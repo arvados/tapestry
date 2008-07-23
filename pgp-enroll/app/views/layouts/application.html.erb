@@ -1,0 +1,48 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Personal Genome Project</title>
+  <%= stylesheet_link_tag 'application' %>
+	<!--[if lte IE 7]><%= stylesheet_link_tag 'application-ie' %>><![endif]-->
+</head>
+<body>
+	<div id="body">
+		<h1 class="verbose"><a href="./"><span>Personal Genome Project</span></a></h1>
+
+
+
+<div class="menu">
+		<ul>
+			<li class="current"><a href="./">Home</a></li>
+			<li><a href="project.html">Project Overview</a></li>
+			<li><a href="participate.html">Participation Overview</a></li>
+			<li><a href="community.html">PGP Community</a></li>
+			<li class="right"><a href="donate.html"><img src="images/donate.gif" width="100" height="24" alt="Donate"></a></li>
+		</ul>
+</div>
+<div class="clear"><!-- --></div>
+	
+
+
+<%= yield %>
+
+<div class="clear"><!-- --></div>
+	</div>
+	<div id="foot">
+		<div id="copyright">
+			<p>
+				<span class="link"><a href="privacypolicy.html">Privacy Policy</a></span>
+				<span class="bullet"> &nbsp;&bull;&nbsp; </span>
+				<span class="link"><a href="contact.html">Contact</a></span>
+				<span class="bullet"> &nbsp;&bull;&nbsp; </span>
+				<span class="link"><a href="careers.html">Careers</a></span>
+				<span class="bullet"> &nbsp;&bull;&nbsp; </span>
+				<span>Copyright &copy; Harvard University</span>
+
+			</p>
+		</div>
+	</div>
+
+</body>
+</html>

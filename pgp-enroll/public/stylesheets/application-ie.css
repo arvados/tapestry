@@ -1,0 +1,29 @@
+/*
+stylesheet (codename prospero) -- modified version for pgp -- ie/win
+(C) 2007 Xiaodi Wu
+*/
+
+body {
+	text-align: center;
+	padding-bottom: 18px;
+}
+
+/* --- */
+
+#head {
+	text-align: left;
+}
+
+#body {
+	width: 960px !important;
+	text-align: left;
+}
+
+#foot {
+	width: 960px !important;
+	text-align: left;
+}
+
+#foot #breadcrumbs {
+	margin-top: 6px;
+}
