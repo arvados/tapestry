@@ -17,52 +17,52 @@ class SessionsControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
-  def test_should_login_and_redirect
+  should "login and redirect" do
     post :create, :login => 'quentin', :password => 'monkey'
     assert session[:user_id]
     assert_response :redirect
   end
 
-  def test_should_fail_login_and_not_redirect
+  should "fail login and not redirect" do
     post :create, :login => 'quentin', :password => 'bad password'
     assert_nil session[:user_id]
     assert_response :success
   end
 
-  def test_should_logout
+  should "logout" do  
     login_as :quentin
     get :destroy
     assert_nil session[:user_id]
     assert_response :redirect
   end
 
-  def test_should_remember_me
+  should "remember me" do
     @request.cookies["auth_token"] = nil
     post :create, :login => 'quentin', :password => 'monkey', :remember_me => "1"
     assert_not_nil @response.cookies["auth_token"]
   end
 
-  def test_should_not_remember_me
+  should "not remember me" do
     @request.cookies["auth_token"] = nil
     post :create, :login => 'quentin', :password => 'monkey', :remember_me => "0"
     puts @response.cookies["auth_token"]
     assert @response.cookies["auth_token"].blank?
   end
   
-  def test_should_delete_token_on_logout
+  should "delete token on logout" do
     login_as :quentin
     get :destroy
     assert @response.cookies["auth_token"].blank?
   end
 
-  def test_should_login_with_cookie
+  should "login with cookie" do
     users(:quentin).remember_me
     @request.cookies["auth_token"] = cookie_for(:quentin)
     get :new
     assert @controller.send(:logged_in?)
   end
 
-  def test_should_fail_expired_cookie_login
+  should "fail expired cookie login" do
     users(:quentin).remember_me
     users(:quentin).update_attribute :remember_token_expires_at, 5.minutes.ago
     @request.cookies["auth_token"] = cookie_for(:quentin)
@@ -70,7 +70,7 @@ class SessionsControllerTest < Test::Unit::TestCase
     assert !@controller.send(:logged_in?)
   end
 
-  def test_should_fail_cookie_login
+  should "fail cookie login" do
     users(:quentin).remember_me
     @request.cookies["auth_token"] = auth_token('invalid_auth_token')
     get :new

@@ -16,7 +16,7 @@ class UserMailerTest < Test::Unit::TestCase
     @expected.set_content_type "text", "plain", { "charset" => CHARSET }
   end
 
-  def test_dummy_test
+  should "RENAME ME: test dummy test" do
     #do nothing
   end
 

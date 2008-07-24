@@ -17,14 +17,14 @@ class UsersControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
-  def test_should_allow_signup
+  should "allow signup" do
     assert_difference 'User.count' do
       create_user
       assert_response :redirect
     end
   end
 
-  def test_should_require_login_on_signup
+  should "require login on signup" do
     assert_no_difference 'User.count' do
       create_user(:login => nil)
       assert assigns(:user).errors.on(:login)
@@ -32,7 +32,7 @@ class UsersControllerTest < Test::Unit::TestCase
     end
   end
 
-  def test_should_require_password_on_signup
+  should "require password on signup" do
     assert_no_difference 'User.count' do
       create_user(:password => nil)
       assert assigns(:user).errors.on(:password)
@@ -40,7 +40,7 @@ class UsersControllerTest < Test::Unit::TestCase
     end
   end
 
-  def test_should_require_password_confirmation_on_signup
+  should "require password confirmation on signup" do
     assert_no_difference 'User.count' do
       create_user(:password_confirmation => nil)
       assert assigns(:user).errors.on(:password_confirmation)
@@ -48,7 +48,7 @@ class UsersControllerTest < Test::Unit::TestCase
     end
   end
 
-  def test_should_require_email_on_signup
+  should "require email on signup" do
     assert_no_difference 'User.count' do
       create_user(:email => nil)
       assert assigns(:user).errors.on(:email)
@@ -58,13 +58,13 @@ class UsersControllerTest < Test::Unit::TestCase
   
 
   
-  def test_should_sign_up_user_with_activation_code
+  should "sign up user with activation code" do
     create_user
     assigns(:user).reload
     assert_not_nil assigns(:user).activation_code
   end
 
-  def test_should_activate_user
+  should "activate user" do
     assert_nil User.authenticate('aaron', 'test')
     get :activate, :activation_code => users(:aaron).activation_code
     assert_redirected_to '/session/new'
@@ -72,18 +72,22 @@ class UsersControllerTest < Test::Unit::TestCase
     assert_equal users(:aaron), User.authenticate('aaron', 'monkey')
   end
   
-  def test_should_not_activate_user_without_key
-    get :activate
-    assert_nil flash[:notice]
-  rescue ActionController::RoutingError
-    # in the event your routes deny this, we'll just bow out gracefully.
+  should "not activate user without key" do
+    begin
+      get :activate
+      assert_nil flash[:notice]
+    rescue ActionController::RoutingError
+      # in the event your routes deny this, we'll just bow out gracefully.
+    end
   end
 
-  def test_should_not_activate_user_with_blank_key
-    get :activate, :activation_code => ''
-    assert_nil flash[:notice]
-  rescue ActionController::RoutingError
-    # well played, sir
+  should "not activate user with blank key" do
+    begin
+      get :activate, :activation_code => ''
+      assert_nil flash[:notice]
+    rescue ActionController::RoutingError
+      # well played, sir
+    end
   end
 
   protected
