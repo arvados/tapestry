@@ -493,3 +493,14 @@ form .submit input.long {
 #foot #copyright .bullet {
 color: #7f97c9;
 }
+
+#mini-consent dt {
+  font-weight: bold;
+  display: block;
+}
+
+#mini-consent dd {
+  display: block; 
+  padding-bottom: 1em;
+  margin: 0;
+}

@@ -1,0 +1,11 @@
+"doc/time"
+"doc/specs"
+"doc/tickets"
+
+== Tickets ==
+
+x 1. add restful auth
+x 2. make user agree to agreement to create a user
+_ 3. remove homes content
+_ 4. change user model to have name, and not a login, and to login with email+password
+
