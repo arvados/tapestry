@@ -6,7 +6,7 @@
 
 x 1. add restful auth
 x 2. make user agree to agreement to create a user
-_ 3. remove homes content
+x 3. remove homes content
 x 4. change user model to have name, and not a login, and to login with email+password
 x 5. create enrollment step model
 x 6. have a logged_in_user_homepage vs not_logged_in_user_homepage (partials in homes/index ?)
