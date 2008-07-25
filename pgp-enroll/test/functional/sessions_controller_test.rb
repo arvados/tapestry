@@ -18,13 +18,13 @@ class SessionsControllerTest < Test::Unit::TestCase
   end
 
   should "login and redirect" do
-    post :create, :login => 'quentin', :password => 'monkey'
+    post :create, :email => 'quentin@example.com', :password => 'monkey'
     assert session[:user_id]
     assert_response :redirect
   end
 
   should "fail login and not redirect" do
-    post :create, :login => 'quentin', :password => 'bad password'
+    post :create, :email => 'quentin@example.com', :password => 'bad password'
     assert_nil session[:user_id]
     assert_response :success
   end
@@ -38,13 +38,13 @@ class SessionsControllerTest < Test::Unit::TestCase
 
   should "remember me" do
     @request.cookies["auth_token"] = nil
-    post :create, :login => 'quentin', :password => 'monkey', :remember_me => "1"
+    post :create, :email => 'quentin@example.com', :password => 'monkey', :remember_me => "1"
     assert_not_nil @response.cookies["auth_token"]
   end
 
   should "not remember me" do
     @request.cookies["auth_token"] = nil
-    post :create, :login => 'quentin', :password => 'monkey', :remember_me => "0"
+    post :create, :email => 'quentin@example.com', :password => 'monkey', :remember_me => "0"
     puts @response.cookies["auth_token"]
     assert @response.cookies["auth_token"].blank?
   end

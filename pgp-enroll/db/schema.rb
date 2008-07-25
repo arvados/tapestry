@@ -9,10 +9,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080716044930) do
+ActiveRecord::Schema.define(:version => 20080725034428) do
+
+  create_table "enrollment_steps", :force => true do |t|
+    t.string   "keyword"
+    t.integer  "order"
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", :force => true do |t|
-    t.string   "login",                     :limit => 40
     t.string   "name",                      :limit => 100, :default => ""
     t.string   "email",                     :limit => 100
     t.string   "crypted_password",          :limit => 40
@@ -24,7 +32,5 @@ ActiveRecord::Schema.define(:version => 20080716044930) do
     t.string   "activation_code",           :limit => 40
     t.datetime "activated_at"
   end
-
-  add_index "users", ["login"], :name => "index_users_on_login", :unique => true
 
 end
