@@ -1,3 +1,9 @@
 <h2>Logged in user portal</h2>
 
 <p>Welcome, <%=h current_user.name %>!</p>
+
+<ol id="enrollment_steps">
+  <% @enrollment_steps.each do |step| -%>
+    <li><%= step.title %> <span>(not completed)</span></li>
+  <% end -%>
+</ol>

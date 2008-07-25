@@ -494,13 +494,28 @@ form .submit input.long {
 color: #7f97c9;
 }
 
-#mini-consent dt {
+#mini_consent dt {
   font-weight: bold;
   display: block;
 }
 
-#mini-consent dd {
+#mini_consent dd {
   display: block; 
   padding-bottom: 1em;
   margin: 0;
+}
+
+#enrollment_steps {
+  width: 300px;
+}
+
+#enrollment_steps li {
+  clear: both;
+  line-height: 2em;
+}
+
+#enrollment_steps li span {
+  font-weight: bold;
+  float: right;
+  margin-top: -2em;
 }

@@ -1,48 +1,48 @@
 signup:
   id: 1
-  order: 1
+  ordinal: 1
   keyword: signup
   title: Consent to take entrance exam
   description: In this step, you sign up for an account and agree to the mini consent form.
 
 entrance_exam:
   id: 2
-  order: 2
+  ordinal: 2
   keyword: entrance_exam
   title: Entrance exam
   description: In this step, you take an entrance exam which consists of three to four content areas.
 
 consent:
   id: 3
-  order: 3
+  ordinal: 3
   keyword: consent
   title: Consent to participate
   description: Consent to participate step
 
 trait:
   id: 4
-  order: 4
+  ordinal: 4
   keyword: trait
   title: Trait collection
   description: Trait collection step
 
 enrollment_application:
   id: 5
-  order: 5
+  ordinal: 5
   keyword: enrollment_application
   title: Apply for enrollment
   description: Enrollment application step
 
 appointment:
   id: 6
-  order: 6
+  ordinal: 6
   keyword: appointment
   title: Schedule an appointment
   description: Schedule an appointment step
 
 complete:
   id: 7
-  order: 7
+  ordinal: 7
   keyword: complete
   title: Complete
   description: At this point, you are complete!
