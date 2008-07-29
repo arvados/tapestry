@@ -16,3 +16,4 @@ _ 9. automatically add an ESC for the first EC upon activation
 _ 10. show which ECs have ESCs on logged_in_user_homepage
 x 11. get a staging env configured
 x 12. get actionmailer working with gmail
+_ 13. make stranger homepage render like the loggedinuser homepage, but prompting on e-step 1
