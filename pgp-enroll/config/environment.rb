@@ -66,3 +66,8 @@ Rails::Initializer.run do |config|
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector
 end
+
+# TODO: Override in per-environment files
+ROOT_URL = 'http://pgp-staging.hugcapacitor.com'
+ADMIN_EMAIL = 'jason.p.morrison@gmail.com'
+
