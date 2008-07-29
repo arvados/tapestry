@@ -9,7 +9,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080725043358) do
+ActiveRecord::Schema.define(:version => 20080729033912) do
+
+  create_table "enrollment_step_completions", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "enrollment_step_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "enrollment_steps", :force => true do |t|
     t.string   "keyword"

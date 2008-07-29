@@ -3,6 +3,9 @@ require File.dirname(__FILE__) + '/../test_helper'
 class UserTest < Test::Unit::TestCase
   fixtures :users
 
+  should_have_many :enrollment_step_completions
+  should_have_many :completed_enrollment_steps, :source => :enrollment_step
+
   should "create user" do
     assert_difference 'User.count' do
       user = create_user
@@ -77,6 +80,8 @@ class UserTest < Test::Unit::TestCase
     assert_not_nil users(:quentin).remember_token_expires_at
     assert users(:quentin).remember_token_expires_at.between?(before, after)
   end
+
+ # TODO: test last_completed_enrollment_step
 
 protected
   def create_user(options = {})

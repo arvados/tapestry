@@ -11,7 +11,7 @@ x 4. change user model to have name, and not a login, and to login with email+pa
 x 5. create enrollment step model
 x 6. have a logged_in_user_homepage vs not_logged_in_user_homepage (partials in homes/index ?)
 x 7. in logged_in_user_homepage, render the enrollment steps
-_ 8. create EnrollmentStepCompletion model
+x 8. create EnrollmentStepCompletion model
 _ 9. automatically add an ESC for the first EC upon activation
 _ 10. show which ECs have ESCs on logged_in_user_homepage
 x 11. get a staging env configured

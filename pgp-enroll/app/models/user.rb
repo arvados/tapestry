@@ -5,6 +5,9 @@ class User < ActiveRecord::Base
   include Authentication::ByPassword
   include Authentication::ByCookieToken
 
+  has_many :enrollment_step_completions
+  has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step
+
   validates_format_of       :name,     :with => RE_NAME_OK,  :message => MSG_NAME_BAD, :allow_nil => true
   validates_length_of       :name,     :maximum => 100
 
@@ -48,6 +51,10 @@ class User < ActiveRecord::Base
   def self.authenticate(email, password)
     u = find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email] # need to get the salt
     u && u.authenticated?(password) ? u : nil
+  end
+
+  def last_completed_enrollment_step
+    completed_enrollment_steps.sort_by(&:ordinal).last
   end
 
   protected
