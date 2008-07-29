@@ -21,7 +21,7 @@ namespace :deploy do
     task t, :roles => :app do ; end
   end
 
-  desc “A setup task to put shared system, log, and database directories in place”
+  desc "A setup task to put shared system, log, and database directories in place"
   task :setup, :roles => [:app, :db, :web] do
     run <<-CMD
       mkdir -p -m 775 #{release_path} #{shared_path}/system #{shared_path}/db &&
