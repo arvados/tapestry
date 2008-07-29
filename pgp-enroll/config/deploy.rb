@@ -1,6 +1,7 @@
 set :application, 'pgp'
 set :repository,  'http://svn.jayunit.net/pgpproto/trunk'
 set :deploy_to,   '/var/www/pgp-staging.hugcapacitor.com'
+set :deploy_via,  :remote_cache 
 
 ssh_options[:port] = 33333
 ssh_options[:username] = 'jason'
