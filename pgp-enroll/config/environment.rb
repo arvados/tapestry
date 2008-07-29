@@ -64,7 +64,7 @@ Rails::Initializer.run do |config|
   # config.active_record.schema_format = :sql
 
   # Activate observers that should always be running
-  config.active_record.observers = :user
+  config.active_record.observers = :user_observer
 end
 
 # TODO: Override in per-environment files
