@@ -14,5 +14,5 @@ x 7. in logged_in_user_homepage, render the enrollment steps
 _ 8. create EnrollmentStepCompletion model
 _ 9. automatically add an ESC for the first EC upon activation
 _ 10. show which ECs have ESCs on logged_in_user_homepage
-_ 11. get a staging env configured
-_ 12. get actionmailer working with gmail
+x 11. get a staging env configured
+x 12. get actionmailer working with gmail
