@@ -34,6 +34,11 @@ class User < ActiveRecord::Base
     activation_code.nil?
   end
 
+# Used in user_observer
+  def recently_activated?
+    @activated
+  end
+
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
   # uff.  this is really an authorization, not authentication routine.  
