@@ -68,6 +68,6 @@ Rails::Initializer.run do |config|
 end
 
 # TODO: Override in per-environment files
-ROOT_URL = 'http://pgp-staging.hugcapacitor.com'
+ROOT_URL = 'pgp-staging.hugcapacitor.com'
 ADMIN_EMAIL = 'jason.p.morrison@gmail.com'
 
