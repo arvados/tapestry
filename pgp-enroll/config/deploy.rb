@@ -20,5 +20,13 @@ namespace :deploy do
     desc "#{t} task is a no-op with mod_rails"
     task t, :roles => :app do ; end
   end
+
+  desc “A setup task to put shared system, log, and database directories in place”
+  task :setup, :roles => [:app, :db, :web] do
+    run <<-CMD
+      mkdir -p -m 775 #{release_path} #{shared_path}/system #{shared_path}/db &&
+      mkdir -p -m 777 #{shared_path}/log
+    CMD
+  end
 end
 
