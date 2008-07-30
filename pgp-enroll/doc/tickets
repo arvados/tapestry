@@ -12,8 +12,10 @@ x 5. create enrollment step model
 x 6. have a logged_in_user_homepage vs not_logged_in_user_homepage (partials in homes/index ?)
 x 7. in logged_in_user_homepage, render the enrollment steps
 x 8. create EnrollmentStepCompletion model
-_ 9. automatically add an ESC for the first EC upon activation
+x 9. automatically add an ESC for the :signup EC upon activation
 _ 10. show which ECs have ESCs on logged_in_user_homepage
 x 11. get a staging env configured
 x 12. get actionmailer working with gmail
-_ 13. make stranger homepage render like the loggedinuser homepage, but prompting on e-step 1
+x 13. make stranger homepage render like the loggedinuser homepage, but prompting on e-step 1
+x 14. make next_step clickable on homepage
+_ 15. mark previously completed ES as completed (with completed_at)

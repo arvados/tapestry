@@ -1,5 +1,18 @@
+<h2>Home</h2>
+
 <% if current_user -%>
-  <%= render :partial => 'logged_in_user_homepage' %>
-<% else -%>
-  <%= render :partial => 'stranger_homepage' %>
-<% end %>
+  <p>Welcome, <%=h current_user.name %>!</p>
+<% end -%>
+
+<ol id="enrollment_steps">
+  <% @steps.each do |step| -%>
+    <li>
+    <% if step == @next_step -%>
+      <%= link_to step.title, :controller => step.keyword, :action => 'index'  %>
+    <% else -%>
+      <%= step.title %> <span>(not completed)</span>
+    <% end -%>
+    </li>
+  <% end -%>
+</ol>
+
