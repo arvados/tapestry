@@ -5,13 +5,16 @@
 <% end -%>
 
 <ol id="enrollment_steps">
-  <% each_step_with_completion do |step, completion| -%>
-    <li>
-    <% if step == @next_step -%>
-      <%= link_to step.title, :controller => step.keyword, :action => 'index'  %>
-    <% else -%>
-      <%= step.title %> <span>(not completed)</span>
-    <% end -%>
+  <% @steps.each do |step| -%>
+    <li class="<%= step_item_class(step) %>">
+      <span class="title">
+      <% if step == @next_step -%>
+        <%= link_to step.title, :controller => step.keyword, :action => 'index'  %>
+      <% else -%>
+        <%= step.title %>
+      <% end -%>
+      </span>
+      <div class="completion_time"><%= completion_time_for step -%></div>
     </li>
   <% end -%>
 </ol>
