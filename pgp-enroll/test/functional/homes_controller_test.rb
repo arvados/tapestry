@@ -43,7 +43,7 @@ class HomesControllerTest < ActionController::TestCase
 
     should "have only the signup step available to click on" do
       assert_equal 'signup', assigns(:next_step).keyword
-      assert_select 'ol#enrollment_steps>li>a', { :text => assigns(:next_step).title, :count => 1 }
+      assert_select 'ol#enrollment_steps>li>span.title>a', { :text => assigns(:next_step).title, :count => 1 }
     end
   end
 end
