@@ -8,7 +8,7 @@ signup:
 entrance_exam:
   id: 2
   ordinal: 2
-  keyword: entrance_exam
+  keyword: content_areas
   title: Entrance exam
   description: In this step, you take an entrance exam which consists of three to four content areas.
 

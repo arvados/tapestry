@@ -223,7 +223,9 @@ form .submit input.long {
 	font: 12px/18px Arial, Helvetica, sans-serif;
 }
 
+
 #body .menu {
+  height: 40px; 
 	float: left;
 	background: #91a9d1;
 	color: #fff;
@@ -232,32 +234,44 @@ form .submit input.long {
 	border-top: 1px solid #9ab0d5;
 }
 
-#body .menu ul {
-	float: left;
-	width: 936px;
-	margin: 0;
-	padding: 0 12px;
+div.menu span.breadcrumbs {
+  float: left;
+  width: 49%:
+  padding: 0;
+  margin: 10px;
 }
 
-#body .menu li {
-	float: left;
-	display: inline;
-	font: 14px/20px Arial, Helvetica, sans-serif;
-	list-style: none;
-	margin: 0 12px;
-	padding: 6px 0;
+
+#body .menu ul.links {
+  float: right;
+  text-align: right;
+  margin: 0px;
+  padding: 0;
+  height: 100%;
+  line-height: 40px;
+}
+
+#body .menu ul.links li {
+  display: inline;
+  font: 14px/20px Arial, Helvetica, sans-serif;
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+}
+
+ul.links li a {
+  padding: 10px;
+  height: 40px;
 }
 
 #body .menu li.current {
-	padding-top: 4px;
-	border-top: 2px solid #6183bd;
-/*	border-bottom: 2px solid #6183bd;
-	background: #6183bd; */
+  padding-top: 4px;
+  border-top: 2px solid #6183bd;
 }
 
 #body .menu li.right {
-	float: right;
-	padding: 3px 0 0 0;
+  float: right;
+  padding: 3px 0 0 0;
 }
 
 #body .menu a, #body .menu a:link, #body .menu a:visited {
@@ -579,3 +593,5 @@ div.flash.error {
   background: #c33;
   border-color: #800;
 }
+
+/* Navigation bar */

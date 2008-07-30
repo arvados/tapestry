@@ -13,13 +13,18 @@
 
 
 <div class="menu">
-		<ul>
-			<li><a href="./">Home</a></li>
+    <span class="breadcrumbs">
+      (You are here)
+    </span>
+
+		<ul class="links">
+			<li><%= link_to 'Home', root_url %></li>
       <% unless current_user -%>
         <li><a href="/login">Login</a></li>
         <li><a href="/signup">Signup</a></li>
       <% else -%>
-        <li><a href="/logout">Logout</a></li>
+        <li><%= link_to 'Settings', edit_user_url(current_user) %></li>
+        <li><%= link_to 'Logout', logout_url %></li>
       <% end -%>
 
       <!--

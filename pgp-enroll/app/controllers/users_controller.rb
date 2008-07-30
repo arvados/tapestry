@@ -1,8 +1,35 @@
 class UsersController < ApplicationController
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :create, :activate ]
+
   def new
     @user = User.new
   end
- 
+
+  def edit
+    @user = User.find params[:id]
+  end
+
+  def update
+    @user = User.find params[:id]
+    # if current_user.admin?
+    #   @user.admin       = params[:user][:admin]       if params[:user].has_key?(:admin)
+    #   @user.project_ids = params[:user][:project_ids] if params[:user].has_key?(:project_ids)
+    # end
+
+    # TODO NEXT: don't update password if box is blank
+
+    if @user.update_attributes(params[:user])
+      flash[:notice] = 'User updated.'
+      # if current_user.admin?
+      #   redirect_to users_url
+      # else
+        redirect_to root_url
+      # end
+    else
+      render :action => 'edit'
+    end
+  end
+
   def create
     logout_keeping_session!
     @user = User.new(params[:user])
@@ -31,5 +58,11 @@ class UsersController < ApplicationController
       flash[:error]  = "We couldn't find a user with that activation code -- check your email? Or maybe you've already activated -- try signing in."
       redirect_back_or_default('/')
     end
+  end
+
+  private
+
+  def ensure_current_user_may_edit_this_user
+    redirect_to root_url unless current_user && ( current_user.id == params[:id].to_i ) # || curren_user.admin?
   end
 end
