@@ -29,15 +29,29 @@ class User < ActiveRecord::Base
     @activated = true
     self.activated_at = Time.now.utc
     self.activation_code = nil
+    self.complete_enrollment_step EnrollmentStep.find_by_keyword('signup')
     save(false)
   end
 
+  def next_enrollment_step
+    last_step_completed = last_completed_enrollment_step
+
+    if last_step_completed.nil?
+      EnrollmentStep.first
+    else
+      EnrollmentStep.find :first, :conditions => ['ordinal > ?', last_step_completed.ordinal]
+    end
+  end
+
+  def complete_enrollment_step step
+    completion = EnrollmentStepCompletion.new :enrollment_step => step
+    enrollment_step_completions << completion 
+  end
+
   def active?
-    # the existence of an activation code means they have not activated yet
     activation_code.nil?
   end
 
-# Used in user_observer
   def recently_activated?
     @activated
   end
@@ -48,7 +62,7 @@ class User < ActiveRecord::Base
   # We really need a Dispatch Chain here or something.
   # This will also let us return a human error message.
   #
-  def self.authenticate(email, password)
+  def self.authenticate email, password
     u = find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email] # need to get the salt
     u && u.authenticated?(password) ? u : nil
   end
@@ -58,10 +72,8 @@ class User < ActiveRecord::Base
   end
 
   protected
-    
-    def make_activation_code
-        self.activation_code = self.class.make_token
-    end
 
-
+  def make_activation_code
+    self.activation_code = self.class.make_token
+  end
 end

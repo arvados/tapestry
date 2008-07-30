@@ -4,7 +4,7 @@ class UserTest < Test::Unit::TestCase
   fixtures :users
 
   should_have_many :enrollment_step_completions
-  should_have_many :completed_enrollment_steps, :source => :enrollment_step
+  # should_have_many :completed_enrollment_steps, :through => :enrollment_step_completions, :class_name => 'EnrollmentStep'
 
   should "create user" do
     assert_difference 'User.count' do
@@ -17,6 +17,47 @@ class UserTest < Test::Unit::TestCase
     user = create_user
     user.reload
     assert_not_nil user.activation_code
+  end
+
+  context "partially complete enrollments" do
+    setup do
+      @user1, @user2, @user3 = Factory(:user), Factory(:user), Factory(:user)
+
+      @enrollment_steps = []
+      5.times { @enrollment_steps << Factory(:enrollment_step) }
+
+      # No EnrollmentStepCompletions for @user1
+      3.times { |n| @user2.complete_enrollment_step @enrollment_steps[n] }
+      5.times { |n| @user3.complete_enrollment_step @enrollment_steps[n] }
+    end
+
+    should "give the correct next step when #next_enrollment_step" do
+      assert_equal @enrollment_steps[0], @user1.next_enrollment_step
+      assert_equal @enrollment_steps[3], @user2.next_enrollment_step
+    end
+
+    should "give nil when #next_enrollment_step called and user has completed all EnrollmentSteps" do
+      assert_nil @user3.next_enrollment_step
+    end
+  end
+
+  should "add a completed_enrollment_step when sent #complete_enrollment_step" do
+    user = Factory(:user)
+    step = Factory(:enrollment_step)
+
+    assert_difference 'user.completed_enrollment_steps.count' do
+      user.complete_enrollment_step(step)
+    end
+  end
+
+  should "add an enrollment_step_completion for enrollment_step(:signup) upon activation" do
+    # User.activate! explicitly tries to complete the 'signup' enrollment_step
+    Factory(:enrollment_step, :keyword => 'signup')
+    user = Factory(:user)
+
+    assert_difference 'user.completed_enrollment_steps.count' do
+      user.activate!
+    end
   end
 
   should_require_attributes :email, :password
