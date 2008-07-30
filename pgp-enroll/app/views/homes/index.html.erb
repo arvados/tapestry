@@ -5,7 +5,7 @@
 <% end -%>
 
 <ol id="enrollment_steps">
-  <% @steps.each do |step| -%>
+  <% each_step_with_completion do |step, completion| -%>
     <li>
     <% if step == @next_step -%>
       <%= link_to step.title, :controller => step.keyword, :action => 'index'  %>
