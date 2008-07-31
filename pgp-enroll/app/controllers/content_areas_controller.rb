@@ -1,0 +1,2 @@
+class ContentAreasController < ApplicationController
+end

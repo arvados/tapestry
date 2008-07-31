@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :content_areas
+
   map.resources :exam_definitions
 
   map.logout   '/logout',   :controller => 'sessions', :action => 'destroy'
@@ -10,6 +12,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users
   map.resource  :session
+  map.resources :content_areas do |content_area|
+    content_area.resources :exam_definitions
+  end
 
   # See how all your routes lay out with "rake routes"
   map.root :controller => 'homes'

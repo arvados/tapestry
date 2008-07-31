@@ -23,3 +23,14 @@ Factory.define(:enrollment_step) do |f|
   f.title       { Factory.next :enrollment_step_title   }
   f.description { Factory.next :enrollment_step_description }
 end
+
+Factory.define(:content_area) do |f|
+  f.title 'Content Area Title'
+  f.description 'Content Area Description'
+end
+
+Factory.define(:exam_definition) do |f|
+  f.title 'Exam Definition Title'
+  f.description 'Exam Definition Description'
+  f.content_area { |e| e.association :content_area }
+end

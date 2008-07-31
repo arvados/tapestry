@@ -1,0 +1,14 @@
+genetic_literacy:
+  id: 1
+  title: Genetic Literacy
+  description: Genetic Literacy Description
+
+hsr_literacy:
+  id: 2
+  title: Human Subjects Research Literacy
+  description: Human Subjects Research Literacy
+
+protocol_literacy:
+  id: 3
+  title: PGP Protocols Literacy
+  description: PGP Protocols Literacy
