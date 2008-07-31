@@ -25,3 +25,6 @@ _ 18. add breadcrumbs
 _ 19. make exam_definition resource under content_areas
 _ 20. make exam_response resource under e-def
 _ 21. make exam_question resource under e-def 
+_ 22. fix up the flash css
+_ 23. on user#new page, consolidate flash (it's split around the TOS)
+
