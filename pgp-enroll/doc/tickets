@@ -33,3 +33,4 @@ _ 26. make user CRUD+export under admin namespace
 _ 27. make content-area CRUD under admin namespace
 _ 28.  
 
+- note: rname exam_definition parent/child to previous_version and next_version?
