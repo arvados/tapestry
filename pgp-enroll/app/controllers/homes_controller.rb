@@ -1,4 +1,6 @@
 class HomesController < ApplicationController
+  skip_before_filter :login_required, :only => [:index]
+
   def index
     @steps = EnrollmentStep.find :all, :order => 'ordinal'
     @step_completions = current_user ? current_user.enrollment_step_completions : []

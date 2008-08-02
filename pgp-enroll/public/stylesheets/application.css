@@ -595,3 +595,22 @@ div.flash.error {
 }
 
 /* Navigation bar */
+
+/* Admin */
+.admin_table {
+  border: 1px solid #ccc;
+}
+
+.admin_table, .admin_table tr, .admin_table td, .admin_table th {
+  padding: 5px;
+  margin: 0;
+}
+
+.admin_table th {
+  background-color: #aaa;
+}
+
+.admin_table tr.even td {
+  background-color: #ddd;
+}
+

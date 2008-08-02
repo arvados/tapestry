@@ -71,3 +71,4 @@ end
 ROOT_URL = 'pgp-staging.hugcapacitor.com'
 ADMIN_EMAIL = 'jason.p.morrison@gmail.com'
 
+require 'csv'

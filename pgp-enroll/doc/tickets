@@ -19,7 +19,7 @@ x 12. get actionmailer working with gmail
 x 13. make stranger homepage render like the loggedinuser homepage, but prompting on e-step 1
 x 14. make next_step clickable on homepage
 x 15. make content_areas resource
-_ 16. add admin attribute to user (manually set this for now), attr_accessible the others, and this allows user onto the admin namespace
+x 16. add admin attribute to user (manually set this for now), attr_accessible the others, and this allows user onto the admin namespace
 x 17. add user settings page
 _ 18. add breadcrumbs
 _ 19. make exam_definition resource under content_areas
@@ -28,8 +28,8 @@ _ 21. make exam_question resource under e-def
 x 22. fix up the flash css
 _ 23. on user#new page, consolidate flash (it's split around the TOS)
 _ 24. fix the bad link on clicking banner
-_ 25. make admin namespace
-_ 26. make user CRUD+export under admin namespace
+x 25. make admin namespace
+x 26. make user CRUD+export under admin namespace
 _ 27. make content-area CRUD under admin namespace
 _ 28.  
 

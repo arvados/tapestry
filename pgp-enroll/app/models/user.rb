@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :name, :password, :password_confirmation
 
 
+
   # Activates the user in the database.
   def activate!
     @activated = true

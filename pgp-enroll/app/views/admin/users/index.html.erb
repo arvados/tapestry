@@ -1,0 +1,25 @@
+<h2>Users</h2>
+
+<p>Download list of users as <%= link_to 'CSV', formatted_admin_users_url(:format => 'csv') %></p>
+
+<table class="admin_table">
+  <thead>
+  <tr>
+    <th>Name</th><th>Email</th><th>Active?</th><th>Edit</th><th>Delete</th><th>Activate</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| -%>
+      <tr class="<%= cycle 'even', 'odd' %>">
+        <td><%=h user.name %></td>
+        <td><%=h user.email %></td>
+        <td><%=  user.active? %></td>
+        <td><%= link_to 'Edit', edit_admin_user_url(user) %></td>
+        <td><%= link_to 'Delete', admin_user_url(user),
+                  :method => 'DELETE',
+                  :confirm => 'Are you sure you want to delete this user?' %></td>
+        <td><%= link_to 'Activate', activate_admin_user_url(user), :method => 'PUT' %></td>
+      </tr>
+    <% end -%>
+  </tbody>
+</table>
