@@ -31,6 +31,6 @@ _ 24. fix the bad link on clicking banner
 x 25. make admin namespace
 x 26. make user CRUD+export under admin namespace
 _ 27. make content-area CRUD under admin namespace
-_ 28.  
+_ 28. make is_admin check_box on admin/users/edit
 
 - note: rname exam_definition parent/child to previous_version and next_version?
