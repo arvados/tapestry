@@ -31,13 +31,18 @@ Factory.define(:enrollment_step) do |f|
   f.description { Factory.next :enrollment_step_description }
 end
 
+Factory.define(:enrollment_step_completion) do |f|
+  f.user            { |u| u.association :user }
+  f.enrollment_step { |e| e.association :enrollment_step }
+end
+
 Factory.define(:content_area) do |f|
-  f.title 'Content Area Title'
+  f.title       'Content Area Title'
   f.description 'Content Area Description'
 end
 
 Factory.define(:exam_definition) do |f|
-  f.title 'Exam Definition Title'
+  f.title       'Exam Definition Title'
   f.description 'Exam Definition Description'
   f.content_area { |e| e.association :content_area }
 end
