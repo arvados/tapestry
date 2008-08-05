@@ -27,10 +27,12 @@ _ 20. make exam_response resource under e-def
 _ 21. make exam_question resource under e-def 
 x 22. fix up the flash css
 _ 23. on user#new page, consolidate flash (it's split around the TOS)
-_ 24. fix the bad link on clicking banner
+x 24. fix the bad link on clicking banner
 x 25. make admin namespace
 x 26. make user CRUD+export under admin namespace
-_ 27. make content-area CRUD under admin namespace
-_ 28. make is_admin check_box on admin/users/edit
+x 27. make content-area CRUD under admin namespace
+x 28. make is_admin check_box on admin/users/edit
+_ 29. install environment on harvard cluster domU for production
+_ 30. install environment on harvard cluster domU for staging
 
 - note: rname exam_definition parent/child to previous_version and next_version?
