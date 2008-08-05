@@ -4,4 +4,8 @@ class ExamDefinition < ActiveRecord::Base
   belongs_to :content_area
 
   validates_presence_of :content_area, :title, :description
+
+  def version
+    parent.nil? ? 1 : parent.version + 1
+  end
 end
