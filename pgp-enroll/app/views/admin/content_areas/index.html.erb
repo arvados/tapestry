@@ -10,9 +10,9 @@
   <tr class="<%= cycle 'even', 'odd' %>">
     <td><%=h content_area.title %></td>
     <td><%=h content_area.description %></td>
-    <td><%= link_to 'Show', admin_content_area_path(content_area) %></td>
+    <td><%= link_to 'Show', [:admin, content_area] %></td>
     <td><%= link_to 'Edit', edit_admin_content_area_path(content_area) %></td>
-    <td><%= link_to 'Destroy', admin_content_area_path(content_area), :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Destroy', [:admin, content_area], :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

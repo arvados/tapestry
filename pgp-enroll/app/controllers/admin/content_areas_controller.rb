@@ -1,4 +1,4 @@
-class Admin::ContentAreasController < ApplicationController
+class Admin::ContentAreasController < Admin::AdminControllerBase
   # GET /content_areas
   # GET /content_areas.xml
   def index
@@ -62,7 +62,7 @@ class Admin::ContentAreasController < ApplicationController
     respond_to do |format|
       if @content_area.update_attributes(params[:content_area])
         flash[:notice] = 'ContentArea was successfully updated.'
-        format.html { redirect_to(admin_content_area_path(@content_area)) }
+        format.html { redirect_to([:admin, @content_area]) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

@@ -35,4 +35,5 @@ x 28. make is_admin check_box on admin/users/edit
 _ 29. install environment on harvard cluster domU for production
 _ 30. install environment on harvard cluster domU for staging
 
+- note: test out admin/exam_defintions; have only proven to work, not tried it ;)
 - note: rname exam_definition parent/child to previous_version and next_version?
