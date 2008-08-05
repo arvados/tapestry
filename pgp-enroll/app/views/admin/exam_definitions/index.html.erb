@@ -1,0 +1,27 @@
+<h1>Listing exam definitions</h1>
+
+<table class="admin_table">
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Content Area</th>
+    <th>Version Number</th>
+  </tr>
+
+<% for exam_definition in @exam_definitions %>
+  <tr class="<%= cycle 'even', 'odd' %>">
+    <td><%=h exam_definition.title %></td>
+    <td><%=h exam_definition.description %></td>
+    <td><%= link_to exam_definition.content_area.title,
+              [:admin, exam_definition.content_area] %></td>
+    <td><%=  exam_definition.version %></td>
+    <td><%= link_to 'Show', [:admin, exam_definition] %></td>
+    <td><%= link_to 'Edit', edit_admin_exam_definition_path(exam_definition) %></td>
+    <td><%= link_to 'Destroy', [:admin, exam_definition], :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New exam_definition', new_admin_exam_definition_path %>

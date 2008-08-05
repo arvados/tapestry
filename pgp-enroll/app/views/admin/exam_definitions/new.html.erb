@@ -1,0 +1,22 @@
+<h1>New exam definition</h1>
+
+<% form_for [:admin, @exam_definition] do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </p>
+  <p>
+    <%= f.label :content_area %><br/>
+    <%= f.collection_select :content_area_id, @content_areas, :id, :title %>
+  </p>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', admin_exam_definitions_path %>
