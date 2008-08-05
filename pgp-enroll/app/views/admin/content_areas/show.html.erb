@@ -1,0 +1,13 @@
+<p>
+  <b>Title:</b>
+  <%=h @content_area.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @content_area.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_admin_content_area_path(@content_area) %> |
+<%= link_to 'Back', admin_content_areas_path %>

@@ -1,3 +1,22 @@
-<h2>Content Areas</h2>
+<h1>Listing content_areas</h1>
 
-<p>TODO: put crud controller here</p>
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+  </tr>
+
+<% for content_area in @content_areas %>
+  <tr>
+    <td><%=h content_area.title %></td>
+    <td><%=h content_area.description %></td>
+    <td><%= link_to 'Show', admin_content_area_path(content_area) %></td>
+    <td><%= link_to 'Edit', edit_admin_content_area_path(content_area) %></td>
+    <td><%= link_to 'Destroy', admin_content_area_path(content_area), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New content_area', new_admin_content_area_path %>

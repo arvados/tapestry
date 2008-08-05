@@ -1,39 +1,53 @@
 require 'test_helper'
 
 class Admin::ContentAreasControllerTest < ActionController::TestCase
-  context 'when logged in as a non-admin' do
+  context 'when logged in as an admin, with content areas' do
     setup do
-      @user = Factory(:user)
-      @user.activate!
+      @user = Factory :admin_user
       login_as @user
+      @content_area = Factory :content_area
     end
 
-    should 'not allow access to the admin/users controller' do
+    should "get index" do
       get :index
-      assert_response :redirect
-      assert_redirected_to login_url
-    end
-  end
-
-  context 'when logged in as an admin' do
-    setup do
-      @user = Factory(:admin_user)
-      @user.activate!
-      login_as @user
+      assert_response :success
+      assert_not_nil assigns(:content_areas)
     end
 
-    context 'on GET to index' do
-      setup do
-        get :index
-        assert_response :success
+    should "get new" do
+      get :new
+      assert_response :success
+    end
+
+    should "create content area" do
+      assert_difference('ContentArea.count') do
+        post :create, :content_area => Factory.attributes_for(:content_area)
       end
 
-      should_eventually 'show all content_areas' do
-        ContentArea.all.each do |area|
-          assert_select 'td', area.title
-        end
+      assert_redirected_to admin_content_areas_path
+    end
+
+    should "show content area" do
+      get :show, :id => @content_area.id
+      assert_response :success
+    end
+
+    should "get edit" do
+      get :edit, :id => @content_area.id
+      assert_response :success
+    end
+
+    should "update content area" do
+      put :update, :id => @content_area.id, :content_area => { }
+      assert_redirected_to admin_content_area_path(assigns(:content_area))
+    end
+
+    should "destroy content area" do
+      assert_difference('ContentArea.count', -1) do
+        delete :destroy, :id => @content_area.id
       end
+
+      assert_redirected_to admin_content_areas_path
     end
   end
 end
-
