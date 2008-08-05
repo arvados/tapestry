@@ -32,7 +32,7 @@ x 25. make admin namespace
 x 26. make user CRUD+export under admin namespace
 x 27. make content-area CRUD under admin namespace
 x 28. make is_admin check_box on admin/users/edit
-_ 29. install environment on harvard cluster domU for production
+_ 29. install environment on harvard cluster domU for production - rails is up, need mysql conf, and proper sites_enabled config
 _ 30. install environment on harvard cluster domU for staging
 _ 31. make name read-only on user/edit
 _ 32. add preferences exam to db/bootstrap
