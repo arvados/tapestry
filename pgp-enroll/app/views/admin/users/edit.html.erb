@@ -2,7 +2,7 @@
 
 <% @user.password = @user.password_confirmation = nil %>
 
-<% form_for :user, :url => user_path, :html => { :method => :put } do |f| -%>
+<% form_for [:admin, @user], :html => { :method => :put } do |f| -%>
 <%= error_messages_for :user %>
 <p><label for="name">Name</label><br/>
 <%= f.text_field :name %></p>
@@ -18,6 +18,9 @@
 
 <p><label for="password_confirmation">Confirm Password</label><br/>
 <%= f.password_field :password_confirmation %></p>
+
+<p><label for="is_admin">Is Admin?</label><br/>
+<%= f.check_box :is_admin %></p>
 
 <p><%= submit_tag 'Save Changes' %></p>
 <% end -%>
