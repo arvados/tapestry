@@ -36,7 +36,7 @@ _ 29. install environment on harvard cluster domU for production - rails is up, 
 _ 30. install environment on harvard cluster domU for staging
 _ 31. make name read-only on user/edit
 _ 32. add preferences exam to db/bootstrap
-_ 33. fill out content_areas view for users
+_ 33. fill out content_areas view for users => working...
 
 
 - note: test out admin/exam_defintions; have only proven to work, not tried it ;)
