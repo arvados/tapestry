@@ -1,6 +1,6 @@
 <h2>Exam content areas</h2>
 <ul>
 <% @content_areas.each do |area| -%>
-  <li><%= area.title %></li>
+  <li><%= link_to area.title, area %></li>
 <% end -%>
 </ul>

@@ -9,9 +9,8 @@ ActionController::Routing::Routes.draw do |map|
   map.signup   '/signup',         :controller => 'users',    :action => 'new'
   map.activate '/activate/:code', :controller => 'users',    :action => 'activate'
 
-  map.resources :content_areas
   map.resources :content_areas do |content_area|
-    content_area.resources :exam_definitions
+    content_area.resources :exam_definitions, :controller => 'content_areas/exam_definitions'
   end
 
   map.namespace 'admin' do |admin|
