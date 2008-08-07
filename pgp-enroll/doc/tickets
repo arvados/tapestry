@@ -41,3 +41,5 @@ _ 33. fill out content_areas view for users => working...
 
 - note: test out admin/exam_defintions; have only proven to work, not tried it ;)
 - note: rname exam_definition parent/child to previous_version and next_version?
+- note: consolidate pgp-static and pgp-enroll servers, with an apache and 2vhosts on each (for www. and enroll.)
+- note: add cronjob on staging/prod for backing up DB
