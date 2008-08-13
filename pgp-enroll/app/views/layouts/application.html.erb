@@ -22,7 +22,7 @@
         <li><a href="/login">Login</a></li>
         <li><a href="/signup">Signup</a></li>
       <% else -%>
-        <li><%= link_to 'Settings', edit_user_url(current_user) %></li>
+        <li><%= link_to 'Account', edit_user_url(current_user) %></li>
         <li><%= link_to 'Logout', logout_url %></li>
 
         <% if current_user.is_admin? -%>
