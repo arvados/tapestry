@@ -530,7 +530,7 @@ color: #7f97c9;
   line-height: 2em;
   list-style: none;
   padding: 10px;
-  border: 2px solid #666;
+  border: 0px;
 }
 
 #enrollment_steps li span.title {
@@ -552,10 +552,11 @@ color: #7f97c9;
 }
 
 #enrollment_steps li.next {
-  background-color: #ff9;
-  background-image: url('/images/1leftarrow.png');
-  background-repeat: no-repeat;
-  background-position: right top;
+  background: #FFF url('/images/go.png') no-repeat right top;
+  border-right: 2px solid #999;
+  border-bottom: 2px solid #999;
+  border-top: 1px solid #CCC;
+  border-left: 1px solid #CCC;
 }
 
 #enrollment_steps li.next p.description {
@@ -563,9 +564,11 @@ color: #7f97c9;
 }
 
 #enrollment_steps li.locked {
-  background-image: url('/images/lock.png');
-  background-repeat: no-repeat;
-  background-position: right center;
+  background: #F2F2F2 url('/images/lock.png') no-repeat right top;
+  border-right: 1px solid #CCC;
+  border-bottom: 1px solid #CCC;
+  border-top: 1px solid #EEE;
+  border-left: 1px solid #EEE;
 }
 
 div.flash {
