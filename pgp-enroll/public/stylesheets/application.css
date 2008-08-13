@@ -542,16 +542,16 @@ color: #7f97c9;
 #enrollment_steps li div.completion_time {
 }
 
-#enrollment_steps li.completed {
+#enrollment_steps li.next {
   background-color: #5D7CBB;
   color: #fff;
 }
 
-#enrollment_steps li.completed span.title {
+#enrollment_steps li.next span.title a {
   color: #fff;
 }
 
-#enrollment_steps li.next {
+#enrollment_steps li.completed {
   background: #FFF url('/images/go.png') no-repeat right top;
   border-right: 2px solid #999;
   border-bottom: 2px solid #999;

@@ -46,3 +46,8 @@ Factory.define(:exam_definition) do |f|
   f.description 'Exam Definition Description'
   f.content_area { |e| e.association :content_area }
 end
+
+Factory.define(:exam_response) do |f|
+  f.user            { |u| u.association :user }
+  f.exam_definition { |e| e.association :exam_definition }
+end
