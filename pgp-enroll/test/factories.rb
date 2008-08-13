@@ -23,7 +23,6 @@ Factory.sequence(:enrollment_step_ordinal) { |n| n }
   Factory.sequence("enrollment_step_#{attr}".to_sym) { |n| "#{attr.upcase} #{n}" }
 end
 
-
 Factory.define(:enrollment_step) do |f|
   f.keyword     { Factory.next :enrollment_step_keyword }
   f.ordinal     { Factory.next :enrollment_step_ordinal }
@@ -50,4 +49,22 @@ end
 Factory.define(:exam_response) do |f|
   f.user            { |u| u.association :user }
   f.exam_definition { |e| e.association :exam_definition }
+end
+
+Factory.sequence(:question_kind) { |n| ExamQuestion::QUESTION_KINDS[n%2+1] }
+
+Factory.define(:exam_question) do |f|
+  f.kind             { Factory.next :question_kind }
+  f.exam_definition  { |e| e.association :exam_definition }
+end
+
+Factory.define(:answer_option) do |f|
+  f.exam_question { |q| q.association :exam_question }
+  f.answer 'Answer Option'
+  f.correct false
+end
+
+Factory.define(:question_response) do |f|
+  f.answer_option { |a| a.assocation :answer_option }
+  f.exam_response { |r| r.association :exam_response, :exam_definition => answer_option.exam_definition }
 end

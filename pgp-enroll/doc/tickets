@@ -23,8 +23,8 @@ x 16. add admin attribute to user (manually set this for now), attr_accessible t
 x 17. add user settings page
 _ 18. add breadcrumbs
 x 19. make exam_definition resource under content_areas for users
-_ 20. make exam_response resource under e-def model
-_ 21. make exam_question resource under e-def model
+x 20. make exam_response resource under e-def model
+x 21. make exam_question resource under e-def model
 x 22. fix up the flash css
 _ 23. on user#new page, consolidate flash (it's split around the TOS)
 x 24. fix the bad link on clicking banner

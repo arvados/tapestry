@@ -9,7 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080813020815) do
+ActiveRecord::Schema.define(:version => 20080813131627) do
+
+  create_table "answer_options", :force => true do |t|
+    t.integer  "exam_question_id"
+    t.string   "answer"
+    t.boolean  "correct"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "content_areas", :force => true do |t|
     t.string   "title"
@@ -43,9 +51,25 @@ ActiveRecord::Schema.define(:version => 20080813020815) do
     t.integer  "content_area_id"
   end
 
+  create_table "exam_questions", :force => true do |t|
+    t.integer  "exam_definition_id"
+    t.string   "kind"
+    t.integer  "ordinal"
+    t.string   "question"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "exam_responses", :force => true do |t|
     t.integer  "user_id"
     t.integer  "exam_definition_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "question_responses", :force => true do |t|
+    t.integer  "exam_response_id"
+    t.integer  "answer_option_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
