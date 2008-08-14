@@ -1,0 +1,32 @@
+nature_of_genetic_materials_1_1:
+  id: 1
+  exam_question_id: 1
+  answer: Answer 1.1
+nature_of_genetic_materials_1_2:
+  id: 2
+  exam_question_id: 1
+  answer: Answer 1.2
+nature_of_genetic_materials_2_1:
+  id: 3
+  exam_question_id: 2
+  answer: Answer 2.1
+nature_of_genetic_materials_2_2:
+  id: 4
+  exam_question_id: 2
+  answer: Answer 2.2
+nature_of_genetic_materials_3_1:
+  id: 5
+  exam_question_id: 3
+  answer: Answer 3.1
+nature_of_genetic_materials_3_2:
+  id: 6
+  exam_question_id: 3
+  answer: Answer 3.2
+transmission_1_1:
+  id: 7
+  exam_question_id: 4
+  answer: Answer 4.1
+transmission_1_2:
+  id: 8
+  exam_question_id: 4
+  answer: Answer 4.2

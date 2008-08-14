@@ -1,0 +1,21 @@
+nature_of_genetic_materials_1:
+  id: 1
+  exam_definition_id: 1
+  type: MultipleChoiceExamQuestion
+  ordinal: 1
+  question: Question body 1
+nature_of_genetic_materials_2:
+  id: 2
+  type: MultipleChoiceExamQuestion
+  ordinal: 2
+  question: Question body 2
+nature_of_genetic_materials_3:
+  id: 3
+  type: MultipleChoiceExamQuestion
+  ordinal: 3
+  question: Question body 3
+transmission_1:
+  id: 4
+  type: MultipleChoiceExamQuestion
+  ordinal: 1
+  question: Question body 4

@@ -7,5 +7,6 @@ class ExamQuestionTest < ActiveSupport::TestCase
     end
 
     should_belong_to :exam_definition
+    should_have_many :answer_options
   end
 end

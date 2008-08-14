@@ -1,0 +1,10 @@
+nature_of_genetic_materials:
+  id: 1
+  title: Nature of Genetic Material
+  description: Nature of Genetic Material description
+  content_area_id: 1
+transmission:
+  id: 2
+  title: Transmission
+  description: Transmission description
+  content_area_id: 1
