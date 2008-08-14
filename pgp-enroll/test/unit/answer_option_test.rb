@@ -7,5 +7,6 @@ class AnswerOptionTest < ActiveSupport::TestCase
     end
 
     should_belong_to :exam_question
+    should_have_many :question_responses
   end
 end

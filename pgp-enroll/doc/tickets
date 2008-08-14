@@ -34,10 +34,10 @@ x 27. make content-area CRUD under admin namespace
 x 28. make is_admin check_box on admin/users/edit
 _ 29. install environment on harvard cluster domU for production - rails is up, need mysql conf, and proper sites_enabled config
 _ 30. install environment on harvard cluster domU for staging
-_ 31. make name read-only on user/edit
+x 31. make name read-only on user/edit
 _ 32. add preferences exam to db/bootstrap
 _ 33. fill out content_areas view for users => working...
-
+_ 34. make user#name not attr_accessible to preview url hacking on users#edit
 
 - note: test out admin/exam_defintions; have only proven to work, not tried it ;)
 - note: rname exam_definition parent/child to previous_version and next_version?

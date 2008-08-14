@@ -1,8 +1,12 @@
 require 'test_helper'
 
 class QuestionResponseTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  context 'with an QuestionResponse' do
+    setup do
+      @question_response = Factory :question_response
+    end
+
+    should_belong_to :exam_response
+    should_belong_to :answer_option
   end
 end

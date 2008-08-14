@@ -10,6 +10,8 @@ class ExamDefinitionTest < ActiveSupport::TestCase
 
     should_belong_to :content_area
     should_require_attributes :title, :description
+    should_have_many :exam_questions
+    should_have_many :exam_responses
 
     should 'show version when sent #version' do
       assert_equal 1, @exam1.version

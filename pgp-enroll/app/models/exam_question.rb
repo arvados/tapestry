@@ -1,5 +1,10 @@
 class ExamQuestion < ActiveRecord::Base
-  QUESTION_KINDS = %w(multiple_choice check_all)
-
   belongs_to :exam_definition
+  has_many   :question_responses
+end
+
+class MultipleChoiceExamQuestion < ExamQuestion
+end
+
+class CheckAllExamQuestion < ExamQuestion
 end

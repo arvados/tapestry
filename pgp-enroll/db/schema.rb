@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(:version => 20080813131627) do
 
   create_table "exam_questions", :force => true do |t|
     t.integer  "exam_definition_id"
-    t.string   "kind"
+    t.string   "type"
     t.integer  "ordinal"
     t.string   "question"
     t.datetime "created_at"

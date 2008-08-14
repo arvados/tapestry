@@ -5,6 +5,7 @@ class UserTest < Test::Unit::TestCase
 
   should_have_many :enrollment_step_completions
   # should_have_many :completed_enrollment_steps, :through => :enrollment_step_completions, :class_name => 'EnrollmentStep'
+  should_have_many :exam_responses
 
   should "create user" do
     assert_difference 'User.count' do

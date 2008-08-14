@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
 
   has_many :enrollment_step_completions
   has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step
+  has_many :exam_responses
 
   validates_format_of       :name,     :with => RE_NAME_OK,  :message => MSG_NAME_BAD, :allow_nil => true
   validates_length_of       :name,     :maximum => 100
