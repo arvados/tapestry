@@ -1,0 +1,2 @@
+class CheckAllExamQuestion < ExamQuestion
+end

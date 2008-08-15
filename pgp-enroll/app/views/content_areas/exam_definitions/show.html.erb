@@ -1,9 +1,9 @@
-<p>
-  <b>Title:</b>
-  <%=h @exam_definition.title %>
-</p>
+<h2><%=h @exam_definition.title %></h2>
 
-<p>
-  <b>Description:</b>
-  <%=h @exam_definition.description %>
-</p>
+<p><%=h @exam_definition.description %></p>
+
+<h3>Your response:</h3>
+<p><%= @exam_response.question_responses.count %> / <%= @exam_definition.exam_questions.count %> questions answered.</p>
+<p><%= @exam_response.question_responses.select {|qr| qr.answer_option.correct? }.size %> / <%= @exam_definition.exam_questions.count %> correct.</p>
+
+<%= link_to 'Start the exam', content_area_exam_definition_exam_question_path(@content_area, @exam_definition, @exam_definition.exam_questions.first) %>

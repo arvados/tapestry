@@ -1,10 +1,12 @@
 class ExamQuestion < ActiveRecord::Base
   belongs_to :exam_definition
   has_many   :answer_options
-end
 
-class MultipleChoiceExamQuestion < ExamQuestion
-end
+  def next_question
+    exam_definition.exam_questions.find(:first, :conditions => ['ordinal > ?', ordinal])
+  end
 
-class CheckAllExamQuestion < ExamQuestion
+  def last_in_exam?
+    next_question.nil?
+  end
 end

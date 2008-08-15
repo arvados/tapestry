@@ -1,0 +1,2 @@
+class MultipleChoiceExamQuestion < ExamQuestion
+end

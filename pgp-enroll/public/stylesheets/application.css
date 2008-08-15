@@ -617,3 +617,19 @@ div.flash.error {
   background-color: #ddd;
 }
 
+.exam_progress {
+  border: 1px solid #ccc;
+  width: 300px;
+  height: 25px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.exam_progress .progress_bar_wrapper {
+  margin: 1px;
+}
+
+.exam_progress .progress_bar {
+  background-color: #ccc;
+  height: 23px;
+}

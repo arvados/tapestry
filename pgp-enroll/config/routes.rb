@@ -10,7 +10,11 @@ ActionController::Routing::Routes.draw do |map|
   map.activate '/activate/:code', :controller => 'users',    :action => 'activate'
 
   map.resources :content_areas do |content_area|
-    content_area.resources :exam_definitions, :controller => 'content_areas/exam_definitions'
+    content_area.resources :exam_definitions, :controller => 'content_areas/exam_definitions' do |exam_definition|
+      exam_definition.resources :exam_questions,
+        :controller => 'content_areas/exam_definitions/exam_questions',
+        :member => { :answer => :post }
+    end
   end
 
   map.namespace 'admin' do |admin|

@@ -7,6 +7,7 @@ class ContentAreas::ExamDefinitionsController < ApplicationController
 
   def show
     @exam_definition = @content_area.exam_definitions.find(params[:id])
+    @exam_response = ExamResponse.find_or_create_by_user_id_and_exam_definition_id(current_user, @exam_definition)
   end
 
   private
