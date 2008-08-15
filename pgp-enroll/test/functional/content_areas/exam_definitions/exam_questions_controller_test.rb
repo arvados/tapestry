@@ -13,18 +13,24 @@ class ContentAreas::ExamDefinitions::ExamQuestionsControllerTest < ActionControl
       3.times { Factory :answer_option, :exam_question => @exam_question }
     end
 
-    context 'on GET to show' do
+    context 'with an exam started' do
       setup do
-        get :show,
-            :content_area_id => @content_area.id,
-            :exam_definition_id => @exam_definition.id,
-            :id => @exam_question
-        assert_response :success
-        assert_template :show
+        @exam_reponse = Factory(:exam_response, :user => @user, :exam_definition => @exam_definition)
       end
 
-      should 'assign to exam_question, exam_definition, and content_area' do
-        assert_equal @exam_question, assigns(:exam_question)
+      context 'on GET to show' do
+        setup do
+          get :show,
+              :content_area_id => @content_area.id,
+              :exam_definition_id => @exam_definition.id,
+              :id => @exam_question
+          assert_response :success
+          assert_template 'show'
+        end
+
+        should 'assign to exam_question, exam_definition, and content_area' do
+          assert_equal @exam_question, assigns(:exam_question)
+        end
       end
     end
   end

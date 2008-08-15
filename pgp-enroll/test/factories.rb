@@ -58,6 +58,7 @@ end
 
 Factory.define(:check_all_exam_question) do |f|
   f.exam_definition  { |e| e.association :exam_definition }
+  f.ordinal          { |q| q.exam_definition.exam_questions.count }
 end
 
 Factory.define(:answer_option) do |f|
