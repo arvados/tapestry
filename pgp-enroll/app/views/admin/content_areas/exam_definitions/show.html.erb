@@ -1,0 +1,18 @@
+<p>
+  <b>Title:</b>
+  <%=h @exam_definition.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @exam_definition.description %>
+</p>
+
+<p>
+  <b>Content Area:</b>
+  <%= link_to @exam_definition.content_area.title,
+              [:admin, @content_area] %>
+</p>
+
+<%= link_to 'Edit', edit_admin_content_area_exam_definition_path(@content_area, @exam_definition) %> |
+<%= link_to 'Back', admin_content_area_exam_definitions_path(@content_area) %>

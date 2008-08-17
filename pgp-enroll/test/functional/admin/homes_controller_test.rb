@@ -29,9 +29,9 @@ class Admin::HomesControllerTest < ActionController::TestCase
       end
 
       should 'show all admin areas' do
-        Admin::HomesController::ADMIN_RESOURCES.each do |resource|
-          assert_select 'div.main>ul>li', /#{resource.humanize}/
-        end
+        assert_select 'div.main>ul>li', /Users/
+        assert_select 'div.main>ul>li', /Exams/
+        assert_select 'div.main>ul>li', /Results/
       end
     end
   end

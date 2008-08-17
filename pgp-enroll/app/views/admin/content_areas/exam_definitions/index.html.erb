@@ -13,15 +13,15 @@
     <td><%=h exam_definition.title %></td>
     <td><%=h exam_definition.description %></td>
     <td><%= link_to exam_definition.content_area.title,
-              [:admin, exam_definition.content_area] %></td>
+              [:admin, @content_area] %></td>
     <td><%=  exam_definition.version %></td>
-    <td><%= link_to 'Show', [:admin, exam_definition] %></td>
-    <td><%= link_to 'Edit', edit_admin_exam_definition_path(exam_definition) %></td>
-    <td><%= link_to 'Destroy', [:admin, exam_definition], :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Show', [:admin, @content_area, exam_definition] %></td>
+    <td><%= link_to 'Edit', edit_admin_content_area_exam_definition_path(@content_area, exam_definition) %></td>
+    <td><%= link_to 'Destroy', [:admin, @content_area, exam_definition], :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New exam_definition', new_admin_exam_definition_path %>
+<%= link_to 'New exam_definition', new_admin_content_area_exam_definition_path(@content_area) %>

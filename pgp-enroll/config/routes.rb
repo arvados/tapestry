@@ -24,8 +24,13 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
     admin.resources :users, :member => { :activate => :put }
-    admin.resources :content_areas
-    admin.resources :exam_definitions
+    admin.resources :content_areas do |content_area|
+      content_area.resources :exam_definitions, :controller => 'content_areas/exam_definitions' do |exam_definition|
+        exam_definition.resources :exam_questions do |exam_question|
+          exam_question.resources :answer_options
+        end
+      end
+    end
   end
 
   map.connect ':controller/:action/:id'

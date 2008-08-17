@@ -40,7 +40,7 @@ x 33. fill out content_areas view for users
 _ 34. make user#name not attr_accessible to preview url hacking on users#edit
 x 35. make user able to take the test
 x 36. ensure a user can retake a test, and results are stored
-_ 37. refactor admin/exam_definitions under admin/content_areas
+x 37. refactor admin/exam_definitions under admin/content_areas
 _ 38. allow admin to add questions to an exam_definition
 _ 39. allow admin to add answer_options to an exam_question
 _ 40. allow admin to view results of exams by exam_definition
