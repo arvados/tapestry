@@ -1,8 +1,7 @@
+<h2>Administer the Enrollment Process</h2>
+
 <ul>
-<% @admin_resources.each do |r| -%>
-  <li>
-    <%= link_to r.humanize, :controller => r, :action => 'index' %>
-    (<%= Kernel.const_get(r.singularize.classify).count rescue 'n/a' %>)
-  </li>
-<% end -%>
+  <li><%= link_to 'Users',   :controller => 'admin/users' %></li>
+  <li><%= link_to 'Exams',   :controller => 'admin/content_areas' %></li>
+  <li><%= link_to 'Results', :controller => 'admin/exam_responses' %></li>
 </ul>
