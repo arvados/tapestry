@@ -1,0 +1,11 @@
+<h1>New question</h1>
+
+<% form_for [:admin, @content_area, @exam_definition, ExamQuestion.new(:ordinal => @exam_definition.exam_questions.count + 1)] do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', admin_content_area_exam_definition_exam_questions_path(@content_area, @exam_definition) %>

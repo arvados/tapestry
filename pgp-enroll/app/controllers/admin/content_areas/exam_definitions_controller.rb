@@ -3,11 +3,10 @@ class Admin::ContentAreas::ExamDefinitionsController < Admin::AdminControllerBas
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
   add_breadcrumb 'Exams', 'admin_content_area_exam_definitions_path(@content_area)'
-  before_filter :set_exam_definition, :only => [:show, :edit]
-
+  before_filter :set_exam_definition, :only => [:show, :edit, :update]
 
   def index
-    @exam_definitions = @content_area.exam_definitions.find(:all)
+    @exam_definitions = @content_area.exam_definitions
   end
 
   def show
@@ -32,8 +31,6 @@ class Admin::ContentAreas::ExamDefinitionsController < Admin::AdminControllerBas
   end
 
   def update
-    @exam_definition = ExamDefinition.find(params[:id])
-
     if @exam_definition.update_attributes(params[:exam_definition])
       flash[:notice] = 'ExamDefinition was successfully updated.'
       redirect_to [:admin, @content_area, @exam_definition]

@@ -45,6 +45,8 @@ _ 38. allow admin to add questions to an exam_definition
 _ 39. allow admin to add answer_options to an exam_question
 _ 40. allow admin to view results of exams by exam_definition
 _ 41. allow admin to view results of exams by content_area
+_ 42. allow admin to create a new version of an exam_definition
+_ 43. let question_responses habtm answer_options for check-all
 
 - note: test out admin/exam_defintions; have only proven to work, not tried it ;)
 - note: rname exam_definition parent/child to previous_version and next_version?

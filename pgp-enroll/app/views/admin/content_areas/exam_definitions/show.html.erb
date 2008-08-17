@@ -14,5 +14,10 @@
               [:admin, @content_area] %>
 </p>
 
+<p>
+<%= link_to "Edit Questions (#{@exam_definition.exam_questions.count})",
+            admin_content_area_exam_definition_exam_questions_path(@content_area, @exam_definition) %>
+</p>
+
 <%= link_to 'Edit', edit_admin_content_area_exam_definition_path(@content_area, @exam_definition) %> |
 <%= link_to 'Back', admin_content_area_exam_definitions_path(@content_area) %>

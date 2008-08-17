@@ -2,7 +2,7 @@ class Admin::ContentAreasController < Admin::AdminControllerBase
   add_breadcrumb 'Admin', '/admin'
   add_breadcrumb 'Content Areas', '/admin/content_areas'
 
-  before_filter :set_content_area, :only => [:show, :edit]
+  before_filter :set_content_area, :only => [:show, :edit, :update]
 
   def index
     @content_areas = ContentArea.find(:all)
@@ -30,10 +30,8 @@ class Admin::ContentAreasController < Admin::AdminControllerBase
   end
 
   def update
-    @content_area = ContentArea.find(params[:id])
-
     if @content_area.update_attributes(params[:content_area])
-      flash[:notice] = 'ContentArea was successfully updated.'
+      flash[:notice] = 'Content area was successfully updated.'
       redirect_to([:admin, @content_area])
     else
       render :action => "edit"

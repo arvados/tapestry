@@ -1,0 +1,15 @@
+<h1>Editing exam question</h1>
+
+<% form_for :exam_question, @exam_question,
+            :url => admin_content_area_exam_definition_exam_question_path(
+              @content_area,
+              @exam_definition,
+              @exam_question),
+            :html => { :method => :put } do |f| %>
+
+  <%= f.error_messages %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>

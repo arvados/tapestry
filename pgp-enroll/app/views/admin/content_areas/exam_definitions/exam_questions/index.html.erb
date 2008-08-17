@@ -1,0 +1,24 @@
+<h2><%=h @exam_definition.title %>: Questions</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>Question</th>
+    <th>Type</th>
+    <th>Ordinal</th>
+  </tr>
+
+<% for exam_question in @exam_questions %>
+  <tr class="<%= cycle 'even', 'odd' %>">
+    <td><%=h exam_question.question %></td>
+    <td><%=h exam_question.type %></td>
+    <td><%=h exam_question.ordinal %></td>
+    <td><%= link_to 'Show',      admin_content_area_exam_definition_exam_question_path(@content_area, @exam_definition, exam_question) %></td>
+    <td><%= link_to 'Edit', edit_admin_content_area_exam_definition_exam_question_path(@content_area, @exam_definition, exam_question) %></td>
+    <td><%= link_to 'Destroy', admin_content_area_exam_definition_exam_question_path(@content_area, @exam_definition, exam_question), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<p>
+  <%= link_to 'Add a new question', new_admin_content_area_exam_definition_exam_question_path(@content_area, @exam_definition) %>
+</p>

@@ -1,0 +1,14 @@
+  <p>
+    <%= f.label :question %><br />
+    <%= f.text_field :question %>
+  </p>
+  <p>
+    <%= f.label :ordinal %><br />
+    <%= f.text_field :ordinal %>
+  </p>
+  <p>
+    <%= f.label :type %><br />
+    <%= f.select :type, [['Multiple Choice', 'MultipleChoiceExamQuestion']] %>
+  </p>
+  <%= f.hidden_field :exam_definition_id, :value => @exam_definition.id %>
+
