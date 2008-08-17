@@ -36,8 +36,11 @@ _ 29. install environment on harvard cluster domU for production - rails is up, 
 _ 30. install environment on harvard cluster domU for staging
 x 31. make name read-only on user/edit
 _ 32. add preferences exam to db/bootstrap
-_ 33. fill out content_areas view for users => working...
+x 33. fill out content_areas view for users
 _ 34. make user#name not attr_accessible to preview url hacking on users#edit
+x 35. make user able to take the test
+x 36. ensure a user can retake a test, and results are stored
+
 
 - note: test out admin/exam_defintions; have only proven to work, not tried it ;)
 - note: rname exam_definition parent/child to previous_version and next_version?

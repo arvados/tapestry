@@ -14,11 +14,11 @@ nature_of_genetic_materials_3:
   id: 3
   exam_definition_id: 2
   type: MultipleChoiceExamQuestion
-  ordinal: 3
+  ordinal: 1
   question: Question body 3
 transmission_1:
   id: 4
   exam_definition_id: 2
   type: MultipleChoiceExamQuestion
-  ordinal: 1
+  ordinal: 2
   question: Question body 4

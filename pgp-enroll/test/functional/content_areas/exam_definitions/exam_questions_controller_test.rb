@@ -30,6 +30,12 @@ class ContentAreas::ExamDefinitions::ExamQuestionsControllerTest < ActionControl
 
         should 'assign to exam_question, exam_definition, and content_area' do
           assert_equal @exam_question, assigns(:exam_question)
+          assert_equal @exam_definition, assigns(:exam_definition)
+          assert_equal @content_area, assigns(:content_area)
+        end
+
+        should 'render exam progress' do
+          assert_select '.main p', /1 out of 1/
         end
       end
     end

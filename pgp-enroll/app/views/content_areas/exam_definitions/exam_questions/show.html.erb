@@ -3,7 +3,8 @@
 
 <%= render :partial => 'exam_progress',
            :locals => {
-             :progress => @exam_response.question_responses.count,
-             :total    => @exam_definition.exam_questions.count } %>
+             :answered_questions => @exam_response.question_responses.count,
+             :current_question   => @exam_response.question_responses.count + 1,
+             :total_questions    => @exam_definition.exam_questions.count } %>
 
 <%= render :partial => @exam_question.class.name.tableize.singularize %>
