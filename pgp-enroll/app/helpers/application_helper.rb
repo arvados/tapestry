@@ -27,4 +27,15 @@ module ApplicationHelper
     end.to_s << '</ul>'
     error_list
   end
+
+  def breadcrumbs
+    breadcrumb_list = []
+    if @breadcrumbs
+      @breadcrumbs[0..-2].each do |txt, path|
+        breadcrumb_list << link_to(h(txt), path)
+      end
+    end
+    breadcrumb_list << h(@breadcrumbs.last.first)
+    breadcrumb_list.join(' > ')
+  end
 end
