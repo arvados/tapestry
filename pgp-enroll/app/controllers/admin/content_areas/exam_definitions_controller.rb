@@ -40,10 +40,10 @@ class Admin::ContentAreas::ExamDefinitionsController < Admin::AdminControllerBas
   end
 
   def destroy
-    @exam_definition = ExamDefinition.find(params[:id])
+    @exam_definition = @content_area.exam_definitions.find(params[:id])
     @exam_definition.destroy
 
-    redirect_to admin_content_area_exam_definitions_path(@content_area)
+    redirect_to :action => :index
   end
 
   private

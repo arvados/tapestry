@@ -1,0 +1,16 @@
+<h1>Editing answer option</h1>
+
+<% form_for :answer_option, @answer_option,
+            :url => admin_content_area_exam_definition_exam_question_answer_option_path(
+              @content_area,
+              @exam_definition,
+              @exam_question,
+              @answer_option),
+            :html => { :method => :put } do |f| %>
+
+  <%= f.error_messages %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>

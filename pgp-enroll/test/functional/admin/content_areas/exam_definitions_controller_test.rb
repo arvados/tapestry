@@ -50,7 +50,7 @@ class Admin::ContentAreas::ExamDefinitionsControllerTest < ActionController::Tes
         delete :destroy, :content_area_id => @content_area, :id => @exam_definition.id
       end
 
-      assert_redirected_to admin_content_area_exam_definitions_path(@content_area)
+      assert_redirected_to :action => 'index'
     end
   end
 end

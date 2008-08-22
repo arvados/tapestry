@@ -1,0 +1,10 @@
+  <p>
+    <%= f.label :answer %><br />
+    <%= f.text_field :answer %>
+  </p>
+  <p>
+    <%= f.label :correct, 'Correct?'  %><br />
+    <%= f.check_box :correct %>
+  </p>
+  <%= f.hidden_field :exam_question_id, :value => @exam_question.id %>
+

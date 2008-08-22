@@ -15,7 +15,7 @@ class Admin::ContentAreas::ExamDefinitions::ExamQuestionsController < Admin::Adm
   end
 
   def new
-    @exam_question = ExamQuestion.new
+    @exam_question = ExamQuestion.new(:ordinal => @exam_definition.exam_questions.count + 1)]
   end
 
   def edit
@@ -44,7 +44,7 @@ class Admin::ContentAreas::ExamDefinitions::ExamQuestionsController < Admin::Adm
   end
 
   def destroy
-    @exam_question = ExamQuestion.find(params[:id])
+    @exam_question = @exam_definition.exam_questions.find(params[:id])
     @exam_question.destroy
 
     redirect_to :action => 'index'
