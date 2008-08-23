@@ -1,14 +1,30 @@
-<p>
-  <b>Title:</b>
-  <%=h @content_area.title %>
-</p>
+<h2>Content Area: <%=h @content_area.title %></h2>
 
 <p>
-  <b>Description:</b>
+  <strong>Description:</strong>
   <%=h @content_area.description %>
 </p>
 
+<h2><%=h @content_area.title %> Exam Definitions</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Version Number</th>
+  </tr>
+
+<% for exam_definition in @content_area.exam_definitions %>
+  <tr class="<%= cycle 'even', 'odd' %>">
+    <td><%= link_to h(exam_definition.title), [:admin, @content_area, exam_definition] %></td>
+    <td><%=h exam_definition.description %></td>
+    <td><%=  exam_definition.version %></td>
+    <td><%= link_to 'Edit', edit_admin_content_area_exam_definition_path(@content_area, exam_definition) %></td>
+    <td><%= link_to 'Destroy', [:admin, @content_area, exam_definition], :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
 <p>
-<%= link_to "Exams for this content area (#{@content_area.exam_definitions.count})",
-            admin_content_area_exam_definitions_path(@content_area) %>
+  <%= link_to 'Add a new exam definition', new_admin_content_area_exam_definition_path(@content_area) %>
 </p>

@@ -8,9 +8,8 @@
 
 <% for content_area in @content_areas %>
   <tr class="<%= cycle 'even', 'odd' %>">
-    <td><%=h content_area.title %></td>
+    <td><%= link_to h(content_area.title), [:admin, content_area] %></td>
     <td><%=h content_area.description %></td>
-    <td><%= link_to 'Show', [:admin, content_area] %></td>
     <td><%= link_to 'Edit', edit_admin_content_area_path(content_area) %></td>
     <td><%= link_to 'Destroy', [:admin, content_area], :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>

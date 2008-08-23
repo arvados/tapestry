@@ -28,6 +28,4 @@ class ApplicationController < ActionController::Base
       controller.send(:add_breadcrumb, name, url)
     end
   end
-
-  add_breadcrumb 'Home', '/'
 end

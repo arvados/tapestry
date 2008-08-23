@@ -1,12 +1,8 @@
 class Admin::ContentAreas::ExamDefinitions::ExamQuestions::AnswerOptionsController < Admin::AdminControllerBase
-  add_breadcrumb 'Admin', '/admin'
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
-  add_breadcrumb 'Exams', 'admin_content_area_exam_definitions_path(@content_area)'
   before_filter :set_exam_definition
-  add_breadcrumb 'Questions', 'admin_content_area_exam_definition_exam_questions_path(@content_area, @exam_definition)'
   before_filter :set_exam_question
-  add_breadcrumb 'Answer Options', 'admin_content_area_exam_definition_exam_question_answer_options_path(@content_area, @exam_definition, @exam_question)'
   before_filter :set_answer_option, :only => [:show, :edit, :update]
 
   def index
@@ -25,7 +21,6 @@ class Admin::ContentAreas::ExamDefinitions::ExamQuestions::AnswerOptionsControll
 
   def create
     @answer_option = AnswerOption.new(params[:answer_option])
-    @answer_option.type = params[:answer_option][:type]
 
     if @answer_option.save
       flash[:notice] = 'Answer option was successfully created.'

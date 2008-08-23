@@ -1,6 +1,4 @@
 class Admin::UsersController < Admin::AdminControllerBase
-  add_breadcrumb 'Admin', '/admin'
-  add_breadcrumb 'Users', '/admin/users'
 
   include Admin::UsersHelper
 

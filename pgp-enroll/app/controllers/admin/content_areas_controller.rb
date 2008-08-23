@@ -1,5 +1,4 @@
 class Admin::ContentAreasController < Admin::AdminControllerBase
-  add_breadcrumb 'Admin', '/admin'
   add_breadcrumb 'Content Areas', '/admin/content_areas'
 
   before_filter :set_content_area, :only => [:show, :edit, :update]

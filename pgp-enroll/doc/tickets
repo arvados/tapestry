@@ -47,6 +47,12 @@ _ 40. allow admin to view results of exams by exam_definition
 _ 41. allow admin to view results of exams by content_area
 _ 42. allow admin to create a new version of an exam_definition
 _ 43. let question_responses habtm answer_options for check-all
+_ 44. configure cap envs for www-dev.oxf and www-prod.oxf
+_ 45. style content_areas#index UL
+_ 46. style content_areas#show UL
+_ 47. style exam_definitions#show - if user has completed, show completion w/ option to retake unless they 100%
+_ 48. plan basic reporting in admin/**/* - mix in with indices and shows
+_ 49. sort by ordinal on index for admin/content_areas/1/exam_definitions/1/exam_questions
 
 - note: test out admin/exam_defintions; have only proven to work, not tried it ;)
 - note: rname exam_definition parent/child to previous_version and next_version?

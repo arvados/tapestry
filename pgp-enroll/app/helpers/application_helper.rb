@@ -28,14 +28,25 @@ module ApplicationHelper
     error_list
   end
 
-  def breadcrumbs
+  def breadcrumb_content
     breadcrumb_list = []
-    if @breadcrumbs
+    if @breadcrumbs && @breadcrumbs.any?
       @breadcrumbs[0..-2].each do |txt, path|
         breadcrumb_list << link_to(h(txt), path)
       end
+      breadcrumb_list << h(@breadcrumbs.last.first)
+      breadcrumb_list.join(' > ')
+    else
+      ''
     end
-    breadcrumb_list << h(@breadcrumbs.last.first)
-    breadcrumb_list.join(' > ')
+  end
+
+  def breadcrumbs
+    content = breadcrumb_content
+    content.blank? ? '' : <<EOS
+      <div id="top-breadcrumbs">
+        #{breadcrumb_content}
+      </div>
+EOS
   end
 end

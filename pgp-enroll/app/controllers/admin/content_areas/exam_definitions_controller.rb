@@ -1,8 +1,6 @@
 class Admin::ContentAreas::ExamDefinitionsController < Admin::AdminControllerBase
-  add_breadcrumb 'Admin', '/admin'
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
-  add_breadcrumb 'Exams', 'admin_content_area_exam_definitions_path(@content_area)'
   before_filter :set_exam_definition, :only => [:show, :edit, :update]
 
   def index

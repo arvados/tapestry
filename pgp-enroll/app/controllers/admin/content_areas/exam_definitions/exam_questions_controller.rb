@@ -1,10 +1,7 @@
 class Admin::ContentAreas::ExamDefinitions::ExamQuestionsController < Admin::AdminControllerBase
-  add_breadcrumb 'Admin', '/admin'
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
-  add_breadcrumb 'Exams', 'admin_content_area_exam_definitions_path(@content_area)'
   before_filter :set_exam_definition
-  add_breadcrumb 'Questions', 'admin_content_area_exam_definition_exam_questions_path(@content_area, @exam_definition)'
   before_filter :set_exam_question, :only => [:show, :edit, :update]
 
   def index
@@ -15,7 +12,7 @@ class Admin::ContentAreas::ExamDefinitions::ExamQuestionsController < Admin::Adm
   end
 
   def new
-    @exam_question = ExamQuestion.new(:ordinal => @exam_definition.exam_questions.count + 1)]
+    @exam_question = ExamQuestion.new(:ordinal => @exam_definition.exam_questions.count + 1)
   end
 
   def edit

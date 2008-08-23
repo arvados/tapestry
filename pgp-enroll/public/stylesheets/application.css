@@ -226,25 +226,22 @@ form .submit input.long {
 
 #body .menu {
   height: 40px; 
-	float: left;
-	background: #91a9d1;
-	color: #fff;
-	width: 100%;
-	margin-top: -18px;
-	border-top: 1px solid #9ab0d5;
-}
-
-div.menu span.breadcrumbs {
   float: left;
-  width: 49%:
-  padding: 0;
-  margin: 10px;
+  background: #91a9d1;
+  color: #fff;
+  width: 100%;
+  margin-top: -18px;
+  border-top: 1px solid #9ab0d5;
 }
 
+#top-breadcrumbs {
+  padding: 6px 18px;
+  background-color: #dfe5f1;
+}
+
+#top-breadcrumbs * { font-weight: normal; }
 
 #body .menu ul.links {
-  float: right;
-  text-align: right;
   margin: 0px;
   padding: 0;
   height: 100%;
@@ -264,10 +261,11 @@ ul.links li a {
   height: 40px;
 }
 
-#body .menu li.current {
+#body .menu ul.links li.current {
   padding-top: 4px;
   border-top: 2px solid #6183bd;
 }
+
 
 #body .menu li.right {
   float: right;
@@ -455,7 +453,6 @@ ul.links li a {
 
 #body .clear {
 	clear: both;
-	height: 18px;
 }
 
 #foot {
@@ -573,6 +570,7 @@ color: #7f97c9;
 
 div.flash {
   margin-left: 25px;
+  margin-top: 25px;
   padding: 10px;
   width: 500px;
   font-size: 16px;

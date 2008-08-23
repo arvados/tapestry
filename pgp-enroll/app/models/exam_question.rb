@@ -3,7 +3,7 @@ class ExamQuestion < ActiveRecord::Base
   has_many   :answer_options
 
   def next_question
-    exam_definition.exam_questions.find(:first, :conditions => ['ordinal > ?', ordinal])
+    exam_definition.exam_questions.find(:first, :conditions => ['ordinal > ?', ordinal], :order => 'ordinal')
   end
 
   def last_in_exam?
