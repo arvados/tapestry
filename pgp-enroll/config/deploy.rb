@@ -1,14 +1,31 @@
+# For migrations
+set :rails_env, 'staging'
+
+# Who are we?
 set :application, 'pgp'
-set :repository,  'http://svn.jayunit.net/pgpproto/trunk'
-set :deploy_to,   '/var/www/pgp-staging.hugcapacitor.com'
-set :deploy_via,  :remote_cache 
+set :repository,  'http://dev.freelogy.org/svn/pgp-enroll/trunk'
 
-ssh_options[:port] = 33333
-ssh_options[:username] = 'jason'
+# Where to deploy to?
+role :app, 'www-dev.oxf'
+role :web, 'www-dev.oxf'
+role :db,  'www-dev.oxf', :primary => true
 
-role :app, 'pgp-staging.hugcapacitor.com'
-role :web, 'pgp-staging.hugcapacitor.com'
-role :db,  'pgp-staging.hugcapacitor.com', :primary => true
+# Deploy details
+set :deploy_to,   '/var/www/enroll-dev.personalgenomes.org'
+set :deploy_via,  :remote_cache
+set :scm_command, 'svn'
+set :user,        'www-data'
+set :use_sudo,    false
+
+
+# Main deploy.rb
+set :stages, %w(staging production)
+set :default_stage, 'staging'
+require 'capistrano/ext/multistage'
+
+# ssh_options[:port] = 33333
+# ssh_options[:username] = 'jason'
+
 
 namespace :deploy do
   desc "Restarting mod_rails with restart.txt"
@@ -29,4 +46,6 @@ namespace :deploy do
     CMD
   end
 end
+
+
 
