@@ -31,4 +31,6 @@ ActionMailer::Base.smtp_settings = {
   :password => "xxxxxxxx" 
 }
 
+ROOT_URL = 'dev.personalgenomes.org'
+ADMIN_EMAIL = 'jason.p.morrison@gmail.com'
 
