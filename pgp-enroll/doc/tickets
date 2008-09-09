@@ -4,61 +4,81 @@
 
 == Tickets ==
 
-D: Done in basecamp
-u: undone in basecamp
-_: needs to be migrated to basecamp
+x 1. add restful auth
+x 2. make user agree to agreement to create a user
+x 3. remove homes content
+x 4. change user model to have name, and not a login, and to login with email+password
+x 5. create enrollment step model
+x 6. have a logged_in_user_homepage vs not_logged_in_user_homepage (partials in homes/index ?)
+x 7. in logged_in_user_homepage, render the enrollment steps
+x 8. create EnrollmentStepCompletion model
+x 9. automatically add an ESC for the :signup EC upon activation
+x 10. show which ECs have ESCs on logged_in_user_homepage
+x 11. get a staging env configured
+x 12. get actionmailer working with gmail
+x 13. make stranger homepage render like the loggedinuser homepage, but prompting on e-step 1
+x 14. make next_step clickable on homepage
+x 15. make content_areas resource
+x 16. add admin attribute to user (manually set this for now), attr_accessible the others, and this allows user onto the admin namespace
+x 17. add user settings page
+_ 18. add breadcrumbs
+x 19. make exam_definition resource under content_areas for users
+x 20. make exam_response resource under e-def model
+x 21. make exam_question resource under e-def model
+x 22. fix up the flash css
+_ 23. on user#new page, consolidate flash (it's split around the TOS)
+x 24. fix the bad link on clicking banner
+x 25. make admin namespace
+x 26. make user CRUD+export under admin namespace
+x 27. make content-area CRUD under admin namespace
+x 28. make is_admin check_box on admin/users/edit
+_ 29. install environment on harvard cluster domU for production - rails is up, need mysql conf, and proper sites_enabled config
+_ 30. install environment on harvard cluster domU for staging
+x 31. make name read-only on user/edit
+_ 32. add preferences exam to db/bootstrap
+x 33. fill out content_areas view for users
+_ 34. make user#name not attr_accessible to preview url hacking on users#edit
+x 35. make user able to take the test
+x 36. ensure a user can retake a test, and results are stored
+x 37. refactor admin/exam_definitions under admin/content_areas
+x 38. allow admin to add questions to an exam_definition
+x 39. allow admin to add answer_options to an exam_question
+_ 40. allow admin to view results of exams by exam_definition
+_ 41. allow admin to view results of exams by content_area
+_ 42. allow admin to create a new version of an exam_definition
+_ 43. let question_responses habtm answer_options for check-all
+_ 44. configure cap envs for www-dev.oxf and www-prod.oxf
+_ 45. style content_areas#index UL
+_ 46. style content_areas#show UL
+_ 47. style exam_definitions#show - if user has completed, show completion w/ option to retake unless they 100%
+_ 48. plan basic reporting in admin/**/* - mix in with indices and shows
+_ 49. sort by ordinal on index for admin/content_areas/1/exam_definitions/1/exam_questions
+_ 50. add explicit exam_version model
 
-D 1. add restful auth
-D 2. make user agree to agreement to create a user
-D 3. remove homes content
-D 4. change user model to have name, and not a login, and to login with email+password
-D 5. create enrollment step model
-D 6. have a loggeduin_user_homepage vs not_logged_in_user_homepage (partials in homes/index ?)
-D 7. in loggeduin_user_homepage, render the enrollment steps
-D 8. create EnrollmentStepCompletion model
-D 9. automatically add an ESC for the :signup EC upon activation
-D 10. show which ECs have ESCs on loggeduin_user_homepage
-D 11. get a staging env configured
-D 12. get actionmailer working with gmail
-D 13. make stranger homepage render like the loggedinuser homepage, but prompting on e-step 1
-D 14. make nextustep clickable on homepage
-D 15. make contentuareas resource
-D 16. add admin attribute to user (manually set this for now), attruaccessible the others, and this allows user onto the admin namespace
-D 17. add user settings page
-u 18. add breadcrumbs
-D 19. make examudefinition resource under content_areas for users
-D 20. make examuresponse resource under e-def model
-D 21. make examuquestion resource under e-def model
-D 22. fix up the flash css
-u 23. on user#new page, consolidate flash (it's split around the TOS)
-D 24. fix the bad link on clicking banner
-D 25. make admin namespace
-D 26. make user CRUD+export under admin namespace
-D 27. make content-area CRUD under admin namespace
-D 28. make isuadmin check_box on admin/users/edit
-u 29. install environment on harvard cluster domU for production - rails is up, need mysql conf, and proper sites_enabled config
-u 30. install environment on harvard cluster domU for staging
-D 31. make name read-only on user/edit
-u 32. add preferences eDam to db/bootstrap
-D 33. fill out contentuareas view for users
-u 34. make user#name not attr_accessible to preview url hacking on users#edit
-D 35. make user able to take the test
-D 36. ensure a user can retake a test, and results are stored
-D 37. refactor admin/examudefinitions under admin/content_areas
-u 38. allow admin to add questions to an eDam_definition
-u 39. allow admin to add answer_options to an eDam_question
-u 40. allow admin to view results of eDams by exam_definition
-u 41. allow admin to view results of eDams by content_area
-u 42. allow admin to create a new version of an eDam_definition
-u 43. let question_responses habtm answer_options for check-all
-u 44. configure cap envs for www-dev.oDf and www-prod.oxf
-u 45. style content_areas#indeD UL
-u 46. style content_areas#show UL
-u 47. style eDam_definitions#show - if user has completed, show completion w/ option to retake unless they 100%
-u 48. plan basic reporting in admin/**/* - miD in with indices and shows
-u 49. sort by ordinal on indeD for admin/content_areas/1/exam_definitions/1/exam_questions
+CURRENTLY: Created two migrations, considering what to put in exams table.
 
-- note: test out admin/exam_defintions; have only proven to work, not tried it ;)
-- note: rname exam_definition parent/child to previous_version and next_version?
-- note: consolidate pgp-static and pgp-enroll servers, with an apache and 2vhosts on each (for www. and enroll.)
-- note: add cronjob on staging/prod for backing up DB
+Model
+  Move ExamDefinition to ExamVersion
+  Add Exam, ExamVersion bt Exam
+  Remove parent/child, and add version # field
+  Add current_version to exam
+  Add previous_version field to Question model since it will be duplicated
+
+VC
+  Modify content_areas to show current version of child exams
+  Modify exams controller to show current version
+  Modify admin/content_areas to show
+_ 51. don't allow user to retake exam if passed
+_ 52. don't allow user to re-enter content area if passed
+_ 53. add cronjob on prod for backup db
+
+_ 54. user-exam-version-association model / Model A = The exam version is locked at the moment a participant either (1) registers on the site or (2) starts an exam.  A new version of an exam would only impact people who sign-up after the exam is changed. (second easiest).
+
+== Tidy ==
+* change is_admin? to admin?
+* change exam_question to question
+* on admin/users#index, disable activate link if user is active
+
+== Debt ==
+
+

@@ -1,10 +1,12 @@
-nature_of_genetic_materials:
+nature_of_genetic_materials_v1:
   id: 1
+  exam_id: 1
   title: Nature of Genetic Material
   description: Nature of Genetic Material description
-  content_area_id: 1
-transmission:
+  published: true
+transmission_v1:
   id: 2
+  exam_id: 2
   title: Transmission
   description: Transmission description
-  content_area_id: 1
+  published: true

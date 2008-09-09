@@ -10,13 +10,11 @@ ActionController::Routing::Routes.draw do |map|
   map.activate '/activate/:code', :controller => 'users',    :action => 'activate'
 
   map.resources :content_areas do |content_area|
-    content_area.resources :exam_definitions,
-                           :controller => 'content_areas/exam_definitions',
-                           :member => {
-                             :start  => :post,
-                             :retake => :post } do |exam_definition|
-      exam_definition.resources :exam_questions,
-        :controller => 'content_areas/exam_definitions/exam_questions',
+    content_area.resources :exams,
+                           :controller => 'content_areas/exams',
+                           :member => { :start => :post, :retake => :post } do |exam|
+      exam.resources :exam_questions,
+        :controller => 'content_areas/exams/exam_questions',
         :member => { :answer => :post }
     end
   end
@@ -25,12 +23,13 @@ ActionController::Routing::Routes.draw do |map|
     admin.root :controller => 'homes'
     admin.resources :users, :member => { :activate => :put }
     admin.resources :content_areas do |content_area|
-      content_area.resources :exam_definitions,
-                             :controller => 'content_areas/exam_definitions',
-                             :member => {
-                               :clone => :post } do |exam_definition|
-        exam_definition.resources :exam_questions, :controller => 'content_areas/exam_definitions/exam_questions' do |exam_question|
-          exam_question.resources :answer_options, :controller => 'content_areas/exam_definitions/exam_questions/answer_options'
+      content_area.resources :exams, :controller => 'content_areas/exams' do |exam|
+        exam.resources :exam_versions, :member => { :clone => :post } do |exam_version|
+          exam_version.resources :exam_questions,
+                                 :controller => 'content_areas/exam_versions/exam_questions' do |exam_question|
+            exam_question.resources :answer_options,
+                                    :controller => 'content_areas/exam_versions/exam_questions/answer_options'
+          end
         end
       end
     end

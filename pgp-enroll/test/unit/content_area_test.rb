@@ -5,7 +5,7 @@ class ContentAreaTest < ActiveSupport::TestCase
     @content_area = Factory :content_area
   end
 
-  should_have_many :exam_definitions
+  should_have_many :exams
   should_require_attributes :title, :description
 end
 

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080815035142) do
+ActiveRecord::Schema.define(:version => 20080907232739) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -42,17 +42,8 @@ ActiveRecord::Schema.define(:version => 20080815035142) do
     t.datetime "updated_at"
   end
 
-  create_table "exam_definitions", :force => true do |t|
-    t.string   "title"
-    t.text     "description"
-    t.integer  "parent_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "content_area_id"
-  end
-
   create_table "exam_questions", :force => true do |t|
-    t.integer  "exam_definition_id"
+    t.integer  "exam_version_id"
     t.string   "type"
     t.integer  "ordinal"
     t.string   "question"
@@ -62,10 +53,26 @@ ActiveRecord::Schema.define(:version => 20080815035142) do
 
   create_table "exam_responses", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "exam_definition_id"
+    t.integer  "exam_version_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "original_user_id"
+  end
+
+  create_table "exam_versions", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "exam_id"
+    t.integer  "version"
+    t.boolean  "published",   :default => false, :null => false
+  end
+
+  create_table "exams", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "content_area_id"
   end
 
   create_table "question_responses", :force => true do |t|

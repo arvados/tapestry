@@ -1,7 +1,8 @@
 <h2><%= @content_area.title %></h2>
 
 <ul>
-<% @exam_definitions.each do |exam| -%>
-<li><%= link_to exam.title, content_area_exam_definition_path(:content_area_id => @content_area, :id => exam) %></li>
+<% @exams.each do |exam| -%>
+  <li><%= link_to exam.version_for(current_user).title,
+                  content_area_exam_path(@content_area, exam) %></li>
 <% end -%>
 </ul>

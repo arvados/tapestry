@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ContentAreas::ExamDefinitions::ExamQuestionsControllerTest < ActionController::TestCase
+class ContentAreas::Exams::ExamQuestionsControllerTest < ActionController::TestCase
   context 'with a logged in user and several content areas' do
     setup do
       @user = Factory :user

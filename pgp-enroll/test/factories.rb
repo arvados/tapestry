@@ -40,25 +40,30 @@ Factory.define(:content_area) do |f|
   f.description 'Content Area Description'
 end
 
-Factory.define(:exam_definition) do |f|
-  f.title       'Exam Definition Title'
-  f.description 'Exam Definition Description'
+Factory.define(:exam) do |f|
   f.content_area { |e| e.association :content_area }
 end
 
+Factory.define(:exam_version) do |f|
+  f.title       'Exam Definition Title'
+  f.description 'Exam Definition Description'
+  f.exam { |e| e.exam :exam }
+  f.version 1
+end
+
 Factory.define(:exam_response) do |f|
-  f.user            { |u| u.association :user }
-  f.exam_definition { |e| e.association :exam_definition }
+  f.user         { |u| u.association :user }
+  f.exam_version { |e| e.association :exam_version }
 end
 
 Factory.define(:multiple_choice_exam_question) do |f|
-  f.exam_definition  { |e| e.association :exam_definition }
-  f.ordinal          { |q| q.exam_definition.exam_questions.count }
+  f.exam_version  { |e| e.association :exam_version }
+  f.ordinal       { |q| q.exam_version.exam_questions.count }
 end
 
 Factory.define(:check_all_exam_question) do |f|
-  f.exam_definition  { |e| e.association :exam_definition }
-  f.ordinal          { |q| q.exam_definition.exam_questions.count }
+  f.exam_version  { |e| e.association :exam_version }
+  f.ordinal       { |q| q.exam_version.exam_questions.count }
 end
 
 Factory.define(:answer_option) do |f|
@@ -69,5 +74,5 @@ end
 
 Factory.define(:question_response) do |f|
   f.answer_option { |a| a.association :answer_option }
-  f.exam_response { |r| r.association(:exam_response, :exam_definition => r.answer_option.exam_question.exam_definition) }
+  f.exam_response { |r| r.association(:exam_response, :exam_version => r.answer_option.exam_question.exam_version) }
 end

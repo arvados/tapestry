@@ -8,7 +8,7 @@ class ExamResponseTest < ActiveSupport::TestCase
 
     should_belong_to :user
     should_belong_to :original_user
-    should_belong_to :exam_definition
+    should_belong_to :exam_version
     should_have_many :question_responses
 
     should 'move user to original_user when sent #discard_for_retake!' do

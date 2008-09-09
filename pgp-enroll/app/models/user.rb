@@ -17,21 +17,16 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email,    :case_sensitive => false
   validates_format_of       :email,    :with => RE_EMAIL_OK, :message => MSG_EMAIL_BAD
 
-  before_create :make_activation_code 
-
-  # HACK HACK HACK -- how to do attr_accessible from here?
-  # prevents a user from submitting a crafted form that bypasses activation
-  # anything else you want your user to change should be added here.
+  before_create :make_activation_code
   attr_accessible :email, :name, :password, :password_confirmation
-
-
 
   # Activates the user in the database.
   def activate!
     @activated = true
     self.activated_at = Time.now.utc
     self.activation_code = nil
-    self.complete_enrollment_step EnrollmentStep.find_by_keyword('signup')
+    signup_enrollment_step = EnrollmentStep.find_by_keyword('signup')
+    self.complete_enrollment_step(signup_enrollment_step)
     save(false)
   end
 
@@ -45,7 +40,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def complete_enrollment_step step
+  def complete_enrollment_step(step)
+    raise "enrollment step is nil" if step.nil?
     completion = EnrollmentStepCompletion.new :enrollment_step => step
     enrollment_step_completions << completion 
   end
