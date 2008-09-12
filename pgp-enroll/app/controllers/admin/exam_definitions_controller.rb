@@ -1,4 +1,4 @@
-class Admin::ContentAreas::ExamDefinitionsController < Admin::AdminControllerBase
+class Admin::ExamsController < Admin::AdminControllerBase
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
   before_filter :set_exam_definition, :only => [:show, :edit, :update]

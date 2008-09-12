@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Admin::ContentAreas::ExamDefinitionsControllerTest < ActionController::TestCase
+class Admin::ExamsControllerTest < ActionController::TestCase
   context 'when logged in as an admin, with exam definitions' do
     setup do
       @user = Factory :admin_user

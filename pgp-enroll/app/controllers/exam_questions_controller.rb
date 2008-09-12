@@ -1,4 +1,4 @@
-class ContentAreas::Exams::ExamQuestionsController < ApplicationController
+class ContentAreas::ExamQuestionsController < ApplicationController
   before_filter :load_exam_models, :only => [:show, :answer]
 
   def show

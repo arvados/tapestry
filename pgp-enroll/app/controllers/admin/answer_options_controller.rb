@@ -1,4 +1,4 @@
-class Admin::ContentAreas::ExamDefinitions::ExamQuestions::AnswerOptionsController < Admin::AdminControllerBase
+class Admin::AnswerOptionsController < Admin::AdminControllerBase
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
   before_filter :set_exam_definition
