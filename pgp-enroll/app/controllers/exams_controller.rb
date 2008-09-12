@@ -1,4 +1,4 @@
-class ContentAreas::ExamDefinitionsController < ApplicationController
+class ExamsController < ApplicationController
   before_filter :set_content_area
   before_filter :set_exam_definition, :only => [:show, :start, :retake]
 
