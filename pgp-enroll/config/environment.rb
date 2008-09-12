@@ -27,6 +27,7 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'thoughtbot-factory_girl', :version => '1.1', :lib => 'factory_girl'
   config.gem 'mocha'
+  config.gem 'quietbacktrace', :version => '0.1.1'
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
