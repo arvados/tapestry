@@ -8,7 +8,6 @@ class ExamTest < ActiveSupport::TestCase
 
     should_belong_to :content_area
     should_have_many :versions
-    should_have_one :published_version
 
     context 'with multiple versions and a user' do
       setup do

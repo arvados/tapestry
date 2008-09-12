@@ -1,4 +1,4 @@
-class Admin::ContentAreas::ExamDefinitions::ExamQuestionsController < Admin::AdminControllerBase
+class Admin::ExamQuestionsController < Admin::AdminControllerBase
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
   before_filter :set_exam_definition
@@ -33,7 +33,7 @@ class Admin::ContentAreas::ExamDefinitions::ExamQuestionsController < Admin::Adm
   def update
     if @exam_question.update_attributes(params[:exam_question]) &&
        @exam_question.update_attribute(:type, params[:exam_question][:type])
-      flash[:notice] = 'ExamDefinition was successfully updated.'
+      flash[:notice] = 'Question was successfully updated.'
       redirect_to :action => 'index'
     else
       render :action => "edit"
