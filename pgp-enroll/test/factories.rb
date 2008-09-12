@@ -30,6 +30,12 @@ Factory.define(:enrollment_step) do |f|
   f.description { Factory.next :enrollment_step_description }
 end
 
+# Is there a better way?  This enrollment_step is necessary, and torn down before tests.
+Factory(:enrollment_step,
+        :keyword     => 'signup',
+        :title       => 'Consent to take entrance exam',
+        :description => 'In this step, you sign up for an account and agree to the mini consent form.')
+
 Factory.define(:enrollment_step_completion) do |f|
   f.user            { |u| u.association :user }
   f.enrollment_step { |e| e.association :enrollment_step }

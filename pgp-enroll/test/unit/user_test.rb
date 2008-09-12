@@ -24,6 +24,7 @@ class UserTest < Test::Unit::TestCase
     setup do
       @user1, @user2, @user3 = Factory(:user), Factory(:user), Factory(:user)
 
+      EnrollmentStep.delete_all
       @enrollment_steps = []
       5.times { @enrollment_steps << Factory(:enrollment_step) }
 
