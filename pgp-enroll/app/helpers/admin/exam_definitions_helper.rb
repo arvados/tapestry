@@ -1,2 +1,0 @@
-module Admin::ExamDefinitionsHelper
-end
