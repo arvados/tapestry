@@ -1,13 +1,13 @@
-<h2><%=h @exam_definition.title %></h2>
-<p><%=h @exam_definition.description %></p>
+<h2><%=h @exam_version.title %></h2>
+<p><%=h @exam_version.description %></p>
 
 <h3>Your exam response:</h3>
-<% if @exam_response -%>
-  <p><%= @exam_response.question_responses.count %> / <%= @exam_definition.exam_questions.count %> questions answered.</p>
-  <p><%= @exam_response.question_responses.correct.count %> / <%= @exam_definition.exam_questions.count %> correct.</p>
-  <%= link_to 'Retake the exam', retake_content_area_exam_definition_path(@content_area, @exam_definition), :method => 'post' %>
+<% if @exam_version_response -%>
+  <p><%= @exam_version_response.question_responses.count %> / <%= @exam_version.exam_questions.count %> questions answered.</p>
+  <p><%= @exam_version_response.question_responses.correct.count %> / <%= @exam_version.exam_questions.count %> correct.</p>
+  <%= link_to 'Retake the exam', retake_content_area_exam_path(@content_area, @exam), :method => 'post' %>
 <% else -%>
   <p>Not started.</p>
-  <%= link_to 'Start the exam', start_content_area_exam_definition_path(@content_area, @exam_definition), :method => 'post' %>
+  <%= link_to 'Start the exam', start_content_area_exam_path(@content_area, @exam), :method => 'post' %>
 <% end -%>
 

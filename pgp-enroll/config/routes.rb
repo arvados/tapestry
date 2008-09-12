@@ -10,6 +10,8 @@ ActionController::Routing::Routes.draw do |map|
   map.activate '/activate/:code', :controller => 'users',    :action => 'activate'
 
   map.resources :content_areas do |content_area|
+    # /content_areas/:content_area_id/exams/:id will show _a version of_ that exam;
+    # particularly, exam.version_for(current_user)
     content_area.resources :exams, :member => { :start  => :post, :retake => :post } do |exam|
       exam.resources :exam_questions, :member => { :answer => :post }
     end
