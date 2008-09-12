@@ -510,10 +510,13 @@ color: #7f97c9;
   display: block;
 }
 
+/* jason bobe added margin right and changed display from block to inline */
+
 #mini_consent dd {
-  display: block; 
+  display: inline; 
   padding-bottom: 1em;
   margin: 0;
+  margin-right:50%;
 }
 
 #enrollment_steps {
