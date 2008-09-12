@@ -8,7 +8,7 @@ class ExamsControllerTest < ActionController::TestCase
       login_as @user
       3.times do
         @content_area = Factory :content_area
-        3.times { Factory :exam_definition, :content_area => @content_area }
+        3.times { Factory :exam_version, :content_area => @content_area }
       end
     end
 
@@ -21,7 +21,7 @@ class ExamsControllerTest < ActionController::TestCase
     context 'without having taken the exam before' do
       context 'on GET to show' do
         setup do
-          get :show, :content_area_id => ContentArea.first, :id => ExamDefinition.first
+          get :show, :content_area_id => ContentArea.first, :id => ExamVersion.first
           assert_response :success
         end
 
@@ -31,7 +31,7 @@ class ExamsControllerTest < ActionController::TestCase
 
         should 'create an ExamResponse on POST to start' do
           assert_difference '@user.exam_responses.count' do
-            post :start, :content_area_id => ContentArea.first, :id => ExamDefinition.first
+            post :start, :content_area_id => ContentArea.first, :id => ExamVersion.first
             assert_response :redirect
           end
         end
@@ -40,9 +40,9 @@ class ExamsControllerTest < ActionController::TestCase
 
     context 'with having taken the exam before' do
       setup do
-        @exam_definition = ExamDefinition.first
-        @exam_response = Factory(:exam_response, :user => @user, :exam_definition => @exam_definition)
-        @exam_definition.exam_questions.each do |exam_question|
+        @exam_version = ExamVersion.first
+        @exam_response = Factory(:exam_response, :user => @user, :exam_version => @exam_version)
+        @exam_version.exam_questions.each do |exam_question|
           QuestionResponse.create_by_exam_response_id_and_answer_option_id(
             @exam_response,
             exam_question.answer_options.first)
@@ -51,7 +51,7 @@ class ExamsControllerTest < ActionController::TestCase
 
       context 'on GET to show' do
         setup do
-          get :show, :content_area_id => ContentArea.first, :id => ExamDefinition.first
+          get :show, :content_area_id => ContentArea.first, :id => ExamVersion.first
           assert_response :success
         end
 
@@ -62,7 +62,7 @@ class ExamsControllerTest < ActionController::TestCase
         should 'discard and create an ExamResponse on POST to retake' do
           assert_difference 'ExamResponse.count' do
             assert_equal 1, @user.exam_responses.count
-            post :retake, :content_area_id => ContentArea.first, :id => ExamDefinition.first
+            post :retake, :content_area_id => ContentArea.first, :id => ExamVersion.first
             assert_equal 1, @user.exam_responses.count
           end
         end
