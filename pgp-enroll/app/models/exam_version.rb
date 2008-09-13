@@ -6,4 +6,5 @@ class ExamVersion < ActiveRecord::Base
   validates_presence_of :title, :description, :version
 
   named_scope :published, :conditions => [ 'published = ?', true ]
+  named_scope :ordered,   :order => 'version'
 end
