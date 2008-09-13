@@ -8,4 +8,14 @@ class Exam < ActiveRecord::Base
       :conditions => [ 'created_at < ? and published = ?', user.created_at, true ],
       :order => 'created_at DESC'
   end
+
+  def title
+    if versions.published.any?
+      versions.published.ordered.last.title
+    elsif versions.any?
+      "#{versions.ordered.last.title} (Unpublished)"
+    else
+      'Untitled Exam'
+    end
+  end
 end
