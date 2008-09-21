@@ -2,7 +2,7 @@ class Admin::ExamVersionsController < Admin::AdminControllerBase
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
   before_filter :set_exam
-  before_filter :set_exam_version, :only => [:show, :edit, :update]
+  before_filter :set_exam_version, :only => [:show, :edit, :update, :destroy]
 
   def index
     @exam_versions = @exam.versions
@@ -19,30 +19,27 @@ class Admin::ExamVersionsController < Admin::AdminControllerBase
   end
 
   def create
-    @exam_version = ExamVersion.new(params[:exam_definition])
-
+    @exam_version = @exam.versions.new(params[:exam_version])
     if @exam_version.save
       flash[:notice] = 'ExamVersion was successfully created.'
-      redirect_to [:admin, @content_area, @exam, :exam_versions]
+      redirect_to admin_content_area_exam_exam_versions_url(@content_area, @exam)
     else
       render :action => 'new'
     end
   end
 
   def update
-    if @exam_definition.update_attributes(params[:exam_definition])
+    if @exam_version.update_attributes(params[:exam_version])
       flash[:notice] = 'ExamDefinition was successfully updated.'
-      redirect_to [:admin, @content_area, @exam, :exam_versions]
+      redirect_to admin_content_area_exam_exam_versions_url(@content_area, @exam)
     else
       render :action => "edit"
     end
   end
 
   def destroy
-    @exam_definition = @content_area.exam_definitions.find()
-    @exam_definition.destroy
-
-    redirect_to :action => :index
+    @exam_version.destroy
+    redirect_to admin_content_area_exam_exam_versions_url(@content_area, @exam)
   end
 
   private

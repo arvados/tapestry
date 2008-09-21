@@ -2,17 +2,27 @@ require 'test_helper'
 
 class Admin::ExamVersionsControllerTest < ActionController::TestCase
 
-  should_route :get, '/admin/content_areas/1/exams/1/exam_verisons',   :controller => 'admin/exam_versions', :action => :index
-  should_route :get, '/admin/content_areas/1/exams/1/exam_verisons/1', :controller => 'admin/exam_versions', :action => :show, :id => 1
+  should 'route to #index' do
+    assert_routing(
+        { :path => '/admin/content_areas/1/exams/1/exam_versions', :method => 'GET' },
+        { :controller => 'admin/exam_versions', :action => 'index', :content_area_id => '1', :exam_id => '1'} )
+  end
+
+  should 'route to #show' do
+    assert_routing(
+        { :path => '/admin/content_areas/1/exams/1/exam_versions/1', :method => 'GET' },
+        { :controller => 'admin/exam_versions', :action => 'show', :content_area_id => '1', :exam_id => '1', :id => '1' } )
+  end
 
   context 'when logged in as an admin, with an exam with versions' do
     setup do
       @user = Factory :admin_user
       login_as @user
-      @content_area = Factory(:content_area)
-      @exam         = Factory(:exam, :content_area => @content_area)
-      @version1     = Factory(:exam_version, :exam => @exam, :created_at => 3.minutes.ago, :published => false)
-      @version2     = Factory(:exam_version, :exam => @exam, :created_at => 2.minutes.ago, :published => true)
+      @content_area  = Factory(:content_area)
+      @exam          = Factory(:exam, :content_area => @content_area)
+      @version1      = Factory(:exam_version, :exam => @exam, :created_at => 3.minutes.ago, :published => false)
+      @version2      = Factory(:exam_version, :exam => @exam, :created_at => 2.minutes.ago, :published => true)
+      @exam_versions = [@version1, @version2]
     end
 
     context 'on GET to #index ' do
@@ -25,7 +35,7 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
 
       should 'have a link to each exam version' do
         @exam_versions.each do |version|
-          assert_select 'a[href=?]', admin_content_area_exam_exam_version_path(@content_area, @exam, @exam_version)
+          assert_select 'a[href=?]', admin_content_area_exam_exam_version_path(@content_area, @exam, @version1)
         end
       end
     end
@@ -41,16 +51,16 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
 
     context 'on POST to #create' do
       setup do
-        @old_exam_count = Exam.count
-        exam_hash = Factory.attributes_for(:exam, :content_area => @content_area)
-        post :create, :content_area_id => @content_area, :exam => exam_hash
+        @old_exam_version_count = @exam.versions.count
+        exam_version_hash = Factory.attributes_for(:exam_version, :exam => @exam)
+        post :create, :content_area_id => @content_area, :exam_id => @exam, :exam_version =>exam_version_hash
       end
+
+      should_redirect_to 'admin_content_area_exam_exam_versions_path(@content_area, @exam)'
 
       should 'create another exam' do
-        assert_equal @old_exam_count+1, Exam.count
+        assert_equal @old_exam_version_count+1, @exam.versions.count
       end
-
-      should_redirect_to admin_content_area_exam_exam_versions_path(@content_area, @exam)
     end
 
     context 'on GET to #show' do
@@ -60,8 +70,7 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
 
       should_respond_with :success
       should_render_template :show
-      should_assign_to :exam
-      should_assign_to :exam_versions
+      should_assign_to :exam_version
     end
 
     context 'on GET to #edit' do
@@ -71,7 +80,6 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
 
       should_respond_with :success
       should_render_template :edit
-      should_assign_to :exam
       should_assign_to :exam_version
 
       should 'have a form that PUTs to #update' do
@@ -81,23 +89,31 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
 
     context 'on PUT to #update' do
       setup do
-        put :update, :content_area_id => @content_area, :id => @exam, :exam => { }
+        @exam_version_hash = Factory.attributes_for(:exam_version, :exam => @exam)
+        put :update, :content_area_id => @content_area, :exam_id => @exam, :id => @version1, :exam_version => @exam_version_hash
       end
 
-      should_redirect_to admin_content_area_exam_exam_versions_path(@content_area, @exam)
+      should_redirect_to 'admin_content_area_exam_exam_versions_path(@content_area, @exam)'
+
+      should 'update the attributes' do
+        @version1.reload
+        [:title, :description, :version, :published?].each do |key|
+          assert_equal @exam_version_hash[key], @version1[key]
+        end
+      end
     end
 
     context 'on DELETE to #destroy' do
       setup do
         @old_exam_version_count = @exam.versions.count
-        delete :destroy, :content_area_id => @content_area, :exam_id => @exam, id => @version1
+        delete :destroy, :content_area_id => @content_area, :exam_id => @exam, :id => @version1
       end
 
       should 'decrement the number of versions by 1' do
         assert_equal @old_exam_version_count-1, @exam.versions.count
       end
 
-      should_redirect_to admin_content_area_exam_exam_versions_path(@content_area, @exam)
+      should_redirect_to 'admin_content_area_exam_exam_versions_path(@content_area, @exam)'
     end
   end
 end

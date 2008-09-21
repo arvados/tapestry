@@ -1,0 +1,35 @@
+<h2>Exam: <%= h @exam_version.title %> (Version <%=h @exam_version.version %>)</h2>
+
+<p>
+  <b>Description:</b>
+  <%=h @exam_version.description %>
+</p>
+
+<p>
+  <b>Version:</b>
+  <%=@exam_version.version %>
+</p>
+
+<h2><%=h @exam_version.title %> Questions</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>Question</th>
+    <th>Type</th>
+    <th>Ordinal</th>
+  </tr>
+
+<% for exam_question in @exam_version.exam_questions %>
+  <tr class="<%= cycle 'even', 'odd' %>">
+    <td><%= link_to h(exam_question.question), admin_content_area_exam_exam_version_exam_question_path(@content_area, @exam, @exam_version, exam_question) %></td>
+    <td><%=h exam_question.type %></td>
+    <td><%=h exam_question.ordinal %></td>
+    <td><%= link_to 'Edit', edit_admin_content_area_exam_exam_version_exam_question_path(@content_area, @exam, @exam_version, exam_question) %></td>
+    <td><%= link_to 'Destroy', admin_content_area_exam_exam_version_exam_question_path(@content_area, @exam, @exam_version, exam_question), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<p>
+  <%= link_to 'Add a new question', new_admin_content_area_exam_exam_version_exam_question_path(@content_area, @exam, @exam_version) %>
+</p>

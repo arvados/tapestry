@@ -1,0 +1,9 @@
+<h1>Editing exam version</h1>
+
+<% form_for [:admin, @content_area, @exam, @exam_version] do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
