@@ -1,0 +1,29 @@
+<h1>Listing exam versions</h1>
+
+<table class="admin_table">
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Content Area</th>
+    <th>Version Number</th>
+    <th>Updated At</th>
+  </tr>
+
+<% for exam_version in @exam_versions -%>
+
+  <tr class="<%= cycle 'even', 'odd' %>">
+    <td><%=h exam_version.title %></td>
+    <td><%=h exam_version.description %></td>
+    <td><%= link_to @exam.content_area.title, [:admin, @content_area] %></td>
+    <td><%=  exam_version.version %></td>
+    <td><%=  exam_version.updated_at %></td>
+    <td><%= link_to 'Show', [:admin, @content_area, @exam, exam_version] %></td>
+    <td><%= link_to 'Edit', [:edit, :admin, @content_area, @exam, exam_version] %></td>
+    <td><%= link_to 'Destroy', [:admin, @content_area, @exam, exam_version], :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end -%>
+</table>
+
+<br />
+
+<%= link_to 'New version', [:new, :admin, @content_area, @exam, :exam_version] %>
