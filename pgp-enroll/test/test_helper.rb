@@ -5,6 +5,10 @@ require 'shoulda'
 require 'factories'
 require 'mocha'
 
+Dir[File.join(RAILS_ROOT, 'test', 'macros', '*.rb')].each do |f|
+  require f
+end
+
 class Test::Unit::TestCase
   include AuthenticatedTestHelper
 
