@@ -1,7 +1,7 @@
 <div class="question">
   <p><%= @exam_question.question %></p>
 
-  <% form_tag answer_content_area_exam_definition_exam_question_path(@content_area, @exam_definition, @exam_question) do %>
+  <% form_tag answer_content_area_exam_exam_question_path(@content_area, @exam, @exam_question) do %>
 
     <% @answer_options.each_with_index do |answer_option, i| -%>
       <%= radio_button_tag :answer_option_id, answer_option.id, i.zero? %>

@@ -3,16 +3,15 @@ require 'test_helper'
 class ExamsControllerTest < ActionController::TestCase
   context 'with a logged in user and several content areas' do
     setup do
-      @user = Factory :user
+      @user = Factory :user, :created_at => 1.year.ago
       @user.activate!
       login_as @user
-      3.times do
-        @content_area = Factory :content_area
-        3.times do
-          exam = Factory(:exam, :content_area => @content_area)
-          version = Factory(:exam_version, :exam => exam)
-        end
-      end
+
+      @exam_version = Factory(:exam_version)
+      @exam = @exam_version.exam
+      @content_area = @exam.content_area
+
+      Exam.any_instance.expects(:version_for).returns(@exam)
     end
 
     should 'redirect to the parent content_area on GET to index' do
@@ -20,62 +19,73 @@ class ExamsControllerTest < ActionController::TestCase
       assert_redirected_to content_area_path(@content_area)
     end
 
-
     context 'without having taken the exam before' do
       context 'on GET to show' do
         setup do
-          @exam = Exam.first
-          get :show, :content_area_id => ContentArea.first, :id => @exam
-          assert_response :success
+          get :show, :content_area_id => @content_area, :id => @exam
         end
+
+        should_respond_with :success
+        should_render_template :show
 
         should 'prompt you to start' do
           assert_select 'a', /Start/
         end
+      end
 
-        should 'create an ExamResponse on POST to start' do
-          assert_difference '@user.exam_responses.count' do
-            post :start, :content_area_id => ContentArea.first, :id => @exam
-            assert_response :redirect
-          end
+      context 'on POST to create' do
+        setup do
+          @count = @user.exam_responses.count
+          post :start, :content_area_id => @content_area, :id => @exam
+        end
+
+        should_redirect_to 'content_area_exam_exam_questions_url(@content_area, @exam)'
+
+        should 'create a new exam response' do
+          assert_equal @count+1, @user.exam_responses.count
         end
       end
     end
 
-    context 'with having taken the exam before' do
+    context 'with having taken the exam before and gotten 1 of 2 correct' do
       setup do
-        @exam = Exam.first
-
-        @exam_version = @exam.versions.first
-        @exam.stubs(:version_for).returns(@exam_version)
-
         @exam_response = Factory(:exam_response, :user => @user, :exam_version => @exam_version)
-        @exam_version.exam_questions.each do |exam_question|
-          QuestionResponse.create_by_exam_response_id_and_answer_option_id(@exam_response, exam_question.answer_options.first)
-        end
+        ExamResponse.expects(:find_by_user_id_and_exam_version_id).returns(@exam_respons)
+
+        Exam.any_instance.expects(:question_count).returns(2)
+        ExamResponse.any_instance.expects(:response_count).returns(2)
+        ExamResponse.any_instance.expects(:correct_response_count).returns(1)
       end
 
       context 'on GET to show' do
-        setup do
-          get :show, :content_area_id => ContentArea.first, :id => @exam
-        end
+        setup { get :show, :content_area_id => @content_area, :id => @exam }
 
         should_respond_with :success
-
-        should 'set exam_version to @exam.version_for(@user)' do
-          assert_equal assigns(:exam_version), @exam.version_for(@user)
-        end
+        should_render_template :show
+        should_assign_to :exam
+        should_assign_to :exam_version
 
         should 'prompt you to retake' do
           assert_select 'a', /Retake/
         end
+      end
 
-        should 'discard and create an ExamResponse on POST to retake' do
-          assert_difference 'ExamResponse.count' do
-            assert_equal 1, @user.exam_responses.count
-            post :retake, :content_area_id => ContentArea.first, :id => @exam
-            assert_equal 1, @user.exam_responses.count
-          end
+      context 'on POST to retake' do
+        setup do
+          @exam_response_count = ExamResponse.count
+          @user_exam_response_count = @user.exam_responses.count
+          post :retake, :content_area_id => @content_area, :id => @exam
+        end
+
+        should_respond_with :success
+        should_render_template :show
+
+        should 'create a new exam response' do
+          assert_equal @exam_response_count+1, ExamResponse.count
+        end
+
+        should 'not create a new exam_response scoped under the user' do
+          assert_equal @user_exam_response_count, @user.exam_responses.count
         end
       end
     end

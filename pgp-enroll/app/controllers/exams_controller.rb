@@ -35,6 +35,6 @@ class ExamsController < ApplicationController
 
   def set_exam_version
     @exam = @content_area.exams.find(params[:id])
-    @exam_version = @exam.version_for(current_user)
+    @exam_version = @exam.version_for!(current_user)
   end
 end

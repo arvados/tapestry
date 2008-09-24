@@ -7,4 +7,8 @@ class ExamVersion < ActiveRecord::Base
 
   named_scope :published, :conditions => [ 'published = ?', true ]
   named_scope :ordered,   :order => 'version'
+
+  def question_count
+    questions.count
+  end
 end

@@ -9,4 +9,12 @@ class ExamResponse < ActiveRecord::Base
       :original_user_id => user_id,
       :user_id => nil)
   end
+
+  def response_count
+    question_responses.count
+  end
+
+  def correct_response_count
+    question_responses.correct.count
+  end
 end

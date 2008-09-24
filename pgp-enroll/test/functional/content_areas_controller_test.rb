@@ -27,6 +27,33 @@ class ContentAreasControllerTest < ActionController::TestCase
       end
     end
 
+    context 'when some exams do not have versions for the current user' do
+      setup do
+        Exam.any_instance.expects(:version_for).returns(nil)
+      end
+
+      context 'on GET to show' do
+        setup do
+          @content_area = ContentArea.first
+          get :show, :id => @content_area
+        end
+
+        should_assign_to :exams
+
+        should 'assign some exams' do
+          assert assigns(:exams).any?
+        end
+
+        should 'not actually display any exams' do
+          assigns(:exams).each do |exam|
+            assert_select 'a[href=?]',
+                          content_area_exam_path(@content_area, exam),
+                          :count => 0
+          end
+        end
+      end
+    end
+
     context 'on GET to show' do
       setup do
         @content_area = ContentArea.first
@@ -35,11 +62,13 @@ class ContentAreasControllerTest < ActionController::TestCase
 
       should_respond_with :success
       should_render_template :show
+      should_assign_to :exams
 
       should 'show, for each exam, the version for the current_user' do
-        assert assigns(:exams)
         assigns(:exams).each do |exam|
-          assert_select 'a[href=?]', content_area_exam_path(@content_area, exam), :text => /#{exam.version_for(@user).title}/
+          assert_select 'a[href=?]',
+                        content_area_exam_path(@content_area, exam),
+                        :text => /#{exam.version_for(@user).title}/
         end
       end
     end

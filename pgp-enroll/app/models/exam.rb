@@ -9,6 +9,10 @@ class Exam < ActiveRecord::Base
       :order => 'created_at DESC'
   end
 
+  def version_for!(user)
+    raise ActiveRecord::RecordNotFound unless version_for(user)
+  end
+
   def title
     if versions.published.any?
       versions.published.ordered.last.title

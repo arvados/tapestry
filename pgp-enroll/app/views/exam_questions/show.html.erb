@@ -1,10 +1,10 @@
-<h2><%= @exam_definition.title %></h2>
-<p><%= @exam_definition.description %></p>
+<h2><%= @exam_version.title %></h2>
+<p><%= @exam_version.description %></p>
 
 <%= render :partial => 'exam_progress',
            :locals => {
              :answered_questions => @exam_response.question_responses.count,
              :current_question   => @exam_response.question_responses.count + 1,
-             :total_questions    => @exam_definition.exam_questions.count } %>
+             :total_questions    => @exam_version.exam_questions.count } %>
 
 <%= render :partial => @exam_question.class.name.tableize.singularize %>

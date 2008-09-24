@@ -2,7 +2,9 @@
 
 <ul>
 <% @exams.each do |exam| -%>
-  <li><%= link_to exam.version_for(current_user).title,
-                  content_area_exam_path(@content_area, exam) %></li>
+  <% if exam.version_for(current_user) %>
+    <li><%= link_to exam.version_for(current_user).title,
+                    content_area_exam_path(@content_area, exam) %></li>
+  <% end %>
 <% end -%>
 </ul>

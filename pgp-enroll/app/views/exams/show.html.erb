@@ -2,9 +2,9 @@
 <p><%=h @exam_version.description %></p>
 
 <h3>Your exam response:</h3>
-<% if @exam_version_response -%>
-  <p><%= @exam_version_response.question_responses.count %> / <%= @exam_version.exam_questions.count %> questions answered.</p>
-  <p><%= @exam_version_response.question_responses.correct.count %> / <%= @exam_version.exam_questions.count %> correct.</p>
+<% if @exam_response -%>
+  <p><%= @exam_response.response_count         %> / <%= @exam_version.question_count %> questions answered.</p>
+  <p><%= @exam_response.correct_response_count %> / <%= @exam_version.question_count %> correct.</p>
   <%= link_to 'Retake the exam', retake_content_area_exam_path(@content_area, @exam), :method => 'post' %>
 <% else -%>
   <p>Not started.</p>
