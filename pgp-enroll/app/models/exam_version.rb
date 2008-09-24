@@ -9,6 +9,6 @@ class ExamVersion < ActiveRecord::Base
   named_scope :ordered,   :order => 'version'
 
   def question_count
-    questions.count
+    exam_questions.count
   end
 end
