@@ -53,7 +53,7 @@ end
 Factory.define(:exam_version) do |f|
   f.title       'Exam Definition Title'
   f.description 'Exam Definition Description'
-  f.exam { |e| e.exam :exam }
+  f.exam        { |e| e.association :exam }
   f.version 1
 end
 

@@ -6,50 +6,53 @@ class Admin::ExamsControllerTest < ActionController::TestCase
       @user = Factory :admin_user
       login_as @user
       @exam_version = Factory :exam_version
-      @content_area = @exam_version.exam.content_area
+      @exam         = @exam_version.exam
+      @content_area = @exam.content_area
     end
 
-    should "get index" do
-      get :index, :content_area_id => @content_area
-      assert_response :success
-      assert_not_nil assigns(:exam_versions)
+    context 'on GET to index' do
+      setup { get :index, :content_area_id => @content_area }
+
+      should_respond_with :success
+      should_render_template :index
+      should_assign_to :exams
     end
 
-    should "get new" do
-      get :new, :content_area_id => @content_area
-      assert_response :success
+    context 'on GET to show' do
+      setup { get :show, :content_area_id => @content_area, :id => @exam }
+
+      should_respond_with :success
+      should_render_template :show
+      should_assign_to :exam
     end
 
-    should "create exam" do
-      assert_difference('Exam.count') do
+    context 'on POST to create' do
+      setup do
+        @count = Exam.count
         exam_hash = Factory.attributes_for(:exam, :content_area => @content_area)
         post :create, :content_area_id => @content_area, :exam => exam_hash
+        @exam = Exam.last
       end
 
-      assert_redirected_to admin_content_area_exam_versions_path(@content_area)
+      should_redirect_to 'admin_content_area_exams_path(@content_area)'
+      should_set_the_flash_to /created/i
+
+      should 'increase the number of exams by 1' do
+        assert_equal @count+1, Exam.count
+      end
     end
 
-    should "show exam" do
-      get :show, :content_area_id => @content_area, :id => @exam
-      assert_response :success
-    end
-
-    should "get edit" do
-      get :edit, :content_area_id => @content_area, :id => @exam
-      assert_response :success
-    end
-
-    should "update exam" do
-      put :update, :content_area_id => @content_area, :id => @exam, :exam => { }
-      assert_redirected_to admin_content_area_exam_version_path(@content_area, assigns(:exam))
-    end
-
-    should "destroy exam definition" do
-      assert_difference('ExamVersion.count', -1) do
+    context 'on DELETE to destroy' do
+      setup do
+        @count = Exam.count
         delete :destroy, :content_area_id => @content_area, :id => @exam_version.id
       end
 
-      assert_redirected_to :action => 'index'
+      should_redirect_to 'admin_content_area_exams_path(@content_area)'
+
+      should 'change the count of exams by -1' do
+        assert_equal @count-1, Exam.count
+      end
     end
   end
 end

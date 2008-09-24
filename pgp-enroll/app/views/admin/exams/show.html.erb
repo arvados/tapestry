@@ -1,35 +1,27 @@
-<h2>Exam Definition: <%= h @exam_definition.title %></h2>
+<h2>Exam: <%= h @exam.versions.last.title %></h2>
 
 <p>
   <b>Description:</b>
-  <%=h @exam_definition.description %>
+  <%=h @exam.versions.last.description %>
 </p>
 
-<p>
-  <b>Version:</b>
-  <%=@exam_definition.version %>
-</p>
+<h3>Versions</h3>
 
-<h2><%=h @exam_definition.title %> Questions</h2>
-
-<table class="admin_table">
-  <tr>
-    <th>Question</th>
-    <th>Type</th>
-    <th>Ordinal</th>
-  </tr>
-
-<% for exam_question in @exam_definition.exam_questions %>
-  <tr class="<%= cycle 'even', 'odd' %>">
-    <td><%= link_to h(exam_question.question), admin_content_area_exam_definition_exam_question_path(@content_area, @exam_definition, exam_question) %></td>
-    <td><%=h exam_question.type %></td>
-    <td><%=h exam_question.ordinal %></td>
-    <td><%= link_to 'Edit', edit_admin_content_area_exam_definition_exam_question_path(@content_area, @exam_definition, exam_question) %></td>
-    <td><%= link_to 'Destroy', admin_content_area_exam_definition_exam_question_path(@content_area, @exam_definition, exam_question), :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+<table>
+  <thead>
+    <th>Version</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Updated</th>
+  </thead>
+  <% @exam.versions.each_with_index do |version, i| -%>
+    <tr>
+      <td><%= i %></td>
+      <td><%=h version.title %></td>
+      <td><%=h version.description %></td>
+      <td><%=  version.updated_at %></td>
+    </tr>
+  <% end -%>
 </table>
 
-<p>
-  <%= link_to 'Add a new question', new_admin_content_area_exam_definition_exam_question_path(@content_area, @exam_definition) %>
-</p>
+<%= link_to 'Add a new version', new_admin_content_area_exam_exam_version_url(@content_area, @exam) %>

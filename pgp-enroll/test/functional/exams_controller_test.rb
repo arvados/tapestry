@@ -47,7 +47,6 @@ class ExamsControllerTest < ActionController::TestCase
         @exam = Exam.first
 
         @exam_version = @exam.versions.first
-        puts "EV: #{@exam_version}"
         @exam.stubs(:version_for).returns(@exam_version)
 
         @exam_response = Factory(:exam_response, :user => @user, :exam_version => @exam_version)

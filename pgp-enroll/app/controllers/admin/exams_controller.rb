@@ -1,47 +1,38 @@
 class Admin::ExamsController < Admin::AdminControllerBase
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
-  before_filter :set_exam_definition, :only => [:show, :edit, :update]
+  before_filter :set_exam, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @exam_definitions = @content_area.exam_definitions
+    @exams = @content_area.exams
   end
 
   def show
   end
 
-  def new
-    @exam_definition = ExamDefinition.new
-  end
-
-  def edit
-  end
-
   def create
-    @exam_definition = ExamDefinition.new(params[:exam_definition])
+    @exam = @content_area.exams.new
 
-    if @exam_definition.save
-      flash[:notice] = 'ExamDefinition was successfully created.'
-      redirect_to admin_content_area_exam_definitions_path(@content_area)
+    if @exam.save
+      flash[:notice] = 'Exam was successfully created.'
+      redirect_to admin_content_area_exams_path(@content_area)
     else
       render :action => "new"
     end
   end
 
   def update
-    if @exam_definition.update_attributes(params[:exam_definition])
-      flash[:notice] = 'ExamDefinition was successfully updated.'
-      redirect_to [:admin, @content_area, @exam_definition]
+    if @exam.update_attributes(params[:exam])
+      flash[:notice] = 'Exam was successfully updated.'
+      redirect_to admin_content_area_exams_path(@content_area)
     else
       render :action => "edit"
     end
   end
 
   def destroy
-    @exam_definition = @content_area.exam_definitions.find(params[:id])
-    @exam_definition.destroy
-
-    redirect_to :action => :index
+    @exam.destroy
+    redirect_to admin_content_area_exams_path(@content_area)
   end
 
   private
@@ -51,8 +42,8 @@ class Admin::ExamsController < Admin::AdminControllerBase
     add_breadcrumb @content_area.title, admin_content_area_path(@content_area)
   end
 
-  def set_exam_definition
-    @exam_definition = @content_area.exam_definitions.find(params[:id])
-    add_breadcrumb @exam_definition.title
+  def set_exam
+    @exam = @content_area.exams.find params[:id]
+    add_breadcrumb @exam.title
   end
 end

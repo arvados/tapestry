@@ -8,20 +8,19 @@
     <th>Version Number</th>
   </tr>
 
-<% for exam_definition in @exam_definitions %>
-  <tr class="<%= cycle 'even', 'odd' %>">
-    <td><%=h exam_definition.title %></td>
-    <td><%=h exam_definition.description %></td>
-    <td><%= link_to exam_definition.content_area.title,
-              [:admin, @content_area] %></td>
-    <td><%=  exam_definition.version %></td>
-    <td><%= link_to 'Show', [:admin, @content_area, exam_definition] %></td>
-    <td><%= link_to 'Edit', edit_admin_content_area_exam_definition_path(@content_area, exam_definition) %></td>
-    <td><%= link_to 'Destroy', [:admin, @content_area, exam_definition], :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <% for exam in @exams %>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=h exam.versions.last.title %></td>
+      <td><%=h exam.versions.last.description %></td>
+      <td><%= link_to exam.content_area.title,  [:admin, @content_area] %></td>
+      <td><%= exam.versions.count %></td>
+      <td><%= link_to 'Show',      admin_content_area_exam_path(@content_area, exam) %></td>
+      <td><%= link_to 'Edit', edit_admin_content_area_exam_path(@content_area, exam) %></td>
+      <td><%= link_to 'Destroy',   admin_content_area_exam_path(@content_area, exam), :method => :delete, :confirm => 'Are you sure?' %></td>
+    </tr>
+  <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New exam_definition', new_admin_content_area_exam_definition_path(@content_area) %>
+<%= link_to 'Create a new exam', admin_content_area_exams_path(@content_area), :method => :post %>
