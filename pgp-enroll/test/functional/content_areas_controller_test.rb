@@ -39,9 +39,7 @@ class ContentAreasControllerTest < ActionController::TestCase
       should 'show, for each exam, the version for the current_user' do
         assert assigns(:exams)
         assigns(:exams).each do |exam|
-          assert_select 'a[href=?]', content_area_exam_path(@content_area, exam) do
-            assert_select /#{exam.version_for(@user).title}/
-          end
+          assert_select 'a[href=?]', content_area_exam_path(@content_area, exam), :text => /#{exam.version_for(@user).title}/
         end
       end
     end
