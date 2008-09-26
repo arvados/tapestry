@@ -19,10 +19,12 @@ class ExamVersionTest < ActiveSupport::TestCase
       setup do
         @versions = []
         3.times { @versions << Factory(:exam_version, :exam => @exam) }
+        @versions.shift.destroy
+        @versions << Factory(:exam_version, :exam => @exam)
       end
 
       should 'assign the next version to each' do
-        assert_equal [1,2,3], @versions.map(&:version)
+        assert_equal [2,3,4], @versions.map(&:version)
       end
     end
   end

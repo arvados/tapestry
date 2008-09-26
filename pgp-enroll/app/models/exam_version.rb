@@ -27,7 +27,9 @@ class ExamVersion < ActiveRecord::Base
   protected
 
   def assign_version
-    self.version = exam.versions.count + 1
+    # self.version = exam.versions.max_by(&:version) + 1
+    maximum = ExamVersion.maximum('version', :conditions => ['exam_id = ?', self.exam_id]) || 0
+    self.version = maximum + 1
   end
 
 end
