@@ -54,13 +54,33 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
       setup do
         @old_exam_version_count = @exam.versions.count
         exam_version_hash = Factory.attributes_for(:exam_version, :exam => @exam)
-        post :create, :content_area_id => @content_area, :exam_id => @exam, :exam_version =>exam_version_hash
+        post :create, :content_area_id => @content_area, :exam_id => @exam, :exam_version => exam_version_hash
       end
 
       should_redirect_to 'admin_content_area_exam_exam_versions_path(@content_area, @exam)'
 
-      should 'create another exam' do
+      should 'create another exam version' do
         assert_equal @old_exam_version_count+1, @exam.versions.count
+      end
+    end
+
+    context 'on POST to #duplicate' do
+      setup do
+        @old_exam_version_count = @exam.versions.count
+        post :duplicate, :content_area_id => @content_area, :exam_id => @exam, :id => @version2
+        @exam.reload
+      end
+
+      should 'create another exam version' do
+        assert_equal @old_exam_version_count+1, @exam.versions.count
+      end
+
+      should 'duplicate the specified exam' do
+        @version3 = @exam.versions.last
+        assert_equal @version2.exam_questions.count, @version3.exam_questions.count
+      end
+
+      should_eventually 'duplicate the specified exam, all the way down the tree' do
       end
     end
 

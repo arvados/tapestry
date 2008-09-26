@@ -22,7 +22,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :users, :member => { :activate => :put }
     admin.resources :content_areas do |content_area|
       content_area.resources :exams do |exam|
-        exam.resources :exam_versions, :member => { :clone => :post } do |exam_version|
+        exam.resources :exam_versions, :member => { :duplicate => :post } do |exam_version|
           exam_version.resources :exam_questions do |exam_question|
             exam_question.resources :answer_options
           end

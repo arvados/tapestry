@@ -2,7 +2,7 @@ class Admin::ExamVersionsController < Admin::AdminControllerBase
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
   before_filter :set_exam
-  before_filter :set_exam_version, :only => [:show, :edit, :update, :destroy]
+  before_filter :set_exam_version, :only => [:show, :edit, :duplicate, :update, :destroy]
 
   def index
     @exam_versions = @exam.versions
@@ -21,16 +21,22 @@ class Admin::ExamVersionsController < Admin::AdminControllerBase
   def create
     @exam_version = @exam.versions.new(params[:exam_version])
     if @exam_version.save
-      flash[:notice] = 'ExamVersion was successfully created.'
+      flash[:notice] = 'Exam version was successfully created.'
       redirect_to admin_content_area_exam_exam_versions_url(@content_area, @exam)
     else
       render :action => 'new'
     end
   end
 
+  def duplicate
+    @exam_version.duplicate!
+    flash[:notice] = 'Exam version was successfully duplicated.'
+    redirect_to admin_content_area_exam_exam_versions_url(@content_area, @exam)
+  end
+
   def update
     if @exam_version.update_attributes(params[:exam_version])
-      flash[:notice] = 'ExamDefinition was successfully updated.'
+      flash[:notice] = 'Exam version was successfully updated.'
       redirect_to admin_content_area_exam_exam_versions_url(@content_area, @exam)
     else
       render :action => "edit"

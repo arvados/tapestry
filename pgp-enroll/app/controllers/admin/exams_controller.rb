@@ -8,6 +8,7 @@ class Admin::ExamsController < Admin::AdminControllerBase
   end
 
   def show
+    redirect_to admin_content_area_exam_exam_versions_url(@content_area, @exam)
   end
 
   def create

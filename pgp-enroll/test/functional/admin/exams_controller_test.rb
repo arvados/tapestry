@@ -21,9 +21,7 @@ class Admin::ExamsControllerTest < ActionController::TestCase
     context 'on GET to show' do
       setup { get :show, :content_area_id => @content_area, :id => @exam }
 
-      should_respond_with :success
-      should_render_template :show
-      should_assign_to :exam
+      should_redirect_to 'admin_content_area_exam_exam_versions_url(@content_area, @exam)'
     end
 
     context 'on POST to create' do
