@@ -8,9 +8,9 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
       @content_area = @exam.content_area
 
       @context_hash = {
-       :content_area => @content_area,
-       :exam         => @exam,
-       :exam_version => @exam_version  
+       :content_area_id => @content_area,
+       :exam_id         => @exam,
+       :exam_version_id => @exam_version  
       }
     end
 
@@ -29,32 +29,47 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
     end
 
     context 'on POST to create' do
+      setup do
+        hash = { :question => 'test question' }
+        post :create, @context_hash.merge({ :exam_question => hash })
+      end
+
+      should_redirect_to 'admin_content_area_exam_exam_version_exam_questions_url(@content_area, @exam, @exam_version)'
     end
 
     context 'with an exam question' do
       setup do
-        @exam_question = Factory :exam_question, :exam_version => @exam_version
+        @exam_question = Factory :multiple_choice_exam_question, :exam_version => @exam_version
         @context_hash.merge!({
           :id => @exam_question
         })
       end
 
       context 'on GET to show' do
-        setup { get :new, @context_hash }
+        setup { get :show, @context_hash }
 
         should_respond_with :success
         should_render_template :show
       end
 
       context 'on GET to edit' do
-        setup { get :new, @context_hash }
+        setup { get :edit, @context_hash }
 
         should_respond_with :success
         should_render_template :edit
       end
 
       context 'on PUT to update' do
-        setup { get :new, @context_hash }
+        setup do
+          hash = { :question => 'test question' }.stringify_keys
+          Kernel.const_get(@exam_question.class.name).any_instance.expects(:update_attributes).with(hash).returns(true)
+
+          put :update, @context_hash.merge({ :exam_question => hash })
+        end
+
+        should 'set the flash[:notice] to /success/i' do
+          assert flash[:notice] =~ /success/i
+        end
 
         should_redirect_to 'admin_content_area_exam_exam_version_exam_questions_url(@content_area, @exam, @exam_version)'
       end

@@ -2,6 +2,8 @@ class ExamQuestion < ActiveRecord::Base
   belongs_to :exam_version
   has_many   :answer_options
 
+  attr_accessible :type, :ordinal, :question
+
   def next_question
     exam_version.exam_questions.find(:first, :conditions => ['ordinal > ?', ordinal], :order => 'ordinal')
   end

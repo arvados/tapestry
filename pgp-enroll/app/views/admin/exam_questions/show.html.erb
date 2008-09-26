@@ -1,4 +1,4 @@
-<h2><%=h @exam_question.exam_definition.title %> Question # <%= @exam_question.ordinal %></h2>
+<h2><%=h @exam_question.exam_version.title %> Question # <%= @exam_question.ordinal %></h2>
 
 <p>
   <b>Question:</b>
@@ -27,13 +27,13 @@
   <tr class="<%= cycle 'even', 'odd' %>">
     <td><%=h answer_option.answer %></td>
     <td><%= answer_option.correct? ? 'Yes' : 'No' %></td>
-    <td><%= link_to 'Edit', edit_admin_content_area_exam_definition_exam_question_answer_option_path(@content_area, @exam_definition, @exam_question, answer_option) %></td>
-    <td><%= link_to 'Destroy',   admin_content_area_exam_definition_exam_question_answer_option_path(@content_area, @exam_definition, @exam_question, answer_option), :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Edit', edit_admin_content_area_exam_exam_version_exam_question_answer_option_path(@content_area, @exam, @exam_version, @exam_question, answer_option) %></td>
+    <td><%= link_to 'Destroy',   admin_content_area_exam_exam_version_exam_question_answer_option_path(@content_area, @exam, @exam_version, @exam_question, answer_option), :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <p>
-  <%= link_to 'Add a new answer option', new_admin_content_area_exam_definition_exam_question_answer_option_path(@content_area, @exam_definition, @exam_question) %>
+  <%= link_to 'Add a new answer option', new_admin_content_area_exam_exam_version_exam_question_answer_option_path(@content_area, @exam, @exam_version, @exam_question) %>
 </p>
 

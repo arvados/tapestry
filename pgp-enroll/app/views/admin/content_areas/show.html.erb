@@ -19,7 +19,6 @@
     <td><%= link_to h(exam.title), [:admin, @content_area, exam] %></td>
     <td><%=h exam.description %></td>
     <td><%=  exam.versions.count %></td>
-    <td><%= link_to 'Edit', edit_admin_content_area_exam_path(@content_area, exam) %></td>
     <td><%= link_to 'Destroy', [:admin, @content_area, exam], :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>

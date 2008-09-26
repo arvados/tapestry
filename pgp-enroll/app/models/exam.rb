@@ -14,12 +14,22 @@ class Exam < ActiveRecord::Base
   end
 
   def title
+    get_versioned_attribute(:title, 'Untitled Exam')
+  end
+
+  def description
+    get_versioned_attribute(:description, 'Unpublished Exam')
+  end
+
+  private
+
+  def get_versioned_attribute(attribute, default)
     if versions.published.any?
-      versions.published.ordered.last.title
+      versions.published.ordered.last.send(attribute)
     elsif versions.any?
-      "#{versions.ordered.last.title} (Unpublished)"
+      "#{versions.ordered.last.send(attribute)} (Unpublished)"
     else
-      'Untitled Exam'
+      default
     end
   end
 end

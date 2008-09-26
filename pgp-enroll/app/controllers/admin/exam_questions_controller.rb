@@ -1,50 +1,50 @@
 class Admin::ExamQuestionsController < Admin::AdminControllerBase
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
-  before_filter :set_exam_definition
+  before_filter :set_exam
+  before_filter :set_exam_version
   before_filter :set_exam_question, :only => [:show, :edit, :update]
 
   def index
-    @exam_questions = @exam_definition.exam_questions
+    @exam_questions = @exam_version.exam_questions
   end
 
   def show
   end
 
   def new
-    @exam_question = ExamQuestion.new(:ordinal => @exam_definition.exam_questions.count + 1)
+    @exam_question = @exam_version.exam_questions.new(:ordinal => @exam_version.exam_questions.count + 1)
   end
 
   def edit
   end
 
   def create
-    @exam_question = ExamQuestion.new(params[:exam_question])
+    @exam_question = @exam_version.exam_questions.new(params[:exam_question])
     @exam_question.type = params[:exam_question][:type]
 
     if @exam_question.save
       flash[:notice] = 'Question was successfully created.'
-      redirect_to admin_content_area_exam_definition_exam_questions_path(@content_area, @exam_definition)
+      redirect_to admin_content_area_exam_exam_version_exam_questions_path(@content_area, @exam, @exam_version)
     else
       render :action => "new"
     end
   end
 
   def update
-    if @exam_question.update_attributes(params[:exam_question]) &&
-       @exam_question.update_attribute(:type, params[:exam_question][:type])
+    if @exam_question.update_attributes(params[:exam_question])
       flash[:notice] = 'Question was successfully updated.'
-      redirect_to :action => 'index'
+      redirect_to admin_content_area_exam_exam_version_exam_questions_url(@content_area, @exam, @exam_version)
     else
       render :action => "edit"
     end
   end
 
   def destroy
-    @exam_question = @exam_definition.exam_questions.find(params[:id])
+    @exam_question = @exam_version.exam_questions.find(params[:id])
     @exam_question.destroy
 
-    redirect_to :action => 'index'
+    redirect_to admin_content_area_exam_exam_version_exam_questions_url(@content_area, @exam, @exam_version)
   end
 
   private
@@ -54,13 +54,18 @@ class Admin::ExamQuestionsController < Admin::AdminControllerBase
     add_breadcrumb @content_area.title, admin_content_area_path(@content_area)
   end
 
-  def set_exam_definition
-    @exam_definition = @content_area.exam_definitions.find(params[:exam_definition_id])
-    add_breadcrumb @exam_definition.title, admin_content_area_exam_definition_path(@content_area, @exam_definition)
+  def set_exam
+    @exam = @content_area.exams.find(params[:exam_id])
+    add_breadcrumb @exam.title, admin_content_area_exam_path(@content_area, @exam)
+  end
+
+  def set_exam_version
+    @exam_version = @exam.versions.find params[:exam_version_id]
+    add_breadcrumb @exam_version.version, admin_content_area_exam_exam_version_path(@content_area, @exam, @exam_version)
   end
 
   def set_exam_question
-    @exam_question = @exam_definition.exam_questions.find(params[:id])
+    @exam_question = @exam_version.exam_questions.find(params[:id])
     add_breadcrumb @exam_question.question
   end
 end
