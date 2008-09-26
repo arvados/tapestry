@@ -1,9 +1,10 @@
 <h1>New answer option</h1>
 
 <% form_for :answer_option, @answer_option,
-            :url => admin_content_area_exam_definition_exam_question_answer_option_path(
+            :url => admin_content_area_exam_exam_version_exam_question_answer_option_path(
               @content_area,
-              @exam_definition,
+              @exam,
+              @exam_version,
               @exam_question,
               @answer_option),
             :html => { :method => :post } do |f| %>
@@ -14,4 +15,4 @@
   </p>
 <% end %>
 
-<%= link_to 'Back', admin_content_area_exam_definition_exam_question_answer_options_path(@content_area, @exam_definition, @exam_question) %>
+<%= link_to 'Back', admin_content_area_exam_exam_version_exam_question_answer_options_path(@content_area, @exam, @exam_version, @exam_question) %>

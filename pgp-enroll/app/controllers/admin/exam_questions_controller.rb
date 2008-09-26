@@ -61,7 +61,7 @@ class Admin::ExamQuestionsController < Admin::AdminControllerBase
 
   def set_exam_version
     @exam_version = @exam.versions.find params[:exam_version_id]
-    add_breadcrumb @exam_version.version, admin_content_area_exam_exam_version_path(@content_area, @exam, @exam_version)
+    add_breadcrumb "Version #{@exam_version.version}", admin_content_area_exam_exam_version_path(@content_area, @exam, @exam_version)
   end
 
   def set_exam_question
