@@ -604,7 +604,7 @@ div.flash.error {
 
 .admin_table, .admin_table tr, .admin_table td, .admin_table th {
   padding: 5px;
-  margin: 0;
+  margin: 20px 0 0 0;
 }
 
 .admin_table th {

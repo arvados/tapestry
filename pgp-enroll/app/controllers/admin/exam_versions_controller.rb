@@ -12,7 +12,7 @@ class Admin::ExamVersionsController < Admin::AdminControllerBase
   end
 
   def new
-    @exam_version = ExamVersion.new
+    @exam_version = @exam.versions.new
   end
 
   def edit

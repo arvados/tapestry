@@ -35,7 +35,8 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
 
       should 'have a link to each exam version' do
         @exam_versions.each do |version|
-          assert_select 'a[href=?]', admin_content_area_exam_exam_version_path(@content_area, @exam, @version1)
+          assert_select 'a[href=?]', admin_content_area_exam_exam_version_path(@content_area, @exam, version)
+          assert_select 'td', :text => version.version
         end
       end
     end

@@ -8,7 +8,16 @@ class ExamVersion < ActiveRecord::Base
   named_scope :published, :conditions => [ 'published = ?', true ]
   named_scope :ordered,   :order => 'version'
 
+  before_create :assign_version
+
   def question_count
     exam_questions.count
   end
+
+  protected
+
+  def assign_version
+    self.version = exam.versions.count + 1
+  end
+
 end

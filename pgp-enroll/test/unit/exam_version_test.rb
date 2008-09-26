@@ -11,4 +11,20 @@ class ExamVersionTest < ActiveSupport::TestCase
     should_have_many :exam_questions
     should_have_many :exam_responses
   end
+
+  context 'given an exam' do
+    setup { @exam = Factory(:exam) }
+
+    context 'when creating multiple versions' do
+      setup do
+        @versions = []
+        3.times { @versions << Factory(:exam_version, :exam => @exam) }
+      end
+
+      should 'assign the next version to each' do
+        assert_equal [1,2,3], @versions.map(&:version)
+      end
+    end
+  end
+
 end
