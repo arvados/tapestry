@@ -7,8 +7,9 @@
     <%= f.text_field :ordinal %>
   </p>
   <p>
-    <%= f.label :type %><br />
-    <%= f.select :type, [['Multiple Choice', 'MultipleChoiceExamQuestion']] %>
+    <%= f.label :kind %><br />
+    <%= f.select :kind, [['Multiple Choice', 'MULTIPLE_CHOICE'],
+                         ['Check All', 'CHECK_ALL']] %>
   </p>
   <%= f.hidden_field :exam_version_id, :value => @exam_version.id %>
 

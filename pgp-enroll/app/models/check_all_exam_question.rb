@@ -1,2 +1,0 @@
-class CheckAllExamQuestion < ExamQuestion
-end

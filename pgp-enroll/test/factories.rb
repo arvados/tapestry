@@ -62,18 +62,14 @@ Factory.define(:exam_response) do |f|
   f.exam_version { |e| e.association :exam_version }
 end
 
-Factory.define(:multiple_choice_exam_question) do |f|
+Factory.define(:exam_question) do |f|
   f.exam_version  { |e| e.association :exam_version }
   f.ordinal       { |q| q.exam_version.exam_questions.count }
-end
-
-Factory.define(:check_all_exam_question) do |f|
-  f.exam_version  { |e| e.association :exam_version }
-  f.ordinal       { |q| q.exam_version.exam_questions.count }
+  f.kind          'MULTIPLE_CHOICE'
 end
 
 Factory.define(:answer_option) do |f|
-  f.exam_question { |q| q.association :multiple_choice_exam_question }
+  f.exam_question { |q| q.association :exam_question }
   f.answer 'Answer Option'
   f.correct false
 end

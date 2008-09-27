@@ -22,5 +22,35 @@ class ExamResponseTest < ActiveSupport::TestCase
       # WTF this works on script/console, but breaks in test env.  something's wonky with the test setup or libs.
       # It wont set user_id to nil for some reason...??
     end
+
+    context 'in response to an exam' do
+      setup do
+      end
+
+      context 'with all correct answers' do
+        setup do
+        end
+
+        should_eventually 'be correct' do
+        end
+      end
+
+      context 'with some correct answers' do
+        setup do
+        end
+
+        should_eventually 'not be correct' do
+        end
+      end
+
+      context 'with no correct answers' do
+        setup do
+        end
+
+        should_eventually 'not be correct' do
+        end
+      end
+    end
   end
+
 end

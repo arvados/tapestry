@@ -7,7 +7,7 @@ class ExamQuestionsControllerTest < ActionController::TestCase
       @user.activate!
       login_as @user
 
-      @exam_question = Factory :multiple_choice_exam_question
+      @exam_question = Factory :exam_question
       @exam_version  = @exam_question.exam_version
       @exam          = @exam_version.exam
       @content_area  = @exam.content_area

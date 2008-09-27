@@ -33,7 +33,7 @@ class ExamVersionTest < ActiveSupport::TestCase
     setup do
       @exam_version = Factory(:exam_version)
       3.times do
-        @question = Factory(:multiple_choice_exam_question, :exam_version => @exam_version)
+        @question = Factory(:exam_question, :exam_version => @exam_version)
         @answer   = Factory(:answer_option, :exam_question => @question, :correct => true)
         3.times do |i|
           @answer = Factory(:answer_option, :exam_question => @question, :correct => false)

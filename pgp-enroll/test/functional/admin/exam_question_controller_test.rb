@@ -30,7 +30,7 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
 
     context 'on POST to create' do
       setup do
-        hash = { :question => 'test question' }
+        hash = { :question => 'test question', :kind => 'MULTIPLE_CHOICE' }
         post :create, @context_hash.merge({ :exam_question => hash })
       end
 
@@ -39,7 +39,7 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
 
     context 'with an exam question' do
       setup do
-        @exam_question = Factory :multiple_choice_exam_question, :exam_version => @exam_version
+        @exam_question = Factory :exam_question, :exam_version => @exam_version
         @context_hash.merge!({
           :id => @exam_question
         })

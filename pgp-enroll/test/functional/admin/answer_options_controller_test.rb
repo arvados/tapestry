@@ -4,7 +4,7 @@ class Admin::AnswerOptionsControllerTest < ActionController::TestCase
 
   logged_in_as_admin do
     setup do
-      @exam_question = Factory(:multiple_choice_exam_question)
+      @exam_question = Factory(:exam_question)
       @exam_version  = @exam_question.exam_version
       @exam          = @exam_version.exam
       @content_area  = @exam.content_area

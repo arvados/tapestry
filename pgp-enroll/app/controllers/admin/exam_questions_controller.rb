@@ -21,7 +21,7 @@ class Admin::ExamQuestionsController < Admin::AdminControllerBase
 
   def create
     @exam_question = @exam_version.exam_questions.new(params[:exam_question])
-    @exam_question.type = params[:exam_question][:type]
+    @exam_question.kind = params[:exam_question][:kind]
 
     if @exam_question.save
       flash[:notice] = 'Question was successfully created.'
