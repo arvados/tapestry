@@ -12,6 +12,26 @@ class ExamVersionTest < ActiveSupport::TestCase
     should_have_many :exam_responses
   end
 
+  context 'given a published exam version' do
+    setup do
+      @published = Factory(:exam_version, :published => true)
+    end
+
+    should 'show up in ExamVersion#published' do
+      assert ExamVersion.published.include?(@published)
+    end
+  end
+
+  context 'given an unpublished exam version' do
+    setup do
+      @unpublished = Factory(:exam_version, :published => false)
+    end
+
+    should 'not show up in ExamVersion#published' do
+      assert !ExamVersion.published.include?(@unpublished)
+    end
+  end
+
   context 'given an exam' do
     setup { @exam = Factory(:exam) }
 

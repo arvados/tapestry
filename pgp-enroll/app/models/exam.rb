@@ -1,6 +1,5 @@
 class Exam < ActiveRecord::Base
   has_many :versions, :class_name => 'ExamVersion'
-  has_one :published_version, :class_name => 'ExamVersion'
   belongs_to :content_area
 
   # after_create :create_initial_version
