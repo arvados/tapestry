@@ -3,7 +3,7 @@ class Exam < ActiveRecord::Base
   has_one :published_version, :class_name => 'ExamVersion'
   belongs_to :content_area
 
-  after_create :create_initial_version
+  # after_create :create_initial_version
 
   def version_for(user)
     versions.find :first,
@@ -36,10 +36,10 @@ class Exam < ActiveRecord::Base
     end
   end
 
-  def create_initial_version
-    versions.create({
-      :title       => 'New Exam',
-      :description => 'New Exam Description'
-    })
-  end
+  # def create_initial_version
+  #   versions.create({
+  #     :title       => 'New Exam',
+  #     :description => 'New Exam Description'
+  #   })
+  # end
 end

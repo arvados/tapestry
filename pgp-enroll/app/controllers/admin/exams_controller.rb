@@ -15,6 +15,7 @@ class Admin::ExamsController < Admin::AdminControllerBase
     @exam = @content_area.exams.new
 
     if @exam.save
+      @exam.versions.create({:title => 'New exam', :description => 'New exam description' })
       flash[:notice] = 'Exam was successfully created.'
       redirect_to admin_content_area_exams_path(@content_area)
     else
