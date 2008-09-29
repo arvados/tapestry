@@ -79,9 +79,6 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
         @version3 = @exam.versions.last
         assert_equal @version2.exam_questions.count, @version3.exam_questions.count
       end
-
-      should_eventually 'duplicate the specified exam, all the way down the tree' do
-      end
     end
 
     context 'on GET to #show' do
