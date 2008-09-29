@@ -74,13 +74,13 @@ class Admin::AnswerOptionsControllerTest < ActionController::TestCase
           assert flash[:notice] =~ /success/i
         end
 
-        should_redirect_to 'admin_content_area_exam_exam_version_exam_question_answer_options_url(@content_area, @exam, @exam_version, @answer_option)'
+        should_redirect_to 'admin_content_area_exam_exam_version_exam_question_answer_options_url(@content_area, @exam, @exam_version, @exam_question)'
       end
 
       context 'on DELETE to destroy' do
         setup { delete :destroy, @context_hash }
 
-        should_redirect_to 'admin_content_area_exam_exam_version_exam_question_answer_options_url(@content_area, @exam, @exam_version, @answer_option)'
+        should_redirect_to 'admin_content_area_exam_exam_version_exam_question_answer_options_url(@content_area, @exam, @exam_version, @exam_question)'
       end
     end
   end
