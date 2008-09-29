@@ -75,6 +75,7 @@ Factory.define(:answer_option) do |f|
 end
 
 Factory.define(:question_response) do |f|
-  f.answer_option { |a| a.association :answer_option }
-  f.exam_response { |r| r.association(:exam_response, :exam_version => r.answer_option.exam_question.exam_version) }
+  f.exam_question { |q| q.association :exam_question }
+  f.exam_response { |r| r.association(:exam_response, :exam_version => r.exam_question.exam_version) }
+  f.answer        { |a| a.exam_question.correct_answer }
 end

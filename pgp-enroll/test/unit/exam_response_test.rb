@@ -25,21 +25,39 @@ class ExamResponseTest < ActiveSupport::TestCase
 
     context 'in response to an exam' do
       setup do
+        @exam_version = build_exam_version_with_questions_and_answers
+        @exam_response = Factory(:exam_response, :exam_version => @exam_version)
       end
 
       context 'with all correct answers' do
         setup do
+          # TODO: QuestionResponse is now configured differently...
+          # @exam_version.exam_questions.each do |question|
+          #   @exam_response.question_responses.create({
+          #     :exam_version => @exam_version,
+          #     :answer_option => question.correct_answer
+          #   })
+          # end
+          @exam_version.exam_questions.each do |question|
+            @exam_response.question_responses.create({
+              :exam_question => question,
+              :answer        => question.correct_answer
+            })
+          end
         end
 
-        should_eventually 'be correct' do
+        should 'be correct' do
+          assert @exam_response.correct?
         end
       end
 
       context 'with some correct answers' do
         setup do
+          #TODO setup
         end
 
-        should_eventually 'not be correct' do
+        should 'not be correct' do
+          assert !@exam_response.correct?
         end
       end
 
@@ -47,10 +65,22 @@ class ExamResponseTest < ActiveSupport::TestCase
         setup do
         end
 
-        should_eventually 'not be correct' do
+        should 'not be correct' do
+          assert !@exam_response.correct?
         end
       end
     end
+  end
+
+  def build_exam_version_with_questions_and_answers
+    exam_version = Factory(:exam_version)
+    5.times do
+      question = Factory(:exam_question, :exam_version => exam_version)
+      5.times do |i|
+        answer_option = Factory(:answer_option, :exam_question => question, :correct => i.zero?)
+      end
+    end
+    exam_version
   end
 
 end

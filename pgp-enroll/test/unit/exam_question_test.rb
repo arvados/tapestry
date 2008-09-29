@@ -8,6 +8,7 @@ class ExamQuestionTest < ActiveSupport::TestCase
 
     should_belong_to :exam_version
     should_have_many :answer_options
+    should_have_many :question_responses
 
     context "with a kind that is not 'MULTIPLE_CHOICE' or 'CHECK_ALL'" do
       setup do
@@ -38,4 +39,34 @@ class ExamQuestionTest < ActiveSupport::TestCase
       assert @exam_version.exam_questions.last.last_in_exam?
     end
   end
+
+  context 'with a multiple choice exam question' do
+    setup do
+      @question = Factory(:exam_question, :kind => 'MULTIPLE_CHOICE')
+      5.times do |i|
+        @answer_option = Factory(:answer_option, :exam_question => @question, :correct => i.zero?)
+      end
+    end
+
+    should 'give the id of the correct answer_option when sent #correct_answer' do
+      assert_equal @question.answer_options.first.id.to_s, @question.correct_answer
+    end
+  end
+
+  context 'with a check all exam question' do
+    setup do
+      @question = Factory(:exam_question, :kind => 'CHECK_ALL')
+      5.times do |i|
+        @answer_option = Factory(:answer_option, :exam_question => @question)
+        @answer_option.update_attribute(:correct, i.odd?)
+      end
+
+      @correct_answers = @question.answer_options.select(&:correct?)
+    end
+
+    should 'give the answer option ids joined by comma when sent #correct_answer' do
+      assert_equal @correct_answers.map(&:id).join(','), @question.correct_answer
+    end
+  end
+
 end
