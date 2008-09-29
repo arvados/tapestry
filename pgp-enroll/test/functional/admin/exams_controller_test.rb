@@ -43,7 +43,7 @@ class Admin::ExamsControllerTest < ActionController::TestCase
     context 'on DELETE to destroy' do
       setup do
         @count = Exam.count
-        delete :destroy, :content_area_id => @content_area, :id => @exam_version.id
+        delete :destroy, :content_area_id => @content_area, :id => @exam.id
       end
 
       should_redirect_to 'admin_content_area_exams_path(@content_area)'
