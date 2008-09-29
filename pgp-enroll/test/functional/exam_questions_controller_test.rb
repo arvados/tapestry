@@ -42,6 +42,46 @@ class ExamQuestionsControllerTest < ActionController::TestCase
           assert_select '.main p', /1 out of 1/
         end
       end
+
+      context 'on GET to show for a multiple choice question' do
+        setup do
+        end
+
+        should_eventually 'render radio buttons for the answer' do
+        end
+      end
+
+      context 'on GET to show for a check-all question' do
+        setup do
+        end
+
+        should_eventually 'render checkboxes for the answer' do
+        end
+      end
+
+      context 'on POST to answer for a multiple choice question' do
+        setup do
+        end
+
+        should_eventually 'store the answer' do
+        end
+
+        should_eventually 'progress the exam' do
+
+        end
+      end
+
+      context 'on POST to answer for a check-all question' do
+        setup do
+        end
+
+        should_eventually 'store the answer' do
+        end
+
+        should_eventually 'progress the exam' do
+
+        end
+      end
     end
   end
 end

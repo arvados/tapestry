@@ -1,21 +1,17 @@
-<h1>Listing exam definitions</h1>
+<h2><%=h @content_area.title %> Exams</h2>
 
 <table class="admin_table">
   <tr>
     <th>Title</th>
     <th>Description</th>
-    <th>Content Area</th>
-    <th>Version Number</th>
+    <th>Versions</th>
   </tr>
 
   <% for exam in @exams %>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%=h exam.versions.last.title %></td>
-      <td><%=h exam.versions.last.description %></td>
-      <td><%= link_to exam.content_area.title,  [:admin, @content_area] %></td>
+      <td><%= link_to h(exam.title), admin_content_area_exam_exam_versions_url(@content_area, exam) %></td>
+      <td><%=h exam.description %></td>
       <td><%= exam.versions.count %></td>
-      <td><%= link_to 'Show',      admin_content_area_exam_path(@content_area, exam) %></td>
-      <td><%= link_to 'Edit', edit_admin_content_area_exam_path(@content_area, exam) %></td>
       <td><%= link_to 'Destroy',   admin_content_area_exam_path(@content_area, exam), :method => :delete, :confirm => 'Are you sure?' %></td>
     </tr>
   <% end %>

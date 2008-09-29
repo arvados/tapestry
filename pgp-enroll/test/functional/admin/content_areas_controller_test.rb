@@ -27,9 +27,10 @@ class Admin::ContentAreasControllerTest < ActionController::TestCase
       assert_redirected_to admin_content_areas_path
     end
 
-    should "show content area" do
-      get :show, :id => @content_area.id
-      assert_response :success
+    context 'on GET to show' do
+      setup { get :show, :id => @content_area }
+
+      should_redirect_to 'admin_content_area_exams_url(@content_area)'
     end
 
     should "get edit" do

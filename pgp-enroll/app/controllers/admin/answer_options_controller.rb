@@ -7,6 +7,7 @@ class Admin::AnswerOptionsController < Admin::AdminControllerBase
   before_filter :set_answer_option, :only => [:show, :edit, :update, :destroy]
 
   def index
+    add_breadcrumb 'Answers'
     @answer_options = @exam_question.answer_options
   end
 

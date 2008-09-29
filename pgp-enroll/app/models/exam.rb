@@ -3,6 +3,8 @@ class Exam < ActiveRecord::Base
   has_one :published_version, :class_name => 'ExamVersion'
   belongs_to :content_area
 
+  after_create :create_initial_version
+
   def version_for(user)
     versions.find :first,
       :conditions => [ 'created_at < ? and published = ?', user.created_at, true ],
@@ -11,6 +13,7 @@ class Exam < ActiveRecord::Base
 
   def version_for!(user)
     raise ActiveRecord::RecordNotFound unless version_for(user)
+    version_for(user)
   end
 
   def title
@@ -31,5 +34,12 @@ class Exam < ActiveRecord::Base
     else
       default
     end
+  end
+
+  def create_initial_version
+    versions.create({
+      :title       => 'New Exam',
+      :description => 'New Exam Description'
+    })
   end
 end
