@@ -6,17 +6,22 @@ class ExamQuestionsController < ApplicationController
   end
 
   def answer
-    @answer_option = @exam_question.answer_options.find params[:answer_option_id]
+    if params[:answer].respond_to?(:values)
+      @answer = params[:answer].values.join(',')
+    else
+      @answer = params[:answer]
+    end
 
     @question_reponse = QuestionResponse.new(
       :exam_response => @exam_response,
-      :answer_option => @answer_option)
+      :exam_question => @exam_question,
+      :answer        => @answer)
 
     if @question_reponse.save
       if @exam_question.last_in_exam?
-        redirect_to content_area_exam_path(@content_area, @exam)
+        redirect_to content_area_exam_url(@content_area, @exam)
       else
-        redirect_to content_area_exam_path(@content_area, @exam, @exam_question.next_question)
+        redirect_to content_area_exam_exam_question_url(@content_area, @exam, @exam_question.next_question)
       end
     else
       show

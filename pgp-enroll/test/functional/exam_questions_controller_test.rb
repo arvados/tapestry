@@ -43,43 +43,83 @@ class ExamQuestionsControllerTest < ActionController::TestCase
         end
       end
 
-      context 'on GET to show for a multiple choice question' do
+      context 'with a multiple choice question' do
         setup do
+          @exam_question.update_attribute(:kind, 'MULTIPLE_CHOICE')
+          @correct_answer_string = ''
+          @exam_question.answer_options.each_with_index do |option, i|
+            option.update_attribute(:correct, i.zero?)
+            @correct_answer_string = option.id.to_s if option.correct?
+          end
         end
 
-        should_eventually 'render radio buttons for the answer' do
+        context 'on GET to show' do
+          setup do
+            get :show,
+                :content_area_id => @content_area,
+                :exam_id         => @exam,
+                :id              => @exam_question
+          end
+
+          should 'render radio buttons for the answer' do
+            assert_select 'input[type=?]', 'radio', :count => @exam_question.answer_options.count
+          end
+        end
+
+
+        context 'on POST to answer' do
+          setup do
+            @count = QuestionResponse.count
+            post :answer,
+                 :content_area_id => @content_area,
+                 :exam_id         => @exam,
+                 :id              => @exam_question,
+                 :answer          => @correct_answer_string
+          end
+
+          should 'store the answer' do
+            assert_equal @count+1, QuestionResponse.count
+          end
         end
       end
 
-      context 'on GET to show for a check-all question' do
+      context 'with a check-all question' do
         setup do
+          @exam_question.update_attribute(:kind, 'CHECK_ALL')
+          @correct_answer_string = ''
+          @exam_question.answer_options.each do |option|
+            option.update_attribute(:correct, true)
+          end
+          @correct_answer_string = @exam_question.answer_options.map(&:id).join(',')
         end
 
-        should_eventually 'render checkboxes for the answer' do
-        end
-      end
+        context 'on GET to show' do
+          setup do
+            get :show,
+                :content_area_id => @content_area,
+                :exam_id         => @exam,
+                :id              => @exam_question
+          end
 
-      context 'on POST to answer for a multiple choice question' do
-        setup do
-        end
-
-        should_eventually 'store the answer' do
-        end
-
-        should_eventually 'progress the exam' do
-
-        end
-      end
-
-      context 'on POST to answer for a check-all question' do
-        setup do
+          should 'render check boxes for the answer' do
+            assert_select 'input[type=?]', 'checkbox', :count => @exam_question.answer_options.count
+          end
         end
 
-        should_eventually 'store the answer' do
-        end
 
-        should_eventually 'progress the exam' do
+        context 'on POST to answer' do
+          setup do
+            @count = QuestionResponse.count
+            post :answer,
+                 :content_area_id => @content_area,
+                 :exam_id         => @exam,
+                 :id              => @exam_question,
+                 :answer          => @correct_answer_string
+          end
 
+          should 'store the answer' do
+            assert_equal @count+1, QuestionResponse.count
+          end
         end
       end
     end
