@@ -6,10 +6,11 @@ class Admin::ExamQuestionsController < Admin::AdminControllerBase
   before_filter :set_exam_question, :only => [:show, :edit, :update]
 
   def index
-    @exam_questions = @exam_version.exam_questions
+    @exam_questions = @exam_version.exam_questions.ordered
   end
 
   def show
+    @answer_options = @exam_question.answer_options
   end
 
   def new

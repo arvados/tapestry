@@ -19,6 +19,12 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
 
       should_respond_with :success
       should_render_template :index
+      should_assign_to :exam_questions
+
+      should 'sort exam questions by ordinal' do
+        sorted_exam_questions = assigns(:exam_questions).sort_by(&:ordinal)
+        assert_equal sorted_exam_questions, assigns(:exam_questions)
+      end
     end
 
     context 'on GET to new' do
@@ -50,6 +56,7 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
 
         should_respond_with :success
         should_render_template :show
+        should_assign_to :answer_options
       end
 
       context 'on GET to edit' do

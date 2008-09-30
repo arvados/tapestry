@@ -23,7 +23,7 @@
     <th>Correct?</th>
   </tr>
 
-<% for answer_option in @exam_question.answer_options %>
+<% for answer_option in @answer_options %>
   <tr class="<%= cycle 'even', 'odd' %>">
     <td><%=h answer_option.answer %></td>
     <td><%= answer_option.correct? ? 'Yes' : 'No' %></td>
