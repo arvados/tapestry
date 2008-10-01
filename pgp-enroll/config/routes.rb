@@ -19,6 +19,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
+    admin.resources :exam_responses
     admin.resources :users, :member => { :activate => :put }
     admin.resources :content_areas do |content_area|
       content_area.resources :exams do |exam|
