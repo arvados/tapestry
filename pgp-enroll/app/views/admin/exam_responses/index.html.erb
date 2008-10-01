@@ -1,0 +1,25 @@
+<h2>Exam Responses</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>Content Area</th>
+    <th>Exam</th>
+    <th>Results</th>
+    <th>User</th>
+    <th>Details</th>
+  </tr>
+
+<% for exam_response in @exam_responses %>
+  <tr class="<%= cycle 'even', 'odd' %>">
+    <td><%=h exam_response.exam_version.exam.content_area.title %></td>
+    <td><%=h exam_response.exam_version.title %></td>
+    <td><%= format_exam_response_results(exam_response) %></td>
+    <% if exam_response.user -%>
+      <td><%= link_to h(exam_response.user.name), edit_admin_user_url(exam_response.user) %></td>
+    <% else -%>
+      <td><%= link_to h(exam_response.original_user.name), edit_admin_user_url(exam_response.original_user) %> (previous attempt)</td>
+    <% end -%>
+    <td><%= link_to 'Details', admin_exam_response_url(exam_response) %></td>
+  </tr>
+<% end %>
+</table>

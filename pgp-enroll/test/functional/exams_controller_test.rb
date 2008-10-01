@@ -47,6 +47,10 @@ class ExamsControllerTest < ActionController::TestCase
         should 'create a new exam response' do
           assert_equal @count+1, @user.exam_responses.count
         end
+
+        should 'assign the current_user to the exam response user' do
+          assert_equal @user, ExamResponse.last.user
+        end
       end
     end
 

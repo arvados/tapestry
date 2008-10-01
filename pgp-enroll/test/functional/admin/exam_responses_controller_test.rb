@@ -40,7 +40,13 @@ class Admin::ExamResponsesControllerTest < ActionController::TestCase
 
         should_respond_with :success
         should_render_template :show
+
+        should_assign_to :content_area
+        should_assign_to :exam
+        should_assign_to :exam_version
+
         should_assign_to :exam_response
+        should_assign_to :question_responses
       end
     end
   end
