@@ -4,6 +4,6 @@ module Admin::ExamResponsesHelper
     total   = exam_response.exam_version.exam_questions.count
     percent = 100.0 * ( correct.to_f / total.to_f )
 
-    "#{percent}% (#{correct}/#{total})"
+    "#{sprintf('%0.2f', percent)}% (#{correct}/#{total})"
   end
 end
