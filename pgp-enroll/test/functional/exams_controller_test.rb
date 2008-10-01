@@ -11,6 +11,8 @@ class ExamsControllerTest < ActionController::TestCase
       @exam = @exam_version.exam
       @content_area = @exam.content_area
 
+      Factory(:exam_question, :exam_version => @exam_version)
+
       Exam.any_instance.stubs(:version_for).returns(@exam_version)
       Exam.any_instance.stubs(:version_for!).returns(@exam_version)
     end
@@ -34,13 +36,13 @@ class ExamsControllerTest < ActionController::TestCase
         end
       end
 
-      context 'on POST to create' do
+      context 'on POST to start' do
         setup do
           @count = @user.exam_responses.count
           post :start, :content_area_id => @content_area, :id => @exam
         end
 
-        should_redirect_to 'content_area_exam_exam_questions_url(@content_area, @exam)'
+        should_redirect_to 'content_area_exam_exam_question_url(@content_area, @exam, @exam_version.exam_questions.first)'
 
         should 'create a new exam response' do
           assert_equal @count+1, @user.exam_responses.count

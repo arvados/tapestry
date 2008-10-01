@@ -12,15 +12,10 @@ class ExamResponseTest < ActiveSupport::TestCase
     should_have_many :question_responses
 
     should 'move user to original_user when sent #discard_for_retake!' do
-      original_user = @exam_response.user
+      assert original_user_id = @exam_response.user.id
       @exam_response.discard_for_retake!
-      assert_equal original_user, @exam_response.original_user
-
-      # assert_nil @exam_response.user
-      # ^^^
-      # <nil> was expected but was <4>
-      # WTF this works on script/console, but breaks in test env.  something's wonky with the test setup or libs.
-      # It wont set user_id to nil for some reason...??
+      assert_equal original_user_id, @exam_response.original_user_id
+      assert_nil @exam_response.user
     end
 
     context 'in response to an exam' do
