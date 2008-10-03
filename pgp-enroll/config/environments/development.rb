@@ -26,3 +26,7 @@ ActionMailer::Base.smtp_settings = {
   :password => "xxxxxxxx" 
 }
 
+ROOT_URL = 'localhost:3000'
+ADMIN_EMAIL = 'jason.p.morrison@gmail.com'
+
+

@@ -70,8 +70,4 @@ Rails::Initializer.run do |config|
   config.active_record.observers = :user_observer
 end
 
-# TODO: Override in per-environment files
-ROOT_URL = 'pgp-staging.hugcapacitor.com'
-ADMIN_EMAIL = 'jason.p.morrison@gmail.com'
-
 require 'csv'
