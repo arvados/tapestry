@@ -15,9 +15,9 @@
     <td><%=h exam_response.exam_version.title %></td>
     <td><%= format_exam_response_results(exam_response) %></td>
     <% if exam_response.user -%>
-      <td><%= link_to h(exam_response.user.name), edit_admin_user_url(exam_response.user) %></td>
+      <td><%= link_to h(exam_response.user.full_name), edit_admin_user_url(exam_response.user) %></td>
     <% else -%>
-      <td><%= link_to h(exam_response.original_user.name), edit_admin_user_url(exam_response.original_user) %> (previous attempt)</td>
+      <td><%= link_to h(exam_response.original_user.full_name), edit_admin_user_url(exam_response.original_user) %> (previous attempt)</td>
     <% end -%>
     <td><%= link_to 'Details', admin_exam_response_url(exam_response) %></td>
   </tr>

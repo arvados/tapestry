@@ -4,8 +4,15 @@
 
 <% form_for [:admin, @user], :html => { :method => :put } do |f| -%>
 <%= error_messages_for :user %>
-<p><label for="name">Name</label><br/>
-<%= f.text_field :name %></p>
+
+<p><%= f.label :first_name %><br/>
+<%= f.text_field :first_name %></p>
+
+<p><%= f.label :middle_name %><br/>
+<%= f.text_field :middle_name %></p>
+
+<p><%= f.label :last_name %></label><br/>
+<%= f.text_field :last_name %></p>
 
 <p><label for="email">Email</label><br/>
 <%= f.text_field :email %></p>

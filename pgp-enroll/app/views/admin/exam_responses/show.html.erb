@@ -5,9 +5,9 @@
   <%=h @exam_response.exam_version.title %><br/>
   <%= format_exam_response_results(@exam_response) %><br/>
   <% if @exam_response.user -%>
-    <%= link_to h(@exam_response.user.name), edit_admin_user_url(@exam_response.user) %><br/>
+    <%= link_to h(@exam_response.user.full_name), edit_admin_user_url(@exam_response.user) %><br/>
   <% else -%>
-    <%= link_to h(@exam_response.original_user.name), edit_admin_user_url(@exam_response.original_user) %> (previous attempt)<br/>
+    <%= link_to h(@exam_response.original_user.full_name), edit_admin_user_url(@exam_response.original_user) %> (previous attempt)<br/>
   <% end -%>
 </p>
 

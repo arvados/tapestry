@@ -9,8 +9,11 @@ class User < ActiveRecord::Base
   has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step
   has_many :exam_responses
 
-  validates_format_of       :name,     :with => RE_NAME_OK,  :message => MSG_NAME_BAD, :allow_nil => true
-  validates_length_of       :name,     :maximum => 100
+  # validates_format_of       :name,     :with => RE_NAME_OK,  :message => MSG_NAME_BAD, :allow_nil => true
+  # validates_length_of       :name,     :maximum => 100
+
+  validates_presence_of     :first_name
+  validates_presence_of     :last_name
 
   validates_presence_of     :email
   validates_length_of       :email,    :within => 6..100 #r@a.wk
@@ -18,7 +21,7 @@ class User < ActiveRecord::Base
   validates_format_of       :email,    :with => RE_EMAIL_OK, :message => MSG_EMAIL_BAD
 
   before_create :make_activation_code
-  attr_accessible :email, :name, :password, :password_confirmation
+  attr_accessible :email, :first_name, :middle_name, :last_name, :password, :password_confirmation
 
   # Activates the user in the database.
   def activate!
@@ -67,6 +70,10 @@ class User < ActiveRecord::Base
 
   def last_completed_enrollment_step
     completed_enrollment_steps.sort_by(&:ordinal).last
+  end
+
+  def full_name
+    [first_name, middle_name, last_name].join(' ').gsub(/\s+/,' ').strip
   end
 
   protected

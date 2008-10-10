@@ -1,7 +1,7 @@
 <h2>Home</h2>
 
 <% if current_user -%>
-  <p>Welcome, <%=h current_user.name %>!</p>
+  <p>Welcome, <%=h current_user.full_name %>!</p>
 <% end -%>
 
 <ol id="enrollment_steps">
