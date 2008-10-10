@@ -27,7 +27,7 @@ h2 {
 
 h3 {
 	font: 14px/20px Georgia, "Times New Roman", Times, serif;
-	margin: 18px 0 -12px 0;
+	margin: 18px 0 0 0;
 }
 
 p {
@@ -503,6 +503,11 @@ ul.links li a {
 
 #foot #copyright .bullet {
 color: #7f97c9;
+}
+
+#mini_consent {
+  padding-left: 10%;
+  padding-right: 30%;
 }
 
 #mini_consent dt {
