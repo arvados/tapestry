@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20080927005352) do
+ActiveRecord::Schema.define(:version => 20081010031127) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -84,7 +84,6 @@ ActiveRecord::Schema.define(:version => 20080927005352) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "name",                      :limit => 100, :default => ""
     t.string   "email",                     :limit => 100
     t.string   "crypted_password",          :limit => 40
     t.string   "salt",                      :limit => 40
@@ -95,6 +94,9 @@ ActiveRecord::Schema.define(:version => 20080927005352) do
     t.string   "activation_code",           :limit => 40
     t.datetime "activated_at"
     t.boolean  "is_admin"
+    t.string   "first_name"
+    t.string   "middle_name"
+    t.string   "last_name"
   end
 
 end

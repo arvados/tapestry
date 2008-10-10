@@ -6,28 +6,29 @@ class SessionsController; def rescue_action(e) raise e end; end
 
 class SessionsControllerTest < Test::Unit::TestCase
 
-  fixtures :users
-
   def setup
     @controller = SessionsController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
+    @password   = 'secret'
+    @user       = Factory(:user, :password => @password, :password_confirmation => @password)
+    @user.activate!
   end
 
   should "login and redirect" do
-    post :create, :email => 'quentin@example.com', :password => 'monkey'
+    post :create, :email => @user.email, :password => @user.password
     assert session[:user_id]
     assert_response :redirect
   end
 
   should "fail login and not redirect" do
-    post :create, :email => 'quentin@example.com', :password => 'bad password'
+    post :create, :email => @user.email, :password => 'bad password'
     assert_nil session[:user_id]
     assert_response :success
   end
 
   should "logout" do  
-    login_as :quentin
+    login_as @user
     get :destroy
     assert_nil session[:user_id]
     assert_response :redirect
@@ -35,39 +36,39 @@ class SessionsControllerTest < Test::Unit::TestCase
 
   should "remember me" do
     @request.cookies["auth_token"] = nil
-    post :create, :email => 'quentin@example.com', :password => 'monkey', :remember_me => "1"
+    post :create, :email => @user.email, :password => @user.password, :remember_me => "1"
     assert_not_nil @response.cookies["auth_token"]
   end
 
   should "not remember me" do
     @request.cookies["auth_token"] = nil
-    post :create, :email => 'quentin@example.com', :password => 'monkey', :remember_me => "0"
+    post :create, :email => @user.email, :password => @user.password, :remember_me => "0"
     assert @response.cookies["auth_token"].blank?
   end
   
   should "delete token on logout" do
-    login_as :quentin
+    login_as @user
     get :destroy
     assert @response.cookies["auth_token"].blank?
   end
 
   should "login with cookie" do
-    users(:quentin).remember_me
-    @request.cookies["auth_token"] = cookie_for(:quentin)
+    @user.remember_me
+    @request.cookies["auth_token"] = cookie_for(@user)
     get :new
     assert @controller.send(:logged_in?)
   end
 
   should "fail expired cookie login" do
-    users(:quentin).remember_me
-    users(:quentin).update_attribute :remember_token_expires_at, 5.minutes.ago
-    @request.cookies["auth_token"] = cookie_for(:quentin)
+    @user.remember_me
+    @user.update_attribute :remember_token_expires_at, 5.minutes.ago
+    @request.cookies["auth_token"] = cookie_for(@user)
     get :new
     assert !@controller.send(:logged_in?)
   end
 
   should "fail cookie login" do
-    users(:quentin).remember_me
+    @user.remember_me
     @request.cookies["auth_token"] = auth_token('invalid_auth_token')
     get :new
     assert !@controller.send(:logged_in?)
@@ -77,8 +78,8 @@ class SessionsControllerTest < Test::Unit::TestCase
     def auth_token(token)
       CGI::Cookie.new('name' => 'auth_token', 'value' => token)
     end
-    
+
     def cookie_for(user)
-      auth_token users(user).remember_token
+      auth_token user.remember_token
     end
 end

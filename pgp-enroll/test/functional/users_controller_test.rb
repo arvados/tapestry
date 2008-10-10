@@ -6,8 +6,6 @@ class UsersController; def rescue_action(e) raise e end; end
 
 class UsersControllerTest < Test::Unit::TestCase
 
-  fixtures :users
-
   def setup
     @controller = UsersController.new
     @request    = ActionController::TestRequest.new
@@ -62,11 +60,14 @@ class UsersControllerTest < Test::Unit::TestCase
   end
 
   def test_should_activate_user
-    assert_nil User.authenticate('aaron@example.com', 'test')
-    get :activate, :code => users(:aaron).activation_code
+    @password = 'monkey'
+
+    @aaron = Factory(:user, :password => @password, :password_confirmation => @password)
+    assert_nil User.authenticate(@aaron.email, @password)
+    User.any_instance.expects(:activate!)
+    get :activate, :code => @aaron.activation_code
     assert_redirected_to '/login'
     assert_not_nil flash[:notice]
-    assert_equal users(:aaron), User.authenticate('aaron@example.com', 'monkey')
   end
   
   def test_should_not_activate_user_without_key
@@ -86,6 +87,7 @@ class UsersControllerTest < Test::Unit::TestCase
   protected
     def create_user(options = {})
       post :create, :user => { :email => 'quire@example.com',
-        :password => 'quire69', :password_confirmation => 'quire69' }.merge(options)
+        :password => 'quire69', :password_confirmation => 'quire69',
+        :first_name => 'First', :last_name => 'Last'}.merge(options)
     end
 end

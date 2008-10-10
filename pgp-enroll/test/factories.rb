@@ -1,14 +1,16 @@
 require 'factory_girl'
 
 Factory.define(:user) do |f|
-  f.add_attribute         'name', 'Barack Obama'
+  f.first_name            'Jason'
+  f.last_name             'Morrison'
   f.email                 { Factory.next :email }
   f.password              'password'
   f.password_confirmation 'password'
 end
 
 Factory.define(:admin_user, :class => User) do |f|
-  f.add_attribute         'name', 'Barack Obama'
+  f.first_name            'Jason'
+  f.last_name             'Morrison'
   f.email                 { Factory.next :email }
   f.password              'password'
   f.password_confirmation 'password'
@@ -79,3 +81,5 @@ Factory.define(:question_response) do |f|
   f.exam_response { |r| r.association(:exam_response, :exam_version => r.exam_question.exam_version) }
   f.answer        { |a| a.exam_question.correct_answer }
 end
+
+
