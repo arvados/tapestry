@@ -20,6 +20,18 @@ class UserTest < Test::Unit::TestCase
     # should_allow_values_for ... maybe swap RESTful Auth for clearance,
     # so don't worry about this yet.
 
+    should "require password validation on create" do
+      user = User.new(:password => "blah", :password_confirmation => "boogidy")
+      assert !user.save
+      assert user.errors.on(:password).any? { |e| e =~ /confirmation/i }
+    end
+
+    should "require email validation on create" do
+      user = User.new(:email => "blah", :email_confirmation => "boogidy")
+      assert !user.save
+      assert user.errors.on(:email).any? { |e| e =~ /confirmation/i }
+    end
+
     should "return the full name when sent #full_name" do
       assert_equal "Jason Paul Morrison", @user.full_name
     end

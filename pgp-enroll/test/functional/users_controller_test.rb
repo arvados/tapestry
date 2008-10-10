@@ -85,9 +85,8 @@ class UsersControllerTest < Test::Unit::TestCase
   end
 
   protected
-    def create_user(options = {})
-      post :create, :user => { :email => 'quire@example.com',
-        :password => 'quire69', :password_confirmation => 'quire69',
-        :first_name => 'First', :last_name => 'Last'}.merge(options)
-    end
+
+  def create_user(options = {})
+    post :create, :user => Factory.attributes_for(:user).merge(options)
+  end
 end

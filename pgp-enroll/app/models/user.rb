@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
 
   # validates_format_of       :name,     :with => RE_NAME_OK,  :message => MSG_NAME_BAD, :allow_nil => true
   # validates_length_of       :name,     :maximum => 100
+  attr_accessor :email_confirmation
 
   validates_presence_of     :first_name
   validates_presence_of     :last_name
@@ -20,8 +21,20 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email,    :case_sensitive => false
   validates_format_of       :email,    :with => RE_EMAIL_OK, :message => MSG_EMAIL_BAD
 
+  # validates_confirmation_of :email#, :on => :create
+  # validates_presence_of :email_confirmation, :on => :create
+  validate_on_create :email_confirmed
+
+  def email_confirmed
+    unless email_confirmation == email
+      errors.add(:email, 'must match confirmation')
+    end
+  end
+
   before_create :make_activation_code
-  attr_accessible :email, :first_name, :middle_name, :last_name, :password, :password_confirmation
+  attr_accessible :email, :email_confirmation,
+                  :password, :password_confirmation,
+                  :first_name, :middle_name, :last_name
 
   # Activates the user in the database.
   def activate!
