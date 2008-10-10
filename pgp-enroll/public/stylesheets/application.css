@@ -506,7 +506,7 @@ color: #7f97c9;
 }
 
 #mini_consent {
-  padding-left: 10%;
+  padding-left: 75px;
   padding-right: 30%;
 }
 
@@ -519,6 +519,19 @@ color: #7f97c9;
   display: block;
   padding-bottom: 1em;
   margin: 0;
+}
+
+.full_name_warning {
+  background-color: #faa;
+  border: 2px solid #a99;
+  width: 304px;
+  margin: 25px 0 0 105px;
+  padding: 5px 15px;
+}
+
+form.signup {
+  width: 304px;
+  margin: 25px 0 0 105px;
 }
 
 #enrollment_steps {

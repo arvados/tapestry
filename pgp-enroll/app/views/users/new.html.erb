@@ -2,9 +2,14 @@
 
 <%= render :partial => 'mini_consent' %>
 
+<div class="full_name_warning">
+  <p>Failure to accurately represent your full name on this informed consent will invalidate your eligibility for enrollment.</p>
+  <p>Once you submit this consent form, you will not be able to change the name associated with your account.  We recommend that you enter your name as it appears on government issued identification, such as a valid driver's license.</p>
+</div>
+
 <% @user.password = @user.password_confirmation = nil %>
 
-<% form_for :user, :url => users_path do |f| -%>
+<% form_for :user, :url => users_path, :html => { :class => 'signup' } do |f| -%>
 <%= error_messages_for :user %>
 
 <p><%= f.label :first_name %><br/>
