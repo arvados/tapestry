@@ -613,6 +613,14 @@ div.flash.error {
   border-color: #800;
 }
 
+.errorExplanation {
+  border: 1px solid #c00; padding: 20px;
+}
+
+.errorExplanation h2 {
+  color:#c00;
+}
+
 /* Navigation bar */
 
 /* Admin */
@@ -649,3 +657,4 @@ div.flash.error {
   background-color: #ccc;
   height: 23px;
 }
+

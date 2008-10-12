@@ -24,9 +24,11 @@ class UsersController < ApplicationController
   def create
     logout_keeping_session!
     @user = User.new(params[:user])
-    success = @user && @user.save
+
+    success = @user && verify_recaptcha(@user) && @user.save
+
     if success && @user.errors.empty?
-            redirect_back_or_default('/')
+      redirect_back_or_default('/')
       flash[:notice] = "Thanks for signing up!  We're sending you an email with your activation code."
     else
       flash[:error]  = "Please double-check your signup information below."
