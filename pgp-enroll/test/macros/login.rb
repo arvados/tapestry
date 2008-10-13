@@ -1,9 +1,21 @@
 class Test::Unit::TestCase
 
+  def self.logged_in_user_context(&blk)
+    context 'as an activated and logged in user' do
+      setup do
+        @user = Factory :user
+        @user.activate!
+        login_as @user
+      end
+
+      merge_block(&blk)
+    end
+  end
+
   def self.public_context(&blk)
     context 'as a public visitor' do
       setup do
-        logout_killing_session!
+        logout
       end
 
       merge_block(&blk)
@@ -24,6 +36,7 @@ class Test::Unit::TestCase
     actions.each do |action|
       public_context do
         # should_deny_access_on action, :redirect => "login_url"
+        should_eventually "deny access on #{action}: see test/macros/login.rb"
       end
     end
   end

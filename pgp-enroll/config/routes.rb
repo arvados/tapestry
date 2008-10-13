@@ -17,6 +17,8 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
 
+  map.resource :consent
+
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
     admin.resources :exam_responses
