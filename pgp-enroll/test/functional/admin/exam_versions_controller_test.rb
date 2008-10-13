@@ -21,7 +21,7 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
       @content_area  = Factory(:content_area)
       @exam          = Factory(:exam, :content_area => @content_area)
       @version1      = Factory(:exam_version, :exam => @exam, :created_at => 3.minutes.ago, :published => false)
-      @version2      = Factory(:exam_version, :exam => @exam, :created_at => 2.minutes.ago, :published => true)
+      @version2      = Factory(:published_exam_version_with_question, :exam => @exam, :created_at => 2.minutes.ago)
       @exam_versions = [@version1, @version2]
     end
 

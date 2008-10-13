@@ -10,11 +10,52 @@ class ExamVersionTest < ActiveSupport::TestCase
     should_require_attributes :title, :description
     should_have_many :exam_questions
     should_have_many :exam_responses
+
+    context 'that is completed by a user' do
+      setup do
+        @user = Factory(:user)
+        @response = Factory(:exam_response,
+                            :exam_version => @exam_version,
+                            :user => @user)
+      end
+
+      should 'return true when sent #completed_by?(user)' do
+        assert @exam_version.completed_by?(@user)
+      end
+    end
+
+    context 'that is not completed by a user' do
+      setup do
+        @user = Factory(:user)
+      end
+
+      should 'return false when sent #completed_by?(user)' do
+        assert !@exam_version.completed_by?(@user)
+      end
+    end
+  end
+
+  context 'an exam version with no questions' do
+    setup do
+      @version = Factory(:exam_version)
+    end
+
+    context 'marking it as published' do
+      setup do
+        @version.published = true
+      end
+
+      should 'not be valid' do
+        assert ! @version.valid?
+      end
+    end
   end
 
   context 'given a published exam version' do
     setup do
-      @published = Factory(:exam_version, :published => true)
+      @published = Factory(:exam_version)
+      Factory(:exam_question, :exam_version => @published)
+      @published.update_attributes({:published => true})
     end
 
     should 'show up in ExamVersion#published' do

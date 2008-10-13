@@ -658,3 +658,94 @@ div.flash.error {
   height: 23px;
 }
 
+/******* List of exams seen at /content_areas ********/
+
+#exam_listing {
+  width: 400px;
+  margin: 0;
+  padding: 0;
+}
+
+#exam_listing li {
+  clear: both;
+  line-height: 2em;
+  list-style: none;
+  border: 0px;
+}
+
+#exam_listing li span.title {
+  color: #5D7CBB;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+#exam_listing li div.completion_time {
+}
+
+
+#exam_listing li.current span {
+  /* content area */
+  color: #000;
+  background: #FFF url('/images/down.png') no-repeat right top;
+  border-right: 2px solid #999;
+  border-bottom: 2px solid #999;
+  border-top: 1px solid #CCC;
+  border-left: 1px solid #CCC;
+}
+
+#exam_listing li.current a {
+  background-color: #5D7CBB;
+  color: #fff;
+  border-right: 2px solid #999;
+  border-bottom: 2px solid #999;
+  border-top: 1px solid #CCC;
+  border-left: 1px solid #CCC;
+}
+
+#exam_listing li.completed span {
+  /* content area */
+  color: #000;
+  background: #FFF url('/images/go.png') no-repeat right top;
+  border-right: 2px solid #999;
+  border-bottom: 2px solid #999;
+  border-top: 1px solid #CCC;
+  border-left: 1px solid #CCC;
+}
+
+#exam_listing li.completed a {
+  background: #FFF url('/images/go.png') no-repeat right top;
+  color: #5D7CBB;
+  border-right: 2px solid #999;
+  border-bottom: 2px solid #999;
+  border-top: 1px solid #CCC;
+  border-left: 1px solid #CCC;
+}
+
+#exam_listing li.completed a .completion_time {
+  text-decoration: none !important;
+  font-weight: normal;
+}
+
+#exam_listing li.next p.description {
+  font-style: italic;
+}
+
+#exam_listing li.locked span {
+  background: #F2F2F2 url('/images/lock.png') no-repeat right top;
+  border-right: 1px solid #CCC;
+  border-bottom: 1px solid #CCC;
+  border-top: 1px solid #EEE;
+  border-left: 1px solid #EEE;
+}
+#exam_listing li span, #exam_listing li a {
+  height: 44px;
+  width: 340px;
+  display: block;
+  padding: 10px;
+}
+
+#exam_listing li li span, #exam_listing li li a {
+  width: 300px;
+
+}
+

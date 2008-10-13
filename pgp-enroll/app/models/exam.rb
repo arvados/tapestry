@@ -4,6 +4,8 @@ class Exam < ActiveRecord::Base
 
   # after_create :create_initial_version
 
+  named_scope :ordered, {}
+
   def version_for(user)
     versions.find :first,
       :conditions => [ 'created_at < ? and published = ?', user.created_at, true ],
@@ -21,6 +23,16 @@ class Exam < ActiveRecord::Base
 
   def description
     get_versioned_attribute(:description, 'Unpublished Exam')
+  end
+
+  def completed_by?(user)
+    version_for(user) && version_for(user).completed_by?(user)
+  end
+
+  def self.current_for(user)
+    ordered.detect do |exam|
+      exam.version_for(user) && !exam.completed_by?(user)
+    end
   end
 
   private

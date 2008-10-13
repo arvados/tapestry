@@ -4,6 +4,8 @@ class ExamResponse < ActiveRecord::Base
   belongs_to :exam_version
   has_many   :question_responses
 
+  named_scope :for_user, lambda { |user| { :conditions => ['user_id = ?', user ] } }
+
   def discard_for_retake!
     update_attributes!(
       :original_user_id => user_id,

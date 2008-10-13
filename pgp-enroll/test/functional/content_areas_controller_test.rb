@@ -10,7 +10,8 @@ class ContentAreasControllerTest < ActionController::TestCase
         content_area = Factory(:content_area)
         exam = Factory(:exam, :content_area => content_area)
         Factory(:exam_version, :exam => exam, :published => false, :created_at => @user.created_at - 2.minutes)
-        Factory(:exam_version, :exam => exam, :published => true,  :created_at => @user.created_at - 1.minute)
+        Factory(:published_exam_version_with_question, :exam => exam, :created_at => @user.created_at - 1.minute)
+        # Factory(:exam_version,  :exam => exam, :published => true,  :created_at => @user.created_at - 1.minute)
       end
     end
 
@@ -20,9 +21,15 @@ class ContentAreasControllerTest < ActionController::TestCase
       should_respond_with :success
       should_render_template :index
 
-      should 'show the content areas' do
+      should 'show the content areas, with nested exams' do
         ContentArea.all.each do |area|
-          assert_select 'li', /#{area.title}/
+          assert_select 'ol li', /#{area.title}/ do
+            if area == ContentArea.current_for(@user)
+              area.exams.each do |exam|
+                assert_select 'ol li', /#{exam.title}/
+              end
+            end
+          end
         end
       end
     end

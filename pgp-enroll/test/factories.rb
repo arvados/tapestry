@@ -61,6 +61,15 @@ Factory.define(:exam_version) do |f|
   f.version 1
 end
 
+Factory.define(:published_exam_version_with_question, :class => ExamVersion) do |f|
+  f.title       'Exam Definition Title'
+  f.description 'Exam Definition Description'
+  f.exam        { |e| e.association :exam }
+  f.published   true
+  f.exam_questions { |e| [e.association :exam_question] }
+  f.version 1
+end
+
 Factory.define(:exam_response) do |f|
   f.user         { |u| u.association :user }
   f.exam_version { |e| e.association :exam_version }
