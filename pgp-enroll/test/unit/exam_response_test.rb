@@ -26,13 +26,6 @@ class ExamResponseTest < ActiveSupport::TestCase
 
       context 'with all correct answers' do
         setup do
-          # TODO: QuestionResponse is now configured differently...
-          # @exam_version.exam_questions.each do |question|
-          #   @exam_response.question_responses.create({
-          #     :exam_version => @exam_version,
-          #     :answer_option => question.correct_answer
-          #   })
-          # end
           @exam_version.exam_questions.each do |question|
             @exam_response.question_responses.create({
               :exam_question => question,
@@ -48,7 +41,12 @@ class ExamResponseTest < ActiveSupport::TestCase
 
       context 'with some correct answers' do
         setup do
-          #TODO setup
+          @exam_version.exam_questions.each_with_index do |question, i|
+            @exam_response.question_responses.create({
+              :exam_question => question,
+              :answer        => i.zero? ? 'the-wrong-answer' : question.correct_answer
+            })
+          end
         end
 
         should 'not be correct' do
@@ -58,6 +56,12 @@ class ExamResponseTest < ActiveSupport::TestCase
 
       context 'with no correct answers' do
         setup do
+          @exam_version.exam_questions.each_with_index do |question, i|
+            @exam_response.question_responses.create({
+              :exam_question => question,
+              :answer        => 'oh man this is so wrong'
+            })
+          end
         end
 
         should 'not be correct' do
