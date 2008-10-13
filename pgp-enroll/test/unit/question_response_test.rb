@@ -24,7 +24,6 @@ class QuestionResponseTest < ActiveSupport::TestCase
       setup do
         @question_response = Factory(:question_response,
                                      :exam_question => @exam_question,
-                                     :exam_response => nil,
                                      :answer => @correct_answer)
       end
 
@@ -37,7 +36,6 @@ class QuestionResponseTest < ActiveSupport::TestCase
       setup do
         @question_response = Factory(:question_response,
                                      :exam_question => @exam_question,
-                                     :exam_response => nil,
                                      :answer => "#{@correct_answer}_wrong")
       end
 
@@ -64,7 +62,6 @@ class QuestionResponseTest < ActiveSupport::TestCase
       setup do
         @question_response = Factory(:question_response,
                                      :exam_question => @exam_question,
-                                     :exam_response => nil,
                                      :answer => @correct_answer)
       end
 
@@ -78,7 +75,6 @@ class QuestionResponseTest < ActiveSupport::TestCase
       setup do
         @question_response = Factory(:question_response,
                                      :exam_question => @exam_question,
-                                     :exam_response => nil,
                                      :answer => @some_correct_answers)
       end
 
@@ -91,13 +87,33 @@ class QuestionResponseTest < ActiveSupport::TestCase
       setup do
         @question_response = Factory(:question_response,
                                      :exam_question => @exam_question,
-                                     :exam_response => nil,
                                      :answer => '')
       end
 
       should 'not be correct' do
         assert !@question_response.correct?
       end
+    end
+  end
+
+  context 'when responding to the last exam' do
+    setup do
+      @exam_version = build_exam_version_with_questions_and_answers
+      @user = Factory(:user)
+      @exam_response = Factory(:exam_response, :exam_version => @exam_version, :user => @user)
+
+      assert ! EnrollmentStep.find_by_keyword('content_areas').completers.include?(@user)
+
+      @exam_version.exam_questions.each do |question|
+        @exam_response.question_responses.create({
+          :exam_question => question,
+          :answer        => question.correct_answer
+        })
+      end
+    end
+
+    should 'create the enrollment step completion' do
+      assert EnrollmentStep.find_by_keyword('content_areas').completers.include?(@user)
     end
   end
 

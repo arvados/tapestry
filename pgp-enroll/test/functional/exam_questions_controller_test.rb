@@ -12,7 +12,7 @@ class ExamQuestionsControllerTest < ActionController::TestCase
       @exam          = @exam_version.exam
       @content_area  = @exam.content_area
 
-      Exam.any_instance.expects(:version_for).returns(@exam_version)
+      Exam.any_instance.stubs(:version_for).returns(@exam_version)
 
       3.times { Factory :answer_option, :exam_question => @exam_question }
     end

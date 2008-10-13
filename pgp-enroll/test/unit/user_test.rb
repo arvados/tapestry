@@ -151,8 +151,6 @@ class UserTest < Test::Unit::TestCase
   end
 
   should "add an enrollment_step_completion for enrollment_step(:signup) upon activation" do
-    # User.activate! explicitly tries to complete the 'signup' enrollment_step
-    Factory(:enrollment_step, :keyword => 'signup')
     user = Factory(:user)
 
     assert_difference 'user.completed_enrollment_steps.count' do
