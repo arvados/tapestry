@@ -7,7 +7,9 @@ class ContentArea < ActiveRecord::Base
 
   def completed_by?(user)
     exams.all? do |exam|
-      exam.version_for(user) && exam.version_for(user).completed_by?(user)
+      !exam.version_for(user) || (
+        exam.version_for(user) && exam.version_for(user).completed_by?(user)
+      )
     end
   end
 

@@ -4,6 +4,8 @@ class ExamResponse < ActiveRecord::Base
   belongs_to :exam_version
   has_many   :question_responses
 
+  # after_save :check_for_entrance_exam_completion
+
   named_scope :for_user, lambda { |user| { :conditions => ['user_id = ?', user ] } }
 
   def discard_for_retake!

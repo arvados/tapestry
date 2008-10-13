@@ -27,7 +27,7 @@ class ExamVersion < ActiveRecord::Base
   end
 
   def completed_by?(user)
-    exam_responses.for_user(user).any?
+    exam_responses.for_user(user).select(&:correct?).any?
   end
 
   protected

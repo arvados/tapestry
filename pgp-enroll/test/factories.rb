@@ -66,7 +66,7 @@ Factory.define(:published_exam_version_with_question, :class => ExamVersion) do 
   f.description 'Exam Definition Description'
   f.exam        { |e| e.association :exam }
   f.published   true
-  f.exam_questions { |e| [e.association :exam_question] }
+  f.exam_questions { |e| [e.association(:exam_question)] }
   f.version 1
 end
 
