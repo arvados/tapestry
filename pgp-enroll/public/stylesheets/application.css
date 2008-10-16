@@ -324,7 +324,7 @@ ul.links li a {
 #body .main {
 	float: left;
 	width: 678px;
-	padding: 0 12px 0 24px;
+	padding: 0 12px 24px 24px;
 }
 
 #body .main .clear {
