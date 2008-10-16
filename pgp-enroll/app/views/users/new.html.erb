@@ -24,13 +24,13 @@
 <p><%= f.label :email %><br/>
 <%= f.text_field :email %></p>
 
-<p><%= f.label :email_confirmation %><br/>
+<p><%= f.label :email_confirmation, "Confirm email" %><br/>
 <%= f.text_field :email_confirmation %></p>
 
-<p><label for="password">Password</label><br/>
+<p><%= f.label :password %><br/>
 <%= f.password_field :password %></p>
 
-<p><label for="password_confirmation">Confirm Password</label><br/>
+<p><%= f.label :password_confirmation, 'Confirm password' %><br/>
 <%= f.password_field :password_confirmation %></p>
 
 <%= recaptcha_tags %>

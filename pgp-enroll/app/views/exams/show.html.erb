@@ -5,7 +5,11 @@
 <% if @exam_response -%>
   <p><%= @exam_response.response_count         %> / <%= @exam_version.question_count %> questions answered.</p>
   <p><%= @exam_response.correct_response_count %> / <%= @exam_version.question_count %> correct.</p>
-  <%= link_to 'Retake the exam', retake_content_area_exam_path(@content_area, @exam), :method => 'post' %>
+  <% if @exam_response.correct? -%>
+    <%= link_to 'Back to exams', content_areas_url %>
+  <% else -%>
+    <%= link_to 'Retake the exam', retake_content_area_exam_path(@content_area, @exam), :method => 'post' %>
+  <% end -%>
 <% else -%>
   <p>Not started.</p>
   <%= link_to 'Start the exam', start_content_area_exam_path(@content_area, @exam), :method => 'post' %>

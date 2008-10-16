@@ -1,5 +1,7 @@
 # Be sure to restart your server when you modify this file
 
+PROJECT_NAME = 'pgp'
+
 # Uncomment below to force Rails into production mode when
 # you don't control web/app server and can't set it the proper way
 # ENV['RAILS_ENV'] ||= 'production'
@@ -74,3 +76,4 @@ require 'csv'
 
 ENV['RECAPTCHA_PUBLIC_KEY'] = 'yyyyyyyyyyyyyyyyyyyyyyyy-xxxxxxxx'
 ENV['RECAPTCHA_PRIVATE_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-yyyyyyyy'
+

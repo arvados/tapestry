@@ -7,7 +7,7 @@ class ExamsController < ApplicationController
   end
 
   def show
-    @exam_response = ExamResponse.find_by_user_id_and_exam_version_id(current_user, @exam_version)
+    @exam_response = exam_response
   end
 
   def start
@@ -28,6 +28,10 @@ class ExamsController < ApplicationController
   end
 
   private
+
+  def exam_response
+    ExamResponse.find_by_user_id_and_exam_version_id(current_user, @exam_version)
+  end
 
   def set_content_area
     @content_area = ContentArea.find params[:content_area_id]

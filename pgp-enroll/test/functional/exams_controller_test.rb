@@ -58,8 +58,7 @@ class ExamsControllerTest < ActionController::TestCase
       setup do
         @exam_response = Factory(:exam_response, :user => @user, :exam_version => @exam_version)
 
-        Exam.any_instance.stubs(:question_count).returns(2)
-
+        ExamVersion.any_instance.stubs(:question_count).returns(2)
         ExamResponse.any_instance.stubs(:response_count).returns(2)
         ExamResponse.any_instance.stubs(:correct_response_count).returns(1)
       end
@@ -95,6 +94,26 @@ class ExamsControllerTest < ActionController::TestCase
 
         should 'not create a new exam_response scoped under the user' do
           assert_equal @user_exam_response_count, @user.exam_responses.count
+        end
+      end
+    end
+
+    context 'with having taken the exam before and having gotten all questions correct' do
+      setup do
+        @exam_response = Factory(:exam_response, :user => @user, :exam_version => @exam_version)
+        ExamVersion.any_instance.stubs(:question_count).returns(2)
+        ExamResponse.any_instance.stubs(:response_count).returns(2)
+        ExamResponse.any_instance.stubs(:correct_response_count).returns(2)
+      end
+
+      context 'on GET to show' do
+        setup do
+          @controller.expects(:exam_response).returns(@exam_response)
+          get :show, :content_area_id => @content_area, :id => @exam
+        end
+
+        should 'render a link back to index' do
+          assert_select 'a[href=?]', content_areas_url
         end
       end
     end

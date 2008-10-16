@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081010031127) do
+ActiveRecord::Schema.define(:version => 20081012192045) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -18,6 +18,8 @@ ActiveRecord::Schema.define(:version => 20081010031127) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "answer_options", ["exam_question_id"], :name => "index_answer_options_on_exam_question_id"
 
   create_table "content_areas", :force => true do |t|
     t.string   "title"
@@ -32,6 +34,9 @@ ActiveRecord::Schema.define(:version => 20081010031127) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "enrollment_step_completions", ["user_id"], :name => "index_enrollment_step_completions_on_user_id"
+  add_index "enrollment_step_completions", ["enrollment_step_id"], :name => "index_enrollment_step_completions_on_enrollment_step_id"
 
   create_table "enrollment_steps", :force => true do |t|
     t.string   "keyword"
@@ -51,6 +56,8 @@ ActiveRecord::Schema.define(:version => 20081010031127) do
     t.datetime "updated_at"
   end
 
+  add_index "exam_questions", ["exam_version_id"], :name => "index_exam_questions_on_exam_version_id"
+
   create_table "exam_responses", :force => true do |t|
     t.integer  "user_id"
     t.integer  "exam_version_id"
@@ -58,6 +65,10 @@ ActiveRecord::Schema.define(:version => 20081010031127) do
     t.datetime "updated_at"
     t.integer  "original_user_id"
   end
+
+  add_index "exam_responses", ["user_id"], :name => "index_exam_responses_on_user_id"
+  add_index "exam_responses", ["exam_version_id"], :name => "index_exam_responses_on_exam_version_id"
+  add_index "exam_responses", ["original_user_id"], :name => "index_exam_responses_on_original_user_id"
 
   create_table "exam_versions", :force => true do |t|
     t.string   "title"
@@ -69,11 +80,15 @@ ActiveRecord::Schema.define(:version => 20081010031127) do
     t.boolean  "published",   :default => false, :null => false
   end
 
+  add_index "exam_versions", ["exam_id"], :name => "index_exam_versions_on_exam_id"
+
   create_table "exams", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "content_area_id"
   end
+
+  add_index "exams", ["content_area_id"], :name => "index_exams_on_content_area_id"
 
   create_table "question_responses", :force => true do |t|
     t.integer  "exam_response_id"
@@ -82,6 +97,9 @@ ActiveRecord::Schema.define(:version => 20081010031127) do
     t.datetime "updated_at"
     t.integer  "exam_question_id"
   end
+
+  add_index "question_responses", ["exam_response_id"], :name => "index_question_responses_on_exam_response_id"
+  add_index "question_responses", ["exam_question_id"], :name => "index_question_responses_on_exam_question_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                     :limit => 100

@@ -21,6 +21,6 @@ class ExamResponse < ActiveRecord::Base
   end
 
   def correct?
-    correct_response_count == exam_version.exam_questions.size
+    correct_response_count == exam_version.question_count
   end
 end
