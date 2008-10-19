@@ -96,6 +96,10 @@ class User < ActiveRecord::Base
     [first_name, middle_name, last_name].join(' ').gsub(/\s+/,' ').strip
   end
 
+  def completed_content_area_count
+    ContentArea.all.select { |content_area| content_area.completed_by?(self) }.size
+  end
+
   protected
 
   def make_activation_code

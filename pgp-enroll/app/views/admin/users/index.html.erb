@@ -10,12 +10,13 @@
 
 <table class="admin_table">
   <tr>
-    <th>Name</th><th>Email</th><th>Active?</th><th>Is Admin?</th><th>Edit</th><th>Delete</th><th>Activate</th>
+    <th>Name</th><th>Email</th><th>Content Areas</th><th>Active?</th><th>Is Admin?</th><th>Edit</th><th>Delete</th><th>Activate</th>
   </tr>
   <% @users.each do |user| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=h user.full_name %></td>
       <td><%=h user.email %></td>
+      <td><%= user.completed_content_area_count %> / <%= ContentArea.count %></td>
       <td><%=  user.active? %></td>
       <td><%=  user.is_admin? %></td>
       <td><%= link_to 'Edit', edit_admin_user_url(user) %></td>
