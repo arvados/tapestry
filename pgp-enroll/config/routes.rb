@@ -24,6 +24,7 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :users, :member => { :activate => :put } do |user|
       user.resources :exam_responses
     end
+    admin.resources :reports
     admin.resources :content_areas do |content_area|
       content_area.resources :exams do |exam|
         exam.resources :exam_versions, :member => { :duplicate => :post } do |exam_version|
