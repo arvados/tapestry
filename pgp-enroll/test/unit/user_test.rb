@@ -168,6 +168,20 @@ class UserTest < Test::Unit::TestCase
     end
   end
 
- should_eventually 'test last_completed_enrollment_step'
+  should_eventually 'test last_completed_enrollment_step'
 
+  context 'where some, but not all, users have completed the enrollment exam' do
+    setup do
+      assert @exams_step = EnrollmentStep.find_by_keyword('content_areas')
+      @completed_users = [Factory(:user)]
+      @uncompleted_users = [Factory(:user)]
+      @completed_users.each { |u| Factory(:enrollment_step_completion, :enrollment_step => @exams_step, :user => u) }
+    end
+
+    should 'return all users who have completed the enrollment exam on User#has_completed("content_areas")' do
+      User.has_completed("content_areas").each do |user|
+        assert user.completed_enrollment_steps.include?(@exams_step)
+      end
+    end
+  end
 end

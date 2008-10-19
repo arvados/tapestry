@@ -25,6 +25,13 @@ class User < ActiveRecord::Base
   # validates_presence_of :email_confirmation, :on => :create
   validate_on_create :email_confirmed
 
+  named_scope :has_completed, lambda { |keyword|
+    {
+      :conditions => ["enrollment_steps.keyword = ?", keyword],
+      :joins => :completed_enrollment_steps
+    }
+  }
+
   def email_confirmed
     unless email_confirmation == email
       errors.add(:email, 'must match confirmation')

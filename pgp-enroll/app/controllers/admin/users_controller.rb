@@ -3,7 +3,8 @@ class Admin::UsersController < Admin::AdminControllerBase
   include Admin::UsersHelper
 
   def index
-    @users = User.all
+    @users = params[:completed_enrollment_exam] ? User.has_completed('content_areas') : User.all
+
     respond_to do |format|
       format.html
       format.csv { send_data csv_for_users(@users), {

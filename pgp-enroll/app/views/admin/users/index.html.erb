@@ -1,6 +1,12 @@
 <h2>Users</h2>
 
-<p>Download list of users as <%= link_to 'CSV', formatted_admin_users_url(:format => 'csv') %></p>
+<% if params[:completed_enrollment_exam] -%>
+  <em>Only showing users who have completed the enrollment exam. (<%= link_to 'Show all.', admin_users_url %>)</em>
+<% else -%>
+  <%= link_to 'Only show users who have completed the enrollment exam.', admin_users_url(:completed_enrollment_exam => true) %>
+<% end -%>
+
+<p>Download list of users as <%= link_to 'CSV', formatted_admin_users_url(:format => 'csv', :completed_enrollment_exam => params[:completed_enrollment_exam]) %></p>
 
 <table class="admin_table">
   <tr>
