@@ -21,8 +21,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
-    admin.resources :exam_responses
-    admin.resources :users, :member => { :activate => :put }
+    admin.resources :users, :member => { :activate => :put } do |user|
+      user.resources :exam_responses
+    end
     admin.resources :content_areas do |content_area|
       content_area.resources :exams do |exam|
         exam.resources :exam_versions, :member => { :duplicate => :post } do |exam_version|

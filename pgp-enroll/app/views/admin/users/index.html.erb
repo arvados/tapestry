@@ -16,7 +16,7 @@
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=h user.full_name %></td>
       <td><%=h user.email %></td>
-      <td><%= user.completed_content_area_count %> / <%= ContentArea.count %></td>
+      <td><%= user.completed_content_area_count %> / <%= ContentArea.count %> (<%= link_to 'Details', admin_user_exam_responses_path(user) %>)</td>
       <td><%=  user.active? %></td>
       <td><%=  user.is_admin? %></td>
       <td><%= link_to 'Edit', edit_admin_user_url(user) %></td>

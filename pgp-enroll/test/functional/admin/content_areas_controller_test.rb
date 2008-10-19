@@ -40,7 +40,7 @@ class Admin::ContentAreasControllerTest < ActionController::TestCase
 
     should "update content area" do
       put :update, :id => @content_area.id, :content_area => { }
-      assert_redirected_to admin_content_area_path(assigns(:content_area))
+      assert_redirected_to admin_content_areas_path
     end
 
     should "destroy content area" do

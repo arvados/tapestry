@@ -50,13 +50,17 @@ Factory.define(:enrollment_step_completion) do |f|
   f.enrollment_step { |e| e.association :enrollment_step }
 end
 
+Factory.sequence(:content_area_ordinal) { |n| n }
 Factory.define(:content_area) do |f|
   f.title       'Content Area Title'
   f.description 'Content Area Description'
+  f.ordinal { Factory.next :content_area_ordinal }
 end
 
+Factory.sequence(:exam_ordinal) { |n| n }
 Factory.define(:exam) do |f|
   f.content_area { |e| e.association :content_area }
+  f.ordinal { Factory.next :exam_ordinal }
 end
 
 Factory.define(:exam_version) do |f|

@@ -2,6 +2,7 @@
 
 <table class="admin_table">
   <tr>
+    <th>Ordinal</th>
     <th>Title</th>
     <th>Description</th>
     <th>Versions</th>
@@ -9,6 +10,7 @@
 
   <% for exam in @exams %>
     <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%= exam.ordinal %></td>
       <td><%= link_to h(exam.title), admin_content_area_exam_exam_versions_url(@content_area, exam) %></td>
       <td><%=h exam.description %></td>
       <td><%= exam.versions.count %></td>

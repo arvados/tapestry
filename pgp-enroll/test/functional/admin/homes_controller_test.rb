@@ -31,7 +31,6 @@ class Admin::HomesControllerTest < ActionController::TestCase
       should 'show all admin areas' do
         assert_select 'div.main>ul>li', /Users/
         assert_select 'div.main>ul>li', /Exams/
-        assert_select 'div.main>ul>li', /Exam Responses/
       end
     end
   end

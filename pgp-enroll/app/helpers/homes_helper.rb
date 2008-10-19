@@ -8,7 +8,13 @@ module HomesHelper
 
   def completion_time_for step
     step_completion = @step_completions.detect {|c| c.enrollment_step == step }
-    step_completion ? "Completed #{distance_of_time_in_words_to_now(step_completion.created_at)} ago": 'Not started'
+    if step == @next_step
+      'Current step'
+    elsif step_completion
+      "Completed #{distance_of_time_in_words_to_now(step_completion.created_at)} ago"
+    else
+      'Not started'
+    end
   end
 
   def is_completed step

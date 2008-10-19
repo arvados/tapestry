@@ -32,7 +32,7 @@ class Admin::ContentAreasController < Admin::AdminControllerBase
   def update
     if @content_area.update_attributes(params[:content_area])
       flash[:notice] = 'Content area was successfully updated.'
-      redirect_to([:admin, @content_area])
+      redirect_to admin_content_areas_path
     else
       render :action => "edit"
     end

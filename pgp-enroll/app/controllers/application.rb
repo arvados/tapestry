@@ -17,6 +17,8 @@ class ApplicationController < ActionController::Base
   # from your application log (in this case, all fields with names like "password"). 
   # filter_parameter_logging :password
 
+  protected
+
   def add_breadcrumb name, url = ''
     @breadcrumbs ||= []
     url = eval(url) if url =~ /_path|_url|@/

@@ -1,7 +1,7 @@
 class Admin::ExamsController < Admin::AdminControllerBase
   add_breadcrumb 'Content Areas', '/admin/content_areas'
   before_filter :set_content_area
-  before_filter :set_exam, :only => [:show, :edit, :update, :destroy]
+  before_filter :set_exam, :only => [:show, :destroy]
 
   def index
     @exams = @content_area.exams
@@ -20,15 +20,6 @@ class Admin::ExamsController < Admin::AdminControllerBase
       redirect_to admin_content_area_exams_path(@content_area)
     else
       render :action => "new"
-    end
-  end
-
-  def update
-    if @exam.update_attributes(params[:exam])
-      flash[:notice] = 'Exam was successfully updated.'
-      redirect_to admin_content_area_exams_path(@content_area)
-    else
-      render :action => "edit"
     end
   end
 

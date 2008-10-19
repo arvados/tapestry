@@ -1,11 +1,12 @@
 <h2>Exam Responses</h2>
 
+<p>Exams for <%= link_to h(user.full_name), edit_admin_user_url(user) %>:</p>
+
 <table class="admin_table">
   <tr>
     <th>Content Area</th>
     <th>Exam</th>
     <th>Results</th>
-    <th>User</th>
     <th>Details</th>
   </tr>
 
@@ -14,12 +15,7 @@
     <td><%=h exam_response.exam_version.exam.content_area.title %></td>
     <td><%=h exam_response.exam_version.title %></td>
     <td><%= format_exam_response_results(exam_response) %></td>
-    <% if exam_response.user -%>
-      <td><%= link_to h(exam_response.user.full_name), edit_admin_user_url(exam_response.user) %></td>
-    <% else -%>
-      <td><%= link_to h(exam_response.original_user.full_name), edit_admin_user_url(exam_response.original_user) %> (previous attempt)</td>
-    <% end -%>
-    <td><%= link_to 'Details', admin_exam_response_url(exam_response) %></td>
+    <td><%= link_to 'Details', admin_user_exam_response_url(user, exam_response) %></td>
   </tr>
 <% end %>
 </table>

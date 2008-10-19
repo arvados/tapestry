@@ -2,12 +2,14 @@
 
 <table class="admin_table">
   <tr>
+    <th>Ordinal</th>
     <th>Title</th>
     <th>Description</th>
   </tr>
 
 <% for content_area in @content_areas %>
   <tr class="<%= cycle 'even', 'odd' %>">
+    <td><%= content_area.ordinal %></td>
     <td><%= link_to h(content_area.title), [:admin, content_area] %></td>
     <td><%=h content_area.description %></td>
     <td><%= link_to 'Edit', edit_admin_content_area_path(content_area) %></td>
