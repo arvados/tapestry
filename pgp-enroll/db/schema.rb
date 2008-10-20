@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081012192045) do
+ActiveRecord::Schema.define(:version => 20081019203852) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20081012192045) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "ordinal"
   end
 
   create_table "enrollment_step_completions", :force => true do |t|
@@ -86,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20081012192045) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "content_area_id"
+    t.integer  "ordinal"
   end
 
   add_index "exams", ["content_area_id"], :name => "index_exams_on_content_area_id"

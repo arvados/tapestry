@@ -24,6 +24,11 @@ class ExamQuestionTest < ActiveSupport::TestCase
 
   context 'with many questions in an exam' do
     setup do
+      # why does this test sometimes fail if these are not present?
+      Exam.destroy_all
+      ExamVersion.destroy_all
+      ExamQuestion.destroy_all
+
       @exam_version = Factory :exam_version
       @exam_questions = []
       3.times { Factory(:exam_question, :exam_version => @exam_version) }
