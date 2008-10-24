@@ -10,7 +10,12 @@
           <% content_tag_for 'li', exam, :class => exam_class(exam) do %>
             <% exam_response = version.exam_responses.for_user(current_user).first -%>
             <% if Exam.current_for(current_user) == exam -%>
-              <%= link_to h(version.title), content_area_exam_path(area, exam) %>
+              <%= render :partial => 'exams/exam_response_status',
+                         :locals => {
+                           :content_area  => area,
+                           :exam          => exam,
+                           :exam_response => exam_response,
+                           :exam_version  => version} %>
             <% else -%>
               <span>
                 <%=h version.title %>

@@ -1,13 +1,9 @@
 class ExamsController < ApplicationController
   before_filter :set_content_area
-  before_filter :set_exam_version, :only => [:show, :start, :retake]
+  before_filter :set_exam_version, :only => [:start, :retake]
 
   def index
     redirect_to @content_area
-  end
-
-  def show
-    @exam_response = exam_response
   end
 
   def start
@@ -29,7 +25,7 @@ class ExamsController < ApplicationController
 
   private
 
-  def exam_response
+  def find_exam_response
     ExamResponse.find_by_user_id_and_exam_version_id(current_user, @exam_version)
   end
 

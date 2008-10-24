@@ -19,7 +19,8 @@ class ExamQuestionsController < ApplicationController
 
     if @question_reponse.save
       if @exam_question.last_in_exam?
-        redirect_to content_area_exam_url(@content_area, @exam)
+        flash[:notice] = 'You correctly completed the exam.'
+        redirect_to content_areas_url
       else
         redirect_to content_area_exam_exam_question_url(@content_area, @exam, @exam_question.next_question)
       end

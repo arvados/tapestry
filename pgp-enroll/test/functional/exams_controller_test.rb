@@ -23,19 +23,6 @@ class ExamsControllerTest < ActionController::TestCase
     end
 
     context 'without having taken the exam before' do
-      context 'on GET to show' do
-        setup do
-          get :show, :content_area_id => @content_area, :id => @exam
-        end
-
-        should_respond_with :success
-        should_render_template :show
-
-        should 'prompt you to start' do
-          assert_select 'a', /Start/
-        end
-      end
-
       context 'on POST to start' do
         setup do
           @count = @user.exam_responses.count
@@ -63,22 +50,6 @@ class ExamsControllerTest < ActionController::TestCase
         ExamResponse.any_instance.stubs(:correct_response_count).returns(1)
       end
 
-      context 'on GET to show' do
-        setup do
-          ExamResponse.expects(:find_by_user_id_and_exam_version_id).returns(@exam_response)
-          get :show, :content_area_id => @content_area, :id => @exam
-        end
-
-        should_respond_with :success
-        should_render_template :show
-        should_assign_to :exam
-        should_assign_to :exam_version
-
-        should 'prompt you to retake' do
-          assert_select 'a', /Retake/
-        end
-      end
-
       context 'on POST to retake' do
         setup do
           @exam_response_count = ExamResponse.count
@@ -97,25 +68,6 @@ class ExamsControllerTest < ActionController::TestCase
         end
       end
     end
-
-    context 'with having taken the exam before and having gotten all questions correct' do
-      setup do
-        @exam_response = Factory(:exam_response, :user => @user, :exam_version => @exam_version)
-        ExamVersion.any_instance.stubs(:question_count).returns(2)
-        ExamResponse.any_instance.stubs(:response_count).returns(2)
-        ExamResponse.any_instance.stubs(:correct_response_count).returns(2)
-      end
-
-      context 'on GET to show' do
-        setup do
-          @controller.expects(:exam_response).returns(@exam_response)
-          get :show, :content_area_id => @content_area, :id => @exam
-        end
-
-        should 'render a link back to index' do
-          assert_select 'a[href=?]', content_areas_url
-        end
-      end
-    end
   end
+
 end
