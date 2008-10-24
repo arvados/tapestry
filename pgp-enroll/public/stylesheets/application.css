@@ -533,6 +533,14 @@ form.signup {
   margin: 25px 0 0 105px;
 }
 
+.signup table tr td{
+  vertical-align: top;
+}
+.signup .optional {
+  font-size: 9px;
+  display: block;
+}
+
 .signup #user_first_name  { width: 100px; }
 .signup #user_middle_name { width: 25px;  }
 .signup #user_last_name   { width: 167px; }
