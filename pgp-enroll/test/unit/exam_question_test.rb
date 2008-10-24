@@ -40,8 +40,8 @@ class ExamQuestionTest < ActiveSupport::TestCase
     end
 
     should 'give right answer for #last_in_exam?' do
-      assert ! @exam_version.exam_questions.first.last_in_exam?
-      assert @exam_version.exam_questions.last.last_in_exam?
+      assert ! @exam_version.exam_questions.ordered.first.last_in_exam?
+      assert @exam_version.exam_questions.ordered.last.last_in_exam?
     end
   end
 
