@@ -19,7 +19,11 @@ class ExamQuestionsController < ApplicationController
 
     if @question_reponse.save
       if @exam_question.last_in_exam?
-        flash[:notice] = 'You correctly completed the exam.'
+        if @exam_response.correct?
+          flash[:notice] = 'You correctly completed the exam.'
+        else
+          flash[:warning] = 'You must complete the exam correctly to proceed.'
+        end
         redirect_to content_areas_url
       else
         redirect_to content_area_exam_exam_question_url(@content_area, @exam, @exam_question.next_question)
