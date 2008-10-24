@@ -9,6 +9,7 @@ class ExamQuestionTest < ActiveSupport::TestCase
     should_belong_to :exam_version
     should_have_many :answer_options
     should_have_many :question_responses
+    should_allow_values_for :question, ('TENLETTERS' * 1000)
 
     context "with a kind that is not 'MULTIPLE_CHOICE' or 'CHECK_ALL'" do
       setup do
