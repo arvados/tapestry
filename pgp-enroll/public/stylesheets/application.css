@@ -530,9 +530,12 @@ color: #7f97c9;
 }
 
 form.signup {
-  width: 304px;
   margin: 25px 0 0 105px;
 }
+
+.signup #user_first_name  { width: 100px; }
+.signup #user_middle_name { width: 25px;  }
+.signup #user_last_name   { width: 167px; }
 
 #enrollment_steps {
   width: 400px;
@@ -627,7 +630,10 @@ div.formError {
 }
 
 .errorExplanation {
-  border: 1px solid #c00; padding: 20px;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #c00;
 }
 
 .errorExplanation h2 {

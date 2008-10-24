@@ -1,5 +1,9 @@
 <h2>Sign up as a new user</h2>
 
+<% if @user.errors.any? -%>
+<p class="errorExplanation">Please check over your name and email address below.</p>
+<% end -%>
+
 <%= render :partial => 'mini_consent' %>
 
 <div class="full_name_warning">
@@ -9,23 +13,26 @@
 
 <% @user.password = @user.password_confirmation = nil %>
 
-<% form_for :user, :url => new2_user_url, :html => { :method => :get, :class => 'signup' } do |f| -%>
+<% form_for :user, :url => new2_user_url, :html => { :method => :get, :class => 'signup', :id => 'signup_form' } do |f| -%>
 
-<p><%= f.label :first_name %>
-<%= error_message_on :user, :first_name %><br/>
-<%= f.text_field :first_name %></p>
+<table><tr><td>
+  <%= f.label :first_name %>
+  <%= error_message_on :user, :first_name %><br/>
+  <%= f.text_field :first_name %>
+</td><td>
+  <%= f.label :middle_name, "MI" %>
+  <%= error_message_on :user, :middle_name %><br/>
+  <%= f.text_field :middle_name %>
+</td><td>
+  <%= f.label :last_name %>
+  <%= error_message_on :user, :last_name %><br/>
+  <%= f.text_field :last_name %>
+</td></tr><tr><td colspan="4">
 
-<p><%= f.label :middle_name %>
-<%= error_message_on :user, :middle_name %><br/>
-<%= f.text_field :middle_name %></p>
-
-<p><%= f.label :last_name %>
-<%= error_message_on :user, :last_name %><br/>
-<%= f.text_field :last_name %></p>
-
-<p><%= f.label :email %>
+<%= f.label :email %>
 <%= error_message_on :user, :email %><br/>
-<%= f.text_field :email %></p>
+<%= f.text_field :email %>
+</td></tr></table>
 
 <p><%= submit_tag 'Step 2 &rarr;' %></p>
 <% end -%>
