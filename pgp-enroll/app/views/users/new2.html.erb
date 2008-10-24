@@ -11,12 +11,15 @@
   <%= f.hidden_field attr %>
 <% end -%>
 
-<p><%= f.label :password %><br/>
-<%= error_message_on :user, :password %>
+<p><%= f.label :password %>
+<% if @user.errors.on(:password).nil? -%>(minimum is 6 characters)<% end -%>
+<%= error_message_on :user, :password, '', '.' %>
+<br/>
 <%= f.password_field :password %></p>
 
-<p><%= f.label :password_confirmation, 'Confirm password' %><br/>
-<%= error_message_on :user, :password_confirmation %>
+<p><%= f.label :password_confirmation, 'Confirm password' %>
+<%= error_message_on :user, :password_confirmation, '', '.' %>
+<br/>
 <%= f.password_field :password_confirmation %></p>
 
 <%= recaptcha_tags %>
