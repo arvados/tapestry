@@ -1,9 +1,9 @@
 <h2>Sign up as a new user</h2>
 
-<p>Please check over your name and email below.
-<strong>We will send a confirmation email to this address</strong> that you will need to check in order to complete your registrayion.</p>
+<p>Please check over your name and email below.</p>
+<p><strong>We will send a confirmation email to this address</strong> that you will need to check in order to complete your registration.</p>
 
-<p><%= @user.full_name %>: <%= @user.email %></p>
+<p style="padding: 20px; border: 1px solid #ccc;"><%= @user.full_name %>: <%= @user.email %></p>
 
 <% form_for :user, :url => users_url, :html => { :class => 'signup' } do |f| -%>
 
