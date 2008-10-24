@@ -13,12 +13,12 @@
 
 <p><%= f.label :password %>
 <% if @user.errors.on(:password).nil? -%>(minimum is 6 characters)<% end -%>
-<%= error_message_on :user, :password, '', '.' %>
+<%= error_message_on :user, :password, :append_text => '.' %>
 <br/>
 <%= f.password_field :password %></p>
 
 <p><%= f.label :password_confirmation, 'Confirm password' %>
-<%= error_message_on :user, :password_confirmation, '', '.' %>
+<%= error_message_on :user, :password_confirmation, :append_text => '.' %>
 <br/>
 <%= f.password_field :password_confirmation %></p>
 

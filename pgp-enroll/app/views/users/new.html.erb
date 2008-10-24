@@ -17,20 +17,20 @@
 
 <table><tr><td>
   <%= f.label :first_name %>
-  <%= error_message_on :user, :first_name, '', '.' %><br/>
+  <%= error_message_on :user, :first_name, :append_text => '.' %><br/>
   <%= f.text_field :first_name %>
 </td><td>
   <%= f.label :middle_name, "MI" %>
-  <%= error_message_on :user, :middle_name, '', '.' %><br/>
+  <%= error_message_on :user, :middle_name, :append_text => '.' %><br/>
   <%= f.text_field :middle_name %><span class="optional">(optional)</span>
 </td><td>
   <%= f.label :last_name %>
-  <%= error_message_on :user, :last_name, '', '.' %><br/>
+  <%= error_message_on :user, :last_name, :append_text => '.' %><br/>
   <%= f.text_field :last_name %>
 </td></tr><tr><td colspan="4">
 
 <%= f.label :email %>
-<%= error_message_on :user, :email, '', '.' %><br/>
+<%= error_message_on :user, :email, :append_text => '.' %><br/>
 <%= f.text_field :email %>
 </td></tr></table>
 
