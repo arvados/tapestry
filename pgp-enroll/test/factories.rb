@@ -12,7 +12,6 @@ Factory.define(:admin_user, :class => User) do |f|
   f.first_name            'Jason'
   f.last_name             'Morrison'
   f.email                 { Factory.next :email }
-  f.email_confirmation    { |e| e.email }
   f.password              'password'
   f.password_confirmation 'password'
   f.is_admin              true
