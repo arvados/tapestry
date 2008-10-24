@@ -24,7 +24,11 @@ class ExamQuestionsController < ApplicationController
         if @exam_response.correct?
           flash[:notice] = 'You correctly completed the exam.'
         else
-          flash[:warning] = 'You must complete the exam correctly to proceed.'
+          flash[:warning] = %[#{@exam_response.correct_response_count}
+                              of #{@exam_response.response_count}
+                              questions were answered correctly.
+                              To proceed, you must retake the exam and
+                              provide correct answers to all questions.]
         end
         redirect_to content_areas_url
       else
