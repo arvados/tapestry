@@ -46,4 +46,16 @@ class HomesControllerTest < ActionController::TestCase
       assert_select 'ol#enrollment_steps>li>span.title>a', { :text => assigns(:next_step).title, :count => 1 }
     end
   end
+
+  context 'on GET to index with :hide_enrollment_steps' do
+    setup do
+      get :index, :hide_enrollment_steps => true
+    end
+
+    should 'not render the enrollment steps' do
+      assert_select 'h2',                  :count => 0
+      assert_select 'ol#enrollment_steps', :count => 0
+    end
+  end
+
 end

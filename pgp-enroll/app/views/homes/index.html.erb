@@ -1,3 +1,5 @@
+<% unless params[:hide_enrollment_steps] -%>
+
 <h2>Home</h2>
 
 <% if current_user -%>
@@ -24,3 +26,4 @@
   <% end -%>
 </ol>
 
+<% end -%>

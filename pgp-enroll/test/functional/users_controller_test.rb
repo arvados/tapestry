@@ -98,7 +98,7 @@ class UsersControllerTest < Test::Unit::TestCase
     end
 
     should_respond_with :redirect
-    should_redirect_to 'root_url(:show_enrollment_steps => false)'
+    should_redirect_to 'root_url(:hide_enrollment_steps => true)'
     should_change 'User.count', :by => 1
   end
 
