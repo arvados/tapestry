@@ -1,12 +1,15 @@
 <h2>Sign up as a new user</h2>
 
+<p>Please check over your name and email below.
+<strong>We will send a confirmation email to this address</strong> that you will need to check in order to complete your registrayion.</p>
+
+<p><%= @user.full_name %>: <%= @user.email %></p>
+
 <% form_for :user, :url => users_url, :html => { :class => 'signup' } do |f| -%>
 
 <% %w(first_name middle_name last_name email).each do |attr| -%>
   <%= f.hidden_field attr %>
 <% end -%>
-
-<p><%= @user.full_name %>: <%= @user.email %></p>
 
 <p><%= f.label :password %><br/>
 <%= error_message_on :user, :password %>
