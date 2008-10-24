@@ -613,6 +613,19 @@ div.flash.error {
   border-color: #800;
 }
 
+label {
+  font-weight: bold;
+}
+
+div.fieldWithErrors, div.fieldWithErrors label {
+  display: inline;
+}
+div.formError {
+  display: inline;
+  color: #f00;
+  font-weight: bold;
+}
+
 .errorExplanation {
   border: 1px solid #c00; padding: 20px;
 }

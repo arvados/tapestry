@@ -1,0 +1,22 @@
+<h2>Sign up as a new user</h2>
+
+<% form_for :user, :url => users_url, :html => { :class => 'signup' } do |f| -%>
+
+<% %w(first_name middle_name last_name email).each do |attr| -%>
+  <%= f.hidden_field attr %>
+<% end -%>
+
+<p><%= @user.full_name %>: <%= @user.email %></p>
+
+<p><%= f.label :password %><br/>
+<%= error_message_on :user, :password %>
+<%= f.password_field :password %></p>
+
+<p><%= f.label :password_confirmation, 'Confirm password' %><br/>
+<%= error_message_on :user, :password_confirmation %>
+<%= f.password_field :password_confirmation %></p>
+
+<%= recaptcha_tags %>
+
+<p><%= submit_tag 'Sign up' %></p>
+<% end -%>

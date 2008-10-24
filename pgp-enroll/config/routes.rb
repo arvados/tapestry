@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'homes'
 
+  map.new2_user '/users/new2',    :controller => 'users',    :action => 'new2'
   map.resources :users
   map.resource  :session
   map.login    '/login',          :controller => 'sessions', :action => 'new'

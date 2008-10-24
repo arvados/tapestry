@@ -9,31 +9,23 @@
 
 <% @user.password = @user.password_confirmation = nil %>
 
-<% form_for :user, :url => users_path, :html => { :class => 'signup' } do |f| -%>
-<%= error_messages_for :user %>
+<% form_for :user, :url => new2_user_url, :html => { :method => :get, :class => 'signup' } do |f| -%>
 
-<p><%= f.label :first_name %><br/>
+<p><%= f.label :first_name %>
+<%= error_message_on :user, :first_name %><br/>
 <%= f.text_field :first_name %></p>
 
-<p><%= f.label :middle_name %><br/>
+<p><%= f.label :middle_name %>
+<%= error_message_on :user, :middle_name %><br/>
 <%= f.text_field :middle_name %></p>
 
-<p><%= f.label :last_name %></label><br/>
+<p><%= f.label :last_name %>
+<%= error_message_on :user, :last_name %><br/>
 <%= f.text_field :last_name %></p>
 
-<p><%= f.label :email %><br/>
+<p><%= f.label :email %>
+<%= error_message_on :user, :email %><br/>
 <%= f.text_field :email %></p>
 
-<p><%= f.label :email_confirmation, "Confirm email" %><br/>
-<%= f.text_field :email_confirmation %></p>
-
-<p><%= f.label :password %><br/>
-<%= f.password_field :password %></p>
-
-<p><%= f.label :password_confirmation, 'Confirm password' %><br/>
-<%= f.password_field :password_confirmation %></p>
-
-<%= recaptcha_tags %>
-
-<p><%= submit_tag 'Sign up' %></p>
+<p><%= submit_tag 'Step 2 &rarr;' %></p>
 <% end -%>

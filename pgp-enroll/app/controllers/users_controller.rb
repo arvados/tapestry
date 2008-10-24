@@ -1,9 +1,19 @@
 class UsersController < ApplicationController
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :create, :activate ]
-  skip_before_filter :login_required, :only => [:new, :create, :activate]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate ]
+  skip_before_filter :login_required, :only => [:new, :new2, :create, :activate]
 
   def new
-    @user = User.new
+    @user = User.new(params[:user])
+  end
+
+  def new2
+    @user = User.new(params[:user])
+
+    if @user.valid_for_attrs?(params[:user].keys)
+      @user.errors.clear
+    else
+      render :template => 'users/new'
+    end
   end
 
   def edit
@@ -28,11 +38,11 @@ class UsersController < ApplicationController
     success = @user && verify_recaptcha(@user) && @user.save
 
     if success && @user.errors.empty?
-      redirect_back_or_default('/')
+      redirect_to root_url
       flash[:notice] = "Thanks for signing up!  We're sending you an email with your activation code."
     else
       flash[:error]  = "Please double-check your signup information below."
-      render :action => 'new'
+      render :action => 'new2'
     end
   end
 

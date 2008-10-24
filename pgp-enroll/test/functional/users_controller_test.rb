@@ -12,6 +12,95 @@ class UsersControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
+  context 'on GET to new' do
+    setup do
+      get :new
+    end
+
+    should 'render the signup page 1 form' do
+      assert_select 'form[method=?][action=?]', 'get', new2_user_url do
+        assert_select 'input[type=?][name=?]', 'text', 'user[first_name]'
+        assert_select 'input[type=?][name=?]', 'text', 'user[middle_name]'
+        assert_select 'input[type=?][name=?]', 'text', 'user[last_name]'
+        assert_select 'input[type=?][name=?]', 'text', 'user[email]'
+      end
+    end
+  end
+
+  context 'on GET to new2 with bad values' do
+    setup do
+      get :new2, :user => {
+        :first_name  => 'First',
+        :middle_name => 'M',
+        :last_name   => nil,
+        :email       => 'bademail'
+      }
+    end
+
+    should_respond_with :success
+    should_render_template :new
+  end
+
+  context 'on GET to new2 with good values' do
+    setup do
+      get :new2, :user => {
+        :first_name  => 'First',
+        :middle_name => 'M',
+        :last_name   => 'Last',
+        :email       => 'user@example.org'
+      }
+    end
+
+    should_respond_with :success
+    should_render_template :new2
+
+    should 'render the signup page 2 form' do
+      assert_select 'form[method=?][action=?]', 'post', users_url do
+        assert_select 'input[type=?][name=?]', 'hidden', 'user[first_name]'
+        assert_select 'input[type=?][name=?]', 'hidden', 'user[middle_name]'
+        assert_select 'input[type=?][name=?]', 'hidden', 'user[last_name]'
+        assert_select 'input[type=?][name=?]', 'hidden', 'user[email]'
+        assert_select 'input[type=?][name=?]', 'password', 'user[password]'
+        assert_select 'input[type=?][name=?]', 'password', 'user[password_confirmation]'
+      end
+    end
+  end
+
+  context 'on POST to create with bad values' do
+    setup do
+      @controller.expects(:verify_recaptcha).returns(false)
+      post :create, :user => {
+        :first_name            => '',
+        :middle_name           => '',
+        :last_name             => '',
+        :email                 => 'user@example.org',
+        :password              => '',
+        :password_confirmation => 'password'
+      }
+    end
+
+    should_respond_with :success
+    should_render_template :new2
+  end
+
+  context 'on POST to create with good values' do
+    setup do
+      @controller.expects(:verify_recaptcha).returns(true)
+
+      post :create, :user => {
+        :first_name            => 'First',
+        :middle_name           => 'M',
+        :last_name             => 'Last',
+        :email                 => 'user@example.org',
+        :password              => 'password',
+        :password_confirmation => 'password'
+      }
+    end
+
+    should_respond_with :redirect
+    should_change 'User.count', :by => 1
+  end
+
   def test_should_allow_signup
     assert_difference 'User.count' do
       create_user

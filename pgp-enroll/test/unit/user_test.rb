@@ -26,11 +26,13 @@ class UserTest < Test::Unit::TestCase
       assert user.errors.on(:password).any? { |e| e =~ /confirmation/i }
     end
 
-    should "require email validation on create" do
-      user = User.new(:email => "blah", :email_confirmation => "boogidy")
-      assert !user.save
-      assert user.errors.on(:email).any? { |e| e =~ /confirmation/i }
-    end
+    # temporarily removed requirement
+    #
+    # should "require email validation on create" do
+    #   user = User.new(:email => "blah", :email_confirmation => "boogidy")
+    #   assert !user.save
+    #   assert user.errors.on(:email).any? { |e| e =~ /confirmation/i }
+    # end
 
     should "return the full name when sent #full_name" do
       assert_equal "Jason Paul Morrison", @user.full_name
@@ -42,6 +44,21 @@ class UserTest < Test::Unit::TestCase
 
       @user.stubs(:last_name).returns('')
       assert_equal "Jason", @user.full_name
+    end
+
+    context 'that is correct except for first_name' do
+      setup do
+        assert @user.valid?
+        @user.first_name = nil
+      end
+
+      should 'be valid for other attrs' do
+        assert @user.valid_for_attrs?(%w(last_name email))
+      end
+
+      should 'not be valid for first_name' do
+        assert ! @user.valid_for_attrs?(['first_name'])
+      end
     end
 
     context 'when activated' do
