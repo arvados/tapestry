@@ -109,7 +109,6 @@ class ExamQuestionsControllerTest < ActionController::TestCase
 
         context 'on POST to answer' do
           setup do
-            @count = QuestionResponse.count
             post :answer,
                  :content_area_id => @content_area,
                  :exam_id         => @exam,
@@ -117,8 +116,18 @@ class ExamQuestionsControllerTest < ActionController::TestCase
                  :answer          => @correct_answer_string
           end
 
-          should 'store the answer' do
-            assert_equal @count+1, QuestionResponse.count
+          should_change '@exam_response.question_responses.count', :by => 1
+
+          context 'when POSTing an answer to the same question' do
+            setup do
+              post :answer,
+                   :content_area_id => @content_area,
+                   :exam_id         => @exam,
+                   :id              => @exam_question,
+                   :answer          => @correct_answer_string
+            end
+
+            should_not_change '@exam_response.question_responses.count'
           end
         end
       end
