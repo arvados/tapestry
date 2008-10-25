@@ -3,12 +3,12 @@ class ExamVersion < ActiveRecord::Base
   has_many   :exam_questions
   has_many   :exam_responses
 
-  validates_presence_of :title, :description
+  validates_presence_of :title, :description, :ordinal
 
   validate :cannot_publish_without_questions
 
   named_scope :published, :conditions => [ 'published = ?', true ]
-  named_scope :ordered,   :order => 'version'
+  named_scope :by_version, :order => 'version'
 
   before_create :assign_version
 
@@ -33,7 +33,6 @@ class ExamVersion < ActiveRecord::Base
   protected
 
   def assign_version
-    # self.version = exam.versions.max_by(&:version) + 1
     maximum = ExamVersion.maximum('version', :conditions => ['exam_id = ?', self.exam_id]) || 0
     self.version = maximum + 1
   end

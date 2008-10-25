@@ -55,17 +55,17 @@ Factory.define(:content_area) do |f|
   f.ordinal { Factory.next :content_area_ordinal }
 end
 
-Factory.sequence(:exam_ordinal) { |n| n }
 Factory.define(:exam) do |f|
   f.content_area { |e| e.association :content_area }
-  f.ordinal { Factory.next :exam_ordinal }
 end
 
+Factory.sequence(:exam_version_ordinal) { |n| n }
 Factory.define(:exam_version) do |f|
   f.title       'Exam Definition Title'
   f.description 'Exam Definition Description'
   f.exam        { |e| e.association :exam }
   f.version 1
+  f.ordinal     { Factory.next(:exam_version_ordinal) }
 end
 
 Factory.define(:published_exam_version_with_question, :class => ExamVersion) do |f|
@@ -75,6 +75,7 @@ Factory.define(:published_exam_version_with_question, :class => ExamVersion) do 
   f.published   true
   f.exam_questions { |e| [e.association(:exam_question)] }
   f.version 1
+  f.ordinal     { Factory.next(:exam_version_ordinal) }
 end
 
 Factory.define(:exam_response) do |f|

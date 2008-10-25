@@ -2,14 +2,22 @@ class Exam < ActiveRecord::Base
   has_many :versions, :class_name => 'ExamVersion'
   belongs_to :content_area
 
-  # after_create :create_initial_version
+  def ordinal
+    if versions.any?
+      versions.by_version.last.ordinal
+    else
+      1
+    end
+  end
 
-  named_scope :ordered, {}
+  def self.ordered
+    Exam.all.sort_by(&:ordinal)
+  end
 
   def version_for(user)
     versions.find :first,
       :conditions => [ 'created_at < ? and published = ?', user.created_at, true ],
-      :order => 'created_at DESC'
+      :order => 'version DESC'
   end
 
   def version_for!(user)
@@ -39,18 +47,11 @@ class Exam < ActiveRecord::Base
 
   def get_versioned_attribute(attribute, default)
     if versions.published.any?
-      versions.published.ordered.last.send(attribute)
+      versions.published.by_version.last.send(attribute)
     elsif versions.any?
-      "#{versions.ordered.last.send(attribute)} (Unpublished)"
+      "#{versions.by_version.last.send(attribute)} (Unpublished)"
     else
       default
     end
   end
-
-  # def create_initial_version
-  #   versions.create({
-  #     :title       => 'New Exam',
-  #     :description => 'New Exam Description'
-  #   })
-  # end
 end

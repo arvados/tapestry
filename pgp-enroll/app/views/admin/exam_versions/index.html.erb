@@ -3,6 +3,7 @@
 <h3>Versions</h3>
 <table class="admin_table">
   <tr>
+    <th>Ordinal</th>
     <th>Title</th>
     <th>Description</th>
     <th>Version</th>
@@ -13,6 +14,7 @@
 <% for exam_version in @exam_versions -%>
 
   <tr class="<%= cycle 'even', 'odd' %>">
+    <td><%= exam_version.ordinal %></td>
     <td><%= link_to h(exam_version.title), [:admin, @content_area, @exam, exam_version] %></td>
     <td><%=h exam_version.description %></td>
     <td><%=  exam_version.version %></td>

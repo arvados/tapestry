@@ -36,8 +36,8 @@ class ExamQuestionTest < ActiveSupport::TestCase
     end
 
     should 'give right answer for #next_question' do
-      assert_equal @exam_version.exam_questions.last,
-                   @exam_version.exam_questions.first.next_question.next_question
+      assert_equal @exam_version.exam_questions.ordered.last,
+                   @exam_version.exam_questions.ordered.first.next_question.next_question
     end
 
     should 'give right answer for #last_in_exam?' do

@@ -80,4 +80,17 @@ class ContentAreaTest < ActiveSupport::TestCase
     end
   end
 
+  context 'with three content_areas with ordinals' do
+    setup do
+      @c3 = Factory(:content_area, :ordinal => 3)
+      @c2 = Factory(:content_area, :ordinal => 2)
+      @c1 = Factory(:content_area, :ordinal => 1)
+      assert_not_equal [@c1, @c2, @c3], ContentArea.all
+    end
+
+    should 'order them by ordinal on #ordered' do
+      assert_equal [@c1, @c2, @c3], ContentArea.ordered
+    end
+  end
+
 end

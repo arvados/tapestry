@@ -3,7 +3,7 @@ class ContentArea < ActiveRecord::Base
 
   validates_presence_of :title, :description
 
-  named_scope :ordered, {}
+  named_scope :ordered, { :order => 'ordinal' }
 
   def completed_by?(user)
     exams.all? do |exam|

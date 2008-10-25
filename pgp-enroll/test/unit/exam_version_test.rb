@@ -7,7 +7,7 @@ class ExamVersionTest < ActiveSupport::TestCase
     end
 
     should_belong_to :exam
-    should_require_attributes :title, :description
+    should_require_attributes :title, :description, :ordinal
     should_have_many :exam_questions
     should_have_many :exam_responses
 
@@ -129,5 +129,30 @@ class ExamVersionTest < ActiveSupport::TestCase
 
     end
   end
+
+  context 'with three exam_versions with versions' do
+    setup do
+      @exam = Factory(:exam)
+      @v3 = Factory(:exam_version, :exam => @exam)
+      @v2 = Factory(:exam_version, :exam => @exam)
+      @v1 = Factory(:exam_version, :exam => @exam)
+
+      @v1.update_attributes(:version => 1001)
+      @v2.update_attributes(:version => 1002)
+      @v3.update_attributes(:version => 1003)
+
+      @v1.update_attributes(:version => 1)
+      @v2.update_attributes(:version => 2)
+      @v3.update_attributes(:version => 3)
+
+      # default order by id
+      assert_not_equal [@v1, @v2, @v3], @exam.versions
+    end
+
+    should 'order them by version on #by_version' do
+      assert_equal [@v1, @v2, @v3].map(&:version), @exam.versions.by_version.map(&:version)
+    end
+  end
+
 
 end
