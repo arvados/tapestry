@@ -19,6 +19,11 @@ class UserTest < Test::Unit::TestCase
     should_require_attributes :first_name, :last_name, :email
     # should_allow_values_for ... maybe swap RESTful Auth for clearance,
     # so don't worry about this yet.
+    should_allow_values_for :email, 'a@b.cc', 'test@harvard.edu', 'jason.p.morrison@gmail.com'
+    should_not_allow_values_for :email, 'aaa@bbb', 'aaa.com', 'a.b.com', 'aa@bb@cc', :message => /look like/
+    should_not_allow_values_for :email, 'a@b.c', :message => /too short/
+    should_not_allow_values_for :email, '', :message => /blank/
+
 
     should "require password validation on create" do
       user = User.new(:password => "blah", :password_confirmation => "boogidy")

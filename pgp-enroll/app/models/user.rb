@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
   validates_presence_of     :email
   validates_length_of       :email,    :within => 6..100 #r@a.wk
   validates_uniqueness_of   :email,    :case_sensitive => false
-  validates_format_of       :email,    :with => RE_EMAIL_OK, :message => MSG_EMAIL_BAD
+  validates_format_of       :email,    :with => /.+@.+\..+/, :message => MSG_EMAIL_BAD
 
   # temporarily removed requirement
   # validate_on_create :email_confirmed
