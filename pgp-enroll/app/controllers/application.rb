@@ -4,6 +4,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   include AuthenticatedSystem
+  include HoptoadNotifier::Catcher
 
   before_filter :login_required
 
