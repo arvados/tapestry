@@ -54,6 +54,7 @@ class QuestionResponseTest < ActiveSupport::TestCase
         correct_answers << answer_option.id.to_s if answer_option.correct?
       end
       @correct_answer = correct_answers.join(',')
+      @reverse_correct_answer = correct_answers.reverse.join(',')
       @some_correct_answers = correct_answers.first
       @exam_question.reload
     end
@@ -63,6 +64,19 @@ class QuestionResponseTest < ActiveSupport::TestCase
         @question_response = Factory(:question_response,
                                      :exam_question => @exam_question,
                                      :answer => @correct_answer)
+      end
+
+      should 'be correct' do
+        assert_equal @correct_answer, @exam_question.correct_answer
+        assert @question_response.correct?
+      end
+    end
+
+    context 'with the correct answer specified in a different order' do
+      setup do
+        @question_response = Factory(:question_response,
+                                     :exam_question => @exam_question,
+                                     :answer => @reverse_correct_answer)
       end
 
       should 'be correct' do
@@ -116,5 +130,7 @@ class QuestionResponseTest < ActiveSupport::TestCase
       assert EnrollmentStep.find_by_keyword('content_areas').completers.include?(@user)
     end
   end
+
+
 
 end

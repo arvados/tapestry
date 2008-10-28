@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081024231544) do
+ActiveRecord::Schema.define(:version => 20081024232228) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(:version => 20081024231544) do
     t.integer  "exam_id"
     t.integer  "version"
     t.boolean  "published",   :default => false, :null => false
+    t.integer  "ordinal"
   end
 
   add_index "exam_versions", ["exam_id"], :name => "index_exam_versions_on_exam_id"
@@ -87,7 +88,6 @@ ActiveRecord::Schema.define(:version => 20081024231544) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "content_area_id"
-    t.integer  "ordinal"
   end
 
   add_index "exams", ["content_area_id"], :name => "index_exams_on_content_area_id"
