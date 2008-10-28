@@ -11,6 +11,7 @@ class ExamQuestionsController < ApplicationController
     else
       @answer = params[:answer]
     end
+    @answer = '' if @answer.nil?
 
     @question_reponse = QuestionResponse.new(
       :exam_response => @exam_response,
