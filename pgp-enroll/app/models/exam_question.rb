@@ -23,7 +23,7 @@ class ExamQuestion < ActiveRecord::Base
       correct_answer_option = answer_options.detect(&:correct?)
       correct_answer_option.nil? ? nil : correct_answer_option.id.to_s
     elsif kind == 'CHECK_ALL'
-      answer_options.select(&:correct?).map(&:id).join(',')
+      answer_options.select(&:correct?).map(&:id).sort.join(',')
     else
       nil
     end

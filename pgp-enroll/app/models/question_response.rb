@@ -24,7 +24,7 @@ class QuestionResponse < ActiveRecord::Base
   def normalize_answer
     unless self.answer.blank?
       if self.exam_question.kind == 'CHECK_ALL'
-        self.answer = self.answer.split(',').sort.join(',')
+        self.answer = self.answer.split(',').map(&:to_i).sort.join(',')
       end
     end
   end
