@@ -1,3 +1,9 @@
+class Exam < ActiveRecord::Base
+end
+
+class ExamVersion < ActiveRecord::Base
+end
+
 class ExamQuestion < ActiveRecord::Base
   belongs_to :exam_version
 end
