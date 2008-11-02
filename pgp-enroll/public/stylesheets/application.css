@@ -710,7 +710,7 @@ div.formError {
 }
 
 
-#exam_listing li.current span {
+#exam_listing li.available span {
   /* content area */
   color: #000;
   background: #FFF url('/images/down.png') no-repeat right top;
@@ -720,7 +720,7 @@ div.formError {
   border-left: 1px solid #CCC;
 }
 
-#exam_listing li.current a {
+#exam_listing li.available a {
   background-color: #5D7CBB;
   color: #fff;
   border-right: 2px solid #999;
@@ -751,10 +751,6 @@ div.formError {
 #exam_listing li.completed a .completion_time {
   text-decoration: none !important;
   font-weight: normal;
-}
-
-#exam_listing li.next p.description {
-  font-style: italic;
 }
 
 #exam_listing li.locked span {

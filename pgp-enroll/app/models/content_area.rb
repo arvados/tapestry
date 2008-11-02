@@ -14,6 +14,8 @@ class ContentArea < ActiveRecord::Base
   end
 
   def self.current_for(user)
-    Exam.current_for(user).content_area if Exam.current_for(user)
+    ordered.detect do |area|
+      ! area.completed_by?(user)
+    end
   end
 end

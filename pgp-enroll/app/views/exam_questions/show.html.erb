@@ -1,5 +1,4 @@
 <h2><%= @exam_version.title %></h2>
-
 <%= render :partial => 'exam_progress',
            :locals => {
              :answered_questions => @exam_response.question_responses.count,
