@@ -13,7 +13,7 @@ class ConsentsControllerTest < ActionController::TestCase
       end
 
       should_respond_with :redirect
-      should_redirect_to 'new_session_url'
+      should_redirect_to 'login_url'
     end
   end
 

@@ -1,68 +1,40 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<title>Personal Genome Project</title>
+  <title>Personal Genome Project</title>
   <%= stylesheet_link_tag 'application' %>
-	<!--[if lte IE 7]><%= stylesheet_link_tag 'application-ie' %>><![endif]-->
+  <!--[if lte IE 7]><%= stylesheet_link_tag 'application-ie' %>><![endif]-->
 </head>
 <body>
-	<div id="body">
-		<h1 class="verbose"><%= link_to '<span>Personal Genome Project</span>', root_url %></h1>
+  <div id="body">
+    <h1 class="verbose"><%= link_to '<span>Personal Genome Project</span>', root_url %></h1>
 
+    <%= render :partial => 'layouts/navigation' %>
+    <div class="clear"><!-- --></div>
 
+    <%= breadcrumbs %>
+    <%= display_standard_flashes %>
+    <div class="main">
+      <%= yield %>
+    </div>
 
-<div class="menu">
-    <ul class="links">
-      <li><%= link_to 'Home', root_url %></li>
-      <% unless current_user -%>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/signup">Signup</a></li>
-      <% else -%>
-        <li><%= link_to 'Account', edit_user_url(current_user) %></li>
-        <li><%= link_to 'Logout', logout_url %></li>
+    <div class="clear"><!-- --></div>
+  </div>
+  <div id="foot">
+    <div id="copyright">
+      <p>
+        <span class="link"><a href="http://www.personalgenomes.org/privacypolicy.html">Privacy Policy</a></span>
+        <span class="bullet"> &nbsp;&bull;&nbsp; </span>
+        <span class="link"><a href="http://www.personalgenomes.org/contact.html">Contact</a></span>
+        <span class="bullet"> &nbsp;&bull;&nbsp; </span>
+        <span class="link"><a href="http://www.personalgenomes.org/careers.html">Careers</a></span>
+        <span class="bullet"> &nbsp;&bull;&nbsp; </span>
+        <span>Copyright &copy; Harvard University</span>
+      </p>
+    </div>
+  </div>
 
-        <% if current_user.is_admin? -%>
-          <li><%= link_to 'Admin', admin_root_url %></li>
-        <% end -%>
-      <% end -%>
-		</ul>
-</div>
-<div class="clear"><!-- --></div>
-
-<%= breadcrumbs %>
-
-<%= display_standard_flashes %>
-
-<div class="main">
-  <%= yield %>
-</div>
-
-<div class="clear"><!-- --></div>
-	</div>
-	<div id="foot">
-		<div id="copyright">
-			<p>
-				<span class="link"><a href="http://www.personalgenomes.org/privacypolicy.html">Privacy Policy</a></span>
-				<span class="bullet"> &nbsp;&bull;&nbsp; </span>
-				<span class="link"><a href="http://www.personalgenomes.org/contact.html">Contact</a></span>
-				<span class="bullet"> &nbsp;&bull;&nbsp; </span>
-				<span class="link"><a href="http://www.personalgenomes.org/careers.html">Careers</a></span>
-				<span class="bullet"> &nbsp;&bull;&nbsp; </span>
-				<span>Copyright &copy; Harvard University</span>
-
-			</p>
-		</div>
-	</div>
-
-<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-var pageTracker = _gat._getTracker("UA-51513-4");
-pageTracker._trackPageview();
-</script>
+  <%= render :partial => 'layouts/google_analytics' %>
 
 </body>
 </html>

@@ -41,19 +41,14 @@ class HomesControllerTest < ActionController::TestCase
       get :index
     end
 
-    should "have only the signup step available to click on" do
-      assert_equal 'signup', assigns(:next_step).keyword
-      assert_select 'ol#enrollment_steps>li>span.title>a', { :text => assigns(:next_step).title, :count => 1 }
+    should 'render public-facing copy to help orient new users' do
     end
-  end
 
-  context 'on GET to index with :hide_enrollment_steps' do
-    setup do
-      get :index, :hide_enrollment_steps => true
+    should 'link to the signup page' do
+      assert_select 'a', :text => /informed consent/
     end
 
     should 'not render the enrollment steps' do
-      assert_select 'h2',                  :count => 0
       assert_select 'ol#enrollment_steps', :count => 0
     end
   end

@@ -49,4 +49,11 @@ module ApplicationHelper
       </div>
 EOS
   end
+
+  def nav_element(text, link)
+    content_tag(:li, (current_page?(link) ? {:class => 'current'} : {})) do
+      link_to(text, link)
+    end
+  end
+
 end
