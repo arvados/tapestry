@@ -6,7 +6,7 @@ class QuestionResponse < ActiveRecord::Base
   before_validation :normalize_answer
 
   def correct?
-    (exam_question && exam_question.correct_answer) ? (answer.to_s == exam_question.correct_answer.to_s_) : false
+    (exam_question && exam_question.correct_answer) ? (answer.to_s == exam_question.correct_answer.to_s) : false
   end
 
   protected
