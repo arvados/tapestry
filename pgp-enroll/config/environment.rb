@@ -30,7 +30,7 @@ Rails::Initializer.run do |config|
   config.gem 'thoughtbot-factory_girl', :version => '1.1', :lib => 'factory_girl'
   config.gem 'mocha'
   config.gem 'quietbacktrace', :version => '0.1.1'
-  config.gem 'thoughtbot-shoulda', :version => '2.0.2', :lib => 'shoulda'
+  config.gem 'thoughtbot-shoulda', :version => '2.0.5', :lib => 'shoulda'
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.

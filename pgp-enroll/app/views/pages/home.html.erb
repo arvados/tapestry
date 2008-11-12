@@ -1,0 +1,34 @@
+<h2>Home</h2>
+
+<% if current_user -%>
+  <p>Welcome, <%=h current_user.full_name %>!</p>
+<% end -%>
+
+<ol id="enrollment_steps">
+  <% unless current_user -%>
+    <li class="next">
+      <span class="title">
+        <%= link_to 'Introduction to Enrollment', page_url(:introduction) %>
+      </span>
+      <p class="description">Learn more about our introduction process.</p>
+    </li>
+  <% end -%>
+
+  <% @steps.each do |step| -%>
+    <li class="<%= step_item_class(step) %>">
+      <span class="title">
+        <% if step == @next_step -%>
+          <%= link_to step.title, :controller => step.keyword, :action => 'index'  %>
+        <% else -%>
+          <%= step.title %>
+        <% end -%>
+      </span>
+
+      <div class="completion_time"><%= completion_time_for step -%></div>
+
+      <% if step == @next_step -%>
+        <p class="description"><%= step.description %></p>
+      <% end -%>
+    </li>
+  <% end -%>
+</ol>

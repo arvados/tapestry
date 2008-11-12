@@ -12,10 +12,7 @@ module ThoughtBot # :nodoc:
       # Example:
       #
       #   context "Creating a post"
-      #     setup do
-      #       Post.create
-      #     end
-      #
+      #     setup { Post.create }
       #     should_change "Post.count", :by => 1
       #   end
       #
@@ -29,8 +26,8 @@ module ThoughtBot # :nodoc:
       # Combinations of <tt>:by</tt>, <tt>:from</tt>, and <tt>:to</tt> are allowed:
       #
       #   should_change "@post.title"                # => assert the value changed in some way
-      #   should_change "@post.title" :from => "old" # => assert the value changed to anything other than "old"
-      #   should_change "@post.title" :to   => "new" # => assert the value changed from anything other than "new"
+      #   should_change "@post.title", :from => "old" # => assert the value changed to anything other than "old"
+      #   should_change "@post.title", :to   => "new" # => assert the value changed from anything other than "new"
       def should_change(expression, options = {})
         by, from, to = get_options!([options], :by, :from, :to)
         stmt = "change #{expression.inspect}"
@@ -57,10 +54,7 @@ module ThoughtBot # :nodoc:
       # Example:
       #
       #   context "Updating a post"
-      #     setup do
-      #       @post.update_attributes(:title => "new")
-      #     end
-      #
+      #     setup { @post.update_attributes(:title => "new") }
       #     should_not_change "Post.count"
       #   end
       def should_not_change(expression)

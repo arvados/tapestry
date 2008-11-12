@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-  map.root :controller => 'homes'
+  map.resources :pages
+  map.root :controller => 'pages', :action => 'show', :id => 'home'
 
   map.new2_user '/users/new2',    :controller => 'users',    :action => 'new2'
   map.resources :users

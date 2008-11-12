@@ -32,6 +32,7 @@ class SessionsControllerTest < Test::Unit::TestCase
     get :destroy
     assert_nil session[:user_id]
     assert_response :redirect
+    assert_redirected_to page_url(:logged_out)
   end
 
   should "remember me" do
