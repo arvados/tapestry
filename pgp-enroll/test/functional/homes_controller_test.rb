@@ -44,10 +44,6 @@ class HomesControllerTest < ActionController::TestCase
     should 'render public-facing copy to help orient new users' do
     end
 
-    should 'link to the signup page' do
-      assert_select 'a', :text => /informed consent/
-    end
-
     should 'not render the enrollment steps' do
       assert_select 'ol#enrollment_steps', :count => 0
     end
