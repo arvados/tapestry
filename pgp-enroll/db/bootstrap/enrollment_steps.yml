@@ -10,7 +10,7 @@ entrance_exam:
   ordinal: 2
   keyword: content_areas
   title: Entrance exam
-  description: In this step, you take an entrance exam which consists of three to four content areas.
+  description: In this step, you take an entrance exam which consists of four content areas.
 
 consent:
   id: 3
