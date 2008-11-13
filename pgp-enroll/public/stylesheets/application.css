@@ -772,3 +772,13 @@ div.formError {
 
 }
 
+
+/* exams */
+.question form input {
+  vertical-align: middle;
+  margin: 5px 0;
+}
+
+.question form label {
+  vertical-align: middle;
+}
