@@ -128,6 +128,7 @@ class UsersControllerTest < Test::Unit::TestCase
       should 'send the email' do
         assert_sent_email do |email|
           email.subject =~ /delete/ &&
+          email.to      == ['delete-account@personalgenomes.org'] &&
           email.body    =~ /#{@user.full_name}/
         end
       end
