@@ -15,7 +15,7 @@ class UserMailer < ActionMailer::Base
 
   def delete_request(user)
     setup_email(user)
-    @recipients  = "delete-request@personalgenomes.org"
+    @recipients  = "delete-account@personalgenomes.org"
     @subject     = "PGP account delete request"
     @body[:url]  = "http://#{ROOT_URL}/admin/users"
     @body[:user] = user
