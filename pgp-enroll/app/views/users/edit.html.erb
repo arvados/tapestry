@@ -3,17 +3,24 @@
 <% @user.password = @user.password_confirmation = nil %>
 
 <% form_for :user, :url => user_path, :html => { :method => :put } do |f| -%>
-<%= error_messages_for :user %>
-<p><label for="name">Name</label>: <%=h @user.full_name %>
+  <%= error_messages_for :user %>
+  <p><label for="name">Name</label>: <%=h @user.full_name %></p>
 
-<p><label for="email">Email</label><br/>
-<%= f.text_field :email %></p>
+  <p><label for="email">Email</label><br/>
+  <%= f.text_field :email %></p>
 
-<p><label for="password">Password</label><br/>
-<%= f.password_field :password %></p>
+  <p><label for="password">Password</label><br/>
+  <%= f.password_field :password %></p>
 
-<p><label for="password_confirmation">Confirm Password</label><br/>
-<%= f.password_field :password_confirmation %></p>
+  <p><label for="password_confirmation">Confirm Password</label><br/>
+  <%= f.password_field :password_confirmation %></p>
 
-<p><%= submit_tag 'Save Changes' %></p>
+  <p><%= submit_tag 'Save Changes' %></p>
 <% end -%>
+
+<h2>Delete my account</h2>
+<p>If you would like to delete your account, click below to request an account deletion:</p>
+<%= button_to 'Delete my account',
+              user_url(@user),
+              :confirm => 'Are you sure?  This will send an email requestion an account deletion.  A PGP administrator will remove your account.',
+              :method => 'delete' %>

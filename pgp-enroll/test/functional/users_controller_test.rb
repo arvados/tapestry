@@ -102,6 +102,38 @@ class UsersControllerTest < Test::Unit::TestCase
     should_change 'User.count', :by => 1
   end
 
+  logged_in_user_context do
+    context 'on GET to edit' do
+      setup do
+        get :edit, :id => @user.to_param
+      end
+
+      should_respond_with :success
+      should_render_template :edit
+
+      should 'include a link to request account deletion' do
+        assert_select 'form[action=?]', user_url(@user) do
+          assert_select 'input[type=submit]'
+        end
+      end
+    end
+
+    context 'on DELETE to destroy' do
+      setup do
+        delete :destroy, :id => @user.to_param
+      end
+
+      should_redirect_to 'page_url(:logged_out)'
+
+      should 'send the email' do
+        assert_sent_email do |email|
+          email.subject =~ /delete/ &&
+          email.body    =~ /#{@user.full_name}/
+        end
+      end
+    end
+  end
+
   def test_should_allow_signup
     assert_difference 'User.count' do
       create_user

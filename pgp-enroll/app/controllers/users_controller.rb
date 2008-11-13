@@ -46,6 +46,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def destroy
+    @user = User.find params[:id]
+    UserMailer.deliver_delete_request(@user)
+    logout_killing_session!
+    flash[:notice] = "A request to delete your account has been sent."
+    redirect_back_or_default page_url(:logged_out)
+    
+  end
+
   def activate
     logout_keeping_session!
     user = User.find_by_activation_code(params[:code]) unless params[:code].blank?

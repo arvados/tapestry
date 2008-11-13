@@ -12,6 +12,14 @@ class UserMailer < ActionMailer::Base
     @subject    += 'Your account has been activated!'
     @body[:url]  = "http://#{ROOT_URL}/"
   end
+
+  def delete_request(user)
+    setup_email(user)
+    @recipients  = "delete-request@personalgenomes.org"
+    @subject     = "PGP account delete request"
+    @body[:url]  = "http://#{ROOT_URL}/admin/users"
+    @body[:user] = user
+  end
   
   protected
     def setup_email(user)
