@@ -1,8 +1,8 @@
 <h2><%= @exam_version.title %></h2>
 <%= render :partial => 'exam_progress',
            :locals => {
-             :answered_questions => @exam_response.question_responses.count,
-             :current_question   => @exam_response.question_responses.count + 1,
+             :answered_questions => @exam_question.ordinal - 1,
+             :current_question   => @exam_question.ordinal,
              :total_questions    => @exam_version.exam_questions.count } %>
 
 <%= render :partial => @exam_question.kind.downcase %>
