@@ -26,7 +26,7 @@ class PagesController < ApplicationController
 
   # TODO: Refactor
   def fetch_ivars
-    @steps            = EnrollmentStep.find :all, :order => 'ordinal'
+    @steps            = EnrollmentStep.ordered
     @step_completions = current_user ? current_user.enrollment_step_completions : []
     @next_step        = current_user ? current_user.next_enrollment_step : []
   end
