@@ -20,6 +20,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resource :consent
+  map.resources :screening_surveys
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'

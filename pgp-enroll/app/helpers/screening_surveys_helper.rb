@@ -1,0 +1,2 @@
+module ScreeningSurveysHelper
+end
