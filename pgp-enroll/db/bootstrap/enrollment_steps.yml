@@ -1,18 +1,18 @@
+signup:
+  id: 1
+  ordinal: 1
+  keyword: signup
+  title: Consent to take entrance exam
+  description: In this step, you sign up for an account and agree to the mini consent form.
+
 # the id is 8 because this was added after the other steps,
 # and we don't want to mess up enrollment_step_completion fk references
 screening_surveys:
   id: 8
-  ordinal: 1
+  ordinal: 2
   keyword: screening_surveys
   title: Screening Surveys
   description: Complete initial screening surveys.
-
-signup:
-  id: 1
-  ordinal: 2
-  keyword: signup
-  title: Consent to take entrance exam
-  description: In this step, you sign up for an account and agree to the mini consent form.
 
 entrance_exam:
   id: 2
