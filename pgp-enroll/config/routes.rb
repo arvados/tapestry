@@ -20,6 +20,9 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resource :consent
+  map.namespace :screening_surveys do |screening_surveys|
+    screening_surveys.resource :residency
+  end
   map.resources :screening_surveys
 
   map.namespace 'admin' do |admin|

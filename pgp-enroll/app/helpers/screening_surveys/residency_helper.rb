@@ -1,0 +1,2 @@
+module ScreeningSurveys::ResidencyHelper
+end
