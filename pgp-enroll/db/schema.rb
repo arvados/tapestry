@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081113232051) do
+ActiveRecord::Schema.define(:version => 20081214221403) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -102,6 +102,20 @@ ActiveRecord::Schema.define(:version => 20081113232051) do
 
   add_index "question_responses", ["exam_response_id"], :name => "index_question_responses_on_exam_response_id"
   add_index "question_responses", ["exam_question_id"], :name => "index_question_responses_on_exam_question_id"
+
+  create_table "residency_survey_responses", :force => true do |t|
+    t.integer  "user_id"
+    t.boolean  "us_resident"
+    t.string   "country"
+    t.boolean  "contact_when_pgp_opens_outside_us"
+    t.string   "zip"
+    t.boolean  "can_travel_to_boston"
+    t.boolean  "contact_when_boston_travel_facilitated"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "residency_survey_responses", ["user_id"], :name => "index_residency_survey_responses_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                     :limit => 100

@@ -101,4 +101,10 @@ Factory.define(:question_response) do |f|
   f.answer        { |a| a.exam_question.correct_answer }
 end
 
+Factory.define(:residency_survey_response) do |f|
+  f.user { |u| u.association :user }
+  f.us_resident true
+  f.zip '12345'
+  f.can_travel_to_boston true
+end
 
