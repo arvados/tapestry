@@ -1,3 +1,66 @@
 <h2>Residency Survey</h2>
 
 Last updated: <%= @residency_survey_response.new_record? ? 'Just now' : @residency_survey_response.updated_at %>
+
+
+
+<% form_for @residency_survey_response, :url => screening_surveys_residency_path, :html => { :method => :put } do |f| -%>
+<%= error_messages_for :residency_survey_response %>
+
+<style type="text/css">
+  form p label { vertical-align: middle; }
+  form p input { vertical-align: middle; }
+</style>
+
+<p>
+  Are you a resident of the United States?<br/>
+  <%= f.radio_button(:us_resident, true) %>
+  <label for="residency_survey_response_us_resident_true">Yes</label>
+  <br/>
+  <%= f.radio_button(:us_resident, false) %>
+  <label for="residency_survey_response_us_resident_false">No</label>
+</p>
+
+<p>
+  <%= f.label :country %><br/>
+  <%= f.text_field :country %>
+</p>
+
+<p>
+  <%= f.label :contact_when_pgp_opens_outside_us %><br/>
+
+  <%= f.radio_button(:contact_when_pgp_opens_outside_us, true) %>
+  <label for="contact_when_pgp_opens_outside_us_true">Yes</label>
+  <br/>
+  <%= f.radio_button(:contact_when_pgp_opens_outside_us, false) %>
+  <label for="contact_when_pgp_opens_outside_us_false">No</label>
+</p>
+
+<p>
+  <%= f.label :zip %><br/>
+  <%= f.text_field :zip %>
+</p>
+
+<p>
+  <%= f.label :can_travel_to_boston %><br/>
+
+  <%= f.radio_button(:can_travel_to_boston, true) %>
+  <label for="can_travel_to_boston_true">Yes</label>
+  <br/>
+  <%= f.radio_button(:can_travel_to_boston, false) %>
+  <label for="can_travel_to_boston_false">No</label>
+</p>
+
+<p>
+  <%= f.label :contact_when_boston_travel_facilitated %><br/>
+
+  <%= f.radio_button(:contact_when_boston_travel_facilitated, true) %>
+  <label for="contact_when_boston_travel_facilitated_true">Yes</label>
+  <br/>
+  <%= f.radio_button(:contact_when_boston_travel_facilitated, false) %>
+  <label for="contact_when_boston_travel_facilitated_false">No</label>
+</p>
+
+<p><%= submit_tag 'Save' %></p>
+<% end -%>
+

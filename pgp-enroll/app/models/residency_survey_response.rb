@@ -22,7 +22,9 @@ class ResidencySurveyResponse < ActiveRecord::Base
   private
 
   def require_attribute(attribute, message = "can't be blank")
-    if self.send(attribute).nil?
+    value = self.send(attribute)
+
+    if value.nil? || value == ''
       errors.add(attribute, message)
     else
       yield if block_given?

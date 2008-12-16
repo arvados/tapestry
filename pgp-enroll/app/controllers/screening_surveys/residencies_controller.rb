@@ -7,7 +7,8 @@ class ScreeningSurveys::ResidenciesController < ApplicationController
     ResidencySurveyResponse.create({
       :user                 => current_user,
       :us_resident          => true,
-      :zip                  => '12345',
+      :zip                  => 'Your zip code',
+      :zip                  => 'Your country',
       :can_travel_to_boston => true
     })
 
@@ -20,9 +21,12 @@ class ScreeningSurveys::ResidenciesController < ApplicationController
 
   def update
     @residency_survey_response = current_user.residency_survey_response
-    @residency_survey_response.update_attributes(params[:residency_survey_response])
-    flash[:notice] = 'Success!'
-    redirect_to edit_screening_surveys_residency_path
+    if @residency_survey_response.update_attributes(params[:residency_survey_response])
+      flash[:notice] = 'Success!'
+      redirect_to edit_screening_surveys_residency_path
+    else
+      render :action => 'edit'
+    end
   end
 
   protected
