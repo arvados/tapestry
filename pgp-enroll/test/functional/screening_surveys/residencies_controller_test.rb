@@ -18,16 +18,38 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
   end
 
   logged_in_user_context do
+    context 'without an existing residency survey response' do
+      setup do
+      end
+      context 'on GET to new' do
+        setup { get :new }
+
+        should 'create a new residency survey response' do
+          assert_not_nil @user.reload.residency_survey_response
+        end
+
+        should_respond_with :redirect
+        should_redirect_to 'edit_screening_surveys_residency_path'
+      end
+
+      context 'on GET to edit' do
+        setup { get :edit }
+
+        should_respond_with :redirect
+        should_redirect_to 'new_screening_surveys_residency_path'
+      end
+    end
+
     context 'with an existing residency survey response' do
       setup do
         Factory(:residency_survey_response, :user => @user)
       end
 
-      # context 'on GET to new' do
-      # end
-
-      # context 'on POST to create' do
-      # end
+      context 'on GET to new' do
+        setup { get :new }
+        should_respond_with :redirect
+        should_redirect_to 'edit_screening_surveys_residency_path'
+      end
 
       context 'on GET to edit' do
         setup do
