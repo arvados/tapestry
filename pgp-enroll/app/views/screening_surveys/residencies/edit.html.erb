@@ -1,9 +1,5 @@
 <h2>Residency Survey</h2>
 
-Last updated: <%= @residency_survey_response.new_record? ? 'Just now' : @residency_survey_response.updated_at %>
-
-
-
 <% form_for @residency_survey_response, :url => screening_surveys_residency_path, :html => { :method => :put } do |f| -%>
 <%= error_messages_for :residency_survey_response %>
 
