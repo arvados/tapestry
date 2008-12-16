@@ -7,12 +7,12 @@ class ResidencySurveyResponse < ActiveRecord::Base
   end
 
   def validate
-    if us_resident
+    if (us_resident == true)
       require_attribute 'zip' do
         require_attribute 'can_travel_to_boston'
         require_attribute 'contact_when_boston_travel_facilitated' unless can_travel_to_boston
       end
-    else
+    elsif (us_resident == false)
       require_attribute 'country' do
         require_attribute 'contact_when_pgp_opens_outside_us'
       end
