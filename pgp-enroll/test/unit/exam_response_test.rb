@@ -14,6 +14,7 @@ class ExamResponseTest < ActiveSupport::TestCase
     should 'move user to original_user when sent #discard_for_retake!' do
       assert original_user_id = @exam_response.user.id
       @exam_response.discard_for_retake!
+      @exam_response.reload
       assert_equal original_user_id, @exam_response.original_user_id
       assert_nil @exam_response.user
     end
