@@ -23,7 +23,7 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :screening_surveys do |screening_surveys|
     screening_surveys.resource :residency
   end
-  map.resources :screening_surveys
+  map.resources :screening_surveys, :collection => { :complete => :post } 
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'

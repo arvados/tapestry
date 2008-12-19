@@ -61,7 +61,7 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
         end
       end
 
-      context 'on PUT to update with valid options' do
+      context 'on PUT to update with valid but ineligible options' do
         setup do
           @attr_hash = {
             :us_resident => false,
@@ -80,8 +80,8 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
         end
 
         should_respond_with :redirect
-        should_set_the_flash_to /success/i
-        should_redirect_to 'edit_screening_surveys_residency_path'
+        should_set_the_flash_to /can only accept qualified individuals/i
+        should_redirect_to 'screening_surveys_path'
       end
 
       context 'on PUT to update with invalid options' do

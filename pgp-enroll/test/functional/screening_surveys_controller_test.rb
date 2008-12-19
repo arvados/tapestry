@@ -26,6 +26,16 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
       should_respond_with :success
       should_render_template :index
     end
+
+    context 'on POST to complete' do
+      setup do
+        post :complete
+      end
+
+      should_respond_with :redirect
+      should_redirect_to 'root_url'
+      should_change '@user.completed_enrollment_steps.count', :by => 1
+    end
   end
 
 

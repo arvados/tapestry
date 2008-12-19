@@ -43,6 +43,11 @@ Factory(:enrollment_step,
         :title       => 'Entrance exam',
         :description => 'In this step, you take an entrance exam which consists of three to four content areas.')
 
+Factory(:enrollment_step,
+        :keyword     => 'screening_surveys',
+        :title       => 'SScreening Surveys',
+        :description => 'Complete initial screening surveys')
+
 Factory.define(:enrollment_step_completion) do |f|
   f.user            { |u| u.association :user }
   f.enrollment_step { |e| e.association :enrollment_step }
