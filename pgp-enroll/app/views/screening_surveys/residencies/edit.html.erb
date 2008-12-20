@@ -6,55 +6,89 @@
 <style type="text/css">
   form p label { vertical-align: middle; }
   form p input { vertical-align: middle; }
+  span.nojs { font-weight: normal; }
 </style>
 
+<%# Be accessible. %>
+<% content_for :js do %>
+$(document).ready(function () {
+  $('.nojs').hide();
+});
+<% end %>
+
+
+
 <p>
-  Are you a resident of the United States?<br/>
-  <%= f.radio_button(:us_resident, true) %>
-  <label for="residency_survey_response_us_resident_true">Yes</label>
+  <strong class="nojs">1.)</strong>
+  <%= f.label :us_resident, "Are you a resident of the United States?" %>
   <br/>
+
+  <%= f.radio_button(:us_resident, true) %>
+  <label for="residency_survey_response_us_resident_true">
+    Yes <span class="nojs"> - If so, skip directly to question #4.</span>
+  </label>
+
+  <br/>
+
   <%= f.radio_button(:us_resident, false) %>
   <label for="residency_survey_response_us_resident_false">No</label>
 </p>
 
 <p>
-  <%= f.label :country %><br/>
+  <strong class="nojs">2.)</strong>
+  <%= f.label :country, 'What country do you reside?' %><br/>
   <%= f.text_field :country %>
 </p>
 
 <p>
-  <%= f.label :contact_when_pgp_opens_outside_us %><br/>
+  <strong class="nojs">3.)</strong>
+  <%= f.label :contact_when_pgp_opens_outside_us, "The Personal Genome Project currently has approval to enroll individuals who reside in the United States only. Would you like to be contacted when the Personal Genome Project opens enrollment to individuals living outside the United States?" %>
+  <br/>
 
   <%= f.radio_button(:contact_when_pgp_opens_outside_us, true) %>
-  <label for="contact_when_pgp_opens_outside_us_true">Yes</label>
+  <label for="residency_survey_response_contact_when_pgp_opens_outside_us_true">
+    Yes <span class="nojs"> - Skip to the end of the survey.</span>
+  </label>
   <br/>
   <%= f.radio_button(:contact_when_pgp_opens_outside_us, false) %>
-  <label for="contact_when_pgp_opens_outside_us_false">No</label>
+  <label for="residency_survey_response_contact_when_pgp_opens_outside_us_false">
+    No <span class="nojs"> - Skip to the end of the survey.</span>
+  </label>
+
+  <br/>
 </p>
 
 <p>
-  <%= f.label :zip %><br/>
+  <strong class="nojs">4.)</strong>
+  <%= f.label :zip, "What is your ZIP code?" %><br/>
   <%= f.text_field :zip %>
 </p>
 
 <p>
-  <%= f.label :can_travel_to_boston %><br/>
+  <strong class="nojs">5.)</strong>
+  <%= f.label :can_travel_to_boston, "The Personal Genome Project currently requires all participants to travel to Boston as part of the enrollment process. The possibility exists that during the visit to the medical center, either you or the study staff will decide against your enrollment in the project. Travel to Boston may be expensive, depending on the distance from your home. Are you able to travel to a medical center in Boston at your own expense?" %><br/>
 
   <%= f.radio_button(:can_travel_to_boston, true) %>
-  <label for="can_travel_to_boston_true">Yes</label>
+  <label for="residency_survey_response_can_travel_to_boston_true">
+    Yes <span class="nojs"> - If so, skip to the end of the survey.</span>
+  </label>
+
   <br/>
   <%= f.radio_button(:can_travel_to_boston, false) %>
-  <label for="can_travel_to_boston_false">No</label>
+  <label for="residency_survey_response_can_travel_to_boston_false">
+    No <span class="nojs"> - If so, proceed to the next question.</span>
+  </label>
 </p>
 
 <p>
-  <%= f.label :contact_when_boston_travel_facilitated %><br/>
+  <strong class="nojs">6.)</strong>
+  <%= f.label :contact_when_boston_travel_facilitated, "Would you like to be contacted when the Personal Genome Project can facilitate the enrollment of individuals who cannot travel to Boston?" %><br/>
 
   <%= f.radio_button(:contact_when_boston_travel_facilitated, true) %>
-  <label for="contact_when_boston_travel_facilitated_true">Yes</label>
+  <label for="residency_survey_response_contact_when_boston_travel_facilitated_true">Yes</label>
   <br/>
   <%= f.radio_button(:contact_when_boston_travel_facilitated, false) %>
-  <label for="contact_when_boston_travel_facilitated_false">No</label>
+  <label for="residency_survey_response_contact_when_boston_travel_facilitated_false">No</label>
 </p>
 
 <p><%= submit_tag 'Save' %></p>
