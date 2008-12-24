@@ -6,34 +6,44 @@
 <style type="text/css">
   form p label { vertical-align: middle; }
   form p input { vertical-align: middle; }
+  form p.skip * { font-color: #ccc; }
+  form div.fieldWithErrors { display: inline; }
 </style>
 
 <%# Be accessible. %>
 <% content_for :js do %>
 
 $(document).ready(function () {
-  $('form').clearForm();
-  $('.nojs').hide();
-  showQuestions([1]);
+  // $('form').clearForm();
+  // $('.nojs').hide();
+  // showQuestions([1]);
 
   var radioEvent = $.browser.msie ? "click" : "change";
+  $('input:radio').bind(radioEvent, function() { updateQuestions() });
+  updateQuestions();
+});
 
-  var states = {
-    'us_resident'                            : [[1,4,5],   [1,2,3]],
-    'contact_when_pgp_opens_outside_us'      : [[1,2,3],   [1,2,3]],
-    'can_travel_to_boston'                   : [[1,4,5],   [1,4,5,6]],
-    'contact_when_boston_travel_facilitated' : [[1,4,5,6], [1,4,5,6]]
+<%# residency_survey_response_us_resident_true => hide 2, 3%>
+<%# residency_survey_response_can_travel_to_boston_true => hide 6%>
+
+function updateQuestions() {
+  $('form>p.question').show();
+
+  if ($('#residency_survey_response_us_resident_true')[0].checked)
+  {
+    $('#question2, #question3').hide();
   }
 
-  $.each(states, function(slug, questionStates) {
-    $('#residency_survey_response_' + slug +  '_true').bind(radioEvent, function() {
-      showQuestions(questionStates[0]);
-    });
-    $('#residency_survey_response_' + slug + '_false').bind(radioEvent, function() {
-      showQuestions(questionStates[1]);
-    });
-  });
-});
+  if ($('#residency_survey_response_us_resident_false')[0].checked)
+  {
+    $('#question4, #question5').hide();
+  }
+
+  if ($('#residency_survey_response_can_travel_to_boston_true')[0].checked)
+  {
+    $('#question6').hide();
+  }
+}
 
 function showQuestions(numbers) {
   $.each([1,2,3,4,5,6], function(index, number) {
@@ -50,7 +60,7 @@ function showQuestions(numbers) {
 
 <% end %>
 
-<p id="question1">
+<p class="question" id="question1">
   <strong class="nojs">1.)</strong>
   <%= f.label :us_resident, "Are you a resident of the United States?" %>
   <br/>
@@ -66,13 +76,13 @@ function showQuestions(numbers) {
   <label for="residency_survey_response_us_resident_false">No</label>
 </p>
 
-<p id="question2">
+<p class="question" id="question2">
   <strong class="nojs">2.)</strong>
   <%= f.label :country, 'In what country do you reside?' %><br/>
   <%= f.text_field :country %>
 </p>
 
-<p id="question3">
+<p class="question" id="question3">
   <strong class="nojs">3.)</strong>
   <%= f.label :contact_when_pgp_opens_outside_us, "The Personal Genome Project currently has approval to enroll individuals who reside in the United States only. Would you like to be contacted when the Personal Genome Project opens enrollment to individuals living outside the United States?" %>
   <br/>
@@ -90,13 +100,13 @@ function showQuestions(numbers) {
   <br/>
 </p>
 
-<p id="question4">
+<p class="question" id="question4">
   <strong class="nojs">4.)</strong>
   <%= f.label :zip, "What is your ZIP code?" %><br/>
   <%= f.text_field :zip %>
 </p>
 
-<p id="question5">
+<p class="question" id="question5">
   <strong class="nojs">5.)</strong>
   <%= f.label :can_travel_to_boston, "The Personal Genome Project currently requires all participants to travel to Boston as part of the enrollment process. The possibility exists that during the visit to the medical center, either you or the study staff will decide against your enrollment in the project. Travel to Boston may be expensive, depending on the distance from your home. Are you able to travel to a medical center in Boston at your own expense?" %><br/>
 
@@ -112,7 +122,7 @@ function showQuestions(numbers) {
   </label>
 </p>
 
-<p id="question6">
+<p class="question" id="question6">
   <strong class="nojs">6.)</strong>
   <%= f.label :contact_when_boston_travel_facilitated, "Would you like to be contacted when the Personal Genome Project can facilitate the enrollment of individuals who cannot travel to Boston?" %><br/>
 
