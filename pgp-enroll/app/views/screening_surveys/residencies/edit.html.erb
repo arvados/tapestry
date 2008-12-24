@@ -31,17 +31,22 @@ function updateQuestions() {
 
   if ($('#residency_survey_response_us_resident_true')[0].checked)
   {
-    $('#question2, #question3').hide();
+    $('#question2, #question3, #question6').hide();
   }
 
   if ($('#residency_survey_response_us_resident_false')[0].checked)
   {
-    $('#question4, #question5').hide();
+    $('#question4, #question5, #question6').hide();
   }
 
   if ($('#residency_survey_response_can_travel_to_boston_true')[0].checked)
   {
     $('#question6').hide();
+  }
+
+  if ($('#residency_survey_response_can_travel_to_boston_false')[0].checked)
+  {
+    $('#question6').show();
   }
 }
 
@@ -61,8 +66,7 @@ function showQuestions(numbers) {
 <% end %>
 
 <p class="question" id="question1">
-  <strong class="nojs">1.)</strong>
-  <%= f.label :us_resident, "Are you a resident of the United States?" %>
+  <%= f.label :us_resident, "1.) Are you a resident of the United States?" %>
   <br/>
 
   <%= f.radio_button(:us_resident, true) %>
@@ -77,14 +81,12 @@ function showQuestions(numbers) {
 </p>
 
 <p class="question" id="question2">
-  <strong class="nojs">2.)</strong>
-  <%= f.label :country, 'In what country do you reside?' %><br/>
+  <%= f.label :country, '2.) In what country do you reside?' %><br/>
   <%= f.text_field :country %>
 </p>
 
 <p class="question" id="question3">
-  <strong class="nojs">3.)</strong>
-  <%= f.label :contact_when_pgp_opens_outside_us, "The Personal Genome Project currently has approval to enroll individuals who reside in the United States only. Would you like to be contacted when the Personal Genome Project opens enrollment to individuals living outside the United States?" %>
+  <%= f.label :contact_when_pgp_opens_outside_us, "3.) The Personal Genome Project currently has approval to enroll individuals who reside in the United States only. Would you like to be contacted when the Personal Genome Project opens enrollment to individuals living outside the United States?" %>
   <br/>
 
   <%= f.radio_button(:contact_when_pgp_opens_outside_us, true) %>
@@ -101,14 +103,12 @@ function showQuestions(numbers) {
 </p>
 
 <p class="question" id="question4">
-  <strong class="nojs">4.)</strong>
-  <%= f.label :zip, "What is your ZIP code?" %><br/>
+  <%= f.label :zip, "4.) What is your ZIP code?" %><br/>
   <%= f.text_field :zip %>
 </p>
 
 <p class="question" id="question5">
-  <strong class="nojs">5.)</strong>
-  <%= f.label :can_travel_to_boston, "The Personal Genome Project currently requires all participants to travel to Boston as part of the enrollment process. The possibility exists that during the visit to the medical center, either you or the study staff will decide against your enrollment in the project. Travel to Boston may be expensive, depending on the distance from your home. Are you able to travel to a medical center in Boston at your own expense?" %><br/>
+  <%= f.label :can_travel_to_boston, "5.) The Personal Genome Project currently requires all participants to travel to Boston as part of the enrollment process. The possibility exists that during the visit to the medical center, either you or the study staff will decide against your enrollment in the project. Travel to Boston may be expensive, depending on the distance from your home. Are you able to travel to a medical center in Boston at your own expense?" %><br/>
 
   <%= f.radio_button(:can_travel_to_boston, true) %>
   <label for="residency_survey_response_can_travel_to_boston_true">
@@ -123,8 +123,7 @@ function showQuestions(numbers) {
 </p>
 
 <p class="question" id="question6">
-  <strong class="nojs">6.)</strong>
-  <%= f.label :contact_when_boston_travel_facilitated, "Would you like to be contacted when the Personal Genome Project can facilitate the enrollment of individuals who cannot travel to Boston?" %><br/>
+  <%= f.label :contact_when_boston_travel_facilitated, "6.) Would you like to be contacted when the Personal Genome Project can facilitate the enrollment of individuals who cannot travel to Boston?" %><br/>
 
   <%= f.radio_button(:contact_when_boston_travel_facilitated, true) %>
   <label for="residency_survey_response_contact_when_boston_travel_facilitated_true">Yes</label>
