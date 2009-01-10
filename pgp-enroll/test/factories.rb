@@ -113,3 +113,9 @@ Factory.define(:residency_survey_response) do |f|
   f.can_travel_to_boston true
 end
 
+Factory.define :family_survey_response do |f|
+  f.birth_year 1983
+  f.relatives_interested_in_pgp '0'
+  f.monozygotic_twin 'no'
+  f.child_situation 'none'
+end
