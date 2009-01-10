@@ -22,6 +22,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :consent
   map.namespace :screening_surveys do |screening_surveys|
     screening_surveys.resource :residency
+    screening_surveys.resource :family
   end
   map.resources :screening_surveys, :collection => { :complete => :post } 
 

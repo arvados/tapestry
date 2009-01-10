@@ -1,0 +1,51 @@
+<h2>Family Survey</h2>
+
+<% form_for @family_survey_response, :url => screening_surveys_family_path, :html => { :method => :put } do |f| -%>
+<%= error_messages_for :family_survey_response %>
+
+<style type="text/css">
+  form p label { vertical-align: middle; }
+  form p input { vertical-align: middle; }
+  form p.skip * { font-color: #ccc; }
+  form div.fieldWithErrors { display: inline; }
+</style>
+
+
+<p class="question" id="question1">
+  <%= f.label :birth_year, '1.) What year were you born?' %><br/>
+  <%= f.text_field :birth_year %>
+</p>
+
+<p class="question" id="question2">
+  <%= f.label :relatives_interested_in_pgp, '2.) How many first degree relatives (parents, siblings, offspring) do you have who are already in the PGP or willing to join?' %><br/>
+  <%= f.select :relatives_interested_in_pgp, FamilySurveyResponse::RELATIVES_INTERESTED_IN_PGP_VALUES %>
+</p>
+
+<p class="question" id="question3">
+  <%= f.label :monozygotic_twin, '3.) Do you have an identical (monozygotic) twin?' %><br/>
+
+  <% FamilySurveyResponse::MONOZYGOTIC_TWIN_OPTIONS.each do |description, value| -%>
+    <%= f.radio_button(:monozygotic_twin, value) %>
+    <label for="family_survey_response_monozygotic_twin_<%= value %>"><%= description %></label>
+    <br/>
+  <% end -%>
+</p>
+
+<p class="question" id="question4">
+  <%= f.label :child_situation, '4.) Which of the following statements best represents your situation regarding children? ' %><br/>
+
+  <% FamilySurveyResponse::CHILD_SITUATION_OPTIONS.each do |description, value| -%>
+    <%= f.radio_button(:child_situation, value) %>
+    <label for="family_survey_response_child_situation_<%= value %>"><%= description %></label>
+    <br/>
+  <% end -%>
+</p>
+
+<p class="question" id="question5">
+  <%= f.label :youngest_child_age, '5.) What is the age of your youngest child?' %><br/>
+  <%= f.text_field :youngest_child_age %>
+</p>
+
+<p><%= submit_tag 'Save' %></p>
+<% end -%>
+

@@ -25,6 +25,14 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
 
       should_respond_with :success
       should_render_template :index
+
+      should 'render links to residency survey' do
+        assert_select 'a[href=?]', edit_screening_surveys_residency_url
+      end
+
+      should 'render links to family survey' do
+        assert_select 'a[href=?]', edit_screening_surveys_family_url
+      end
     end
 
     context 'on POST to complete' do

@@ -114,6 +114,7 @@ Factory.define(:residency_survey_response) do |f|
 end
 
 Factory.define :family_survey_response do |f|
+  f.user         { |u| u.association :user }
   f.birth_year 1983
   f.relatives_interested_in_pgp '0'
   f.monozygotic_twin 'no'

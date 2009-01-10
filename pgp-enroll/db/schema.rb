@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20090110033334) do
   add_index "exams", ["content_area_id"], :name => "index_exams_on_content_area_id"
 
   create_table "family_survey_responses", :force => true do |t|
+    t.integer  "user_id"
     t.integer  "birth_year"
     t.string   "relatives_interested_in_pgp"
     t.string   "monozygotic_twin"

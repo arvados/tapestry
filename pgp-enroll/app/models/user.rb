@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step
   has_many :exam_responses
   has_one  :residency_survey_response
+  has_one  :family_survey_response
 
   # temporarily removed requirement
   # attr_accessor :email_confirmation
