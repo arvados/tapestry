@@ -70,18 +70,22 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
           }
 
           put :update, :residency_survey_response => @attr_hash
+
+          @updated_response = @user.residency_survey_response.reload
         end
 
         should 'update the residency_survey_response' do
-          @updated_response = @user.residency_survey_response.reload
           @attr_hash.each do |key, value|
             assert_equal value, @updated_response.send(key)
           end
         end
 
         should_respond_with :redirect
-        should_set_the_flash_to /can only accept qualified individuals/i
         should_redirect_to 'screening_surveys_path'
+
+        should "render the waitlist message" do
+          assert_contains flash.values, @updated_response.waitlist_message, ", Flash: #{flash.inspect}"
+        end
       end
 
       context 'on PUT to update with invalid options' do

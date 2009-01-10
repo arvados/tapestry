@@ -8,17 +8,12 @@ class ScreeningSurveys::ResidenciesController < ApplicationController
   def update
     if @residency_survey_response.update_attributes(params[:residency_survey_response])
       if @residency_survey_response.eligible?
-        flash[:notice] = 'You are eligible for participation in the PGP.'
+        flash[:notice] = 'You have passed the residency survey successfully!  Please proceed to the next survey.'
       else
-        flash[:warning] = <<-EOS
-        Thank you for completing the residency survey.
-        At this time, we can only accept qualified individuals
-        (this text will change to reflect the reason for lack of eligibility,
-        and what followup notification steps will take place.)
-        EOS
+        flash[:warning] = @residency_survey_response.waitlist_message
       end
-      redirect_to screening_surveys_path
 
+      redirect_to screening_surveys_path
     else
       render :action => 'edit'
     end

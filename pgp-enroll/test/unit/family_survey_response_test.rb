@@ -17,7 +17,7 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
     should_allow_values_for     :relatives_interested_in_pgp, '0', '1', '2', '3+' 
     should_not_allow_values_for :relatives_interested_in_pgp, '-1', 0, 1, 2
 
-    should_allow_values_for     :monozygotic_twin, 'no', 'yes-willing', 'yes-unwilling'
+    should_allow_values_for     :monozygotic_twin, 'no', 'willing', 'unwilling'
     should_not_allow_values_for :monozygotic_twin, 1, 0, 'yes'
 
     should_allow_values_for     :child_situation, 'some', 'none', 'never'

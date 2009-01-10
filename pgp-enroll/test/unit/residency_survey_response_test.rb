@@ -8,12 +8,6 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
     end
   end
 
-  def self.should_not_be_valid
-    should 'not be valid' do
-      assert ! @residency_survey_response.valid?
-    end
-  end
-
   def self.should_be_eligible
     should 'be eligible' do
       assert @residency_survey_response.eligible?
@@ -38,16 +32,6 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
     end
   end
 
-  def self.should_have_eligibility_message(message_regex_or_nil)
-    should "have an eligibility message matching #{message_regex_or_nil.inspect}" do
-      if message_regex_or_nil.nil?
-        assert_nil @residency_survey_response.eligibility_message
-      else
-        assert_match message_regex_or_nil, @residency_survey_response.eligibility_message
-      end
-    end
-  end
-
   context 'with a ResidencySurveyResponse' do
     setup do
       @residency_survey_response = Factory.build(:residency_survey_response)
@@ -68,6 +52,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
 
           should_be_valid
           should_be_eligible
+          should_not_have_waitlist_message
         end
 
         context 'who cannot travel to boston' do
@@ -82,7 +67,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
 
             should_be_valid
             should_not_be_eligible
-            # should_have_eligibility_message /.*/
+            should_have_waitlist_message %r{will contact you when}i
           end
 
           context 'and does not want to know when Boston travel is facilitated' do
@@ -92,7 +77,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
 
             should_be_valid
             should_not_be_eligible
-            # should_have_eligibility_message /.*/
+            should_have_waitlist_message %r{thank you for your interest}i
           end
         end
       end
@@ -114,7 +99,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
 
           should_be_valid
           should_not_be_eligible
-          # should_have_eligibility_message /.*/
+          should_have_waitlist_message %r{will contact you when}i
         end
 
         context 'who does not want to be contacted for international pgp' do
@@ -122,7 +107,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
 
           should_be_valid
           should_not_be_eligible
-          # should_have_eligibility_message /.*/
+          should_have_waitlist_message %r{thank you for your interest}i
         end
       end
     end
