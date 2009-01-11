@@ -33,6 +33,10 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
       should 'render links to family survey' do
         assert_select 'a[href=?]', edit_screening_surveys_family_url
       end
+
+      should 'render links to privacy survey' do
+        assert_select 'a[href=?]', edit_screening_surveys_privacy_url
+      end
     end
 
     context 'on POST to complete' do

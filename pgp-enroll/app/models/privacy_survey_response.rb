@@ -20,13 +20,13 @@ class PrivacySurveyResponse < ActiveRecord::Base
 
   validates_inclusion_of :worrisome_information_comfort_level,
                          :in => WORRISOME_INFORMATION_COMFORT_LEVEL_OPTIONS.values,
-                         :message => 'is invalid'
+                         :message => 'must be answered'
 
   validates_inclusion_of :information_disclosure_comfort_level,
                          :in => INFORMATION_DISCLOSURE_COMFORT_LEVEL_OPTIONS.values,
-                         :message => 'is invalid'
+                         :message => 'must be answered'
 
   validates_inclusion_of :past_genetic_test_participation,
                          :in => PAST_GENETIC_TEST_PARTICIPATION_OPTIONS.values,
-                         :message => 'is invalid'
+                         :message => 'must be answered'
 end

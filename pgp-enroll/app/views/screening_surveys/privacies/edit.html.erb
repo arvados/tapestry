@@ -1,0 +1,46 @@
+<h2>Privacy Survey</h2>
+
+<% form_for @privacy_survey_response, :url => screening_surveys_privacy_path, :html => { :method => :put } do |f| -%>
+<%= error_messages_for :privacy_survey_response %>
+
+<style type="text/css">
+  form p label { vertical-align: middle; }
+  form p input { vertical-align: middle; }
+  form p.skip * { font-color: #ccc; }
+  form div.fieldWithErrors { display: inline; }
+</style>
+
+
+
+<p class="question" id="question1">
+  <%= f.label :worrisome_information_comfort_level, '1.) Think about whether there any specific types of genetic information you would not want to learn about yourself, or whether there are any foreseeable circumstances that you would want to keep private all or part of your DNA sequence data. Examples might include (i) medical conditions with no effective cures or therapies, e.g. Alzheimers disease (ii) medical conditions that may lead to premature death, e.g. Huntingtons disease (iii) serious genetic conditions that may affect family members, e.g. hereditary cancers or (iv) stigmatized traits. Which of the following statements best describes your comfort level with learning potentially worrisome information?' %><br/>
+
+  <% PrivacySurveyResponse::WORRISOME_INFORMATION_COMFORT_LEVEL_OPTIONS.each do |description, value| -%>
+    <%= f.radio_button(:worrisome_information_comfort_level, value) %>
+    <label for="privacy_survey_response_worrisome_information_comfort_level_<%= value %>"><%= description %></label>
+    <br/>
+  <% end -%>
+</p>
+
+<p class="question" id="question2">
+  <%= f.label :information_disclosure_comfort_level, '2.) Which of the following statements best describes your feelings about sharing your genomic data with the general public?' %><br/>
+
+  <% PrivacySurveyResponse::INFORMATION_DISCLOSURE_COMFORT_LEVEL_OPTIONS.each do |description, value| -%>
+    <%= f.radio_button(:information_disclosure_comfort_level, value) %>
+    <label for="privacy_survey_response_information_disclosure_comfort_level_<%= value %>"><%= description %></label>
+    <br/>
+  <% end -%>
+</p>
+
+<p class="question" id="question3">
+  <%= f.label :past_genetic_test_participation, '3.) Have you ever participated in a research study involving genetic testing or received results from a genetic test, genome scan, or genome sequencing?' %><br/>
+
+  <% PrivacySurveyResponse::PAST_GENETIC_TEST_PARTICIPATION_OPTIONS.each do |description, value| -%>
+    <%= f.radio_button(:past_genetic_test_participation, value) %>
+    <label for="privacy_survey_response_past_genetic_test_participation_<%= value %>"><%= description %></label>
+    <br/>
+  <% end -%>
+</p>
+
+<p><%= submit_tag 'Save' %></p>
+<% end -%>
