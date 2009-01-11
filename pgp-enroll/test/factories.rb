@@ -120,3 +120,10 @@ Factory.define :family_survey_response do |f|
   f.monozygotic_twin 'no'
   f.child_situation 'none'
 end
+
+Factory.define :privacy_survey_response do |f|
+  f.user { |u| u.association :user }
+  f.worrisome_information_comfort_level 'comfortable'
+  f.information_disclosure_comfort_level 'comfortable'
+  f.past_genetic_test_participation 'yes'
+end

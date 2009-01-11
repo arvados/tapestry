@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090110033334) do
+ActiveRecord::Schema.define(:version => 20090111175611) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -99,6 +99,15 @@ ActiveRecord::Schema.define(:version => 20090110033334) do
     t.string   "monozygotic_twin"
     t.string   "child_situation"
     t.integer  "youngest_child_age"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "privacy_survey_responses", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "worrisome_information_comfort_level"
+    t.string   "information_disclosure_comfort_level"
+    t.string   "past_genetic_test_participation"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
