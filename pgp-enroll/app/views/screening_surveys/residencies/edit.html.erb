@@ -71,13 +71,15 @@ function showQuestions(numbers) {
 
   <%= f.radio_button(:us_resident, true) %>
   <label for="residency_survey_response_us_resident_true">
-    Yes <span class="nojs"> - If so, skip directly to question #4.</span>
+    Yes <span class="nojs"> - Please go to question 4.</span>
   </label>
 
   <br/>
 
   <%= f.radio_button(:us_resident, false) %>
-  <label for="residency_survey_response_us_resident_false">No</label>
+  <label for="residency_survey_response_us_resident_false">
+    No <span class="nojs"> - Please answer questions 2 and 3.</span>
+  </label>
 </p>
 
 <p class="question" id="question2">
@@ -91,12 +93,12 @@ function showQuestions(numbers) {
 
   <%= f.radio_button(:contact_when_pgp_opens_outside_us, true) %>
   <label for="residency_survey_response_contact_when_pgp_opens_outside_us_true">
-    Yes <span class="nojs"> - Skip to the end of the survey.</span>
+    Yes
   </label>
   <br/>
   <%= f.radio_button(:contact_when_pgp_opens_outside_us, false) %>
   <label for="residency_survey_response_contact_when_pgp_opens_outside_us_false">
-    No <span class="nojs"> - Skip to the end of the survey.</span>
+    No
   </label>
 
   <br/>
@@ -112,13 +114,13 @@ function showQuestions(numbers) {
 
   <%= f.radio_button(:can_travel_to_boston, true) %>
   <label for="residency_survey_response_can_travel_to_boston_true">
-    Yes <span class="nojs"> - If so, skip to the end of the survey.</span>
+    Yes
   </label>
 
   <br/>
   <%= f.radio_button(:can_travel_to_boston, false) %>
   <label for="residency_survey_response_can_travel_to_boston_false">
-    No <span class="nojs"> - If so, proceed to the next question.</span>
+    No
   </label>
 </p>
 
