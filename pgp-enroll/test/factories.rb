@@ -123,7 +123,7 @@ end
 
 Factory.define :privacy_survey_response do |f|
   f.user { |u| u.association :user }
-  f.worrisome_information_comfort_level 'comfortable'
-  f.information_disclosure_comfort_level 'comfortable'
+  f.worrisome_information_comfort_level 'understand'
+  f.information_disclosure_comfort_level 'understand'
   f.past_genetic_test_participation 'yes'
 end

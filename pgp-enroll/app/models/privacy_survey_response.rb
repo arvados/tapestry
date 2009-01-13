@@ -1,19 +1,26 @@
 class PrivacySurveyResponse < ActiveRecord::Base
   WORRISOME_INFORMATION_COMFORT_LEVEL_OPTIONS = {
     'I am very uncomfortable with the idea of learning potentially worrisome information about myself.' => 'uncomfortable',
-    'I understand the possibility exists that I will learn potentially worrisome information, but I am willing to accept those risks.' => 'comfortable'
+    'I understand the possibility exists that I will learn potentially worrisome information, but I am willing to accept those risks.' => 'understand',
+    'Unsure.' => 'unsure',
+    "I don't find information about myself worrisome and would always want to know." => 'always',
+    'It depends on the information. I would want to review any information about me on a case-by-case basis.' => 'depends'
   }
 
   INFORMATION_DISCLOSURE_COMFORT_LEVEL_OPTIONS = {
     'I am very uncomfortable with the idea of public access to my genomic data. The potential risks are too great.' => 'uncomfortable',
-    'I understand there are potential risks. But I am willing to make my genomic data publicly available anyway.' => 'comfortable',
-    'Unsure' => 'unsure'
+    'I understand there are potential risks. But I am willing to make my genomic data publicly available anyway.' => 'understand',
+    'Unsure' => 'unsure',
+    "I don't find information worrisome and I'm comfortable with others having access to this information as well." => 'comfortable',
+    "It depends, I would want to review any information on a case-by-case basis." => 'depends'
   }
 
   PAST_GENETIC_TEST_PARTICIPATION_OPTIONS = {
     'Yes and if requested, I would should share any information with the PGP.' => 'yes',
     'Yes, but I would prefer to keep this information confidential.' => 'confidential',
-    'No.' => 'no'
+    'No.' => 'no',
+    'Unsure' => 'unsure',
+    "Yes, and I am comfortable making this information publicly available." => 'public'
   }
 
   belongs_to :user
