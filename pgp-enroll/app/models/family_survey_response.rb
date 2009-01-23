@@ -23,4 +23,14 @@ class FamilySurveyResponse < ActiveRecord::Base
   validates_inclusion_of :child_situation,             :in => CHILD_SITUATION_OPTIONS.values,      :message => 'must be answered'
   validates_inclusion_of :youngest_child_age,          :in => 0..100, :if => :youngest_child_age?, :message => 'must be answered'
 
+  validate :youngest_child_age_required_if_you_have_children
+
+  private
+
+  def youngest_child_age_required_if_you_have_children
+    if child_situation == 'some' && youngest_child_age.nil?
+      errors.add("youngest_child_age", "must be filled out if you have children.")
+    end
+  end
+
 end
