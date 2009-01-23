@@ -26,24 +26,20 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
     should_allow_values_for     :youngest_child_age, nil, '', 0, 1, 2, 100
     should_not_allow_values_for :youngest_child_age, -1, :message => 'must be answered'
 
-    context 'that indicated having children currently' do
+    context 'that indicated having children currently and did not specify youngest_child_age' do
       setup do
         @family_survey_response.child_situation = 'some'
+        @family_survey_response.youngest_child_age = nil
       end
 
-      context 'and did not specify youngest_child_age' do
-        setup do
-          @family_survey_response.youngest_child_age = nil
-        end
+      should 'not be valid' do
+        assert ! @family_survey_response.valid?
+      end
 
-        should 'not be valid' do
-          assert ! @family_survey_response.valid?
-        end
-
-        should 'give an appropriate error message' do
-          assert_equal 'must be filled out if you have children.',
-                        @family_survey_response.errors.on(:youngest_child_age)
-        end
+      should 'give an appropriate error message' do
+        @family_survey_response.valid?
+        assert_equal 'must be filled out if you have children.',
+                      @family_survey_response.errors.on(:youngest_child_age)
       end
     end
   end

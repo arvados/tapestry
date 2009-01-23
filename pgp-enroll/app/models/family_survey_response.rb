@@ -28,8 +28,8 @@ class FamilySurveyResponse < ActiveRecord::Base
   private
 
   def youngest_child_age_required_if_you_have_children
-    if child_situation == 'some' && youngest_child_age.nil?
-      errors.add("youngest_child_age", "must be filled out if you have children.")
+    if self.child_situation == 'some' && self.youngest_child_age.nil?
+      errors.add(:youngest_child_age, "must be filled out if you have children.")
     end
   end
 
