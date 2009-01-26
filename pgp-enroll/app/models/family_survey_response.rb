@@ -25,6 +25,14 @@ class FamilySurveyResponse < ActiveRecord::Base
 
   validate :youngest_child_age_required_if_you_have_children
 
+  def eligible?
+    maximum_age = Time.now.year - birth_year
+    possibly_under_18 = maximum_age < 18
+    unwilling_monozygotic_twin = ( monozygotic_twin == 'unwilling' )
+
+    return !possibly_under_18 && !unwilling_monozygotic_twin
+  end
+
   private
 
   def youngest_child_age_required_if_you_have_children

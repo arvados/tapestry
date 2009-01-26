@@ -2,6 +2,18 @@ require 'test_helper'
 
 class FamilySurveyResponseTest < ActiveSupport::TestCase
 
+  def self.should_not_be_eligible
+    should 'not be eligible' do
+      assert ! @family_survey_response.eligible?
+    end
+  end
+
+  def self.should_be_eligible
+    should 'be eligible' do
+      assert @family_survey_response.eligible?
+    end
+  end
+
   context 'a response' do
     setup do
       @family_survey_response = Factory(:family_survey_response)
@@ -41,6 +53,24 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
         assert_equal 'must be filled out if you have children.',
                       @family_survey_response.errors.on(:youngest_child_age)
       end
+    end
+
+    should 'respond to #eligible?' do
+      assert @family_survey_response.respond_to?(:eligible?)
+    end
+
+    context 'where the user is under 18' do
+      setup { @family_survey_response.birth_year = Time.now.year - 15 }
+      should_not_be_eligible
+    end
+
+    context 'who has a monozygotic_twin who is not willing to participate' do
+      setup { @family_survey_response.monozygotic_twin = 'unwilling' }
+      should_not_be_eligible
+    end
+
+    context 'who is over 18 and does not have a non-willing monozygotic twin' do
+      should_be_eligible
     end
   end
 
