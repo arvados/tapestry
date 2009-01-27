@@ -32,11 +32,17 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
     end
   end
 
+  context 'an ineligible response' do
+    setup { @residency_survey_response = Factory(:ineligible_residency_survey_response) }
+    should_not_be_eligible
+  end
+
   context 'with a ResidencySurveyResponse' do
     setup do
       @residency_survey_response = Factory.build(:residency_survey_response)
     end
 
+    should_be_eligible
     should_require_attributes :us_resident
 
     context 'for a US resident' do

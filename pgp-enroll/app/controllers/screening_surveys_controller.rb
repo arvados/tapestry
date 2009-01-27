@@ -1,5 +1,8 @@
 class ScreeningSurveysController < ApplicationController
   def index
+    @privacy_survey_response   = current_user.privacy_survey_response
+    @family_survey_response    = current_user.family_survey_response
+    @residency_survey_response = current_user.residency_survey_response
   end
 
   def complete

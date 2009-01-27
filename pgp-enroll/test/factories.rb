@@ -105,7 +105,6 @@ Factory.define(:question_response) do |f|
   f.exam_response { |r| r.association(:exam_response, :exam_version => r.exam_question.exam_version) }
   f.answer        { |a| a.exam_question.correct_answer }
 end
-
 Factory.define(:residency_survey_response) do |f|
   f.user { |u| u.association :user }
   f.us_resident true
@@ -125,5 +124,29 @@ Factory.define :privacy_survey_response do |f|
   f.user { |u| u.association :user }
   f.worrisome_information_comfort_level 'understand'
   f.information_disclosure_comfort_level 'understand'
-  f.past_genetic_test_participation 'yes'
+  f.past_genetic_test_participation 'public'
 end
+
+Factory.define :ineligible_residency_survey_response, :class => ResidencySurveyResponse do |f|
+  f.user { |u| u.association :user }
+  f.us_resident false
+  f.country 'Canada'
+  f.contact_when_pgp_opens_outside_us false
+  f.can_travel_to_boston false
+end
+
+Factory.define :ineligible_family_survey_response, :class => FamilySurveyResponse do |f|
+  f.user         { |u| u.association :user }
+  f.birth_year { Time.now.year - 1 }
+  f.relatives_interested_in_pgp '0'
+  f.monozygotic_twin 'no'
+  f.child_situation 'none'
+end
+
+Factory.define :ineligible_privacy_survey_response, :class => PrivacySurveyResponse do |f|
+  f.user { |u| u.association :user }
+  f.worrisome_information_comfort_level 'uncomfortable'
+  f.information_disclosure_comfort_level 'uncomfortable'
+  f.past_genetic_test_participation 'no'
+end
+

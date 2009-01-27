@@ -1,9 +1,20 @@
 <h2>Screening Surveys</h2>
 
 <ol>
-<li><%= link_to 'Residency Survey', edit_screening_surveys_residency_url %></li>
-<li><%= link_to 'Family Considerations Survey', edit_screening_surveys_family_url %></li>
-<li><%= link_to 'Privacy Preferences Survey', edit_screening_surveys_privacy_url %></li>
+<li>
+  <%= link_to 'Residency Survey', edit_screening_surveys_residency_url %>:
+  <%= display_survey_status(@residency_survey_response) %>
+</li>
+
+<li>
+  <%= link_to 'Family Considerations Survey', edit_screening_surveys_family_url %>:
+  <%= display_survey_status(@family_survey_response) %>
+</li>
+
+<li>
+  <%= link_to 'Privacy Preferences Survey', edit_screening_surveys_privacy_url %>:
+  <%= display_survey_status(@privacy_survey_response) %>
+</li>
 </ol>
 
 <p><%= link_to 'Mark screening surveys as complete', complete_screening_surveys_url, :method => 'POST' %></p>

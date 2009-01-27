@@ -14,10 +14,17 @@ class PrivacySurveyResponseTest < ActiveSupport::TestCase
     end
   end
 
+  context 'an ineligible response' do
+    setup { @privacy_survey_response = Factory(:ineligible_privacy_survey_response) }
+    should_not_be_eligible
+  end
+
   context 'a privacy survey response' do
     setup do
       @privacy_survey_response = Factory(:privacy_survey_response)
     end
+
+    should_be_eligible
 
     should_belong_to :user
 
@@ -35,14 +42,6 @@ class PrivacySurveyResponseTest < ActiveSupport::TestCase
     end
 
     context 'where the privacy_survey_response is otherwise eligible' do
-      setup do
-        @privacy_survey_response.past_genetic_test_participation = 'public'
-        @privacy_survey_response.information_disclosure_comfort_level = 'comfortable'
-        @privacy_survey_response.worrisome_information_comfort_level = 'always'
-
-        assert @privacy_survey_response.eligible?
-      end
-
       %w(public).each do |eligible_answer|
         context "where past_genetic_test_participation is #{eligible_answer}" do
           setup { @privacy_survey_response.past_genetic_test_participation = eligible_answer }

@@ -14,10 +14,17 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
     end
   end
 
+  context 'an ineligible response' do
+    setup { @family_survey_response = Factory(:ineligible_family_survey_response) }
+    should_not_be_eligible
+  end
+
   context 'a response' do
     setup do
       @family_survey_response = Factory(:family_survey_response)
     end
+
+    should_be_eligible
 
     should_belong_to :user
 
