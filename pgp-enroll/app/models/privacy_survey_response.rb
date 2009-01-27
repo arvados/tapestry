@@ -36,4 +36,12 @@ class PrivacySurveyResponse < ActiveRecord::Base
   validates_inclusion_of :past_genetic_test_participation,
                          :in => PAST_GENETIC_TEST_PARTICIPATION_OPTIONS.values,
                          :message => 'must be answered'
+
+  def eligible?
+    eligible_worrisome_information_comfort_level  = %w(understand always).include?(worrisome_information_comfort_level)
+    eligible_information_disclosure_comfort_level = %w(understand comfortable).include?(information_disclosure_comfort_level)
+    eligible_past_genetic_test_participation      = %w(public).include?(past_genetic_test_participation)
+
+    eligible_worrisome_information_comfort_level &&      eligible_information_disclosure_comfort_level &&      eligible_past_genetic_test_participation
+  end
 end
