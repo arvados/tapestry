@@ -69,28 +69,61 @@ class ScreeningSurveys::FamiliesControllerTest < ActionController::TestCase
         end
       end
 
-  #     context 'on PUT to update with valid but ineligible options' do
-  #       setup do
-  #         @attr_hash = {
-  #           :us_resident => false,
-  #           :country => 'France',
-  #           :contact_when_pgp_opens_outside_us => true
-  #         }
+      context 'on PUT to update with valid but ineligible options' do
+        setup do
+          @attr_hash = {
+            :birth_year => 1983,
+            :relatives_interested_in_pgp => '0',
+            # :monozygotic_twin => 'no',
+            :monozygotic_twin => 'unwilling',
+            :child_situation => 'none'
+          }
 
-  #         put :update, :family_survey_response => @attr_hash
-  #       end
+          put :update, :family_survey_response => @attr_hash
 
-  #       should 'update the family_survey_response' do
-  #         @updated_response = @user.family_survey_response.reload
-  #         @attr_hash.each do |key, value|
-  #           assert_equal value, @updated_response.send(key)
-  #         end
-  #       end
+          @updated_response = @user.family_survey_response.reload
+        end
 
-  #       should_respond_with :redirect
-  #       should_set_the_flash_to /can only accept qualified individuals/i
-  #       should_redirect_to 'screening_surveys_path'
-  #     end
+        should 'update the family_survey_response' do
+          @attr_hash.each do |key, value|
+            assert_equal value, @updated_response.send(key)
+          end
+        end
+
+        should_respond_with :redirect
+        should_redirect_to 'screening_surveys_path'
+
+        should "set the flash to the waitlist message" do
+          assert_equal flash[:warning], @updated_response.waitlist_message
+        end
+      end
+
+      context 'on PUT to update with valid and eligible options' do
+        setup do
+          @attr_hash = {
+            :birth_year => 1983,
+            :relatives_interested_in_pgp => '0',
+            :monozygotic_twin => 'no',
+            # :monozygotic_twin => 'unwilling',
+            :child_situation => 'none'
+          }
+
+          put :update, :family_survey_response => @attr_hash
+
+          @updated_response = @user.family_survey_response.reload
+        end
+
+        should 'update the family_survey_response' do
+          @attr_hash.each do |key, value|
+            assert_equal value, @updated_response.send(key)
+          end
+        end
+
+        should_respond_with :redirect
+        should_redirect_to 'screening_surveys_path'
+
+        should_set_the_flash_to /passed/i
+      end
 
       context 'on PUT to update with invalid options' do
         setup do
