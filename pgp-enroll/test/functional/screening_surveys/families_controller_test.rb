@@ -74,7 +74,6 @@ class ScreeningSurveys::FamiliesControllerTest < ActionController::TestCase
           @attr_hash = {
             :birth_year => 1983,
             :relatives_interested_in_pgp => '0',
-            # :monozygotic_twin => 'no',
             :monozygotic_twin => 'unwilling',
             :child_situation => 'none'
           }
@@ -104,7 +103,6 @@ class ScreeningSurveys::FamiliesControllerTest < ActionController::TestCase
             :birth_year => 1983,
             :relatives_interested_in_pgp => '0',
             :monozygotic_twin => 'no',
-            # :monozygotic_twin => 'unwilling',
             :child_situation => 'none'
           }
 
