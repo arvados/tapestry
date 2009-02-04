@@ -44,4 +44,13 @@ class PrivacySurveyResponse < ActiveRecord::Base
 
     eligible_worrisome_information_comfort_level &&      eligible_information_disclosure_comfort_level &&      eligible_past_genetic_test_participation
   end
+
+  def waitlist_message
+    <<-EOS
+    Thank you for your interest in participating in the PGP.
+    You should be completely comfortable with your participation in the PGP,
+    with any possible findings, and with sharing your information publicly
+    before participation.
+    EOS
+  end
 end

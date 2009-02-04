@@ -85,6 +85,12 @@ class PrivacySurveyResponseTest < ActiveSupport::TestCase
       end
     end
 
+    should "have a waitlist_message" do
+      assert @privacy_survey_response.respond_to?(:waitlist_message)
+      assert ! @privacy_survey_response.waitlist_message.empty?
+    end
+
   end
+
 
 end

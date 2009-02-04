@@ -69,28 +69,57 @@ class ScreeningSurveys::PrivaciesControllerTest < ActionController::TestCase
         end
       end
 
-  #     context 'on PUT to update with valid but ineligible options' do
-  #       setup do
-  #         @attr_hash = {
-  #           :us_resident => false,
-  #           :country => 'France',
-  #           :contact_when_pgp_opens_outside_us => true
-  #         }
+      context 'on PUT to update with valid but ineligible options' do
+        setup do
+          @attr_hash = {
+            :worrisome_information_comfort_level => 'uncomfortable',
+            :information_disclosure_comfort_level => 'uncomfortable',
+            :past_genetic_test_participation => 'no'
+          }
 
-  #         put :update, :family_survey_response => @attr_hash
-  #       end
+          put :update, :privacy_survey_response => @attr_hash
 
-  #       should 'update the family_survey_response' do
-  #         @updated_response = @user.family_survey_response.reload
-  #         @attr_hash.each do |key, value|
-  #           assert_equal value, @updated_response.send(key)
-  #         end
-  #       end
+          @updated_response = @user.privacy_survey_response.reload
+        end
 
-  #       should_respond_with :redirect
-  #       should_set_the_flash_to /can only accept qualified individuals/i
-  #       should_redirect_to 'screening_surveys_path'
-  #     end
+        should 'update the privacy_survey_response' do
+          @attr_hash.each do |key, value|
+            assert_equal value, @updated_response.send(key)
+          end
+        end
+
+        should_respond_with :redirect
+        should_redirect_to 'screening_surveys_path'
+
+        should "set the flash to the waitlist message" do
+          assert_equal flash[:warning], @updated_response.waitlist_message
+        end
+      end
+
+      context 'on PUT to update with valid and eligible options' do
+        setup do
+          @attr_hash = {
+            :worrisome_information_comfort_level => 'understand',
+            :information_disclosure_comfort_level => 'understand',
+            :past_genetic_test_participation => 'public'
+          }
+
+          put :update, :privacy_survey_response => @attr_hash
+
+          @updated_response = @user.privacy_survey_response.reload
+        end
+
+        should 'update the privacy_survey_response' do
+          @attr_hash.each do |key, value|
+            assert_equal value, @updated_response.send(key)
+          end
+        end
+
+        should_respond_with :redirect
+        should_redirect_to 'screening_surveys_path'
+
+        should_set_the_flash_to /passed/i
+      end
 
       context 'on PUT to update with invalid options' do
         setup do
