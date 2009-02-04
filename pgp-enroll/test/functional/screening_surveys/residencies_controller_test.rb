@@ -88,6 +88,31 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
         end
       end
 
+      context "on PUT to update with valid and eligible options" do
+        setup do
+          @attr_hash = {
+            :us_resident  => true,
+            :zip => '12345',
+            :can_travel_to_boston => true
+          }
+
+          put :update, :residency_survey_response => @attr_hash
+
+          @updated_response = @user.residency_survey_response.reload
+        end
+
+        should 'update the residency_survey_response' do
+          @attr_hash.each do |key, value|
+            assert_equal value, @updated_response.send(key)
+          end
+        end
+
+        should_respond_with :redirect
+        should_redirect_to 'screening_surveys_path'
+
+        should_set_the_flash_to /success/i
+      end
+
       context 'on PUT to update with invalid options' do
         setup do
           @invalid_attr_hash = {
