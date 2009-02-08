@@ -175,6 +175,23 @@ class UserTest < Test::Unit::TestCase
     end
   end
 
+  context "has completed an enrollment step" do
+    setup do
+      @user = Factory(:user)
+      @step = Factory(:enrollment_step)
+      @user.complete_enrollment_step(@step)
+      @user.reload
+    end
+
+    should "return true for #has_completed?(keyword)" do
+      assert @user.has_completed?(@step.keyword)
+    end
+
+    should "return true for #has_completed?(another keyword)" do
+      assert ! @user.has_completed?('nonexistant_step')
+    end
+  end
+
   should "not add two enrollment_steps if #complete_enrollment_step is called twice for the same step" do
     user = Factory(:user)
     step = Factory(:enrollment_step)

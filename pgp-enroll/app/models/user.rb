@@ -33,6 +33,10 @@ class User < ActiveRecord::Base
     }
   }
 
+  def has_completed?(keyword)
+    !!completed_enrollment_steps.find_by_keyword(keyword)
+  end
+
   # temporarily removed requirement
   #
   # def email_confirmed
