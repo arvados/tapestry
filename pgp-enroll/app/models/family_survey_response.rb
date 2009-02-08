@@ -1,4 +1,16 @@
 class FamilySurveyResponse < ActiveRecord::Base
+  after_save :complete_enrollment_step
+  def complete_enrollment_step
+    user = self.user.reload
+    if user.residency_survey_response &&
+       user.family_survey_response &&
+       user.privacy_survey_response
+
+      step = EnrollmentStep.find_by_keyword('screening_surveys')
+      user.complete_enrollment_step(step)
+    end
+  end
+
   RELATIVES_INTERESTED_IN_PGP_VALUES = %w(0 1 2 3+)
 
   MONOZYGOTIC_TWIN_OPTIONS = {

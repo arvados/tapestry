@@ -72,9 +72,12 @@ class User < ActiveRecord::Base
   end
 
   def complete_enrollment_step(step)
-    raise "enrollment step is nil" if step.nil?
-    completion = EnrollmentStepCompletion.new :enrollment_step => step
-    enrollment_step_completions << completion 
+    raise "Cannot find enrollment step to complete." if step.nil?
+
+    if ! EnrollmentStepCompletion.find_by_user_id_and_enrollment_step_id(self, step)
+      completion = EnrollmentStepCompletion.new :enrollment_step => step
+      enrollment_step_completions << completion 
+    end
   end
 
   def active?

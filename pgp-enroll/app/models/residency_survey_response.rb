@@ -1,4 +1,16 @@
 class ResidencySurveyResponse < ActiveRecord::Base
+  after_save :complete_enrollment_step
+  def complete_enrollment_step
+    user = self.user.reload
+    if user.residency_survey_response &&
+       user.family_survey_response &&
+       user.privacy_survey_response
+
+      step = EnrollmentStep.find_by_keyword('screening_surveys')
+      user.complete_enrollment_step(step)
+    end
+  end
+
   belongs_to :user
   validates_inclusion_of :us_resident, :in => [true, false], :message => "can't be blank"
 
@@ -50,4 +62,5 @@ class ResidencySurveyResponse < ActiveRecord::Base
       yield if block_given?
     end
   end
+
 end

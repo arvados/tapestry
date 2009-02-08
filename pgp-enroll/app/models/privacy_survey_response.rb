@@ -1,4 +1,16 @@
 class PrivacySurveyResponse < ActiveRecord::Base
+  after_save :complete_enrollment_step
+  def complete_enrollment_step
+    user = self.user.reload
+    if user.residency_survey_response &&
+       user.family_survey_response &&
+       user.privacy_survey_response
+
+      step = EnrollmentStep.find_by_keyword('screening_surveys')
+      user.complete_enrollment_step(step)
+    end
+  end
+
   WORRISOME_INFORMATION_COMFORT_LEVEL_OPTIONS = {
     'I am very uncomfortable with the idea of learning potentially worrisome information about myself.' => 'uncomfortable',
     'I understand the possibility exists that I will learn potentially worrisome information, but I am willing to accept those risks.' => 'understand',

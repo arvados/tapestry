@@ -175,6 +175,19 @@ class UserTest < Test::Unit::TestCase
     end
   end
 
+  should "not add two enrollment_steps if #complete_enrollment_step is called twice for the same step" do
+    user = Factory(:user)
+    step = Factory(:enrollment_step)
+
+    assert_difference 'user.completed_enrollment_steps.count' do
+      user.complete_enrollment_step(step)
+    end
+
+    assert_no_difference 'user.completed_enrollment_steps.count' do
+      user.complete_enrollment_step(step)
+    end
+  end
+
   should "add an enrollment_step_completion for enrollment_step(:signup) upon activation" do
     user = Factory(:user)
 
