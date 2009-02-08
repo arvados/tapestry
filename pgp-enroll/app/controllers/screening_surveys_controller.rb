@@ -12,10 +12,6 @@ class ScreeningSurveysController < ApplicationController
 
   def redirect_to_enrollment_steps_if_screening_surveys_complete
     if current_user.has_completed?('screening_surveys')
-    # unless EnrollmentStep.find_by_keyword('screening_surveys').completers.include?(current_user)
-    #   current_user.enrollment_step_completions.create({
-    #     :enrollment_step => EnrollmentStep.find_by_keyword('screening_surveys'),
-    #   })
       flash[:notice] = 'Completed screening surveys.'
       redirect_to root_path
     end

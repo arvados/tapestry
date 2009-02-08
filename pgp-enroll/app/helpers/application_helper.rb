@@ -57,21 +57,7 @@ EOS
   end
 
   def display_survey_completion(survey)
-    survey.nil? ? 'not complete' : 'complete'
-  end
-
-  def display_survey_eligibility(survey)
-    return '' if survey.nil?
-    return 'eligible' if survey.eligible?
-    return 'not eligible'
-  end
-
-  def display_survey_status(survey)
-    status = display_survey_completion(survey)
-    if survey
-      status << " and #{display_survey_eligibility(survey)}"
-    end
-    status.capitalize
+    survey.nil? ? 'Not complete' : 'Complete'
   end
 
 end

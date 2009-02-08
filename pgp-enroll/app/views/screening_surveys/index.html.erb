@@ -3,17 +3,17 @@
 <ol>
 <li>
   <%= link_to 'Residency Survey', edit_screening_surveys_residency_url %>:
-  <%= display_survey_status(@residency_survey_response) %>
+  <%= display_survey_completion(@residency_survey_response) %>
 </li>
 
 <li>
   <%= link_to 'Family Considerations Survey', edit_screening_surveys_family_url %>:
-  <%= display_survey_status(@family_survey_response) %>
+  <%= display_survey_completion(@family_survey_response) %>
 </li>
 
 <li>
   <%= link_to 'Privacy Preferences Survey', edit_screening_surveys_privacy_url %>:
-  <%= display_survey_status(@privacy_survey_response) %>
+  <%= display_survey_completion(@privacy_survey_response) %>
 </li>
 </ol>
 

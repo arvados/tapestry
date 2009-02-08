@@ -43,28 +43,8 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
       end
     end
 
-    context 'where there are completed but ineligible surveys' do
-      setup do
-        @residency_survey_response = Factory(:ineligible_residency_survey_response, :user => @user)
-        @family_survey_response    = Factory(:ineligible_family_survey_response, :user => @user)
-      end
 
-      context 'on GET to index' do
-        setup { get :index }
-
-        should_assign_to :residency_survey_response, :equals => '@user.residency_survey_response'
-        should_assign_to :family_survey_response,    :equals => '@user.family_survey_response'
-
-        should_respond_with :success
-        should_render_template :index
-
-        should "say that each survey is complete but not eligible" do
-          assert_select 'li', :text => /complete.*not eligible/i, :count => 2
-        end
-      end
-    end
-
-    context 'where there are completed and eligible surveys' do
+    context 'where there are completed surveys' do
       setup do
         @residency_survey_response = Factory(:residency_survey_response, :user => @user)
         @family_survey_response    = Factory(:family_survey_response, :user => @user)
@@ -79,9 +59,12 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
         should_respond_with :success
         should_render_template :index
 
-        should "say that each survey is complete and eligible" do
-          assert_select 'li', :text => /complete.*eligible/i,     :count => 2
-          assert_select 'li', :text => /complete.*not eligible/i, :count => 0
+        should 'say that one survey is not complete' do
+          assert_select 'li', :text => /Not complete/, :count => 1
+        end
+
+        should 'say that two surveys are complete' do
+          assert_select 'li', :text => /Complete/, :count => 2
         end
       end
     end
