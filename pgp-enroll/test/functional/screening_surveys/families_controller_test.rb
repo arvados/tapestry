@@ -69,17 +69,10 @@ class ScreeningSurveys::FamiliesControllerTest < ActionController::TestCase
         end
       end
 
-      context 'on PUT to update with valid but ineligible options' do
+      context 'on PUT to update with valid options' do
         setup do
-          @attr_hash = {
-            :birth_year => 1983,
-            :relatives_interested_in_pgp => '0',
-            :monozygotic_twin => 'unwilling',
-            :child_situation => 'none'
-          }
-
+          @attr_hash = Factory.attributes_for(:family_survey_response, :user => @user)
           put :update, :family_survey_response => @attr_hash
-
           @updated_response = @user.family_survey_response.reload
         end
 
@@ -92,35 +85,7 @@ class ScreeningSurveys::FamiliesControllerTest < ActionController::TestCase
         should_respond_with :redirect
         should_redirect_to 'screening_surveys_path'
 
-        should "set the flash to the waitlist message" do
-          assert_equal flash[:warning], @updated_response.waitlist_message
-        end
-      end
-
-      context 'on PUT to update with valid and eligible options' do
-        setup do
-          @attr_hash = {
-            :birth_year => 1983,
-            :relatives_interested_in_pgp => '0',
-            :monozygotic_twin => 'no',
-            :child_situation => 'none'
-          }
-
-          put :update, :family_survey_response => @attr_hash
-
-          @updated_response = @user.family_survey_response.reload
-        end
-
-        should 'update the family_survey_response' do
-          @attr_hash.each do |key, value|
-            assert_equal value, @updated_response.send(key)
-          end
-        end
-
-        should_respond_with :redirect
-        should_redirect_to 'screening_surveys_path'
-
-        should_set_the_flash_to /passed/i
+        should_set_the_flash_to /continue/i
       end
 
       context 'on PUT to update with invalid options' do

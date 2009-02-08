@@ -7,11 +7,7 @@ class ScreeningSurveys::FamiliesController < ApplicationController
 
   def update
     if @family_survey_response.update_attributes(params[:family_survey_response])
-      if @family_survey_response.eligible?
-        flash[:notice] = 'You have passed the family consideration survey. Please proceed to the next survey.'
-      else
-        flash[:warning] = @family_survey_response.waitlist_message
-      end
+      flash[:notice] = 'You have completed the family consideration survey.  Please continue to the next survey.'
       redirect_to screening_surveys_path
     else
       render :action => 'edit'
