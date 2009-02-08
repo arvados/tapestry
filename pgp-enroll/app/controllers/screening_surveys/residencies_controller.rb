@@ -7,11 +7,7 @@ class ScreeningSurveys::ResidenciesController < ApplicationController
 
   def update
     if @residency_survey_response.update_attributes(params[:residency_survey_response])
-      if @residency_survey_response.eligible?
-        flash[:notice] = 'You have passed the residency survey successfully!  Please proceed to the next survey.'
-      else
-        flash[:warning] = @residency_survey_response.waitlist_message
-      end
+      flash[:notice] = 'You have completed the residency survey.  Please continue to the next survey.'
 
       redirect_to screening_surveys_path
     else
