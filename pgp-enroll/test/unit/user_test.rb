@@ -240,4 +240,18 @@ class UserTest < Test::Unit::TestCase
       end
     end
   end
+
+  context 'when sent #current_phase' do
+    setup do
+      @expected_phase = mock('expected phase')
+      PhaseCompletion.stubs(:phase_for).returns(@expected_phase)
+
+      @user = Factory(:user)
+      @phase = @user.current_phase
+    end
+
+    should 'return the value from PhaseCompletion.phase_for(self)' do
+      assert_equal @expected_phase, @phase
+    end
+  end
 end

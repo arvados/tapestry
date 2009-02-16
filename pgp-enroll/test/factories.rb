@@ -54,6 +54,11 @@ Factory.define(:enrollment_step_completion) do |f|
   f.enrollment_step { |e| e.association :enrollment_step }
 end
 
+Factory.define :phase_completion do |f|
+  f.user { |u| u.association :user }
+  f.phase 'screening'
+end
+
 Factory.sequence(:content_area_ordinal) { |n| n }
 Factory.define(:content_area) do |f|
   f.title       'Content Area Title'

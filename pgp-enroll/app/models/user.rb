@@ -116,6 +116,10 @@ class User < ActiveRecord::Base
     ContentArea.all.select { |content_area| content_area.completed_by?(self) }.size
   end
 
+  def current_phase
+    PhaseCompletion.phase_for(self)
+  end
+
   protected
 
   def make_activation_code
