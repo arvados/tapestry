@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090111175611) do
+ActiveRecord::Schema.define(:version => 20090216142448) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20090111175611) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "phase"
   end
 
   create_table "exam_questions", :force => true do |t|

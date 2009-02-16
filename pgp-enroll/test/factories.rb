@@ -30,6 +30,7 @@ Factory.define(:enrollment_step) do |f|
   f.ordinal     { Factory.next :enrollment_step_ordinal }
   f.title       { Factory.next :enrollment_step_title   }
   f.description { Factory.next :enrollment_step_description }
+  f.phase 'screening'
 end
 
 # Is there a better way?  These enrollment_step are necessary, and torn down before tests.
@@ -45,7 +46,7 @@ Factory(:enrollment_step,
 
 Factory(:enrollment_step,
         :keyword     => 'screening_surveys',
-        :title       => 'SScreening Surveys',
+        :title       => 'Screening Surveys',
         :description => 'Complete initial screening surveys')
 
 Factory.define(:enrollment_step_completion) do |f|
