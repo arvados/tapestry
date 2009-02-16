@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090216142448) do
+ActiveRecord::Schema.define(:version => 20090216143050) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -103,6 +103,15 @@ ActiveRecord::Schema.define(:version => 20090216142448) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "phase_completions", :force => true do |t|
+    t.string   "phase"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "phase_completions", ["user_id"], :name => "index_phase_completions_on_user_id"
 
   create_table "privacy_survey_responses", :force => true do |t|
     t.integer  "user_id"

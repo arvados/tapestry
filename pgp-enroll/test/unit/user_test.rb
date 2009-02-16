@@ -4,6 +4,7 @@ class UserTest < Test::Unit::TestCase
   should_have_many :enrollment_step_completions
   should_have_many :completed_enrollment_steps
   should_have_many :exam_responses
+  should_have_many :phase_completions
   should_have_one  :residency_survey_response
   should_have_one  :family_survey_response
   should_have_one  :privacy_survey_response
