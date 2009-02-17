@@ -14,7 +14,6 @@ class User < ActiveRecord::Base
   has_one  :privacy_survey_response
 
   # has_attached_file :phr
-  
 
   # temporarily removed requirement
   # attr_accessor :email_confirmation
