@@ -73,10 +73,10 @@ identity_confirmation:
   description: Identity Questionnaire
   phase: preenrollment
 
-submit_enrollment_application:
+enrollment_application:
   id: 10
   ordinal: 10
-  keyword: submit_enrollment_application
+  keyword: enrollment_application
   title: Submit Enrollment Application
   description: Submit Enrollment Application
   phase: preenrollment

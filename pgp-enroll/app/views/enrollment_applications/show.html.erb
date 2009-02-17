@@ -1,0 +1,14 @@
+<h2>Submit Enrollment Application</h2>
+
+<p>
+  Submit your enrollment application to the PGP,
+  including your signed consent to participate, personal health record,
+  financial pledge, and identity questionnaire.
+</p>
+
+<% form_for :enrollment_application do |f| %>
+  <p>In 200 words or less, tell us why you want to be a PGP participant.</p>
+  <p>TODO: Add essay text area</p>
+  <%= f.submit 'Apply to enroll' %>
+<% end %>
+
