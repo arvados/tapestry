@@ -36,6 +36,7 @@ consent_review:
 submit_screening:
   id: 4
   ordinal: 5
+  keyword: submit_screening
   title: Submit Eligibility Screening
   description: Submit Eligibility Screening
   phase: screening
