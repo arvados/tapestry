@@ -26,9 +26,15 @@ class PagesController < ApplicationController
 
   # TODO: Refactor
   def fetch_ivars
-    @steps            = EnrollmentStep.ordered
-    @step_completions = current_user ? current_user.enrollment_step_completions : []
-    @next_step        = current_user ? current_user.next_enrollment_step : []
+    if current_user
+      @steps            = EnrollmentStep.ordered.for_phase(current_user.current_phase)
+      @step_completions = current_user.enrollment_step_completions
+      @next_step        = current_user.next_enrollment_step
+    else
+      @steps            = []
+      @step_completions = []
+      @next_step        = nil
+    end
   end
 
 end

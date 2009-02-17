@@ -7,4 +7,6 @@ class EnrollmentStep < ActiveRecord::Base
 
   named_scope :ordered, { :order => 'ordinal' }
 
+  named_scope :for_phase, lambda { |phase| { :conditions => ['phase = ?', phase] } }
+
 end

@@ -25,4 +25,19 @@ class PagesControllerTest < ActionController::TestCase
     should_raise_exception ActionController::RoutingError
   end
 
+  logged_in_user_context do
+    context 'on GET to /pages/home' do
+      setup do
+        @enrollment_steps = [Factory(:enrollment_step)]
+        EnrollmentStep.expects(:ordered).at_least_once.returns(EnrollmentStep)
+        EnrollmentStep.expects(:for_phase).at_least_once.with('screening').returns(@enrollment_steps)
+        get :show, :id => 'home'
+      end
+
+      should "assign enrollment_steps for the correct phase" do
+        assert_equal @enrollment_steps, assigns(:steps)
+      end
+    end
+  end
+
 end
