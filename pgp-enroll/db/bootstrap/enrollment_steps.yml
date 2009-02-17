@@ -33,10 +33,10 @@ consent_review:
   description: View the consent form document and mark that you have read it.
   phase: screening
 
-submit_screening:
+screening_submission:
   id: 4
   ordinal: 5
-  keyword: submit_screening
+  keyword: screening_submission
   title: Submit Eligibility Screening
   description: Submit Eligibility Screening
   phase: screening

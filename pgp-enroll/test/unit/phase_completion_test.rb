@@ -3,6 +3,9 @@ require 'test_helper'
 class PhaseCompletionTest < ActiveSupport::TestCase
   should_belong_to :user
 
+  should_allow_values_for :phase, 'screening', 'preenrollment'
+  should_not_allow_values_for :phase, '', 'asdf'
+
   context 'when a user' do
     setup do
       @user = Factory(:user)

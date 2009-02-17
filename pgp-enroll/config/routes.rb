@@ -25,6 +25,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.resources :screening_surveys, :collection => { :complete => :post } 
   map.resource :consent_review
+  map.resource :screening_submission
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'

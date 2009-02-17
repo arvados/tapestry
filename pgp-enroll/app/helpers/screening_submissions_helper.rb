@@ -1,0 +1,2 @@
+module ScreeningSubmissionsHelper
+end
