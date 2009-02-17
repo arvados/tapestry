@@ -31,6 +31,7 @@ Rails::Initializer.run do |config|
   config.gem 'mocha'
   config.gem 'quietbacktrace', :version => '0.1.1'
   config.gem 'thoughtbot-shoulda', :version => '2.0.6', :lib => 'shoulda'
+  config.gem 'thoughtbot-paperclip', :version => '>=2.2.5', :lib => 'paperclip'
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
