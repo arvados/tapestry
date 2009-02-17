@@ -34,45 +34,13 @@ Factory.define(:enrollment_step) do |f|
 end
 
 # Is there a better way?  These enrollment_step are necessary, and torn down before tests.
-Factory(:enrollment_step,
-        :keyword     => 'signup',
-        :title       => 'Consent to take entrance exam',
-        :description => 'In this step, you sign up for an account and agree to the mini consent form.')
-
-Factory(:enrollment_step,
-        :keyword     => 'content_areas',
-        :title       => 'Entrance exam',
-        :description => 'In this step, you take an entrance exam which consists of three to four content areas.')
-
-Factory(:enrollment_step,
-        :keyword     => 'screening_surveys',
-        :title       => 'Screening Surveys',
-        :description => 'Complete initial screening surveys')
-
-Factory(:enrollment_step,
-        :keyword     => 'consent_review',
-        :title       => 'Review of PGP Consent Form',
-        :description => 'Review of PGP Consent Form')
-
-Factory(:enrollment_step,
-        :keyword     => 'screening_submission',
-        :title       => 'Submit Eligibility Screening',
-        :description => 'Submit Eligibility Screening')
-
-Factory(:enrollment_step,
-        :keyword     => 'participation_consent',
-        :title       => 'Participation Consent',
-        :description => 'Participation Consent')
-
-Factory(:enrollment_step,
-        :keyword     => 'trait_collection',
-        :title       => 'trait_collection',
-        :description => 'trait_collection')
-
-Factory(:enrollment_step,
-        :keyword     => 'pledge',
-        :title       => 'pledge',
-        :description => 'pledge')
+%w(signup content_areas screening_surveys consent_review screening_submission
+   participation_consent trait_collection pledge identity_confirmation).each do |step|
+  Factory(:enrollment_step,
+          :keyword     => step,
+          :title       => step,
+          :description => step)
+end
 
 Factory.define(:enrollment_step_completion) do |f|
   f.user            { |u| u.association :user }

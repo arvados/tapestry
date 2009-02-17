@@ -65,10 +65,10 @@ pledge:
   description: Make Financial Pledge
   phase: preenrollment
 
-identity_questionnaire:
+identity_confirmation:
   id: 9
   ordinal: 9
-  keyword: identity_questionnaire
+  keyword: identity_confirmation
   title: Identity Questionnaire
   description: Identity Questionnaire
   phase: preenrollment
