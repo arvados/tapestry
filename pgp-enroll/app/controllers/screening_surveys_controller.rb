@@ -7,7 +7,6 @@ class ScreeningSurveysController < ApplicationController
     @residency_survey_response = current_user.residency_survey_response
   end
 
-
   private
 
   def redirect_to_enrollment_steps_if_screening_surveys_complete
@@ -15,6 +14,5 @@ class ScreeningSurveysController < ApplicationController
       flash[:notice] = 'Completed screening surveys.'
       redirect_to root_path
     end
-
   end
 end
