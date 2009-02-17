@@ -69,6 +69,11 @@ Factory(:enrollment_step,
         :title       => 'trait_collection',
         :description => 'trait_collection')
 
+Factory(:enrollment_step,
+        :keyword     => 'pledge',
+        :title       => 'pledge',
+        :description => 'pledge')
+
 Factory.define(:enrollment_step_completion) do |f|
   f.user            { |u| u.association :user }
   f.enrollment_step { |e| e.association :enrollment_step }
