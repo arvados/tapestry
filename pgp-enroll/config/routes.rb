@@ -19,13 +19,13 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
 
-  map.resource :consent
   map.namespace :screening_surveys do |screening_surveys|
     screening_surveys.resource :residency, :family, :privacy
   end
   map.resources :screening_surveys, :collection => { :complete => :post } 
   map.resource :consent_review
   map.resource :screening_submission
+  map.resource :participation_consent
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'

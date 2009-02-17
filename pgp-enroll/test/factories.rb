@@ -59,6 +59,11 @@ Factory(:enrollment_step,
         :title       => 'Submit Eligibility Screening',
         :description => 'Submit Eligibility Screening')
 
+Factory(:enrollment_step,
+        :keyword     => 'participation_consent',
+        :title       => 'Participation Consent',
+        :description => 'Participation Consent')
+
 Factory.define(:enrollment_step_completion) do |f|
   f.user            { |u| u.association :user }
   f.enrollment_step { |e| e.association :enrollment_step }
