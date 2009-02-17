@@ -64,6 +64,11 @@ Factory(:enrollment_step,
         :title       => 'Participation Consent',
         :description => 'Participation Consent')
 
+Factory(:enrollment_step,
+        :keyword     => 'trait_collection',
+        :title       => 'trait_collection',
+        :description => 'trait_collection')
+
 Factory.define(:enrollment_step_completion) do |f|
   f.user            { |u| u.association :user }
   f.enrollment_step { |e| e.association :enrollment_step }

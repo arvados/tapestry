@@ -26,6 +26,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :consent_review
   map.resource :screening_submission
   map.resource :participation_consent
+  map.resource :trait_collection
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
