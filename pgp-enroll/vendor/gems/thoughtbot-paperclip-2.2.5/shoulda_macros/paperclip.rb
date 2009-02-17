@@ -12,6 +12,9 @@ module Paperclip
     # This will test whether you have defined your attachment correctly by
     # checking for all the required fields exist after the definition of the
     # attachment.
+
+    # include Paperclip::Shoulda::Matchers
+
     def should_have_attached_file name
       klass   = self.name.gsub(/Test$/, '').constantize
       matcher = have_attached_file name
@@ -63,6 +66,6 @@ module Paperclip
 end
 
 class Test::Unit::TestCase #:nodoc:
- extend  Paperclip::Shoulda
- include Paperclip::Shoulda::Matchers
+  extend Paperclip::Shoulda
+  extend Paperclip::Shoulda::Matchers
 end

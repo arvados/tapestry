@@ -9,7 +9,7 @@ class UserTest < Test::Unit::TestCase
   should_have_one  :family_survey_response
   should_have_one  :privacy_survey_response
 
-  # should_have_attached_file :phr
+  should_have_attached_file :phr
 
   context 'a user' do
     setup do
