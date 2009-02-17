@@ -49,6 +49,11 @@ Factory(:enrollment_step,
         :title       => 'Screening Surveys',
         :description => 'Complete initial screening surveys')
 
+Factory(:enrollment_step,
+        :keyword     => 'consent_review',
+        :title       => 'Review of PGP Consent Form',
+        :description => 'Review of PGP Consent Form')
+
 Factory.define(:enrollment_step_completion) do |f|
   f.user            { |u| u.association :user }
   f.enrollment_step { |e| e.association :enrollment_step }

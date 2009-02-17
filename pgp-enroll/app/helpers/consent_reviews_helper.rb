@@ -1,0 +1,2 @@
+module ConsentReviewsHelper
+end

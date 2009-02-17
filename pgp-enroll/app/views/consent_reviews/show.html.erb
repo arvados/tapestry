@@ -1,0 +1,17 @@
+<h2>Review of PGP Consent Form</h2>
+
+<p>
+  You must review the
+  <a href="http://arep.med.harvard.edu/PGP/Consent08/PG_Consent_15Apr2008.pdf">PGP consent form</a>
+  before continuing.
+</p>
+
+<% form_for :consent_review do |f| %>
+  <div class="input">
+    <%= f.check_box 'agreement' %>
+    <%= f.label 'agreement', "I have reviewed the PGP consent form." %>
+  </div>
+
+  <%= f.submit %>
+<% end %>
+
