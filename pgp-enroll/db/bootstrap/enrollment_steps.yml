@@ -60,9 +60,9 @@ trait_collection:
 pledge:
   id: 7
   ordinal: 8
-  keyword: trait_collection
-  title: Trait collection
-  description: Trait collection step.
+  keyword: pledge
+  title: Make Financial Pledge
+  description: Make Financial Pledge
   phase: preenrollment
 
 identity_questionnaire:
