@@ -44,10 +44,17 @@ class ScreeningSubmissionsControllerTest < ActionController::TestCase
 
     context "on POST to create with some ineligible screening surveys" do
       setup do
-        # TODO: Work here next
-
+        @family_survey_response = Factory(:ineligible_family_survey_response, :user => @user)
         post :create
       end
+
+      should_change "EnrollmentStepCompletion.count", :by => 1
+      should_not_change "PhaseCompletion.count"
+      should_not_change "@user.reload.current_phase"
+
+      should_redirect_to "root_path"
+
+      should_set_the_flash_to /thank you for your interest/i
     end
   end
 end
