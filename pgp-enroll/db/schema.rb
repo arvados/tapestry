@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090217182009) do
+ActiveRecord::Schema.define(:version => 20090218014244) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -165,6 +165,7 @@ ActiveRecord::Schema.define(:version => 20090217182009) do
     t.string   "phr_content_type"
     t.integer  "phr_file_size"
     t.datetime "phr_updated_at"
+    t.integer  "pledge"
   end
 
 end

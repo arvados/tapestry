@@ -22,15 +22,27 @@ class PledgesControllerTest < ActionController::TestCase
       should_render_template :show
 
       should "render a form to accept a pledge" do
-        assert_select 'form[method=?][action=?]', 'post', pledge_path
+        assert_select 'form[method=?][action=?]', 'post', pledge_path do
+          assert_select 'input[name=?]', 'pledge'
+        end
       end
     end
 
-    context "on POST to create" do
-      setup { post :create }
+    context "on POST to create with a valid pledge" do
+      setup { post :create, :pledge => '1000' }
 
       should_change 'EnrollmentStepCompletion.count', :by => 1
+      should_change '@user.reload.pledge', :to => 1000
       should_redirect_to 'root_path'
+    end
+
+    context "on POST to create with an invalid pledge" do
+      setup { post :create, :pledge => 'ASDF' }
+
+      should_not_change 'EnrollmentStepCompletion.count'
+      should_respond_with :success
+      should_render_template :show
+      should_set_the_flash_to /pledge/i
     end
   end
 end

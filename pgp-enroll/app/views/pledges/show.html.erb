@@ -3,7 +3,8 @@
 <p>Make your financial pledge for participation.</p>
 
 <% form_for :pledge do |f| %>
-  <p>TODO: Add a box that specifies an eventual pledge amount.</p>
+  <label for="pledge">Pledge: (USD, in even dollar amount, please) $</label>
+  <input type="text" name="pledge" value="<%=h params[:pledge] %>" id="pledge" />
   <%= f.submit 'Pledge' %>
 <% end %>
 
