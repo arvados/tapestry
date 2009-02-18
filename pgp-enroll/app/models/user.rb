@@ -56,7 +56,8 @@ class User < ActiveRecord::Base
   before_create :make_activation_code
   attr_accessible :email, :email_confirmation,
                   :password, :password_confirmation,
-                  :first_name, :middle_name, :last_name
+                  :first_name, :middle_name, :last_name,
+                  :address1, :address2, :city, :state, :zip
 
   # Activates the user in the database.
   def activate!
