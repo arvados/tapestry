@@ -66,8 +66,8 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
       assert @family_survey_response.respond_to?(:eligible?)
     end
 
-    context 'where the user is under 18' do
-      setup { @family_survey_response.birth_year = Time.now.year - 15 }
+    context 'where the user is under 21' do
+      setup { @family_survey_response.birth_year = Time.now.year - 19 }
       should_not_be_eligible
     end
 
@@ -76,7 +76,7 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
       should_not_be_eligible
     end
 
-    context 'who is over 18 and does not have a non-willing monozygotic twin' do
+    context 'who is over 21 and does not have a non-willing monozygotic twin' do
       should_be_eligible
     end
   end

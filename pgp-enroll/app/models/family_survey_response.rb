@@ -39,16 +39,16 @@ class FamilySurveyResponse < ActiveRecord::Base
 
   def eligible?
     maximum_age = Time.now.year - birth_year
-    possibly_under_18 = maximum_age < 18
+    possibly_under_21 = maximum_age < 21
     unwilling_monozygotic_twin = ( monozygotic_twin == 'unwilling' )
 
-    return !possibly_under_18 && !unwilling_monozygotic_twin
+    return !possibly_under_21 && !unwilling_monozygotic_twin
   end
 
   def waitlist_message
     <<-EOS
     Thank you for your interest in participating in the PGP.
-    We can currently only enroll individuals 18 or older,
+    We can currently only enroll individuals 21 or older,
     and any monozygotic twins must be willing to participate.
     EOS
   end
