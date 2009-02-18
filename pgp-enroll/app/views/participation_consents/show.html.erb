@@ -540,15 +540,20 @@ to my complete satisfaction.  </font></p>
 </font><font size="3" face="Times New Roman">I understand that by typing 
 my name and email address in the box below I am signing this form and 
 therefore am providing informed consent for this study.</font><font size="3" face="Arial"> <br>
-  <br>
-</font><font size="3" face="Times New Roman">Name: </font><font size="3" face="Arial"> <br>
-
- <br>
-</font><font size="3" face="Times New Roman">Email: </font><font size="3" face="Arial"> <br>
- <br>
 </font></p>
 
-
 <% form_for :participation_consent do |f| %>
+  <div class="inputs">
+    <%= f.label 'name' %>
+    <%= f.text_field 'name' %>
+    <span>(Must match &ldquo;<%= h current_user.full_name %>&rdquo;)</span>
+  </div>
+  <br/>
+  <div class="inputs">
+    <%= f.label 'email' %>
+    <%= f.text_field 'email' %>
+    <span>(Must match &ldquo;<%= h current_user.email %>&rdquo;)</span>
+  </div>
+  <br/>
   <%= f.submit %>
 <% end %>

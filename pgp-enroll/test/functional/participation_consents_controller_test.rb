@@ -26,8 +26,29 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
       end
     end
 
-    context "on POST to create" do
-      setup { post :create }
+    context "on POST to create with mismatched confirmation information" do
+      setup do
+        post :create, :participation_consent => {
+          :name  => 'mismatched-name',
+          :email => 'mismatched-email'
+        }
+      end
+
+      should_not_change 'EnrollmentStepCompletion.count'
+      should_respond_with :success
+      should_render_template :show
+
+      should_set_the_flash_to /name/i
+      should_set_the_flash_to /email/i
+    end
+
+    context "on POST to create with matched confirmation information" do
+      setup do
+        post :create, :participation_consent => {
+          :name  => @user.full_name,
+          :email => @user.email
+        }
+      end
 
       should_change 'EnrollmentStepCompletion.count', :by => 1
       should_redirect_to 'root_path'
