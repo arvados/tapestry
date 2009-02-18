@@ -3,7 +3,7 @@ class EnrollmentApplicationsController < ApplicationController
   end
 
   def create
-    if params[:essay].blank? || params[:essay].split(//).size > 200
+    if params[:essay].blank? || params[:essay].split.size > 200
       flash[:error] = "You must submit an essay less than 200 words."
       show
       render :action => 'show'

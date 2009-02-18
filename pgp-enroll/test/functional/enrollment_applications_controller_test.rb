@@ -29,9 +29,9 @@ class EnrollmentApplicationsControllerTest < ActionController::TestCase
     end
 
     context "on POST to create with a valid essay" do
-      setup { post :create, :essay => 'Essay text' }
+      setup { post :create, :essay => 'word ' * 200 }
 
-      should_change '@user.reload.enrollment_essay', :to => 'Essay text'
+      should_change '@user.reload.enrollment_essay', :to => 'word ' * 200
       should_change 'EnrollmentStepCompletion.count', :by => 1
       should_redirect_to 'root_path'
       should_set_the_flash_to /thank you/i
