@@ -43,7 +43,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
     end
 
     should_be_eligible
-    should_require_attributes :us_resident
+    should_validate_presence_of :us_resident
 
     context 'for a US resident' do
       setup { @residency_survey_response.us_resident = true }
@@ -51,7 +51,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
       context 'with a zip code' do
         setup { @residency_survey_response.zip = '12345' }
 
-        should_require_attributes :can_travel_to_boston
+        should_validate_presence_of :can_travel_to_boston
 
         context 'who can travel to boston' do
           setup { @residency_survey_response.can_travel_to_boston = true }
@@ -64,7 +64,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
         context 'who cannot travel to boston' do
           setup { @residency_survey_response.can_travel_to_boston = false }
 
-          should_require_attributes :contact_when_boston_travel_facilitated
+          should_validate_presence_of :contact_when_boston_travel_facilitated
 
           context 'and wants to hear when Boston travel is facilitated' do
             setup do
@@ -93,12 +93,12 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
       setup { @residency_survey_response.us_resident = false }
 
       should_not_be_eligible
-      should_require_attributes :country
+      should_validate_presence_of :country
 
       context 'who specifies their country' do
         setup { @residency_survey_response.country = 'Canada' }
 
-        should_require_attributes :contact_when_pgp_opens_outside_us
+        should_validate_presence_of :contact_when_pgp_opens_outside_us
 
         context 'who wants to be contacted for international pgp' do
           setup { @residency_survey_response.contact_when_pgp_opens_outside_us = true }

@@ -7,7 +7,7 @@ class ExamVersionTest < ActiveSupport::TestCase
     end
 
     should_belong_to :exam
-    should_require_attributes :title, :description, :ordinal
+    should_validate_presence_of :title, :description, :ordinal
     should_have_many :exam_questions
     should_have_many :exam_responses
 

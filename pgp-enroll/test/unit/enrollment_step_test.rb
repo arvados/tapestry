@@ -5,7 +5,7 @@ class EnrollmentStepTest < ActiveSupport::TestCase
     @enrollment_step = Factory :enrollment_step
   end
 
-  should_require_attributes :keyword, :ordinal, :title, :description
+  should_validate_presence_of :keyword, :ordinal, :title, :description
   should_have_many :enrollment_step_completions
   should_allow_values_for :phase, 'screening', 'preenrollment'
   should_have_many :completers

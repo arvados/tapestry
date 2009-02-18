@@ -8,7 +8,7 @@ class ContentAreaTest < ActiveSupport::TestCase
     end
 
     should_have_many :exams
-    should_require_attributes :title, :description
+    should_validate_presence_of :title, :description
 
     context 'with many published exams and a user' do
       setup do

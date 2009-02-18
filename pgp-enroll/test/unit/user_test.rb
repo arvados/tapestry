@@ -22,7 +22,7 @@ class UserTest < Test::Unit::TestCase
                       :password_confirmation => @password)
     end
 
-    should_require_attributes :first_name, :last_name, :email
+    should_validate_presence_of :first_name, :last_name, :email
     # should_allow_values_for ... maybe swap RESTful Auth for clearance,
     # so don't worry about this yet.
     should_allow_values_for :email, 'a@b.cc', 'test@harvard.edu', 'jason.p.morrison@gmail.com'
@@ -216,7 +216,7 @@ class UserTest < Test::Unit::TestCase
     end
   end
 
-  should_require_attributes :email, :password
+  should_validate_presence_of :email, :password
 
   should "require password confirmation" do
     assert_no_difference 'User.count' do

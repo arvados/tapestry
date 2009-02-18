@@ -28,7 +28,7 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
 
     should_belong_to :user
 
-    should_require_attributes :birth_year, :relatives_interested_in_pgp, :monozygotic_twin, :child_situation
+    should_validate_presence_of :birth_year, :relatives_interested_in_pgp, :monozygotic_twin, :child_situation
 
     should_allow_values_for     :birth_year, 1895, 1980, 1990, 2000, 2008, 2020
     should_not_allow_values_for :birth_year, -1, 1800, 1894, :message => 'must be answered'
