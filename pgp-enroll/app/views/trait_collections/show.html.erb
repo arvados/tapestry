@@ -6,7 +6,7 @@
   <a href="https://www.google.com/health">Google Health</a>.
 </p>
 
-<% form_for :trait_collection do |f| %>
-  <p>TODO: Add upload box</p>
+<% form_for :trait_collection, :html => { :multipart => true } do |f| %>
+  <input id="phr" name="phr" size="30" type="file" /> <br/>
   <%= f.submit 'Upload' %>
 <% end %>
