@@ -8,7 +8,8 @@
 
 <% form_for :enrollment_application do |f| %>
   <p>In 200 words or less, tell us why you want to be a PGP participant.</p>
-  <p>TODO: Add essay text area</p>
+  <textarea name="essay" style="width:100%; height:200px;"><%= params[:essay] %></textarea>
+  <br/>
   <%= f.submit 'Apply to enroll' %>
 <% end %>
 

@@ -22,16 +22,39 @@ class EnrollmentApplicationsControllerTest < ActionController::TestCase
       should_render_template :show
 
       should "render a form to apply for enrollment" do
-        assert_select 'form[method=?][action=?]', 'post', enrollment_application_path
+        assert_select 'form[method=?][action=?]', 'post', enrollment_application_path do
+          assert_select 'textarea[name=?]', 'essay'
+        end
       end
     end
 
-    context "on POST to create" do
-      setup { post :create }
+    context "on POST to create with a valid essay" do
+      setup { post :create, :essay => 'Essay text' }
 
+      should_change '@user.reload.enrollment_essay', :to => 'Essay text'
       should_change 'EnrollmentStepCompletion.count', :by => 1
       should_redirect_to 'root_path'
       should_set_the_flash_to /thank you/i
+    end
+
+    context "on POST to create with no essay" do
+      setup { post :create }
+
+      should_not_change 'EnrollmentStepCompletion.count'
+      should_respond_with :success
+      should_render_template :show
+
+      should_set_the_flash_to /essay/i
+    end
+
+    context "on POST to create with an essay that is too long" do
+      setup { post :create, :essay => "word " * 201 }
+
+      should_not_change 'EnrollmentStepCompletion.count'
+      should_respond_with :success
+      should_render_template :show
+
+      should_set_the_flash_to /200 words/i
     end
   end
 end

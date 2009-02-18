@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090218021450) do
+ActiveRecord::Schema.define(:version => 20090218024007) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(:version => 20090218021450) do
     t.string   "city"
     t.string   "state"
     t.string   "zip"
+    t.text     "enrollment_essay"
   end
 
 end
