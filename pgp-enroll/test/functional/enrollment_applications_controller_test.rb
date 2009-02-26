@@ -56,5 +56,15 @@ class EnrollmentApplicationsControllerTest < ActionController::TestCase
 
       should_set_the_flash_to /200 words/i
     end
+
+    context "on POST to create with an essay that is too short" do
+      setup { post :create, :essay => "word " * 19 }
+
+      should_not_change 'EnrollmentStepCompletion.count'
+      should_respond_with :success
+      should_render_template :show
+
+      should_set_the_flash_to /20&ndash;200 words/i
+    end
   end
 end
