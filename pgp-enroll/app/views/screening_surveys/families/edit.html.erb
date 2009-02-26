@@ -1,3 +1,21 @@
+<%= javascript_tag <<EOJS
+// TODO: Refactor somewhere?
+$('#family_survey_response_child_situation_none').click(toggleChildAgeQuestion);
+$('#family_survey_response_child_situation_never').click(toggleChildAgeQuestion);
+$('#family_survey_response_child_situation_some').click(toggleChildAgeQuestion);
+$(document).ready(toggleChildAgeQuestion);
+
+function toggleChildAgeQuestion() {
+  hasChildren = $('#family_survey_response_child_situation_some')[0].checked;
+  if (hasChildren) {
+    $('#question5').show('fast');
+  } else {
+    $('#question5').hide('fast');
+  }
+};
+EOJS
+%>
+
 <h2>Family Survey</h2>
 
 <% form_for @family_survey_response, :url => screening_surveys_family_path, :html => { :method => :put } do |f| -%>
