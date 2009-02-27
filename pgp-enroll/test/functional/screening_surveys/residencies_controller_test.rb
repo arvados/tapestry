@@ -48,13 +48,11 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
 
         should 'render a form for the residency_survey_response' do
           assert_select 'form[action=?]', screening_surveys_residency_path do
-            %w(country zip).each do |strfield|
-              assert_select 'input[type=text]', :name => /#{strfield}/
-            end
+            assert_select 'input[type=text][name=?]', 'residency_survey_response[zip]'
+            assert_select 'select[name=?]', 'residency_survey_response[country]'
 
             %w(us_resident can_travel_to_boston).each do |boolfield|
-              assert_select 'input[type=radio]', :name => /#{boolfield}_true/
-              assert_select 'input[type=radio]', :name => /#{boolfield}_false/
+              assert_select 'input[type=radio][name=?]', "residency_survey_response[#{boolfield}]"
             end
           end
         end
