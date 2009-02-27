@@ -1,12 +1,16 @@
 <%= javascript_tag <<EOJS
 // TODO: Refactor somewhere?
-$('#family_survey_response_child_situation_none').click(toggleChildAgeQuestion);
-$('#family_survey_response_child_situation_never').click(toggleChildAgeQuestion);
-$('#family_survey_response_child_situation_some').click(toggleChildAgeQuestion);
-$(document).ready(toggleChildAgeQuestion);
+$(document).ready(function() {
+  $('#family_survey_response_child_situation_none').click(toggleChildAgeQuestion);
+  $('#family_survey_response_child_situation_never').click(toggleChildAgeQuestion);
+  $('#family_survey_response_child_situation_some').click(toggleChildAgeQuestion);
+  toggleChildAgeQuestion();
+}
+);
 
 function toggleChildAgeQuestion() {
   hasChildren = $('#family_survey_response_child_situation_some')[0].checked;
+alert('yo');
   if (hasChildren) {
     $('#question5').show('fast');
   } else {
