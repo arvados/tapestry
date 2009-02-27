@@ -50,11 +50,17 @@ class ScreeningSurveys::FamiliesControllerTest < ActionController::TestCase
           assert_select 'form[action=?]', screening_surveys_family_path do
             assert_select 'select[name=?]', "family_survey_response[birth_year]" do
               (1895..Time.now.year).each do |year|
-                  assert_select 'option[value=?]', year
+                assert_select 'option[value=?]', year
               end
+              assert_select 'option[value=?]', ''
             end
 
-            assert_select 'input[type=text][name=?]', "family_survey_response[youngest_child_age]"
+            assert_select 'select[name=?]', "family_survey_response[youngest_child_birth_year]" do
+              (1895..Time.now.year).each do |year|
+                assert_select 'option[value=?]', year
+              end
+              assert_select 'option[value=?]', ''
+            end
 
             assert_select 'select[name=?]', 'family_survey_response[relatives_interested_in_pgp]' do
               FamilySurveyResponse::RELATIVES_INTERESTED_IN_PGP_VALUES.each do |value|
@@ -97,7 +103,7 @@ class ScreeningSurveys::FamiliesControllerTest < ActionController::TestCase
         setup do
           @invalid_attr_hash = {
              :monozygotic_twin => nil,
-             :youngest_child_age => nil
+             :youngest_child_birth_year => nil
           }
 
           put :update, :family_survey_response => @invalid_attr_hash

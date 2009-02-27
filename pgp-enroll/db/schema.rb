@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090227131733) do
+ActiveRecord::Schema.define(:version => 20090227135141) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(:version => 20090227131733) do
     t.string   "relatives_interested_in_pgp"
     t.string   "monozygotic_twin"
     t.string   "child_situation"
-    t.integer  "youngest_child_age"
+    t.integer  "youngest_child_birth_year"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

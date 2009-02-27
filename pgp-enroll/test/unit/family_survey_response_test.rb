@@ -42,13 +42,13 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
     should_allow_values_for     :child_situation, 'some', 'none', 'never'
     should_not_allow_values_for :child_situation, 1, 'yes', :message => 'must be answered'
 
-    should_allow_values_for     :youngest_child_age, nil, '', 0, 1, 2, 100
-    should_not_allow_values_for :youngest_child_age, -1, :message => 'must be answered'
+    should_allow_values_for     :youngest_child_birth_year, nil, '', 1985, 2000, 2008, 2020
+    should_not_allow_values_for :youngest_child_birth_year, -1, :message => 'must be filled out if you have children'
 
     context 'that indicated having children currently and did not specify youngest_child_age' do
       setup do
         @family_survey_response.child_situation = 'some'
-        @family_survey_response.youngest_child_age = nil
+        @family_survey_response.youngest_child_birth_year = nil
       end
 
       should 'not be valid' do
@@ -58,7 +58,7 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
       should 'give an appropriate error message' do
         @family_survey_response.valid?
         assert_equal 'must be filled out if you have children.',
-                      @family_survey_response.errors.on(:youngest_child_age)
+                      @family_survey_response.errors.on(:youngest_child_birth_year)
       end
     end
 

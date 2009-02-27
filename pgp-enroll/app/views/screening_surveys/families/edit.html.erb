@@ -34,7 +34,7 @@ EOJS
 
 <p class="question" id="question1">
   <%= f.label :birth_year, '1.) What year were you born?' %><br/>
-  <%= f.select :birth_year, (1895..Time.now.year).to_a.reverse %>
+  <%= f.select :birth_year, (1895..Time.now.year).to_a.reverse, :include_blank => true  %>
 </p>
 
 <p class="question" id="question2">
@@ -63,8 +63,8 @@ EOJS
 </p>
 
 <p class="question" id="question5">
-  <%= f.label :youngest_child_age, '5.) What is the age of your youngest child?' %><br/>
-  <%= f.text_field :youngest_child_age %>
+  <%= f.label :youngest_child_birth_year, '5.) What is the birth year of your youngest child?' %><br/>
+  <%= f.select :youngest_child_birth_year, (1895..Time.now.year).to_a.reverse, :include_blank => true %>
 </p>
 
 <p><%= submit_tag 'Save' %></p>

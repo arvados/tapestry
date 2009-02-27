@@ -33,9 +33,9 @@ class FamilySurveyResponse < ActiveRecord::Base
   validates_inclusion_of :relatives_interested_in_pgp, :in => RELATIVES_INTERESTED_IN_PGP_VALUES,  :message => 'must be answered'
   validates_inclusion_of :monozygotic_twin,            :in => MONOZYGOTIC_TWIN_OPTIONS.values,     :message => 'must be answered'
   validates_inclusion_of :child_situation,             :in => CHILD_SITUATION_OPTIONS.values,      :message => 'must be answered'
-  validates_inclusion_of :youngest_child_age,          :in => 0..100, :if => :youngest_child_age?, :message => 'must be answered'
+  validates_inclusion_of :youngest_child_birth_year,   :in => 1895..3000, :if => :youngest_child_birth_year?, :message => 'must be filled out if you have children'
 
-  validate :youngest_child_age_required_if_you_have_children
+  validate :youngest_child_birth_year_required_if_you_have_children
 
   def eligible?
     maximum_age = Time.now.year - birth_year
@@ -55,9 +55,9 @@ class FamilySurveyResponse < ActiveRecord::Base
 
   private
 
-  def youngest_child_age_required_if_you_have_children
-    if self.child_situation == 'some' && self.youngest_child_age.nil?
-      errors.add(:youngest_child_age, "must be filled out if you have children.")
+  def youngest_child_birth_year_required_if_you_have_children
+    if self.child_situation == 'some' && self.youngest_child_birth_year.nil?
+      errors.add(:youngest_child_birth_year, "must be filled out if you have children.")
     end
   end
 
