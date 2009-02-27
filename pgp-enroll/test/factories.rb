@@ -130,7 +130,6 @@ Factory.define :ineligible_residency_survey_response, :class => ResidencySurveyR
   f.user { |u| u.association :user }
   f.us_resident false
   f.country 'Canada'
-  f.contact_when_pgp_opens_outside_us false
   f.can_travel_to_boston false
 end
 

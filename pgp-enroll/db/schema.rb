@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090218033714) do
+ActiveRecord::Schema.define(:version => 20090227131733) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -141,10 +141,8 @@ ActiveRecord::Schema.define(:version => 20090218033714) do
     t.integer  "user_id"
     t.boolean  "us_resident"
     t.string   "country"
-    t.boolean  "contact_when_pgp_opens_outside_us"
     t.string   "zip"
     t.boolean  "can_travel_to_boston"
-    t.boolean  "contact_when_boston_travel_facilitated"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

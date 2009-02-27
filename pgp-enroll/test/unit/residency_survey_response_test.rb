@@ -64,27 +64,9 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
         context 'who cannot travel to boston' do
           setup { @residency_survey_response.can_travel_to_boston = false }
 
-          should_validate_presence_of :contact_when_boston_travel_facilitated
-
-          context 'and wants to hear when Boston travel is facilitated' do
-            setup do
-              @residency_survey_response.contact_when_boston_travel_facilitated = true
-            end
-
-            should_be_valid
-            should_not_be_eligible
-            should_have_waitlist_message %r{will contact you when}i
-          end
-
-          context 'and does not want to know when Boston travel is facilitated' do
-            setup do
-              @residency_survey_response.contact_when_boston_travel_facilitated = false
-            end
-
-            should_be_valid
-            should_not_be_eligible
-            should_have_waitlist_message %r{thank you for your interest}i
-          end
+          should_be_valid
+          should_not_be_eligible
+          should_have_waitlist_message %r{thank you for your interest}i
         end
       end
     end
@@ -98,23 +80,9 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
       context 'who specifies their country' do
         setup { @residency_survey_response.country = 'Canada' }
 
-        should_validate_presence_of :contact_when_pgp_opens_outside_us
-
-        context 'who wants to be contacted for international pgp' do
-          setup { @residency_survey_response.contact_when_pgp_opens_outside_us = true }
-
-          should_be_valid
-          should_not_be_eligible
-          should_have_waitlist_message %r{will contact you when}i
-        end
-
-        context 'who does not want to be contacted for international pgp' do
-          setup { @residency_survey_response.contact_when_pgp_opens_outside_us = false }
-
-          should_be_valid
-          should_not_be_eligible
-          should_have_waitlist_message %r{thank you for your interest}i
-        end
+        should_be_valid
+        should_not_be_eligible
+        should_have_waitlist_message %r{thank you for your interest}i
       end
     end
   end

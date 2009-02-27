@@ -52,8 +52,7 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
               assert_select 'input[type=text]', :name => /#{strfield}/
             end
 
-            %w(us_resident contact_when_pgp_opens_outside_us can_travel_to_boston
-               contact_when_boston_travel_facilitated).each do |boolfield|
+            %w(us_resident can_travel_to_boston).each do |boolfield|
               assert_select 'input[type=radio]', :name => /#{boolfield}_true/
               assert_select 'input[type=radio]', :name => /#{boolfield}_false/
             end
