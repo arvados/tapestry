@@ -31,7 +31,7 @@ EOJS
 
 <p class="question" id="question1">
   <%= f.label :birth_year, '1.) What year were you born?' %><br/>
-  <%= f.select :birth_year, (1895..Time.now.year-20).to_a.reverse %>
+  <%= f.select :birth_year, (1895..Time.now.year).to_a.reverse %>
 </p>
 
 <p class="question" id="question2">

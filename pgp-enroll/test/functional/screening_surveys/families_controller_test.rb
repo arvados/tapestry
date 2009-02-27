@@ -49,7 +49,7 @@ class ScreeningSurveys::FamiliesControllerTest < ActionController::TestCase
         should 'render a form for the family_survey_response' do
           assert_select 'form[action=?]', screening_surveys_family_path do
             assert_select 'select[name=?]', "family_survey_response[birth_year]" do
-              (1895..Time.now.year-20).each do |year|
+              (1895..Time.now.year).each do |year|
                   assert_select 'option[value=?]', year
               end
             end
