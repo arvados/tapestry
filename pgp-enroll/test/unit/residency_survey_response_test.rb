@@ -48,6 +48,18 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
     context 'for a US resident' do
       setup { @residency_survey_response.us_resident = true }
 
+      should 'require the zip code to be 5 digits long' do
+        @residency_survey_response.zip = '1234'
+        assert ! @residency_survey_response.valid?
+        assert @residency_survey_response.errors.on(:zip)
+      end
+
+      should 'require the zip code to be numerical digits' do
+        @residency_survey_response.zip = 'abcde'
+        assert ! @residency_survey_response.valid?
+        assert @residency_survey_response.errors.on(:zip)
+      end
+
       context 'with a zip code' do
         setup { @residency_survey_response.zip = '12345' }
 
@@ -79,6 +91,12 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
 
       context 'who specifies their country' do
         setup { @residency_survey_response.country = 'Canada' }
+
+        should 'allow a blank zip code' do
+          assert @residency_survey_response.valid?
+          @residency_survey_response.zip = ''
+          assert @residency_survey_response.valid?
+        end
 
         should_be_valid
         should_not_be_eligible

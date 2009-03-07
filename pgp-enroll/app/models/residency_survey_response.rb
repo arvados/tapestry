@@ -1,5 +1,7 @@
 class ResidencySurveyResponse < ActiveRecord::Base
   after_save :complete_enrollment_step
+  validate :zip_is_5_characters_if_us_resident
+
   def complete_enrollment_step
     user = self.user.reload
     if user.residency_survey_response &&
@@ -41,6 +43,14 @@ class ResidencySurveyResponse < ActiveRecord::Base
   end
 
   private
+
+  def zip_is_5_characters_if_us_resident
+    if us_resident
+      unless zip =~ /\d{5}/
+        errors.add(:zip, 'must be 5 numeric digits')
+      end
+    end
+  end
 
   def require_attribute(attribute, message = "can't be blank")
     value = self.send(attribute)
