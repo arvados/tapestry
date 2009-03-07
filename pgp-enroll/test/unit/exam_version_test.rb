@@ -154,5 +154,17 @@ class ExamVersionTest < ActiveSupport::TestCase
     end
   end
 
+  context 'an exam version with questions whose ordinals are out of order' do
+    setup do
+      @version = Factory(:exam_version)
+      Factory(:exam_question, :exam_version => @version, :ordinal => 2)
+      Factory(:exam_question, :exam_version => @version, :ordinal => 1)
+      Factory(:exam_question, :exam_version => @version, :ordinal => 3)
+    end
+
+    should "return questions ordered by ordinal when sent #exam_questions" do
+      assert_equal [1,2,3], @version.exam_questions.map(&:ordinal)
+    end
+  end
 
 end
