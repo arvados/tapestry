@@ -22,7 +22,7 @@ class FamilySurveyResponse < ActiveRecord::Base
   CHILD_SITUATION_OPTIONS = {
     'I have one or more children.'                                                                      => 'some',
     'I do not currently have children, but I plan to have children or may have children in the future.' => 'none',
-    'I do not currently have children or I do not plan to have children.'                               => 'never'
+    'I do not currently have children and I do not plan to have children.'                               => 'never'
   }
 
   belongs_to :user
