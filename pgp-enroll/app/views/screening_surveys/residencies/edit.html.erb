@@ -18,7 +18,7 @@ $(document).ready(function() {
 });
 
 function toggleResidencyQuestions() {
-  isUSResident = $('#residency_survey_response_us_resident_true')[0].checked;
+  isUSResident = !$('#residency_survey_response_us_resident_false')[0].checked;
   if (isUSResident) {
     $('#question2').hide('fast');
     $('#question4').show('fast');
