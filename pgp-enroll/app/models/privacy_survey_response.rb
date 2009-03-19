@@ -1,5 +1,6 @@
 class PrivacySurveyResponse < ActiveRecord::Base
   after_save :complete_enrollment_step
+  attr_protected :user_id
   def complete_enrollment_step
     user = self.user.reload
     if user.residency_survey_response &&

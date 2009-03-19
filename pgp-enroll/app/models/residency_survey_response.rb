@@ -1,6 +1,7 @@
 class ResidencySurveyResponse < ActiveRecord::Base
   after_save :complete_enrollment_step
   validate :zip_is_5_characters_if_us_resident
+  attr_protected :user_id
 
   def complete_enrollment_step
     user = self.user.reload

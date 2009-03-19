@@ -28,6 +28,8 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
 
     should_belong_to :user
 
+    should_protect_attributes :user_id
+
     should_validate_presence_of :birth_year, :relatives_interested_in_pgp, :monozygotic_twin, :child_situation
 
     should_allow_values_for     :birth_year, 1895, 1980, 1990, 2000, 2008, 2020
