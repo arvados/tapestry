@@ -148,3 +148,7 @@ Factory.define :ineligible_privacy_survey_response, :class => PrivacySurveyRespo
   f.past_genetic_test_participation 'no'
 end
 
+
+Factory.define :informed_consent_response do |f|
+  f.user { |u| u.association :user }
+end

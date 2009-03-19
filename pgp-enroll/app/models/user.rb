@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_one  :residency_survey_response
   has_one  :family_survey_response
   has_one  :privacy_survey_response
+  has_one  :informed_consent_response
 
   has_attached_file :phr
 

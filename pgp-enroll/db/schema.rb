@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090227135141) do
+ActiveRecord::Schema.define(:version => 20090319012357) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -105,6 +105,15 @@ ActiveRecord::Schema.define(:version => 20090227135141) do
   end
 
   add_index "family_survey_responses", ["user_id"], :name => "index_family_survey_responses_on_user_id"
+
+  create_table "informed_consent_responses", :force => true do |t|
+    t.boolean  "twin",       :default => false, :null => false
+    t.boolean  "biopsy",     :default => false, :null => false
+    t.boolean  "recontact",  :default => false, :null => false
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "phase_completions", :force => true do |t|
     t.string   "phase"

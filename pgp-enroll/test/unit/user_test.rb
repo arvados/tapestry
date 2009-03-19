@@ -8,6 +8,7 @@ class UserTest < Test::Unit::TestCase
   should_have_one  :residency_survey_response
   should_have_one  :family_survey_response
   should_have_one  :privacy_survey_response
+  should_have_one  :informed_consent_response
 
   should_have_attached_file :phr
 
