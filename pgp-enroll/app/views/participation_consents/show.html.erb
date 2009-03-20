@@ -1,5 +1,7 @@
 <h2>Consent Form</h2>
 
+<% form_for :informed_consent_response, :url => participation_consent_path do |f| %>
+<%= error_messages_for :informed_consent_response %>
 <table border="1" cellspacing="0" cellpadding="2">
   <tr>
     <td width="468" valign="top"><br />
@@ -62,7 +64,17 @@ You have been invited to participate because you are an individual 21 years of a
 <p><strong>4. MONOZYGOTIC TWIN</strong><br />
 4.1 If you have any living siblings who are your identical (monozygotic) twin, such sibling(s) will need to provide consent for your participation in this research study before the PGP will consider you for enrollment.</p>
 
-<div><p>INSERT FORM ELEMENT</p></div>
+<P>ERRORS: <%= error_message_on :informed_consent_response, :twin %></P>
+<%= error_messages_for :informed_consent_response %>
+<div class="consent-form-question"> <p>
+
+<%= f.radio_button :twin, "true" %>
+<label for="informed_consent_response_twin_true">Yes</label>
+
+<%= f.radio_button :twin, "false" %>
+<label for="informed_consent_response_twin_false">No</label>
+
+</p> </div>
 
 <p><strong>5. APPLICATION FOR ENROLLMENT</strong><br />
 5.1 After submitting your trait information, specifying your pledge, completing your identity verification and completing any other applicable pre-enrollment activities, your application for enrollment will be considered by the PGP.<br />
@@ -87,7 +99,16 @@ You have been invited to participate because you are an individual 21 years of a
 
 <div>
 a. The PGP will also notify you at this time whether tissue specimens will be collected during your visit.&nbsp; You may request to be enrolled without undergoing a skin biopsy procedure by marking NO below. <br />
-<div><p>INSERT FORM ELEMENT</p></div>
+
+<div class="consent-form-question"> <p>
+
+<%= f.radio_button :biopsy, "true" %>
+<label for="informed_consent_response_biopsy_true">Yes</label>
+
+<%= f.radio_button :biopsy, "false" %>
+<label for="informed_consent_response_biopsy_false">No</label>
+
+</p> </div>
 
 b. Please review the locations of participating medical centers because they may be located a long distance from your home and the PGP will not reimburse you for any costs you may incur traveling to or from the medical center.&nbsp; A list of participating medical centers may be found on the PGP website.<br />
 
@@ -164,7 +185,15 @@ c. Examples of other Reports similar to what you may receive as an enrollee are 
 1.1 Other than the Safety Questionnaires described below, you are under no obligation to receive study notices or participate after providing the tissue samples and exchange of the information outlined above.&nbsp; If you choose YES to the question below, you may be contacted by the PGP at a future date and asked if you would like to voluntarily submit additional tissue specimens and/or trait or other information and/or participate in research studies or other activities coordinated by the PGP.&nbsp; You may change your choice on this option at any time by notifying the PGP in writing.
 </p>
 
-<div><p>INSERT FORM ELEMENT</p></div>
+<div class="consent-form-question"> <p>
+
+<%= f.radio_button :recontact, "true" %>
+<label for="informed_consent_response_recontact_true">Yes</label>
+
+<%= f.radio_button :recontact, "false" %>
+<label for="informed_consent_response_recontact_false">No</label>
+
+</p> </div>
 
 <p><strong>2. ADDITIONAL TRAIT COLLECTION</strong> <strong></strong><br />
 2.1 Additional personal and trait information may be requested by the PGP and submitted by you on a voluntary basis.&nbsp; Any additional information disclosed by you may be made publicly available by the PGP via the public website and database without your additional consent.
@@ -328,18 +357,19 @@ b. If you decide to withdraw from participation and request that the PGP remove 
 <p>I understand that by typing my name and email address in the box below I am signing this informed consent form, I am acknowledging and agreeing to all of the terms and conditions of participation set forth above, and I am providing my informed consent to participate in the PGP.
 </p>
 
-<% form_for :participation_consent do |f| %>
-  <div class="inputs">
-    <%= f.label 'name' %>
-    <%= f.text_field 'name' %>
-    <span>(Must match &ldquo;<%= h current_user.full_name %>&rdquo;)</span>
-  </div>
-  <br/>
-  <div class="inputs">
-    <%= f.label 'email' %>
-    <%= f.text_field 'email' %>
-    <span>(Must match &ldquo;<%= h current_user.email %>&rdquo;)</span>
-  </div>
-  <br/>
+  <% fields_for :participation_consent do |pcf| %>
+    <div class="inputs">
+      <%= pcf.label 'name' %>
+      <%= pcf.text_field 'name' %>
+      <span>(Must match &ldquo;<%= h current_user.full_name %>&rdquo;)</span>
+    </div>
+    <br/>
+    <div class="inputs">
+      <%= pcf.label 'email' %>
+      <%= pcf.text_field 'email' %>
+      <span>(Must match &ldquo;<%= h current_user.email %>&rdquo;)</span>
+    </div>
+    <br/>
+  <% end %>
   <%= f.submit %>
 <% end %>
