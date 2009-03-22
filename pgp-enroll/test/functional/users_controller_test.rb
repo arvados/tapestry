@@ -98,7 +98,7 @@ class UsersControllerTest < Test::Unit::TestCase
     end
 
     should_respond_with :redirect
-    should_redirect_to 'root_url'
+    should_redirect_to 'login_url'
     should_change 'User.count', :by => 1
   end
 

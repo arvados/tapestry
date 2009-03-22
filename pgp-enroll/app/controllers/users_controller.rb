@@ -38,7 +38,7 @@ class UsersController < ApplicationController
     success = @user && verify_recaptcha(@user) && @user.save
 
     if success && @user.errors.empty?
-      redirect_to root_url
+      redirect_to login_url
       flash[:notice] = "Your account has been created. You will need to activate this account before proceeding. In the next few minutes, you will receive an email containing an activation link. Please check your email."
     else
       flash[:error]  = "Please double-check your signup information below."
