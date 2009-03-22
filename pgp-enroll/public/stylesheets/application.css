@@ -624,9 +624,11 @@ div.flash.error {
   border-color: #800;
 }
 
+/*
 label {
   font-weight: bold;
 }
+*/
 
 div.fieldWithErrors, div.fieldWithErrors label {
   display: inline;
