@@ -44,7 +44,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
 
     should_be_eligible
     should_validate_presence_of :us_resident
-    should_protect_attributes :user_id
+    should_not_allow_mass_assignment_of :user_id
 
     context 'for a US resident' do
       setup { @residency_survey_response.us_resident = true }

@@ -28,7 +28,7 @@ class PrivacySurveyResponseTest < ActiveSupport::TestCase
 
     should_belong_to :user
 
-    should_protect_attributes :user_id
+    should_not_allow_mass_assignment_of :user_id
 
     should_allow_values_for     :worrisome_information_comfort_level, 'understand', 'uncomfortable', 'unsure', 'always', 'depends'
     should_not_allow_values_for :worrisome_information_comfort_level, nil, '', 'asdf', :message => 'must be answered'

@@ -17,6 +17,6 @@ class InformedConsentResponseTest < ActiveSupport::TestCase
     should_not_allow_values_for :biopsy, nil, :message => 'must be Yes or No'
     should_not_allow_values_for :recontact, nil, :message => 'must be Yes or No'
 
-    should_protect_attributes :user_id
+    should_not_allow_mass_assignment_of :user_id
   end
 end
