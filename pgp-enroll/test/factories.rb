@@ -152,3 +152,7 @@ end
 Factory.define :informed_consent_response do |f|
   f.user { |u| u.association :user }
 end
+
+Factory.define :invited_email do |f|
+  f.email { Factory.next :email }
+end

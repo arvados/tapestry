@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090319032509) do
+ActiveRecord::Schema.define(:version => 20090324005831) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -111,6 +111,13 @@ ActiveRecord::Schema.define(:version => 20090319032509) do
     t.boolean  "biopsy",     :default => false, :null => false
     t.boolean  "recontact",  :default => false, :null => false
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "invited_emails", :force => true do |t|
+    t.string   "email"
+    t.datetime "accepted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
