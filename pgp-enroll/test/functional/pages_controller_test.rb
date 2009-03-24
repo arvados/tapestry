@@ -25,6 +25,14 @@ class PagesControllerTest < ActionController::TestCase
     should_raise_exception ActionController::RoutingError
   end
 
+  context 'on GET to /pages/home for a not-logged-in user' do
+    setup do
+      get :show, :id => 'home'
+    end
+
+    should_eventually "render a form that POSTs to /accepted_invites#create"
+  end
+
   logged_in_user_context do
     context 'on GET to /pages/home' do
       setup do

@@ -1,0 +1,2 @@
+module AcceptedInvitesHelper
+end

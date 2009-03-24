@@ -11,6 +11,8 @@ ActionController::Routing::Routes.draw do |map|
   map.register '/register',       :controller => 'users',    :action => 'create'
   map.activate '/activate/:code', :controller => 'users',    :action => 'activate'
 
+  map.resources :accepted_invites
+
   map.resources :content_areas do |content_area|
     # /content_areas/:content_area_id/exams/:id will show _a version of_ that exam;
     # particularly, exam.version_for(current_user)
