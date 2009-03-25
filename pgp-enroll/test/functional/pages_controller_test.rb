@@ -30,7 +30,12 @@ class PagesControllerTest < ActionController::TestCase
       get :show, :id => 'home'
     end
 
-    should_eventually "render a form that POSTs to /accepted_invites#create"
+    should "render a form that POSTs to /accepted_invites#create" do
+      assert_select 'form[method=post][action=?]', accepted_invites_path do
+        assert_select 'input[type=text][name=?]', 'email'
+        assert_select 'input[type=submit]'
+      end
+    end
   end
 
   logged_in_user_context do
@@ -44,6 +49,10 @@ class PagesControllerTest < ActionController::TestCase
 
       should "assign enrollment_steps for the correct phase" do
         assert_equal @enrollment_steps, assigns(:steps)
+      end
+
+      should "not render a form to accept an invite" do
+        assert_select 'form[method=post][action=?]', accepted_invites_path, :count => 0
       end
     end
   end

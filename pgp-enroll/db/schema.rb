@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090324005831) do
+ActiveRecord::Schema.define(:version => 20090325025809) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
