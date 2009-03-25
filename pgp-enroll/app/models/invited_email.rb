@@ -4,4 +4,6 @@ class InvitedEmail < ActiveRecord::Base
   def accept!
     update_attributes!({:accepted_at => Time.now})
   end
+
+  named_scope :accepted, { :conditions => ['accepted_at is not null'] }
 end
