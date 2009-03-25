@@ -48,6 +48,7 @@ ActionController::Routing::Routes.draw do |map|
         end
       end
     end
+    admin.resources :invited_emails
   end
 
   map.connect ':controller/:action/:id'

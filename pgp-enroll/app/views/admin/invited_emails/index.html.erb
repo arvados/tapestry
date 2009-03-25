@@ -1,0 +1,33 @@
+<h2>Invited Emails</h2>
+
+<h3>
+  Invited Emails: <%= @invited_emails.size %>
+</h3>
+
+<h3>
+  Accepted Emails: <%= @number_of_accepted_emails %>
+</h3>
+<p>(This number of people have entered their email address on the frontpage, but have not necessarily signed up.)</p>
+
+<p>
+  <%= link_to 'Invite more people', new_admin_invited_email_path %>
+</p>
+
+<p>Users in the list of invited email addresses are able to sign up:</p>
+
+<table class="admin_table">
+  <tr>
+    <th>ID</th>
+    <th>Email</th>
+    <th>Invited On</th>
+    <th>Accepted On</th>
+  </tr>
+  <% @invited_emails.each do |invited_email| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=  invited_email.id %></td>
+      <td><%=h invited_email.email %></td>
+      <td><%=  invited_email.created_at.to_s %></td>
+      <td><%=  invited_email.accepted_at ? invited_email.accepted_at.to_s : 'Not yet' %></td>
+    </tr>
+  <% end %>
+</table>

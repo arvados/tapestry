@@ -32,6 +32,7 @@ class Admin::HomesControllerTest < ActionController::TestCase
         assert_select 'div.main>ul>li', /Users/
         assert_select 'div.main>ul>li', /Exams/
         assert_select 'div.main>ul>li', /Reports/
+        assert_select 'div.main>ul>li', /Invited Email Addresses/
       end
     end
   end
