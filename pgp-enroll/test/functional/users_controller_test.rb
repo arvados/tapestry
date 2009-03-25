@@ -12,9 +12,34 @@ class UsersControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
-  context 'on GET to new' do
+  context "on GET to new without an invite" do
+    setup { get :new, {}, { :invited => false } }
+    should_redirect_to("root_url")
+    should_set_the_flash_to /You must enter an invited email address to sign up./i
+  end
+
+  context "on GET to new2 without an invite" do
+    setup { get :new2, {}, { :invited => false } }
+    should_redirect_to("root_url")
+    should_set_the_flash_to /You must enter an invited email address to sign up./i
+  end
+
+  context "on POST to create without an invite" do
+    setup { post :create, {}, { :invited => false } }
+    should_redirect_to("root_url")
+    should_set_the_flash_to /You must enter an invited email address to sign up./i
+  end
+
+  context "on GET activate without an invite" do
+    setup { get :activate, {}, { :invited => false } }
+    should "not require an invite" do
+      assert_no_match /invited/, flash[:error] 
+    end
+  end
+
+  context 'on GET to new when invited' do
     setup do
-      get :new
+      get :new, {}, { :invited => true }
     end
 
     should 'render the signup page 1 form' do
@@ -27,28 +52,32 @@ class UsersControllerTest < Test::Unit::TestCase
     end
   end
 
-  context 'on GET to new2 with bad values' do
+  context 'on GET to new2 with bad values when invited' do
     setup do
-      get :new2, :user => {
-        :first_name  => 'First',
-        :middle_name => 'M',
-        :last_name   => nil,
-        :email       => 'bademail'
-      }
+      get :new2, {
+        :user => {
+          :first_name  => 'First',
+          :middle_name => 'M',
+          :last_name   => nil,
+          :email       => 'bademail'
+        }
+      }, { :invited => true }
     end
 
     should_respond_with :success
     should_render_template :new
   end
 
-  context 'on GET to new2 with good values' do
+  context 'on GET to new2 with good values when invited' do
     setup do
-      get :new2, :user => {
-        :first_name  => 'First',
-        :middle_name => 'M',
-        :last_name   => 'Last',
-        :email       => 'user@example.org'
-      }
+      get :new2, {
+        :user => {
+          :first_name  => 'First',
+          :middle_name => 'M',
+          :last_name   => 'Last',
+          :email       => 'user@example.org'
+        }
+      }, { :invited => true }
     end
 
     should_respond_with :success
@@ -66,40 +95,74 @@ class UsersControllerTest < Test::Unit::TestCase
     end
   end
 
-  context 'on POST to create with bad values' do
+  context 'on POST to create with bad values when invited' do
     setup do
       @controller.expects(:verify_recaptcha).returns(false)
-      post :create, :user => {
-        :first_name            => '',
-        :middle_name           => '',
-        :last_name             => '',
-        :email                 => 'user@example.org',
-        :password              => '',
-        :password_confirmation => 'password'
-      }
+      post :create, {
+        :user => {
+          :first_name            => '',
+          :middle_name           => '',
+          :last_name             => '',
+          :email                 => 'user@example.org',
+          :password              => '',
+          :password_confirmation => 'password'
+        }
+      }, { :invited => true }
     end
 
     should_respond_with :success
     should_render_template :new2
   end
 
-  context 'on POST to create with good values' do
+  context 'on POST to create with good values when invited' do
     setup do
       @controller.expects(:verify_recaptcha).returns(true)
 
-      post :create, :user => {
-        :first_name            => 'First',
-        :middle_name           => 'M',
-        :last_name             => 'Last',
-        :email                 => 'user@example.org',
-        :password              => 'password',
-        :password_confirmation => 'password'
-      }
+      post :create, {
+        :user => {
+          :first_name            => 'First',
+          :middle_name           => 'M',
+          :last_name             => 'Last',
+          :email                 => 'user@example.org',
+          :password              => 'password',
+          :password_confirmation => 'password'
+        }
+      }, { :invited => true }
     end
 
     should_respond_with :redirect
     should_redirect_to 'login_url'
     should_change 'User.count', :by => 1
+  end
+
+  def test_should_sign_up_user_with_activation_code
+    create_invited_user
+    assigns(:user).reload
+    assert_not_nil assigns(:user).activation_code
+  end
+
+  def test_should_activate_user
+    @password = 'monkey'
+    @aaron = Factory(:user, :password => @password, :password_confirmation => @password)
+    assert_nil User.authenticate(@aaron.email, @password)
+    User.any_instance.expects(:activate!)
+    get :activate, :code => @aaron.activation_code
+    assert_redirected_to '/login'
+    assert_not_nil flash[:notice]
+  end
+
+  def test_should_not_activate_user_without_key
+    get :activate
+    assert_nil flash[:notice]
+  rescue ActionController::RoutingError
+    # in the event your routes deny this, we'll just bow out gracefully.
+  end
+
+  def test_should_not_activate_user_with_blank_key
+    get :activate, :code => ''
+    assert_nil flash[:notice]
+  rescue ActionController::RoutingError
+    # well played, sir
   end
 
   logged_in_user_context do
@@ -135,81 +198,10 @@ class UsersControllerTest < Test::Unit::TestCase
     end
   end
 
-  def test_should_allow_signup
-    assert_difference 'User.count' do
-      create_user
-      assert_response :redirect
-    end
-  end
-
-  def test_should_require_email_on_signup
-    assert_no_difference 'User.count' do
-      create_user(:email => nil)
-      assert assigns(:user).errors.on(:email)
-      assert_response :success
-    end
-  end
-
-  def test_should_require_password_on_signup
-    assert_no_difference 'User.count' do
-      create_user(:password => nil)
-      assert assigns(:user).errors.on(:password)
-      assert_response :success
-    end
-  end
-
-  def test_should_require_password_confirmation_on_signup
-    assert_no_difference 'User.count' do
-      create_user(:password_confirmation => nil)
-      assert assigns(:user).errors.on(:password_confirmation)
-      assert_response :success
-    end
-  end
-
-  def test_should_require_email_on_signup
-    assert_no_difference 'User.count' do
-      create_user(:email => nil)
-      assert assigns(:user).errors.on(:email)
-      assert_response :success
-    end
-  end
-  
-
-  
-  def test_should_sign_up_user_with_activation_code
-    create_user
-    assigns(:user).reload
-    assert_not_nil assigns(:user).activation_code
-  end
-
-  def test_should_activate_user
-    @password = 'monkey'
-
-    @aaron = Factory(:user, :password => @password, :password_confirmation => @password)
-    assert_nil User.authenticate(@aaron.email, @password)
-    User.any_instance.expects(:activate!)
-    get :activate, :code => @aaron.activation_code
-    assert_redirected_to '/login'
-    assert_not_nil flash[:notice]
-  end
-  
-  def test_should_not_activate_user_without_key
-    get :activate
-    assert_nil flash[:notice]
-  rescue ActionController::RoutingError
-    # in the event your routes deny this, we'll just bow out gracefully.
-  end
-
-  def test_should_not_activate_user_with_blank_key
-    get :activate, :code => ''
-    assert_nil flash[:notice]
-  rescue ActionController::RoutingError
-    # well played, sir
-  end
 
   protected
 
-  def create_user(options = {})
-    post :create, :user => Factory.attributes_for(:user).merge(options)
+  def create_invited_user(options = {})
+    post :create, { :user => Factory.attributes_for(:user).merge(options) }, { :invited => true }
   end
 end

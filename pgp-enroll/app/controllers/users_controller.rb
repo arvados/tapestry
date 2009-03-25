@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate ]
   skip_before_filter :login_required, :only => [:new, :new2, :create, :activate]
+  before_filter :ensure_invited, :only => [:new, :new2, :create]
+
 
   def new
     @user = User.new(params[:user])
@@ -9,7 +11,7 @@ class UsersController < ApplicationController
   def new2
     @user = User.new(params[:user])
 
-    if @user.valid_for_attrs?(params[:user].keys)
+    if params[:user] && @user.valid_for_attrs?(params[:user].keys)
       @user.errors.clear
     else
       render :template => 'users/new'
@@ -76,5 +78,12 @@ class UsersController < ApplicationController
 
   def ensure_current_user_may_edit_this_user
     redirect_to root_url unless current_user && ( current_user.id == params[:id].to_i ) # || curren_user.admin?
+  end
+
+  def ensure_invited
+    unless session[:invited]
+      flash[:error] = 'You must enter an invited email address to sign up.'
+      redirect_to root_url
+    end
   end
 end
