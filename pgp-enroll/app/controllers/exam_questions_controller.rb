@@ -1,4 +1,5 @@
 class ExamQuestionsController < ApplicationController
+  layout 'exam'
   before_filter :load_exam_models, :only => [:show, :answer]
 
   def show

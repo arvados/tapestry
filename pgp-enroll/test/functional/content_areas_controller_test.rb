@@ -18,6 +18,7 @@ class ContentAreasControllerTest < ActionController::TestCase
     context 'on GET to index' do
       setup { get :index }
 
+      should_render_with_layout 'exam'
       should_respond_with :success
       should_render_template :index
 
@@ -44,6 +45,8 @@ class ContentAreasControllerTest < ActionController::TestCase
           @content_area = ContentArea.first
           get :show, :id => @content_area
         end
+
+          should_render_with_layout 'exam'
 
         should_assign_to :exams
 

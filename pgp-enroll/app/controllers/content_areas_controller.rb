@@ -1,4 +1,6 @@
 class ContentAreasController < ApplicationController
+  layout 'exam'
+
   def index
     @content_areas = ContentArea.all
 

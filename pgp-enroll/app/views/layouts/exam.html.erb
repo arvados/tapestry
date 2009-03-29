@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <title>Personal Genome Project</title>
+  <%= stylesheet_link_tag 'application' %>
+  <!--[if lte IE 7]><%= stylesheet_link_tag 'application-ie' %>><![endif]-->
+  <%= javascript_include_tag 'jquery-1.2.6', 'jquery-custom-extensions' %>
+  <% javascript_tag do %>
+    <%= yield :js %>
+  <% end %>
+</head>
+<body>
+  <div id="body">
+    <h1 class="verbose"><%= link_to '<span>Personal Genome Project</span>', root_url %></h1>
+
+    <%= render :partial => 'layouts/navigation' %>
+    <div class="clear"><!-- --></div>
+
+    <%= breadcrumbs %>
+    <%= display_standard_flashes %>
+    <div class="main">
+      <%= yield %>
+    </div>
+
+    <%= render :partial => 'layouts/exam_sidebar' %>
+
+    <div class="clear"><!-- --></div>
+  </div>
+  <div id="foot">
+    <div id="copyright">
+      <p>
+        <span class="link"><a href="http://www.personalgenomes.org/privacypolicy.html">Privacy Policy</a></span>
+        <span class="bullet"> &nbsp;&bull;&nbsp; </span>
+        <span class="link"><a href="http://www.personalgenomes.org/contact.html">Contact</a></span>
+        <span class="bullet"> &nbsp;&bull;&nbsp; </span>
+        <span class="link"><a href="http://www.personalgenomes.org/careers.html">Careers</a></span>
+        <span class="bullet"> &nbsp;&bull;&nbsp; </span>
+        <span>Copyright &copy; Harvard University</span>
+      </p>
+    </div>
+  </div>
+
+  <%= render :partial => 'layouts/google_analytics' %>
+
+</body>
+</html>

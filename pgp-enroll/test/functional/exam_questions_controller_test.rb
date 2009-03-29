@@ -32,6 +32,7 @@ class ExamQuestionsControllerTest < ActionController::TestCase
           assert_template 'show'
         end
 
+        should_render_with_layout 'exam'
         should 'assign to exam_question, exam_version, and content_area' do
           assert_equal @exam_question, assigns(:exam_question)
           assert_equal @exam_version,  assigns(:exam_version)
@@ -61,6 +62,7 @@ class ExamQuestionsControllerTest < ActionController::TestCase
                 :id              => @exam_question
           end
 
+          should_render_with_layout 'exam'
           should 'render radio buttons for the answer' do
             assert_select 'input[type=?]', 'radio', :count => @exam_question.answer_options.count
           end
