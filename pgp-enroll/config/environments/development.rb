@@ -27,6 +27,4 @@ ActionMailer::Base.smtp_settings = {
 }
 
 ROOT_URL = 'localhost:3000'
-ADMIN_EMAIL = 'jason.p.morrison@gmail.com'
-
-
+ADMIN_EMAIL = 'general@personalgenomes.org'

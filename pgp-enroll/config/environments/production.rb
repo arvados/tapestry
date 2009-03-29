@@ -32,5 +32,5 @@ ActionMailer::Base.smtp_settings = {
 }
 
 ROOT_URL = 'enroll.personalgenomes.org'
-ADMIN_EMAIL = 'jason.p.morrison@gmail.com'
+ADMIN_EMAIL = 'general@personalgenomes.org'
 
