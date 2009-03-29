@@ -22,15 +22,9 @@ config.action_view.cache_template_loading            = true
 # config.action_mailer.raise_delivery_errors = false
 
 ActionMailer::Base.smtp_settings = {
-  :tls => true,
-  :address => "smtp.gmail.com",
-  :port => "587",
-  # :domain => "YOURDOMAIN",
-  :authentication => :plain,
-  :user_name => "admin@pgp-staging.jayunit.net",
-  :password => "xxxxxxxx" 
+  :domain => "enroll.personalgenomes.org",
+  :address => 'durga.oxf.freelogy.org'
 }
 
 ROOT_URL = 'enroll.personalgenomes.org'
-ADMIN_EMAIL = 'general@personalgenomes.org'
-
+ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'

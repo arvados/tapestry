@@ -27,4 +27,4 @@ ActionMailer::Base.smtp_settings = {
 }
 
 ROOT_URL = 'localhost:3000'
-ADMIN_EMAIL = 'general@personalgenomes.org'
+ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'

@@ -22,9 +22,10 @@ config.action_view.cache_template_loading            = true
 # config.action_mailer.raise_delivery_errors = false
 
 ActionMailer::Base.smtp_settings = {
+  :domain => "enroll-dev.personalgenomes.org",
   :address => 'durga.oxf.freelogy.org'
 }
 
 ROOT_URL = 'enroll-dev.personalgenomes.org'
-ADMIN_EMAIL = 'general@personalgenomes.org'
+ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'
 
