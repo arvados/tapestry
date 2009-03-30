@@ -22,6 +22,11 @@ class ContentAreasControllerTest < ActionController::TestCase
       should_respond_with :success
       should_render_template :index
 
+      before_should 'get the content areas in order' do
+        content_areas = ContentArea.all
+        ContentArea.expects(:ordered).at_least_once.returns(content_areas)
+      end
+
       should 'show the content areas, with nested exams' do
         ContentArea.all.each do |area|
           assert_select 'ol li', /#{area.title}/ do
