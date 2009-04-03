@@ -64,9 +64,9 @@ You have been invited to participate because you are an individual 21 years of a
 <p><strong>4. MONOZYGOTIC TWIN</strong><br />
 4.1 If you have any living siblings who are your identical (monozygotic) twin, such sibling(s) will need to provide consent for your participation in this research study before the PGP will consider you for enrollment.</p>
 
-<p><%= error_message_on :informed_consent_response, :twin %></p>
-<%= error_messages_for :informed_consent_response %>
 <div class="consent-form-question"> <p>
+
+Do you have a living monozygotic (identical) twin?
 
 <%= f.radio_button :twin, "true" %>
 <label for="informed_consent_response_twin_true">Yes</label>
@@ -101,7 +101,7 @@ You have been invited to participate because you are an individual 21 years of a
 a. The PGP will also notify you at this time whether tissue specimens will be collected during your visit.&nbsp; You may request to be enrolled without undergoing a skin biopsy procedure by marking NO below. <br />
 
 <div class="consent-form-question"> <p>
-
+Willing to undergo skin biopsy procedure?
 <%= f.radio_button :biopsy, "true" %>
 <label for="informed_consent_response_biopsy_true">Yes</label>
 
@@ -186,7 +186,7 @@ c. Examples of other Reports similar to what you may receive as an enrollee are 
 </p>
 
 <div class="consent-form-question"> <p>
-
+Willing to be recontacted?
 <%= f.radio_button :recontact, "true" %>
 <label for="informed_consent_response_recontact_true">Yes</label>
 
