@@ -22,9 +22,9 @@ class PrivacySurveyResponse < ActiveRecord::Base
 
   INFORMATION_DISCLOSURE_COMFORT_LEVEL_OPTIONS = {
     'I am very uncomfortable with the idea of public access to my genomic data. The potential risks are too great.' => 'uncomfortable',
-    'I understand there are potential risks. But I am willing to make my genomic data publicly available anyway.' => 'understand',
+    'I understand there are potential risks, but I am willing to make my genomic data publicly available anyway.' => 'understand',
     'Unsure' => 'unsure',
-    "I don't find information worrisome and I'm comfortable with others having access to this information as well." => 'comfortable',
+    "I don't find information about myself worrisome and I'm comfortable with others having access to this information as well." => 'comfortable',
     "It depends, I would want to review any information on a case-by-case basis." => 'depends'
   }
 

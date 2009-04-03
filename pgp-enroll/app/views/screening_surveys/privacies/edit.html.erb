@@ -13,7 +13,7 @@
 
 
 <p class="question" id="question1">
-  <%= f.label :worrisome_information_comfort_level, '1.) Think about whether there any specific types of genetic information you would not want to learn about yourself. Examples might include (i) medical conditions with no effective cures or therapies, e.g. Alzheimers disease (ii) medical conditions that may lead to premature death, e.g. Huntingtons disease (iii) serious genetic conditions that may affect family members, e.g. hereditary cancers or (iv) stigmatized traits. Which of the following statements best describes your comfort level with learning potentially worrisome information?' %><br/>
+  <%= f.label :worrisome_information_comfort_level, '1.) Think about whether there any specific types of genetic information you would not want to learn about yourself. Examples might include (i) medical conditions with no effective cures or therapies, e.g. Alzheimers disease (ii) medical conditions that may lead to premature death, e.g. Huntingtons disease (iii) serious genetic conditions that may affect family members, e.g. hereditary cancers or (iv) stigmatized traits, e.g. mental illness. Which of the following statements best describes your comfort level with learning potentially worrisome information?' %><br/>
 
   <% PrivacySurveyResponse::WORRISOME_INFORMATION_COMFORT_LEVEL_OPTIONS.each do |description, value| -%>
     <%= f.radio_button(:worrisome_information_comfort_level, value) %>
@@ -33,8 +33,7 @@
 </p>
 
 <p class="question" id="question3">
-  <%= f.label :past_genetic_test_participation, '3.) Have you ever participated in a research study involving genetic testing or received results from a genetic test, genome scan, or genome sequencing?' %><br/>
-
+  <%= f.label :past_genetic_test_participation, '3.) Have you ever received the results of a genetic test, genome scan or genome sequencing (i) from a commercial provider of such information, (ii) as the result of your participation in a research study or clinical trial or (iii) any other means?' %><br/>
   <% PrivacySurveyResponse::PAST_GENETIC_TEST_PARTICIPATION_OPTIONS.each do |description, value| -%>
     <%= f.radio_button(:past_genetic_test_participation, value) %>
     <label for="privacy_survey_response_past_genetic_test_participation_<%= value %>"><%= description %></label>
