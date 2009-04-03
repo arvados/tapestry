@@ -35,7 +35,7 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
 
     context "on POST to create with mismatched confirmation information" do
       setup do
-        post :create,
+        post :create, {
           :participation_consent => {
             :name  => 'mismatched-name',
             :email => 'mismatched-email'
@@ -44,7 +44,7 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
             :twin => '',
             :biopsy => '',
             :recontact => ''
-          }
+          } }
       end
 
       should_not_change 'EnrollmentStepCompletion.count'
@@ -57,7 +57,7 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
 
     context "on POST to create with matched confirmation information but no answers to the questionnaire" do
       setup do
-        post :create,
+        post :create, {
           :participation_consent => {
             :name  => @user.full_name,
             :email => @user.email,
@@ -66,7 +66,7 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
             :twin => '',
             :biopsy => '',
             :recontact => ''
-          }
+          } }
       end
 
       should_not_change 'EnrollmentStepCompletion.count'
@@ -80,16 +80,16 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
 
     context "on POST to create with matched confirmation information and answers to the questionnaire" do
       setup do
-        post :create,
+        post :create, {
           :participation_consent => {
             :name  => @user.full_name,
             :email => @user.email,
           },
           :informed_consent_response => {
-          :twin => 'true',
-          :biopsy => 'true',
-          :recontact => 'true'
-        }
+            :twin => 'true',
+            :biopsy => 'true',
+            :recontact => 'true'
+          } }
       end
 
       should_change 'EnrollmentStepCompletion.count', :by => 1
