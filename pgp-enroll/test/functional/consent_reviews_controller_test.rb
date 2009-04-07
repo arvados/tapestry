@@ -18,7 +18,7 @@ class ConsentReviewsControllerTest < ActionController::TestCase
       should_render_template :show
 
       should "link to the consent document" do
-        assert_select 'a', :text => /consent/i
+        assert_select 'a', :text => /download/i
       end
 
       should "have a form that creates a new consent review" do
