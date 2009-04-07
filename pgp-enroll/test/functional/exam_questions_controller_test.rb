@@ -40,7 +40,7 @@ class ExamQuestionsControllerTest < ActionController::TestCase
         end
 
         should 'render exam progress' do
-          assert_select '.main p', /1 out of 1/
+          assert_select '.exam_progress_label', /0 of 1 answered/
         end
       end
 
