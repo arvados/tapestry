@@ -1,7 +1,11 @@
+<% percent = answered_questions.to_f / total_questions.to_f * 100.0 %>
+<div class="exam_progress_label">
+  <span>Progress:</span>
+  <%= answered_questions %> of <%= total_questions %> answered (<%= percent.to_i %>%):
+</div>
 <div class="exam_progress">
   <div class="progress_bar_wrapper">
-    <div class="progress_bar" style="width: <%= answered_questions.to_f / total_questions.to_f * 100.0 %>%;"></div>
+    <div class="progress_bar" style="width: <%= percent %>%;"></div>
   </div>
 </div>
 
-<p>Question <%= current_question %> out of <%= total_questions %>:</p>

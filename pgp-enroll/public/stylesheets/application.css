@@ -671,19 +671,27 @@ div.formError {
 }
 
 .exam_progress {
-  border: 1px solid #ccc;
+  border: 2px solid #5D7CBB;
   width: 300px;
   height: 25px;
   margin-left: auto;
   margin-right: auto;
 }
-
+.exam_progress_label {
+  width: 100%;
+  text-align: center;
+  color: #666;
+}
+.exam_progress_label span {
+  font-weight: bold;
+}
 .exam_progress .progress_bar_wrapper {
+  background-color: #DFE5F1;
   margin: 1px;
 }
 
 .exam_progress .progress_bar {
-  background-color: #ccc;
+  background-color: #5D7CBB;
   height: 23px;
 }
 
