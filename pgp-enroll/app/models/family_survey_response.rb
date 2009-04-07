@@ -17,13 +17,15 @@ class FamilySurveyResponse < ActiveRecord::Base
   MONOZYGOTIC_TWIN_OPTIONS = {
     'No, I do not have a monozygotic twin.'                                 => 'no',
     'Yes and he/she is willing to participate in this research study.'      => 'willing',
-    'Yes, but he/she is not willing to participate in this research study.' => 'unwilling'
+    'Yes, but he/she is not willing to participate in this research study.' => 'unwilling',
+    "I don't know"                                                          => 'unknown'
   }
 
   CHILD_SITUATION_OPTIONS = {
     'I have one or more children.'                                                                      => 'some',
     'I do not currently have children, but I plan to have children or may have children in the future.' => 'none',
-    'I do not currently have children and I do not plan to have children.'                               => 'never'
+    'I do not currently have children and I do not plan to have children.'                              => 'never',
+    "I don't know"                                                                                      => 'unknown'
   }
 
   belongs_to :user

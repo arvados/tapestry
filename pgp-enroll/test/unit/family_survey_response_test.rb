@@ -38,10 +38,24 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
     should_allow_values_for     :relatives_interested_in_pgp, '0', '1', '2', '3+' 
     should_not_allow_values_for :relatives_interested_in_pgp, '-1', 0, 1, 2, :message => 'must be answered'
 
-    should_allow_values_for     :monozygotic_twin, 'no', 'willing', 'unwilling'
+    #TODO why did should_allow_values_for not work properly (didn't fail for new value)
+    %w(no willing unwilling unknown).each do |value|
+      should "allow #{value} for :monozygotic_twin" do
+        @family_survey_response.monozygotic_twin = value
+        assert @family_survey_response.valid?
+      end
+    end
+
     should_not_allow_values_for :monozygotic_twin, 1, 0, 'yes', :message => 'must be answered'
 
-    should_allow_values_for     :child_situation, 'some', 'none', 'never'
+    %w(some none never unknown).each do |value|
+      should "allow #{value} for :child_situation" do
+        @family_survey_response.youngest_child_birth_year = 2000
+        @family_survey_response.child_situation = value
+        assert @family_survey_response.valid?, @family_survey_response.errors.inspect
+      end
+    end
+
     should_not_allow_values_for :child_situation, 1, 'yes', :message => 'must be answered'
 
     should_allow_values_for     :youngest_child_birth_year, nil, '', 1985, 2000, 2008, 2020
