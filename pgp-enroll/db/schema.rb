@@ -107,9 +107,9 @@ ActiveRecord::Schema.define(:version => 20090403133017) do
   add_index "family_survey_responses", ["user_id"], :name => "index_family_survey_responses_on_user_id"
 
   create_table "informed_consent_responses", :force => true do |t|
-    t.boolean  "twin",       :default => false
-    t.boolean  "biopsy",     :default => false
-    t.boolean  "recontact",  :default => false
+    t.boolean  "twin",       :default => false, :null => false
+    t.boolean  "biopsy",     :default => false, :null => false
+    t.boolean  "recontact",  :default => false, :null => false
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
