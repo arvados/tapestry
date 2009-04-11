@@ -4,14 +4,15 @@ class AcceptedInvitesController < ApplicationController
   def create
     invite = InvitedEmail.first(:conditions => { :email => params[:email] })
 
-    if invite
+    if invite && params[:code] == InvitedEmail::INVITE_CODE
       invite.accept!
       session[:invited] = true
       redirect_to page_url(:introduction)
     else
       session[:invited] = false
-      flash[:error] = "Sorry, that email address has not yet been invited to enroll."
+      flash[:error] = "Sorry, that email address and invite code have not yet been invited to enroll."
       redirect_to page_url(:home)
     end
   end
+
 end

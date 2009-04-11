@@ -19,9 +19,17 @@
     </p>
 
     <% form_tag(accepted_invites_path) do %>
-      <label for="accepted_invites_email">Email</label>
-      <%= text_field_tag 'email', nil, :id => 'accepted_invites_email' %>
-      <%= submit_tag 'Submit' %>
+      <div>
+        <label for="accepted_invites_email">Email</label><br/>
+        <%= text_field_tag 'email', nil, :id => 'accepted_invites_email' %>
+      </div><br/>
+
+      <div>
+        <label for="accepted_invites_code">Code</label><br/>
+        <%= password_field_tag 'code', nil, :id => 'accepted_invites_code' %>
+      </div><br/>
+
+      <%= submit_tag 'Accept Invite' %>
     <% end %>
 
     <p>

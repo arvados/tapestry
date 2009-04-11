@@ -33,6 +33,7 @@ class PagesControllerTest < ActionController::TestCase
     should "render a form that POSTs to /accepted_invites#create" do
       assert_select 'form[method=post][action=?]', accepted_invites_path do
         assert_select 'input[type=text][name=?]', 'email'
+        assert_select 'input[type=password][name=?]', 'code'
         assert_select 'input[type=submit]'
       end
     end

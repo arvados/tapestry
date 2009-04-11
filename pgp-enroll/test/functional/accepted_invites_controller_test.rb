@@ -3,10 +3,10 @@ require 'test_helper'
 class AcceptedInvitesControllerTest < ActionController::TestCase
   should_route :post, '/accepted_invites', { :action => 'create' }
 
-  context 'on POST to create for an invited email' do
+  context 'on POST to create for an invited email with the right invite code' do
     setup do
       @invited_email = Factory(:invited_email, :email => 'username@example.com')
-      post :create, :email => 'username@example.com'
+      post :create, :email => 'username@example.com', :code => InvitedEmail::INVITE_CODE
     end
 
     should "set invited in the session" do
@@ -18,6 +18,20 @@ class AcceptedInvitesControllerTest < ActionController::TestCase
     end
 
     should_redirect_to "page_url(:introduction)"
+  end
+
+  context 'on POST to create for an invited email with the wrong invite code' do
+    setup do
+      @invited_email = Factory(:invited_email, :email => 'username@example.com')
+      post :create, :email => 'username@example.com', :code => "wrong-#{InvitedEmail::INVITE_CODE}"
+    end
+
+    should "not set invited in the session" do
+      assert ! session[:invited]
+    end
+
+    should_set_the_flash_to /invite/i
+    should_redirect_to "page_url(:home)"
   end
 
   context 'on POST to create for a not-invited email' do
