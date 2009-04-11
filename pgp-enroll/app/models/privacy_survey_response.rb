@@ -29,7 +29,7 @@ class PrivacySurveyResponse < ActiveRecord::Base
   }
 
   PAST_GENETIC_TEST_PARTICIPATION_OPTIONS = {
-    'Yes and if requested, I would should share any information with the PGP.' => 'yes',
+    'Yes and if requested, I would share any information with the PGP.' => 'yes',
     'Yes, but I would prefer to keep this information confidential.' => 'confidential',
     'No.' => 'no',
     'Unsure' => 'unsure',

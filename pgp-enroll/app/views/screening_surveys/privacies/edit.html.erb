@@ -13,7 +13,7 @@
 
 
 <p class="question" id="question1">
-  <%= f.label :worrisome_information_comfort_level, '1.) Think about whether there any specific types of genetic information you would not want to learn about yourself. Examples might include (i) medical conditions with no effective cures or therapies, e.g. Alzheimers disease (ii) medical conditions that may lead to premature death, e.g. Huntingtons disease (iii) serious genetic conditions that may affect family members, e.g. hereditary cancers or (iv) stigmatized traits, e.g. mental illness. Which of the following statements best describes your comfort level with learning potentially worrisome information?' %><br/>
+  <%= f.label :worrisome_information_comfort_level, '1.) Think about whether there are any specific types of genetic information you would not want to learn about yourself. Examples might include (i) medical conditions with no effective cures or therapies, e.g. Alzheimers disease (ii) medical conditions that may lead to premature death, e.g. Huntingtons disease (iii) serious genetic conditions that may affect family members, e.g. hereditary cancers or (iv) stigmatized traits, e.g. mental illness. Which of the following statements best describes your comfort level with learning potentially worrisome information?' %><br/>
 
   <% PrivacySurveyResponse::WORRISOME_INFORMATION_COMFORT_LEVEL_OPTIONS.each do |description, value| -%>
     <%= f.radio_button(:worrisome_information_comfort_level, value) %>
