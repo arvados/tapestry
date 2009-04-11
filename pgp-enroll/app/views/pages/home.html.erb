@@ -51,12 +51,6 @@
 
   <p>Welcome, <%=h current_user.full_name %>!</p>
 
-  <h3>
-    <%# TODO: Refactor this %>
-    Steps for <%= current_user.current_phase == 'screening' ? 'screening' : 'pre-enrollment' %>
-    phase (<%= current_user.current_phase == 'screening' ? '1' : '2' %> of 2 phases)
-  </h3>
-
   <ol id="enrollment_steps">
     <% @steps.each do |step| -%>
       <li class="<%= step_item_class(step) %>">

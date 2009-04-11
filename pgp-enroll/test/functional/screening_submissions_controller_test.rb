@@ -36,8 +36,6 @@ class ScreeningSubmissionsControllerTest < ActionController::TestCase
       end
 
       should_change "EnrollmentStepCompletion.count", :by => 1
-      should_change "PhaseCompletion.count", :by => 1
-      should_change "@user.reload.current_phase"
 
       should_redirect_to "root_path"
     end
@@ -49,8 +47,6 @@ class ScreeningSubmissionsControllerTest < ActionController::TestCase
       end
 
       should_change "EnrollmentStepCompletion.count", :by => 1
-      should_not_change "PhaseCompletion.count"
-      should_not_change "@user.reload.current_phase"
 
       should_redirect_to "root_path"
 

@@ -8,7 +8,6 @@ class User < ActiveRecord::Base
   has_many :enrollment_step_completions
   has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step
   has_many :exam_responses
-  has_many :phase_completions
   has_one  :residency_survey_response
   has_one  :family_survey_response
   has_one  :privacy_survey_response
@@ -118,10 +117,6 @@ class User < ActiveRecord::Base
 
   def completed_content_area_count
     ContentArea.all.select { |content_area| content_area.completed_by?(self) }.size
-  end
-
-  def current_phase
-    PhaseCompletion.phase_for(self)
   end
 
   protected
