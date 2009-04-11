@@ -40,6 +40,7 @@ class UsersController < ApplicationController
     success = @user && verify_recaptcha(@user) && @user.save
 
     if success && @user.errors.empty?
+      accept_invite!
       redirect_to login_url
       flash[:notice] = "Your account has been created. You will need to activate this account before proceeding. In the next few minutes, you will receive an email containing an activation link. Please check your email."
     else
@@ -85,5 +86,10 @@ class UsersController < ApplicationController
       flash[:error] = 'You must enter an invited email address to sign up.'
       redirect_to root_url
     end
+  end
+
+  def accept_invite!
+    @invite = InvitedEmail.first(:conditions => { :email => session[:invited_email] })
+    @invite.accept! if @invite
   end
 end

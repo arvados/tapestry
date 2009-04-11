@@ -97,6 +97,8 @@ class UsersControllerTest < Test::Unit::TestCase
 
   context 'on POST to create with bad values when invited' do
     setup do
+      @email = 'username@example.com'
+      @invited_email = Factory(:invited_email, :email => @email)
       @controller.expects(:verify_recaptcha).returns(false)
       post :create, {
         :user => {
@@ -107,15 +109,21 @@ class UsersControllerTest < Test::Unit::TestCase
           :password              => '',
           :password_confirmation => 'password'
         }
-      }, { :invited => true }
+      }, { :invited => true, :invited_email => @email}
     end
 
     should_respond_with :success
     should_render_template :new2
+
+    should "not mark that invite as accepted" do
+      assert ! @invited_email.reload.accepted_at
+    end
   end
 
   context 'on POST to create with good values when invited' do
     setup do
+      @email = 'username@example.com'
+      @invited_email = Factory(:invited_email, :email => @email)
       @controller.expects(:verify_recaptcha).returns(true)
 
       post :create, {
@@ -127,12 +135,16 @@ class UsersControllerTest < Test::Unit::TestCase
           :password              => 'password',
           :password_confirmation => 'password'
         }
-      }, { :invited => true }
+      }, { :invited => true, :invited_email => @email }
     end
 
     should_respond_with :redirect
     should_redirect_to 'login_url'
     should_change 'User.count', :by => 1
+
+    should "mark that invite as accepted" do
+      assert @invited_email.reload.accepted_at
+    end
   end
 
   def test_should_sign_up_user_with_activation_code
