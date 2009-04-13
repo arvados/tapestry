@@ -48,7 +48,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
 
         should 'show all users' do
           User.all.each do |user|
-            assert_select user.email
+            assert_match user.email, @response.body
           end
         end
       end
