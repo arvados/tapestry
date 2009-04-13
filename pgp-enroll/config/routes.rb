@@ -32,6 +32,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :pledge
   map.resource :identity_confirmation
   map.resource :enrollment_application
+  map.resources :eligibility_screening_results
+  map.resources :eligibility_application_results
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'

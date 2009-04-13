@@ -41,9 +41,17 @@ screening_submission:
   description: Submit Eligibility Screening
   phase: screening
 
+eligibility_screening_results:
+  id: 12
+  ordinal: 6
+  keyword: eligibility_screening_results
+  title: Eligibility Screening Results
+  description: Eligibility Screening Results
+  phase: screening
+
 participation_consent:
   id: 5
-  ordinal: 6
+  ordinal: 7
   keyword: participation_consent
   title: Consent to Participate
   description: Consent to Participate step.
@@ -51,7 +59,7 @@ participation_consent:
 
 trait_collection:
   id: 6
-  ordinal: 7
+  ordinal: 8
   keyword: trait_collection
   title: Trait Collection
   description: Trait collection step.
@@ -59,7 +67,7 @@ trait_collection:
 
 pledge:
   id: 7
-  ordinal: 8
+  ordinal: 9
   keyword: pledge
   title: Make Financial Pledge
   description: Make Financial Pledge
@@ -67,7 +75,7 @@ pledge:
 
 identity_confirmation:
   id: 9
-  ordinal: 9
+  ordinal: 10
   keyword: identity_confirmation
   title: Identity Questionnaire
   description: Identity Questionnaire
@@ -75,8 +83,17 @@ identity_confirmation:
 
 enrollment_application:
   id: 10
-  ordinal: 10
+  ordinal: 11
   keyword: enrollment_application
   title: Submit Enrollment Application
   description: Submit Enrollment Application
   phase: preenrollment
+
+eligibility_application_results:
+  id: 11
+  ordinal: 12
+  keyword: eligibility_application_results
+  title: Eligibility Application Results
+  description: Eligibility Application Results
+  phase: preenrollment
+
