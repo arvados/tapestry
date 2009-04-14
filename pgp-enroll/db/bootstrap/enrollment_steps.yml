@@ -5,6 +5,7 @@ signup:
   title: Consent for Eligibility Screening
   description: In this step, you sign up for an account and agree to the mini consent form.
   phase: screening
+  duration: 5 minutes
 
 # the id is 8 because this was added after the other steps,
 # and we don't want to mess up enrollment_step_completion fk references
@@ -15,6 +16,7 @@ screening_surveys:
   title: Eligibility Questionnaire
   description: Complete initial screening surveys.
   phase: screening
+  duration: 10 minutes
 
 # this id must stay as 2 because of existing enrollment_step_completion fk references
 entrance_exam:
@@ -24,6 +26,7 @@ entrance_exam:
   title: Entrance Exam
   description: In this step, you take an entrance exam which consists of four content areas.
   phase: screening
+  duration: 30-90 minutes
 
 consent_review:
   id: 3
@@ -32,6 +35,7 @@ consent_review:
   title: Review of PGP Consent Form
   description: View the consent form document and mark that you have read it.
   phase: screening
+  duration: 20 minutes
 
 screening_submission:
   id: 4
@@ -40,6 +44,7 @@ screening_submission:
   title: Submit Eligibility Screening
   description: Submit Eligibility Screening
   phase: screening
+  duration: 1 minute
 
 eligibility_screening_results:
   id: 12
@@ -48,6 +53,7 @@ eligibility_screening_results:
   title: Eligibility Screening Results
   description: Eligibility Screening Results
   phase: screening
+  duration: 2-4 weeks
 
 participation_consent:
   id: 5
@@ -56,6 +62,7 @@ participation_consent:
   title: Consent to Participate
   description: Consent to Participate step.
   phase: preenrollment
+  duration: 5 minutes
 
 trait_collection:
   id: 6
@@ -64,6 +71,7 @@ trait_collection:
   title: Trait Collection
   description: Trait collection step.
   phase: preenrollment
+  duration: 2 hours
 
 pledge:
   id: 7
@@ -72,6 +80,7 @@ pledge:
   title: Make Financial Pledge
   description: Make Financial Pledge
   phase: preenrollment
+  duration: 1 minute
 
 identity_confirmation:
   id: 9
@@ -80,6 +89,7 @@ identity_confirmation:
   title: Identity Questionnaire
   description: Identity Questionnaire
   phase: preenrollment
+  duration: 5-10 minutes
 
 enrollment_application:
   id: 10
@@ -88,6 +98,7 @@ enrollment_application:
   title: Submit Enrollment Application
   description: Submit Enrollment Application
   phase: preenrollment
+  duration: 1 minute
 
 eligibility_application_results:
   id: 11
@@ -96,4 +107,5 @@ eligibility_application_results:
   title: Eligibility Application Results
   description: Eligibility Application Results
   phase: preenrollment
+  duration: 2-4 weeks
 

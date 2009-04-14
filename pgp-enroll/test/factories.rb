@@ -30,6 +30,7 @@ Factory.define(:enrollment_step) do |f|
   f.ordinal     { Factory.next :enrollment_step_ordinal }
   f.title       { Factory.next :enrollment_step_title   }
   f.description { Factory.next :enrollment_step_description }
+  f.duration "5 minutes"
 end
 
 # Is there a better way?  These enrollment_step are necessary, and torn down before tests.

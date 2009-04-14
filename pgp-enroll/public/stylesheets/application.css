@@ -546,7 +546,7 @@ form.signup {
 .signup #user_last_name   { width: 167px; }
 
 #enrollment_steps {
-  width: 400px;
+  width: 450px;
   margin: 0;
   padding: 0;
 }
@@ -555,17 +555,47 @@ form.signup {
   clear: both;
   line-height: 2em;
   list-style: none;
-  padding: 10px;
+  padding: 5px;
   border: 0px;
+}
+
+#enrollment_steps li span.duration {
+  border-bottom: 1px solid #5D7CBB;
+  border-right:  1px solid #5D7CBB;
+  border-top:    1px solid #DFE5F1;
+  border-left:   1px solid #DFE5F1;
+
+  padding: 6px 6px 0px 6px;
+  color: #5D7CBB;
+  font-weight: bold;
+  font-size: 16px;
+  height: 40px;
+  width: 50px;
+  float: left;
+  text-align: center;
+  background-color: #eee;
+  line-height: 16px;
+}
+
+#enrollment_steps li span.duration span.unit {
+  font-size: 12px;
+}
+#enrollment_steps li.next span.duration {
+  border:   1px solid #fff;
 }
 
 #enrollment_steps li span.title {
   color: #5D7CBB;
   font-weight: bold;
   font-size: 16px;
+  margin-left: 16px;
 }
 
-#enrollment_steps li div.completion_time {
+#enrollment_steps li span.title span.completion_time {
+  margin-left: 16px;
+  color: #000;
+  font-weight: normal;
+  font-size: 12px;
 }
 
 #enrollment_steps li.next {

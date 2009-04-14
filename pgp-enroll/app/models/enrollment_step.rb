@@ -5,4 +5,14 @@ class EnrollmentStep < ActiveRecord::Base
   has_many :completers, :through => :enrollment_step_completions, :source => :user
 
   named_scope :ordered, { :order => 'ordinal' }
+
+  #FIXME test
+  def duration_amount
+    duration ? duration.split.first : ''
+  end
+
+  #FIXME test
+  def duration_unit
+    duration ? duration.split.last : ''
+  end
 end

@@ -54,19 +54,17 @@
   <ol id="enrollment_steps">
     <% @steps.each do |step| -%>
       <li class="<%= step_item_class(step) %>">
+        <span class="duration"><%= step.duration_amount %><br/>
+        <span class="unit"><%= step.duration_unit %></span></span>
         <span class="title">
           <% if step == @next_step -%>
             <%= link_to step.title, :controller => step.keyword, :action => 'index'  %>
           <% else -%>
             <%= step.title %>
           <% end -%>
+          <br/>
+          <span class="completion_time"><%= completion_time_for step -%></span>
         </span>
-
-        <div class="completion_time"><%= completion_time_for step -%></div>
-
-        <% if step == @next_step -%>
-          <p class="description"><%= step.description %></p>
-        <% end -%>
       </li>
     <% end -%>
   </ol>
