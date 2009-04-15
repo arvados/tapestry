@@ -37,6 +37,10 @@ class PagesControllerTest < ActionController::TestCase
         assert_select 'input[type=submit]'
       end
     end
+
+    should "not show the 'Did you know?' box" do
+      assert_no_match /did you know/i, @response.body
+    end
   end
 
   logged_in_user_context do
@@ -51,6 +55,10 @@ class PagesControllerTest < ActionController::TestCase
 
       should "not render a form to accept an invite" do
         assert_select 'form[method=post][action=?]', accepted_invites_path, :count => 0
+      end
+
+      should "show the 'Did you know?' box" do
+        assert_match /did you know/i, @response.body
       end
     end
   end
