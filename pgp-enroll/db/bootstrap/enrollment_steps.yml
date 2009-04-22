@@ -104,8 +104,8 @@ eligibility_application_results:
   id: 11
   ordinal: 12
   keyword: eligibility_application_results
-  title: Eligibility Application Results
-  description: Eligibility Application Results
+  title: Enrollment Application Results
+  description: Enrollment Application Results
   phase: preenrollment
   duration: 2-4 weeks
 
