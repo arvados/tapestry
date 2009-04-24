@@ -1,9 +1,10 @@
-<h2>Sign up as a new user</h2>
+<h2>Double-check your email</h2>
 
-<p>Please check over your name and email below.</p>
-<p><strong>We will send a confirmation email to this address</strong> that you will need to check in order to complete your registration.</p>
+<p>Please check over your name and email; we will send a confirmation email to <strong><%=h @user.full_name %></strong>
+at <%= link_to h(@user.email), "mailto:#{h(@user.email)}" %> that you will need to check in order to complete your registration.</p>
 
-<p style="padding: 20px; border: 1px solid #ccc;"><%= @user.full_name %>: <%= @user.email %></p>
+<h2>Choose a password</h2>
+<p>Please enter a password for your PGP account:</p>
 
 <% form_for :user, :url => users_url, :html => { :class => 'signup' } do |f| -%>
 
@@ -22,6 +23,8 @@
 <br/>
 <%= f.password_field :password_confirmation %></p>
 
+<h2>Are you a robot?</h2>
+<p>Please type the two words you see below to confirm that you&rsquo;re a real person.</p>
 <%= recaptcha_tags %>
 
 <p><%= submit_tag 'Sign up' %></p>
