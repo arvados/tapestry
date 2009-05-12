@@ -25,3 +25,6 @@ config.action_mailer.delivery_method = :test
 
 ROOT_URL = 'localhost:3000'
 ADMIN_EMAIL = 'general@personalgenomes.org'
+
+config.gem 'quietbacktrace', :version => '0.1.1'
+
