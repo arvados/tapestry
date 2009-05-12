@@ -29,6 +29,5 @@ ADMIN_EMAIL = 'general@personalgenomes.org'
 config.gem 'quietbacktrace', :version => '0.1.1'
 config.gem 'thoughtbot-factory_girl', :version => '1.1', :lib => 'factory_girl'
 config.gem 'mocha'
-config.gem 'thoughtbot-paperclip', :version => '2.2.5', :lib => 'paperclip'
 config.gem 'thoughtbot-shoulda', :version => '2.9.1', :lib => 'shoulda'
 
