@@ -7,6 +7,7 @@ require 'shoulda/rails'
 require 'factories'
 require 'mocha'
 require 'redgreen'
+require 'quietbacktrace'
 
 Dir[File.join(RAILS_ROOT, 'test', 'macros', '*.rb')].each do |f|
   require f
