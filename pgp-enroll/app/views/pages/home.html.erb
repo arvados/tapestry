@@ -1,7 +1,7 @@
 <% if ! current_user -%>
 
   <div style="width: 480px;">
-    <h2>Registration for Invited Users</h2>
+    <h2>Registration for invited users</h2>
 
     <p>
       If you received an email invitation to begin the online enrollment process,
@@ -22,6 +22,11 @@
       <%= submit_tag 'Accept Invite' %>
     <% end %>
 
+    <h2>Log in for enrolled users</h2>
+    <p>If you have already enrolled with the form above, and confirmed your account in your confirmation email,
+    then you can <%= link_to "log in", login_path %>.</p>
+
+    <h2>Sign up to be invited</h2>
     <p>
       Interested in enrolling in the PGP?
       <a href="http://www.personalgenomes.org/register.html">Register here</a>.
