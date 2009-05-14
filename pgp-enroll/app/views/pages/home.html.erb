@@ -5,7 +5,7 @@
 
     <p>
       If you received an email invitation to begin the online enrollment process,
-      please log in now with the email address where the invitation was sent:
+      you may accept the invite and register by entering the email address where the invitation was sent:
     </p>
 
     <% form_tag(accepted_invites_path) do %>
@@ -22,7 +22,7 @@
       <%= submit_tag 'Accept Invite' %>
     <% end %>
 
-    <h2>Log in for enrolled users</h2>
+    <h2>Log in for registered users</h2>
     <p>If you have already enrolled with the form above, and confirmed your account in your confirmation email,
     then you can <%= link_to "log in", login_path %>.</p>
 
