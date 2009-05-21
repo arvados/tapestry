@@ -1,5 +1,10 @@
 <h2>Users</h2>
 
+<h3>Users per day</h3>
+<p>
+  <img src="<%= UserReport.users_per_day_chart_url %>" />
+</p>
+
 <% if params[:completed_enrollment_exam] -%>
   <em>Only showing users who have completed the enrollment exam. (<%= link_to 'Show all.', admin_users_url %>)</em>
 <% else -%>
