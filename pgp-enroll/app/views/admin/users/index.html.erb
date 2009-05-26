@@ -12,7 +12,7 @@
     <li>
       <label for="completed">Show users who have completed enrollment step:</label>
       <%= select_tag 'completed',
-          options_for_select(EnrollmentStep.ordered.all.map { |es| ["##{es.ordinal} (#{User.has_completed(es.keyword).count} users) - #{es.title} ", es.keyword] },
+          options_for_select(EnrollmentStep.ordered.all.map { |es| ["##{es.ordinal} - #{es.title} ", es.keyword] },
                              params[:completed])%>
       <%= submit_tag 'Show' %>
     </li>
