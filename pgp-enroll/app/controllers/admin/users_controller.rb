@@ -3,7 +3,11 @@ class Admin::UsersController < Admin::AdminControllerBase
   include Admin::UsersHelper
 
   def index
-    @users = params[:completed_enrollment_exam] ? User.has_completed('content_areas') : User.all
+    if params[:completed]
+      @users = User.has_completed(params[:completed])
+    else
+      @users = User.all
+    end
 
     respond_to do |format|
       format.html
@@ -39,6 +43,14 @@ class Admin::UsersController < Admin::AdminControllerBase
     else
       render :action => 'index'
     end
+  end
+
+  def promote
+    user = User.find params[:id]
+    user.promote!
+    user.reload
+    flash[:notice] = "User promoted"
+    redirect_to admin_users_url
   end
 
   def activate

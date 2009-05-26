@@ -1,11 +1,11 @@
 <% if ! current_user -%>
 
   <div style="width: 480px;">
-    <h2>Registration for invited users</h2>
+    <h2>Receive an invitation?  Accept the invite now:</h2>
 
     <p>
       If you received an email invitation to begin the online enrollment process,
-      you may accept the invite and register by entering the email address where the invitation was sent:
+      you may accept the invite by entering the email address where the invitation was sent and the code:
     </p>
 
     <% form_tag(accepted_invites_path) do %>
@@ -22,7 +22,7 @@
       <%= submit_tag 'Accept Invite' %>
     <% end %>
 
-    <h2>Log in for registered users</h2>
+    <h2>Already accept the invitation?  Log in now:</h2>
     <p>If you have already accepted your invitation via the form above, and confirmed your account in your confirmation email,
     then you can <%= link_to "log in", login_path %>.</p>
 

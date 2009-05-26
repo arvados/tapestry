@@ -131,6 +131,23 @@ class UserTest < Test::Unit::TestCase
         assert @user.remember_token_expires_at.between?(before, after)
       end
     end
+
+    should "promote to the next enrollment step when sent #promote!" do
+      EnrollmentStep.delete_all
+      es1 = Factory(:enrollment_step, :keyword => 'first', :ordinal => 1)
+      es2 = Factory(:enrollment_step, :keyword => 'second', :ordinal => 2)
+      es3 = Factory(:enrollment_step, :keyword => 'third', :ordinal => 3)
+
+      user = Factory(:user)
+
+      user.promote!
+      user.reload
+      assert_equal es2, user.next_enrollment_step
+
+      user.promote!
+      user.reload
+      assert_equal es3, user.next_enrollment_step
+    end
   end
 
   should "create user" do

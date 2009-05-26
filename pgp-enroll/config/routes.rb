@@ -37,7 +37,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
-    admin.resources :users, :member => { :activate => :put } do |user|
+    admin.resources :users, :member => { :activate => :put,
+                                         :promote  => :put } do |user|
       user.resources :exam_responses
     end
     admin.resources :reports

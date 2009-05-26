@@ -69,6 +69,10 @@ class User < ActiveRecord::Base
     save(false)
   end
 
+  def promote!
+    complete_enrollment_step(next_enrollment_step)
+  end
+
   def next_enrollment_step
     last_step_completed = last_completed_enrollment_step
 
