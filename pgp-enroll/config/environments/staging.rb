@@ -22,7 +22,7 @@ config.action_controller.perform_caching             = true
 
 ActionMailer::Base.smtp_settings = {
   :domain => "enroll-dev.personalgenomes.org",
-  :address => 'durga.oxf.freelogy.org'
+  :address => 'outgoing.personalgenomes.org'
 }
 
 ROOT_URL = 'enroll-dev.personalgenomes.org'
