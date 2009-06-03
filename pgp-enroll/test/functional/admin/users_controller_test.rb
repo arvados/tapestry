@@ -17,9 +17,26 @@ class Admin::UsersControllerTest < ActionController::TestCase
 
   context 'when logged in as an admin' do
     setup do
-      @user = Factory(:admin_user)
-      @user.activate!
-      login_as @user
+      @admin = Factory(:admin_user)
+      @admin.activate!
+      login_as @admin
+    end
+
+    context 'on GET to edit for a user' do
+      setup do
+        @user = Factory(:user)
+        Factory(:enrollment_step)
+        get :edit, :id => @user.id
+      end
+
+      should_respond_with :success
+      should_render_template :edit
+
+      should "link to #promote for each user" do
+        assert_select 'a[href=?]', promote_admin_user_url(@user)
+      end
+
+      should_eventually "render the edit form"
     end
 
     context 'with some users' do
@@ -38,12 +55,6 @@ class Admin::UsersControllerTest < ActionController::TestCase
         should 'show all users' do
           User.all.each do |user|
             assert_select 'td', user.email
-          end
-        end
-
-        should "link to #promote for each user" do
-          User.all.each do |user|
-            assert_select 'td a[href=?]', promote_admin_user_url(@user)
           end
         end
 

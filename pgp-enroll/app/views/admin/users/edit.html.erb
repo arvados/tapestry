@@ -1,9 +1,27 @@
-<h2>Edit User Account</h2>
-
+<h2>User details</h2>
 <% @user.password = @user.password_confirmation = nil %>
 
 <% form_for [:admin, @user], :html => { :method => :put } do |f| -%>
 <%= error_messages_for :user %>
+
+<p>Completed Content Areas:<br/>
+<%= @user.completed_content_area_count %> / <%= ContentArea.count %> (<%= link_to 'Details', admin_user_exam_responses_path(@user) %>)</p>
+
+<p>
+  Current Enrollment Step:<br/>
+  <% if @user.next_enrollment_step -%>
+    <%= @user.next_enrollment_step.ordinal %> <%= @user.next_enrollment_step.title %>
+  <% else -%>
+    Finished
+  <% end -%>
+</p>
+
+<% if @user.next_enrollment_step -%>
+  <p>Promote to the next enrollment step:<br/>
+  <%= link_to 'Promote', promote_admin_user_url(@user), :method => 'PUT' %></p>
+<% end -%>
+
+<h2>Edit User Account</h2>
 
 <p><%= f.label :first_name %><br/>
 <%= f.text_field :first_name %></p>
@@ -11,14 +29,14 @@
 <p><%= f.label :middle_name %><br/>
 <%= f.text_field :middle_name %></p>
 
-<p><%= f.label :last_name %></label><br/>
+<p><%= f.label :last_name %><br/>
 <%= f.text_field :last_name %></p>
 
 <p><label for="email">Email</label><br/>
 <%= f.text_field :email %></p>
 
 <p><label for="activated">Activated</label><br/>
-<%= @user.active? ? @user.activated_at : 'No' %>
+<%= @user.active? ? @user.activated_at : 'No' %></p>
 
 <p><label for="password">Password</label><br/>
 <%= f.password_field :password %></p>

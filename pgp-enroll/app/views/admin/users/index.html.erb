@@ -23,13 +23,18 @@
 
 <table class="admin_table">
   <tr>
-    <th>Name</th><th>Email</th><th>Content Areas</th><th>Active?</th><th>Is Admin?</th><th>Edit</th><th>Delete</th><th>Activate</th><th>Current step</th><th>Promote to next enrollment step</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Active?</th>
+    <th>Is Admin?</th>
+    <th>Edit</th>
+    <th>Delete</th>
+    <th>Activate</th>
   </tr>
   <% @users.each do |user| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=h user.full_name %></td>
       <td><%=h user.email %></td>
-      <td><%= user.completed_content_area_count %> / <%= ContentArea.count %> (<%= link_to 'Details', admin_user_exam_responses_path(user) %>)</td>
       <td><%=  user.active? %></td>
       <td><%=  user.is_admin? %></td>
       <td><%= link_to 'Edit', edit_admin_user_url(user) %></td>
@@ -37,18 +42,6 @@
                 :method => 'DELETE',
                 :confirm => 'Are you sure you want to delete this user?' %></td>
       <td><%= link_to 'Activate', activate_admin_user_url(user), :method => 'PUT' %></td>
-      <td>
-        <% if user.next_enrollment_step -%>
-          #<%= user.next_enrollment_step.ordinal %>
-        <% else -%>
-          Finished
-        <% end -%>
-      </td>
-      <td>
-        <% if user.next_enrollment_step -%>
-          <%= link_to 'Promote', promote_admin_user_url(user), :method => 'PUT' %>
-        <% end -%>
-      </td>
     </tr>
   <% end -%>
 </table>
