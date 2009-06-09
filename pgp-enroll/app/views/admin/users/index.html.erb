@@ -21,7 +21,7 @@
 
 <p>Download list of users as <%= link_to 'CSV', formatted_admin_users_url(:format => 'csv', :completed => params[:completed]) %></p>
 
-<%= @users.count %> users:
+<%= @users.size %> users:
 
 <table class="admin_table">
   <tr>
