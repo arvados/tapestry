@@ -11,6 +11,8 @@ ActionController::Routing::Routes.draw do |map|
   map.register '/register',       :controller => 'users',    :action => 'create'
   map.activate '/activate/:code', :controller => 'users',    :action => 'activate'
 
+  map.resource :password
+
   map.resources :accepted_invites
 
   map.resources :content_areas do |content_area|

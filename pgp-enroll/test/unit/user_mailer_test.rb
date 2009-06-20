@@ -6,6 +6,8 @@ class UserMailerTest < Test::Unit::TestCase
   CHARSET = "utf-8"
 
   include ActionMailer::Quoting
+  include ActionView::Helpers::UrlHelper
+  include ActionController::UrlWriter
 
   def setup
     ActionMailer::Base.delivery_method = :test
@@ -14,6 +16,13 @@ class UserMailerTest < Test::Unit::TestCase
 
     @expected = TMail::Mail.new
     @expected.set_content_type "text", "plain", { "charset" => CHARSET }
+  end
+
+  should "set the right edit_password_url in password_reset email" do
+    user = Factory(:user)
+    email = UserMailer.create_password_reset(user)
+    assert email.body.include?(edit_password_url(:id => user.id, :key => user.crypted_password)), 
+      "email body should include password reset url in:\n#{email.body}"
   end
 
   should "RENAME ME: test dummy test" do

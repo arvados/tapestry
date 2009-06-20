@@ -8,6 +8,15 @@ Factory.define(:user) do |f|
   f.password_confirmation 'password'
 end
 
+Factory.define(:activated_user, :class => :user) do |f|
+  f.first_name            'Jason'
+  f.last_name             'Morrison'
+  f.email                 { Factory.next :email }
+  f.password              'password'
+  f.password_confirmation 'password'
+  f.activated_at { Time.now }
+end
+
 Factory.define(:admin_user, :class => User) do |f|
   f.first_name            'Jason'
   f.last_name             'Morrison'
