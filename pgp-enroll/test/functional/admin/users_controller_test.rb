@@ -64,6 +64,10 @@ class Admin::UsersControllerTest < ActionController::TestCase
             assert_select 'input[type=submit]'
           end
         end
+
+        should "render a link to filter only inactive users" do
+          assert_select 'li>a[href=?]', admin_users_path(:inactive => true)
+        end
       end
 
       should 'show all users on GET to index as CSV' do
@@ -73,6 +77,16 @@ class Admin::UsersControllerTest < ActionController::TestCase
         User.all.each do |user|
           assert_match user.email, @response.body
         end
+      end
+
+      should "show users who have not yet activated when params[:inactive] is specified" do
+        inactive_user  = Factory(:user,           :first_name => "Ralph")
+        activated_user = Factory(:activated_user, :first_name => "Lauren")
+
+        get :index, :inactive => true
+
+        assert_response :success
+        assert_equal User.inactive, assigns(:users)
       end
 
       should "show users who have completed a certain enrollment step when params[:completed] is specified" do

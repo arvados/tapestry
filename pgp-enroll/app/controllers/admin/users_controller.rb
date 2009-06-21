@@ -5,6 +5,8 @@ class Admin::UsersController < Admin::AdminControllerBase
   def index
     if params[:completed]
       @users = User.has_completed(params[:completed])
+    elsif params[:inactive]
+      @users = User.inactive
     else
       @users = User.all
     end

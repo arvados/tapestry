@@ -270,4 +270,11 @@ class UserTest < Test::Unit::TestCase
     assert_equal user, User.authenticate(" a@b.com ", "password")
   end
 
+  should "only return inactive users for named scope .inactive" do
+    inactive_user  = Factory(:user,           :first_name => "Ralph")
+    activated_user = Factory(:activated_user, :first_name => "Lauren")
+
+    assert_equal [inactive_user], User.inactive
+  end
+
 end

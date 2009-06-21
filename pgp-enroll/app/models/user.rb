@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
     }
   }
 
+  named_scope :inactive, { :conditions => "activated_at IS NULL" }
+
   def email=(email)
     email = email.strip if email
     write_attribute(:email, email)
