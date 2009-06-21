@@ -260,4 +260,14 @@ class UserTest < Test::Unit::TestCase
     end
   end
 
+  should "strip whitespace on email when setting" do
+    user = Factory(:user, :email => " test@example.com ")
+    assert_equal "test@example.com", user.reload.email
+  end
+
+  should "strip whitespace on email when authenticating" do
+    user = Factory(:activated_user, :email => "a@b.com", :password => "password", :password_confirmation => "password")
+    assert_equal user, User.authenticate(" a@b.com ", "password")
+  end
+
 end

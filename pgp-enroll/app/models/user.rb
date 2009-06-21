@@ -36,6 +36,11 @@ class User < ActiveRecord::Base
     }
   }
 
+  def email=(email)
+    email = email.strip if email
+    write_attribute(:email, email)
+  end
+
   def has_completed?(keyword)
     !!completed_enrollment_steps.find_by_keyword(keyword)
   end
@@ -107,6 +112,7 @@ class User < ActiveRecord::Base
   # This will also let us return a human error message.
   #
   def self.authenticate email, password
+    email = email.strip if email
     u = find :first, :conditions => ['email = ? and activated_at IS NOT NULL', email] # need to get the salt
     u && u.authenticated?(password) ? u : nil
   end
