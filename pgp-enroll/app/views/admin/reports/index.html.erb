@@ -6,11 +6,6 @@
   (<%= @passed_entrance_exam_count %> / <%= User.count %>)
 </p>
 
-<p>
-  <%= link_to "Show users who have completed the entrance exam",
-       admin_users_url(:completed_enrollment_exam => true) %>
-</p>
-
 <h3>Details</h3>
 
 <table class="admin_table">
@@ -25,9 +20,21 @@
   <% for content_area in @content_areas %>
     <% for exam in content_area.exams %>
       <% for version in exam.versions %>
+
+        <% first_exam_in_content_area = (exam    == content_area.exams.first ) %>
+        <% first_version_of_exam      = (version == exam.versions.first) %>
+
         <tr class="<%= cycle 'even', 'odd' %>">
-          <td><%= content_area.title %></td>
-          <td><%= exam.title %></td>
+          <td>
+            <% if first_exam_in_content_area && first_version_of_exam  %>
+              <%= content_area.title %>
+            <% end %>
+          </td>
+          <td>
+            <% if first_version_of_exam %>
+              <%= exam.title %>
+            <% end %>
+          </td>
           <td><%= version.version %></td>
           <td><%= version.exam_responses.count %></td>
           <td><%= version.exam_responses.select(&:correct?).size %></td>
