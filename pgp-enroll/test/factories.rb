@@ -108,6 +108,7 @@ Factory.define(:question_response) do |f|
   f.exam_response { |r| r.association(:exam_response, :exam_version => r.exam_question.exam_version) }
   f.answer        { |a| a.exam_question.correct_answer }
 end
+
 Factory.define(:residency_survey_response) do |f|
   f.user { |u| u.association :user }
   f.us_resident true

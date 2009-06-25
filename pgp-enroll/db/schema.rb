@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090414030113) do
+ActiveRecord::Schema.define(:version => 20090625023228) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(:version => 20090414030113) do
     t.datetime "updated_at"
   end
 
-  add_index "enrollment_step_completions", ["user_id"], :name => "index_enrollment_step_completions_on_user_id"
   add_index "enrollment_step_completions", ["enrollment_step_id"], :name => "index_enrollment_step_completions_on_enrollment_step_id"
+  add_index "enrollment_step_completions", ["user_id"], :name => "index_enrollment_step_completions_on_user_id"
 
   create_table "enrollment_steps", :force => true do |t|
     t.string   "keyword"
@@ -69,9 +69,9 @@ ActiveRecord::Schema.define(:version => 20090414030113) do
     t.integer  "original_user_id"
   end
 
-  add_index "exam_responses", ["user_id"], :name => "index_exam_responses_on_user_id"
   add_index "exam_responses", ["exam_version_id"], :name => "index_exam_responses_on_exam_version_id"
   add_index "exam_responses", ["original_user_id"], :name => "index_exam_responses_on_original_user_id"
+  add_index "exam_responses", ["user_id"], :name => "index_exam_responses_on_user_id"
 
   create_table "exam_versions", :force => true do |t|
     t.string   "title"
@@ -108,9 +108,9 @@ ActiveRecord::Schema.define(:version => 20090414030113) do
   add_index "family_survey_responses", ["user_id"], :name => "index_family_survey_responses_on_user_id"
 
   create_table "informed_consent_responses", :force => true do |t|
-    t.boolean  "twin",       :default => false
-    t.boolean  "biopsy",     :default => false
-    t.boolean  "recontact",  :default => false
+    t.boolean  "twin",       :default => false, :null => false
+    t.boolean  "biopsy",     :default => false, :null => false
+    t.boolean  "recontact",  :default => false, :null => false
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -149,10 +149,12 @@ ActiveRecord::Schema.define(:version => 20090414030113) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "exam_question_id"
+    t.boolean  "correct",          :default => false, :null => false
   end
 
-  add_index "question_responses", ["exam_response_id"], :name => "index_question_responses_on_exam_response_id"
+  add_index "question_responses", ["correct"], :name => "index_question_responses_on_correct"
   add_index "question_responses", ["exam_question_id"], :name => "index_question_responses_on_exam_question_id"
+  add_index "question_responses", ["exam_response_id"], :name => "index_question_responses_on_exam_response_id"
 
   create_table "residency_survey_responses", :force => true do |t|
     t.integer  "user_id"

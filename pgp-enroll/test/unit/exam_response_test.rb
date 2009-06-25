@@ -72,4 +72,10 @@ class ExamResponseTest < ActiveSupport::TestCase
     end
   end
 
+  should "give the count of question_responses when sent response_count" do
+    exam_response = Factory(:exam_response)
+    5.times { Factory(:question_response, :exam_response => exam_response) }
+    assert_equal 5, exam_response.response_count
+  end
+
 end

@@ -17,7 +17,7 @@ class ExamResponse < ActiveRecord::Base
   end
 
   def correct_response_count
-    question_responses.select(&:correct?).size
+    question_responses.correct.size
   end
 
   def correct?
