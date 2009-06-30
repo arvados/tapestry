@@ -6,8 +6,10 @@ class ParticipationConsentsController < ApplicationController
     #TODO: Tried making DB columns nullable, but these fields default to false anyway.
     #      How to ensure a user chooses yes or no?
     informed_consent_response = InformedConsentResponse.new
-    %w(twin biopsy recontact).each do |field|
-      informed_consent_response.send(:"#{field}=", params[:informed_consent_response][field])
+    if params[:informed_consent_response]
+      %w(twin biopsy recontact).each do |field|
+        informed_consent_response.send(:"#{field}=", params[:informed_consent_response][field])
+      end
     end
 
     informed_consent_response.user = current_user
