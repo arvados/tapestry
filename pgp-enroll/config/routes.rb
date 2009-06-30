@@ -27,6 +27,7 @@ ActionController::Routing::Routes.draw do |map|
     screening_surveys.resource :residency, :family, :privacy
   end
   map.resources :screening_surveys, :collection => { :complete => :post } 
+  map.resource :phr
   map.resource :consent_review
   map.resource :screening_submission
   map.resource :participation_consent

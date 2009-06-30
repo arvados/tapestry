@@ -64,18 +64,27 @@ participation_consent:
   phase: preenrollment
   duration: 5 minutes
 
+phr:
+  id: 13
+  ordinal: 8
+  keyword: phr
+  title: Personalized health record
+  description: Share your personalized health record
+  phase: preenrollment
+  duration: 1 hour
+
 trait_collection:
   id: 6
-  ordinal: 8
+  ordinal: 9
   keyword: trait_collection
   title: Trait Collection
   description: Trait collection step.
   phase: preenrollment
-  duration: 2 hours
+  duration: 1 hour
 
 pledge:
   id: 7
-  ordinal: 9
+  ordinal: 10
   keyword: pledge
   title: Make Financial Pledge
   description: Make Financial Pledge
@@ -84,7 +93,7 @@ pledge:
 
 identity_confirmation:
   id: 9
-  ordinal: 10
+  ordinal: 11
   keyword: identity_confirmation
   title: Identity Questionnaire
   description: Identity Questionnaire
@@ -93,7 +102,7 @@ identity_confirmation:
 
 enrollment_application:
   id: 10
-  ordinal: 11
+  ordinal: 12
   keyword: enrollment_application
   title: Submit Enrollment Application
   description: Submit Enrollment Application
@@ -102,7 +111,7 @@ enrollment_application:
 
 eligibility_application_results:
   id: 11
-  ordinal: 12
+  ordinal: 13
   keyword: eligibility_application_results
   title: Enrollment Application Results
   description: Enrollment Application Results
