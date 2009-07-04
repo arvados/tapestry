@@ -64,7 +64,8 @@ class User < ActiveRecord::Base
   attr_accessible :email, :email_confirmation,
                   :password, :password_confirmation,
                   :first_name, :middle_name, :last_name,
-                  :address1, :address2, :city, :state, :zip
+                  :address1, :address2, :city, :state, :zip,
+                  :phr_profile_name
 
   # Activates the user in the database.
   def activate!

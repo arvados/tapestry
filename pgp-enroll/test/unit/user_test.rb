@@ -9,6 +9,12 @@ class UserTest < Test::Unit::TestCase
   should_have_one  :privacy_survey_response
   should_have_one  :informed_consent_response
 
+  should_allow_mass_assignment_of :email, :email_confirmation,
+                                  :password, :password_confirmation,
+                                  :first_name, :middle_name, :last_name,
+                                  :address1, :address2, :city, :state, :zip,
+                                  :phr_profile_name
+
   should_have_attached_file :phr
 
   context 'a user' do

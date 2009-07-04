@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090625023228) do
+ActiveRecord::Schema.define(:version => 20090704025413) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(:version => 20090625023228) do
     t.string   "state"
     t.string   "zip"
     t.text     "enrollment_essay"
+    t.string   "phr_profile_name"
   end
 
 end
