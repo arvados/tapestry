@@ -38,6 +38,57 @@ class User < ActiveRecord::Base
 
   named_scope :inactive, { :conditions => "activated_at IS NULL" }
 
+  named_scope :in_screening_eligibility_group, lambda { |group|
+     base_conditions = "residency_survey_responses.us_resident = 1 and
+                          residency_survey_responses.can_travel_to_boston = 1 and
+                          family_survey_responses.birth_year <= :birth_year and
+                          (
+                            privacy_survey_responses.worrisome_information_comfort_level = 'always' or
+                            privacy_survey_responses.worrisome_information_comfort_level = 'understand'
+                          ) and
+                          (
+                            privacy_survey_responses.information_disclosure_comfort_level = 'comfortable' or
+                            privacy_survey_responses.information_disclosure_comfort_level = 'understand'
+                          )"
+
+     joins = [:residency_survey_response, :family_survey_response, :privacy_survey_response]
+     birth_year = Time.now.year - 21
+
+     if group == 1
+       {
+         :conditions => ["#{base_conditions} and
+                          privacy_survey_responses.past_genetic_test_participation = 'public'
+                          ", { :birth_year => birth_year }],
+         :joins => joins
+       }
+     elsif group == 2
+       {
+         :conditions => ["#{base_conditions} and
+                          privacy_survey_responses.past_genetic_test_participation = 'no'
+                          ", { :birth_year => birth_year }],
+         :joins => joins
+       }
+     elsif group == 3
+       {
+         :conditions => ["#{base_conditions} and
+                          (
+                            privacy_survey_responses.past_genetic_test_participation = 'unsure' or
+                            privacy_survey_responses.past_genetic_test_participation = 'yes'
+                          )
+                          ", { :birth_year => birth_year }],
+         :joins => joins
+       }
+     else
+       raise "Undefined screening eligibility group (only 1-3 are defined)"
+     end
+  }
+      # @group1_user = Factory(:user)
+      # Factory(:residency_survey_response, :user => @group1_user, :us_resident => true, :can_travel_to_boston => true)
+      # Factory(:family_survey_response,    :user => @group1_user, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      # Factory(:privacy_survey_response,   :user => @group1_user, :worrisome_information_comfort_level => 'always',
+      #                                                            :information_disclosure_comfort_level => 'comfortable',
+      #                                                            :past_genetic_test_participation  => 'public')
+
   def email=(email)
     email = email.strip if email
     write_attribute(:email, email)

@@ -17,10 +17,17 @@
                              params[:completed])%>
       <%= submit_tag 'Show' %>
     </li>
+    <li><%= link_to "Show users who are in eligibility group 1 (good match)", admin_users_path(:screening_eligibility_group => 1) %></li>
+    <li><%= link_to "Show users who are in eligibility group 2 (ok match)", admin_users_path(:screening_eligibility_group => 2) %></li>
+    <li><%= link_to "Show users who are in eligibility group 3 (ok match)", admin_users_path(:screening_eligibility_group => 3) %></li>
   </ul>
 <% end %>
 
-<p>Download list of users as <%= link_to 'CSV', formatted_admin_users_url(:format => 'csv', :completed => params[:completed]) %></p>
+<p>Download this list of users as <%= link_to 'CSV',
+  formatted_admin_users_url(:format => 'csv',
+                            :completed                   => params[:completed],
+                            :inactive                    => params[:inactive],
+                            :screening_eligibility_group => params[:screening_eligibility_group]) %></p>
 
 <%= @users.size %> users:
 

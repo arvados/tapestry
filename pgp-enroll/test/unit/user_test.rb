@@ -283,4 +283,77 @@ class UserTest < Test::Unit::TestCase
     assert_equal [inactive_user], User.inactive
   end
 
+  context "with users who fall into various screening eligibility groups" do
+    setup do
+      User.delete_all
+
+      @group1_user = Factory(:user)
+      Factory(:residency_survey_response, :user => @group1_user, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @group1_user, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @group1_user, :worrisome_information_comfort_level => 'always',
+                                                                 :information_disclosure_comfort_level => 'comfortable',
+                                                                 :past_genetic_test_participation  => 'public')
+
+      @group2_user = Factory(:user)
+      Factory(:residency_survey_response, :user => @group2_user, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @group2_user, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @group2_user, :worrisome_information_comfort_level => 'always',
+                                                                 :information_disclosure_comfort_level => 'comfortable',
+                                                                 :past_genetic_test_participation  => 'no')
+
+      @group3_user_1 = Factory(:user)
+      Factory(:residency_survey_response, :user => @group3_user_1, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @group3_user_1, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @group3_user_1, :worrisome_information_comfort_level => 'always',
+                                                                   :information_disclosure_comfort_level => 'comfortable',
+                                                                   :past_genetic_test_participation  => 'yes')
+
+      @group3_user_2 = Factory(:user)
+      Factory(:residency_survey_response, :user => @group3_user_2, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @group3_user_2, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @group3_user_2, :worrisome_information_comfort_level => 'always',
+                                                                   :information_disclosure_comfort_level => 'comfortable',
+                                                                   :past_genetic_test_participation  => 'unsure')
+
+      # ineligble responses attached to other users
+      Factory(:residency_survey_response, :us_resident => false, :country => "France")
+      Factory(:residency_survey_response, :can_travel_to_boston => false)
+      Factory(:family_survey_response, :monozygotic_twin => 'unwilling')
+      Factory(:family_survey_response, :birth_year => Time.now.year - 15)
+    end
+
+    should "returns users in eligibility group 1 when sent .in_screening_eligibility_group(1)" do
+      assert_equal [@group1_user], User.in_screening_eligibility_group(1)
+    end
+
+    should "returns users in eligibility group 2 when sent .in_screening_eligibility_group(2)" do
+      assert_equal [@group2_user], User.in_screening_eligibility_group(2)
+    end
+
+    should "returns users in eligibility group 3 when sent .in_screening_eligibility_group(3)" do
+      assert_equal [@group3_user_1, @group3_user_2], User.in_screening_eligibility_group(3)
+    end
+  end
 end
+
+# Factory.define(:residency_survey_response) do |f|
+#   f.user { |u| u.association :user }
+#   f.us_resident true
+#   f.zip '12345'
+#   f.can_travel_to_boston true
+# end
+# 
+# Factory.define :family_survey_response do |f|
+#   f.user         { |u| u.association :user }
+#   f.birth_year 1983
+#   f.relatives_interested_in_pgp '0'
+#   f.monozygotic_twin 'no'
+#   f.child_situation 'none'
+# end
+# 
+# Factory.define :privacy_survey_response do |f|
+#   f.user { |u| u.association :user }
+#   f.worrisome_information_comfort_level 'understand'
+#   f.information_disclosure_comfort_level 'understand'
+#   f.past_genetic_test_participation 'public'
+# end

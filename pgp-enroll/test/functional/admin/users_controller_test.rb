@@ -68,6 +68,18 @@ class Admin::UsersControllerTest < ActionController::TestCase
         should "render a link to filter only inactive users" do
           assert_select 'li>a[href=?]', admin_users_path(:inactive => true)
         end
+
+        should "render a link to show only users who are in group 1 (best match)" do
+          assert_select 'li>a[href=?]',admin_users_path(:screening_eligibility_group => 1)
+        end
+
+        should "render a link to show only users who are in group 2 (ok match)" do
+          assert_select 'li>a[href=?]', admin_users_path(:screening_eligibility_group => 2)
+        end
+
+        should "render a link to show only users who are in group 3 (ok match)" do
+          assert_select 'li>a[href=?]', admin_users_path(:screening_eligibility_group => 3)
+        end
       end
 
       should 'show all users on GET to index as CSV' do
@@ -98,6 +110,16 @@ class Admin::UsersControllerTest < ActionController::TestCase
 
         assert_response :success
         assert_equal [completed_user], assigns(:users)
+      end
+
+      should "filter users who are in a screening_eligibility_group when params[:screening_eligibility_group] is specified" do
+        users = [Factory(:user)]
+        User.expects(:in_screening_eligibility_group).with(1).once.returns(users)
+
+        get :index, :screening_eligibility_group => "1"
+
+        assert_equal users, assigns(:users)
+        assert_select 'a[href=?]', formatted_admin_users_url(:format => 'csv', :screening_eligibility_group => "1")
       end
 
       should 'link to the CSV download with the same filter when params[:completed] is specified' do

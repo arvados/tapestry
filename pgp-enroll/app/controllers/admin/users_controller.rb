@@ -7,6 +7,8 @@ class Admin::UsersController < Admin::AdminControllerBase
       @users = User.has_completed(params[:completed])
     elsif params[:inactive]
       @users = User.inactive
+    elsif params[:screening_eligibility_group]
+      @users = User.in_screening_eligibility_group(params[:screening_eligibility_group].to_i)
     else
       @users = User.all
     end
