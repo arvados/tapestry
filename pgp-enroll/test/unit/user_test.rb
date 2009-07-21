@@ -335,25 +335,3 @@ class UserTest < Test::Unit::TestCase
     end
   end
 end
-
-# Factory.define(:residency_survey_response) do |f|
-#   f.user { |u| u.association :user }
-#   f.us_resident true
-#   f.zip '12345'
-#   f.can_travel_to_boston true
-# end
-# 
-# Factory.define :family_survey_response do |f|
-#   f.user         { |u| u.association :user }
-#   f.birth_year 1983
-#   f.relatives_interested_in_pgp '0'
-#   f.monozygotic_twin 'no'
-#   f.child_situation 'none'
-# end
-# 
-# Factory.define :privacy_survey_response do |f|
-#   f.user { |u| u.association :user }
-#   f.worrisome_information_comfort_level 'understand'
-#   f.information_disclosure_comfort_level 'understand'
-#   f.past_genetic_test_participation 'public'
-# end

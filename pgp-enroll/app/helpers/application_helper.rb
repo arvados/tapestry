@@ -40,4 +40,7 @@ EOS
     survey.nil? ? 'Not complete' : 'Complete'
   end
 
+  def in_admin_section?
+    request.path =~ %r{^/admin/}
+  end
 end

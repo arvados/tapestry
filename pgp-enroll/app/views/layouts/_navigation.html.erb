@@ -6,7 +6,19 @@
     <% else -%>
       <%= nav_element 'Account', edit_user_url(current_user) %>
       <%= nav_element 'Log out', logout_url %>
-      <%= nav_element 'Admin', admin_root_url if current_user.is_admin? %>
+      <% if current_user.is_admin? %>
+        <li <%= 'class="current"' if in_admin_section? %> ><%= link_to 'Admin', admin_root_url %></li>
+      <% end %>
     <% end -%>
   </ul>
 </div>
+<% if in_admin_section? %>
+  <div class="menu" style="margin-top: 0px;">
+    <ul class="sublinks">
+      <%= nav_element 'Users', admin_users_path %>
+      <%= nav_element 'Exams', admin_content_areas_path %>
+      <%= nav_element 'Reports', admin_reports_path %>
+      <%= nav_element 'Invited Email Addresses', admin_invited_emails_path %>
+    </ul>
+  </div>
+<% end %>
