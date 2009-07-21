@@ -80,6 +80,10 @@ class Admin::UsersControllerTest < ActionController::TestCase
         should "render a link to show only users who are in group 3 (ok match)" do
           assert_select 'li>a[href=?]', admin_users_path(:screening_eligibility_group => 3)
         end
+
+        should "render a link to the bulk-promote-user page" do
+          assert_select 'li>a[href=?]', new_admin_bulk_promotion_path
+        end
       end
 
       should 'show all users on GET to index as CSV' do

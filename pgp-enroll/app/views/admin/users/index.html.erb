@@ -20,6 +20,7 @@
     <li><%= link_to "Show users who are in eligibility group 1 (good match)", admin_users_path(:screening_eligibility_group => 1) %></li>
     <li><%= link_to "Show users who are in eligibility group 2 (ok match)", admin_users_path(:screening_eligibility_group => 2) %></li>
     <li><%= link_to "Show users who are in eligibility group 3 (ok match)", admin_users_path(:screening_eligibility_group => 3) %></li>
+    <li><%= link_to "Bulk promote users", new_admin_bulk_promotion_path %></li>
   </ul>
 <% end %>
 

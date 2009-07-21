@@ -17,7 +17,7 @@
     <div class="clear"><!-- --></div>
 
     <%= breadcrumbs %>
-    <%= display_standard_flashes %>
+    <%= render :partial => 'layouts/flashes' -%>
     <div class="main">
       <%= yield %>
     </div>

@@ -44,6 +44,7 @@ ActionController::Routing::Routes.draw do |map|
                                          :promote  => :put } do |user|
       user.resources :exam_responses
     end
+    admin.resources :bulk_promotions
     admin.resources :reports
     admin.resources :content_areas do |content_area|
       content_area.resources :exams do |exam|
