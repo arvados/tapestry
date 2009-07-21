@@ -287,51 +287,88 @@ class UserTest < Test::Unit::TestCase
     setup do
       User.delete_all
 
-      @group1_user = Factory(:user)
-      Factory(:residency_survey_response, :user => @group1_user, :us_resident => true, :can_travel_to_boston => true)
-      Factory(:family_survey_response,    :user => @group1_user, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
-      Factory(:privacy_survey_response,   :user => @group1_user, :worrisome_information_comfort_level => 'always',
-                                                                 :information_disclosure_comfort_level => 'comfortable',
-                                                                 :past_genetic_test_participation  => 'public')
+      @user1a = Factory(:user, :first_name => 'user1a')
+      Factory(:residency_survey_response, :user => @user1a, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @user1a, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @user1a, :worrisome_information_comfort_level => 'always',
+                                                            :information_disclosure_comfort_level => 'comfortable',
+                                                            :past_genetic_test_participation  => 'public')
+      @user1b = Factory(:user, :first_name => 'user1b')
+      Factory(:residency_survey_response, :user => @user1b, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @user1b, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @user1b, :worrisome_information_comfort_level => 'understand',
+                                                            :information_disclosure_comfort_level => 'understand',
+                                                            :past_genetic_test_participation  => 'yes')
+      @user1c = Factory(:user, :first_name => 'user1c')
+      Factory(:residency_survey_response, :user => @user1c, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @user1c, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @user1c, :worrisome_information_comfort_level => 'always',
+                                                            :information_disclosure_comfort_level => 'comfortable',
+                                                            :past_genetic_test_participation  => 'no')
+      @user1d = Factory(:user, :first_name => 'user1d')
+      Factory(:residency_survey_response, :user => @user1d, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @user1d, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @user1d, :worrisome_information_comfort_level => 'always',
+                                                            :information_disclosure_comfort_level => 'comfortable',
+                                                            :past_genetic_test_participation  => 'unsure')
 
-      @group2_user = Factory(:user)
-      Factory(:residency_survey_response, :user => @group2_user, :us_resident => true, :can_travel_to_boston => true)
-      Factory(:family_survey_response,    :user => @group2_user, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
-      Factory(:privacy_survey_response,   :user => @group2_user, :worrisome_information_comfort_level => 'always',
-                                                                 :information_disclosure_comfort_level => 'comfortable',
-                                                                 :past_genetic_test_participation  => 'no')
+      @user2a = Factory(:user, :first_name => 'user2a')
+      Factory(:residency_survey_response, :user => @user2a, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @user2a, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @user2a, :worrisome_information_comfort_level => 'depends',
+                                                            :information_disclosure_comfort_level => 'depends',
+                                                            :past_genetic_test_participation  => 'confidential')
 
-      @group3_user_1 = Factory(:user)
-      Factory(:residency_survey_response, :user => @group3_user_1, :us_resident => true, :can_travel_to_boston => true)
-      Factory(:family_survey_response,    :user => @group3_user_1, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
-      Factory(:privacy_survey_response,   :user => @group3_user_1, :worrisome_information_comfort_level => 'always',
-                                                                   :information_disclosure_comfort_level => 'comfortable',
-                                                                   :past_genetic_test_participation  => 'yes')
+      @user2b = Factory(:user, :first_name => 'user2b')
+      Factory(:residency_survey_response, :user => @user2b, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @user2b, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @user2b, :worrisome_information_comfort_level => 'uncomfortable',
+                                                            :information_disclosure_comfort_level => 'uncomfortable',
+                                                            :past_genetic_test_participation  => 'confidential')
 
-      @group3_user_2 = Factory(:user)
-      Factory(:residency_survey_response, :user => @group3_user_2, :us_resident => true, :can_travel_to_boston => true)
-      Factory(:family_survey_response,    :user => @group3_user_2, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
-      Factory(:privacy_survey_response,   :user => @group3_user_2, :worrisome_information_comfort_level => 'always',
-                                                                   :information_disclosure_comfort_level => 'comfortable',
-                                                                   :past_genetic_test_participation  => 'unsure')
+      @user2c = Factory(:user, :first_name => 'user2c')
+      Factory(:residency_survey_response, :user => @user2c, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @user2c, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @user2c, :worrisome_information_comfort_level => 'uncomfortable',
+                                                            :information_disclosure_comfort_level => 'unsure',
+                                                            :past_genetic_test_participation  => 'confidential')
 
-      # ineligble responses attached to other users
-      Factory(:residency_survey_response, :us_resident => false, :country => "France")
-      Factory(:residency_survey_response, :can_travel_to_boston => false)
-      Factory(:family_survey_response, :monozygotic_twin => 'unwilling')
-      Factory(:family_survey_response, :birth_year => Time.now.year - 15)
+      @user3a = Factory(:user, :first_name => 'user3a')
+      Factory(:residency_survey_response, :user => @user3a, :us_resident => false, :country => "France")
+      Factory(:family_survey_response, :user => @user3a)
+      Factory(:privacy_survey_response, :user => @user3a)
+
+      @user3b = Factory(:user, :first_name => 'user3b')
+      Factory(:residency_survey_response, :user => @user3b, :can_travel_to_boston => false)
+      Factory(:family_survey_response, :user => @user3b)
+      Factory(:privacy_survey_response, :user => @user3b)
+
+      @user3c = Factory(:user, :first_name => 'user3c')
+      Factory(:family_survey_response, :user => @user3c, :monozygotic_twin => 'unwilling')
+      Factory(:residency_survey_response, :user => @user3c)
+      Factory(:privacy_survey_response, :user => @user3c)
+
+      @user3d = Factory(:user, :first_name => 'user3d')
+      Factory(:family_survey_response, :user => @user3d, :birth_year => Time.now.year - 15)
+      Factory(:residency_survey_response, :user => @user3d)
+      Factory(:privacy_survey_response, :user => @user3d)
+
+      @user3e = Factory(:user, :first_name => 'user3e')
+      Factory(:family_survey_response, :user => @user3e, :monozygotic_twin => 'unknown')
+      Factory(:residency_survey_response, :user => @user3e)
+      Factory(:privacy_survey_response, :user => @user3e)
     end
 
     should "returns users in eligibility group 1 when sent .in_screening_eligibility_group(1)" do
-      assert_equal [@group1_user], User.in_screening_eligibility_group(1)
+      assert_equal [@user1a, @user1b, @user1c, @user1d].map(&:first_name).sort, User.in_screening_eligibility_group(1).map(&:first_name).sort
     end
 
     should "returns users in eligibility group 2 when sent .in_screening_eligibility_group(2)" do
-      assert_equal [@group2_user], User.in_screening_eligibility_group(2)
+      assert_equal [@user2a, @user2b, @user2c].map(&:first_name).sort, User.in_screening_eligibility_group(2).map(&:first_name).sort
     end
 
     should "returns users in eligibility group 3 when sent .in_screening_eligibility_group(3)" do
-      assert_equal [@group3_user_1, @group3_user_2], User.in_screening_eligibility_group(3)
+      assert_equal [@user3a, @user3b, @user3c, @user3d, @user3e].map(&:first_name).sort, User.in_screening_eligibility_group(3).map(&:first_name).sort
     end
   end
 end
