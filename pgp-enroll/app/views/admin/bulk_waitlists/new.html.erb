@@ -1,0 +1,14 @@
+<h2>Bulk Waitlist Users</h2>
+
+<% form_tag admin_bulk_waitlists_path, { :method => 'post' } do  %>
+  <p>
+    <label for="reason">Reason for waitlisting (if any):</label><br/>
+    <%= text_area_tag 'reason', '', :rows => 5, :style => "width: 100%;" %><br/>
+  </p>
+  <p>
+    <label for="emails">Enter the emails of users to waitlist, each on its own line:</label><br/>
+    <%= text_area_tag 'emails', '', :rows => 20, :style => "width: 100%;" %><br/>
+  </p>
+    <%= submit_tag 'Waitlist' %>
+<% end %>
+

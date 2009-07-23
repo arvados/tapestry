@@ -85,6 +85,8 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
         should_set_the_flash_to /completed/i
       end
     end
+
+
   end
 
 end

@@ -41,6 +41,36 @@ class ScreeningSubmissionsControllerTest < ActionController::TestCase
       should_redirect_to "root_path"
     end
 
+    context "on DELETE to destroy" do
+      setup do
+        Factory(:privacy_survey_response,   :user => @user)
+        Factory(:residency_survey_response, :user => @user)
+        Factory(:family_survey_response,    :user => @user)
+        assert submission_step = EnrollmentStep.find_by_keyword('screening_submission')
+        assert surveys_step    = EnrollmentStep.find_by_keyword('screening_surveys')
+        @user.complete_enrollment_step(submission_step)
+        @user.complete_enrollment_step(surveys_step)
+        @user.reload
+        assert @user.has_completed?('screening_submission')
+        assert @user.has_completed?('screening_surveys')
+
+        delete :destroy
+      end
+
+      should "remove previous responses" do
+        assert_nil @user.privacy_survey_response
+        assert_nil @user.residency_survey_response
+        assert_nil @user.family_survey_response
+      end
+
+      should "remove the enrollment_step_completion" do
+        @user.reload
+        assert ! @user.has_completed?('screening_submission')
+        assert ! @user.has_completed?('screening_surveys')
+      end
+
+      should_redirect_to "screening_surveys_url"
+    end
     # context "on POST to create with some ineligible screening surveys" do
     #   setup do
     #     @family_survey_response = Factory(:ineligible_family_survey_response, :user => @user)

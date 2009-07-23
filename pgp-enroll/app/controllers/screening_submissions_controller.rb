@@ -9,6 +9,23 @@ class ScreeningSubmissionsController < ApplicationController
     redirect_to root_path
   end
 
+  def destroy
+    submission_step = EnrollmentStep.find_by_keyword('screening_submission')
+    surveys_step    = EnrollmentStep.find_by_keyword('screening_surveys')
+
+    submission_completion = EnrollmentStepCompletion.find_by_user_id_and_enrollment_step_id(current_user, submission_step)
+    surveys_completion    = EnrollmentStepCompletion.find_by_user_id_and_enrollment_step_id(current_user, surveys_step)
+
+    submission_completion.destroy
+    surveys_completion.destroy
+
+    current_user.family_survey_response.destroy    if current_user.family_survey_response
+    current_user.residency_survey_response.destroy if current_user.residency_survey_response
+    current_user.privacy_survey_response.destroy   if current_user.privacy_survey_response
+
+    redirect_to screening_surveys_path
+  end
+
   # private
 
   # def get_eligibility_and_message
