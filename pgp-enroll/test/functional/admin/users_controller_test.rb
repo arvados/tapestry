@@ -89,6 +89,10 @@ class Admin::UsersControllerTest < ActionController::TestCase
         should "render a link to the bulk-promote-user page" do
           assert_select 'li>a[href=?]', new_admin_bulk_promotion_path
         end
+
+        should "render a link to the bulk-waitlist-user page" do
+          assert_select 'li>a[href=?]', new_admin_bulk_waitlist_path
+        end
       end
 
       should 'show all users on GET to index as CSV' do

@@ -17,12 +17,17 @@
                              params[:completed])%>
       <%= submit_tag 'Show' %>
     </li>
-    <li><%= link_to "Show users who are in eligibility group 1 (good match)", admin_users_path(:screening_eligibility_group => 1) %></li>
-    <li><%= link_to "Show users who are in eligibility group 2 (ok match)", admin_users_path(:screening_eligibility_group => 2) %></li>
-    <li><%= link_to "Show users who are in eligibility group 3 (ok match)", admin_users_path(:screening_eligibility_group => 3) %></li>
-    <li><%= link_to "Bulk promote users", new_admin_bulk_promotion_path %></li>
+    <li><%= link_to "Show users who are in eligibility group 1 (Eligible, OK match)", admin_users_path(:screening_eligibility_group => 1) %></li>
+    <li><%= link_to "Show users who are in eligibility group 2 (Eligible, NO match)", admin_users_path(:screening_eligibility_group => 2) %></li>
+    <li><%= link_to "Show users who are in eligibility group 3 (Ineligible, N/A)", admin_users_path(:screening_eligibility_group => 3) %></li>
   </ul>
 <% end %>
+
+<h3>Eligibility Actions</h3>
+<ul>
+  <li><%= link_to "Bulk promote some users", new_admin_bulk_promotion_path %></li>
+  <li><%= link_to "Bulk waitlist some users", new_admin_bulk_waitlist_path %></li>
+</ul>
 
 <p>Download this list of users as <%= link_to 'CSV',
   formatted_admin_users_url(:format => 'csv',
