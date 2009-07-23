@@ -21,6 +21,16 @@
   <%= link_to 'Promote', promote_admin_user_url(@user), :method => 'PUT' %></p>
 <% end -%>
 
+<% if @user.waitlists.any? -%>
+  <h2>Waitlistings</h2>
+  <p>This user has been waitlisted:</p>
+  <ol>
+    <% @user.waitlists.each do |waitlist| -%>
+      <li>On <%= waitlist.created_at %>: <%= h waitlist.reason %></li>
+    <% end -%>
+  </ol>
+<% end -%>
+
 <h2>Edit User Account</h2>
 
 <p><%= f.label :first_name %><br/>

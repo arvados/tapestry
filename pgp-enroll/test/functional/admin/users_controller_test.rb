@@ -25,6 +25,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
     context 'on GET to edit for a user' do
       setup do
         @user = Factory(:user)
+        Factory(:waitlist, :user => @user, :reason => "Banana sundae")
         Factory(:enrollment_step)
         get :edit, :id => @user.id
       end
@@ -34,6 +35,10 @@ class Admin::UsersControllerTest < ActionController::TestCase
 
       should "link to #promote for each user" do
         assert_select 'a[href=?]', promote_admin_user_url(@user)
+      end
+
+      should "show that user's waitlists" do
+        assert_match /Banana sundae/, @response.body
       end
 
       should_eventually "render the edit form"

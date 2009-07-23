@@ -162,3 +162,7 @@ end
 Factory.define :invited_email do |f|
   f.email { Factory.next :email }
 end
+
+Factory.define :waitlist do |f|
+  f.association :user
+end

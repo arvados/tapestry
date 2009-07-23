@@ -45,6 +45,7 @@ ActionController::Routing::Routes.draw do |map|
       user.resources :exam_responses
     end
     admin.resources :bulk_promotions
+    admin.resources :bulk_waitlists
     admin.resources :reports
     admin.resources :content_areas do |content_area|
       content_area.resources :exams do |exam|
