@@ -372,4 +372,14 @@ class UserTest < Test::Unit::TestCase
       assert_equal [@user3a, @user3b, @user3c, @user3d, @user3e].map(&:first_name).sort, User.in_screening_eligibility_group(3).map(&:first_name).sort
     end
   end
+
+  should "properly calculate last_waitlisted_at" do
+    assert_nil Factory(:user).last_waitlisted_at
+
+    user = Factory(:user)
+    later = Factory(:waitlist, :user => user, :created_at => 1.day.ago)
+    earlier = Factory(:waitlist, :user => user, :created_at => 2.days.ago)
+
+    assert_equal later.created_at.day, user.reload.last_waitlisted_at.day
+  end
 end

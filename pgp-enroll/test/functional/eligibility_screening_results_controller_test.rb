@@ -17,9 +17,7 @@ class EligibilityScreeningResultsControllerTest < ActionController::TestCase
       should_respond_with :success
       should_render_template :index
     end
-  end
 
-  logged_in_user_context do
     context 'on GET to index for a user who has been waitlisted' do
       setup do
         Factory(:waitlist, :user => @user)

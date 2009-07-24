@@ -144,6 +144,10 @@ class User < ActiveRecord::Base
     ContentArea.all.select { |content_area| content_area.completed_by?(self) }.size
   end
 
+  def last_waitlisted_at
+    waitlists.first(:order => 'created_at desc').created_at if waitlists.any?
+  end
+
   protected
 
   def make_activation_code
