@@ -19,6 +19,7 @@ module Admin::UsersHelper
     survey_response_fields.each do |survey, fields|
       header_row |= fields.map { |field| "#{survey.to_s.humanize} #{field.to_s.humanize}" }
     end
+    header_row.push  "Waitlist Count"
 
     CSV.generate_row(header_row, header_row.size, buf)
     users.each do |user|
@@ -33,6 +34,7 @@ module Admin::UsersHelper
         end
       end
 
+      row.push user.waitlists.count
       CSV.generate_row(row, row.size, buf)
     end
 
