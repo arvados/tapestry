@@ -335,6 +335,13 @@ class UserTest < Test::Unit::TestCase
                                                             :information_disclosure_comfort_level => 'unsure',
                                                             :past_genetic_test_participation  => 'confidential')
 
+      @user2d = Factory(:user, :first_name => 'user2d')
+      Factory(:residency_survey_response, :user => @user2d, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @user2d, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @user2d, :worrisome_information_comfort_level => 'depends',
+                                                            :information_disclosure_comfort_level => 'comfortable',
+                                                            :past_genetic_test_participation  => 'confidential')
+
       @user3a = Factory(:user, :first_name => 'user3a')
       Factory(:residency_survey_response, :user => @user3a, :us_resident => false, :country => "France")
       Factory(:family_survey_response, :user => @user3a)
@@ -366,7 +373,7 @@ class UserTest < Test::Unit::TestCase
     end
 
     should "returns users in eligibility group 2 when sent .in_screening_eligibility_group(2)" do
-      assert_equal [@user2a, @user2b, @user2c].map(&:first_name).sort, User.in_screening_eligibility_group(2).map(&:first_name).sort
+      assert_equal [@user2a, @user2b, @user2c, @user2d].map(&:first_name).sort, User.in_screening_eligibility_group(2).map(&:first_name).sort
     end
 
     should "returns users in eligibility group 3 when sent .in_screening_eligibility_group(3)" do

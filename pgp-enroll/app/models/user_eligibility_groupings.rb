@@ -40,16 +40,18 @@ module UserEligibilityGroupings
         family_survey_responses.monozygotic_twin = 'willing'
       ) and
       (
-        privacy_survey_responses.worrisome_information_comfort_level = 'depends' or
-        privacy_survey_responses.worrisome_information_comfort_level = 'uncomfortable'
-      ) and
-      (
-        privacy_survey_responses.information_disclosure_comfort_level = 'uncomfortable' or
-        privacy_survey_responses.information_disclosure_comfort_level = 'depends' or
-        privacy_survey_responses.information_disclosure_comfort_level = 'unsure'
-      ) and
-      (
-        privacy_survey_responses.past_genetic_test_participation = 'confidential'
+        (
+          privacy_survey_responses.worrisome_information_comfort_level = 'depends' or
+          privacy_survey_responses.worrisome_information_comfort_level = 'uncomfortable'
+        ) or
+        (
+          privacy_survey_responses.information_disclosure_comfort_level = 'uncomfortable' or
+          privacy_survey_responses.information_disclosure_comfort_level = 'depends' or
+          privacy_survey_responses.information_disclosure_comfort_level = 'unsure'
+        ) or
+        (
+          privacy_survey_responses.past_genetic_test_participation = 'confidential'
+        )
       )
       ",
 
