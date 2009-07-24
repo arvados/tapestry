@@ -1,17 +1,23 @@
 class TraitCollectionsController < ApplicationController
   def show
+    @baseline_traits_survey = current_user.baseline_traits_survey || BaselineTraitsSurvey.new(
+      :birth_country => 'United States',
+      :paternal_grandfather_born_in => 'United States',
+      :paternal_grandmother_born_in => 'United States',
+      :maternal_grandfather_born_in => 'United States',
+      :maternal_grandmother_born_in => 'United States')
   end
 
   def create
-    current_user.phr = params[:phr]
+    @baseline_traits_survey = BaselineTraitsSurvey.new(params[:baseline_traits_survey])
+    @baseline_traits_survey.user = current_user
 
-    if current_user.save && current_user.reload.phr && current_user.reload.phr.exists?
+    if @baseline_traits_survey.save
       step = EnrollmentStep.find_by_keyword('trait_collection')
       current_user.complete_enrollment_step(step)
+      flash[:notice] = 'You have completed the baseline trait collection survey.'
       redirect_to root_path
     else
-      flash[:error] = "You must upload a valid CCR file containing your personal health record to proceed."
-      show
       render :action => 'show'
     end
   end

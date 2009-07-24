@@ -20,38 +20,32 @@ class TraitCollectionsControllerTest < ActionController::TestCase
 
       should_respond_with :success
       should_render_template :show
+      should_assign_to "baseline_traits_survey"
 
       should "render a form to upload traits" do
         assert_select 'form[method=?][action=?]', 'post', trait_collection_path
       end
     end
 
-    context "on POST to create without a file" do
+    context "on POST to create with valid traits" do
       setup do
-        phr = mock('phr')
-        phr.stubs(:exists?).returns(false)
-        User.any_instance.stubs(:phr).returns(phr)
-
-        post :create
-      end
-
-      should_not_change 'EnrollmentStepCompletion.count'
-      should_respond_with :success
-      should_render_template :show
-      should_set_the_flash_to /file/i
-    end
-
-    context "on POST to create with a file" do
-      setup do
-        phr = mock('phr')
-        phr.stubs(:exists?).returns(true)
-        User.any_instance.stubs(:phr).returns(phr)
-
+        BaselineTraitsSurvey.any_instance.stubs(:save).returns(true)
         post :create
       end
 
       should_change 'EnrollmentStepCompletion.count', :by => 1
       should_redirect_to 'root_path'
+    end
+
+    context "on POST to create with invalid traits" do
+      setup do
+        BaselineTraitsSurvey.any_instance.stubs(:save).returns(false)
+        post :create
+      end
+
+      should_not_change 'EnrollmentStepCompletion.count'
+      should_render_template :show
+      should_assign_to "baseline_traits_survey"
     end
   end
 end

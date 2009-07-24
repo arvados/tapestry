@@ -9,6 +9,7 @@ class UserTest < Test::Unit::TestCase
   should_have_one  :family_survey_response
   should_have_one  :privacy_survey_response
   should_have_one  :informed_consent_response
+  should_have_one  :baseline_traits_survey
 
   should_allow_mass_assignment_of :email, :email_confirmation,
                                   :password, :password_confirmation,

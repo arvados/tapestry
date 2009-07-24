@@ -1,12 +1,92 @@
 <h2>Trait Collection</h2>
 
-<p>Upload your personal health record as a Continuity of Care Record (CCR) file.</p>
-<p>
-  You can submit any valid CCR file, such as that provided by
-  <a href="https://www.google.com/health">Google Health</a>.
-</p>
+<% form_for @baseline_traits_survey, :url => trait_collection_path do |f| %>
+<style type="text/css">
+  form p label { vertical-align: middle; font-weight: bold; }
+  form p label { vertical-align: middle; font-weight: bold; }
+  form p input { vertical-align: middle; }
+  form p.skip * { font-color: #ccc; }
+  form div.fieldWithErrors { display: inline; }
+</style>
 
-<% form_for :trait_collection, :html => { :multipart => true } do |f| %>
-  <input id="phr" name="phr" size="30" type="file" /> <br/>
-  <%= f.submit 'Upload' %>
-<% end %>
+  <%= error_messages_for :baseline_traits_survey %>
+
+  <p class="question">
+    <%= f.label :sex, 'What is your sex?' %><br/>
+    <%= f.select :sex, %w(Male Female), :include_blank => true  %>
+  </p>
+  <p class="question">
+    <%= f.label :birth_year, 'What year were you born? ' %><br/>
+    <select id="baseline_traits_survey_birth_year" name="baseline_traits_survey[birth_year]">
+    <option></option>
+      <%= options_for_select (1895..Time.now.year).to_a.reverse, @baseline_traits_survey.birth_year.to_i %>
+    </select>
+  </p>
+  <p class="question">
+    <%= f.label :health_insurance, 'Do you currently have health insurance?' %> <br/>
+    <%= f.radio_button(:health_insurance, true) %>  <label>Yes</label> <br/>
+    <%= f.radio_button(:health_insurance, false) %> <label>No</label>
+  </p>
+
+  <p class="question">
+    <%= f.label :health_or_medical_conditions, 'Do you have any health or medical conditions? ' %><br/>
+    <%= f.radio_button(:health_or_medical_conditions, true) %>  <label>Yes</label> <br/>
+    <%= f.radio_button(:health_or_medical_conditions, false) %> <label>No</label>
+  </p>
+  <p class="question">
+    <%= f.label :prescriptions_in_last_year, 'Have you taken any prescription medications in the past year? ' %><br/>
+    <%= f.radio_button(:prescriptions_in_last_year, true) %>  <label>Yes</label> <br/>
+    <%= f.radio_button(:prescriptions_in_last_year, false) %> <label>No</label>
+  </p>
+  <p class="question">
+    <%= f.label :allergies, 'Do you have any allergies?' %><br/>
+    <%= f.radio_button(:allergies, true) %>  <label>Yes</label> <br/>
+    <%= f.radio_button(:allergies, false) %> <label>No</label>
+  </p>
+  <p class="question">
+    <%= f.label :us_citizen, 'Are you a U.S. citizen?' %><br/>
+    <%= f.radio_button(:us_citizen, true) %>  <label>Yes</label> <br/>
+    <%= f.radio_button(:us_citizen, false) %> <label>No</label>
+  </p>
+  <p class="question">
+    <%= f.label :birth_country, 'What country were you born in?' %><br/>
+    <span>Enter "Unknown" if you do not know.</span><br/>
+    <%= f.text_field :birth_country %>
+  </p>
+  <p class="question">
+    <label>What U.S. social category of 'race' best captures how you identify in your every day life? </label><br/>
+    <span>Select one or more options.</span>
+    <table border="0">
+      <tr><td><%= f.check_box :asian %>   </td><td>Asian</td></tr>
+      <tr><td><%= f.check_box :black %>   </td><td>Black or African American</td></tr>
+      <tr><td><%= f.check_box :hispanic %></td><td>Hispanic or Latino</td></tr>
+      <tr><td><%= f.check_box :native %>  </td><td>Native american or Alaska Native</td></tr>
+      <tr><td><%= f.check_box :pacific %> </td><td>Pacific Islander or Native Hawaii</td></tr>
+      <tr><td><%= f.check_box :white %>   </td><td>White</td></tr>
+    </table>
+  </p>
+
+  <p class="question">
+    <%= f.label :paternal_grandfather_born_in, 'What country was your paternal grandfather born?' %><br/>
+    <span>Enter "Unknown" if you do not know.</span><br/>
+    <%= f.text_field :paternal_grandfather_born_in %>
+  </p>
+  <p class="question">
+    <%= f.label :paternal_grandmother_born_in, 'What country was your paternal grandmother born?' %><br/>
+    <span>Enter "Unknown" if you do not know.</span><br/>
+    <%= f.text_field :paternal_grandmother_born_in %>
+  </p>
+  <p class="question">
+    <%= f.label :maternal_grandfather_born_in, 'What country was your maternal grandfather born?' %><br/>
+    <span>Enter "Unknown" if you do not know.</span><br/>
+    <%= f.text_field :maternal_grandfather_born_in %>
+  </p>
+  <p class="question">
+    <%= f.label :maternal_grandmother_born_in, 'What country was your maternal grandmother born?' %><br/>
+    <span>Enter "Unknown" if you do not know.</span><br/>
+    <%= f.text_field :maternal_grandmother_born_in %>
+  </p>
+
+  <p><%= submit_tag 'Submit' %></p>
+<% end -%>
+

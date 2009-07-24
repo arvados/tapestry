@@ -77,28 +77,37 @@ trait_collection:
   id: 6
   ordinal: 9
   keyword: trait_collection
-  title: Trait Collection
-  description: Trait collection step.
+  title: Baseline Traits Survey
+  description: Collect your baseline traits
   phase: preenrollment
   duration: 1 hour
 
-pledge:
-  id: 7
-  ordinal: 10
-  keyword: pledge
-  title: Make Financial Pledge
-  description: Make Financial Pledge
-  phase: preenrollment
-  duration: 1 minute
+# pledge:
+#   id: 7
+#   ordinal: 10
+#   keyword: pledge
+#   title: Make Financial Pledge
+#   description: Make Financial Pledge
+#   phase: preenrollment
+#   duration: 1 minute
 
-identity_confirmation:
-  id: 9
-  ordinal: 11
-  keyword: identity_confirmation
-  title: Identity Questionnaire
-  description: Identity Questionnaire
+# identity_confirmation:
+#   id: 9
+#   ordinal: 11
+#   keyword: identity_confirmation
+#   title: Identity Questionnaire
+#   description: Identity Questionnaire
+#   phase: preenrollment
+#   duration: 5-10 minutes
+
+detailed_traits_survey:
+  id: 14
+  ordinal: 10
+  keyword: detailed_traits_survey
+  title: Detailed traits survey
+  description: Enter detailed traits
   phase: preenrollment
-  duration: 5-10 minutes
+  duration: 1 hour
 
 enrollment_application:
   id: 10
