@@ -80,7 +80,7 @@ trait_collection:
   title: Baseline Traits Survey
   description: Collect your baseline traits
   phase: preenrollment
-  duration: 1 hour
+  duration: 2 minutes
 
 # pledge:
 #   id: 7
