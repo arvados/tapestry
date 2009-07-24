@@ -32,6 +32,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :screening_submission
   map.resource :participation_consent
   map.resource :trait_collection
+  map.resource :distinctive_traits_survey
   map.resource :pledge
   map.resource :identity_confirmation
   map.resource :enrollment_application

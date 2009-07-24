@@ -100,11 +100,11 @@ trait_collection:
 #   phase: preenrollment
 #   duration: 5-10 minutes
 
-detailed_traits_survey:
+distinctive_traits_survey:
   id: 14
   ordinal: 10
-  keyword: detailed_traits_survey
-  title: Detailed traits survey
+  keyword: distinctive_traits_survey
+  title: Distinctive traits survey
   description: Enter detailed traits
   phase: preenrollment
   duration: 1 hour
