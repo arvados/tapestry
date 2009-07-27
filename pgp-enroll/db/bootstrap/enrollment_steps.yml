@@ -82,14 +82,14 @@ trait_collection:
   phase: preenrollment
   duration: 2 minutes
 
-# pledge:
-#   id: 7
-#   ordinal: 10
-#   keyword: pledge
-#   title: Make Financial Pledge
-#   description: Make Financial Pledge
-#   phase: preenrollment
-#   duration: 1 minute
+pledge:
+  id: 7
+  ordinal: 10
+  keyword: pledge
+  title: Make Financial Pledge
+  description: Make Financial Pledge
+  phase: preenrollment
+  duration: 1 minute
 
 # identity_confirmation:
 #   id: 9
@@ -102,7 +102,7 @@ trait_collection:
 
 distinctive_traits_survey:
   id: 14
-  ordinal: 10
+  ordinal: 11
   keyword: distinctive_traits_survey
   title: Distinctive traits survey
   description: Enter detailed traits
