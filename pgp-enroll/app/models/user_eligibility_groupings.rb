@@ -11,6 +11,7 @@ module UserEligibilityGroupings
       residency_survey_responses.us_resident = 1 and
       residency_survey_responses.can_travel_to_boston = 1 and
       family_survey_responses.birth_year <= :birth_year and
+      enrollment_step_completions.enrollment_step_id = :content_areas_enrollment_step_id and
       (
        family_survey_responses.monozygotic_twin = 'no' or
        family_survey_responses.monozygotic_twin = 'willing'
@@ -35,6 +36,7 @@ module UserEligibilityGroupings
       residency_survey_responses.us_resident = 1 and
       residency_survey_responses.can_travel_to_boston = 1 and
       family_survey_responses.birth_year <= :birth_year and
+      enrollment_step_completions.enrollment_step_id = :content_areas_enrollment_step_id and
       (
         family_survey_responses.monozygotic_twin = 'no' or
         family_survey_responses.monozygotic_twin = 'willing'
@@ -56,11 +58,14 @@ module UserEligibilityGroupings
       ",
 
       "
-       residency_survey_responses.us_resident = 0 or
-       residency_survey_responses.can_travel_to_boston = 0 or
-       family_survey_responses.birth_year > :birth_year or
-       family_survey_responses.monozygotic_twin = 'unwilling' or
-       family_survey_responses.monozygotic_twin = 'unknown'
+       enrollment_step_completions.enrollment_step_id = :content_areas_enrollment_step_id and
+       (
+         residency_survey_responses.us_resident = 0 or
+         residency_survey_responses.can_travel_to_boston = 0 or
+         family_survey_responses.birth_year > :birth_year or
+         family_survey_responses.monozygotic_twin = 'unwilling' or
+         family_survey_responses.monozygotic_twin = 'unknown'
+       )
        "
     ]
   end

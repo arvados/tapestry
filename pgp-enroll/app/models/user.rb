@@ -42,12 +42,20 @@ class User < ActiveRecord::Base
   named_scope :inactive, { :conditions => "activated_at IS NULL" }
 
   named_scope :in_screening_eligibility_group, lambda { |group|
-     joins = [:residency_survey_response, :family_survey_response, :privacy_survey_response]
+     joins = [:residency_survey_response, :family_survey_response, :privacy_survey_response, :enrollment_step_completions]
      birth_year = Time.now.year - 21
+     content_areas_enrollment_step_id = EnrollmentStep.find_by_keyword('content_areas').id
 
      {
-       :conditions => [UserEligibilityGroupings.eligibility_group_sql(group), { :birth_year => birth_year }],
+       :conditions => [UserEligibilityGroupings.eligibility_group_sql(group), {
+           :birth_year => birth_year,
+           :content_areas_enrollment_step_id => content_areas_enrollment_step_id
+          }],
        :joins => joins
+       #   ,
+       # :select => "*, (select count(*) from enrollment_step_completions esc_nested
+       #                                 where esc_nested.enrollment_step_id = #{content_areas_enrollment_step_id}
+       #                                   and esc_nested.user_id = users.id) as completed_entrance_exam_count"
      }
   }
 
