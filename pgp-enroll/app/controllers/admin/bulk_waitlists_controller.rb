@@ -6,7 +6,7 @@ class Admin::BulkWaitlistsController < Admin::AdminControllerBase
     erroneous_emails = []
     successful_bulk_waitlists = 0
     params[:emails].each do |email|
-      if user = User.find_by_email(email)
+      if user = User.find_by_email(email.strip)
         Waitlist.create(:user => user, :reason => params[:reason])
         successful_bulk_waitlists += 1
       else

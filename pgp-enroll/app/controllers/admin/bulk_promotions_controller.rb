@@ -6,7 +6,7 @@ class Admin::BulkPromotionsController < Admin::AdminControllerBase
     erroneous_emails = []
     successful_bulk_promotions = 0
     params[:emails].each do |email|
-      if user = User.find_by_email(email)
+      if user = User.find_by_email(email.strip)
         user.promote!
         successful_bulk_promotions += 1
       else
