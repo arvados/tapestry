@@ -44,6 +44,21 @@ class Admin::UsersControllerTest < ActionController::TestCase
       should_eventually "render the edit form"
     end
 
+    context "on PUT to update for a user" do
+      setup do
+        @user = Factory(:user)
+        put :update, :id => @user.to_param, :user => { "is_admin" => "1", "email" => "newemail@example.com" }
+      end
+
+      should_respond_with :redirect
+      should_redirect_to "admin_users_url"
+
+      should "update the user" do
+        assert @user.reload.is_admin?
+        assert_equal "newemail@example.com", @user.reload.email
+      end
+    end
+
     context 'with some users' do
       setup do
         5.times { Factory(:user) }

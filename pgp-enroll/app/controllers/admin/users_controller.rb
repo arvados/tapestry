@@ -28,7 +28,7 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   def update
     @user = User.find params[:id]
-    @user.is_admin = params[:user][:is_admin]
+    @user.is_admin = params[:user].delete(:is_admin)
 
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'
