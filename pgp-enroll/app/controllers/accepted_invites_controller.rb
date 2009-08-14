@@ -11,7 +11,7 @@ class AcceptedInvitesController < ApplicationController
       deny_invite("Sorry, that email address has already been used to enroll.")
       redirect_to page_url(:home)
     else
-      deny_invite("Sorry, that email address and invite code have not yet been invited to enroll.")
+      deny_invite("Sorry, that email address and invite code have not yet been invited.")
       redirect_to page_url(:home)
     end
   end
