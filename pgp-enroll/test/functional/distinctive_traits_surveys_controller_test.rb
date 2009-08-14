@@ -17,8 +17,8 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
 
       should "render a button to add a new trait" do
         assert_select 'form[method=post][action=?]', distinctive_traits_survey_path do
-          assert_select 'input[type=button][value=?]', 'Enter a new trait'
-          assert_select 'input[type=submit][value=?]', 'Submit my traits'
+          assert_select 'input[type=button][value=?]', 'Add another trait'
+          assert_select 'input[type=submit][value=?]', 'I am finished entering traits. Submit my list of traits.'
         end
       end
 

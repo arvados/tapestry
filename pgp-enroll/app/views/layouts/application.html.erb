@@ -2,12 +2,13 @@
 <html>
 <head>
   <title>Personal Genome Project</title>
-  <%= stylesheet_link_tag 'application' %>
+  <%= stylesheet_link_tag 'application', 'ui.slider.extras', 'redmond/jquery-ui-1.7.1.custom' %>
   <!--[if lte IE 7]><%= stylesheet_link_tag 'application-ie' %><![endif]-->
   <%= javascript_include_tag 'jquery-1.3.2.min', 'jquery-custom-extensions' %>
   <% javascript_tag do %>
     <%= yield :js %>
   <% end %>
+
 </head>
 <body>
   <div id="body">

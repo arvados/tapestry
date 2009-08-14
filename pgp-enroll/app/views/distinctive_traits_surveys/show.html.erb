@@ -1,3 +1,4 @@
+
 <h2>Detailed traits survey</h2>
 
 <p><strong>Note:</strong> This step is still under consideration and development.  You can read the tentative instructions below, and prepare your answers.  Please check back in a few weeks, as this content should be developed by the end of August.</p>
@@ -8,37 +9,63 @@
 
 
 <%= form_tag distinctive_traits_survey_path, { :id => "distinctive_traits_form" } %>
+  <div id="distinctive_traits_fieldset">
+  </div>
 
-  <p><input type="button" value="Enter a new trait" id="add_new_trait_button" /></p>
-  <p><input type="submit" value="Submit my traits" /></p>
+  <p><input type="button" value="Add another trait" id="add_new_trait_button" /></p>
+  <p><input type="submit" value="I am finished entering traits. Submit my list of traits." /></p>
 </form>
 
-<% javascript_tag do %>
-  $(document).ready(function () {
-    $('#add_new_trait_button').click(function() {
-      var newTraitFields = $("#original_trait_fields").children().clone();
-      $("#distinctive_traits_form").prepend(newTraitFields);
-    });
-  });
-<% end %>
-
-<div style="display: none;">
-  <div id="original_trait_fields">
-    <div class="distinctive_trait_entry">
-      <p>
-        <label>Trait</label><br/>
-        <input type="text" name="traits[][name]" size="100"/>
-      </p>
-      <p>
-        <label>Environmental or genetic?</label><br/>
-        <select name="traits[][rating]">
-          <option value="1">1 - More environmental</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5 - More genetic</option>
-        </select>
-      </p>
-    </div>
+<div id="original_trait_fields" style="display: none;">
+  <div class="distinctive_trait_entry">
+    <p>
+      <label>Describe your trait in a few words:</label><br/>
+      <input type="text" name="traits[][name]" size="100"/>
+    </p>
+    <p>
+      <label>How would you rate this rate on a scale of environmental (1) to genetic (5)?</label><br/>
+      <select name="traits[][rating]">
+        <option value="1">1: Environmental</option>
+        <option value="2">2: Mostly environmental</option>
+        <option value="3">3: Mixed</option>
+        <option value="4">4: Mostly Genetic</option>
+        <option value="5">5: Genetic</option>
+      </select>
+    </p>
   </div>
 </div>
+
+<%= javascript_include_tag 'jquery-ui-1.7.1.custom.min.js', 'selectToUISlider.jQuery.js' %>
+
+<style type="text/css">
+.ui-slider .ui-state-active .ui-slider-tooltip, .ui-slider .ui-state-focus .ui-slider-tooltip, .ui-slider .ui-state-hover .ui-slider-tooltip {
+	width: 14em;
+	margin-left: -6.7em;
+}
+
+.ui-slider {top: 1em; margin-bottom: 1em;}
+
+</style>
+<% content_for :js do %>
+    $(document).ready(function () {
+      var selectCount = 0;
+
+      var addNewTrait = function() {
+        var newTraitFields = $("#original_trait_fields").children().clone();
+        $("#distinctive_traits_fieldset").append(newTraitFields);
+
+        var select = newTraitFields.find("p select");
+        select.attr("id", "trait_rating_select_" + selectCount);
+        selectCount++;
+        select.selectToUISlider();
+        select.hide();
+
+        return false;
+      };
+
+      $('#add_new_trait_button').click(addNewTrait);
+
+      addNewTrait();
+    });
+<% end %>
+
