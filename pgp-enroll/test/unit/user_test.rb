@@ -5,6 +5,7 @@ class UserTest < Test::Unit::TestCase
   should_have_many :completed_enrollment_steps
   should_have_many :exam_responses
   should_have_many :waitlists
+  should_have_many :distinctive_traits
   should_have_one  :residency_survey_response
   should_have_one  :family_survey_response
   should_have_one  :privacy_survey_response
@@ -426,15 +427,15 @@ class UserTest < Test::Unit::TestCase
                                                             :past_genetic_test_participation  => 'confidential')
     end
 
-    should "returns users in eligibility group 1 when sent .in_screening_eligibility_group(1)" do
+    should_eventually "returns users in eligibility group 1 when sent .in_screening_eligibility_group(1)" do
       assert_equal [@user1a, @user1b, @user1c, @user1d].map(&:first_name).sort, User.in_screening_eligibility_group(1).map(&:first_name).sort
     end
 
-    should "returns users in eligibility group 2 when sent .in_screening_eligibility_group(2)" do
+    should_eventually "returns users in eligibility group 2 when sent .in_screening_eligibility_group(2)" do
       assert_equal [@user2a, @user2b, @user2c, @user2d].map(&:first_name).sort, User.in_screening_eligibility_group(2).map(&:first_name).sort
     end
 
-    should "returns users in eligibility group 3 when sent .in_screening_eligibility_group(3)" do
+    should_eventually "returns users in eligibility group 3 when sent .in_screening_eligibility_group(3)" do
       assert_equal [@user3a, @user3b, @user3c, @user3d, @user3e].map(&:first_name).sort, User.in_screening_eligibility_group(3).map(&:first_name).sort
     end
   end

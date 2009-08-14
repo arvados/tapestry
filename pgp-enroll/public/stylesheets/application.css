@@ -869,4 +869,14 @@ div.formError {
 .consent-form-question label { margin-right: 10px; }
 .consent-form-question input { margin-left: 10px; }
 
+.distinctive_trait_entry {
+  border: 1px solid #5D7CBB;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-bottom: 20px;
+}
+
+.distinctive_trait_entry input {
+  width: 98%;
+}
 

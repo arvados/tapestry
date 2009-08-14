@@ -45,7 +45,9 @@ end
 # Is there a better way?  These enrollment_step are necessary, and torn down before tests.
 # These are not in any particular order, AFAIK
 %w(signup content_areas screening_surveys consent_review screening_submission
-   participation_consent eligibility_screening_results phr trait_collection pledge identity_confirmation enrollment_application).each do |step|
+   participation_consent eligibility_screening_results phr trait_collection
+   pledge identity_confirmation enrollment_application
+   distinctive_traits_survey).each do |step|
   Factory(:enrollment_step,
           :keyword     => step,
           :title       => step,
@@ -165,4 +167,9 @@ end
 
 Factory.define :waitlist do |f|
   f.association :user
+end
+
+Factory.define :distinctive_trait do |f|
+  f.name "Swimming"
+  f.rating 5
 end
