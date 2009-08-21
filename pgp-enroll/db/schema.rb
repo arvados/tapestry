@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090814013717) do
+ActiveRecord::Schema.define(:version => 20090821034227) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -201,14 +201,14 @@ ActiveRecord::Schema.define(:version => 20090814013717) do
   add_index "residency_survey_responses", ["user_id"], :name => "index_residency_survey_responses_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                     :limit => 100
-    t.string   "crypted_password",          :limit => 40
-    t.string   "salt",                      :limit => 40
+    t.string   "email",                      :limit => 100
+    t.string   "crypted_password",           :limit => 40
+    t.string   "salt",                       :limit => 40
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_token",            :limit => 40
+    t.string   "remember_token",             :limit => 40
     t.datetime "remember_token_expires_at"
-    t.string   "activation_code",           :limit => 40
+    t.string   "activation_code",            :limit => 40
     t.datetime "activated_at"
     t.boolean  "is_admin"
     t.string   "first_name"
@@ -226,6 +226,9 @@ ActiveRecord::Schema.define(:version => 20090814013717) do
     t.string   "zip"
     t.text     "enrollment_essay"
     t.string   "phr_profile_name"
+    t.boolean  "has_sequence",                              :default => false, :null => false
+    t.string   "has_sequence_explanation"
+    t.text     "family_members_passed_exam"
   end
 
   create_table "waitlists", :force => true do |t|
