@@ -1,8 +1,8 @@
 <h2>Enrollment Application Results</h2>
 
-<p>Thanks for submitting your enrollment application.  It will be reviewed as soon as possible.  However, please note that the review process may take 1-2 months or more.  We will try to get back to you as soon as possible.  If the process will take longer than 1-2 months, we will update this page with more information about your application status.  Once a determination has been made you will be notified by email that you are either (1) selected to continue, (2) waitlisted, or (3) rejected.</p>
+<p>Thanks for submitting your enrollment application.  It will be reviewed as soon as possible.  The review process may take 1-2 months or more.  We will try to get back to you as soon as possible.  If the process will take longer than 1-2 months, we will update this page with more information about your application status.  Once a determination has been made you will be notified by email that you are either (1) selected to continue, (2) waitlisted, or (3) rejected.</p>
 
-<p>How the PGP will prioritize the selection of participants for the PGP-100:</p>
+<p>The PGP will prioritize the selection of participants for the PGP-100 in the following manner:</p>
 
 <% form_tag :eligibility_application_results do %>
 
@@ -28,9 +28,8 @@
   <p>#3. Anyone from #1 who also, has a known genetic disease (rare or common), AND is an under-represented category in the PGP, AND has one or more family members who are enrolled or wish to enroll in the PGP.</p>
 
   <div style="padding-left: 2em;">
-    Do you have family members who have passed the entrance exam?  If yes, please add their name, email address, and relationship to you now.
     <p>
-      <label for="family_members_passed_exam">Please provide us with a more details about your exome or whole genome sequence.</label><br/>
+      <label for="family_members_passed_exam">Do you have family members who have passed the entrance exam?  If yes, please add their name, email address, and relationship to you now.</label><br/>
       <%= text_area_tag 'family_members_passed_exam', @family_members_passed_exam, :rows => 5, :style => "width: 100%;" %>
     </p>
 
