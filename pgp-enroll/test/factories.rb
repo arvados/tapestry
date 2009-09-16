@@ -172,4 +172,5 @@ end
 Factory.define :distinctive_trait do |f|
   f.name "Swimming"
   f.rating 5
+  f.association :user
 end

@@ -3,6 +3,7 @@ class DistinctiveTraitsSurveysController < ApplicationController
   end
 
   def create
+    current_user.distinctive_traits.destroy_all
     if params[:traits]
       traits = params[:traits].map do |trait_attributes|
         trait = current_user.distinctive_traits.build(trait_attributes)
