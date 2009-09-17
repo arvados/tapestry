@@ -53,10 +53,6 @@ class User < ActiveRecord::Base
            :content_areas_enrollment_step_id => content_areas_enrollment_step_id
           }],
        :joins => joins
-       #   ,
-       # :select => "*, (select count(*) from enrollment_step_completions esc_nested
-       #                                 where esc_nested.enrollment_step_id = #{content_areas_enrollment_step_id}
-       #                                   and esc_nested.user_id = users.id) as completed_entrance_exam_count"
      }
   }
 

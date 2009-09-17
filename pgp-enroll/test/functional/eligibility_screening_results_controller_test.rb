@@ -20,7 +20,8 @@ class EligibilityScreeningResultsControllerTest < ActionController::TestCase
 
     context 'on GET to index for a user who has been waitlisted' do
       setup do
-        Factory(:waitlist, :user => @user)
+        Factory(:waitlist, :user => @user, :created_at => 1.hour.ago)
+        @waitlist = Factory(:waitlist, :user => @user)
         get :index
       end
 
@@ -28,8 +29,7 @@ class EligibilityScreeningResultsControllerTest < ActionController::TestCase
       should_render_template :index
 
       should "render a button to allow the user to re-take the screening surveys" do
-        assert_select 'form[action=?][method=post]', screening_submission_path do
-          assert_select 'input[type=hidden][name=_method][value=delete]'
+        assert_select 'form[action=?][method=post]', waitlist_resubmissions_path(:waitlist_id => @waitlist.id) do
           assert_select 'input[type=submit]'
         end
       end

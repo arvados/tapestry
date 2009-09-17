@@ -4,9 +4,10 @@
 Thanks for submitting your eligibility application for the Personal Genome Project (PGP).  PGP staff will review eligibility applications every two weeks starting May 15, 2009.  Once your eligibility application has been reviewed and a determination made, a PGP staff member will notify you by email of your eligibility status and provide additional instructions.  If you have any questions or comments, you can contact us at <a href="mailto:screening@personalgenomes.org">screening@personalgenomes.org</a>.
 </p>
 
-<% if current_user.waitlists.any? -%>
+<% if current_user.waitlists.not_resubmitted.any? -%>
   <p>You have been waitlisted due to one or more of your eligibility screening responses.  If your circumstances have changed, you may retake the eligibility survey and resubmit your application for enrollment.  Otherwise, we will contact you with more information about next steps when enrollment begins for the PGP-1000.</p>
-  <% form_tag screening_submission_path, :method => 'delete' do -%>
+  <% form_tag waitlist_resubmissions_path(:waitlist_id => current_user.waitlists.ordered.last.id) do -%>
+  <%# form_tag screening_submission_path, :method => 'delete' do -%>
     <%= submit_tag 'Retake eligibility screening' %>
   <% end -%>
 <% end -%>
