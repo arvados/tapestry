@@ -459,10 +459,12 @@ class UserTest < Test::Unit::TestCase
       Factory(:waitlist, :user => @resubmitted_waitlisted_user3, :resubmitted_at => Time.now)
     end
 
-    should "return users not promoted or waitlisted when sent .not_promoted_or_waitlisted" do
-      assert_equal [@user1a, @user1b, @user1c, @user1d, @resubmitted_waitlisted_user,
-                    @user2a, @user2b, @user2c, @user2d, @resubmitted_waitlisted_user2,
-                    @user3a, @user3b, @user3c, @user3d, @user3e, @resubmitted_waitlisted_user3].map(&:first_name).sort, User.not_promoted_or_waitlisted.map(&:first_name).sort
+    should "return ids of users promoted sent .promoted_ids" do
+      assert_equal [@promoted_user, @promoted_user2].map(&:id).map(&:to_s).sort, User.promoted_ids.sort
+    end
+
+    should "return ids of users waitlisted sent .waitlisted_ids" do
+      assert_equal [@waitlisted_user, @waitlisted_user2, @waitlisted_user3].map(&:id).map(&:to_s).sort, User.waitlisted_ids.sort
     end
 
     should "returns users in eligibility group 1 when sent .in_screening_eligibility_group(1)" do

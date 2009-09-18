@@ -46,24 +46,33 @@ class User < ActiveRecord::Base
      joins = [:residency_survey_response, :family_survey_response, :privacy_survey_response, :enrollment_step_completions]
      birth_year = Time.now.year - 21
      content_areas_enrollment_step_id = EnrollmentStep.find_by_keyword('content_areas').id
+     promoted_or_waitlisted_ids = User.promoted_ids | User.waitlisted_ids
+
+     conditions_sql = UserEligibilityGroupings.eligibility_group_sql(group)
+     conditions_sql += " and users.id not in (:promoted_or_waitlisted_ids)"
 
      {
-       :conditions => [UserEligibilityGroupings.eligibility_group_sql(group), {
+       :conditions => [conditions_sql, {
            :birth_year => birth_year,
-           :content_areas_enrollment_step_id => content_areas_enrollment_step_id
+           :content_areas_enrollment_step_id => content_areas_enrollment_step_id,
+           :promoted_or_waitlisted_ids => promoted_or_waitlisted_ids
           }],
        :joins => joins
      }
   }
 
-  named_scope :not_promoted_or_waitlisted, {
-    :conditions => [
-      "enrollment_step_completions.enrollment_step_id = :content_areas_enrollment_step_id", {
-        :content_areas_enrollment_step_id => EnrollmentStep.find_by_keyword('content_areas').id
-      }],
-    :joins => [:waitlists, :enrollment_step_completions]
+  def self.promoted_ids
+    step_id = EnrollmentStep.find_by_keyword('eligibility_screening_results').id
+    connection.select_values("select users.id from users
+        inner join enrollment_step_completions on enrollment_step_completions.user_id = users.id
+        where enrollment_step_completions.enrollment_step_id = #{step_id}")
+  end
 
-  }
+  def self.waitlisted_ids
+    connection.select_values("select users.id from users
+        inner join waitlists on waitlists.user_id = users.id
+        where waitlists.resubmitted_at is null")
+  end
 
   def email=(email)
     email = email.strip if email

@@ -1,4 +1,5 @@
 # Pushed SQL queries here from user.rb to make main model more readable
+# This could be cleaned up.
 module UserEligibilityGroupings
   def self.eligibility_group_sql(group)
      raise "Undefined screening eligibility group (only 1-3 are defined)" unless [1,2,3].include?(group)
