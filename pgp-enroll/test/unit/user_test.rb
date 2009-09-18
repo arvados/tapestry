@@ -399,6 +399,15 @@ class UserTest < Test::Unit::TestCase
                                                             :information_disclosure_comfort_level => 'comfortable',
                                                             :past_genetic_test_participation  => 'unsure')
 
+      @resubmitted_waitlisted_user = Factory(:user, :first_name => 'resubmitted_waitlisted_user')
+      @resubmitted_waitlisted_user.complete_enrollment_step(entrance_exam_step)
+      Factory(:waitlist, :user => @resubmitted_waitlisted_user, :resubmitted_at => Time.now)
+      Factory(:residency_survey_response, :user => @resubmitted_waitlisted_user, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @resubmitted_waitlisted_user, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @resubmitted_waitlisted_user, :worrisome_information_comfort_level => 'always',
+                                                            :information_disclosure_comfort_level => 'comfortable',
+                                                            :past_genetic_test_participation  => 'unsure')
+
       @promoted_user = Factory(:user, :first_name => 'promoted_user')
       @promoted_user.complete_enrollment_step(entrance_exam_step)
       @promoted_user.complete_enrollment_step(promotion_step)
@@ -417,6 +426,15 @@ class UserTest < Test::Unit::TestCase
                                                             :information_disclosure_comfort_level => 'comfortable',
                                                             :past_genetic_test_participation  => 'confidential')
 
+      @resubmitted_waitlisted_user2 = Factory(:user, :first_name => 'resubmitted_waitlisted_user2')
+      @resubmitted_waitlisted_user2.complete_enrollment_step(entrance_exam_step)
+      Factory(:waitlist, :user => @resubmitted_waitlisted_user2, :resubmitted_at => Time.now)
+      Factory(:residency_survey_response, :user => @resubmitted_waitlisted_user2, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:family_survey_response,    :user => @resubmitted_waitlisted_user2, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
+      Factory(:privacy_survey_response,   :user => @resubmitted_waitlisted_user2, :worrisome_information_comfort_level => 'depends',
+                                                            :information_disclosure_comfort_level => 'comfortable',
+                                                            :past_genetic_test_participation  => 'confidential')
+
       @promoted_user2 = Factory(:user, :first_name => 'promoted_user2')
       @promoted_user2.complete_enrollment_step(entrance_exam_step)
       @promoted_user2.complete_enrollment_step(promotion_step)
@@ -425,19 +443,39 @@ class UserTest < Test::Unit::TestCase
       Factory(:privacy_survey_response,   :user => @promoted_user2, :worrisome_information_comfort_level => 'depends',
                                                             :information_disclosure_comfort_level => 'comfortable',
                                                             :past_genetic_test_participation  => 'confidential')
+
+      @waitlisted_user3 = Factory(:user, :first_name => 'waitlisted_user3')
+      @waitlisted_user3.complete_enrollment_step(entrance_exam_step)
+      Factory(:family_survey_response, :user => @waitlisted_user3, :monozygotic_twin => 'unknown')
+      Factory(:residency_survey_response, :user => @waitlisted_user3)
+      Factory(:privacy_survey_response, :user => @waitlisted_user3)
+      Factory(:waitlist, :user => @waitlisted_user3)
+
+      @resubmitted_waitlisted_user3 = Factory(:user, :first_name => 'resubmitted_waitlisted_user3')
+      @resubmitted_waitlisted_user3.complete_enrollment_step(entrance_exam_step)
+      Factory(:family_survey_response, :user => @resubmitted_waitlisted_user3, :monozygotic_twin => 'unknown')
+      Factory(:residency_survey_response, :user => @resubmitted_waitlisted_user3)
+      Factory(:privacy_survey_response, :user => @resubmitted_waitlisted_user3)
+      Factory(:waitlist, :user => @resubmitted_waitlisted_user3, :resubmitted_at => Time.now)
     end
 
-    # should "returns users in eligibility group 1 when sent .in_screening_eligibility_group(1)" do
-    #   assert_equal [@user1a, @user1b, @user1c, @user1d].map(&:first_name).sort, User.in_screening_eligibility_group(1).map(&:first_name).sort
-    # end
+    should "return users not promoted or waitlisted when sent .not_promoted_or_waitlisted" do
+      assert_equal [@user1a, @user1b, @user1c, @user1d, @resubmitted_waitlisted_user,
+                    @user2a, @user2b, @user2c, @user2d, @resubmitted_waitlisted_user2,
+                    @user3a, @user3b, @user3c, @user3d, @user3e, @resubmitted_waitlisted_user3].map(&:first_name).sort, User.not_promoted_or_waitlisted.map(&:first_name).sort
+    end
 
-    # should "returns users in eligibility group 2 when sent .in_screening_eligibility_group(2)" do
-    #   assert_equal [@user2a, @user2b, @user2c, @user2d].map(&:first_name).sort, User.in_screening_eligibility_group(2).map(&:first_name).sort
-    # end
+    should "returns users in eligibility group 1 when sent .in_screening_eligibility_group(1)" do
+      assert_equal [@user1a, @user1b, @user1c, @user1d, @resubmitted_waitlisted_user].map(&:first_name).sort, User.in_screening_eligibility_group(1).map(&:first_name).sort
+    end
 
-    # should "returns users in eligibility group 3 when sent .in_screening_eligibility_group(3)" do
-    #   assert_equal [@user3a, @user3b, @user3c, @user3d, @user3e].map(&:first_name).sort, User.in_screening_eligibility_group(3).map(&:first_name).sort
-    # end
+    should "returns users in eligibility group 2 when sent .in_screening_eligibility_group(2)" do
+      assert_equal [@user2a, @user2b, @user2c, @user2d, @resubmitted_waitlisted_user2].map(&:first_name).sort, User.in_screening_eligibility_group(2).map(&:first_name).sort
+    end
+
+    should "returns users in eligibility group 3 when sent .in_screening_eligibility_group(3)" do
+      assert_equal [@user3a, @user3b, @user3c, @user3d, @user3e, @resubmitted_waitlisted_user3].map(&:first_name).sort, User.in_screening_eligibility_group(3).map(&:first_name).sort
+    end
   end
 
   should "properly calculate last_waitlisted_at" do

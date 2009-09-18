@@ -56,6 +56,15 @@ class User < ActiveRecord::Base
      }
   }
 
+  named_scope :not_promoted_or_waitlisted, {
+    :conditions => [
+      "enrollment_step_completions.enrollment_step_id = :content_areas_enrollment_step_id", {
+        :content_areas_enrollment_step_id => EnrollmentStep.find_by_keyword('content_areas').id
+      }],
+    :joins => [:waitlists, :enrollment_step_completions]
+
+  }
+
   def email=(email)
     email = email.strip if email
     write_attribute(:email, email)
@@ -114,7 +123,7 @@ class User < ActiveRecord::Base
 
     if ! EnrollmentStepCompletion.find_by_user_id_and_enrollment_step_id(self, step)
       completion = EnrollmentStepCompletion.new :enrollment_step => step
-      enrollment_step_completions << completion 
+      enrollment_step_completions << completion
     end
   end
 
@@ -128,7 +137,7 @@ class User < ActiveRecord::Base
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
-  # uff.  this is really an authorization, not authentication routine.  
+  # uff.  this is really an authorization, not authentication routine.
   # We really need a Dispatch Chain here or something.
   # This will also let us return a human error message.
   #
