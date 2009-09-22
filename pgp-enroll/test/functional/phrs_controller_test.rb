@@ -15,19 +15,19 @@ class PhrsControllerTest < ActionController::TestCase
   # end
 
   logged_in_user_context do
-    # context "on GET to show" do
-    #   setup { get :show }
+    context "on GET to show" do
+      setup { get :show }
 
-    #   should_respond_with :success
-    #   should_render_template :show
+      should_respond_with :success
+      should_render_template :show
 
-    #   should "render a form to acknowledge PHR" do
-    #     assert_select 'form[method=?][action=?]', 'post', phr_path do
-    #       assert_select 'input[type=text][name=?]', 'phr_profile_name'
-    #       assert_select 'input[type=submit]'
-    #     end
-    #   end
-    # end
+      should "render a form to acknowledge PHR" do
+        assert_select 'form[method=?][action=?]', 'post', phr_path do
+          assert_select 'input[type=text][name=?]', 'phr_profile_name'
+          assert_select 'input[type=submit]'
+        end
+      end
+    end
 
     context "on POST to create with a phr_profile_name" do
       setup do
