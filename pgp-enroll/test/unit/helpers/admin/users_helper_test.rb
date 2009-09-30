@@ -4,13 +4,20 @@ class Admin::UsersHelperTest < Test::Unit::TestCase
 
   context "with some users who have CSV-destined data" do
     setup do
-      @user = Factory(:user, :phr_profile_name => "My PHR")
+      @user = Factory(:user,
+          :phr_profile_name => "My PHR",
+          :enrollment_essay => "My\nEssay",
+          :has_sequence => true,
+          :has_sequence_explanation => 'explanation',
+          :family_members_passed_exam => 'response')
+
       Factory(:privacy_survey_response, :user => @user)
       Factory(:family_survey_response, :user => @user)
       Factory(:residency_survey_response, :user => @user)
       2.times { Factory(:waitlist, :user => @user) }
       Factory(:informed_consent_response, :user => @user)
       Factory(:baseline_traits_survey, :user => @user)
+      2.times { Factory(:distinctive_trait, :user => @user) }
 
       @user_without_attached_data = Factory(:user)
 
@@ -67,48 +74,29 @@ class Admin::UsersHelperTest < Test::Unit::TestCase
         "Baseline traits survey Paternal grandfather born in" => @user.baseline_traits_survey.paternal_grandfather_born_in,
         "Baseline traits survey Paternal grandmother born in" => @user.baseline_traits_survey.paternal_grandmother_born_in,
         "Baseline traits survey Maternal grandfather born in" => @user.baseline_traits_survey.maternal_grandfather_born_in,
-        "Baseline traits survey Maternal grandmother born in" => @user.baseline_traits_survey.maternal_grandmother_born_in
+        "Baseline traits survey Maternal grandmother born in" => @user.baseline_traits_survey.maternal_grandmother_born_in,
+
+        "Distinctive traits" => @user.distinctive_traits.map { |trait| "#{trait.name} (#{trait.rating}/5)" }.join(", "),
+
+        "Enrollment essay" => @user.enrollment_essay,
+
+        "Enrollment application result Has sequence" => @user.has_sequence,
+        "Enrollment application result Has sequence explanation" => @user.has_sequence_explanation,
+        "Enrollment application result Family members passed exam" => @user.family_members_passed_exam,
       }
 
-      header_line = @csv.split("\n").first
-      header_cells = CSV.parse_line(header_line)
-
-      values_line = @csv.split("\n").second
-      values_cells = CSV.parse_line(values_line)
+      header_cells = CSV.parse(@csv).first
+      values_cells = CSV.parse(@csv).second
 
       values.each do |header, value|
-        assert_match %r{#{header}}, header_line, "Expected to see csv header '#{header}' but didn't"
+        assert header_cells.include?(header), "Expected to see csv header '#{header}' but didn't"
       end
 
       values.each do |header, value|
         column = header_cells.index(header)
         value_cell = values_cells[column]
-        assert_equal value.to_s, value_cell.to_s, "Expected to see value '#{value}' but got '#{value_cell}' at column #{column} (the '#{header}' cell).\nFull CSV:\n#{@csv}"
+        assert_equal value.to_s, value_cell.to_s, "Expected to see value '#{value}' but got '#{value_cell}' at column #{column} (the '#{header}' cell).\nFull CSV:\n#{@csv.inspect}"
       end
     end
   end
 end
-
-# 
-#     
-#     user_fields = %w(first_name last_name email activated_at).freeze
-# 
-#     survey_response_fields = {
-#       :privacy   => %w(worrisome_information_comfort_level
-#                        information_disclosure_comfort_level
-#                        past_genetic_test_participation),
-# 
-#       :family    => %w(birth_year relatives_interested_in_pgp monozygotic_twin
-#                        child_situation youngest_child_birth_year),
-# 
-#       :residency => %w(us_resident country zip can_travel_to_boston)
-#     }.freeze
-#     buf = ''
-# 
-#     header_row = user_fields.map(&:humanize)
-#     survey_response_fields.each do |survey, fields|
-#       header_row |= fields.map { |field| "#{survey.to_s.humanize} #{field.to_s.humanize}" }
-#     end
-#     header_row.push  "Waitlist Count"
-#   
-#   

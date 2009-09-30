@@ -33,6 +33,13 @@ module Admin::UsersHelper
 
     header_row |= baseline_traits_survey_fields.map { |field| "Baseline traits survey #{field.to_s.humanize}" }
 
+    header_row.push "Distinctive traits"
+    header_row.push "Enrollment essay"
+
+    header_row.push "Enrollment application result Has sequence"
+    header_row.push "Enrollment application result Has sequence explanation"
+    header_row.push "Enrollment application result Family members passed exam"
+
     CSV.generate_row(header_row, header_row.size, buf)
     users.each do |user|
 
@@ -59,6 +66,13 @@ module Admin::UsersHelper
       baseline_traits_survey_fields.each do |field|
         row.push(user.baseline_traits_survey ? user.baseline_traits_survey.send(field) : '-')
       end
+
+      row.push user.distinctive_traits.map { |trait| "#{trait.name} (#{trait.rating}/5)" }.join(", ")
+      row.push user.enrollment_essay
+
+      row.push user.has_sequence
+      row.push user.has_sequence_explanation
+      row.push user.family_members_passed_exam
 
       CSV.generate_row(row, row.size, buf)
     end
