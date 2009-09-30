@@ -174,3 +174,21 @@ Factory.define :distinctive_trait do |f|
   f.rating 5
   f.association :user
 end
+
+Factory.define :baseline_traits_survey do |f|
+  f.association :user
+  f.sex "Male"
+
+  ["health_insurance", "health_or_medical_conditions", "prescriptions_in_last_year", "allergies",
+   "asian", "black", "hispanic", "native", "pacific", "white", "us_citizen"].each do |boolean|
+    f.send(boolean, true)
+  end
+
+  f.birth_year 1990
+  f.birth_country "United States"
+
+  f.paternal_grandfather_born_in "France"
+  f.paternal_grandmother_born_in "Germany"
+  f.maternal_grandfather_born_in "Poland"
+  f.maternal_grandmother_born_in "England"
+end
