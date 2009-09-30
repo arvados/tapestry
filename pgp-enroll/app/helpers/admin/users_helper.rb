@@ -1,6 +1,17 @@
 module Admin::UsersHelper
   # TODO: Move to a separate presenter class instead of a helper.
   def csv_for_users(users)
+
+    # precache associations
+    users = User.find(users.map(&:id),
+        :include => [:distinctive_traits,
+          :residency_survey_response,
+          :family_survey_response,
+          :privacy_survey_response,
+          :baseline_traits_survey,
+          :informed_consent_response,
+          :waitlists])
+
     user_fields = %w(first_name last_name email activated_at phr_profile_name).freeze
 
     survey_response_fields = {
