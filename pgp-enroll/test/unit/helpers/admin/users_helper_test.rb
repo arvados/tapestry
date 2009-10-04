@@ -5,11 +5,12 @@ class Admin::UsersHelperTest < Test::Unit::TestCase
   context "with some users who have CSV-destined data" do
     setup do
       @user = Factory(:user,
-          :phr_profile_name => "My PHR",
+          :phr_profile_name => nil,
           :enrollment_essay => "My\nEssay",
           :has_sequence => true,
           :has_sequence_explanation => 'explanation',
-          :family_members_passed_exam => 'response')
+          :family_members_passed_exam => 'response',
+          :pledge => '1000')
 
       Factory(:privacy_survey_response, :user => @user)
       Factory(:family_survey_response, :user => @user)
@@ -83,6 +84,8 @@ class Admin::UsersHelperTest < Test::Unit::TestCase
         "Enrollment application result Has sequence" => @user.has_sequence,
         "Enrollment application result Has sequence explanation" => @user.has_sequence_explanation,
         "Enrollment application result Family members passed exam" => @user.family_members_passed_exam,
+
+        "Pledge" => @user.pledge
       }
 
       header_cells = CSV.parse(@csv).first

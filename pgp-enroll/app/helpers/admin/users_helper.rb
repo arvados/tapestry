@@ -42,7 +42,9 @@ module Admin::UsersHelper
     header_row.push "Informed Consent Biopsy"
     header_row.push "Informed Consent Recontact"
 
-    header_row |= baseline_traits_survey_fields.map { |field| "Baseline traits survey #{field.to_s.humanize}" }
+    baseline_traits_survey_fields.each do |field|
+      header_row.push "Baseline traits survey #{field.to_s.humanize}"
+    end
 
     header_row.push "Distinctive traits"
     header_row.push "Enrollment essay"
@@ -51,11 +53,15 @@ module Admin::UsersHelper
     header_row.push "Enrollment application result Has sequence explanation"
     header_row.push "Enrollment application result Family members passed exam"
 
+    header_row.push "Pledge"
+
     CSV.generate_row(header_row, header_row.size, buf)
     users.each do |user|
 
       row = []
-      row |= user_fields.map { |field| user.send(field) }
+      user_fields.each do |field|
+        row.push user.send(field)
+      end
 
       survey_response_fields.each do |survey, fields|
         survey_response = user.send(:"#{survey}_survey_response")
@@ -84,6 +90,8 @@ module Admin::UsersHelper
       row.push user.has_sequence
       row.push user.has_sequence_explanation
       row.push user.family_members_passed_exam
+
+      row.push user.pledge
 
       CSV.generate_row(row, row.size, buf)
     end
