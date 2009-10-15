@@ -41,8 +41,8 @@ class UsersController < ApplicationController
 
     if success && @user.errors.empty?
       accept_invite!
-      redirect_to login_url
-      flash[:notice] = "Your account has been created. You will need to activate this account before proceeding. In the next few minutes, you will receive an email containing an activation link. Please check your email."
+      flash.now[:notice] = "Your account has been created. You will need to activate this account before proceeding. In the next few minutes, you will receive an email containing an activation link. Please check your email."
+      render :template => 'users/created'
     else
       flash[:error]  = "Please double-check your signup information below."
       render :action => 'new2'

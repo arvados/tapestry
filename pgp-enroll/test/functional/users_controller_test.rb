@@ -138,9 +138,14 @@ class UsersControllerTest < Test::Unit::TestCase
       }, { :invited => true, :invited_email => @email }
     end
 
-    should_respond_with :redirect
-    should_redirect_to 'login_url'
+    should_respond_with :success
+    should_render_template 'created'
     should_change 'User.count', :by => 1
+    # should_set_the_flash_to /Your account has been created/
+
+    should "set flash.now to the creation message" do
+      assert_match /Your account has been created/, flash.now[:notice]
+    end
 
     should "mark that invite as accepted" do
       assert @invited_email.reload.accepted_at
