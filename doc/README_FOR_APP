@@ -1,0 +1,29 @@
+Use this README file to introduce your application and point to useful places in the API for learning more.
+Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+
+== Enrollment Steps ==
+Enrollment Steps guide the "main menu" that the user sees.  These should always be loaded from
+db/bootstrap with the following rake task:
+
+
+rake db:bootstrap:load FIXTURES=enrollment_steps
+
+== Deploying ==
+As part of getting access to the deploy cluter, you'll need the following
+in your  ~/.ssh/config:
+
+Host *.oxf
+   ProxyCommand ssh -p2222 turnout@switchyard.oxf.freelogy.org -x -a -o "Compression no" $SSH_PROXY_FLAGS %h
+   User YOUR_SSH_USER_NAME_HERE
+
+I use a patched vlad 1.2.0 (versioned 1.2.0.1 as my patch) available here:
+http://github.com/jasonm/vlad
+
+Installation instructions for vlad 1.2.0.1 here:
+http://gist.github.com/219127
+
+To deploy to staging:
+rake vlad:deploy vlad:start_app
+
+To deploy to production:
+rake vlad:target:production vlad:deploy vlad:start_app
