@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090917020840) do
+ActiveRecord::Schema.define(:version => 20100324195010) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(:version => 20090917020840) do
     t.boolean  "has_sequence",                              :default => false, :null => false
     t.string   "has_sequence_explanation"
     t.text     "family_members_passed_exam"
+    t.string   "authsub_token"
   end
 
   create_table "waitlists", :force => true do |t|
@@ -237,6 +238,7 @@ ActiveRecord::Schema.define(:version => 20090917020840) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "resubmitted_at"
+    t.string   "phase",          :default => "preenroll", :null => false
   end
 
 end

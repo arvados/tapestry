@@ -26,10 +26,11 @@ class Admin::BulkWaitlistsControllerTest < ActionController::TestCase
     end
 
     should "render the new form on GET to #new" do
-      get :new
+      get :new, :phase => 'preenroll'
       assert_response :success
       assert_template 'new'
       assert_select 'form[action=?][method=post]', admin_bulk_waitlists_path do
+        assert_select 'input[type=hidden][name=?]', 'phase'
         assert_select 'textarea[name=?]', 'reason'
         assert_select 'textarea[name=?]', 'emails'
         assert_select 'input[type=submit]'
@@ -42,7 +43,7 @@ class Admin::BulkWaitlistsControllerTest < ActionController::TestCase
       user1.activate!
       user2.activate!
 
-      post :create, :emails => [user1.email, user2.email], :reason => "Ineligible"
+      post :create, :emails => [user1.email, user2.email], :reason => "Ineligible", :phase => 'preenroll'
 
       assert_equal 1, user1.reload.waitlists.count
       assert_equal 1, user2.reload.waitlists.count
@@ -50,7 +51,7 @@ class Admin::BulkWaitlistsControllerTest < ActionController::TestCase
       assert_equal "Ineligible", user1.reload.waitlists.first.reason
       assert_equal "Ineligible", user2.reload.waitlists.first.reason
 
-      assert_redirected_to new_admin_bulk_waitlist_url
+      assert_redirected_to new_admin_bulk_waitlist_url(:phase => 'preenroll')
       assert_match /2 user/, flash[:notice]
     end
 
@@ -60,12 +61,12 @@ class Admin::BulkWaitlistsControllerTest < ActionController::TestCase
       original_step_1 = user1.next_enrollment_step
 
       bad_email = "badbadbad#{user1.email}"
-      post :create, :emails => [user1.email, bad_email], :reason => "Ineligible"
+      post :create, :emails => [user1.email, bad_email], :reason => "Ineligible", :phase => 'preenroll'
 
       assert_equal 1, user1.reload.waitlists.count
       assert_equal "Ineligible", user1.reload.waitlists.first.reason
 
-      assert_redirected_to new_admin_bulk_waitlist_url
+      assert_redirected_to new_admin_bulk_waitlist_url(:phase => 'preenroll')
       assert_match %r{1 user}, flash[:notice]
       assert_match %r{#{bad_email}}, flash[:warning]
     end

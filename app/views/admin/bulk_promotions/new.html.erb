@@ -1,6 +1,10 @@
 <h2>Bulk Promote Users</h2>
 
 <% form_tag admin_bulk_promotions_path, { :method => 'post' } do  %>
+  <% if @require %>
+    <p> Prerequisite: <b><%= @require.title %></b> </p>
+    <%= hidden_field_tag 'require', @require.keyword %>
+  <% end %>
   <p>
     <label for="emails">Enter the emails of users to promote, each on its own line:</label><br/>
     <%= text_area_tag 'emails', '', :rows => 20, :style => "width: 100%;" %><br/>

@@ -2,6 +2,8 @@
 
 <% form_tag admin_bulk_waitlists_path, { :method => 'post' } do  %>
   <p>
+  Phase: <b><%=h @phase%></b><br/>
+  <%= hidden_field_tag 'phase', @phase %>
     <label for="reason">Reason for waitlisting (if any):</label><br/>
     <%= text_area_tag 'reason', '', :rows => 5, :style => "width: 100%;" %><br/>
   </p>

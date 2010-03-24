@@ -127,3 +127,12 @@ eligibility_application_results:
   phase: preenrollment
   duration: 2-4 weeks
 
+enrolled:
+  id: 20
+  ordinal: 20
+  keyword: enrolled
+  title: Enrolled
+  description: Enrolled after pre-requisites met and spot available
+  phase: enrolled
+  duration: TBD
+

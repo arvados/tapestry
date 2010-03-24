@@ -34,8 +34,7 @@ class Admin::UsersController < Admin::AdminControllerBase
       flash[:notice] = 'User updated.'
       redirect_to admin_users_url
     else
-      render :action => 'edit'
-    end
+      render :action => 'edit' end
   end
 
   def destroy
@@ -54,7 +53,7 @@ class Admin::UsersController < Admin::AdminControllerBase
     user.promote!
     user.reload
     flash[:notice] = "User promoted"
-    redirect_to admin_users_url
+    redirect_to edit_admin_user_url(user)
   end
 
   def activate
