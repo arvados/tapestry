@@ -68,6 +68,10 @@ Rails::Initializer.run do |config|
 
   # Activate observers that should always be running
   config.active_record.observers = :user_observer
+  config.gem "sqlite3-ruby", :lib => "sqlite3"
+  config.gem "vlad"
+  config.gem "gchart"
+  config.gem "hoe"
 end
 
 require 'csv'

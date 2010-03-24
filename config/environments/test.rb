@@ -28,4 +28,5 @@ config.gem 'thoughtbot-quietbacktrace', :version => '>= 1.1.6', :lib => 'quietba
 config.gem 'thoughtbot-factory_girl', :version => '1.2.1', :lib => 'factory_girl'
 config.gem 'mocha'
 config.gem 'thoughtbot-shoulda', :version => '2.9.1', :lib => 'shoulda'
+config.gem "redgreen"
 
