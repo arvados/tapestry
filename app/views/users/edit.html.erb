@@ -15,8 +15,27 @@
   <p><label for="password_confirmation">Confirm Password</label><br/>
   <%= f.password_field :password_confirmation %></p>
 
+<h2>Manage mailing list subscriptions</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th>Subscribed</th>
+  </tr>
+  <% @mailing_lists.each do |mailing_list| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=h mailing_list.name %></td>
+      <td>
+        <%= check_box_tag "user[mailing_list_ids][]", mailing_list.id, @user.mailing_list_ids.include?(mailing_list.id) -%> <%= mailing_list.name -%>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
   <p><%= submit_tag 'Save Changes' %></p>
 <% end -%>
+
+
 
 <h2>Delete my account</h2>
 <p>If you would like to delete your account, click below to request an account deletion:</p>

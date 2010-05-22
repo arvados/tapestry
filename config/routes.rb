@@ -39,6 +39,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :enrollment_application
   map.resources :eligibility_screening_results
   map.resources :eligibility_application_results
+  map.resources :mailing_list_subscriptions
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
@@ -58,6 +59,7 @@ ActionController::Routing::Routes.draw do |map|
         end
       end
     end
+    admin.resources :mailing_lists
     admin.resources :invited_emails
   end
 

@@ -20,11 +20,11 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find params[:id]
+    @mailing_lists = MailingList.all
   end
 
   def update
     @user = User.find params[:id]
-
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'
       redirect_to root_url

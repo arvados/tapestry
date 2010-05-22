@@ -1,0 +1,24 @@
+<h2>Mailing lists</h2>
+
+<h3>
+  Mailing lists: <%= @mailing_lists.size %>
+</h3>
+
+<p>
+  <%= link_to 'Create new mailing list', new_admin_mailing_list_path %>
+</p>
+
+<table class="admin_table">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+  </tr>
+  <% @mailing_lists.each do |mailing_list| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=  mailing_list.id %></td>
+      <td><%=h mailing_list.name %></td>
+      <td><%= link_to 'Edit', edit_admin_mailing_list_path(mailing_list) %></td>
+      <td><%= link_to 'Destroy', [:admin, mailing_list], :confirm => 'Are you sure? All existing subscribers will be unsubscribed, and this is irreversable.', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>

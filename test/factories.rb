@@ -192,3 +192,10 @@ Factory.define :baseline_traits_survey do |f|
   f.maternal_grandfather_born_in "Poland"
   f.maternal_grandmother_born_in "England"
 end
+
+Factory.sequence(:list_name) {|n| "Mailing List #{n}"}
+
+Factory.define(:mailing_list) do |f|
+  f.name       { Factory.next(:list_name) }
+end
+

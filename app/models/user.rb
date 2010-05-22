@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   has_one  :privacy_survey_response
   has_one  :informed_consent_response
   has_one  :baseline_traits_survey
+  has_and_belongs_to_many :mailing_lists, :join_table => :mailing_list_subscriptions
 
   has_attached_file :phr
 
@@ -102,7 +103,7 @@ class User < ActiveRecord::Base
                   :password, :password_confirmation,
                   :first_name, :middle_name, :last_name,
                   :address1, :address2, :city, :state, :zip,
-                  :phr_profile_name
+                  :phr_profile_name, :mailing_list_ids
 
   # Activates the user in the database.
   def activate!

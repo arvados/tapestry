@@ -213,6 +213,25 @@ class UsersControllerTest < Test::Unit::TestCase
         end
       end
     end
+
+    context 'on PUT to update with good values' do
+      setup do
+        @mailing_list = Factory :mailing_list
+        put :update, :id => @user.to_param, :user => { 
+                                :email => @user.email,
+                                :password => 'newpassword',
+                                :password_confirmation => 'newpassword',
+                                :mailing_list_ids => [ @mailing_list.id ]
+                              }
+      end
+
+      should_redirect_to("root_url")
+
+      should "update user password and mailing list subscriptions" do
+        assert_equal @user, User.authenticate(@user.email, 'newpassword')
+        assert_equal @user.mailing_list_ids, [ @mailing_list.id ]
+      end
+    end
   end
 
 
