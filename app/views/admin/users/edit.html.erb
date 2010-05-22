@@ -57,5 +57,22 @@
 <p><label for="is_admin">Is Admin?</label><br/>
 <%= f.check_box :is_admin %></p>
 
+<p><label for="mailing_list_subscriptions">Mailing list subscriptions</label><br/>
+<table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th>Subscribed</th>
+  </tr>
+  <% @mailing_lists.each do |mailing_list| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=h mailing_list.name %></td>
+      <td>
+        <%= check_box_tag "user[mailing_list_ids][]", mailing_list.id, @user.mailing_list_ids.include?(mailing_list.id) -%> <%= mailing_list.name -%>
+      </td>
+    </tr>
+  <% end %>
+</table></p>
+
+
 <p><%= submit_tag 'Save Changes' %></p>
 <% end -%>

@@ -47,7 +47,8 @@ class Admin::UsersControllerTest < ActionController::TestCase
     context "on PUT to update for a user" do
       setup do
         @user = Factory(:user)
-        put :update, :id => @user.to_param, :user => { "is_admin" => "1", "email" => "newemail@example.com" }
+        @mailing_list = Factory :mailing_list
+        put :update, :id => @user.to_param, :user => { "is_admin" => "1", "email" => "newemail@example.com", "mailing_list_ids" => [ @mailing_list.id ] }
       end
 
       should_respond_with :redirect
@@ -56,6 +57,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
       should "update the user" do
         assert @user.reload.is_admin?
         assert_equal "newemail@example.com", @user.reload.email
+        assert_equal @user.mailing_list_ids, [ @mailing_list.id ]
       end
     end
 

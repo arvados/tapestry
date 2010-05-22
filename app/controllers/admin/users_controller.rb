@@ -24,6 +24,7 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   def edit
     @user = User.find params[:id]
+    @mailing_lists = MailingList.all
   end
 
   def update
