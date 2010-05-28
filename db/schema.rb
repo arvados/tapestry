@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100324195010) do
+ActiveRecord::Schema.define(:version => 20100528164535) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -155,6 +155,19 @@ ActiveRecord::Schema.define(:version => 20100324195010) do
     t.datetime "updated_at"
   end
 
+  create_table "mailing_list_subscriptions", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "mailing_list_id"
+  end
+
+  add_index "mailing_list_subscriptions", ["user_id", "mailing_list_id"], :name => "index_mailing_list_subscriptions_on_user_id_and_mailing_list_id", :unique => true
+
+  create_table "mailing_lists", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "phase_completions", :force => true do |t|
     t.string   "phase"
     t.integer  "user_id"
@@ -229,7 +242,8 @@ ActiveRecord::Schema.define(:version => 20100324195010) do
     t.boolean  "has_sequence",                              :default => false, :null => false
     t.string   "has_sequence_explanation"
     t.text     "family_members_passed_exam"
-    t.string   "authsub_token"
+    t.string   "security_question"
+    t.string   "security_answer"
   end
 
   create_table "waitlists", :force => true do |t|

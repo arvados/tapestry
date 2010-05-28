@@ -3,6 +3,8 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'pages', :action => 'show', :id => 'home'
 
   map.new2_user '/users/new2',    :controller => 'users',    :action => 'new2'
+  map.created_user '/users/created/:id',    :controller => 'users',    :action => 'created'
+  map.resend_signup_notification_user '/users/resend_signup_notification/:id',    :controller => 'users',    :action => 'resend_signup_notification'
   map.resources :users
   map.resource  :session
   map.login    '/login',          :controller => 'sessions', :action => 'new'

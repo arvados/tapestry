@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate ]
-  skip_before_filter :login_required, :only => [:new, :new2, :create, :activate]
-  before_filter :ensure_invited, :only => [:new, :new2, :create]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate, :created, :resend_signup_notification ]
+  skip_before_filter :login_required, :only => [:new, :new2, :create, :activate, :created, :resend_signup_notification ]
+  #before_filter :ensure_invited, :only => [:new, :new2, :create]
 
 
   def new
@@ -12,6 +12,9 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
 
     if params[:user] && @user.valid_for_attrs?(params[:user].keys)
+      # Sometimes the error flash remains on the page, which is confusing. Kill it here if all is well.
+      flash.delete(:error)
+
       @user.errors.clear
     else
       render :template => 'users/new'
@@ -37,16 +40,38 @@ class UsersController < ApplicationController
     logout_keeping_session!
     @user = User.new(params[:user])
 
-    success = @user && verify_recaptcha(@user) && @user.save
+    if (params[:pgp_newsletter])
+      if MailingList.find_by_name('PGP newsletter') then
+        @user.mailing_lists = [ MailingList.find_by_name('PGP newsletter') ]
+      end
+    end
 
-    if success && @user.errors.empty?
+    success = @user && verify_recaptcha(@user) && @user.save
+    errors = @user.errors
+
+    if success && errors.empty?
       accept_invite!
-      flash.now[:notice] = "Your account has been created. You will need to activate this account before proceeding. In the next few minutes, you will receive an email containing an activation link. Please check your email."
-      render :template => 'users/created'
+      # Sometimes the error flash remains on the page, which is confusing. Kill it here if all is well.
+      flash.delete(:error)
+      flash.now[:notice] = "We have sent an e-mail to #{@user.email} in order to confirm your identity. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration."
+      redirect_to :action => 'created', :id => @user, :notice => "We have sent an e-mail to #{@user.email} in order to confirm your identity. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration."
     else
-      flash[:error]  = "Please double-check your signup information below."
+      flash[:error]  = "Please double-check your signup information below.<br/>&nbsp;"
+      errors.each { |k,v|
+        # We only show e-mail and captcha errors; the rest is indicated next to the field.
+        if (k == 'base') then
+         flash[:error] += "<br/>#{v}"
+        elsif (k == 'email') then
+         flash[:error] += "<br/>#{k} #{v}"
+        end
+      }
       render :action => 'new2'
     end
+  end
+
+  def created
+    @user = User.find_by_id(params[:id])
+    flash.now[:notice] = params[:notice] if params[:notice]
   end
 
   def destroy
@@ -73,6 +98,13 @@ class UsersController < ApplicationController
       flash[:error]  = "We couldn't find a user with that activation code -- check your email? Or maybe you've already activated -- try signing in."
       redirect_back_or_default('/')
     end
+  end
+
+  def resend_signup_notification
+    @user = User.find_by_id(params[:id])
+    UserMailer.deliver_signup_notification(@user)
+    flash.now[:notice] = "We have re-sent an e-mail to #{@user.email} in order to confirm your identity. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration."
+    render :template => 'users/created'
   end
 
   private

@@ -26,6 +26,11 @@ class User < ActiveRecord::Base
   validates_presence_of     :first_name
   validates_presence_of     :last_name
 
+  validates_presence_of     :security_question
+  validates_length_of       :security_question, :minimum => 5
+  validates_presence_of     :security_answer
+  validates_length_of       :security_answer, :minimum => 2
+
   validates_presence_of     :email
   validates_length_of       :email,    :within => 6..100 #r@a.wk
   validates_uniqueness_of   :email,    :case_sensitive => false
@@ -102,6 +107,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :email_confirmation,
                   :password, :password_confirmation,
                   :first_name, :middle_name, :last_name,
+                  :security_question, :security_answer,
                   :address1, :address2, :city, :state, :zip,
                   :phr_profile_name, :mailing_list_ids
 
