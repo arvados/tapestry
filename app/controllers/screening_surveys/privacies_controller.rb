@@ -7,7 +7,7 @@ class ScreeningSurveys::PrivaciesController < ApplicationController
 
   def update
     if @privacy_survey_response.update_attributes(params[:privacy_survey_response])
-      flash[:notice] = 'You have completed the family consideration survey.  Please continue to the next survey.'
+      flash[:notice] = 'You have completed the privacy survey.  Please continue to the next survey.'
       redirect_to screening_surveys_path
     else
       render :action => 'edit'
