@@ -31,6 +31,10 @@
   </ol>
 <% end -%>
 
+<% if @user.eligibility_survey_version -%>
+  <p>This user has passed eligibility survey version <%= @user.eligibility_survey_version %>.
+<% end -%>
+
 <h2>Edit User Account</h2>
 
 <p><%= f.label :first_name %><br/>

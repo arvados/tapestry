@@ -7,6 +7,11 @@ class FamilySurveyResponse < ActiveRecord::Base
        user.family_survey_response &&
        user.privacy_survey_response
 
+      if not user.eligibility_survey_version then
+        user.eligibility_survey_version = 'v1'
+        user.save(false)
+      end
+
       step = EnrollmentStep.find_by_keyword('screening_surveys')
       user.complete_enrollment_step(step)
     end
