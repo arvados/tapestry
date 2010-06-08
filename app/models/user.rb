@@ -29,10 +29,11 @@ class User < ActiveRecord::Base
   validates_presence_of     :first_name
   validates_presence_of     :last_name
 
-  validates_presence_of     :security_question
-  validates_length_of       :security_question, :minimum => 5
-  validates_presence_of     :security_answer
-  validates_length_of       :security_answer, :minimum => 2
+# Temporarily disabled; we need to ensure these for new users, but not for people already in the system because otherwise any call to user.save will fail.
+#  validates_presence_of     :security_question
+#  validates_length_of       :security_question, :minimum => 5
+#  validates_presence_of     :security_answer
+#  validates_length_of       :security_answer, :minimum => 2
 
   validates_presence_of     :email
   validates_length_of       :email,    :within => 6..100 #r@a.wk
