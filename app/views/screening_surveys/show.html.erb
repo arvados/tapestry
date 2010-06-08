@@ -1,0 +1,93 @@
+<h2>Eligibility Questionnaire</h2>
+
+<% form_for @screening_survey_response, :url => screening_surveys_path, :html => { :method => :put } do |f| -%>
+<%= error_messages_for :screening_survey_response %>
+
+<style type="text/css">
+  form p label { vertical-align: middle; }
+  form p input { vertical-align: middle; }
+  form p.skip * { font-color: #ccc; }
+  form div.fieldWithErrors { display: inline; }
+</style>
+
+<p class="question" id="question1">
+  <span class="question">
+  <%= f.label :us_resident, "1.) Are you a resident of the United States?" %>
+  </span>
+  <br/>
+
+  <%= f.radio_button(:us_resident, true) %>
+  <label for="screening_survey_response_us_resident_true">Yes</label>
+  <br/>
+
+  <%= f.radio_button(:us_resident, false) %>
+  <label for="screening_survey_response_us_resident_false">No</label>
+</p>
+
+<p class="question" id="question2">
+  <span class="question">
+  <%= f.label :country, '2.) Are you currently 21 years of age or older?' %>
+  </span>
+  <br/>
+
+  <%= f.radio_button(:age_21, true) %>
+  <label for="screening_survey_response_age_21_true">Yes</label>
+  <br/>
+
+  <%= f.radio_button(:age_21, false) %>
+  <label for="screening_survey_response_age_21_false">No</label>
+</p>
+
+<p class="question" id="question3">
+  <span class="question">
+  <%= f.label :monozygotic_twin, '3.) Do you have a living, identical (monozygotic) twin?' %>
+  </span>
+  <br/>
+
+  <% ScreeningSurveyResponse::MONOZYGOTIC_TWIN_OPTIONS.sort.each do |description, value| -%>
+    <%= f.radio_button(:monozygotic_twin, value) %>
+    <label for="screening_survey_response_monozygotic_twin_<%= value %>"><%= description[1..-1] %></label>
+    <br/>
+  <% end -%>
+</p>
+
+<p class="question" id="question4">
+  <span class="question">
+  <%= f.label :worrisome_information_comfort_level, '4.) Think about whether there are any specific types of genetic information you would not want to learn about yourself. Examples might include (i) medical conditions with no effective cures or therapies, e.g. Alzheimers or Huntington’s  disease (ii) medical conditions that may lead to premature death, e.g. cancer, cardiovascular disease and stroke (iii) serious genetic conditions that may affect family members, e.g. hereditary cancers or neuromuscular diseases (iv) stigmatized traits, e.g. mental illness. Which of the following statements best describes your comfort level with learning potentially worrisome information?' %>
+  </span>
+  <br/>
+
+  <% ScreeningSurveyResponse::WORRISOME_INFORMATION_COMFORT_LEVEL_OPTIONS.sort.each do |description, value| -%>
+    <%= f.radio_button(:worrisome_information_comfort_level, value) %>
+    <label for="screening_survey_response_worrisome_information_comfort_level_<%= value %>"><%= description[1..-1] %></label>
+    <br/>
+  <% end -%>
+</p>
+
+<p class="question" id="question5">
+  <span class="question">
+  <%= f.label :information_disclosure_comfort_level, '5.) Which of the following statements best describes your feelings about sharing all of your genomic, health and trait data with the general public?' %>
+  </span>
+  <br/>
+  <% ScreeningSurveyResponse::INFORMATION_DISCLOSURE_COMFORT_LEVEL_OPTIONS.sort.each do |description, value| -%>
+    <%= f.radio_button(:information_disclosure_comfort_level, value) %>
+    <label for="screening_survey_response_information_disclosure_comfort_level_<%= value %>"><%= description[1..-1] %></label>
+    <br/>
+  <% end -%>
+</p>
+
+<p class="question" id="question6">
+  <span class="question">
+  <%= f.label :past_genetic_test_participation, '6.) Have you ever received the results of a genetic test, genome scan or genome sequencing (i) from a healthcare provider, (ii) from a commercial company, (iii) as the result of your participation in a research study or clinical trial or (iv) any other means?' %>
+  </span>
+  <br/>
+  <% ScreeningSurveyResponse::PAST_GENETIC_TEST_PARTICIPATION_OPTIONS.sort.each do |description, value| -%>
+    <%= f.radio_button(:past_genetic_test_participation, value) %>
+    <label for="screening_survey_response_past_genetic_test_participation_<%= value %>"><%= description[1..-1] %></label>
+    <br/>
+  <% end -%>
+</p>
+
+<p><%= submit_tag 'Save' %></p>
+<% end -%>
+

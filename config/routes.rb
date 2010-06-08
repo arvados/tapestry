@@ -25,10 +25,12 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
 
+  # the following is legacy - to be removed when we remove eligibility exam v1 code
   map.namespace :screening_surveys do |screening_surveys|
     screening_surveys.resource :residency, :family, :privacy
   end
-  map.resources :screening_surveys, :collection => { :complete => :post } 
+  # /legacy
+  map.resource :screening_surveys
   map.resources :waitlist_resubmissions
   map.resource :phr
   map.resource :consent_review

@@ -860,6 +860,11 @@ div.formError {
   vertical-align: middle;
 }
 
+.question span {
+  vertical-align: middle;
+  font-weight: bold;
+}
+
 .consent-form-question {
   border: 2px solid #5D7CBB;
   background: #91A9D1;

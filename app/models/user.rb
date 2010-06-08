@@ -11,9 +11,12 @@ class User < ActiveRecord::Base
   has_many :exam_responses
   has_many :waitlists
   has_many :distinctive_traits
+  has_one  :screening_survey_response
+  # Next three are legacy and will go away when we drop the code for v1 of the eligibility survey
   has_one  :residency_survey_response
   has_one  :family_survey_response
   has_one  :privacy_survey_response
+  # /legacy
   has_one  :informed_consent_response
   has_one  :baseline_traits_survey
   has_and_belongs_to_many :mailing_lists, :join_table => :mailing_list_subscriptions
