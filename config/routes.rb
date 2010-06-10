@@ -31,6 +31,7 @@ ActionController::Routing::Routes.draw do |map|
   end
   # /legacy
   map.resource :screening_surveys
+  map.screening_survey_results '/screening_survey_results',    :controller => 'screening_surveys',    :action => 'results'
   map.resources :waitlist_resubmissions
   map.resource :phr
   map.resource :consent_review

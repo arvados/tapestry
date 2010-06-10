@@ -13,6 +13,11 @@ class ScreeningSurveysController < ApplicationController
     redirect_to root_path
   end
 
+  def results
+    @passed = @screening_survey_response.passed?
+    @screening_survey_response.complete_results_enrollment_step_if_passed
+  end
+
   protected
 
   def fetch_or_create_response

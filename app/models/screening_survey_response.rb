@@ -4,6 +4,26 @@ class ScreeningSurveyResponse < ActiveRecord::Base
   after_save :complete_enrollment_step
   attr_protected :user_id
 
+  def passed?
+    passed = false
+    if (self.us_resident and 
+        self.age_21 and 
+        ['no','willing'].include?(self.monozygotic_twin) and 
+        ['always','understand'].include?(self.worrisome_information_comfort_level) and 
+        ['comfortable','understand'].include?(self.information_disclosure_comfort_level) and 
+        ['no','public','unsure_public'].include?(self.past_genetic_test_participation)) then
+      passed = true
+    end
+    return passed
+  end
+
+  def complete_results_enrollment_step_if_passed
+    if self.passed? then
+      step = EnrollmentStep.find_by_keyword('screening_survey_results')
+      user.complete_enrollment_step(step)
+    end
+  end
+
   def complete_enrollment_step
     user = self.user.reload
     if not user.screening_survey_response.us_resident.nil? and 
@@ -49,8 +69,8 @@ class ScreeningSurveyResponse < ActiveRecord::Base
   PAST_GENETIC_TEST_PARTICIPATION_OPTIONS = {
     '0No.' => 'no',
     '1Yes, but I would prefer to keep this information confidential.' => 'confidential',
-    '2Unsure, and if genetic information is available from other sources, I am willing to make this information publicly available.' => 'unsure_yes',
-    '3Unsure, and if genetic information is available from other sources I prefer to keep it confidential.' => 'unsure_no',
+    '2Unsure, and if genetic information is available from other sources, I am willing to make this information publicly available.' => 'unsure_public',
+    '3Unsure, and if genetic information is available from other sources I prefer to keep it confidential.' => 'unsure_confidential',
     "4Yes, and I am comfortable making this information publicly available." => 'public',
   }
 
