@@ -22,6 +22,10 @@ class Admin::UsersController < Admin::AdminControllerBase
     end
   end
 
+  def show
+    @user = User.find params[:id]
+  end
+
   def edit
     @user = User.find params[:id]
     @mailing_lists = MailingList.all
