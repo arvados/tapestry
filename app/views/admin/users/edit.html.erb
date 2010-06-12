@@ -58,6 +58,12 @@
 <p><label for="password_confirmation">Confirm Password</label><br/>
 <%= f.password_field :password_confirmation %></p>
 
+<p><label for="security_question">Security Question</label><br/>
+<%= f.text_field :security_question %></p>
+
+<p><label for="security_answer">Security Answer</label><br/>
+<%= f.text_field :security_answer %></p>
+
 <p><label for="is_admin">Is Admin?</label><br/>
 <%= f.check_box :is_admin %></p>
 
