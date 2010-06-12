@@ -25,6 +25,7 @@ class ParticipationConsentsController < ApplicationController
 
     if name_and_email_match && informed_consent_response.save
       step = EnrollmentStep.find_by_keyword('participation_consent')
+      current_user.log('Signed full consent form version 20100331',step)
       current_user.complete_enrollment_step(step)
       redirect_to root_path
     else

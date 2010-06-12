@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   has_one  :informed_consent_response
   has_one  :baseline_traits_survey
   has_and_belongs_to_many :mailing_lists, :join_table => :mailing_list_subscriptions
+  has_many :user_logs
 
   has_attached_file :phr
 
@@ -121,8 +122,13 @@ class User < ActiveRecord::Base
     self.activated_at = Time.now.utc
     self.activation_code = nil
     signup_enrollment_step = EnrollmentStep.find_by_keyword('signup')
+    log('Signed mini consent form version 20100315',signup_enrollment_step)
     self.complete_enrollment_step(signup_enrollment_step)
     save(false)
+  end
+
+  def log(comment,step=nil)
+    UserLog.new(:user => self, :comment => comment, :enrollment_step => step).save!
   end
 
   def promote!
@@ -145,6 +151,7 @@ class User < ActiveRecord::Base
     if ! EnrollmentStepCompletion.find_by_user_id_and_enrollment_step_id(self, step)
       completion = EnrollmentStepCompletion.new :enrollment_step => step
       enrollment_step_completions << completion
+      log("Completed enrollment step: #{step.title}", step)
     end
   end
 
