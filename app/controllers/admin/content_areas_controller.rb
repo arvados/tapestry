@@ -4,7 +4,7 @@ class Admin::ContentAreasController < Admin::AdminControllerBase
   before_filter :set_content_area, :only => [:show, :edit, :update]
 
   def index
-    @content_areas = ContentArea.find(:all)
+    @content_areas = ContentArea.ordered.find(:all)
   end
 
   def show
