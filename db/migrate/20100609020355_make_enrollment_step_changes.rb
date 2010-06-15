@@ -6,9 +6,9 @@ class MakeEnrollmentStepChanges < ActiveRecord::Migration
     # Change duration for the consent review step
     execute "UPDATE enrollment_steps set duration='30 minutes' where keyword='consent_review'"
     # Change step 6 to 'enrollment queue'
-    execute "UPDATE enrollment_steps set duration='4-6 weeks',keyword='enrollment_queue',title='Enrollment Queue',description='Enrollment Queue' where ordinal=6"
+    execute "UPDATE enrollment_steps set duration='4-6 weeks',keyword='enrollment_queue',title='Enrollment Queue',description='Enrollment Queue' where keyword='screening_submission'"
     # Drop other steps
-    execute "DELETE from enrollment_steps where ordinal=7"
+    execute "DELETE from enrollment_steps where keyword='eligibility_screening_results'"
     execute "DELETE from enrollment_steps where ordinal>=9"
     # Change ordinal for 'Consent to participate' step
     execute "UPDATE enrollment_steps set ordinal='7', duration='30-60 minutes' where keyword='participation_consent'"
