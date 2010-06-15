@@ -84,6 +84,7 @@ class ExamVersionThree < ActiveRecord::Migration
 
     tmp = e.exam_questions.find_by_ordinal(4)
     tmp.ordinal = 3
+    tmp.save!
 
     e.exam_questions = [ e.exam_questions.find_by_ordinal(1), e.exam_questions.find_by_ordinal(2), tmp ]
     e.published = true
@@ -114,6 +115,10 @@ class ExamVersionThree < ActiveRecord::Migration
     ExamVersion.find_by_title_and_version('Genetics & Society',2).destroy
     v2 = ExamVersion.find_by_title_and_version('Genetics & Society',1)
     v2.published = true
+
+    tmp = v2.exam_questions.find_by_question('What is an example of an unintended consequence when current genetic technologies are used? (choose the best answer)')
+    tmp.ordinal = 4
+    tmp.save!
     v2.save!
 
   end
