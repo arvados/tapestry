@@ -8,7 +8,7 @@
       <% if version = exam.version_for(current_user) %>
         <% content_tag_for 'li', exam, :class => exam_class(exam) do %>
           <% exam_response = version.exam_responses.for_user(current_user).first -%>
-          <% if exam.completed_by?(current_user) -%>
+          <% if exam.any_version_completed_by?(current_user) -%>
             <span>
               <%=h version.title %>
               <div class="completion_time">

@@ -5,6 +5,14 @@ class ContentArea < ActiveRecord::Base
 
   named_scope :ordered, { :order => 'ordinal' }
 
+  def any_version_completed_by?(user)
+    exams.all? do |exam|
+      !exam.version_for(user) || (
+        exam.version_for(user) && exam.any_version_completed_by?(user)
+      )
+    end
+  end
+
   def completed_by?(user)
     exams.all? do |exam|
       !exam.version_for(user) || (
@@ -15,7 +23,7 @@ class ContentArea < ActiveRecord::Base
 
   def self.current_for(user)
     ordered.detect do |area|
-      ! area.completed_by?(user)
+      ! area.any_version_completed_by?(user)
     end
   end
 end

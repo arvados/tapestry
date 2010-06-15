@@ -33,6 +33,13 @@ class Exam < ActiveRecord::Base
     get_versioned_attribute(:description, 'Unpublished Exam')
   end
 
+  def any_version_completed_by?(user)
+    versions.find(:all, :conditions => [ 'created_at < ? and published = ?', user.created_at, true ],:order => 'version DESC').each do |version|
+      return true if version.completed_by?(user)
+    end
+    return false
+  end
+
   def completed_by?(user)
     version_for(user) && version_for(user).completed_by?(user)
   end

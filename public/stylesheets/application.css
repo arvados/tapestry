@@ -807,6 +807,16 @@ div.formError {
   border-left: 1px solid #CCC;
 }
 
+#exam_listing li.old_completed span {
+  /* content area */
+  color: #000;
+  background: #FFF url('/images/go.png') no-repeat right top;
+  border-right: 2px solid #999;
+  border-bottom: 2px solid #999;
+  border-top: 1px solid #CCC;
+  border-left: 1px solid #CCC;
+}
+
 #exam_listing li.completed span {
   /* content area */
   color: #000;
