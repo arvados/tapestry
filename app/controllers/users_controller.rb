@@ -32,6 +32,7 @@ class UsersController < ApplicationController
       flash[:notice] = 'User updated.'
       redirect_to root_url
     else
+      @mailing_lists = MailingList.all
       render :action => 'edit'
     end
   end
