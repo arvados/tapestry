@@ -6,7 +6,7 @@ class ScreeningSurveyResponse < ActiveRecord::Base
 
   def passed?
     passed = false
-    if (self.us_resident and 
+    if (self.us_citizen and 
         self.age_21 and 
         ['no','willing'].include?(self.monozygotic_twin) and 
         ['always','understand'].include?(self.worrisome_information_comfort_level) and 
@@ -26,7 +26,7 @@ class ScreeningSurveyResponse < ActiveRecord::Base
 
   def complete_enrollment_step
     user = self.user.reload
-    if not user.screening_survey_response.us_resident.nil? and 
+    if not user.screening_survey_response.us_citizen.nil? and 
        not user.screening_survey_response.age_21.nil? and
        not user.screening_survey_response.monozygotic_twin.nil? and
        not user.screening_survey_response.worrisome_information_comfort_level.nil? and
@@ -76,7 +76,7 @@ class ScreeningSurveyResponse < ActiveRecord::Base
 
 
   def eligible?
-    us_resident
+    us_citizen
   end
 
   def waitlist_message

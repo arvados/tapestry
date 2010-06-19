@@ -12,16 +12,16 @@
 
 <p class="question" id="question1">
   <span class="question">
-  <%= f.label :us_resident, "1.) Are you a resident of the United States?" %>
+  <%= f.label :us_citizen, "1.) Are you a citizen of the United States?" %>
   </span>
   <br/>
 
-  <%= f.radio_button(:us_resident, true) %>
-  <label for="screening_survey_response_us_resident_true">Yes</label>
+  <%= f.radio_button(:us_citizen, true) %>
+  <label for="screening_survey_response_us_citizen_true">Yes</label>
   <br/>
 
-  <%= f.radio_button(:us_resident, false) %>
-  <label for="screening_survey_response_us_resident_false">No</label>
+  <%= f.radio_button(:us_citizen, false) %>
+  <label for="screening_survey_response_us_citizen_false">No</label>
 </p>
 
 <p class="question" id="question2">

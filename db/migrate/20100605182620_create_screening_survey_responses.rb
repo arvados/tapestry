@@ -2,7 +2,7 @@ class CreateScreeningSurveyResponses < ActiveRecord::Migration
   def self.up
     create_table :screening_survey_responses do |t|
       t.references :user
-      t.boolean :us_resident
+      t.boolean :us_citizen
       t.boolean :age_21
       t.string :monozygotic_twin
       t.string :worrisome_information_comfort_level
@@ -15,8 +15,8 @@ class CreateScreeningSurveyResponses < ActiveRecord::Migration
       if (u.residency_survey_response or u.family_survey_response or u.privacy_survey_response) then
         u.screening_survey_response = ScreeningSurveyResponse.new()
         s = u.screening_survey_response
-        if (u.residency_survey_response) then
-          s.us_resident = u.residency_survey_response.us_resident
+        if (u.baseline_traits_survey) then
+          s.us_citizen = u.baseline_traits_survey.us_citizen
         end
         if (u.family_survey_response) then
           s.age_21 = u.family_survey_response.birth_year < (Time.now.year - 21)
