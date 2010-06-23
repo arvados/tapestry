@@ -1,0 +1,64 @@
+<h2>Enrollment Application Results</h2>
+
+<% if not current_user.enrolled.nil? then %>
+<p>
+Thank you for applying to the Personal Genome Project (PGP) research study.
+Your application has been reviewed and a determination has been made.  You are
+now enrolled in the Personal Genome Project!
+</p>
+We ask that you carefully consider the following:
+<p>
+(1) Public Nature of the PGP: As stated in the consent form, the entrance exam
+and on our website, the PGP is a public genomics research study.  As such, you
+should understand that the intention of this study is to create a public
+repository of genomic, health and other trait information.  If you choose to
+continue, your genomic, health and trait data will be made publicly available.
+For example, here are two different public websites that contain data from PGP
+participant #1 so you can better visualize what this may entail: 
+</p>
+<%= link_to 'http://www.personalgenomes.org/public/1.html', 'http://www.personalgenomes.org/public/1.html' %><br/>
+<%= link_to 'http://snp.med.harvard.edu/results/job/20/George_Church', 'http://snp.med.harvard.edu/results/job/20/George_Church' %>
+<p>
+(2) DNA Sequencing:  If you choose to continue in the PGP, we want you to
+understand that it may take a considerable amount of time before we are able to
+sequence your genome.   Although the cost of whole genome sequencing is
+dropping fast, it still costs thousands of dollars per person at the current
+market price. Our ability to sequence your genome will depend on our success in
+securing funding and sequencing services for the study.  These are all things
+we are actively working toward, but it is difficult to predict how long it will
+take and there are no guarantees that we will be able to provide DNA sequencing
+for every individual who enrolls in the study.  For those individuals that find
+themselves on the waitlist to be sequenced, there will be other important ways
+to participate in this research study, such as the (a) collection of extensive
+health and trait information, (b) evaluation and testing of new software, (c)
+feedback about ways to improve the research study, (d) participation in
+research studies that are collaborating with the PGP, to name a few.  You
+should know that we may shuffle the order of participants as we prioritize the
+allocation of DNA sequencing and other resources.
+</p>
+<p>
+(3) Tissue Collection: We realize that Boston may be a long distance from your
+home.  We want to limit the amount of time and out-of-pocket expense incurred
+by PGP participants.  Although we hope to establish cell lines derived from
+skin and/or blood, currently there is no economical way of collecting these
+tissues other than requiring that participants travel to Boston at their own
+expense.  DNA sequencing, however, can be done using saliva, which can be
+collected without an in-person visit.  When we are ready to ship you a saliva
+kit, we will request a mailing address and provide further instructions at this
+time.
+</p>
+<p>
+(4) Next Steps: We will be continuously adding new features that will enable
+you to add new genetic, health and trait data to your public profile and
+participate in other aspects of the PGP research study.
+</p>
+
+<%= link_to 'GET STARTED', root_path %>
+
+<% elsif current_user.has_completed?('enrollment_application') then %>
+<p>Thanks for submitting your enrollment application.  The review process may
+take 1-2 months or more.  We will review your application as soon as we can.
+Once a determination has been made we will update this page.</p>
+
+You submitted your enrollment application on <%= current_user.enrollment_step_completions.find_by_enrollment_step_id(EnrollmentStep.find_by_keyword('enrollment_application')).created_at %>
+<% end %>

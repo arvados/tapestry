@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   has_one  :family_survey_response
   has_one  :privacy_survey_response
   # /legacy
+  has_many  :named_proxies
   has_one  :informed_consent_response
   has_one  :baseline_traits_survey
   has_and_belongs_to_many :mailing_lists, :join_table => :mailing_list_subscriptions
@@ -30,11 +31,10 @@ class User < ActiveRecord::Base
   validates_presence_of     :first_name
   validates_presence_of     :last_name
 
-# Temporarily disabled; we need to ensure these for new users, but not for people already in the system because otherwise any call to user.save will fail.
-#  validates_presence_of     :security_question
-#  validates_length_of       :security_question, :minimum => 5
-#  validates_presence_of     :security_answer
-#  validates_length_of       :security_answer, :minimum => 2
+  # We allow nil for security_question and security_answer because we have a lot of legacy records
+  # for which those fields are still nil
+  validates_length_of       :security_question, :minimum => 5, :allow_nil => true
+  validates_length_of       :security_answer, :minimum => 2, :allow_nil => true
 
   validates_presence_of     :email
   validates_length_of       :email,    :within => 6..100 #r@a.wk
@@ -148,10 +148,17 @@ class User < ActiveRecord::Base
   def complete_enrollment_step(step)
     raise "Cannot find enrollment step to complete." if step.nil?
 
+    final_pre_enrollment_step = EnrollmentStep.find_by_keyword('enrollment_application_results')
+
     if ! EnrollmentStepCompletion.find_by_user_id_and_enrollment_step_id(self, step)
       completion = EnrollmentStepCompletion.new :enrollment_step => step
       enrollment_step_completions << completion
       log("Completed enrollment step: #{step.title}", step)
+    end
+
+    if (step == final_pre_enrollment_step and self.enrolled.nil?) then
+      self.enrolled = Time.now()
+      save
     end
   end
 

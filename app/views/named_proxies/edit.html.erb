@@ -1,0 +1,19 @@
+<h2>Update a designated proxy</h2>
+
+<% form_for @named_proxy do |f| %>
+  <%= error_messages_for :named_proxy, :header_message => nil, :message => nil %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :email, 'E-mail address' %><br />
+    <%= f.text_field :email %>
+  </p>
+  <p>
+    <%= f.submit "Save" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', named_proxies_path %>

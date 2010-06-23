@@ -4,6 +4,8 @@ Factory.define(:user) do |f|
   f.first_name            'Jason'
   f.last_name             'Morrison'
   f.email                 { Factory.next :email }
+  f.security_question     'security_question'
+  f.security_answer       'security_answer'
   f.password              'password'
   f.password_confirmation 'password'
 end
@@ -12,6 +14,8 @@ Factory.define(:activated_user, :class => :user) do |f|
   f.first_name            'Jason'
   f.last_name             'Morrison'
   f.email                 { Factory.next :email }
+  f.security_question     'security_question'
+  f.security_answer       'security_answer'
   f.password              'password'
   f.password_confirmation 'password'
   f.activated_at { Time.now }
@@ -21,6 +25,8 @@ Factory.define(:admin_user, :class => User) do |f|
   f.first_name            'Jason'
   f.last_name             'Morrison'
   f.email                 { Factory.next :email }
+  f.security_question     'security_question'
+  f.security_answer       'security_answer'
   f.password              'password'
   f.password_confirmation 'password'
   f.is_admin              true
@@ -112,6 +118,16 @@ Factory.define(:question_response) do |f|
   f.answer        { |a| a.exam_question.correct_answer }
 end
 
+Factory.define(:screening_survey_response) do |f|
+  f.user { |u| u.association :user }
+  f.us_citizen true
+  f.age_21 true
+  f.monozygotic_twin 'no'
+  f.worrisome_information_comfort_level 'understand'
+  f.information_disclosure_comfort_level 'understand'
+  f.past_genetic_test_participation 'public'
+end
+
 Factory.define(:residency_survey_response) do |f|
   f.user { |u| u.association :user }
   f.us_resident true
@@ -198,4 +214,11 @@ Factory.sequence(:list_name) {|n| "Mailing List #{n}"}
 Factory.define(:mailing_list) do |f|
   f.name       { Factory.next(:list_name) }
 end
+
+Factory.define(:named_proxy) do |f|
+  f.user { |u| u.association :user }
+  f.name "John E Miles"
+  f.email "test@example.com"
+end
+
 

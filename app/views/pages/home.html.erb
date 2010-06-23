@@ -40,7 +40,7 @@
     </p>
 
   </div>
-<% else -%>
+<% elsif !current_user.enrolled -%>
 
   <% content_for 'sidebar' do %>
    <div class="bubble">
@@ -73,4 +73,11 @@
       </li>
     <% end -%>
   </ol>
+<% else -%>
+  <div style="width: 480px;">
+    <h2>Public Profile Page</h2>
+
+    <%= link_to "Enrollment Application Results", enrollment_application_results_path %></p>
+    
+  </div>
 <% end -%>

@@ -2,7 +2,7 @@
 
 one:
   user_id: 1
-  us_resident: false
+  us_citizen: false
   monozygotic_twin: MyString
   worrisome_information_comfort_level: MyString
   information_disclosure_comfort_level: MyString
@@ -10,7 +10,7 @@ one:
 
 two:
   user_id: 1
-  us_resident: false
+  us_citizen: false
   monozygotic_twin: MyString
   worrisome_information_comfort_level: MyString
   information_disclosure_comfort_level: MyString

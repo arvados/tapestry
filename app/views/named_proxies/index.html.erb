@@ -1,0 +1,45 @@
+<h2>Naming your designated proxy</h2>
+<p>
+Please name two people (next of kin or other trusted individual) to be your
+proxy only for purposes of this study (your “Designated Proxy”). You are
+strongly encouraged to discuss your wishes with your family and your Designated
+Proxy as part of your enrollment in the PGP.
+</p>
+<p>
+
+In the event that you should die or become mentally incapacitated during the
+course of your participation in the PGP, your Designated Proxy will have the
+authority to decide to either 1) remove your cell lines and/or data from the
+study (subject to the limitations on removal described in the consent form), 2)
+allow the PGP to maintain your cell lines and/or data for continued research
+and use in accordance with the consent form, or 3) authorize the PGP to obtain
+and add additional data, such as cause of death and/or tissue samples obtained
+during an autopsy, to the study on your behalf. 
+</p>
+ 
+<% if @named_proxies != [] %>
+ 
+<strong>Designated Proxies:</strong>
+<table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th>E-mail address</th>
+  </tr>
+  <% @named_proxies.each do |np| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=h np.name %></td>
+      <td>
+        <%= h np.email -%>
+      </td>
+      <td><%= link_to 'Edit', edit_named_proxy_path(np) %></td>
+      <td><%= link_to 'Remove', [ np ], :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<% end %>
+
+<%= link_to 'Add designated proxy', new_named_proxy_path %>
+<p/>
+<%= link_to 'Continue', done_named_proxy_path %>
+
