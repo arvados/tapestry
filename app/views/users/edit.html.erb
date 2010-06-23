@@ -6,7 +6,9 @@
   <%= error_messages_for :user %>
   <p><label for="name">Name</label>: <%=h @user.full_name %></p>
 
-  <p><label for="email">Email</label><br/>
+  <p>
+  <%= f.label :email %>
+  <%= error_message_on :user, :email, :append_text => '.' %><br/>
   <%= f.text_field :email %></p>
 
   <p><label for="password">Password</label><br/>
@@ -14,6 +16,22 @@
 
   <p><label for="password_confirmation">Confirm Password</label><br/>
   <%= f.password_field :password_confirmation %></p>
+
+  <p>
+  <%= f.label :security_question %>
+  <% if @user.errors.on(:security_question).nil? -%>(minimum 5 characters)<% end -%>
+  <%= error_message_on :user, :security_question, :append_text => '.' %>
+  <br/>
+  <%= f.text_field :security_question, :size => 80 %>
+
+  <p>
+  <%= f.label :security_answer %>
+  <% if @user.errors.on(:security_answer).nil? -%><% end -%>
+  <%= error_message_on :user, :security_answer, :append_text => '.' %>
+  <br/>
+  <%= f.text_field :security_answer, :size => 80 %></p>
+
+<%= link_to 'Manage designated proxies', named_proxies_path %>
 
 <h2>Manage mailing list subscriptions</h2>
 
