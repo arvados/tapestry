@@ -54,8 +54,8 @@ class UsersController < ApplicationController
       accept_invite!
       # Sometimes the error flash remains on the page, which is confusing. Kill it here if all is well.
       flash.delete(:error)
-      flash.now[:notice] = "We have sent an e-mail to #{@user.email} in order to confirm your identity. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration."
-      redirect_to :action => 'created', :id => @user, :notice => "We have sent an e-mail to #{@user.email} in order to confirm your identity. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration."
+      flash.now[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration."
+      redirect_to :action => 'created', :id => @user, :notice => "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration."
     else
       flash[:error]  = "Please double-check your signup information below.<br/>&nbsp;"
       errors.each { |k,v|
