@@ -31,14 +31,14 @@
 <% if @user.errors.on(:security_question).nil? -%>(minimum 5 characters)<% end -%>
 <%= error_message_on :user, :security_question, :append_text => '.' %>
 <br/>
-<%= f.text_field :security_question %>
+<%= f.text_field :security_question, :size => 80 %>
 
 <p/>
 <%= f.label :security_answer %>
 <% if @user.errors.on(:security_answer).nil? -%><% end -%>
 <%= error_message_on :user, :security_answer, :append_text => '.' %>
 <br/>
-<%= f.text_field :security_answer %>
+<%= f.text_field :security_answer, :size => 80 %>
 
 <p/>        
 <%= check_box_tag :pgp_newsletter, nil, params[:pgp_newsletter] -%> <%= "Sign me up for the PGP newsletter!" -%>
