@@ -39,6 +39,7 @@ class Admin::UsersController < Admin::AdminControllerBase
       flash[:notice] = 'User updated.'
       redirect_to admin_users_url
     else
+      @mailing_lists = MailingList.all
       render :action => 'edit' end
   end
 
