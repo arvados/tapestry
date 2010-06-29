@@ -42,8 +42,8 @@ ActionController::Routing::Routes.draw do |map|
   map.done_baseline_trait_collection_notification '/baseline_trait_collection_notifications/done', :controller => 'baseline_trait_collection_notifications', :action => 'done'
   map.resource :identity_verification_notification
   map.done_identity_verification_notification '/identity_verification_notifications/done', :controller => 'identity_verification_notifications', :action => 'done'
-  map.resources :named_proxies
   map.done_named_proxy '/named_proxies/done', :controller => 'named_proxies', :action => 'done'
+  map.resources :named_proxies
   map.resource :trait_collection
   map.resource :distinctive_traits_survey
   map.resource :pledge
