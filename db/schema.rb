@@ -277,7 +277,6 @@ ActiveRecord::Schema.define(:version => 20100630012907) do
     t.boolean  "has_sequence",                              :default => false, :null => false
     t.string   "has_sequence_explanation"
     t.text     "family_members_passed_exam"
-    t.string   "authsub_token"
     t.string   "security_question"
     t.string   "security_answer"
     t.string   "eligibility_survey_version"
