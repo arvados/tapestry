@@ -1,5 +1,10 @@
 class InternationalParticipantsController < ApplicationController
-  skip_before_filter :login_required, :only => [:new, :create, :done]
+  skip_before_filter :login_required, :only => [:index, :new, :create, :done]
+
+  def index
+    new
+    render :action => 'new'
+  end
 
   def new
     @international_participant = InternationalParticipant.new()
