@@ -1,0 +1,17 @@
+<h2>International Participant</h2>
+
+<% form_for @international_participant do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :email, 'E-mail address' %><br />
+    <%= f.text_field :email %>
+  </p>
+  <p>
+    <%= f.label :country, 'Country' %><br />
+    <%= f.country_select :country %>
+  </p>
+  <p>
+    <%= f.submit "Subscribe" %>
+  </p>
+<% end %>
