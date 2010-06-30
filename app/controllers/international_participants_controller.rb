@@ -1,4 +1,6 @@
 class InternationalParticipantsController < ApplicationController
+  skip_before_filter :login_required, :only => [:new, :create, :done]
+
   def new
     @international_participant = InternationalParticipant.new()
   end
@@ -6,8 +8,16 @@ class InternationalParticipantsController < ApplicationController
   def create
     @international_participant = InternationalParticipant.new(params[:international_participant])
     if @international_participant.save
-       flash[:notice] = 'You have been added.'
-       render :action => 'done'
+      flash.delete(:error)
+      flash[:notice] = 'You have been added.'
+      render :action => 'done'
+    else
+      flash.delete(:notice)
+      flash[:error] = "Please double-check your e-mail address:<br/>&nbsp;"
+      @international_participant.errors.each { |k,v|
+        flash[:error] += "<br/>* #{k} #{v}"
+      }
+      render :action => 'new'
     end
   end
 
