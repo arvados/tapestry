@@ -52,6 +52,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :eligibility_screening_results
   map.resources :enrollment_application_results
   map.resources :mailing_list_subscriptions
+  map.resources :international_participants
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'

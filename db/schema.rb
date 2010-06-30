@@ -9,11 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100528164535) do
+ActiveRecord::Schema.define(:version => 20100630012907) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
-    t.string   "answer"
+    t.text     "answer"
     t.boolean  "correct"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -140,10 +140,17 @@ ActiveRecord::Schema.define(:version => 20100528164535) do
   add_index "family_survey_responses", ["user_id"], :name => "index_family_survey_responses_on_user_id"
 
   create_table "informed_consent_responses", :force => true do |t|
-    t.boolean  "twin",       :default => false, :null => false
-    t.boolean  "biopsy",     :default => false, :null => false
-    t.boolean  "recontact",  :default => false, :null => false
+    t.integer  "twin",       :limit => 1
+    t.integer  "biopsy",     :limit => 1
+    t.integer  "recontact",  :limit => 1
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "international_participants", :force => true do |t|
+    t.string   "email"
+    t.string   "country"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -164,6 +171,14 @@ ActiveRecord::Schema.define(:version => 20100528164535) do
 
   create_table "mailing_lists", :force => true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "named_proxies", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -213,6 +228,26 @@ ActiveRecord::Schema.define(:version => 20100528164535) do
 
   add_index "residency_survey_responses", ["user_id"], :name => "index_residency_survey_responses_on_user_id"
 
+  create_table "screening_survey_responses", :force => true do |t|
+    t.integer  "user_id"
+    t.boolean  "us_citizen"
+    t.boolean  "age_21"
+    t.string   "monozygotic_twin"
+    t.string   "worrisome_information_comfort_level"
+    t.string   "information_disclosure_comfort_level"
+    t.string   "past_genetic_test_participation"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_logs", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "enrollment_step_id"
+    t.string   "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", :force => true do |t|
     t.string   "email",                      :limit => 100
     t.string   "crypted_password",           :limit => 40
@@ -242,8 +277,11 @@ ActiveRecord::Schema.define(:version => 20100528164535) do
     t.boolean  "has_sequence",                              :default => false, :null => false
     t.string   "has_sequence_explanation"
     t.text     "family_members_passed_exam"
+    t.string   "authsub_token"
     t.string   "security_question"
     t.string   "security_answer"
+    t.string   "eligibility_survey_version"
+    t.datetime "enrolled"
   end
 
   create_table "waitlists", :force => true do |t|
