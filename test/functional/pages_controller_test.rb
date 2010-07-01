@@ -30,10 +30,10 @@ class PagesControllerTest < ActionController::TestCase
       get :show, :id => 'home'
     end
 
-    should "render a form that POSTs to /accepted_invites#create" do
-      assert_select 'form[method=post][action=?]', accepted_invites_path do
+    should "render a form that POSTs to /session" do
+      assert_select 'form[method=post][action=?]', session_path do
         assert_select 'input[type=text][name=?]', 'email'
-        assert_select 'input[type=password][name=?]', 'code'
+        assert_select 'input[type=password][name=?]', 'password'
         assert_select 'input[type=submit]'
       end
     end

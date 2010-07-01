@@ -12,8 +12,8 @@ class InformedConsentResponseTest < ActiveSupport::TestCase
     should_allow_values_for :twin, 0, 1, 2
     should_allow_values_for :recontact, 0, 1
 
-    should_not_allow_values_for :twin, nil, :message => 'must be Yes, No or Unsure'
-    should_not_allow_values_for :recontact, nil, :message => 'must be Yes or No'
+    should_not_allow_values_for :twin, 3, :message => 'must be Yes, No or Unsure'
+    should_not_allow_values_for :recontact, 2, :message => 'must be Yes or No'
 
     should_not_allow_mass_assignment_of :user_id
   end

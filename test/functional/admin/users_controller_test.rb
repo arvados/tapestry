@@ -111,10 +111,6 @@ class Admin::UsersControllerTest < ActionController::TestCase
           assert_select 'li>a[href=?]', new_admin_bulk_waitlist_path(:phase => 'preenroll')
         end
 
-        should "render an enroll link to the bulk-promote-user page" do
-          assert_select 'li>a[href=?]', new_admin_bulk_promotion_path(:require => 'eligibility_application_results')
-        end
-
         should "render an enroll link to the bulk-waitlist-user page" do
           assert_select 'li>a[href=?]', new_admin_bulk_waitlist_path(:phase => 'enroll')
         end

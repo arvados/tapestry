@@ -34,40 +34,18 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
         @user.complete_enrollment_step(surveys_step)
         @user.reload
         assert @user.has_completed?('screening_surveys')
-
-#      end
-      
-#      setup do
-##        surveys_step    = EnrollmentStep.find_by_keyword('screening_surveys')
-##        @user.complete_enrollment_step(surveys_step)
-##        @user.reload
-##        Factory(:enrollment_step_completion, :user => @user, :enrollment_step => surveys_step)
-##        Factory(:screening_survey_response, :user => @user)
-#
-## W T F is going on here...
-#assert submission_step = EnrollmentStep.find_by_keyword('screening_submission')
-#        assert surveys_step    = EnrollmentStep.find_by_keyword('screening_surveys')
-#        @user.complete_enrollment_step(submission_step)
-#        @user.complete_enrollment_step(surveys_step)
-#        @user.reload
-#        assert @user.has_completed?('screening_submission')
-#        assert @user.has_completed?('screening_surveysxx')
-#
-#
-#
-#      end
-#
-#      context "on GET to show" do
-#        setup do
-          get :show
-        end
-
-        should_redirect_to 'root_path'
-        should_set_the_flash_to /completed/i
       end
+
     end
 
+    context "on GET to show" do
+      setup do
+        post :update
+      end
 
-#  end
+      should_redirect_to 'root_path'
+      should_set_the_flash_to /eligibility questionnaire/i
+    end
+  end
 
 end

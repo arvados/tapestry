@@ -13,35 +13,40 @@
   <%= f.hidden_field attr %>
 <% end -%>
 
-<p/>
+<br/>
 <%= f.label :password %>
 <% if @user.errors.on(:password).nil? -%>(minimum 6 characters)<% end -%>
 <%= error_message_on :user, :password, :append_text => '.' %>
 <br/>
 <%= f.password_field :password %>
+<br/>
 
-<p/>
+<br/>
 <%= f.label :password_confirmation, 'Confirm password' %>
 <%= error_message_on :user, :password_confirmation, :append_text => '.' %>
 <br/>
 <%= f.password_field :password_confirmation %>
+<br/>
 
-<p/>
+<br/>
 <%= f.label :security_question %>
 <% if @user.errors.on(:security_question).nil? -%>(minimum 5 characters)<% end -%>
 <%= error_message_on :user, :security_question, :append_text => '.' %>
 <br/>
 <%= f.text_field :security_question, :size => 80 %>
+<br/>
 
-<p/>
+<br/>
 <%= f.label :security_answer %>
 <% if @user.errors.on(:security_answer).nil? -%><% end -%>
 <%= error_message_on :user, :security_answer, :append_text => '.' %>
 <br/>
 <%= f.text_field :security_answer, :size => 80 %>
+<br/>
 
-<p/>        
+<p>        
 <%= check_box_tag :pgp_newsletter, nil, params[:pgp_newsletter] -%> <%= "Sign me up for the PGP newsletter!" -%>
+</p>
 
 <h2>Are you a robot?</h2>
 <p>Please type the two words you see below to confirm that you&rsquo;re a real person.</p>

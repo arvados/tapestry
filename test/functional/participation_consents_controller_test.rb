@@ -26,9 +26,10 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
 
       should "render form elements for the informed_consent_response" do
         assert_select 'form[method=?][action=?]', 'post', participation_consent_path do
-          %w(twin biopsy recontact).each do |radio_name|
+          %w(recontact).each do |radio_name|
             assert_select 'input[type=radio][name=?]', "informed_consent_response[#{radio_name}]", :count => 2
           end
+          assert_select 'input[type=radio][name=?]', "informed_consent_response[twin]", :count => 3 
         end
       end
     end
@@ -42,7 +43,6 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
           },
           :informed_consent_response => {
             :twin => '',
-            :biopsy => '',
             :recontact => ''
           } }
       end
@@ -51,8 +51,9 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
       should_respond_with :success
       should_render_template :show
 
-      should_set_the_flash_to /name/i
-      should_set_the_flash_to /email/i
+      should "render error messages about the questionnaire" do
+        assert_match /Your name and email signature must match the name and email that you signed up with./, @response.body
+      end
     end
 
     context "on POST to create with matched confirmation information but no answers to the questionnaire" do
@@ -64,7 +65,6 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
           },
           :informed_consent_response => {
             :twin => '',
-            :biopsy => '',
             :recontact => ''
           } }
       end
@@ -86,9 +86,8 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
             :email => @user.email,
           },
           :informed_consent_response => {
-            :twin => 'true',
-            :biopsy => 'true',
-            :recontact => 'true'
+            :twin => '1',
+            :recontact => '1'
           } }
       end
 
