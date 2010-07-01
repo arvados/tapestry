@@ -36,10 +36,11 @@
   <%= f.text_field :security_answer, :size => 80 %>
   </p>
 <p>
-<%= link_to 'Manage designated proxies', named_proxies_path %>
+<% if current_user.has_completed?('named_proxies') %>
+  <%= link_to 'Manage designated proxies', named_proxies_path %>
+<% end %>
 </p>
 <h2>Manage mailing list subscriptions</h2>
-
 <table class="admin_table">
   <tr>
     <th>Name</th>
