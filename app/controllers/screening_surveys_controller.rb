@@ -5,6 +5,8 @@ class ScreeningSurveysController < ApplicationController
   def update
     @screening_survey_response.update_attributes(params[:screening_survey_response])
     if current_user.has_completed?('screening_surveys')
+      step = EnrollmentStep.find_by_keyword('screening_surveys')
+      current_user.log('Completed Eligibility Questionnaire',step)
       flash[:notice] = 'You have completed the eligibility questionnaire.  Please continue to the questionnaire results.'
 
     else
