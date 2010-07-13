@@ -72,6 +72,8 @@ Rails::Initializer.run do |config|
   config.gem "vlad"
   config.gem "gchart"
   config.gem "hoe"
+  config.gem "nokogiri"
+  config.gem "gdata", :lib => "gdata"
 end
 
 require 'csv'

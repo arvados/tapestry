@@ -114,7 +114,7 @@ class User < ActiveRecord::Base
                   :first_name, :middle_name, :last_name,
                   :security_question, :security_answer,
                   :address1, :address2, :city, :state, :zip,
-                  :phr_profile_name, :mailing_list_ids
+                  :phr_profile_name, :mailing_list_ids, :authsub_token
 
   # Activates the user in the database.
   def activate!
@@ -133,6 +133,10 @@ class User < ActiveRecord::Base
 
   def promote!
     complete_enrollment_step(next_enrollment_step)
+  end
+
+  def demote!
+    enrollment_step_completions.last.delete
   end
 
   def next_enrollment_step

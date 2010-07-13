@@ -59,7 +59,13 @@
   <p><%= submit_tag 'Save Changes' %></p>
 <% end -%>
 
-
+<% unless @user.authsub_token.blank? %>
+<h2>Unlink my Google Health account</h2>
+<p>If you wish to stop sharing your Google Health information, click below to unlink your health profile:</p>
+<%= button_to 'Unlink Google Health profile',
+              :controller => 'phrccr',
+              :action => 'unlink_googlehealth' %>
+<% end %>
 
 <h2>Delete my account</h2>
 <p>If you would like to delete your account, click below to request an account deletion:</p>

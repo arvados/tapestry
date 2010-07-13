@@ -57,7 +57,9 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
     admin.resources :users, :member => { :activate => :put,
-                                         :promote  => :put } do |user|
+    		    	    	       	 :promote  => :put,
+					 :ccr => :get,
+					 :demote => :put } do |user|
       user.resources :exam_responses
     end
     admin.resources :bulk_promotions
@@ -78,4 +80,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
+
+  map.resource :phrccr
+  map.authsub_phrccr '/phrccr/authsub', :controller => 'phrccrs', :action => 'authsub_update'
+  map.review_phrccr '/phrccr/review', :controller => 'phrccrs', :action => 'review'
+  map.unlink_googlehealth '/phrccr/unlink_googlehealth', :controller => 'phrccrs', :action => 'unlink_googlehealth'
 end

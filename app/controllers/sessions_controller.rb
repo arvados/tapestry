@@ -1,5 +1,6 @@
 # This controller handles the login/logout function of the site.  
 class SessionsController < ApplicationController
+  include PhrccrsHelper
   skip_before_filter :login_required, :only => [:new, :create]
 
   def new
@@ -18,6 +19,7 @@ class SessionsController < ApplicationController
       handle_remember_cookie! new_cookie_flag
       redirect_back_or_default('/')
       flash[:notice] = "Logged in successfully"
+      update_ccr_if_exists
     else
       note_failed_signin
       @email       = params[:email]
@@ -37,5 +39,21 @@ protected
   def note_failed_signin
     flash[:error] = "Couldn't log you in as '#{params[:email]}'"
     logger.warn "Failed login for '#{params[:email]}' from #{request.remote_ip} at #{Time.now.utc}"
+  end
+
+  def update_ccr_if_exists
+    unless current_user.authsub_token.blank?
+      ccr_path = get_ccr_filename(current_user.id, false)
+      if File.exist?(ccr_path)
+      	feed = get_ccr(current_user)
+    	begin
+          outFile = File.new(get_ccr_filename(current_user.id), 'w')
+      	  outFile.write(feed)
+      	  outFile.close
+    	rescue
+      	  flash[:error] = 'There was an error updating your PHR.'
+        end
+      end
+    end
   end
 end

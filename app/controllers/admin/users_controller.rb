@@ -72,4 +72,24 @@ class Admin::UsersController < Admin::AdminControllerBase
       render :action => 'index'
     end
   end
+
+  def ccr
+    @user = User.find params[:id]
+    ccr_path = PhrccrsHelper.get_ccr_filename(@user.id, false)
+    if !File.exist?(ccr_path)
+      flash[:error] = 'User completed PHR but CCR file (' + ccr_path + ') has b\
+een deleted'
+      redirect_to :action => 'show'
+    end
+    ccr_file = File.new(ccr_path)
+    @ccr = Nokogiri::XML(ccr_file)
+  end
+
+  def demote
+    user = User.find params[:id]
+    user.demote!
+    user.reload
+    flash[:notice] = "User demoted"
+    redirect_to :action => 'edit'
+  end
 end
