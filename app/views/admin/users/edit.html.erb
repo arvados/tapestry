@@ -21,7 +21,7 @@
   <%= link_to 'Promote', promote_admin_user_url(@user), :method => 'PUT' %></p>
 <% end -%>
 
-<% if @user.has_completed?('baseline_trait_collection_notification') %>
+<% if @ccr_exists %>
   <p>
     <%= link_to 'View CCR', ccr_admin_user_url(@user) %> |
     <%= link_to 'Demote', demote_admin_user_url(@user), :method => 'PUT' %> (for testing)

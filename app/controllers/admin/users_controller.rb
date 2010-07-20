@@ -1,6 +1,7 @@
 class Admin::UsersController < Admin::AdminControllerBase
 
   include Admin::UsersHelper
+  include PhrccrsHelper
 
   def index
     if params[:completed]
@@ -24,11 +25,15 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   def show
     @user = User.find params[:id]
+    ccr_path = get_ccr_filename(@user.id, false)
+    @ccr_exists = File.exist?(ccr_path)
   end
 
   def edit
     @user = User.find params[:id]
     @mailing_lists = MailingList.all
+    ccr_path = get_ccr_filename(@user.id, false)
+    @ccr_exists = File.exist?(ccr_path)
   end
 
   def update
@@ -75,7 +80,7 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   def ccr
     @user = User.find params[:id]
-    ccr_path = PhrccrsHelper.get_ccr_filename(@user.id, false)
+    ccr_path = get_ccr_filename(@user.id, false)
     if !File.exist?(ccr_path)
       flash[:error] = 'User completed PHR but CCR file (' + ccr_path + ') has b\
 een deleted'
