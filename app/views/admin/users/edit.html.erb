@@ -23,8 +23,7 @@
 
 <% if @ccr_exists %>
   <p>
-    <%= link_to 'View CCR', ccr_admin_user_url(@user) %> |
-    <%= link_to 'Demote', demote_admin_user_url(@user), :method => 'PUT' %> (for testing)
+    <%= link_to 'View CCR', ccr_admin_user_url(@user) %>
   </p>
 <% end %>
 

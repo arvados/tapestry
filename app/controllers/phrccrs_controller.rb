@@ -22,22 +22,32 @@ class PhrccrsController < ApplicationController
   def create
     commit_action = params[:commit]
     if commit_action.eql?('Link Profile')
-       authsub()
+      authsub()
     elsif commit_action.eql?('Unlink Profile')
-       authsub_revoke(current_user)
-       flash[:notice] = 'Your profile has been successfully unlinked'
-       redirect_to :action => :show
+      authsub_revoke(current_user)
+      flash[:notice] = 'Your profile has been successfully unlinked'
+      redirect_to :action => :show
     elsif commit_action.eql?('Review PHR')
-       redirect_to :controller => 'phrccrs', :action => 'review'
+      redirect_to :controller => 'phrccrs', :action => 'review'
     elsif commit_action.eql?('Share my PHR with PGP')
-       download_phr()
-       flash[:notice] = 'Your PHR has been shared with the PGP.'
-       redirect_to '/'
+      begin
+        download_phr()
+      rescue
+        flash[:error] = 'There was an error saving your PHR.'
+        redirect_to :action => :review
+      else
+        flash[:notice] = 'Your PHR has been shared with the PGP.'
+        redirect_to '/'
+      end
     elsif commit_action.eql?('Update PHR')
-       download_phr()
-       redirect_to :action => :review
+      begin
+        download_phr()
+      rescue
+        flash[:error] = 'There was an error saving your PHR.'
+      end
+      redirect_to :action => :review
     else
-       redirect_to :action => :show
+      redirect_to :action => :show
     end
   end
 
@@ -77,7 +87,7 @@ class PhrccrsController < ApplicationController
       scope = 'https://www.google.com/health/feeds'
       next_url = 'https://enroll.personalgenomes.org/phrccr/authsub'
     end
-    next_url = 'http://enroll-si.personalgenomes.org/phrccr/authsub'
+
     secure = true  # set secure = true for signed AuthSub requests
     sess = 1
     authsub_link = AuthSub.get_url(next_url, scope, secure, sess)
@@ -86,18 +96,8 @@ class PhrccrsController < ApplicationController
 
   def download_phr
     feed = get_ccr(current_user)
-    begin
-      outFile = File.new(get_ccr_filename(current_user.id), 'w')
-      outFile.write(feed)
-      outFile.close
-    rescue
-      flash[:error] = 'There was an error saving your PHR.'
-      redirect_to :action => :review
-    else
-      #Not sure if this should advance enrollment step
-      #current_user.complete_enrollment_step(current_user.next_enrollment_step)
-      #Do not revoke yet, keep for updating each time user logs in
-      #authsub_revoke
-    end
+    outFile = File.new(get_ccr_filename(current_user.id), 'w')
+    outFile.write(feed)
+    outFile.close
   end
 end

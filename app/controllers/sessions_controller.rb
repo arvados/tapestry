@@ -45,8 +45,8 @@ protected
     unless current_user.authsub_token.blank?
       ccr_path = get_ccr_filename(current_user.id, false)
       if File.exist?(ccr_path)
-      	feed = get_ccr(current_user)
     	begin
+      	  feed = get_ccr(current_user)
           outFile = File.new(get_ccr_filename(current_user.id), 'w')
       	  outFile.write(feed)
       	  outFile.close
