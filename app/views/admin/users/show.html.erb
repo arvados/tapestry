@@ -16,6 +16,12 @@
   <% end -%>
 </p>
 
+<% if @user.has_completed?('baseline_trait_collection_notification') %>
+   <p>
+     <%= link_to 'View CCR', ccr_admin_user_url(@user) %>
+   </p>
+<% end %>
+
 <% if @user.waitlists.any? -%>
   <h2>Waitlistings</h2>
   <p>This user has been waitlisted:</p>
