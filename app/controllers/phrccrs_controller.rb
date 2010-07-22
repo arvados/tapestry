@@ -32,10 +32,10 @@ class PhrccrsController < ApplicationController
     elsif commit_action.eql?('Share my PHR with PGP')
       begin
         download_phr()
-      rescue
-        flash[:error] = 'There was an error saving your PHR.'
-        redirect_to :action => :review
-      else
+#      rescue
+#        flash[:error] = 'There was an error saving your PHR.'
+#        redirect_to :action => :review
+#      else
         flash[:notice] = 'Your PHR has been shared with the PGP.'
         redirect_to '/'
       end

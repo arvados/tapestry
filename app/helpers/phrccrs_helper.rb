@@ -105,12 +105,12 @@ module PhrccrsHelper
   # File is based on a left-padded user id divided into 2 digit chunks
   # e.g. User id : 12345 => 01/23/45/ccr.xml
   #      User id : 314159 => 31/41/59/ccr.xml
-  def get_ccr_filename(user_id, create_dir = true)
+  def get_ccr_filename(user_id, create_dir = true, timestamp = '')
     user_id = user_id.to_s
     if user_id.length % 2 == 1
       user_id = '0' + user_id
     end
-    f = 'ccr/'
+    f = "/data/#{ROOT_URL}/ccr/"
 
     while user_id.length > 0
       f = f + user_id[0,2]
@@ -121,7 +121,7 @@ module PhrccrsHelper
       user_id = user_id[2, user_id.length]
     end
 
-    return f + '/ccr.xml'
+    return f + "/ccr#{timestamp}#.xml"
   end
 
   def health_url

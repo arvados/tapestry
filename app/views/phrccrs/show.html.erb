@@ -4,15 +4,13 @@
 
 <h2>Personal Health Record</h2>
 
-<p>We believe that PGP participants will benefit over the long-term if select personal health information is managed through a standardized Personal Health Record (PHR).  The Personal Genome Project has selected Google Health as our preferred PHR provider.  In order to be considered for enrollment, the PGP requests that you follow the instructions and guidelines for creating, populating, and sharing a Google Health PHR.  <a href="/PGP_PHR_Instructions.pdf">Download Instructions (PDF)</a>.</p>
+<p>We believe that PGP participants will benefit over the long-term if select personal health information is managed through a standardized Personal Health Record (PHR).  The Personal Genome Project has selected Google Health as our preferred PHR provider.</p>
 
 <h3>(1) Create a Google Health account:</h3>
 
-<div class="tip"><strong>TIP:</strong> It is simplest if you create your Google Health account and complete your profile in a new browser window. Otherwise, you should bookmark this page so you can easily return after you have populated your PHR.</div>
+<p>To create a Google Health account, please visit <a href="<%= health_url %>">Google Health</a>. For detailed instructions on how to create a Google Health account, please see: "<a href="http://www.google.com/support/health/bin/answer.py?hl=en&answer=93491">Getting Started Guide</a>."</p>
 
-To create a Google Health account, please visit <a href="<%= health_url %>">Google Health</a>.
-
-<p>For detailed instructions on how to create a Google Health account, please see: "<a href="http://www.google.com/support/health/bin/answer.py?hl=en&answer=93491">Getting Started Guide</a>."</p>
+<div class="tip"><strong>TIP:</strong> It is simplest if you create your Google Health account in a new browser window.</div>
 
 <h3>(2) Populate your Google Health Profile</h3>
 
@@ -33,21 +31,15 @@ After you create a Google Health account, please complete the following sections
 <%= form_tag(phrccr_path) %>
 
 <h3>(3) Link your profile</h3>
-
-Return to this page after you have completed your Google Health profile, return to this page. Click on the "Link Profile" button to link your profile to PGP and we will securely retrieve the information you entered.
+<p>
+After you have completed your Google Health profile, return to this page. Click on the "Link Profile" button and your Google Health data will be imported into your PGP public profile. Please review the accuracy of your imported data. Use Google Health to modify or add data to your PHR. Chnges will be automatically imprted into your PGP public profile.
+</p>
 
 <% if !current_user.authsub_token.blank? %>
 <p>Your profile has been linked. You can unlink at any time if you do not wish to continue participating in this research.</p>
 <p> <%= submit_tag 'Unlink Profile' %></p>
 <% else %>
 <p> <%= submit_tag 'Link Profile'  %></p>
-<% end %>
-
-<h3>(4) Review and share your PHR</h3>
-Please review your PHR to make sure all the information is accurate. If everything is correct, click "Share your PHR with PGP". If you see any errors, use <a href="<%= health_url %>">Google Health</a> to correct them, and then return to this page to share the corrected PHR.
-
-<% if !current_user.authsub_token.blank? %>
-<p> <%= submit_tag 'Review PHR' %></p>
 <% end %>
 
 </form>

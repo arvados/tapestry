@@ -503,6 +503,7 @@ ul.sublinks li a {
 	margin-bottom: 24px;
 	margin-left: auto;
 	border-top: 1px solid #fff;
+	height: 40px;
 }
 
 #foot p {
@@ -534,10 +535,16 @@ ul.sublinks li a {
 	color: #7f97c9;
 	font-weight: bold;
 }
-
+#foot #privacy_tos {
+      padding: 12px 24px;
+      width: 30%;
+      float: left;
+}
 #foot #copyright {
 	text-align: right;
 	padding: 12px 24px;
+        width: 30%;
+	float: right;
 }
 
 #foot #copyright .bullet {
