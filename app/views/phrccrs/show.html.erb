@@ -32,12 +32,11 @@ After you create a Google Health account, please complete the following sections
 
 <h3>(3) Link your profile</h3>
 <p>
-After you have completed your Google Health profile, return to this page. Click on the "Link Profile" button and your Google Health data will be imported into your PGP public profile. Please review the accuracy of your imported data. Use Google Health to modify or add data to your PHR. Chnges will be automatically imprted into your PGP public profile.
+After you have completed your Google Health profile, return to this page. Click on the "Link Profile" button and your Google Health data will be imported into your PGP public profile. Please review the accuracy of your imported data. Use Google Health to modify or add data to your PHR. Changes will be automatically imported into your PGP public profile.
 </p>
 
 <% if !current_user.authsub_token.blank? %>
-<p>Your profile has been linked. You can unlink at any time if you do not wish to continue participating in this research.</p>
-<p> <%= submit_tag 'Unlink Profile' %></p>
+<p> <%= submit_tag 'Review PHR' %></p>
 <% else %>
 <p> <%= submit_tag 'Link Profile'  %></p>
 <% end %>

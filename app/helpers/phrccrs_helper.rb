@@ -101,6 +101,22 @@ module PhrccrsHelper
     return s
   end
 
+  def get_ccr_path(user_id)
+    user_id = user_id.to_s
+    if user_id.length % 2 == 1
+      user_id = '0' + user_id
+    end
+    f = "/data/#{ROOT_URL}/ccr/"
+
+    while user_id.length > 0
+      f = f + user_id[0,2]
+      f = f + '/'
+      user_id = user_id[2, user_id.length]
+    end
+
+    return f
+  end
+
   # Returns filename of ccr based on user's id
   # File is based on a left-padded user id divided into 2 digit chunks
   # e.g. User id : 12345 => 01/23/45/ccr.xml
@@ -121,7 +137,7 @@ module PhrccrsHelper
       user_id = user_id[2, user_id.length]
     end
 
-    return f + "/ccr#{timestamp}#.xml"
+    return f + "ccr#{timestamp}.xml"
   end
 
   def health_url
@@ -158,10 +174,13 @@ module PhrccrsHelper
     current_user.update_attributes(:authsub_token => '')   
   end
 
-  def get_ccr(current_user)
+  def get_ccr(current_user, etag = nil)
     client = GData::Client::Base.new
     client.authsub_token = current_user.authsub_token
     client.authsub_private_key = private_key
+    if etag
+      client.headers['If-None-Match'] = etag
+    end
     feed = client.get(ccr_profile_url).body
     return feed
   end

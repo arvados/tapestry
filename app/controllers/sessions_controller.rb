@@ -42,18 +42,29 @@ protected
   end
 
   def update_ccr_if_exists
-    unless current_user.authsub_token.blank?
-      ccr_path = get_ccr_filename(current_user.id, false)
-      if File.exist?(ccr_path)
-    	begin
-      	  feed = get_ccr(current_user)
-          outFile = File.new(get_ccr_filename(current_user.id), 'w')
-      	  outFile.write(feed)
-      	  outFile.close
-    	rescue
-      	  flash[:error] = 'There was an error updating your PHR.'
-        end
+    begin
+      unless current_user.authsub_token.blank?
+        ccr_list = Dir.glob(get_ccr_path(current_user.id) + '*').reverse
+        if ccr_list.length > 0
+          feed = File.new(ccr_list[0])
+          ccr = Nokogiri::XML(feed)
+	  etag = CGI.unescapeHTML(ccr.root.xpath('@gd:etag').inner_text)
+          begin
+	    result = get_ccr(current_user, etag)
+	    ccr = Nokogiri::XML(result)
+            updated = ccr.xpath('/xmlns:feed/xmlns:updated').inner_text
+            ccr_filename = get_ccr_filename(current_user.id, true, updated)
+	    if !File.exist?(ccr_filename)
+              outFile = File.new(ccr_filename, 'w')
+      	      outFile.write(ccr)
+      	      outFile.close
+	    end
+	  rescue
+	  end  
+	end
       end
+    rescue
+	flash[:error] = 'Could not update your PHR. Please try refreshing it manually'
     end
   end
 end

@@ -1,22 +1,36 @@
+
+<% if @ccr %>
 <h2>Imported Personal Health Record</h2> 
  
-<p>This is your PHR imported from Google Health. Please make sure all the information is accurate. If there are any errors, you can correct them in your <a href="<%= health_url %>">Google Health profile</a> and import the PHR again.</p>
+<p>This is your PHR imported from Google Health. Please make sure all the information is accurate. If there are any errors, you can correct them in your <a href="<%= health_url %>">Google Health profile</a> and click the "Refresh PHR" button.</p>
 
 <%= render :partial => "ccr" %>
 
+<p><em>Last updated: <%= @ccr.xpath('/xmlns:feed/xmlns:updated') %></em></p>
+<% end %>
+
 <%= form_tag(phrccr_path) %>
 
-<p><em>Last updated: <%= @ccr.xpath('/xmlns:feed/xmlns:updated') %></em></p>
+<p>
+<%= submit_tag 'Unlink from Google Health' %>
+&nbsp;
+<%= submit_tag 'Refresh PHR' %>
+</p>
 
-<% if !File.exist?(get_ccr_filename(current_user.id, false)) %>
-<p>
-<%= submit_tag 'Share my PHR with PGP' %>&nbsp;
-<% else %>
-<p>If you have updated your PHR during this session, please click the button below to share the new version with PGP. Otherwise, the new version will be automatically downloaded the next time you log in.</p>
-<p>
-<%= submit_tag 'Update PHR' %>&nbsp;
+<% if @ccr && @ccr_history.length > 0 %>
+<h3>All PHRs</h3>
+<table>
+<% @ccr_history.each { |version| %>
+<tr>
+  <td><a href="review?version=<%= version %>"><%= version %></a>
+    <% if version == @current_version %>
+    (currently viewing)
+    <% end %>
+  </td>
+  <td><button name="deleteccr" value="<%= version %>">Delete</button></td></tr>
+<% } %>
+</table>
 <% end %>
-<%= submit_tag 'Take me back to previous page' %></p>
 
 </form>
 

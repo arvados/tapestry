@@ -7,15 +7,41 @@ class PhrccrsController < ApplicationController
   attr_accessor :download_time
 
   def show
+    if !current_user.authsub_token.blank?
+      redirect_to :action => 'review'
+    end
   end
 
   def review
-    ccr_path = get_ccr_filename(current_user.id, false)
-    if !File.exist?(ccr_path)
-      feed = get_ccr(current_user)
-    else
-      feed = File.new(ccr_path)
+#    ccr_file = get_ccr_filename(current_user.id, false)
+#    if !File.exist?(ccr_file)
+#      feed = get_ccr(current_user)
+#    else
+#      feed = File.new(ccr_file)
+#    end
+
+    ccr_list = Dir.glob(get_ccr_path(current_user.id) + '*').reverse
+    if ccr_list.length == 0
+      flash[:error] = 'You do not have any PHRs saved. Click the "Refresh PHR" button to get the latest version.'
+      return
     end
+    
+    @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }
+
+    version = params[:version]
+    if version && !version.empty?
+      for i in 0.. ccr_list.length - 1 do
+      	  if @ccr_history[i] == version
+	     feed = File.new(ccr_list[i])
+	     @current_version = version
+	     break
+	  end
+      end
+    else
+      feed = File.new(ccr_list[0])
+      @current_version = @ccr_history[0]
+    end
+
     @ccr = Nokogiri::XML(feed)
   end
 
@@ -23,27 +49,24 @@ class PhrccrsController < ApplicationController
     commit_action = params[:commit]
     if commit_action.eql?('Link Profile')
       authsub()
-    elsif commit_action.eql?('Unlink Profile')
+    elsif commit_action.eql?('Unlink from Google Health')
       authsub_revoke(current_user)
       flash[:notice] = 'Your profile has been successfully unlinked'
       redirect_to :action => :show
     elsif commit_action.eql?('Review PHR')
       redirect_to :controller => 'phrccrs', :action => 'review'
-    elsif commit_action.eql?('Share my PHR with PGP')
-      begin
-        download_phr()
-#      rescue
-#        flash[:error] = 'There was an error saving your PHR.'
-#        redirect_to :action => :review
-#      else
-        flash[:notice] = 'Your PHR has been shared with the PGP.'
-        redirect_to '/'
-      end
-    elsif commit_action.eql?('Update PHR')
+    elsif commit_action.eql?('Refresh PHR')
       begin
         download_phr()
       rescue
         flash[:error] = 'There was an error saving your PHR.'
+      end
+      redirect_to :action => :review
+    elsif params[:deleteccr]
+      timestamp_regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{0,3})?Z$/
+      timestamp = params[:deleteccr]
+      if timestamp.scan(timestamp_regex).length > 0
+        File.delete(get_ccr_filename(current_user.id, false, timestamp))
       end
       redirect_to :action => :review
     else
@@ -64,6 +87,7 @@ class PhrccrsController < ApplicationController
 	authsubRequest.upgrade
 	
 	current_user.update_attributes(:authsub_token => authsubRequest.token)
+        download_phr
 	flash[:notice] = 'Your Google Health Profile was successfully linked'
 	redirect_to :action => :show
       rescue GData::Client::Error => ex
@@ -96,8 +120,13 @@ class PhrccrsController < ApplicationController
 
   def download_phr
     feed = get_ccr(current_user)
-    outFile = File.new(get_ccr_filename(current_user.id), 'w')
-    outFile.write(feed)
-    outFile.close
+    ccr = Nokogiri::XML(feed)
+    updated = ccr.xpath('/xmlns:feed/xmlns:updated').inner_text
+    ccr_filename = get_ccr_filename(current_user.id, true, updated)
+    if !File.exist?(ccr_filename)
+      outFile = File.new(ccr_filename, 'w')
+      outFile.write(feed)
+      outFile.close
+    end
   end
 end
