@@ -61,9 +61,9 @@ class UsersController < ApplicationController
       errors.each { |k,v|
         # We only show e-mail and captcha errors; the rest is indicated next to the field.
         if (k == 'base') then
-         flash[:error] += "<br/>#{v}"
+         flash[:error] += "<br/>#{CGI.escapeHTML(v)}"
         elsif (k == 'email') then
-         flash[:error] += "<br/>#{k} #{v}"
+         flash[:error] += "<br/>#{k} #{CGI.escapeHTML(v)}"
         end
       }
       render :action => 'new2'

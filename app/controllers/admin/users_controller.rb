@@ -25,15 +25,19 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   def show
     @user = User.find params[:id]
-    ccr_path = get_ccr_filename(@user.id, false)
-    @ccr_exists = File.exist?(ccr_path)
+    ccr_list = Dir.glob(get_ccr_path(@user.id) + '*').reverse
+    if ccr_list.length > 0
+      @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }
+    end
   end
 
   def edit
     @user = User.find params[:id]
     @mailing_lists = MailingList.all
-    ccr_path = get_ccr_filename(@user.id, false)
-    @ccr_exists = File.exist?(ccr_path)
+    ccr_list = Dir.glob(get_ccr_path(@user.id) + '*').reverse
+    if ccr_list.length > 0
+      @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }
+    end
   end
 
   def update
@@ -80,14 +84,21 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   def ccr
     @user = User.find params[:id]
-    ccr_path = get_ccr_filename(@user.id, false)
-    if !File.exist?(ccr_path)
-      flash[:error] = 'User completed PHR but CCR file (' + ccr_path + ') has b\
-een deleted'
-      redirect_to :action => 'show'
+
+    version = params[:version]
+    if version && !version.empty?
+      ccr_list = Dir.glob(get_ccr_path(@user.id) + '*').reverse     
+      ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }      
+      for i in 0.. ccr_list.length - 1 do
+      	  if ccr_history[i] == version
+	     feed = File.new(ccr_list[i])
+	     break
+	  end
+      end
+      @ccr = Nokogiri::XML(feed)
+    else
+      flash[:error] = 'No version specified'
     end
-    ccr_file = File.new(ccr_path)
-    @ccr = Nokogiri::XML(ccr_file)
   end
 
   def demote

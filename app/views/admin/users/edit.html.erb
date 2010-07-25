@@ -21,10 +21,16 @@
   <%= link_to 'Promote', promote_admin_user_url(@user), :method => 'PUT' %></p>
 <% end -%>
 
-<% if @ccr_exists %>
-  <p>
-    <%= link_to 'View CCR', ccr_admin_user_url(@user) %>
-  </p>
+<% if @ccr_history.length > 0 %>
+<h3>All PHRs</h3>
+<table>
+<% @ccr_history.each { |version| %>
+<tr>
+  <td><%= link_to version, ccr_admin_user_url(@user) + '?version=' + version %>
+  </td>
+</tr>
+<% } %>
+</table>
 <% end %>
 
 <% if @user.waitlists.any? -%>

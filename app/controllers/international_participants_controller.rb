@@ -20,7 +20,7 @@ class InternationalParticipantsController < ApplicationController
       flash.delete(:notice)
       flash[:error] = "Please double-check your e-mail address:<br/>&nbsp;"
       @international_participant.errors.each { |k,v|
-        flash[:error] += "<br/>* #{k} #{v}"
+        flash[:error] += "<br/>* #{CGI.escapeHTML(k)} #{CGI.escapeHTML(v)}"
       }
       render :action => 'new'
     end

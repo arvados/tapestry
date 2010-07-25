@@ -9,7 +9,7 @@ class PasswordsController < ApplicationController
     user = User.find_by_email(email)
 
     if user
-      flash[:notice] = "An email has been sent to #{email} with instructions for resetting your password."
+      flash[:notice] = "An email has been sent to #{CGI.escapeHTML(email)} with instructions for resetting your password."
       UserMailer.deliver_password_reset(user)
       redirect_to root_url
     else
