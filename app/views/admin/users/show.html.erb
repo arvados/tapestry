@@ -16,7 +16,7 @@
   <% end -%>
 </p>
 
-<% if @ccr_history.length > 0 %>
+<% if @ccr and @ccr_history.length > 0 %>
 <h3>All PHRs</h3>
 <table>
 <% @ccr_history.each { |version| %>
