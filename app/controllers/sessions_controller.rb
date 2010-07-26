@@ -58,6 +58,7 @@ protected
               outFile = File.new(ccr_filename, 'w')
       	      outFile.write(ccr)
       	      outFile.close
+	      current_user.log("Autoupdated PHR (#{ccr_filename})")
 	    end
 	  rescue
 	  end  

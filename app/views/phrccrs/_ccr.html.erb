@@ -1,3 +1,4 @@
+<!-- Begin PHR -->
 <style type="text/css">    
   .phr table { width: 100%; padding: 0px; margin: 2px 0px; border-collapse: collapse}
   .phr .demographics th { width: 100px; }
@@ -119,7 +120,8 @@
 <% } %>
 </table>
 
-</div><!-- End PHR -->
+</div>
+<p><em>Updated: <%= @ccr.xpath('/xmlns:feed/xmlns:updated') %></em></p>
 <script type="text/javascript"> 
   $(".phr tr").hover(
   function() {
@@ -129,3 +131,4 @@
   $("td", this).removeClass("hover");
   });
 </script>
+<!-- End PHR -->

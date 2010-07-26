@@ -13,13 +13,6 @@ class PhrccrsController < ApplicationController
   end
 
   def review
-#    ccr_file = get_ccr_filename(current_user.id, false)
-#    if !File.exist?(ccr_file)
-#      feed = get_ccr(current_user)
-#    else
-#      feed = File.new(ccr_file)
-#    end
-
     ccr_list = Dir.glob(get_ccr_path(current_user.id) + '*').reverse
     if ccr_list.length == 0
       flash[:error] = 'You do not have any PHRs saved. Click the "Refresh PHR" button to get the latest version.'
@@ -50,9 +43,7 @@ class PhrccrsController < ApplicationController
     if commit_action.eql?('Link Profile')
       authsub()
     elsif commit_action.eql?('Unlink from Google Health')
-      authsub_revoke(current_user)
-      flash[:notice] = 'Your profile has been successfully unlinked'
-      redirect_to :action => :show
+      unlink_googlehealth(:action => :show)
     elsif commit_action.eql?('Review PHR')
       redirect_to :controller => 'phrccrs', :action => 'review'
     elsif commit_action.eql?('Refresh PHR')
@@ -66,7 +57,9 @@ class PhrccrsController < ApplicationController
       timestamp_regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{0,3})?Z$/
       timestamp = params[:deleteccr]
       if timestamp.scan(timestamp_regex).length > 0
-        File.delete(get_ccr_filename(current_user.id, false, timestamp))
+        ccr_filename = get_ccr_filename(current_user.id, false, timestamp)
+        File.delete(ccr_filename)
+	current_user.log("Deleted PHR (#{ccr_filename})")
       end
       redirect_to :action => :review
     else
@@ -74,9 +67,15 @@ class PhrccrsController < ApplicationController
     end
   end
 
-  def unlink_googlehealth
+  def unlink_googlehealth(redirect = nil)
     authsub_revoke(current_user)
-    redirect_to edit_user_url(current_user)
+    current_user.log('Unlinked from Google Health')
+    flash[:notice] = 'Unlinked from Google Health'
+    if !redirect
+      redirect_to edit_user_url(current_user)
+    else
+      redirect_to redirect
+    end    
   end
 
   def authsub_update
@@ -87,6 +86,7 @@ class PhrccrsController < ApplicationController
 	authsubRequest.upgrade
 	
 	current_user.update_attributes(:authsub_token => authsubRequest.token)
+	current_user.log('Linked with Google Health')
         download_phr
 	flash[:notice] = 'Your Google Health Profile was successfully linked'
 	redirect_to :action => :show
@@ -127,6 +127,7 @@ class PhrccrsController < ApplicationController
       outFile = File.new(ccr_filename, 'w')
       outFile.write(feed)
       outFile.close
+      current_user.log("Downloaded PHR (#{ccr_filename})")
     end
   end
 end
