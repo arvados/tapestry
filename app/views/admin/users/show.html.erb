@@ -1,4 +1,7 @@
-<h2>User details</h2>
+<h2><%= @user.first_name + ' ' + @user.middle_name + ' ' + @user.last_name -%> -- <%= @user.email -%></h2>
+
+<h3>User details</h3>
+
 <% @user.password = @user.password_confirmation = nil %>
 
 <% form_for [:admin, @user], :html => { :method => :put } do |f| -%>
@@ -47,7 +50,7 @@
   <%= link_to 'Promote', promote_admin_user_url(@user), :method => 'PUT' %></p>
 <% end -%>
 
-<h2>User Log</h2>
+<h3>User Log</h3>
 
 <ul>
 <% @user.user_logs.sort { |x,y| y.id <=> x.id }.each do |entry| -%>
