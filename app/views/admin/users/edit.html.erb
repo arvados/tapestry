@@ -1,4 +1,6 @@
-<h2>User details</h2>
+<h2><%= @user.first_name + ' ' + @user.middle_name + ' ' + @user.last_name -%> -- <%= @user.email -%></h2>
+
+<h3>User details</h3>
 <% @user.password = @user.password_confirmation = nil %>
 
 <% form_for [:admin, @user], :html => { :method => :put } do |f| -%>
@@ -34,7 +36,7 @@
 <% end %>
 
 <% if @user.waitlists.any? -%>
-  <h2>Waitlistings</h2>
+  <h3>Waitlistings</h3>
   <p>This user has been waitlisted:</p>
   <ol>
     <% @user.waitlists.each do |waitlist| -%>
@@ -47,7 +49,7 @@
   <p>This user has passed eligibility survey version <%= @user.eligibility_survey_version %>.
 <% end -%>
 
-<h2>Edit User Account</h2>
+<h3>Edit User Account</h3>
 
 <p><%= f.label :first_name %><br/>
 <%= f.text_field :first_name %></p>
