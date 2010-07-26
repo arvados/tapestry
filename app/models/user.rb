@@ -205,7 +205,7 @@ class User < ActiveRecord::Base
 
   def eligibility_screening_passed
     if self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_title('Eligibility Questionnaire Results') } then
-      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_title('Eligibility Questionnaire Results') }.created_at.to_s + ' (passed ' + self.eligibility_survey_version + ' )'
+      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_title('Eligibility Questionnaire Results') }.created_at.to_s + ' (passed ' + self.eligibility_survey_version + ')'
     else
       return 'Not passed yet.'
     end
