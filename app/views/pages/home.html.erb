@@ -52,10 +52,13 @@
   </ol>
 <% else -%>
   <div style="width: 480px;">
-    <h2>Public Profile Page</h2>
+    <h2>Profile Management</h2>
+
+    <p><%= link_to "Your public profile", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %></p>
 
     <p><%= link_to "Enrollment Application Results", enrollment_application_results_path %></p>
 
     <p><%= link_to "Google Health PHR", phrccr_path %></p>
+
   </div>
 <% end -%>

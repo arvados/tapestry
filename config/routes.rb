@@ -85,4 +85,7 @@ ActionController::Routing::Routes.draw do |map|
   map.authsub_phrccr '/phrccr/authsub', :controller => 'phrccrs', :action => 'authsub_update'
   map.review_phrccr '/phrccr/review', :controller => 'phrccrs', :action => 'review'
   map.unlink_googlehealth '/phrccr/unlink_googlehealth', :controller => 'phrccrs', :action => 'unlink_googlehealth'
+
+  map.public_profile '/profile/:hex',    :controller => 'profiles',    :action => 'public'
+
 end

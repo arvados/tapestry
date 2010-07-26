@@ -162,6 +162,7 @@ class User < ActiveRecord::Base
 
     if (step == final_pre_enrollment_step and self.enrolled.nil?) then
       self.enrolled = Time.now()
+      self.hex = self.make_hex_code()
       save
     end
   end
@@ -202,9 +203,34 @@ class User < ActiveRecord::Base
     waitlists.first(:order => 'created_at desc').created_at if waitlists.any?
   end
 
+  def eligibility_screening_passed
+    if self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_title('Eligibility Questionnaire Results') } then
+      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_title('Eligibility Questionnaire Results') }.created_at.to_s + ' (passed ' + self.eligibility_survey_version + ' )'
+    else
+      return 'Not passed yet.'
+    end
+  end
+
+  def exam_passed
+    if self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_title('Entrance Exam') } then
+      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_title('Entrance Exam') }.created_at.to_s
+    else
+      return 'Not passed yet.'
+    end
+  end
+
   protected
+
+  def make_hex_code
+    code = nil
+    while User.find_by_hex(code) or code == nil
+      code = "hu" + ("%x%x%x%x%x%x" % [ rand(16), rand(16), rand(16), rand(16), rand(16), rand(16) ]).upcase
+    end
+    return code
+  end
 
   def make_activation_code
     self.activation_code = self.class.make_token
   end
+
 end

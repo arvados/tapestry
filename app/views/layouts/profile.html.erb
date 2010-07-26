@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <title>Personal Genome Project</title>
+  <%= stylesheet_link_tag 'application', 'ui.slider.extras', 'redmond/jquery-ui-1.7.1.custom' %>
+  <!--[if lte IE 7]><%= stylesheet_link_tag 'application-ie' %><![endif]-->
+  <%= javascript_include_tag 'jquery-1.3.2.min', 'jquery-custom-extensions' %>
+  <% javascript_tag do %>
+    <%= yield :js %>
+  <% end %>
+
+</head>
+<body>
+  <div id="body">
+    <h1 class="verbose"><%= link_to '<span>Personal Genome Project</span>', root_url %></h1>
+
+    <div class="clear"><!-- --></div>
+
+    <%= breadcrumbs %>
+    <%= render :partial => 'layouts/flashes' -%>
+    <div class="main">
+      <%= yield %>
+    </div>
+
+    <div class="sidebar">
+      <%= yield :sidebar %>
+    </div>
+
+
+    <div class="clear"><!-- --></div>
+  </div>
+  <div id="foot">
+    <div id="privacy_tos">
+        <span><a href="http://www.personalgenomes.org/privacypolicy.html">Privacy Policy</a></span>
+	&bull;
+        <span><a href="http://www.personalgenomes.org/tos.html">Terms of Use</a></span>
+    </div>
+    <div id="copyright">
+      <p>
+        <span>Copyright &copy; PersonalGenomes.org</span>
+      </p>
+    </div>
+  </div>
+
+  <%= render :partial => 'layouts/google_analytics' %>
+
+</body>
+</html>
