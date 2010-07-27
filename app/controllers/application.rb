@@ -32,4 +32,10 @@ class ApplicationController < ActionController::Base
       controller.send(:add_breadcrumb, name, url)
     end
   end
+
+  def default_url_options(options)
+    if ROOT_URL == "enroll-dev.personalgenomes.org"
+      { :protocol => 'https' }
+    end
+  end
 end
