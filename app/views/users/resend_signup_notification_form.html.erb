@@ -1,0 +1,22 @@
+<h2>Resend notification e-mail</h2>
+
+
+<% form_for :user, :url => resend_signup_notification_user_url, :html => { :method => :get, :class => 'signup', :id => 'signup_form' } do |f| -%>
+
+<table>
+<tr><td>
+If you did not receive the e-mail verification e-mail from general@personalgenomes.org, you can request that we re-send the message below.
+</td></tr>
+<tr><td>
+<%= f.label :email %>
+<%= error_message_on :user, :email, :append_text => '.' %><br/>
+<%= f.text_field :email %>
+</td>
+</tr><tr>
+<td>
+<p><%= submit_tag 'Resend notification e-mail &rarr;' %></p>
+</td>
+
+</tr></table>
+
+<% end -%>

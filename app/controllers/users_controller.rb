@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate, :created, :resend_signup_notification ]
-  skip_before_filter :login_required, :only => [:new, :new2, :create, :activate, :created, :resend_signup_notification ]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form ]
+  skip_before_filter :login_required, :only => [:new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form ]
   #before_filter :ensure_invited, :only => [:new, :new2, :create]
 
 
@@ -54,8 +54,8 @@ class UsersController < ApplicationController
       accept_invite!
       # Sometimes the error flash remains on the page, which is confusing. Kill it here if all is well.
       flash.delete(:error)
-      flash.now[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration."
-      redirect_to :action => 'created', :id => @user, :notice => "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration."
+      flash.now[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from general@personalgenomes.org"
+      redirect_to :action => 'created', :id => @user, :notice => "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from general@personalgenomes.org"
     else
       flash[:error]  = "Please double-check your signup information below.<br/>&nbsp;"
       errors.each { |k,v|
@@ -102,10 +102,24 @@ class UsersController < ApplicationController
   end
 
   def resend_signup_notification
-    @user = User.find_by_id(params[:id])
+    @user = nil
+    if (params[:id]) then
+      @user = User.find_by_id(params[:id])
+    elsif (params[:user][:email]) then
+      @user = User.find_by_email(params[:user][:email])
+    end
+    if not @user or @user.active? then
+      # We deliberately return 'unknown user' when the user account is already active. No data leak here.
+      flash.now[:error] = "Unknown user"
+      render :template => 'users/resend_signup_notification_form'
+      return
+    end
     UserMailer.deliver_signup_notification(@user)
-    flash.now[:notice] = "We have re-sent an e-mail to #{@user.email} in order to confirm your identity. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration."
+    flash.now[:notice] = "We have re-sent an e-mail to #{@user.email} in order to confirm your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from general@personalgenomes.org"
     render :template => 'users/created'
+  end
+
+  def resend_signup_notification_form
   end
 
   private
