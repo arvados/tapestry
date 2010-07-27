@@ -74,6 +74,7 @@ Rails::Initializer.run do |config|
   config.gem "hoe"
   config.gem "nokogiri"
   config.gem "gdata", :lib => "gdata"
+  config.gem 'carmen', :source => 'http://gemcutter.org'
 end
 
 require 'csv'

@@ -41,6 +41,12 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email,    :case_sensitive => false
   validates_format_of       :email,    :with => /.+@.+\...+/, :message => MSG_EMAIL_BAD
 
+  # We allow nil because we have lots of legacy records with value nil
+  validates_format_of :zip,
+                      :with => %r{\d{5}(-\d{4})?},
+                      :message => "should be in 5 or 5 plus 4 digit format (e.g. 12345 or 12345-1234)",
+                      :allow_nil => true
+
   # temporarily removed requirement
   # validate_on_create :email_confirmed
 

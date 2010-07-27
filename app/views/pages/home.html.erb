@@ -54,6 +54,12 @@
   <div style="width: 480px;">
     <h2>Profile Management</h2>
 
+  <% if (! current_user.zip) or (! current_user.state) or current_user.zip == '' or current_user.state == '' -%>
+  
+  Please <%= link_to 'Complete your profile', edit_user_url(current_user) %> by providing your state and zip code!
+
+  <% end -%>
+
     <p><%= link_to "Your public profile", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %></p>
 
     <p><%= link_to "Enrollment Application Results", enrollment_application_results_path %></p>
