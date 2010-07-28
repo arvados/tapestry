@@ -33,9 +33,4 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def default_url_options(options)
-    if ROOT_URL == "enroll-dev.personalgenomes.org"
-      { :protocol => 'https' }
-    end
-  end
 end
