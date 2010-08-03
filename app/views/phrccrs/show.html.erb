@@ -10,14 +10,14 @@
 
 <p>To create a Google Health account, please visit <a href="<%= health_url %>">Google Health</a>. For detailed instructions on how to create a Google Health account, please see: "<a href="http://www.google.com/support/health/bin/answer.py?hl=en&answer=93491">Getting Started Guide</a>."</p>
 
-<div class="tip"><strong>TIP:</strong> It is simplest if you create your Google Health account in a new browser window.</div>
+<div class="tip"><strong>TIP:</strong> It is simplest if you keep this window open and create your Google Health account in a new browser window.</div>
 
 <h3>(2) Populate your Google Health Profile</h3>
 
-After you create a Google Health account, please complete the following sections of your profile while being as specific and thorough as possible:
+Please complete as many sections of your Google Health profile as you can and be as specific and thorough as possible. These sections are particularly relevant to the PGP:
 
 <ol>
-<li>Age, sex, height... (Be sure to also complete race/ethnicity, weight, and blood type)</li>
+<li>Age, sex, height... (and race/ethnicity, weight, and blood type)</li>
 <li>Conditions</li>
 <li>Medications</li>
 <li>Allergies</li>
@@ -30,9 +30,9 @@ After you create a Google Health account, please complete the following sections
 
 <%= form_tag(phrccr_path) %>
 
-<h3>(3) Link your profile</h3>
+<h3>(3) Link your Google Health account to your PGP Public profile</h3>
 <p>
-After you have completed your Google Health profile, return to this page. Click on the "Link Profile" button and your Google Health data will be imported into your PGP public profile. Please review the accuracy of your imported data. Use Google Health to modify or add data to your PHR. Changes will be automatically imported into your PGP public profile.
+After you have completed your Google Health profile, return to this page. Click on the "Link Profile" button and your Google Health data will be imported into your PGP public profile. Please review the accuracy of your imported data. Use Google Health to modify or add data. Changes will be automatically imported into your PGP public profile.
 </p>
 
 <% if !current_user.authsub_token.blank? %>
