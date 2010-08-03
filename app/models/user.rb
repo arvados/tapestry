@@ -159,7 +159,7 @@ class User < ActiveRecord::Base
     raise "Cannot find enrollment step to complete." if step.nil?
 
     final_pre_enrollment_step = EnrollmentStep.find_by_keyword('enrollment_application_results')
-
+    exam_enrollment_step = EnrollmentStep.find_by_keyword('content_areas')
     if ! EnrollmentStepCompletion.find_by_user_id_and_enrollment_step_id(self, step)
       completion = EnrollmentStepCompletion.new :enrollment_step => step
       enrollment_step_completions << completion
@@ -169,6 +169,11 @@ class User < ActiveRecord::Base
     if (step == final_pre_enrollment_step and self.enrolled.nil?) then
       self.enrolled = Time.now()
       self.hex = self.make_hex_code()
+      save
+    end
+    if (step == exam_enrollment_step) then
+      # We're at v2 of the exam currently. Ward, 2010-08-03
+      self.exam_version = 'v2'
       save
     end
   end

@@ -21,9 +21,7 @@ class QuestionResponse < ActiveRecord::Base
   def check_for_entrance_exam_completion
     if ContentArea.all.all? {|c| c.completed_by?(exam_response.user) }
       unless EnrollmentStep.find_by_keyword('content_areas').completers.include?(exam_response.user)
-        exam_response.user.enrollment_step_completions.create({
-          :enrollment_step => EnrollmentStep.find_by_keyword('content_areas'),
-        })
+        exam_response.user.complete_enrollment_step(EnrollmentStep.find_by_keyword('content_areas'))
       end
     end
   end
