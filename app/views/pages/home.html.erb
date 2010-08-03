@@ -51,20 +51,58 @@
     <% end -%>
   </ol>
 <% else -%>
+
+<div id="contentbody">
+
+<div class="clear"><!-- --></div>
+<div class="submenu">
+<ul>
+  <li><%= link_to "Your public profile", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %></li>
+  <li><%= link_to "Google Health PHR", phrccr_path %></li>
+  <li><%= link_to "Enrollment Application Results", enrollment_application_results_path %></li>
+</ul>
+</div>
+
+
+
+<div class="narrow main">
+<h2>Public Profile Management</h2>
+
+<p>
+The profile management tool will enable you to voluntarily add genetic,
+health, and trait data to your PGP public profile.  One of the first
+features we have implemented is the ability to link your Google Health
+account with your PGP public profile. By linking these two accounts,
+information contained in your Google Health account will be added to your
+PGP public profile.  When your Google Health account is updated with new
+information, your PGP public profile will be updated too.  We hope you find
+this is a convenient way to share basic health information with the PGP.
+</p>
+
+<p>
+In the coming weeks and months, we will be rolling out a variety of new
+tools such as:
+<ul>
+<li>Trait surveys: explore and share different aspects of your personal phenome</li>
+<li>Tissue tools: Sign-up for tissue donation and track your cell lines</li>
+<li>Genetic data: Review your Preliminary Research Report or add genetic data
+obtained elsewhere</li>
+<li>Link accounts with immediate family members enrolled in the PGP</li>
+<li>Volunteer opportunities: Volunteer for sponsored research programs with
+collaborating scientists</li>
+<li>Quarterly safety reports: Respond to new safety questionnaires</li>
+<li>Consenting tools: Stay informed and keep your consent up-to-date</li>
+</ul>
+</p>
+
+</div>
+
+<div class="clear"><!-- --></div>
+
+
   <div style="width: 480px;">
-    <h2>Public Profile Management</h2>
-
-  <% if (! current_user.zip) or (! current_user.state) or current_user.zip == '' or current_user.state == '' -%>
-  
-  Please <%= link_to 'Complete your profile', edit_user_url(current_user) %> by providing your state and zip code!
-
-  <% end -%>
-
-    <p><%= link_to "Your public profile", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %></p>
-
-    <p><%= link_to "Enrollment Application Results", enrollment_application_results_path %></p>
-
-    <p><%= link_to "Google Health PHR", phrccr_path %></p>
 
   </div>
+
+</div>
 <% end -%>
