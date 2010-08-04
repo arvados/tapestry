@@ -1,0 +1,20 @@
+<h2>Edit Geographic Information</h2>
+
+<% form_for :user, :url => geographic_information_path, :html => { :method => :put } do |f| -%>
+  <%= error_messages_for :user %>
+  <p><label for="name">Name</label>: <%=h @user.full_name %></p>
+
+  <p>
+  <%= f.label :state %>
+  <%= error_message_on :user, :state, :append_text => '.' %><br/>
+  <%= f.state_select(:state, 'US', {:prompt => "Select a State", :selected => @user.state }, { :style => "width: 230px;"}) -%>
+  </p>
+
+  <p>
+  <%= f.label :zip %>
+  <%= error_message_on :user, :zip, :append_text => '.' %><br/>
+  <%= f.text_field :zip %>
+  </p>
+
+  <p><%= submit_tag 'Save Changes' %></p>
+<% end -%>

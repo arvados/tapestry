@@ -80,6 +80,8 @@ ActionController::Routing::Routes.draw do |map|
     admin.resources :invited_emails
   end
 
+  map.resources :geographic_information
+
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 

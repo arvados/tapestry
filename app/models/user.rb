@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
 
   # We allow nil because we have lots of legacy records with value nil
   validates_format_of :zip,
-                      :with => %r{\d{5}(-\d{4})?},
+                      :with => %r{^(\d{5}|)(-\d{4})?$},
                       :message => "should be in 5 or 5 plus 4 digit format (e.g. 12345 or 12345-1234)",
                       :allow_nil => true
 
