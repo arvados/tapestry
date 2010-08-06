@@ -26,6 +26,21 @@
 <tr><td>Enrolled:</td><td><%= @user.enrolled.to_s -%></td></tr>  
 </table>
 
+<% if @user.state != '' or @user.zip != '' -%>
+
+<h3>Geographic Information <% if logged_in? -%><%= link_to "[edit]", edit_geographic_information_path(@user) %><% end -%></h3>
+
+<table class="admin_table">
+<% if @user.state != '' -%>
+<tr><td>State:</td><td><%= Carmen::state_name(@user.state.to_s,'US') -%></td></tr>
+<% end -%>
+<% if @user.zip != '' -%>
+<tr><td>Zip code:</td><td><%= @user.zip.to_s -%></td></tr>
+<% end -%>
+</table>
+
+<% end -%>
+
 <% end -%>
 
 
