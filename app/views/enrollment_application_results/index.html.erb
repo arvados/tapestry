@@ -2,6 +2,9 @@
 
 <% if not current_user.enrolled.nil? then %>
 <p>
+<strong>Date Issued: <%= current_user.enrolled.to_formatted_s(:us_date) -%></strong>
+</p>
+<p>
 Thank you for applying to the Personal Genome Project (PGP) research study.
 Your application has been reviewed and you are now enrolled in the Personal
 Genome Project!  Welcome to the team!
