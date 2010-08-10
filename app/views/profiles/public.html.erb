@@ -10,7 +10,7 @@
 
 <h2>Public Profile -- <%= @user.hex -%></h2>
 
-<h3>Google Health PHR <% if logged_in? -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
+<h3>Google Health PHR <% if logged_in? and @user == current_user -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
 <% if @ccr != nil -%>
 <div class="admin_table">
 <%= render :partial => "phrccrs/ccr" %>
@@ -19,7 +19,7 @@
 None added.
 <% end -%>
 
-<h3>Geographic Information <% if logged_in? -%><%= link_to "[edit]", edit_geographic_information_path(@user) %><% end -%></h3>
+<h3>Geographic Information <% if logged_in? and @user == current_user -%><%= link_to "[edit]", edit_geographic_information_path(@user) %><% end -%></h3>
 
 <% if (@user.state != '' and not @user.state.nil?) or (@user.zip != '' and not @user.zip.nil?) -%>
 
