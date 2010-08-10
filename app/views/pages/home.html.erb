@@ -57,9 +57,7 @@
 <div class="clear"><!-- --></div>
 <div class="submenu">
 <ul>
-  <li><%= link_to "Your public profile", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %></li>
-  <li><%= link_to "Google Health PHR", phrccr_path %></li>
-  <li><%= link_to "Geographic information", edit_geographic_information_path %></li>
+  <li><%= link_to "Edit your public profile", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %></li>
   <li><%= link_to "Enrollment Application Results", enrollment_application_results_path %></li>
 </ul>
 </div>
