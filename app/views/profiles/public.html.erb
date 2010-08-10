@@ -17,18 +17,9 @@
 </div>
 <% end -%>
 
-<h3>Enrollment History</h3>
-
-<table class="admin_table">
-<tr><td>Account created:</td><td><%= @user.created_at.to_s -%></td></tr>
-<tr><td>Eligibility screening:</td><td><%= @user.eligibility_screening_passed -%></td></tr>
-<tr><td>Exam:</td><td><%= @user.exam_passed -%></td></tr> 
-<tr><td>Enrolled:</td><td><%= @user.enrolled.to_s -%></td></tr>  
-</table>
-
-<% if @user.state != '' or @user.zip != '' -%>
-
 <h3>Geographic Information <% if logged_in? -%><%= link_to "[edit]", edit_geographic_information_path(@user) %><% end -%></h3>
+
+<% if (@user.state != '' and not @user.state.nil?) or (@user.zip != '' and not @user.zip.nil?) -%>
 
 <table class="admin_table">
 <% if @user.state != '' -%>
@@ -39,7 +30,18 @@
 <% end -%>
 </table>
 
+<% else -%>
+Not added.
 <% end -%>
+
+<h3>Enrollment History</h3>
+
+<table class="admin_table">
+<tr><td>Account created:</td><td><%= @user.created_at.to_s -%></td></tr>
+<tr><td>Eligibility screening:</td><td><%= @user.eligibility_screening_passed -%></td></tr>
+<tr><td>Exam:</td><td><%= @user.exam_passed -%></td></tr>
+<tr><td>Enrolled:</td><td><%= @user.enrolled.to_s -%></td></tr>
+</table>
 
 <% end -%>
 
