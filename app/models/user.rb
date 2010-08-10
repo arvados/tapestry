@@ -221,8 +221,12 @@ class User < ActiveRecord::Base
   end
 
   def eligibility_screening_passed
-    if self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_title('Eligibility Questionnaire Results') } then
-      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_title('Eligibility Questionnaire Results') }.created_at.to_s + ' (passed ' + self.eligibility_survey_version + ')'
+    if self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_survey_results') } then
+      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_survey_results') }.created_at.to_s + ' (passed ' + self.eligibility_survey_version + ')'
+    elsif self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_surveys') } then
+      # In v1 of the enrollment application, the eligibility questionnaire results step right after taking the eligibility questionnaire did not exist
+      # So, we just take the timestamp of the questionnaire itself, which will hold the date it was last taken. 
+      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_surveys') }.created_at.to_s + ' (passed ' + self.eligibility_survey_version + ')'
     else
       return 'Not passed yet.'
     end
