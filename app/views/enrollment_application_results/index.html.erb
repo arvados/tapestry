@@ -71,7 +71,9 @@ Thanks again and welcome to the team!<br/>
 PGP Staff
 </p>
 
+<% if not current_user.enrollment_accepted %>
 <%= link_to 'GET STARTED', accept_enrollment_user_path %>
+<% end %>
 
 <% elsif current_user.has_completed?('enrollment_application') then %>
 <p>Thanks for submitting your enrollment application.  The review process may
