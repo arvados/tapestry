@@ -160,6 +160,7 @@ class User < ActiveRecord::Base
 
     final_pre_enrollment_step = EnrollmentStep.find_by_keyword('enrollment_application_results')
     exam_enrollment_step = EnrollmentStep.find_by_keyword('content_areas')
+    consent_enrollment_step = EnrollmentStep.find_by_keyword('participation_consent')
     if ! EnrollmentStepCompletion.find_by_user_id_and_enrollment_step_id(self, step)
       completion = EnrollmentStepCompletion.new :enrollment_step => step
       enrollment_step_completions << completion
@@ -174,6 +175,11 @@ class User < ActiveRecord::Base
     if (step == exam_enrollment_step) then
       # We're at v2 of the exam currently. Ward, 2010-08-03
       self.exam_version = 'v2'
+      save
+    end
+    if (step == consent_enrollment_step) then
+      # We're at v20100331 of the consent currently. Ward, 2010-08-10
+      self.consent_version = '20100331'
       save
     end
   end
@@ -227,6 +233,14 @@ class User < ActiveRecord::Base
       return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_title('Entrance Exam') }.created_at.to_s + ' (passed ' + self.exam_version + ')'
     else
       return 'Not passed yet.'
+    end
+  end
+
+  def consent_passed
+    if self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('participation_consent') } then
+      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('participation_consent') }.created_at.to_s + ' (passed v' + self.consent_version + ')'
+    else
+      return 'Not consented yet.'
     end
   end
 

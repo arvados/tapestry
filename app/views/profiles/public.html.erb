@@ -10,11 +10,13 @@
 
 <h2>Public Profile -- <%= @user.hex -%></h2>
 
+<h3>Google Health PHR <% if logged_in? -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
 <% if @ccr != nil -%>
-<h3>Google Health PHR</h3>
 <div class="admin_table">
 <%= render :partial => "phrccrs/ccr" %>
 </div>
+<% else -%>
+None added.
 <% end -%>
 
 <h3>Geographic Information <% if logged_in? -%><%= link_to "[edit]", edit_geographic_information_path(@user) %><% end -%></h3>
@@ -37,9 +39,11 @@ Not added.
 <h3>Enrollment History</h3>
 
 <table class="admin_table">
+<tr><td>Participant ID:</td><td><%= @user.hex -%></td></tr>
 <tr><td>Account created:</td><td><%= @user.created_at.to_s -%></td></tr>
 <tr><td>Eligibility screening:</td><td><%= @user.eligibility_screening_passed -%></td></tr>
 <tr><td>Exam:</td><td><%= @user.exam_passed -%></td></tr>
+<tr><td>Consent:</td><td><%= @user.consent_passed -%></td></tr>
 <tr><td>Enrolled:</td><td><%= @user.enrolled.to_s -%></td></tr>
 </table>
 
