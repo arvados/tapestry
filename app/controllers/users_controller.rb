@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form ]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment ]
   skip_before_filter :login_required, :only => [:new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form ]
   #before_filter :ensure_invited, :only => [:new, :new2, :create]
 
@@ -120,6 +120,17 @@ class UsersController < ApplicationController
   end
 
   def resend_signup_notification_form
+  end
+
+  def accept_enrollment
+    if current_user.enrolled and not current_user.enrollment_accepted
+      current_user.enrollment_accepted = Time.now()
+      current_user.save!
+      redirect_to root_url
+    else
+      # We should never get here.
+      redirect_to root_url
+    end
   end
 
   private

@@ -3,6 +3,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'pages', :action => 'show', :id => 'home'
 
   map.new2_user '/users/new2',    :controller => 'users',    :action => 'new2'
+  map.accept_enrollment_user '/users/accept_enrollment',    :controller => 'users',    :action => 'accept_enrollment'
   map.created_user '/users/created/:id',    :controller => 'users',    :action => 'created'
 
   map.resend_signup_notification_form '/users/resend_signup_notification_form',    :controller => 'users',    :action => 'resend_signup_notification_form'

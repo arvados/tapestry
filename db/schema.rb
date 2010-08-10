@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100803144733) do
+ActiveRecord::Schema.define(:version => 20100810143519) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -284,6 +284,7 @@ ActiveRecord::Schema.define(:version => 20100803144733) do
     t.string   "authsub_token"
     t.string   "hex",                                       :default => ""
     t.string   "exam_version"
+    t.datetime "enrollment_accepted"
   end
 
   create_table "waitlists", :force => true do |t|

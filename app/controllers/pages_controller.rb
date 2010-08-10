@@ -7,6 +7,11 @@ class PagesController < ApplicationController
   skip_before_filter :login_required, :only => [:show]
 
   def show
+    if current_user and current_user.enrolled and not current_user.enrollment_accepted
+      redirect_to enrollment_application_results_url
+      return
+    end
+
     fetch_ivars
     render :template => current_page
   end
