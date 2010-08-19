@@ -1,1 +1,3 @@
 log
+keys
+script/bring_virgin_user_up_to_just_pre_enrollment.rb
