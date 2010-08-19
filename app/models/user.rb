@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step
   has_many :exam_responses
   has_many :waitlists
+  has_many :documents
   has_many :distinctive_traits
   has_one  :screening_survey_response
   # Next three are legacy and will go away when we drop the code for v1 of the eligibility survey
@@ -246,6 +247,15 @@ class User < ActiveRecord::Base
     else
       return 'Not consented yet.'
     end
+  end
+
+  # doctype can be
+  #   tos
+  #   eligibility_survey
+  #   consent
+  #   exam
+  def latest_doc(doctype)
+    self.documents.kind(doctype).first
   end
 
   protected

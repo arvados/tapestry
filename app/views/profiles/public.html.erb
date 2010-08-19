@@ -10,6 +10,8 @@
 
 <h2>Public Profile -- <%= @user.hex -%></h2>
 
+<div align="right">Public profile link: <%= "#{request.protocol}#{request.domain}#{public_profile_path}" -%></div>
+
 <h3>Google Health PHR <% if logged_in? and @user == current_user -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
 <% if @ccr != nil -%>
 <div class="admin_table">

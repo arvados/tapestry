@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100810155658) do
+ActiveRecord::Schema.define(:version => 20100817174004) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -57,6 +57,15 @@ ActiveRecord::Schema.define(:version => 20100810155658) do
     t.string   "name"
     t.integer  "rating"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "documents", :force => true do |t|
+    t.string   "keyword"
+    t.integer  "user_id"
+    t.string   "version"
+    t.datetime "timestamp"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

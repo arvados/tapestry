@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
 
   filter_parameter_logging "password"
   before_filter :login_required
+  before_filter :ensure_tos_agreement
 
 
   # See ActionController::RequestForgeryProtection for details
@@ -20,6 +21,15 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   protected
+
+  def ensure_tos_agreement
+  STDERR.puts self.controller_name
+  STDERR.puts self.action_name
+    if logged_in? and current_user and current_user.documents.kind('tos', 'v1').empty?
+      redirect_to tos_user_url
+#      redirect_to url_for(:controller => 'users', :action => 'tos')
+    end
+  end
 
   def add_breadcrumb name, url = ''
     @breadcrumbs ||= []

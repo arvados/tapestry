@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment ]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos ]
   skip_before_filter :login_required, :only => [:new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form ]
   #before_filter :ensure_invited, :only => [:new, :new2, :create]
-
+  skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :logout ]
 
   def new
     @user = User.new(params[:user])
@@ -133,10 +133,25 @@ class UsersController < ApplicationController
     end
   end
 
+  def tos
+  end
+
+  def accept_tos
+    if current_user.documents.kind('tos', 'v1').empty?
+      current_user.documents << Document.new(:keyword => 'tos', :version => 'v1', :timestamp => Time.now())
+      current_user.save!
+      flash[:notice] = 'Thank you for agreeing with our Terms of Service.'
+      redirect_to root_url
+    else
+      # They've already accepted this version of the terms of service
+      redirect_to root_url
+    end
+  end
+
   private
 
   def ensure_current_user_may_edit_this_user
-    redirect_to root_url unless current_user && ( current_user.id == params[:id].to_i ) # || curren_user.admin?
+    redirect_to root_url unless current_user && ( current_user.id == params[:id].to_i ) # || current_user.admin?
   end
 
   def ensure_invited
