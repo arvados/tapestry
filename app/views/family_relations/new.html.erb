@@ -1,0 +1,19 @@
+<h2>Add a family member</h2>
+
+<% form_for @family_relation, :url => { :action => 'create' } do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= label_tag 'email', 'E-mail address' %><br />
+    <%= text_field_tag 'email' %>
+  </p
+  <p>
+ The person above is my <%= select_tag :relation, options_for_select(['Select relation','parent','child', 'sibling', 'grandparent', 'grandchild'].map { |r| [r,r]}) %>
+  </p>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', family_relations_path %>

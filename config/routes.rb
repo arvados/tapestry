@@ -58,6 +58,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :enrollment_application_results
   map.resources :mailing_list_subscriptions
   map.resources :international_participants
+  map.resources :family_relations
 
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
@@ -94,5 +95,4 @@ ActionController::Routing::Routes.draw do |map|
   map.unlink_googlehealth '/phrccr/unlink_googlehealth', :controller => 'phrccrs', :action => 'unlink_googlehealth'
 
   map.public_profile '/profile/:hex',    :controller => 'profiles',    :action => 'public'
-
 end

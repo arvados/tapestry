@@ -13,6 +13,9 @@ class User < ActiveRecord::Base
   has_many :documents
   has_many :distinctive_traits
   has_one  :screening_survey_response
+  has_many :family_relations
+  has_many :relatives, :class_name => 'User', :through => :family_relations
+
   # Next three are legacy and will go away when we drop the code for v1 of the eligibility survey
   has_one  :residency_survey_response
   has_one  :family_survey_response

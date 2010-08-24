@@ -1,0 +1,37 @@
+<h2>Add Family Member</h2>
+<p>
+Enter emails of users who are immediate family members.
+</p>
+ 
+<% if @family_members != [] %>
+ 
+<strong>Family Members:</strong>
+<table class="admin_table">
+  <tr>
+    <th>E-mail address</th>
+    <th>Relation</th>
+    <th>Confirmed</th>
+    <th>Remove</th>
+  </tr>
+  <% @family_members.each do |fm| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td>
+        <%= h fm.relative.email -%>
+      </td>
+      <td>
+        <%= h fm.relation -%>
+      </td>
+      <td>
+        <%= h fm.is_confirmed -%>
+      </td>
+      <td><%= link_to 'Remove', [ fm ], :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<% end %>
+
+<%= link_to 'Add family_member', new_family_relation_path %>
+</p>
+<%= link_to 'Back to my account', edit_user_path(current_user) %>
+
