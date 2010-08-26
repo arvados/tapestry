@@ -50,7 +50,7 @@
 
 <h2>Are you a robot?</h2>
 <p>Please type the two words you see below to confirm that you&rsquo;re a real person.</p>
-<%= recaptcha_tags %>
+<%= recaptcha_tags :ssl => true %>
 
 <p><%= submit_tag 'Sign up' %></p>
 <% end -%>
