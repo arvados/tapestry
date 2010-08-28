@@ -48,6 +48,22 @@ Not added.
 <tr><td>Consent:</td><td><%= @user.consent_passed -%></td></tr>
 <tr><td>Enrolled:</td><td><%= @user.enrolled.to_s -%></td></tr>
 </table>
+ 
+<h3>Family Members Enrolled <% if logged_in? and @user == current_user -%><%= link_to "[edit]", family_relations_path %><% end -%></h3>
+<% if @family_members && @family_members != []%>
+<table class="admin_table">
+  <% @family_members.find_all{|f| f.is_confirmed}.each do |fm| -%>
+    <tr>
+      <td>
+        <%= link_to fm.relation, public_profile_path(fm.relative.hex) %>
+      </td>
+      <td>linked <%= h fm.updated_at %></td>
+    </tr>
+  <% end %>
+</table>
+<% else %>
+None added
+<% end %>
 
 <% end -%>
 

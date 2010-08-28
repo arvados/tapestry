@@ -8,6 +8,7 @@ class ProfilesController < ApplicationController
   def public
 
     @user = User.find_by_hex(params[:hex])
+    @family_members = @user.family_relations
 
     # Invalid hex code
     return if not @user
@@ -35,7 +36,6 @@ class ProfilesController < ApplicationController
     end
 
     @ccr = Nokogiri::XML(feed)
-
   end
 
 end

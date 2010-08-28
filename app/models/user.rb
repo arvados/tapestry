@@ -275,4 +275,7 @@ class User < ActiveRecord::Base
     self.activation_code = self.class.make_token
   end
 
+  def self.pending_family_relations
+    return FamilyRelations.find :all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id]
+  end
 end

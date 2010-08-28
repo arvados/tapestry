@@ -26,6 +26,20 @@ class UserMailer < ActionMailer::Base
     @body[:url]  = edit_password_url(:id => user.id, :key => user.crypted_password)
   end
 
+  def family_relation_notification(family_relation)
+    setup_email(family_relation.relative)
+    @subject += 'You have been added as a family member'
+    @family_relation = family_relation
+    @body[:url] = "http://#{ROOT_URL}/family_relations"
+    @body[:login_url]  = "http://#{ROOT_URL}/login"
+  end
+
+  def family_relation_rejection(family_relation)
+    setup_email(family_relation.user)
+    @subject += 'Your family relation request was rejected'
+    @body[:user] = family_relation.relative
+  end
+
   protected
 
   def setup_email(user)

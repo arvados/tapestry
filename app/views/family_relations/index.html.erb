@@ -1,11 +1,10 @@
-<h2>Add Family Member</h2>
+<h2>Family Relationships</h2>
+ 
+<% if @family_members.blank? %>
 <p>
-Enter emails of users who are immediate family members.
-</p>
- 
-<% if @family_members != [] %>
- 
-<strong>Family Members:</strong>
+You have not added any family relationships.</p>
+<% else %>
+
 <table class="admin_table">
   <tr>
     <th>E-mail address</th>
@@ -22,7 +21,7 @@ Enter emails of users who are immediate family members.
         <%= h fm.relation -%>
       </td>
       <td>
-        <%= h fm.is_confirmed -%>
+        <%= fm.is_confirmed ? 'Yes' : 'No' -%>
       </td>
       <td><%= link_to 'Remove', [ fm ], :confirm => 'Are you sure?', :method => :delete %></td>
     </tr>
@@ -30,8 +29,31 @@ Enter emails of users who are immediate family members.
 </table>
 
 <% end %>
-
 <%= link_to 'Add family_member', new_family_relation_path %>
+
+<h2>Pending Relationship Requests</h2>
+<% if @pending_family_members.blank? %>
+<p>No Pending Requests</p>
+<% else %>
+<p>The people with the following emails have listed you as family member. Please confirm or reject the relationship.</p>
+<table class="admin_table">
+<tr>
+  <th>Email</th>
+  <th>Relation</th>
+  <th>Confirm</th>
+  <th>Reject</th>
+<tr>
+<% @pending_family_members.each { |fm| %>
+<tr>
+  <td><%= h fm.user.email %></td>
+  <td><%= h FamilyRelation.relations[fm.relation] %></td>
+  <td><%= link_to 'Confirm', confirm_family_relation_path(fm), :method => 'post'%></td><td><%= link_to 'Reject', reject_family_relation_path(fm), :method => 'post' %></td>
+</tr>
+<% } %>
+</table>
+<% end %>
+
+
 </p>
-<%= link_to 'Back to my account', edit_user_path(current_user) %>
+<%= link_to 'Back to public profile', public_profile_path(current_user.hex) %>
 
