@@ -1,0 +1,27 @@
+<h2>Safety Questionnaire Responses</h2>
+<p>
+Review your submitted safety questionnaire answers below.</p>
+ 
+<% if @safety_questionnaires != [] %>
+ 
+<strong>Safety Questionnaires:</strong>
+<table class="admin_table">
+  <tr>
+    <th>Submitted</th>
+    <th>Changes reported</th>
+  </tr>
+  <% @safety_questionnaires.each do |sq| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=h sq.datetime %></td>
+      <td>
+        <%= h sq.changes ? 'yes' : 'no' -%>
+      </td>
+      <td><%= link_to 'View', safety_questionnaire_path(sq) %></td>
+    </tr>
+  <% end %>
+</table>
+
+<% end %>
+
+<%= link_to 'Continue', root_path %>
+

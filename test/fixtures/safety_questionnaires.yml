@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_id: 1
+  changes: false
+  datetime: 2010-08-31 11:46:16
+  events: MyString
+  reactions: MyString
+  contact: MyString
+  healthcare: MyString
+
+two:
+  user_id: 1
+  changes: false
+  datetime: 2010-08-31 11:46:16
+  events: MyString
+  reactions: MyString
+  contact: MyString
+  healthcare: MyString
