@@ -277,6 +277,6 @@ class User < ActiveRecord::Base
   end
 
   def self.pending_family_relations
-    return FamilyRelations.find :all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id]
+    return FamilyRelations.find(:all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id])
   end
 end
