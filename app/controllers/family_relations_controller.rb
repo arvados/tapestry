@@ -44,6 +44,12 @@ class FamilyRelationsController < ApplicationController
       render :action => 'new'
       return
     end
+    
+    if !relative.enrolled
+      flash[:error] = 'The user you specified is not yet enrolled in the PGP.'
+      render :action => 'new'
+      return
+    end
 
     if (!FamilyRelation.relations.include?(params['relation']))
       flash[:error] = 'Please specify the type of relationship'
