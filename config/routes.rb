@@ -58,9 +58,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :enrollment_application_results
   map.resources :mailing_list_subscriptions
   map.resources :international_participants
-  map.resources :family_relations
   map.confirm_family_relation '/family_relation/confirm/:id',    :controller => 'family_relations',    :action => 'confirm'
   map.reject_family_relation '/family_relation/confirm/:id',    :controller => 'family_relations',    :action => 'reject'
+  map.resources :family_relations
+  map.require_safety_questionnaire '/safety_questionnaires/require',    :controller => 'safety_questionnaires',    :action => 'require'
   map.resources :safety_questionnaires
 
   map.namespace 'admin' do |admin|

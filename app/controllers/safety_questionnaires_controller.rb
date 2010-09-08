@@ -1,6 +1,10 @@
 class SafetyQuestionnairesController < ApplicationController
+  skip_before_filter :ensure_recent_safety_questionnaire
 
-def index
+  def require
+  end
+
+  def index
     @safety_questionnaires = current_user.safety_questionnaires.sort { |x,y| y.datetime <=> x.datetime }
   end
 
