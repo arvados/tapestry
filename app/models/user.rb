@@ -263,6 +263,8 @@ class User < ActiveRecord::Base
   end
 
   def has_recent_safety_questionnaire
+    # this only applies to enrolled users; for all others, this function should be a no-op
+    return true if self.enrolled.nil?
     if self.safety_questionnaires.empty? and 3.months.ago > self.enrolled then
       # No SQ results, and account older than 3 months. They have to take one
       return false
