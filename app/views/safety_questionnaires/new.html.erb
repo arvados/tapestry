@@ -1,0 +1,48 @@
+<h2>PGP safety questionnaire</h2>
+
+Enrolled participants in the PGP are required to respond to this questionnaire
+once per quarter so the research study can monitor whether any adverse events
+are occurring. Thanks for your cooperation.
+
+<% content_for :js do %>
+function toggleQuestions() {
+  reportingChanges = $('#safety_questionnaire_changes_true')[0].checked;
+  if (reportingChanges) {
+    $('#questions').show('fast');
+  } else {
+    $('#questions').hide('fast');
+  }
+};
+<% end -%>
+
+
+<% form_for @safety_questionnaire do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <strong>1. Would you like to report changes in your safety, well-being, or interactions with others due to your participation in the PGP?</strong><br/>
+    <%= f.radio_button(:changes, "true", :onChange => 'javascript:toggleQuestions()') %> Yes, I would like to report changes to the PGP.<br/>
+    <%= f.radio_button(:changes, "false", :onChange => 'javascript:toggleQuestions()') %> No, I would like to report no changes to the PGP. 
+  </p>
+  <div id="questions" style="display:none">
+  <p>
+    <strong>2. What negative and/or positive events have happened to you and/or your relatives related to your participation in the PGP?</strong><br/>
+    <%= f.text_area :events, :size => "80x10" %>
+  </p>
+  <p>
+    <strong>3. What are the reactions or responses of relatives and acquaintances to the posting of your genetic and medical data? </strong><br/>
+    <%= f.text_area :reactions, :size => "80x10" %>
+  </p>
+  <p>
+    <strong>4. Please report incidents of being contacted regarding your data being posted online.</strong><br/>
+    <%= f.text_area :contact, :size => "80x10" %>
+  </p>
+  <p>
+    <strong>5. In what ways has this study positively or negatively influenced your health care or interactions with your medical care providers?</strong><br/>
+    <%= f.text_area :healthcare, :size => "80x10" %>
+  </p>
+  </div>
+  <p>
+    <%= f.submit "Submit" %>
+  </p>
+<% end %>

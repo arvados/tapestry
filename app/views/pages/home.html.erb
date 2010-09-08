@@ -57,8 +57,13 @@
 <div class="clear"><!-- --></div>
 <div class="submenu">
 <ul>
-  <li><%= link_to "Edit your public profile", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %></li>
-  <li><%= link_to "Enrollment Application Results", enrollment_application_results_path %></li>
+  <li><strong>Your profile</strong><br>
+  &nbsp;&nbsp;<%= link_to "Edit", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %></li>
+  <li><strong>Safety Questionnaires</strong><br>
+  &nbsp;&nbsp;<%= link_to "Submit new", url_for(:controller => 'safety_questionnaires', :action => 'new') %><br>
+  &nbsp;&nbsp;<%= link_to "Review previous", url_for(:controller => 'safety_questionnaires', :action => 'index') %></li>
+  <li><strong>Enrollment Application</strong><br>
+  &nbsp;&nbsp;<%= link_to "Review results", enrollment_application_results_path %></li>
 </ul>
 </div>
 

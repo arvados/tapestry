@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   has_one  :baseline_traits_survey
   has_and_belongs_to_many :mailing_lists, :join_table => :mailing_list_subscriptions
   has_many :user_logs
+  has_many :safety_questionnaires
 
   has_attached_file :phr
 
@@ -276,6 +277,6 @@ class User < ActiveRecord::Base
   end
 
   def self.pending_family_relations
-    return FamilyRelations.find :all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id]
+    return FamilyRelations.find(:all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id])
   end
 end

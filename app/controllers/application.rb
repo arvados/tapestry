@@ -23,11 +23,8 @@ class ApplicationController < ActionController::Base
   protected
 
   def ensure_tos_agreement
-  STDERR.puts self.controller_name
-  STDERR.puts self.action_name
     if logged_in? and current_user and current_user.documents.kind('tos', 'v1').empty?
       redirect_to tos_user_url
-#      redirect_to url_for(:controller => 'users', :action => 'tos')
     end
   end
 

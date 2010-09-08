@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100821195748) do
+ActiveRecord::Schema.define(:version => 20100831154616) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -245,6 +245,18 @@ ActiveRecord::Schema.define(:version => 20100821195748) do
   end
 
   add_index "residency_survey_responses", ["user_id"], :name => "index_residency_survey_responses_on_user_id"
+
+  create_table "safety_questionnaires", :force => true do |t|
+    t.integer  "user_id"
+    t.datetime "datetime"
+    t.boolean  "changes"
+    t.string   "events"
+    t.string   "reactions"
+    t.string   "contact"
+    t.string   "healthcare"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "screening_survey_responses", :force => true do |t|
     t.integer  "user_id"
