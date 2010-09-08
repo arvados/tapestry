@@ -4,10 +4,10 @@ class CreateSafetyQuestionnaires < ActiveRecord::Migration
       t.integer :user_id
       t.timestamp :datetime
       t.boolean :changes
-      t.string :events
-      t.string :reactions
-      t.string :contact
-      t.string :healthcare
+      t.text :events
+      t.text :reactions
+      t.text :contact
+      t.text :healthcare
 
       t.timestamps
     end
