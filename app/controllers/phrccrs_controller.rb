@@ -108,8 +108,8 @@ class PhrccrsController < ApplicationController
       scope = 'https://www.google.com/h9/feeds'
       next_url = 'http://enroll-dev.personalgenomes.org/phrccr/authsub'
     else
-      scope = 'https://www.google.com/health/feeds'
-      #scope = 'https://www.google.com/h9/feeds'
+      scope = 'https://www.google.com/h9/feeds'
+      #scope = 'https://www.google.com/health/feeds'
       next_url = 'https://my.personalgenomes.org/phrccr/authsub'
     end
 
