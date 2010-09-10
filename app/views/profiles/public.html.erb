@@ -12,7 +12,7 @@
 
 <div align="right">Public profile link: <a href="<%= "#{request.protocol}#{request.domain(2)}#{public_profile_path}" -%>"><%= "#{request.protocol}#{request.domain(2)}#{public_profile_path}" -%></a></div>
 
-<h3>Google Health PHR <% if logged_in? and @user == current_user -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
+<h3>Google Health <% if logged_in? and @user == current_user -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
 <% if @ccr != nil -%>
 <div class="admin_table">
 <%= render :partial => "phrccrs/ccr" %>
