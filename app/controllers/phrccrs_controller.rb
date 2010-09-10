@@ -109,7 +109,8 @@ class PhrccrsController < ApplicationController
       next_url = 'http://enroll-dev.personalgenomes.org/phrccr/authsub'
     else
       scope = 'https://www.google.com/health/feeds'
-      next_url = 'https://enroll.personalgenomes.org/phrccr/authsub'
+      #scope = 'https://www.google.com/h9/feeds'
+      next_url = 'https://my.personalgenomes.org/phrccr/authsub'
     end
 
     secure = true  # set secure = true for signed AuthSub requests
