@@ -272,7 +272,7 @@ class User < ActiveRecord::Base
       # No SQ results, but account younger than 3 months. They are ok.
       return true
     end
-    3.months.ago > self.safety_questionnaires.last.datetime
+    3.months.ago < self.safety_questionnaires.last.datetime
   end
 
   protected
