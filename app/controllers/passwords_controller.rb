@@ -35,6 +35,7 @@ class PasswordsController < ApplicationController
 
       if @user.save
         flash[:notice] = 'You reset your password successfully.'
+        @user.log("Password reset successfully")
         redirect_to login_url
       else
         render :action => 'edit'

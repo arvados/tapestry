@@ -15,15 +15,17 @@ class UserMailer < ActionMailer::Base
   def delete_request(user)
     setup_email(user)
     @recipients  = "delete-account@personalgenomes.org"
-    @subject     = "PGP account delete request"
+    @subject     = "PGP account deletion request"
     @body[:url]  = "http://#{ROOT_URL}/admin/users"
     @body[:user] = user
+    user.log("PGP account deletion request")
   end
 
   def password_reset(user)
     setup_email(user)
     @subject    += 'Reset your password'
     @body[:url]  = edit_password_url(:id => user.id, :key => user.crypted_password)
+    user.log("Sent password reset link: #{@body[:url]}")
   end
 
   def family_relation_notification(family_relation)
@@ -32,17 +34,20 @@ class UserMailer < ActionMailer::Base
     @family_relation = family_relation
     @body[:url] = "http://#{ROOT_URL}/family_relations"
     @body[:login_url]  = "http://#{ROOT_URL}/login"
+    family_relation.log("Sent family relation notification: added as a family member")
   end
 
   def family_relation_rejection(family_relation)
     setup_email(family_relation.user)
     @subject += 'Your family relation request was rejected'
     @body[:user] = family_relation.relative
+    family_relation.log("Sent family relation notification: family relation request was rejected")
   end
 
   def safety_questionnaire_reminder(user)
     setup_email(user)
     @subject += 'PGP Safety Questionnaire'
+    user.log("Sent PGP Safety Questionnaire reminder")
   end
 
   protected
