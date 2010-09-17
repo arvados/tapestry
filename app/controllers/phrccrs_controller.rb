@@ -24,11 +24,11 @@ class PhrccrsController < ApplicationController
     version = params[:version]
     if version && !version.empty?
       for i in 0.. ccr_list.length - 1 do
-      	  if @ccr_history[i] == version
-	     feed = File.new(ccr_list[i])
-	     @current_version = version
-	     break
-	  end
+        if @ccr_history[i] == version
+          feed = File.new(ccr_list[i])
+          @current_version = version
+          break
+        end
       end
     else
       feed = File.new(ccr_list[0])
@@ -59,7 +59,7 @@ class PhrccrsController < ApplicationController
       if timestamp.scan(timestamp_regex).length > 0
         ccr_filename = get_ccr_filename(current_user.id, false, timestamp)
         File.delete(ccr_filename)
-	current_user.log("Deleted PHR (#{ccr_filename})")
+        current_user.log("Deleted PHR (#{ccr_filename})")
       end
       redirect_to :action => :review
     else
@@ -81,18 +81,18 @@ class PhrccrsController < ApplicationController
   def authsub_update
     if !params[:token].blank?
       begin
-	authsubRequest = GData::Auth::AuthSub.new(params[:token])
+        authsubRequest = GData::Auth::AuthSub.new(params[:token])
         authsubRequest.private_key = private_key
-	authsubRequest.upgrade
-	
-	current_user.update_attributes(:authsub_token => authsubRequest.token)
-	current_user.log('Linked with Google Health')
+        authsubRequest.upgrade
+        
+        current_user.update_attributes(:authsub_token => authsubRequest.token)
+        current_user.log('Linked with Google Health')
         download_phr
-	flash[:notice] = 'Your Google Health Profile was successfully linked'
-	redirect_to :action => :show
+        flash[:notice] = 'Your Google Health Profile was successfully linked'
+        redirect_to :action => :show
       rescue GData::Client::Error => ex
-	flash[:error] = 'We could not link your Google Health profile. Please try again.'
-	redirect_to :action => :show
+        flash[:error] = 'We could not link your Google Health profile. Please try again.'
+        redirect_to :action => :show
       end
     else
       flash[:error] = 'No token provided'
@@ -101,6 +101,11 @@ class PhrccrsController < ApplicationController
   end
 
   def authsub
+    # Guard against 'Link Profile' clicks from a stale PHR page
+    if not current_user.authsub_token.nil? and current_user.authsub_token != '' then
+      redirect_to :action => :show
+      return
+    end
     if ROOT_URL == "enroll-si.personalgenomes.org"
       scope = 'https://www.google.com/h9/feeds'
       next_url = 'http://enroll-si.personalgenomes.org/phrccr/authsub'
