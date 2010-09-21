@@ -82,7 +82,8 @@
   <th>Name</th>
   <th class="date">Date</th>
 </tr>
-<% @ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="PROCEDURE"]]//ccr:Procedures/ccr:Procedure').each { |procedure| %>
+<!-- @ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="PROCEDURE"]]//ccr:Procedures/ccr:Procedure').each { |procedure| -->
+<% get_results(@ccr,"PROCEDURE",'Procedure').each { |procedure| %>
 <tr>
   <td><%= procedure.xpath('ccr:Description/ccr:Text') %></td>
   <td><%= show_date procedure.xpath('ccr:DateTime[ccr:Type/ccr:Text="Start date"]/ccr:ExactDateTime') %></td>
@@ -97,7 +98,9 @@
   <th class="result">Result</th>
   <th class="date">Date</th>
 </tr>
-<% @ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="LABTEST"]]//ccr:Results/ccr:Result').each { |result| %>
+
+<!-- @ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="LABTEST"]]//ccr:Results/ccr:Result').each { |result| -->
+<% get_results(@ccr,"LABTEST",'Result').each { |result| %>
 <tr>
   <td><%= result.xpath('ccr:Test/ccr:Description/ccr:Text') %></td>
   <td><%= result.xpath('ccr:Test/ccr:TestResult/ccr:Value') %> <%= result.xpath('ccr:Test/ccr:TestResult/ccr:Units/ccr:Unit') %></td>

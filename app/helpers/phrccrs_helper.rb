@@ -184,4 +184,32 @@ module PhrccrsHelper
     feed = client.get(ccr_profile_url).body
     return feed
   end
+
+  # This is ugly, but it is about 50 times faster than
+  # @ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="LABTEST"]]//ccr:Results/ccr:Result').each { |result| 
+  # This matters a lot when you have a large PHR.
+  # Ward, 2010-09-21
+  def get_results(ccr,cat,field)
+    r = Array.new()
+    ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="' + cat + '"]]').each do |entry| 
+      entry.children.each do |child|
+        if child.name == 'ContinuityOfCareRecord' then
+          child.children.each do |c2|
+            if c2.name == 'Body' then
+              c2.children.each do |c3|
+                if c3.name == field + 's' then
+                  c3.children.each do |result|
+                    next if result.name != field
+                    r.push(result)
+                  end 
+                end 
+              end 
+            end 
+          end 
+        end 
+      end 
+    end 
+    return r
+  end
+
 end
