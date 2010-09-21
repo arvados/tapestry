@@ -40,6 +40,11 @@ class UserMailer < ActionMailer::Base
     @body[:user] = family_relation.relative
   end
 
+  def safety_questionnaire_reminder(user)
+    setup_email(user)
+    @subject += 'PGP Safety Questionnaire'
+  end
+
   protected
 
   def setup_email(user)

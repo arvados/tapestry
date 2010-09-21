@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging "password"
   before_filter :login_required
   before_filter :ensure_tos_agreement
+  before_filter :ensure_recent_safety_questionnaire
 
 
   # See ActionController::RequestForgeryProtection for details
@@ -21,6 +22,12 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   protected
+
+  def ensure_recent_safety_questionnaire
+    if logged_in? and current_user and not current_user.has_recent_safety_questionnaire
+      redirect_to require_safety_questionnaire_url
+    end
+  end
 
   def ensure_tos_agreement
     if logged_in? and current_user and current_user.documents.kind('tos', 'v1').empty?

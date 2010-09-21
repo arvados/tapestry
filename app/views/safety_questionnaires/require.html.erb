@@ -1,0 +1,19 @@
+<h2>PGP safety questionnaire</h2>
+
+Enrolled participants in the PGP are required to take the safety questionnaire
+<strong>once per quarter</strong> so the research study can monitor whether any
+adverse events are occurring.
+
+<% if current_user.safety_questionnaires.empty? and 3.months.ago > current_user.enrolled then -%>
+<p>You were enrolled in the PGP on <%= current_user.enrolled -%> (more than three months ago), and have not
+yet taken a safety questionnaire.</p>
+<% elsif not current_user.safety_questionnaires.empty? -%>
+<p>You took your last safety questionnaire on <%= current_user.safety_questionnaires.last.datetime -%>.</p>
+<% end -%>
+
+<p>Please take the safety questionnaire by following the link below.</p>
+<p>Thanks for your cooperation.</p>
+
+<div><%= link_to "Take the safety questionnaire", :controller => 'safety_questionnaires', :action => 'new' %></div>
+
+
