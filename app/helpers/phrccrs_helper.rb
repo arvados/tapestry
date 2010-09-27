@@ -191,6 +191,10 @@ module PhrccrsHelper
   # Ward, 2010-09-21
   def get_results(ccr,cat,field)
     r = Array.new()
+
+    sortstr = 'ccr:Test/ccr:DateTime[ccr:Type/ccr:Text="Collection start date"]/ccr:ExactDateTime'
+    sortstr = 'ccr:DateTime[ccr:Type/ccr:Text="Start date"]/ccr:ExactDateTime' if cat == 'PROCEDURE'
+
     ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="' + cat + '"]]').each do |entry| 
       entry.children.each do |child|
         if child.name == 'ContinuityOfCareRecord' then
@@ -209,6 +213,8 @@ module PhrccrsHelper
         end 
       end 
     end 
+    r.sort! {|x,y| show_date(x.xpath(sortstr)) <=> show_date(y.xpath(sortstr)) }
+
     return r
   end
 
