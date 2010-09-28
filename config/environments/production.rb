@@ -31,3 +31,6 @@ ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'
 ENV['RECAPTCHA_PUBLIC_KEY'] = 'yyyyyyyyyyyyyyyyyyyyyyyy-xxxxxxxx'
 ENV['RECAPTCHA_PRIVATE_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-yyyyyyyy'
 
+# TMP for Google testing
+#GOOGLE_HEALTH_URL = "https://www.google.com/health"
+GOOGLE_HEALTH_URL = "https://www.google.com/h9"

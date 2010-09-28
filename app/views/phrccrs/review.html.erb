@@ -2,7 +2,7 @@
 <% if @ccr %>
 <h2>Imported Personal Health Record</h2> 
  
-<p>This is your PHR imported from Google Health. Please make sure all the information is accurate. If there are any errors, you can correct them in your <a href="<%= health_url %>">Google Health profile</a> and click the "Refresh PHR" button.</p>
+<p>This is your PHR imported from Google Health. Please make sure all the information is accurate. If there are any errors, you can correct them in your <a href="<%= GOOGLE_HEALTH_URL %>" target="_blank">Google Health profile</a> and click the "Refresh PHR" button.</p>
 
 <%= render :partial => "ccr" %>
 

@@ -106,15 +106,12 @@ class PhrccrsController < ApplicationController
       redirect_to :action => :show
       return
     end
+    scope = GOOGLE_HEALTH_URL + '/feeds'
     if ROOT_URL == "enroll-si.personalgenomes.org"
-      scope = 'https://www.google.com/h9/feeds'
       next_url = 'http://enroll-si.personalgenomes.org/phrccr/authsub'
     elsif ROOT_URL == "enroll-dev.personalgenomes.org"
-      scope = 'https://www.google.com/h9/feeds'
       next_url = 'http://enroll-dev.personalgenomes.org/phrccr/authsub'
     else
-      scope = 'https://www.google.com/h9/feeds'
-      #scope = 'https://www.google.com/health/feeds'
       next_url = 'https://my.personalgenomes.org/phrccr/authsub'
     end
 

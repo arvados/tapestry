@@ -140,14 +140,6 @@ module PhrccrsHelper
     return f + "ccr#{timestamp}.xml"
   end
 
-  def health_url
-    if ROOT_URL == "enroll.personalgenomes.org"
-      return "https://www.google.com/health"
-    else
-      return "https://www.google.com/h9"
-    end
-  end
-
   def show_date(n)
     unless n && n.length > 0
       return ''
@@ -161,7 +153,7 @@ module PhrccrsHelper
   end
 
   def ccr_profile_url
-    return health_url + '/feeds/profile/default'
+    return GOOGLE_HEALTH_URL + '/feeds/profile/default'
   end
 
   def authsub_revoke(current_user)
