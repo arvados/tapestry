@@ -6,12 +6,11 @@ class ProfilesController < ApplicationController
   include PhrccrsHelper
 
   def public
-
     @user = User.find_by_hex(params[:hex])
-    @family_members = @user.family_relations
-
     # Invalid hex code
     return if not @user
+
+    @family_members = @user.family_relations
 
     ccr_list = Dir.glob(get_ccr_path(@user.id) + '*').reverse
     if ccr_list.length == 0
