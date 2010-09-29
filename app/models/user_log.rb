@@ -4,5 +4,5 @@ class UserLog < ActiveRecord::Base
 
   validates_presence_of :user_id
 
-  attr_accessible :user, :comment, :enrollment_step
+  attr_accessible :user, :comment, :enrollment_step, :origin
  end
