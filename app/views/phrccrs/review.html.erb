@@ -1,9 +1,17 @@
 
 <% if @ccr %>
 <h2>Imported Personal Health Record</h2> 
- 
-<p>This is your PHR imported from Google Health. Please make sure all the information is accurate. If there are any errors, you can correct them in your <a href="<%= GOOGLE_HEALTH_URL %>" target="_blank">Google Health profile</a> and click the "Refresh PHR" button.</p>
 
+<p>This is your PHR imported from Google Health. This information has been
+added to your PGP public profile. Please make sure all the information is
+accurate. If there are any errors, you can correct them in your 
+<a href="<%= GOOGLE_HEALTH_URL %>" target="_blank">Google Health profile</a> and click the
+"Refresh PHR" button below to import the corrected version. If you wish to
+remove data imported from Google Health from 
+<%= link_to "your PGP public profile", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %>, you may
+delete imported records by clicking the "delete" button at the bottom of this
+page.</p>
+ 
 <%= render :partial => "ccr" %>
 
 <% end %>
