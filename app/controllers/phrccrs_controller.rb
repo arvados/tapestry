@@ -15,7 +15,9 @@ class PhrccrsController < ApplicationController
   def review
     ccr_list = Dir.glob(get_ccr_path(current_user.id) + '*').reverse
     if ccr_list.length == 0
-      flash[:error] = 'You do not have any PHRs saved. Click the "Refresh PHR" button to get the latest version.'
+      if flash[:error] == '' then
+        flash[:error] = 'You do not have any PHRs saved. Click the "Refresh PHR" button to get the latest version.'
+      end
       return
     end
     
@@ -58,8 +60,12 @@ class PhrccrsController < ApplicationController
       timestamp = params[:deleteccr]
       if timestamp.scan(timestamp_regex).length > 0
         ccr_filename = get_ccr_filename(current_user.id, false, timestamp)
-        File.delete(ccr_filename)
-        current_user.log("Deleted PHR (#{ccr_filename})")
+        if File.exists?(ccr_filename) then
+          File.delete(ccr_filename)
+          current_user.log("Deleted PHR (#{ccr_filename})")
+        else
+          current_user.log("Unabled to delete PHR (#{ccr_filename}): file not found")
+        end
       end
       redirect_to :action => :review
     else
@@ -125,12 +131,16 @@ class PhrccrsController < ApplicationController
     feed = get_ccr(current_user)
     ccr = Nokogiri::XML(feed)
     updated = ccr.xpath('/xmlns:feed/xmlns:updated').inner_text
-    ccr_filename = get_ccr_filename(current_user.id, true, updated)
-    if !File.exist?(ccr_filename)
-      outFile = File.new(ccr_filename, 'w')
-      outFile.write(feed)
-      outFile.close
-      current_user.log("Downloaded PHR (#{ccr_filename})")
+    if (updated != '1970-01-01T00:00:00.000Z') then
+      ccr_filename = get_ccr_filename(current_user.id, true, updated)
+      if !File.exist?(ccr_filename)
+        outFile = File.new(ccr_filename, 'w')
+        outFile.write(feed)
+        outFile.close
+        current_user.log("Downloaded PHR (#{ccr_filename})")
+      end
+    else
+      flash[:error] = 'Your PHR at Google Health is empty, it has not been downloaded.'
     end
   end
 end
