@@ -6,7 +6,7 @@ namespace :backup do
   task :db => :environment do 
     config    = ActiveRecord::Base.configurations[RAILS_ENV || 'development']
     filename  = "#{config['database'].gsub(/_/, '-')}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.sql"
-    backupdir = File.expand_path(File.join(RAILS_ROOT, '..'))
+    backupdir = File.expand_path(File.join(RAILS_ROOT, '../../backups'))
     filepath  = File.join(backupdir, filename)
     mysqldump = `which mysqldump`.strip
     options   =  "-e -u #{config['username']}"
@@ -27,7 +27,7 @@ namespace :backup do
     path       = (Pathname.new(RAILS_ROOT) + 'public' + 'system').realpath
     base_dir   = path.parent
     system_dir = path.basename
-    outfile    = (Pathname.new(RAILS_ROOT) + '..').realpath + 'system.tgz'
+    outfile    = (Pathname.new(RAILS_ROOT) + '../../backups').realpath + 'system.tgz'
 
     cd base_dir
     `tar -czf #{outfile} #{system_dir}`
