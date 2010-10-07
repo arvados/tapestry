@@ -2,6 +2,11 @@
 
 <h3>User details</h3>
 
+<% if @user.enrolled %>
+Unique identifier: <%= @user.hex %><br/>
+Public profile url: <a href="<%= public_profile_url(@user) %>"><%= public_profile_url(@user) %></a>
+<% end %>
+
 <% @user.password = @user.password_confirmation = nil %>
 
 <% form_for [:admin, @user], :html => { :method => :put } do |f| -%>

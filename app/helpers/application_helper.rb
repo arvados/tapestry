@@ -43,4 +43,9 @@ EOS
   def in_admin_section?
     request.path =~ %r{^/admin/}
   end
+
+  def public_profile_url(user)
+    return "#{request.protocol}#{ROOT_URL}#{public_profile_path(:hex => user.hex) }"
+  end
+
 end
