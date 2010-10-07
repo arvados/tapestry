@@ -6,12 +6,29 @@ class Admin::UsersController < Admin::AdminControllerBase
   def index
     if params[:completed]
       @users = User.has_completed(params[:completed])
+      @result = "Searching for users that have completed '#{params[:completed]}': #{@users.size} found"
     elsif params[:inactive]
       @users = User.inactive
+      @result = "Searching for inactive users: #{@users.size} found"
     elsif params[:screening_eligibility_group]
       @users = User.in_screening_eligibility_group(params[:screening_eligibility_group].to_i)
-    else
+      @result = "Searching for users in eligibility group #{params[:screening_eligibility_group].to_i}: #{@users.size} found"
+    elsif params[:name] or params[:email]
+      if (params[:name] == '' and params[:email] == '') then
+        @users = []
+      else
+        @users = User.find_all_by_first_name(params[:name])
+        @users = @users.concat(User.find_all_by_middle_name(params[:name]))
+        @users = @users.concat(User.find_all_by_last_name(params[:name]))
+        @users = @users.concat(User.find_all_by_email(params[:email]))
+      end
+      @result = "Searching for users that match name '" + params[:name] + "' or email '" + params[:email] + "': #{@users.size} found"
+    elsif params[:all]
       @users = User.all
+      @result = "All users: #{@users.size} found"
+    else
+      @users = []
+      @result = ''
     end
 
     respond_to do |format|

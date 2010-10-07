@@ -36,29 +36,22 @@
                             :inactive                    => params[:inactive],
                             :screening_eligibility_group => params[:screening_eligibility_group]) %></p>
 
-<%= @users.size %> users:
-
-<table class="admin_table">
+<h3>Find users</h3>
+<table>
   <tr>
     <th>Name</th>
     <th>Email</th>
-    <th>Active?</th>
-    <th>Is Admin?</th>
-    <th>Edit</th>
-    <th>Delete</th>
-    <th>Activate</th>
   </tr>
-  <% @users.each do |user| -%>
-    <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= link_to user.full_name, admin_user_url(user) %></td>
-      <td><%=h user.email %></td>
-      <td><%=  user.active? %></td>
-      <td><%=  user.is_admin? %></td>
-      <td><%= link_to 'Edit', edit_admin_user_url(user) %></td>
-      <td><%= link_to 'Delete', admin_user_url(user),
-                :method => 'DELETE',
-                :confirm => 'Are you sure you want to delete this user?' %></td>
-      <td><%= link_to 'Activate', activate_admin_user_url(user), :method => 'PUT' %></td>
-    </tr>
-  <% end -%>
+<% form_tag admin_users_path, { :method => 'get' } do  %>
+  <tr><td>
+  <%= text_field_tag :name %></td>
+  <td>
+  <%= text_field_tag :email %></td>
+  <td>
+  <%= submit_tag 'Show' %></td></tr>
+<% end %>
 </table>
+
+  
+<%= render :partial => 'usertable' %>
+
