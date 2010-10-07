@@ -63,6 +63,7 @@ class User < ActiveRecord::Base
   }
 
   named_scope :inactive, { :conditions => "activated_at IS NULL" }
+  named_scope :enrolled, { :conditions => "enrolled IS NOT NULL" }
 
   named_scope :in_screening_eligibility_group, lambda { |group|
      joins = [:residency_survey_response, :family_survey_response, :privacy_survey_response, :enrollment_step_completions]

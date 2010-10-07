@@ -7,6 +7,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     if params[:completed]
       @users = User.has_completed(params[:completed])
       @result = "Searching for users that have completed '#{params[:completed]}': #{@users.size} found"
+    elsif params[:enrolled]
+      @users = User.enrolled
+      @result = "Searching for enrolled users: #{@users.size} found"
     elsif params[:inactive]
       @users = User.inactive
       @result = "Searching for inactive users: #{@users.size} found"
