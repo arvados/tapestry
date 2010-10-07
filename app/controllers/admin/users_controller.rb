@@ -20,10 +20,11 @@ class Admin::UsersController < Admin::AdminControllerBase
       if (params[:name] == '' and params[:email] == '') then
         @users = []
       else
-        @users = User.find_all_by_first_name(params[:name])
-        @users = @users.concat(User.find_all_by_middle_name(params[:name]))
-        @users = @users.concat(User.find_all_by_last_name(params[:name]))
-        @users = @users.concat(User.find_all_by_email(params[:email]))
+        n = ''
+        e = ''
+        n = "%#{params[:name]}%" if params[:name] != ''
+        e = "%#{params[:email]}%" if params[:email] != ''
+        @users = User.find(:all, :conditions => [ "first_name LIKE ? or middle_name LIKE ? or last_name LIKE ? or email LIKE ?" ,n,n,n,e])
       end
       @result = "Searching for users that match name '" + params[:name] + "' or email '" + params[:email] + "': #{@users.size} found"
     elsif params[:all]

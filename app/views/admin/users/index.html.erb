@@ -3,7 +3,7 @@
 <h3>Filter users</h3>
 <% form_tag admin_users_path, { :method => 'get' } do  %>
   <ul>
-    <li><%= link_to "Show all users", admin_users_path %></li>
+    <li><%= link_to "Show all users", admin_users_path(:all => true) %></li>
     <li><%= link_to "Show only enrolled users", admin_users_path(:enrolled => true) %></li>
     <li><%= link_to "Show only inactive users", admin_users_path(:inactive => true) %></li>
     <li>
