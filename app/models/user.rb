@@ -78,7 +78,11 @@ class User < ActiveRecord::Base
     { 
       :conditions => conditions_sql,
       :order => 'enrollment_step_completions.created_at',
-      :joins => joins
+      :joins => joins,
+      # when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
+      # Cf. http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
+      # Ward, 2010-10-09.
+      :readonly => false
     }
   }
 
@@ -92,9 +96,15 @@ class User < ActiveRecord::Base
     { 
       :conditions => conditions_sql,
       :order => 'enrollment_step_completions.created_at',
-      :joins => joins
+      :joins => joins,
+      # when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
+      # Cf. http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
+      # Ward, 2010-10-09.
+      :readonly => false
     }
   }
+
+  named_scope :limit, lambda { |num| { :limit => num } }
 
   # For mislav-will_paginate (WillPaginate), which we use in the admin interface
   cattr_reader :per_page
