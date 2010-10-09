@@ -5,46 +5,57 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   def index
     if params[:completed]
-      @users = User.has_completed(params[:completed])
-      @result = "Searching for users that have completed '#{params[:completed]}': #{@users.size} found"
+      @unpaginated_users = User.has_completed(params[:completed])
+      @result = "Searching for users that have completed '#{params[:completed]}'"
     elsif params[:enrolled]
-      @users = User.enrolled
-      @result = "Searching for enrolled users: #{@users.size} found"
+      @unpaginated_users = User.enrolled
+      @result = "Searching for enrolled users"
     elsif params[:eligible_for_enrollment]
-      @users = User.eligible_for_enrollment
-      @result = "Searching for users eligible for enrollment: #{@users.size} found"
+      @unpaginated_users = User.eligible_for_enrollment
+      @result = "Searching for users eligible for enrollment"
+    elsif params[:ineligible_for_enrollment]
+      @unpaginated_users = User.ineligible_for_enrollment
+      @result = "Searching for users ineligible for enrollment"
     elsif params[:inactive]
-      @users = User.inactive
-      @result = "Searching for inactive users: #{@users.size} found"
+      @unpaginated_users = User.inactive
+      @result = "Searching for inactive users"
     elsif params[:screening_eligibility_group]
-      @users = User.in_screening_eligibility_group(params[:screening_eligibility_group].to_i)
-      @result = "Searching for users in eligibility group #{params[:screening_eligibility_group].to_i}: #{@users.size} found"
+      @unpaginated_users = User.in_screening_eligibility_group(params[:screening_eligibility_group].to_i)
+      @result = "Searching for users in eligibility group #{params[:screening_eligibility_group].to_i}"
     elsif params[:name] or params[:email]
       if (params[:name] == '' and params[:email] == '') then
-        @users = []
+        @unpaginated_users = []
       else
         n = "%#{params[:name]}%" if params[:name] != ''
         e = "%#{params[:email]}%" if params[:email] != ''
         if params[:name] == '' then
-          @users = User.find(:all, :conditions => [ "email LIKE ?" ,e])
+          @unpaginated_users = User.find(:all, :conditions => [ "email LIKE ?" ,e])
         elsif params[:email] == '' then
-          @users = User.find(:all, :conditions => [ "first_name LIKE ? or middle_name LIKE ? or last_name LIKE ?" ,n,n,n])
+          @unpaginated_users = User.find(:all, :conditions => [ "first_name LIKE ? or middle_name LIKE ? or last_name LIKE ?" ,n,n,n])
         else
-          @users = User.find(:all, :conditions => [ "first_name LIKE ? or middle_name LIKE ? or last_name LIKE ? or email LIKE ?" ,n,n,n,e])
+          @unpaginated_users = User.find(:all, :conditions => [ "first_name LIKE ? or middle_name LIKE ? or last_name LIKE ? or email LIKE ?" ,n,n,n,e])
         end
       end
-      @result = "Searching for users that match name '" + params[:name] + "' or email '" + params[:email] + "': #{@users.size} found"
+      @result = "Searching for users that match name '" + params[:name] + "' or email '" + params[:email]
     elsif params[:all]
-      @users = User.all
-      @result = "All users: #{@users.size} found"
+      @unpaginated_users = User.all
+      @result = "All users"
     else
-      @users = []
+      @unpaginated_users = []
       @result = ''
+    end
+
+    @result += ": #{@unpaginated_users.size} found" if (@result != '')
+    # For some reason User.all.paginate does nothing. Work around that here. Ward, 2010-10-09
+    if @unpaginated_users.size != User.all.size then
+      @users = @unpaginated_users.paginate(:page => params[:page] || 1)
+    else
+      @users = User.paginate(:page => params[:page] || 1)
     end
 
     respond_to do |format|
       format.html
-      format.csv { send_data csv_for_users(@users), {
+      format.csv { send_data csv_for_users(@unpaginated_users), {
                      :filename    => 'PGP Application Users.csv',
                      :type        => 'application/csv',
                      :disposition => 'attachment' } }

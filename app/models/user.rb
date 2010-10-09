@@ -117,6 +117,10 @@ class User < ActiveRecord::Base
      }
   }
 
+  # For mislav-will_paginate (WillPaginate), which we use in the admin interface
+  cattr_reader :per_page
+  @@per_page = 30
+
   def self.promoted_ids
     step_id = EnrollmentStep.find_by_keyword('eligibility_screening_results').id
     connection.select_values("select users.id from users

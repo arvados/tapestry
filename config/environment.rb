@@ -76,6 +76,10 @@ Rails::Initializer.run do |config|
   config.gem "gdata", :lib => "gdata"
   config.gem 'carmen', :source => 'http://gemcutter.org'
   config.gem 'hoptoad_notifier'
+
+  config.gem 'mislav-will_paginate', 
+    :lib => 'will_paginate', 
+    :source => 'http://gems.github.com'
 end
 
 require 'csv'

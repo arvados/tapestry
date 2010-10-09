@@ -2,6 +2,7 @@
 <strong><%= @result %></strong>
 
 <% if @users.size > 0 -%>
+<%= will_paginate @users %>
 <table class="admin_table">
   <tr>
     <th>Name</th>

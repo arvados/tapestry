@@ -4,10 +4,10 @@
 <% form_tag admin_users_path, { :method => 'get' } do  %>
   <ul>
     <li><%= link_to "Show all users", admin_users_path(:all => true) %></li>
-    <li><%= link_to "Show only enrolled users", admin_users_path(:enrolled => true) %></li>
-    <li><%= link_to "Show only users eligible to be enrolled", admin_users_path(:eligible_for_enrollment => true) %></li>
-    <li><%= link_to "Show only users ineligible to be enrolled (but who have submitted their enrollment application)", admin_users_path(:ineligible_for_enrollment => true) %></li>
-    <li><%= link_to "Show only inactive users", admin_users_path(:inactive => true) %></li>
+    <li><%= link_to "Show enrolled users", admin_users_path(:enrolled => true) %></li>
+    <li><%= link_to "Show users eligible to be enrolled (who have submitted their enrollment application)", admin_users_path(:eligible_for_enrollment => true) %></li>
+    <li><%= link_to "Show users ineligible to be enrolled (who have submitted their enrollment application)", admin_users_path(:ineligible_for_enrollment => true) %></li>
+    <li><%= link_to "Show inactive users", admin_users_path(:inactive => true) %></li>
     <li>
       <label for="completed">Show users who have completed enrollment step:</label>
       <%= select_tag 'completed',
@@ -35,8 +35,12 @@
 
 <p>Download this list of users as <%= link_to 'CSV',
   formatted_admin_users_url(:format => 'csv',
-                            :completed                   => params[:completed],
+                            :all                         => params[:all],
+                            :enrolled                    => params[:enrolled],
+                            :eligible_for_enrollment     => params[:eligible_for_enrollment],
+                            :ineligible_for_enrollment   => params[:ineligible_for_enrollment],
                             :inactive                    => params[:inactive],
+                            :completed                   => params[:completed],
                             :screening_eligibility_group => params[:screening_eligibility_group]) %></p>
 
 <h3>Find users</h3>
