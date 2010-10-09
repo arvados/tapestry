@@ -58,7 +58,7 @@ Public profile url: <a href="<%= public_profile_url(@user) %>"><%= public_profil
 <h3>User Log</h3>
 
 <ul>
-<% @user.user_logs.sort { |x,y| y.id <=> x.id }.each do |entry| -%>
+<% @user.user_logs.sort { |x,y| y.created_at <=> x.created_at }.each do |entry| -%>
   <li><%= entry.created_at %>: <%= h entry.comment %></li>
 <% end -%>
 </ul>
