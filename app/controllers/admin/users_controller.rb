@@ -19,9 +19,6 @@ class Admin::UsersController < Admin::AdminControllerBase
     elsif params[:inactive]
       @unpaginated_users = User.inactive
       @result = "Searching for inactive users"
-    elsif params[:screening_eligibility_group]
-      @unpaginated_users = User.in_screening_eligibility_group(params[:screening_eligibility_group].to_i)
-      @result = "Searching for users in eligibility group #{params[:screening_eligibility_group].to_i}"
     elsif params[:name] or params[:email]
       if (params[:name] == '' and params[:email] == '') then
         @unpaginated_users = []

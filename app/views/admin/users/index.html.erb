@@ -15,9 +15,6 @@
                              params[:completed])%>
       <%= submit_tag 'Show' %>
     </li>
-    <li><%= link_to "Show users who are in eligibility group 1 (Eligible, OK match)", admin_users_path(:screening_eligibility_group => 1) %></li>
-    <li><%= link_to "Show users who are in eligibility group 2 (Eligible, NO match)", admin_users_path(:screening_eligibility_group => 2) %></li>
-    <li><%= link_to "Show users who are in eligibility group 3 (Ineligible, N/A)", admin_users_path(:screening_eligibility_group => 3) %></li>
   </ul>
 <% end %>
 
@@ -40,8 +37,8 @@
                             :eligible_for_enrollment     => params[:eligible_for_enrollment],
                             :ineligible_for_enrollment   => params[:ineligible_for_enrollment],
                             :inactive                    => params[:inactive],
-                            :completed                   => params[:completed],
-                            :screening_eligibility_group => params[:screening_eligibility_group]) %></p>
+                            :completed                   => params[:completed]
+                           ) %></p>
 
 <h3>Find users</h3>
 <table>

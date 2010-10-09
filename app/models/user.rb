@@ -97,26 +97,6 @@ class User < ActiveRecord::Base
     }
   }
 
-  named_scope :in_screening_eligibility_group, lambda { |group|
-     joins = [:residency_survey_response, :family_survey_response, :privacy_survey_response, :enrollment_step_completions]
-     birth_year = Time.now.year - 21
-     # content_areas_enrollment_step_id = EnrollmentStep.find_by_keyword('content_areas').id
-     eligibility_step_id = EnrollmentStep.find_by_keyword('screening_submission').id
-     promoted_or_waitlisted_ids = User.promoted_ids | User.waitlisted_ids
-
-     conditions_sql = UserEligibilityGroupings.eligibility_group_sql(group)
-     conditions_sql += " and users.id not in (:promoted_or_waitlisted_ids)"
-
-     {
-       :conditions => [conditions_sql, {
-           :birth_year => birth_year,
-           :eligibility_step_id => eligibility_step_id,
-           :promoted_or_waitlisted_ids => promoted_or_waitlisted_ids
-          }],
-       :joins => joins
-     }
-  }
-
   # For mislav-will_paginate (WillPaginate), which we use in the admin interface
   cattr_reader :per_page
   @@per_page = 30
