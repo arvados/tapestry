@@ -321,7 +321,7 @@ class User < ActiveRecord::Base
     # Not a US citizen
     reasons.push('Not a US citizen') if not self.screening_survey_response.nil? and not self.screening_survey_response.us_citizen and not self.screening_survey_response.us_citizen.nil?
     # Have not taken eligibility survey v2 or higher
-    reasons.push('Have not taken eligibility survey v2 or higher') if not self.screening_survey_response.nil? and self.screening_survey_response.us_citizen.nil?
+    reasons.push('Not taken eligibility survey v2 or higher') if not self.screening_survey_response.nil? and self.screening_survey_response.us_citizen.nil?
     # Empty array -> eligible
     # Non-empty array -> ineligible
     return reasons
