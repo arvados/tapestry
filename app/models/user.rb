@@ -319,7 +319,7 @@ class User < ActiveRecord::Base
     # They have a twin or are unsure
     reasons.push('There may be a monozygotic twin') if not self.screening_survey_response.nil? and self.screening_survey_response.monozygotic_twin != 'no'
     # Not a US citizen
-    reasons.push('Not a US citizen') if not self.screening_survey_response.nil? and not self.screening_survey_response.us_citizen
+    reasons.push('Not a US citizen') if not self.screening_survey_response.nil? and not self.screening_survey_response.us_citizen and not self.screening_survey_response.us_citizen.nil?
     # Have not taken eligibility survey v2 or higher
     reasons.push('Have not taken eligibility survey v2 or higher') if not self.screening_survey_response.nil? and self.screening_survey_response.us_citizen.nil?
     # Empty array -> eligible
