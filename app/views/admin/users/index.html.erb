@@ -6,6 +6,7 @@
     <li><%= link_to "Show all users", admin_users_path(:all => true) %></li>
     <li><%= link_to "Show only enrolled users", admin_users_path(:enrolled => true) %></li>
     <li><%= link_to "Show only users eligible to be enrolled", admin_users_path(:eligible_for_enrollment => true) %></li>
+    <li><%= link_to "Show only users ineligible to be enrolled", admin_users_path(:ineligible_for_enrollment => true) %></li>
     <li><%= link_to "Show only inactive users", admin_users_path(:inactive => true) %></li>
     <li>
       <label for="completed">Show users who have completed enrollment step:</label>
