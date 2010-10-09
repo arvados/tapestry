@@ -1,0 +1,14 @@
+
+<h3>Enroll people</h3>
+<p>
+<% form_tag admin_enroll_users_path, { :method => 'put' } do  %>
+  Enroll the next 
+  <%= text_field_tag :number, 100 %> people.
+</p
+<p>
+  <%= submit_tag 'Do it' %>
+</p>
+<% end %>
+</table>
+<%= render :partial => 'usertable' %>
+
