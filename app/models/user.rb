@@ -65,14 +65,15 @@ class User < ActiveRecord::Base
   named_scope :inactive, { :conditions => "activated_at IS NULL" }
   named_scope :enrolled, { :conditions => "enrolled IS NOT NULL" }
 
+  # Beware of NULL: "screening_survey_responses.us_citizen!=1"
+  # does not match rows that have us_citizen set to NULL.
   named_scope :ineligible_for_enrollment, lambda { 
-    joins = [:enrollment_step_completions]
+    joins = [:enrollment_step_completions, :screening_survey_response]
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
     conditions_sql = "users.enrolled IS NULL and 
-        (users.id in (select user_id from residency_survey_responses where us_resident != 1) or
-        users.id in (select user_id from screening_survey_responses where monozygotic_twin != 'no') or
-        users.id in (select user_id from screening_survey_responses where us_citizen=0) or
-        users.id in (select user_id from screening_survey_responses where us_citizen is null)) and
+        (screening_survey_responses.monozygotic_twin != 'no' or 
+         screening_survey_responses.us_citizen is null or 
+         screening_survey_responses.us_citizen!=1) and
         enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id}"
     { 
       :conditions => conditions_sql,
@@ -82,13 +83,11 @@ class User < ActiveRecord::Base
   }
 
   named_scope :eligible_for_enrollment, lambda { 
-    joins = [:enrollment_step_completions]
+    joins = [:enrollment_step_completions, :screening_survey_response]
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
     conditions_sql = "users.enrolled IS NULL and 
-        users.id not in (select user_id from residency_survey_responses where us_resident != 1) and
-        users.id not in (select user_id from screening_survey_responses where monozygotic_twin != 'no') and
-        users.id not in (select user_id from screening_survey_responses where us_citizen=0) and
-        users.id not in (select user_id from screening_survey_responses where us_citizen is null) and
+        screening_survey_responses.monozygotic_twin = 'no' and
+        screening_survey_responses.us_citizen = 1 and
         enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id}"
     { 
       :conditions => conditions_sql,
