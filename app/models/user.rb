@@ -65,6 +65,22 @@ class User < ActiveRecord::Base
   named_scope :inactive, { :conditions => "activated_at IS NULL" }
   named_scope :enrolled, { :conditions => "enrolled IS NOT NULL" }
 
+  named_scope :eligible_for_enrollment, lambda { 
+    joins = [:enrollment_step_completions]
+    enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
+    conditions_sql = "users.enrolled IS NULL and 
+        users.id not in (select user_id from residency_survey_responses where us_resident != 1) and
+        users.id not in (select user_id from screening_survey_responses where monozygotic_twin != 'no') and
+        users.id not in (select user_id from screening_survey_responses where us_citizen=0) and
+        users.id not in (select user_id from screening_survey_responses where us_citizen is null) and
+        enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id}"
+    { 
+      :conditions => conditions_sql,
+      :order => 'enrollment_step_completions.created_at',
+      :joins => joins
+    }
+  }
+
   named_scope :in_screening_eligibility_group, lambda { |group|
      joins = [:residency_survey_response, :family_survey_response, :privacy_survey_response, :enrollment_step_completions]
      birth_year = Time.now.year - 21

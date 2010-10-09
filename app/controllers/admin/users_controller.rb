@@ -10,6 +10,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     elsif params[:enrolled]
       @users = User.enrolled
       @result = "Searching for enrolled users: #{@users.size} found"
+    elsif params[:eligible_for_enrollment]
+      @users = User.eligible_for_enrollment
+      @result = "Searching for users eligible for enrollment: #{@users.size} found"
     elsif params[:inactive]
       @users = User.inactive
       @result = "Searching for inactive users: #{@users.size} found"
