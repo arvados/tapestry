@@ -55,7 +55,7 @@ Public profile url: <a href="<%= public_profile_url(@user) %>"><%= public_profil
   <%= link_to 'Promote', promote_admin_user_url(@user), :method => 'PUT' %></p>
 <% end -%>
 
-<% if @user.ineligible_for_enrollment.length != 0 -%>
+<% if @user.ineligible_for_enrollment.length != 0 and @user.ineligible_for_enrollment[0] != 'Already enrolled' -%>
 <h2>Enrollment eligibility</h2>
 Not eligible for enrollment for the following reason(s):
 <ul>
