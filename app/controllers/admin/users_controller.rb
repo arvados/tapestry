@@ -21,6 +21,7 @@ class Admin::UsersController < Admin::AdminControllerBase
       if params[:number] then
         User.eligible_for_enrollment.limit(params[:number]*1).each do |u|
           u.promote!
+          u.log("Enrolled by #{current_user.full_name}")
           enrolled += 1
         end
       end
