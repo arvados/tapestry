@@ -21,7 +21,7 @@ class PhrccrsController < ApplicationController
       return
     end
     
-    @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }
+    @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] if File.file?(s) and not s.scan(/.+\/ccr(.+)\.xml/).empty? }
 
     version = params[:version]
     if version && !version.empty?
