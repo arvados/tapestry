@@ -50,6 +50,12 @@ class UserMailer < ActionMailer::Base
     user.log("Sent PGP Safety Questionnaire reminder")
   end
 
+  def enrollment_decision_notification(user)
+    setup_email(user)
+    @subject += 'PGP Enrollment decision'
+    user.log("Sent PGP Enrollment decision notification")
+  end
+
   protected
 
   def setup_email(user)

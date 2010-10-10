@@ -22,6 +22,7 @@ class Admin::UsersController < Admin::AdminControllerBase
         User.eligible_for_enrollment.limit(params[:number]*1).each do |u|
           u.promote!
           u.log("Enrolled by #{current_user.full_name}")
+          UserMailer.deliver_enrollment_decision_notification(u)
           enrolled += 1
         end
       end
