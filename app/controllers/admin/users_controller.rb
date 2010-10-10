@@ -38,8 +38,9 @@ class Admin::UsersController < Admin::AdminControllerBase
   def show
     @user = User.find params[:id]
     ccr_list = Dir.glob(get_ccr_path(@user.id) + '*').reverse
+    ccr_list.delete_if { |s| true if not File.file?(s) or s.scan(/.+\/ccr(.+)\.xml/).empty? }
     if ccr_list.length > 0
-      @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] if File.file?(s) and not s.scan(/.+\/ccr(.+)\.xml/).empty? }
+      @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }
     end
   end
 
@@ -47,8 +48,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     @user = User.find params[:id]
     @mailing_lists = MailingList.all
     ccr_list = Dir.glob(get_ccr_path(@user.id) + '*').reverse
+    ccr_list.delete_if { |s| true if not File.file?(s) or s.scan(/.+\/ccr(.+)\.xml/).empty? }
     if ccr_list.length > 0
-      @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] if File.file?(s) and not s.scan(/.+\/ccr(.+)\.xml/).empty? }
+      @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }
     end
   end
 
@@ -100,7 +102,8 @@ class Admin::UsersController < Admin::AdminControllerBase
     version = params[:version]
     if version && !version.empty?
       ccr_list = Dir.glob(get_ccr_path(@user.id) + '*').reverse     
-      ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] if File.file?(s) and not s.scan(/.+\/ccr(.+)\.xml/).empty? }      
+      ccr_list.delete_if { |s| true if not File.file?(s) or s.scan(/.+\/ccr(.+)\.xml/).empty? }
+      ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }      
       for i in 0.. ccr_list.length - 1 do
       	  if ccr_history[i] == version
 	     feed = File.new(ccr_list[i])

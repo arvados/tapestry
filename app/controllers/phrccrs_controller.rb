@@ -14,6 +14,7 @@ class PhrccrsController < ApplicationController
 
   def review
     ccr_list = Dir.glob(get_ccr_path(current_user.id) + '*').reverse
+    ccr_list.delete_if { |s| true if not File.file?(s) or s.scan(/.+\/ccr(.+)\.xml/).empty? }
     if ccr_list.length == 0
       if flash[:error] == '' then
         flash[:error] = 'You do not have any PHRs saved. Click the "Refresh PHR" button to get the latest version.'
@@ -21,7 +22,7 @@ class PhrccrsController < ApplicationController
       return
     end
     
-    @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] if File.file?(s) and not s.scan(/.+\/ccr(.+)\.xml/).empty? }
+    @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }
 
     version = params[:version]
     if version && !version.empty?
