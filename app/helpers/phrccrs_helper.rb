@@ -53,13 +53,18 @@ module PhrccrsHelper
   # View helper method to display DOB and Age
   def dob_to_dob_age(dob_s)
     if (dob_s && !dob_s.empty?)
-      dob = Date.parse(dob_s.text)
-      now = DateTime.now
-      a = now.year - dob.year - 1
-      if now.month > dob.month || now.month == dob.month && now.day >= dob.day
-        a = a + 1
+      begin
+        dob = Date.parse(dob_s.text)
+        now = DateTime.now
+        a = now.year - dob.year - 1
+        if now.month > dob.month || now.month == dob.month && now.day >= dob.day
+          a = a + 1
+        end
+        return dob_s.text + ' (' + a.to_s + ' years old)'
+      rescue ArgumentError
+        # The date of birth is not in YYYY-MM-DD format (or some format that Date.parse understands)
+        return dob_s.text
       end
-      return dob_s.text + ' (' + a.to_s + ' years old)'
    end
    return ''
   end
