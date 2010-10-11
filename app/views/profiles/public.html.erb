@@ -38,17 +38,6 @@ None added.
 Not added.
 <% end -%>
 
-<h3>Enrollment History</h3>
-
-<table class="admin_table">
-<tr><td>Participant ID:</td><td><%= @user.hex -%></td></tr>
-<tr><td>Account created:</td><td><%= @user.created_at.to_s -%></td></tr>
-<tr><td>Eligibility screening:</td><td><%= @user.eligibility_screening_passed -%></td></tr>
-<tr><td>Exam:</td><td><%= @user.exam_passed -%></td></tr>
-<tr><td>Consent:</td><td><%= @user.consent_passed -%></td></tr>
-<tr><td>Enrolled:</td><td><%= @user.enrolled.to_s -%></td></tr>
-</table>
- 
 <h3>Family Members Enrolled <% if logged_in? and @user == current_user -%><%= link_to "[edit]", family_relations_path %><% end -%></h3>
 <% if @family_members && @family_members != []%>
 <table class="admin_table">
@@ -65,6 +54,17 @@ Not added.
 None added
 <% end %>
 
+<h3>Enrollment History</h3>
+
+<table class="admin_table">
+<tr><td>Participant ID:</td><td><%= @user.hex -%></td></tr>
+<tr><td>Account created:</td><td><%= @user.created_at.to_s -%></td></tr>
+<tr><td>Eligibility screening:</td><td><%= @user.eligibility_screening_passed -%></td></tr>
+<tr><td>Exam:</td><td><%= @user.exam_passed -%></td></tr>
+<tr><td>Consent:</td><td><%= @user.consent_passed -%></td></tr>
+<tr><td>Enrolled:</td><td><%= @user.enrolled.to_s -%></td></tr>
+</table>
+ 
 <% end -%>
 
 
