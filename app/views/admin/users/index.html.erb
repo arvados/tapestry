@@ -15,6 +15,7 @@
                              params[:completed])%>
       <%= submit_tag 'Show' %>
     </li>
+    <li><%= link_to "Show test users (excluded from all lists above)", admin_users_path(:test => true) %></li>
   </ul>
 <% end %>
 

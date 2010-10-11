@@ -57,6 +57,7 @@ class Admin::UsersController < Admin::AdminControllerBase
   def update
     @user = User.find params[:id]
     @user.is_admin = params[:user].delete(:is_admin)
+    @user.is_test = params[:user].delete(:is_test)
 
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'
@@ -128,7 +129,7 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   def user_list_worker
     if params[:completed]
-      @unpaginated_users = User.has_completed(params[:completed])
+      @unpaginated_users = User.has_completed(params[:completed]).exclude_test_users
       @result = "Searching for users that have completed '#{params[:completed]}'"
     elsif params[:enrolled]
       @unpaginated_users = User.enrolled
@@ -143,6 +144,7 @@ class Admin::UsersController < Admin::AdminControllerBase
       @unpaginated_users = User.inactive
       @result = "Searching for inactive users"
     elsif params[:name] or params[:email]
+      # Test users are *not* excluded from this
       if (params[:name] == '' and params[:email] == '') then
         @unpaginated_users = []
       else
@@ -158,20 +160,18 @@ class Admin::UsersController < Admin::AdminControllerBase
       end
       @result = "Searching for users that match name '" + params[:name] + "' or email '" + params[:email]
     elsif params[:all]
-      @unpaginated_users = User.all
+      @unpaginated_users = User.exclude_test
       @result = "All users"
+    elsif params[:test]
+      @unpaginated_users = User.test
+      @result = "Test users"
     else
       @unpaginated_users = []
       @result = ''
     end
 
     @result += ": #{@unpaginated_users.size} found" if (@result != '')
-    # For some reason User.all.paginate does nothing. Work around that here. Ward, 2010-10-09
-    if @unpaginated_users.size != User.all.size then
-      @users = @unpaginated_users.paginate(:page => params[:page] || 1)
-    else
-      @users = User.paginate(:page => params[:page] || 1)
-    end
+    @users = @unpaginated_users.paginate(:page => params[:page] || 1)
   end
 
 end

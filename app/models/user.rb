@@ -64,13 +64,16 @@ class User < ActiveRecord::Base
 
   named_scope :inactive, { :conditions => "activated_at IS NULL" }
   named_scope :enrolled, { :conditions => "enrolled IS NOT NULL" }
+  named_scope :test, { :conditions => "is_test = true" }
+  named_scope :exclude_test, { :conditions => "is_test = false" }
+
 
   # Beware of NULL: "screening_survey_responses.us_citizen!=1"
   # does not match rows that have us_citizen set to NULL.
   named_scope :ineligible_for_enrollment, lambda { 
     joins = [:enrollment_step_completions, :screening_survey_response]
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
-    conditions_sql = "users.enrolled IS NULL and 
+    conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and 
         (screening_survey_responses.monozygotic_twin != 'no' or 
          screening_survey_responses.us_citizen is null or 
          screening_survey_responses.us_citizen!=1) and
@@ -89,7 +92,7 @@ class User < ActiveRecord::Base
   named_scope :eligible_for_enrollment, lambda { 
     joins = [:enrollment_step_completions, :screening_survey_response]
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
-    conditions_sql = "users.enrolled IS NULL and 
+    conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and 
         screening_survey_responses.monozygotic_twin = 'no' and
         screening_survey_responses.us_citizen = 1 and
         enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id}"
@@ -128,7 +131,7 @@ class User < ActiveRecord::Base
     write_attribute(:email, email)
   end
 
-  def has_completed?(keyword)
+  def has_completed?(keyword,include_test_users=true)
     !!completed_enrollment_steps.find_by_keyword(keyword)
   end
 

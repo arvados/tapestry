@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100929184131) do
+ActiveRecord::Schema.define(:version => 20101011200437) do
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -317,6 +317,7 @@ ActiveRecord::Schema.define(:version => 20100929184131) do
     t.string   "exam_version"
     t.datetime "enrollment_accepted"
     t.string   "consent_version"
+    t.boolean  "is_test",                                   :default => false
   end
 
   create_table "waitlists", :force => true do |t|
