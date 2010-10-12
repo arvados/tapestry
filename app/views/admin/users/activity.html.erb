@@ -1,5 +1,5 @@
 
-<table class="admin_table">
+<table class="admin_table" width="910">
 <tr>
 <th>When</th>
 <th>Who</th>
@@ -9,9 +9,9 @@
 </tr>
 <% @user_logs.each do |entry| -%>
   <tr>
-    <td><%= entry.created_at %>
+    <td width="150"><%= entry.created_at %>
     </td>
-    <td><%= entry.user.full_name %>
+    <td width="150"><%= link_to entry.user.full_name, admin_user_url(entry.user) %>
     </td>
     <td><%= entry.comment %>
     </td>
