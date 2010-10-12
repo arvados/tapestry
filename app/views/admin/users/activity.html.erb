@@ -1,0 +1,20 @@
+
+<table class="admin_table">
+<tr>
+<th>When</th>
+<th>Who</th>
+<th>What</th>
+</tr>
+<tr>
+</tr>
+<% @user_logs.each do |entry| -%>
+  <tr>
+    <td><%= entry.created_at %>
+    </td>
+    <td><%= entry.user.full_name %>
+    </td>
+    <td><%= entry.comment %>
+    </td>
+  </tr>
+<% end %>
+</table>

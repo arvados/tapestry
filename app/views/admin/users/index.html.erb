@@ -16,8 +16,16 @@
       <%= submit_tag 'Show' %>
     </li>
     <li><%= link_to "Show test users (excluded from all lists above)", admin_users_path(:test => true) %></li>
-  </ul>
 <% end %>
+
+<li>
+<% form_tag admin_users_path, { :method => 'get' } do  %>
+  Name: <%= text_field_tag :name %>
+  E-mail: <%= text_field_tag :email %>
+  <%= submit_tag 'Search' %>
+<% end %>
+</li>
+</ul>
 
 <h3>Eligibility Actions</h3>
 <ul>
@@ -32,7 +40,14 @@
   <li><%= link_to "Bulk waitlist some users (e-mail list)", new_admin_bulk_waitlist_path(:phase => 'enroll') %></li>
 </ul>
 
-<p>Download this list of users as <%= link_to 'CSV',
+<h3>Current activity</h3>
+
+<ul>
+<li><%= link_to "Current user activity", admin_active_users_path() %></li>
+</ul>
+
+<h3>Export</h3>
+Download this list of users as <%= link_to 'CSV',
   formatted_admin_users_url(:format => 'csv',
                             :all                         => params[:all],
                             :enrolled                    => params[:enrolled],
@@ -40,24 +55,6 @@
                             :ineligible_for_enrollment   => params[:ineligible_for_enrollment],
                             :inactive                    => params[:inactive],
                             :completed                   => params[:completed]
-                           ) %></p>
-
-<h3>Find users</h3>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Email</th>
-  </tr>
-<% form_tag admin_users_path, { :method => 'get' } do  %>
-  <tr><td>
-  <%= text_field_tag :name %></td>
-  <td>
-  <%= text_field_tag :email %></td>
-  <td>
-  <%= submit_tag 'Show' %></td></tr>
-<% end %>
-</table>
-
+                           ) %>
   
 <%= render :partial => 'usertable' %>
-

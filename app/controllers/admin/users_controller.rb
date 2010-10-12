@@ -14,6 +14,14 @@ class Admin::UsersController < Admin::AdminControllerBase
     end
   end
 
+  def active
+  end
+
+  def activity
+    @user_logs = UserLog.find(:all, :limit => 10, :order => 'created_at desc')
+    render :layout => "none"
+  end
+
   def enroll
     params[:eligible_for_enrollment] = true
     if request.method == :put then

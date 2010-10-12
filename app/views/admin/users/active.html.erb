@@ -1,0 +1,38 @@
+
+<h3>Current user activity</h3>
+<p>
+This page refreshes automatically every 10 seconds, giving you a view on what users are doing on the site right now.
+</p>
+
+Last updated: <strong><span id="lastupdated"></span></strong><br/>
+
+<div id="activity"></div>
+
+<% content_for :js do %>
+// declare interval and delay
+var interval,delay = 10000;// miliseconds
+
+// function that gets ran on interval
+function runIntervalAjax(){
+    $('#activity').load('activity');
+    $('#lastupdated').html(String(new Date()));
+}
+
+// function to stop interval
+function stopInterval(){ // stop interval
+      clearInterval(interval);
+}
+
+// function to start interval
+function startInterval(){ // start interval
+      runIntervalAjax();
+      interval = setInterval(function(){
+            runIntervalAjax();
+      },delay);
+}
+
+// when the document is loaded, start the interval
+$(document).ready(function(){
+      startInterval();
+});
+<% end %>
