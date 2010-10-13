@@ -5,7 +5,7 @@ class ExamQuestion < ActiveRecord::Base
 
   KINDS = %w(MULTIPLE_CHOICE CHECK_ALL)
 
-  attr_accessible :kind, :ordinal, :question
+  attr_accessible :kind, :ordinal, :question, :exam_version_id
   validates_inclusion_of :kind, :in => ExamQuestion::KINDS
 
   named_scope :ordered, { :order => 'ordinal' }
