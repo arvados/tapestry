@@ -52,36 +52,69 @@ module PhrccrsHelper
 
   # View helper method to display DOB and Age
   def dob_to_dob_age(dob_s)
-    if (dob_s && !dob_s.empty?)
+    if (dob_s && dob_s != '')
       begin
         dob = Date.parse(dob_s.text)
-        now = DateTime.now
-        a = now.year - dob.year - 1
-        if now.month > dob.month || now.month == dob.month && now.day >= dob.day
-          a = a + 1
-        end
-        return dob_s.text + ' (' + a.to_s + ' years old)'
-      rescue ArgumentError
-        # The date of birth is not in YYYY-MM-DD format (or some format that Date.parse understands)
-        return dob_s.text
+      rescue
+        return ''
       end
+      now = DateTime.now
+      a = now.year - dob.year - 1
+      if now.month > dob.month || now.month == dob.month && now.day >= dob.day
+        a = a + 1
+      end
+      return dob_s.text + ' (' + a.to_s + ' years old)'
    end
    return ''
   end
 
+  def normalize_to_oz(value, unit)
+    return '' if value.nil?
+    value = value.text
+    unit = unit.text
+    if ['oz', 'ounce', 'ounces'].include?(unit)
+      return value.to_f
+    elsif ['lb', 'lbs', 'pounds', 'pound'].include?(unit)
+      return value.to_f * 16
+    elsif ['kg', 'kgs', 'kilogram', 'kilograms'].include?(unit)
+      return value.to_f * 35.2739619
+    elsif ['g', 'gram', 'grams'].include?(unit)
+      return value.to_f * 0.0352739619
+    else
+      return value.to_f
+    end
+  end
+
+  def normalize_to_in(value, unit)
+    return '' if value.nil?
+    value = value.text
+    unit = unit.text
+    if ['in', 'inches', 'inch'].include?(unit)
+      return value.to_f
+    elsif ['ft', 'feet'].include?(unit)
+      return value.to_f * 12
+    elsif ['cm', 'centimeter', 'centimeters'].include?(unit)
+      return value.to_f * 0.393700787
+    elsif ['m', 'meter', 'meters'].include?(unit)
+      return value.to_f * 39.3700787
+    else
+      return value.to_f
+    end
+  end
+
   # View helper method to display weight in pounds and kilograms
   def oz_to_lbs_kg(oz)
-    if (oz && !oz.empty?)
-      oz = oz.text.to_i
-      return (oz / 16).to_s + 'lbs (' + (oz / 35.2739619).to_i.to_s + 'kg)'
+    if (oz && oz !=  '' && oz != 0)
+      oz = oz.to_f
+      return (oz / 16).to_i.to_s + 'lbs (' + (oz / 35.2739619).to_i.to_s + 'kg)'
     end
     return ''
   end
 
   # View helper method to display height in feet and centimeters
   def in_to_ft_in_cm(inches)
-    if (inches && !inches.empty?)
-      inches = inches.text.to_i
+    if (inches && inches != '' && inches != 0)
+      inches = inches.to_i
       ft = [inches / 12, inches % 12]
       s = ft[0].to_s + 'ft'
       if ft[1] > 0

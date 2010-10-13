@@ -18,8 +18,8 @@
 <table class="demographics"> 
   <tr><th>Date of Birth</th><td><%= dob_to_dob_age @ccr.xpath('//ccr:Actors/ccr:Actor/ccr:Person/ccr:DateOfBirth/ccr:ExactDateTime') %></td></tr> 
   <tr><th>Gender</th><td><%= @ccr.xpath('//ccr:Actors/ccr:Actor/ccr:Person/ccr:Gender/ccr:Text') %></td></tr> 
-  <tr><th>Weight</th><td><%= oz_to_lbs_kg @ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Weight"]/ccr:TestResult/ccr:Value') %></td></tr> 
-  <tr><th>Height</th><td><%= in_to_ft_in_cm @ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Height"]/ccr:TestResult/ccr:Value') %></td></tr> 
+  <tr><th>Weight</th><td><%= oz_to_lbs_kg(normalize_to_oz(@ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Weight"]/ccr:TestResult/ccr:Value'), @ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Weight"]/ccr:TestResult/ccr:Units/ccr:Unit'))) %></td></tr> 
+  <tr><th>Height</th><td><%= in_to_ft_in_cm(normalize_to_oz(@ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Height"]/ccr:TestResult/ccr:Value'), @ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Height"]/ccr:TestResult/ccr:Units/ccr:Unit'))) %></td></tr> 
   <tr><th>Blood Type</th><td><%= @ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Blood Type"]/ccr:TestResult/ccr:Value') %></td></tr> 
   <tr><th>Race</th><td><% @ccr.xpath('//ccr:SocialHistory/ccr:SocialHistoryElement[ccr:Type/ccr:Text="Race"]/ccr:Description/ccr:Text').each_with_index { |race,i| if i > 0%>, <% end %><%= race %><% } %></td></tr> 
 </table>
