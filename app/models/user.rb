@@ -6,27 +6,30 @@ class User < ActiveRecord::Base
   include Authentication::ByPassword
   include Authentication::ByCookieToken
 
-  has_many :enrollment_step_completions
-  has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step
-  has_many :exam_responses
-  has_many :waitlists
-  has_many :documents
-  has_many :distinctive_traits
-  has_one  :screening_survey_response
-  has_many :family_relations
+  has_many :enrollment_step_completions, :dependent => :destroy
+  has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step, :dependent => :destroy
+  has_many :exam_responses, :dependent => :destroy
+  has_many :waitlists, :dependent => :destroy
+  has_many :documents, :dependent => :destroy
+  has_many :distinctive_traits, :dependent => :destroy
+  has_one  :screening_survey_response, :dependent => :destroy
+  has_many :family_relations, :dependent => :destroy
   has_many :relatives, :class_name => 'User', :through => :family_relations
 
   # Next three are legacy and will go away when we drop the code for v1 of the eligibility survey
-  has_one  :residency_survey_response
-  has_one  :family_survey_response
-  has_one  :privacy_survey_response
+  has_one  :residency_survey_response, :dependent => :destroy
+  has_one  :family_survey_response, :dependent => :destroy
+  has_one  :privacy_survey_response, :dependent => :destroy
   # /legacy
-  has_many  :named_proxies
-  has_one  :informed_consent_response
-  has_one  :baseline_traits_survey
+  has_many  :named_proxies, :dependent => :destroy
+  has_one  :informed_consent_response, :dependent => :destroy
+  has_one  :baseline_traits_survey, :dependent => :destroy
+  # TODO: habtm does not take :dependent => :destroy. But we want that in the event a user is deleted.
+  # We should probably convert this to has_many, see http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_and_belongs_to_many
+  # see also #363. ward, 2010-10-13
   has_and_belongs_to_many :mailing_lists, :join_table => :mailing_list_subscriptions
-  has_many :user_logs
-  has_many :safety_questionnaires
+  has_many :user_logs, :dependent => :destroy
+  has_many :safety_questionnaires, :dependent => :destroy
 
   has_attached_file :phr
 
