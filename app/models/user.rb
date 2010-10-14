@@ -233,7 +233,9 @@ class User < ActiveRecord::Base
     end
     if (step == consent_enrollment_step) then
       # We're at v20100331 of the consent currently. Ward, 2010-08-10
-      self.consent_version = '20100331'
+      consent_version = '20100331'
+      self.consent_version = consent_version
+      self.documents << Document.new(:keyword => 'consent', :version => 'v' + consent_version, :timestamp => Time.now())
       save
     end
   end
