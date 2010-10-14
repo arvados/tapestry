@@ -94,13 +94,28 @@ class User < ActiveRecord::Base
     }
   }
 
+  named_scope :waitlisted, lambda { 
+    joins = [ :waitlists ]
+    conditions_sql = "users.id = waitlists.user_id"
+    {
+      :conditions => conditions_sql,
+      :order => 'users.created_at',
+      :group => 'users.id',
+      :joins => joins,
+      # when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
+      # Cf. http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
+      # Ward, 2010-10-09.
+      :readonly => false
+    }
+  }
+
   named_scope :eligible_for_enrollment, lambda { 
     joins = [:enrollment_step_completions, :screening_survey_response]
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
     conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and 
         screening_survey_responses.monozygotic_twin = 'no' and
         screening_survey_responses.us_citizen = 1 and
-        enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id}"
+        enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id} and users.id not in (select user_id from waitlists group by user_id)"
     { 
       :conditions => conditions_sql,
       :order => 'enrollment_step_completions.created_at',
