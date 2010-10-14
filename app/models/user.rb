@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
 
   named_scope :waitlisted, lambda { 
     joins = [ :waitlists ]
-    conditions_sql = "users.id = waitlists.user_id"
+    conditions_sql = "users.is_test = 'f' and users.id = waitlists.user_id"
     {
       :conditions => conditions_sql,
       :order => 'users.created_at',
