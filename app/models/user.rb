@@ -210,7 +210,7 @@ class User < ActiveRecord::Base
   end
 
   def complete_enrollment_step(step)
-    raise "Cannot find enrollment step to complete." if step.nil?
+    raise Exceptions::MissingStep.new("No enrollment step to complete.") if step.nil?
 
     final_pre_enrollment_step = EnrollmentStep.find_by_keyword('enrollment_application_results')
     exam_enrollment_step = EnrollmentStep.find_by_keyword('content_areas')

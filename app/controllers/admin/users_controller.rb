@@ -23,15 +23,24 @@ class Admin::UsersController < Admin::AdminControllerBase
   end
 
   def enroll
+    flash[:error] = nil;
+    flash[:notice] = nil;
     params[:eligible_for_enrollment] = true
     if request.method == :put then
       enrolled = 0
       if params[:number] then
         User.eligible_for_enrollment.limit(params[:number]*1).each do |u|
-          u.promote!
-          u.log("Enrolled by #{current_user.full_name}")
-          UserMailer.deliver_enrollment_decision_notification(u)
-          enrolled += 1
+          begin
+            u.promote!
+          rescue Exceptions::MissingStep => exception then
+            u.log("Could not be enrolled: #{exception.message}")
+            flash[:error] = '' if flash[:error].nil?
+            flash[:error] += "Could not enroll #{u.full_name} (#{u.id}): #{exception.message}<br/>"
+          else
+            u.log("Enrolled by #{current_user.full_name}")
+            UserMailer.deliver_enrollment_decision_notification(u)
+            enrolled += 1
+          end
         end
       end
       if enrolled != 1 then
