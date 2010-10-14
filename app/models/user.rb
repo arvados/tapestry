@@ -67,8 +67,8 @@ class User < ActiveRecord::Base
     }
   }
 
-  named_scope :inactive, { :conditions => "activated_at IS NULL" }
-  named_scope :enrolled, { :conditions => "enrolled IS NOT NULL" }
+  named_scope :inactive, { :conditions => "activated_at IS NULL and is_test = false" }
+  named_scope :enrolled, { :conditions => "enrolled IS NOT NULL and is_test = false" }
   named_scope :test, { :conditions => "is_test = true" }
   named_scope :exclude_test, { :conditions => "is_test = false" }
 
