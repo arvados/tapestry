@@ -11,7 +11,12 @@
   <tr>
     <td width="150"><%= entry.created_at %>
     </td>
-    <td width="150"><%= link_to entry.user.full_name, admin_user_url(entry.user) %>
+    <td width="150">
+    <% if not entry.user.nil? then %>
+    <%= link_to entry.user.full_name, admin_user_url(entry.user) %>
+    <% else %>
+    UNKNOWN USER (<%= entry.user_id %>)
+    <% end %>
     </td>
     <td><%= entry.comment %>
     </td>
