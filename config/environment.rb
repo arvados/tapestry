@@ -80,7 +80,7 @@ Rails::Initializer.run do |config|
   config.gem 'mislav-will_paginate', 
     :lib => 'will_paginate', 
     :source => 'http://gems.github.com'
-  config.gem 'alexdunae-validates_email_format_of'
+  config.gem 'alexdunae-validates_email_format_of', :lib => 'validates_email_format_of'
 end
 
 require 'csv'
