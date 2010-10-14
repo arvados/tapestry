@@ -6,6 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   map.accept_enrollment_user '/users/accept_enrollment',    :controller => 'users',    :action => 'accept_enrollment'
   map.tos_user '/users/tos',    :controller => 'users',    :action => 'tos'
   map.accept_tos_user '/users/accept_tos',    :controller => 'users',    :action => 'accept_tos'
+  map.consent_user '/users/consent',    :controller => 'users',    :action => 'consent'
   map.created_user '/users/created/:id',    :controller => 'users',    :action => 'created'
 
   map.resend_signup_notification_form '/users/resend_signup_notification_form',    :controller => 'users',    :action => 'resend_signup_notification_form'

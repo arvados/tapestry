@@ -232,10 +232,9 @@ class User < ActiveRecord::Base
       save
     end
     if (step == consent_enrollment_step) then
-      # We're at v20100331 of the consent currently. Ward, 2010-08-10
-      consent_version = '20100331'
+      consent_version = LATEST_CONSENT_VERSION
       self.consent_version = consent_version
-      self.documents << Document.new(:keyword => 'consent', :version => 'v' + consent_version, :timestamp => Time.now())
+      self.documents << Document.new(:keyword => 'consent', :version => consent_version, :timestamp => Time.now())
       save
     end
   end
@@ -298,7 +297,7 @@ class User < ActiveRecord::Base
 
   def consent_passed
     if self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('participation_consent') } then
-      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('participation_consent') }.created_at.to_s + ' (passed v' + self.consent_version + ')'
+      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('participation_consent') }.created_at.to_s + ' (passed v' + self.consent_version.gsub(/^v/,'') + ')'
     else
       return 'Not consented yet.'
     end

@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging "password"
   before_filter :login_required
   before_filter :ensure_tos_agreement
+  before_filter :ensure_latest_consent
   before_filter :ensure_recent_safety_questionnaire
 
 
@@ -31,6 +32,12 @@ class ApplicationController < ActionController::Base
   def ensure_tos_agreement
     if logged_in? and current_user and current_user.documents.kind('tos', 'v1').empty?
       redirect_to tos_user_url
+    end
+  end
+
+  def ensure_latest_consent
+    if logged_in? and current_user and current_user.enrolled and current_user.documents.kind('consent', LATEST_CONSENT_VERSION).empty?
+      redirect_to consent_user_url
     end
   end
 

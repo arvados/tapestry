@@ -1,4 +1,6 @@
 class ParticipationConsentsController < ApplicationController
+  skip_before_filter :ensure_latest_consent, :only => [:show, :create ]
+
   def show
     @informed_consent_response = InformedConsentResponse.new()
   end
@@ -39,7 +41,7 @@ class ParticipationConsentsController < ApplicationController
 
     if name_and_email_match && @informed_consent_response.valid? && @informed_consent_response.save
       step = EnrollmentStep.find_by_keyword('participation_consent')
-      current_user.log('Signed full consent form version 20100331',step)
+      current_user.log('Signed full consent form version ' + LATEST_CONSENT_VERSION,step)
       current_user.complete_enrollment_step(step)
       redirect_to root_path
     else
