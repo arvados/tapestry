@@ -137,7 +137,7 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   def user_list_worker
     if params[:completed]
-      @unpaginated_users = User.has_completed(params[:completed]).exclude_test_users
+      @unpaginated_users = User.has_completed(params[:completed]).exclude_test
       @result = "Searching for users that have completed '#{params[:completed]}'"
     elsif params[:enrolled]
       @unpaginated_users = User.enrolled
