@@ -148,6 +148,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     elsif params[:ineligible_for_enrollment]
       @unpaginated_users = User.ineligible_for_enrollment
       @result = "Searching for users ineligible for enrollment"
+    elsif params[:waitlisted]
+      @unpaginated_users = User.waitlisted
+      @result = "Searching for waitlisted users"
     elsif params[:inactive]
       @unpaginated_users = User.inactive
       @result = "Searching for inactive users"
@@ -178,7 +181,10 @@ class Admin::UsersController < Admin::AdminControllerBase
       @result = ''
     end
 
-    @result += ": #{@unpaginated_users.size} found" if (@result != '')
+    # The extra to_a call is to work around bug #1349 in rails 2.2
+    # See https://rails.lighthouseapp.com/projects/8994/tickets/1349-named-scope-with-group-by-bug 
+    # TODO: after upgrade to 2.3, check if this is still needed. Ward, 2010-10-14
+    @result += ": #{@unpaginated_users.to_a.size} found" if (@result != '')
     @users = @unpaginated_users.paginate(:page => params[:page] || 1)
   end
 
