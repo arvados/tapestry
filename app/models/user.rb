@@ -44,7 +44,9 @@ class User < ActiveRecord::Base
   validates_presence_of     :email
   validates_length_of       :email,    :within => 6..100 #r@a.wk
   validates_uniqueness_of   :email,    :case_sensitive => false
-  validates_format_of       :email,    :with => /.+@.+\...+/, :message => MSG_EMAIL_BAD
+  # this comes from the alexdunae-validates_email_format_of gem, see http://code.dunae.ca/validates_email_format_of.html
+  # ward, 2010-10-13
+  validates_email_format_of :email, :message => MSG_EMAIL_BAD
 
   # We allow nil because we have lots of legacy records with value nil
   validates_format_of :zip,
