@@ -38,8 +38,9 @@ require File.dirname(__FILE__) + '/../config/boot'
 require File.dirname(__FILE__) + '/../config/environment'
 
 now = Time.now.strftime("%Y%m%d-%H%M%S")
+dir = "dump-#{now}"
 
-script = "mkdir dump-#{now}\ncd dump-#{now}"
+script = "mkdir #{dir}\ncd #{dir}\n"
 
 index = "<html>\n<body>\n<h1>#{now}</h1>\n"
 
