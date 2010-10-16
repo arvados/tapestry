@@ -8,6 +8,31 @@ class FamilyRelationsController < ApplicationController
     @family_relation = FamilyRelation.new()
   end
 
+  def update
+    has_family_members_enrolled = params[:has_family_members_enrolled]
+    if has_family_members_enrolled == 'yes'
+      current_user.has_family_members_enrolled = has_family_members_enrolled
+      begin
+        current_user.save!
+        current_user.log("Family relationships status updated to yes.")
+        flash[:notice] = 'Family relationships status updated to yes.'
+      rescue        
+        flash[:error] = 'Could not save due to user validation error. Please contact admin.'
+      end
+      redirect_to(family_relations_url)
+    elsif has_family_members_enrolled == 'no'
+      begin
+        current_user.has_family_members_enrolled = has_family_members_enrolled
+        current_user.save!
+        current_user.log("Family relationships status updated to no.")
+        flash[:notice] = 'Family relationships status updated to no.'
+      rescue
+        flash[:error] = 'Could not save due to user validation error. Please contact admin.'
+      end
+      redirect_to(public_profile_url(current_user.hex))
+    end
+  end
+
   def confirm
     family_relation = FamilyRelation.find(params[:id])
     if family_relation.relative_id = current_user.id
@@ -16,9 +41,9 @@ class FamilyRelationsController < ApplicationController
       reverse_relation.relative_id = family_relation.user.id
       reverse_relation.is_confirmed = true
       reverse_relation.relation = FamilyRelation::relations[family_relation.relation]
-      reverse_relation.save
+      reverse_relation.save!
       family_relation.is_confirmed = true
-      family_relation.save
+      family_relation.save!
       flash[:notice] = 'Family member confirmed'
     end
     redirect_to(family_relations_url)

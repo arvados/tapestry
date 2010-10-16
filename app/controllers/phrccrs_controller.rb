@@ -37,8 +37,8 @@ class PhrccrsController < ApplicationController
       feed = File.new(ccr_list[0])
       @current_version = @ccr_history[0]
     end
-
-    @ccr = Nokogiri::XML(feed)
+    @ccr = Ccr.find(:first, :conditions => {:user_id => current_user.id, :version => @current_version })
+    #@ccr = Nokogiri::XML(feed)
   end
 
   def create
@@ -62,8 +62,10 @@ class PhrccrsController < ApplicationController
       if timestamp.scan(timestamp_regex).length > 0
         ccr_filename = get_ccr_filename(current_user.id, false, timestamp)
         if File.exists?(ccr_filename) then
-          File.delete(ccr_filename)
+          File.delete(ccr_filename)	  
           current_user.log("Deleted PHR (#{ccr_filename})")
+	  ccr_to_delete = Ccr.find(:first, :conditions => {:user_id => current_user.id, :version => timestamp })
+	  Ccr.delete(ccr_to_delete.id)
         else
           current_user.log("Unabled to delete PHR (#{ccr_filename}): file not found")
         end
@@ -132,16 +134,23 @@ class PhrccrsController < ApplicationController
     feed = get_ccr(current_user)
     ccr = Nokogiri::XML(feed)
     updated = ccr.xpath('/xmlns:feed/xmlns:updated').inner_text
-    if (updated != '1970-01-01T00:00:00.000Z') then
-      ccr_filename = get_ccr_filename(current_user.id, true, updated)
-      if !File.exist?(ccr_filename)
-        outFile = File.new(ccr_filename, 'w')
-        outFile.write(feed)
-        outFile.close
-        current_user.log("Downloaded PHR (#{ccr_filename})")
-      end
-    else
+
+    if (updated == '1970-01-01T00:00:00.000Z') then
       flash[:error] = 'Your PHR at Google Health is empty, it has not been downloaded.'
+      return
     end
+      
+    ccr_filename = get_ccr_filename(current_user.id, true, updated)
+    if !File.exist?(ccr_filename)
+      outFile = File.new(ccr_filename, 'w')
+      outFile.write(feed)
+      outFile.close      
+      current_user.log("Downloaded PHR (#{ccr_filename})")
+    end
+
+    db_ccr = parse_xml_to_ccr_object(ccr_filename)
+#    db_ccr = parse_xml_to_ccr_object('/home/siywong/long_ccr.xml')
+    db_ccr.user_id = current_user.id
+    db_ccr.save
   end
 end

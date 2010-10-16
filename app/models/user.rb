@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :mailing_lists, :join_table => :mailing_list_subscriptions
   has_many :user_logs, :dependent => :destroy
   has_many :safety_questionnaires, :dependent => :destroy
+  has_many :ccrs, :dependent => :destroy
 
   has_attached_file :phr
 

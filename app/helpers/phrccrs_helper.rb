@@ -50,6 +50,19 @@ module PhrccrsHelper
       end
   end
 
+  def get_dob_age(dob)
+    #rails populates null DateTime with today's date
+    return '' if Date.today == dob
+    if (dob)
+      now = DateTime.now
+      a = now.year - dob.year - 1
+      if now.month > dob.month || now.month == dob.month && now.day >= dob.day
+        a = a + 1
+      end
+      return dob.to_s + ' (' + a.to_s + ' years old)'
+    end
+  end
+
   # View helper method to display DOB and Age
   def dob_to_dob_age(dob_s)
     if (dob_s && dob_s != '')
@@ -126,17 +139,22 @@ module PhrccrsHelper
   end
 
   def dose_frequency(dose, frequency)
-    s = ''
-    if dose && !dose.empty?
-      s = 'Take ' + dose.text
+    logger.error 'dose: ' + dose.class.to_s + ' / frequency: ' + frequency.class.to_s
+    if dose.class == String || frequency.class == String
+      s = ''
+      if dose && !dose.empty?
+        s = 'Take ' + dose
+      end
+      if dose && !dose.empty? && frequency && !frequency.empty?
+        s = s + ', '
+      end
+      if frequency && !frequency.empty?
+        s = s + frequency
+      end
+      logger.error 'ccr object: ' + s
+      return s
     end
-    if dose && !dose.empty? && frequency && !frequency.empty?
-      s = s + ', '
-    end
-    if frequency && !frequency.empty?
-      s = s + frequency.text
-    end
-    return s
+    return ''
   end
 
   def get_ccr_path(user_id)
@@ -246,6 +264,241 @@ module PhrccrsHelper
     r.sort! {|x,y| show_date(x.xpath(sortstr)) <=> show_date(y.xpath(sortstr)) }
 
     return r
+  end
+
+  def get_elements(node, name)
+    a = []
+    node.children.each { |c|
+      if c.name == name
+	a << c
+      end
+    }
+    return a
+  end
+
+  def get_element(node, name)
+    return nil if node.nil?
+    node.children.each { |c|
+      if c.name == name
+	return c
+      end
+    }
+    return nil
+  end
+
+  def get_element_text(node, name)
+    n = get_element(node, name)
+    return n.nil? ? nil : n.inner_text
+  end
+
+  def get_date_element(node, name)
+    return nil if node.nil?
+    node.children.each { |c|
+      if c.name == 'DateTime'
+      	t = get_element(c, 'Type')
+	next if t.nil?
+	tx = get_element(t, 'Text')
+	tx_s = tx.inner_text
+	next if tx.nil? || tx_s != name
+	edt = get_element(c, 'ExactDateTime')
+	return nil if edt.nil?
+	edt_text = edt.inner_text
+	return nil if edt_text == '--T00:00:00Z'
+	if edt_text.length == 4
+	  edt_text += '-01-01' #Append dummy date for entries with just the year
+        end
+	return DateTime.parse(edt_text)
+      end
+    }
+    return nil
+  end
+
+  def get_codes(d)
+    codes = get_elements(d, 'Code') unless d.nil?
+    cs = ''
+    unless codes.nil?
+      codes.each { |c|
+        cs += get_element_text(c, 'Value') + ':' + get_element_text(c, 'CodingSystem') + ';'
+      }
+    end
+    return cs
+  end
+
+  def get_inner_text(n)
+    return n.nil? ? nil : n.inner_text
+  end
+
+  def get_status(n)
+    s = get_element(n, 'Status')
+    return s.nil? ? nil : get_element_text(s, 'Text')
+  end
+
+  def get_first(n)
+    if n && n.length > 1
+      return n[0]
+    end
+    return n
+  end
+
+  def parse_xml_to_ccr_object(ccr_file)
+    feed = File.open(ccr_file, 'r')
+    ccr_xml = Nokogiri::XML(feed)
+    ccr = Ccr.new
+    conditions = []
+    medications = []
+    immunizations = []
+    lab_test_results = []
+    allergies = []
+    procedures = []
+
+    ccr.version = get_inner_text(ccr_xml.xpath('/xmlns:feed/xmlns:updated'))
+    
+    dem = Demographic.new
+    dob = get_first(ccr_xml.xpath('//ccr:Actors/ccr:Actor/ccr:Person/ccr:DateOfBirth/ccr:ExactDateTime'))
+    begin
+      if dob.nil?
+        dem.dob = nil
+      else
+        dob_s = get_inner_text(dob) 
+        dem.dob = dob_s == '--T00:00:00Z' ? nil : DateTime.parse(dob_s)
+      end	 
+    rescue
+      dem.dob = nil
+    end
+    gender = get_first(ccr_xml.xpath('//ccr:Actors/ccr:Actor/ccr:Person/ccr:Gender/ccr:Text'))
+    dem.gender = get_inner_text(gender)
+    weight = get_first(ccr_xml.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Weight"][1]/ccr:TestResult/ccr:Value'))
+    weight_unit = get_first(ccr_xml.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Weight"][1]/ccr:TestResult/ccr:Units/ccr:Unit'))
+    dem.weight_oz = normalize_to_oz(weight, weight_unit)
+    height = get_first(ccr_xml.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Height"][1]/ccr:TestResult/ccr:Value'))
+    height_unit = get_first(ccr_xml.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Height"][1]/ccr:TestResult/ccr:Units/ccr:Unit'))
+    dem.height_in = normalize_to_in(height, height_unit)
+    blood_type = get_first(ccr_xml.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Blood Type"][1]/ccr:TestResult/ccr:Value'))
+    dem.blood_type = get_inner_text(blood_type)
+    race = ''
+    race_node = get_first(ccr_xml.xpath('//ccr:SocialHistory/ccr:SocialHistoryElement[ccr:Type/ccr:Text="Race"][1]'))
+    race_node.xpath('ccr:Description/ccr:Text').each_with_index { |r,i|
+      if i > 0
+        race += ', '
+      end
+      race += get_inner_text(r)
+    }
+    dem.race = race
+
+    get_results(ccr_xml,'MEDICATION','Medication').each { |medication|
+      o = Medication.new
+      o.dose = ''
+      o.strength = ''
+      product = get_element(medication, 'Product')
+      o.start_date = get_date_element(medication, 'Start date')
+      o.start_date = get_date_element(medication, 'Prescription Date') if o.start_date.nil?
+      o.end_date = get_date_element(medication, 'End date')
+      d = get_element(product, 'ProductName')
+      o.name = get_element_text(d, 'Text') unless d.nil?
+      o.codes = get_codes(d)
+      o.status = get_status(medication)
+      
+      strength = get_element(product, 'Strength')
+      o.strength = get_element_text(strength, 'Value') unless strength.nil?
+      u = get_element(strength, 'Units') unless strength.nil?
+      uv = get_element(u, 'Unit') unless u.nil?
+      o.strength += ' ' + get_inner_text(uv) unless uv.nil?
+
+      form = get_element(product, 'Form')
+      form_text = get_element_text(form, 'Text')
+      if o.strength.nil?
+        o.strength = form_text
+      elsif !form_text.nil?
+        o.strength += ' ' + form_text
+      end
+      
+      directions = get_element(medication, 'Directions')
+      direction = get_element(directions, 'Direction') unless directions.nil?
+      dose = get_element(direction, 'Dose')
+      o.dose = get_element_text(dose, 'Value')
+
+      route = get_element(direction, 'Route') unless direction.nil?
+      o.route = get_element_text(route, 'Text')
+      o.route_codes = get_codes(route)
+
+      frequency = get_element(direction, 'Frequency')
+      o.frequency = get_element_text(frequency, 'Value')
+
+      medications << o
+    }      
+
+    get_results(ccr_xml,'ALLERGY','Alert').each { |allergy|
+      o = Allergy.new
+      o.start_date = get_date_element(allergy, 'Start date')
+      o.end_date = get_date_element(allergy, 'Stop date')
+      d = get_element(allergy, 'Description')
+      o.description = get_element_text(d, 'Text') unless d.nil?
+      o.codes = get_codes(d)
+      o.status = get_status(allergy)
+      r = get_element(allergy, 'Reaction')
+      s = get_element(r, 'Severity') unless r.nil?
+      o.severity = get_element_text(s, 'Text') unless s.nil?
+      allergies << o
+    }
+
+    get_results(ccr_xml,'CONDITION','Problem').each { |problem|
+      o = Condition.new
+      o.start_date = get_date_element(problem, 'Start date')
+      o.end_date = get_date_element(problem, 'Stop date')
+      d = get_element(problem, 'Description')
+      o.status = get_status(problem)
+      o.description = get_element_text(d, 'Text') unless d.nil?
+      o.codes = get_codes(d)
+      conditions << o
+    }
+
+    get_results(ccr_xml,'IMMUNIZATION','Immunization').each { |immunization|
+      o = Immunization.new
+      o.start_date = get_date_element(immunization, 'Start date')
+      p = get_element(immunization, 'Product')
+      d = get_element(p, 'ProductName')
+      o.name = get_element_text(d, 'Text') unless d.nil?
+      o.codes = get_codes(d)
+      immunizations << o
+    }
+     
+    get_results(ccr_xml,'LABTEST','Result').each { |result|
+      o = LabTestResult.new
+      t = get_element(result, 'Test')
+      d = get_element(t, 'Description')
+      o.description = get_element_text(d, 'Text') unless d.nil?
+      tr = get_element(t, 'TestResult')
+      u = tr.nil? ? nil : get_element(tr, 'Units')
+      o.value = get_element_text(tr, 'Value') unless tr.nil?
+      o.units = get_element_text(u, 'Unit') unless u.nil?
+      o.start_date = get_date_element(t, 'Collection start date')
+      o.codes = get_codes(d)
+      lab_test_results << o
+    }
+    
+    get_results(ccr_xml,'PROCEDURE','Procedure').each { |procedure|
+      o = Procedure.new
+      d = get_element(procedure, 'Description')
+      o.description = get_element_text(d, 'Text') unless d.nil?
+      o.start_date = get_date_element(procedure, 'Start date')
+      o.codes = get_codes(d)
+      procedures << o
+    }
+
+    ccr.demographic = dem
+    ccr.allergies = allergies
+    ccr.procedures = procedures
+    ccr.medications = medications
+    ccr.conditions = conditions
+    ccr.immunizations = immunizations
+    ccr.lab_test_results = lab_test_results
+    logger.error '>> allergies: ' + allergies.length.to_s
+    logger.error '>> procedures: ' + procedures.length.to_s
+    logger.error '>> medications: ' + medications.length.to_s
+    logger.error '>> conditions: ' + conditions.length.to_s
+    logger.error '>> immunizations: ' + immunizations.length.to_s
+    logger.error '>> lab test results: ' + lab_test_results.length.to_s
+    return ccr
   end
 
 end

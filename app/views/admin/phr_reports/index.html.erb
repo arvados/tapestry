@@ -1,0 +1,55 @@
+<style>
+#body .sidebar { display: none; width: 0px; padding: 0px }
+#body .main { width: 895px; }
+</style>
+<script type="text/javascript">
+function clearForm() {
+  $('input[type="checkbox"]').attr('checked', false);
+  return false;
+}
+</script>
+<h2>PHR Reports</h2>
+
+<% if params[:commit] %>
+<h3><%= @ccrs.length %> result(s) found</h3>
+<% @ccrs.each {|ccr| %>
+<% if ccr.user.nil? %>
+User not found - CCR's user_id reference is [<%= ccr.user_id %>] <br />
+<% else %>
+<a href="<%= public_profile_url(ccr.user.hex) %>"><%= ccr.user.email %></a><br />
+<% end %>
+<% } %>
+<% end %>
+
+<% form_tag('/admin/phr_reports', :method => :get) do %>
+<p><%= submit_tag('View Matches') %> <input type="button" value="Clear all filters" onclick="return clearForm()" /></p>
+<h3>Filter by Family Relationship</h3>
+<%= check_box_tag 'has_family_members_enrolled', 'has_family_members_enrolled', (params[:has_family_members_enrolled] || {}).include?('has_family_members_enrolled') %>
+Only show users who have indicated they have family members enrolled<br />
+
+<h3>Filter by Race</h3>
+<% @race_options.each {|r|%>
+<%= check_box_tag 'race_filter[]', r, (params[:race_filter] || {}).include?(r) %>
+<%= r %><br />
+<% } %>
+
+<h3>Filter by Gender</h3>
+<% @gender_options.each {|g| %>
+<%= check_box_tag 'gender_filter[]', g, (params[:gender_filter] || {}).include?(g) %>
+<%= g %><br />
+<% } %>
+
+<h3>Filter by Conditions</h3>
+<br />
+<% @condition_options.each {|c|
+   next if c.description.nil? || c.description.empty? %>
+<div style="margin-right: 5px; float:left; width: 173px; height: 20px">
+<div style="float: left; width: 15px"><%= check_box_tag 'condition_filter[]', c.description, (params[:condition_filter] || {}).include?(c.description) %></div>
+<div style="overflow: hidden; width: 150px; float: left; height: 20px"><%= c.description %></div></div>
+<% } %>
+
+<p style="clear: left">
+<%= submit_tag('View Matches') %> <input type="reset" value="Clear all filters" onclick="return clearForm()" />
+</p>
+
+<% end %>

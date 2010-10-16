@@ -13,7 +13,10 @@ delete imported records by clicking the "delete" button at the bottom of this
 page.</p>
  
 <%= render :partial => "ccr" %>
-
+<% else %>
+<h2>Import Personal Health Record</h2> 
+<p>
+Your Google Health account has been linked, but you have not imported any PHRs into PGP public profile. Click "Refresh PHR" to download the latest version of your PHR from Google Health.</p>
 <% end %>
 
 <%= form_tag(phrccr_path) %>

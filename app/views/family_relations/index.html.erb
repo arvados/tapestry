@@ -1,5 +1,17 @@
+<% if @family_members.blank? %>
 <h2>Family Relationships</h2>
-<p>If you have family members who are enrolled in the PGP, you may add this information to your PGP public profile.
+  <% form_tag update_has_family_relations_url do %>
+  <p>Please specify whether you have family members enrolled: </p>
+  <p><label><%= radio_button_tag 'has_family_members_enrolled', 'yes', @current_user.has_family_members_enrolled == 'yes'%> Yes, I have family members currently enrolled in the PGP</label><br />
+  <label><%= radio_button_tag 'has_family_members_enrolled', 'no', @current_user.has_family_members_enrolled == 'no' %> No, I do not have family members currently enrolled in the PGP</label>
+  </p>
+  <p><%= submit_tag('Update') %></p>
+  <% end %>
+<% end %>
+
+<% if @current_user.has_family_members_enrolled == 'yes' %>
+<h2>Add Family Members</h2>
+<p>Since you have family members who are enrolled in the PGP, you may add this information to your PGP public profile.
 Your family member will be asked to confirm the relationship before the information is added to your public profile.</p>
  
 <% if @family_members.blank? %>
@@ -54,8 +66,7 @@ You have not added any family relationships.</p>
 <% } %>
 </table>
 <% end %>
-
-
-</p>
+<% end #if has_family_members_enrolled %>
+<br />
 <%= link_to 'Back to public profile', public_profile_path(current_user.hex) %>
 

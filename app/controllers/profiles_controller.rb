@@ -36,7 +36,8 @@ class ProfilesController < ApplicationController
       @current_version = @ccr_history[0]
     end
 
-    @ccr = Nokogiri::XML(feed)
+    @ccr = Ccr.find(:first, :conditions => {:user_id => current_user.id, :version => @current_version })
+    #@ccr = Nokogiri::XML(feed)
   end
 
 end

@@ -16,12 +16,12 @@
 
 <h3>Demographic Information</h3> 
 <table class="demographics"> 
-  <tr><th>Date of Birth</th><td><%= dob_to_dob_age @ccr.xpath('//ccr:Actors/ccr:Actor/ccr:Person/ccr:DateOfBirth/ccr:ExactDateTime') %></td></tr> 
-  <tr><th>Gender</th><td><%= @ccr.xpath('//ccr:Actors/ccr:Actor/ccr:Person/ccr:Gender/ccr:Text') %></td></tr> 
-  <tr><th>Weight</th><td><%= oz_to_lbs_kg(normalize_to_oz(@ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Weight"]/ccr:TestResult/ccr:Value'), @ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Weight"]/ccr:TestResult/ccr:Units/ccr:Unit'))) %></td></tr> 
-  <tr><th>Height</th><td><%= in_to_ft_in_cm(normalize_to_oz(@ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Height"]/ccr:TestResult/ccr:Value'), @ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Height"]/ccr:TestResult/ccr:Units/ccr:Unit'))) %></td></tr> 
-  <tr><th>Blood Type</th><td><%= @ccr.xpath('//ccr:VitalSigns/ccr:Result/ccr:Test[ccr:Description/ccr:Text="Blood Type"]/ccr:TestResult/ccr:Value') %></td></tr> 
-  <tr><th>Race</th><td><% @ccr.xpath('//ccr:SocialHistory/ccr:SocialHistoryElement[ccr:Type/ccr:Text="Race"]/ccr:Description/ccr:Text').each_with_index { |race,i| if i > 0%>, <% end %><%= race %><% } %></td></tr> 
+  <tr><th>Date of Birth</th><td><%= get_dob_age @ccr.demographic.dob %></td></tr> 
+  <tr><th>Gender</th><td><%= @ccr.demographic.gender %></td></tr> 
+  <tr><th>Weight</th><td><%= oz_to_lbs_kg @ccr.demographic.weight_oz %></td></tr> 
+  <tr><th>Height</th><td><%= in_to_ft_in_cm @ccr.demographic.height_in %></td></tr> 
+  <tr><th>Blood Type</th><td><%= @ccr.demographic.blood_type %></td></tr> 
+  <tr><th>Race</th><td><%= @ccr.demographic.race %></td></tr> 
 </table>
 
 <h3>Conditions</h3>
@@ -31,11 +31,11 @@
   <th class="date">Start Date</th>
   <th class="date">End Date</th>
 </tr>
-<% @ccr.xpath('//ccr:Problems/ccr:Problem').each { |problem| %>
+<% @ccr.conditions.each { |condition| %>
 <tr>
-  <td><%= problem.xpath('ccr:Description/ccr:Text') %></td>
-  <td><%= show_date problem.xpath('ccr:DateTime[ccr:Type/ccr:Text="Start date"]/ccr:ExactDateTime') %></td>
-  <td><%= show_date problem.xpath('ccr:DateTime[ccr:Type/ccr:Text="Stop date"]/ccr:ExactDateTime') %></td>
+  <td><%= condition.description %></td>
+  <td><%= condition.start_date %></td>
+  <td><%= condition.end_date %></td>
 </tr>
 <% } %>
 </table>
@@ -47,13 +47,11 @@
   <th class="dosage">Dosage</th>
   <th class="frequency">Frequency</th>
 </tr>
-<% @ccr.xpath('//ccr:Medications/ccr:Medication').each { |medication| %>
+<% @ccr.medications.each { |medication| %>
 <tr>
-  <td><%= medication.xpath('ccr:Product/ccr:ProductName/ccr:Text') %></td>
-  <td><%= medication.xpath('ccr:Product/ccr:Strength/ccr:Value') %>
-      <%= medication.xpath('ccr:Product/ccr:Strength/ccr:Units/ccr:Unit') %>
-      <%= medication.xpath('ccr:Product/ccr:Form/ccr:Text') %></td>
-  <td><%= dose_frequency(medication.xpath('ccr:Directions/ccr:Direction/ccr:Dose/ccr:Value'), medication.xpath('ccr:Directions/ccr:Direction/ccr:Frequency/ccr:Value')) %></td>
+  <td><%= medication.name %></td>
+  <td><%= medication.strength %></td>
+  <td><%= dose_frequency(medication.dose, medication.frequency) %></td>
 </tr>
 <% } %>
 </table>
@@ -66,12 +64,12 @@
   <th class="date">Start Date</th>
   <th class="date">End Date</th>
 </tr>
-<% @ccr.xpath('//ccr:Alerts/ccr:Alert').each { |alert| %>
+<% @ccr.allergies.each { |allergy| %>
 <tr>
-  <td><%= alert.xpath('ccr:Description/ccr:Text') %></td>
-  <td><%= alert.xpath('ccr:Reaction/ccr:Severity/ccr:Text') %></td>
-  <td><%= show_date alert.xpath('ccr:DateTime[ccr:Type/ccr:Text="Start date"]/ccr:ExactDateTime') %></td>
-  <td><%= show_date alert.xpath('ccr:DateTime[ccr:Type/ccr:Text="Stop date"]/ccr:ExactDateTime') %></td>
+  <td><%= allergy.description %></td>
+  <td><%= allergy.severity %></td>
+  <td><%= allergy.start_date %></td>
+  <td><%= allergy.end_date %></td>
 </tr>
 <% } %>
 </table>
@@ -82,11 +80,10 @@
   <th>Name</th>
   <th class="date">Date</th>
 </tr>
-<!-- @ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="PROCEDURE"]]//ccr:Procedures/ccr:Procedure').each { |procedure| -->
-<% get_results(@ccr,"PROCEDURE",'Procedure').each { |procedure| %>
+<% @ccr.procedures.each { |procedure| %>
 <tr>
-  <td><%= procedure.xpath('ccr:Description/ccr:Text') %></td>
-  <td><%= show_date procedure.xpath('ccr:DateTime[ccr:Type/ccr:Text="Start date"]/ccr:ExactDateTime') %></td>
+  <td><%= procedure.description %></td>
+  <td><%= procedure.start_date %></td>
 </tr>
 <% } %>
 </table>
@@ -98,13 +95,11 @@
   <th class="result">Result</th>
   <th class="date">Date</th>
 </tr>
-
-<!-- @ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="LABTEST"]]//ccr:Results/ccr:Result').each { |result| -->
-<% get_results(@ccr,"LABTEST",'Result').each { |result| %>
+<% @ccr.lab_test_results.each { |result| %>
 <tr>
-  <td><%= result.xpath('ccr:Test/ccr:Description/ccr:Text') %></td>
-  <td><%= result.xpath('ccr:Test/ccr:TestResult/ccr:Value') %> <%= result.xpath('ccr:Test/ccr:TestResult/ccr:Units/ccr:Unit') %></td>
-  <td><%= show_date result.xpath('ccr:Test/ccr:DateTime[ccr:Type/ccr:Text="Collection start date"]/ccr:ExactDateTime') %></td>
+  <td><%= result.description %></td>
+  <td><%= result.value %> <%= result.units %></td>
+  <td><%= result.start_date %></td>
 </tr>
 <% } %>
 </table>
@@ -115,16 +110,16 @@
   <th>Name</th>
   <th class="date">Date</th>
 </tr>
-<% @ccr.xpath('//ccr:Immunizations/ccr:Immunization').each { |immunization| %>
+<% @ccr.immunizations.each { |immunization| %>
 <tr>
-  <td><%= immunization.xpath('ccr:Product/ccr:ProductName/ccr:Text') %></td>
-  <td><%= show_date immunization.xpath('ccr:DateTime[ccr:Type/ccr:Text="Start date"]/ccr:ExactDateTime') %></td>
+  <td><%= immunization.name %></td>
+  <td><%= immunization.start_date %></td>
 </tr>
 <% } %>
 </table>
 
 </div>
-<p><em>Updated: <%= @ccr.xpath('/xmlns:feed/xmlns:updated') %></em></p>
+<p><em>Updated: <%= @ccr.version %></em></p>
 <script type="text/javascript"> 
   $(".phr tr").hover(
   function() {

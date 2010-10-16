@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  relation: MyString
+  is_confirmed: false
+  Relative: 
+
+two:
+  relation: MyString
+  is_confirmed: false
+  Relative: 
