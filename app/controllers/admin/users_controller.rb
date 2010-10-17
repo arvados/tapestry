@@ -23,8 +23,8 @@ class Admin::UsersController < Admin::AdminControllerBase
   end
 
   def enroll
-    flash[:error] = nil;
-    flash[:notice] = nil;
+    flash.delete(:error)
+    flash.delete(:notice)
     params[:eligible_for_enrollment] = true
     if request.method == :put then
       enrolled = 0
