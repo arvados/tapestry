@@ -21,18 +21,18 @@ class Admin::ImportCcrsController < Admin::AdminControllerBase
 
       Dir[data_dir + '/**/*.xml'].each { |f|      
         m = /.+ccr(.+)\/ccr(.+)\.xml/.match(f)
-	#begin
-	  user_id = m[1].gsub('/','').to_i
-	  ccr_version = m[2]	 
-	  ccr = parse_xml_to_ccr_object(f)
-	  ccr.user_id = user_id
-	  ccr.version = ccr_version
-	  ccr.save
-	  @successful_imports << user_id.to_s + ' ' + ccr_version + '<br />'
-	#rescue
-	#  @failed_imports << f
-	#  break
-        #end	
+        #begin
+        user_id = m[1].gsub('/','').to_i
+        ccr_version = m[2]
+        ccr = parse_xml_to_ccr_object(f)
+        ccr.user_id = user_id
+        ccr.version = ccr_version
+        ccr.save
+        @successful_imports << user_id.to_s + ' ' + ccr_version + '<br />'
+        #rescue
+        #  @failed_imports << f
+        #  break
+        #end
       }    
 
       flash[:notice] = "Successfully imported " + @successful_imports.length.to_s + " ccrs"
