@@ -68,7 +68,7 @@ class Admin::PhrReportsController < Admin::AdminControllerBase
     #flash[:notice] = '(' + queries.join(') AND (') + ')'
 
     @ccrs = []
-    unless params[:commit].nil?
+    unless params[:commit].nil? or queries.empty? or query_params.empty? 
       ccr_results = Ccr.find(:all, :joins => joins.join(' '), :conditions => ['(' + queries.join(') AND (') + ')', query_params].flatten, :order => 'id, version')
       current_user_id = 0
       ccr_results.each {|ccr|
