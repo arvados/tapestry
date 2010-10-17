@@ -25,7 +25,7 @@ class Admin::PhrReportsController < Admin::AdminControllerBase
         else
           race_filter_sql += "race LIKE ?"
         end
-	query_params << '%' + race + '%'
+          query_params << '%' + race + '%'
       }
     end
     queries << race_filter_sql unless race_filter_sql.empty?
@@ -35,10 +35,10 @@ class Admin::PhrReportsController < Admin::AdminControllerBase
     if !params['gender_filter'].nil?
       params['gender_filter'].each {|gender|
         if gender_filter_sql != ''
-	  gender_filter_sql += " OR gender = ?"
-	else
-	  gender_filter_sql += "gender = ?"
-	end
+          gender_filter_sql += " OR gender = ?"
+        else
+          gender_filter_sql += "gender = ?"
+        end
         query_params << gender
       }
     end
