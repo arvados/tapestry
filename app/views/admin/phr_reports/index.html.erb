@@ -16,7 +16,7 @@ function clearForm() {
 <% if ccr.user.nil? %>
 User not found - CCR's user_id reference is [<%= ccr.user_id %>] <br />
 <% else %>
-<a href="<%= public_profile_url(ccr.user.hex) %>"><%= ccr.user.email %></a><br />
+<a href="<%= public_profile_url(ccr.user) %>"><%= ccr.user.email %></a><br />
 <% end %>
 <% } %>
 <% end %>

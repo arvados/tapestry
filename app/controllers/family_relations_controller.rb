@@ -29,7 +29,7 @@ class FamilyRelationsController < ApplicationController
       rescue
         flash[:error] = 'Could not save due to user validation error. Please contact admin.'
       end
-      redirect_to(public_profile_url(current_user.hex))
+      redirect_to(public_profile_url(current_user))
     end
   end
 
