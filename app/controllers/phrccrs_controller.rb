@@ -142,11 +142,16 @@ class PhrccrsController < ApplicationController
       
     ccr_filename = get_ccr_filename(current_user.id, true, updated)
     if !File.exist?(ccr_filename)
-      outFile = File.new(ccr_filename, 'w')
-      outFile.write(feed)
-      outFile.close      
       current_user.log("Downloaded PHR (#{ccr_filename})")
+    else
+      current_user.log("Downloaded and replaced PHR (#{ccr_filename})")
     end
+    outFile = File.new(ccr_filename, 'w')
+    outFile.write(feed)
+    outFile.close
+
+    # We don't want duplicates
+    Ccr.find_by_user_id_and_version(current_user.id,updated).destroy unless Ccr.find_by_user_id_and_version(current_user.id,updated).nil?
 
     db_ccr = parse_xml_to_ccr_object(ccr_filename)
     db_ccr.user_id = current_user.id
