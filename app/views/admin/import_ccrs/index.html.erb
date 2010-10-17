@@ -3,7 +3,7 @@
 <%= submit_tag 'Import' %>
 
 </form>
-<% if @user_update_count && @user_update_count > 0 %><%= @user_update_count %> user(s) updated<% end %>
+<% if @user_update_count && @user_update_count > 0 %><p>Updated family relationship status for <%= @user_update_count %> user(s)</p><% end %>
 
 <% if @failed_imports && @failed_imports.length > 0 %>
    <h3>Failed imports:</h3>

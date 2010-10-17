@@ -13,10 +13,9 @@ class Admin::ImportCcrsController < Admin::AdminControllerBase
           @user_update_count += 1
         end
       }
-      return
 
       ccr_files = {}
-      data_dir = '/data/' + ROOT_URL
+      data_dir = '/data/' + ROOT_URL + '/ccr'
       @failed_imports = []
       @successful_imports = []
 
