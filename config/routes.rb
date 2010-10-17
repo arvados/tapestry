@@ -91,6 +91,7 @@ ActionController::Routing::Routes.draw do |map|
     end
     admin.resources :mailing_lists
     admin.resources :invited_emails
+    admin.resources :phr_reports
   end
 
   map.resources :geographic_information
