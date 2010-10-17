@@ -24,6 +24,8 @@ class Admin::ImportCcrsController < Admin::AdminControllerBase
         #begin
         user_id = m[1].gsub('/','').to_i
         ccr_version = m[2]
+        # We don't want duplicates
+        Ccr.find_by_user_id_and_version(user_id,ccr_version).destroy unless Ccr.find_by_user_id_and_version(user_id,ccr_version).nil?
         ccr = parse_xml_to_ccr_object(f)
         ccr.user_id = user_id
         ccr.version = ccr_version
