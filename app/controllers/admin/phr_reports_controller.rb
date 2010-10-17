@@ -68,14 +68,14 @@ class Admin::PhrReportsController < Admin::AdminControllerBase
     #flash[:notice] = '(' + queries.join(') AND (') + ')'
 
     @ccrs = []
+    @seen = []
     unless params[:commit].nil? or queries.empty? or query_params.empty? 
       ccr_results = Ccr.find(:all, :joins => joins.join(' '), :conditions => ['(' + queries.join(') AND (') + ')', query_params].flatten, :order => 'id, version')
-      current_user_id = 0
       ccr_results.each {|ccr|
-        if ccr.user_id != current_user_id
+        unless ccr.user.is_test or @seen.include?(ccr.user)
           @ccrs << ccr
+          @seen << ccr.user
         end
-        current_user_id = ccr.user_id
       }
     end
   end
