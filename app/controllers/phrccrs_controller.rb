@@ -62,10 +62,10 @@ class PhrccrsController < ApplicationController
       if timestamp.scan(timestamp_regex).length > 0
         ccr_filename = get_ccr_filename(current_user.id, false, timestamp)
         if File.exists?(ccr_filename) then
-          File.delete(ccr_filename)	  
+          File.delete(ccr_filename)
           current_user.log("Deleted PHR (#{ccr_filename})")
-	  ccr_to_delete = Ccr.find(:first, :conditions => {:user_id => current_user.id, :version => timestamp })
-	  Ccr.delete(ccr_to_delete.id)
+          ccr_to_delete = Ccr.find(:first, :conditions => {:user_id => current_user.id, :version => timestamp })
+          Ccr.destroy(ccr_to_delete.id)
         else
           current_user.log("Unabled to delete PHR (#{ccr_filename}): file not found")
         end
@@ -149,7 +149,6 @@ class PhrccrsController < ApplicationController
     end
 
     db_ccr = parse_xml_to_ccr_object(ccr_filename)
-#    db_ccr = parse_xml_to_ccr_object('/home/siywong/long_ccr.xml')
     db_ccr.user_id = current_user.id
     db_ccr.save
   end
