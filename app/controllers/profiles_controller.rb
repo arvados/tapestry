@@ -36,7 +36,8 @@ class ProfilesController < ApplicationController
       @current_version = @ccr_history[0]
     end
 
-    @ccr = Ccr.find(:first, :conditions => {:user_id => current_user.id, :version => @current_version })
+    @ccr = Ccr.find(:first, :conditions => {:user_id => @user.id, :version => @current_version })
+    # Old way of parsing the CCR on disk below
     #@ccr = Nokogiri::XML(feed)
   end
 
