@@ -11,6 +11,16 @@
 
 ActiveRecord::Schema.define(:version => 20101011200437) do
 
+  create_table "allergies", :force => true do |t|
+    t.integer "ccr_id"
+    t.date    "start_date"
+    t.date    "end_date"
+    t.string  "description"
+    t.string  "severity"
+    t.string  "codes"
+    t.string  "status"
+  end
+
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
     t.text     "answer"
@@ -45,12 +55,38 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
     t.datetime "updated_at"
   end
 
+  create_table "ccrs", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "version"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "conditions", :force => true do |t|
+    t.integer "ccr_id"
+    t.date    "start_date"
+    t.date    "end_date"
+    t.string  "description"
+    t.string  "codes"
+    t.string  "status"
+  end
+
   create_table "content_areas", :force => true do |t|
     t.string   "title"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "ordinal"
+  end
+
+  create_table "demographics", :force => true do |t|
+    t.integer "ccr_id"
+    t.date    "dob"
+    t.string  "gender"
+    t.integer "weight_oz",  :limit => 10, :precision => 10, :scale => 0
+    t.integer "height_in",  :limit => 10, :precision => 10, :scale => 0
+    t.string  "blood_type"
+    t.string  "race"
   end
 
   create_table "distinctive_traits", :force => true do |t|
@@ -157,6 +193,13 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
 
   add_index "family_survey_responses", ["user_id"], :name => "index_family_survey_responses_on_user_id"
 
+  create_table "immunizations", :force => true do |t|
+    t.integer "ccr_id"
+    t.date    "start_date"
+    t.string  "name"
+    t.string  "codes"
+  end
+
   create_table "informed_consent_responses", :force => true do |t|
     t.integer  "twin",       :limit => 1
     t.integer  "biopsy",     :limit => 1
@@ -180,6 +223,15 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
     t.datetime "updated_at"
   end
 
+  create_table "lab_test_results", :force => true do |t|
+    t.integer "ccr_id"
+    t.date    "start_date"
+    t.string  "description"
+    t.string  "codes"
+    t.string  "value"
+    t.string  "units"
+  end
+
   create_table "mailing_list_subscriptions", :id => false, :force => true do |t|
     t.integer "user_id"
     t.integer "mailing_list_id"
@@ -191,6 +243,20 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "medications", :force => true do |t|
+    t.integer "ccr_id"
+    t.date    "start_date"
+    t.date    "end_date"
+    t.string  "name"
+    t.string  "codes"
+    t.string  "strength"
+    t.string  "dose"
+    t.string  "frequency"
+    t.string  "route"
+    t.string  "route_codes"
+    t.string  "status"
   end
 
   create_table "named_proxies", :force => true do |t|
@@ -220,6 +286,13 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
   end
 
   add_index "privacy_survey_responses", ["user_id"], :name => "index_privacy_survey_responses_on_user_id"
+
+  create_table "procedures", :force => true do |t|
+    t.integer "ccr_id"
+    t.date    "start_date"
+    t.string  "description"
+    t.string  "codes"
+  end
 
   create_table "question_responses", :force => true do |t|
     t.integer  "exam_response_id"
@@ -280,14 +353,14 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "email",                      :limit => 100
-    t.string   "crypted_password",           :limit => 40
-    t.string   "salt",                       :limit => 40
+    t.string   "email",                       :limit => 100
+    t.string   "crypted_password",            :limit => 40
+    t.string   "salt",                        :limit => 40
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_token",             :limit => 40
+    t.string   "remember_token",              :limit => 40
     t.datetime "remember_token_expires_at"
-    t.string   "activation_code",            :limit => 40
+    t.string   "activation_code",             :limit => 40
     t.datetime "activated_at"
     t.boolean  "is_admin"
     t.string   "first_name"
@@ -305,7 +378,7 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
     t.string   "zip"
     t.text     "enrollment_essay"
     t.string   "phr_profile_name"
-    t.boolean  "has_sequence",                              :default => false, :null => false
+    t.boolean  "has_sequence",                               :default => false, :null => false
     t.string   "has_sequence_explanation"
     t.text     "family_members_passed_exam"
     t.string   "security_question"
@@ -313,11 +386,12 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
     t.string   "eligibility_survey_version"
     t.datetime "enrolled"
     t.string   "authsub_token"
-    t.string   "hex",                                       :default => ""
+    t.string   "hex",                                        :default => ""
     t.string   "exam_version"
     t.datetime "enrollment_accepted"
     t.string   "consent_version"
-    t.boolean  "is_test",                                   :default => false
+    t.boolean  "is_test",                                    :default => false
+    t.string   "has_family_members_enrolled"
   end
 
   create_table "waitlists", :force => true do |t|
