@@ -506,7 +506,26 @@ ul.sublinks li a {
 	height: 40px;
 }
 
+#foot_big {
+	background: #dfe5f1 url(/images/foot.gif) bottom center no-repeat;
+	color: #5d7cbb;
+	width: 960px;
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: 24px;
+	margin-left: auto;
+	border-top: 1px solid #fff;
+	height: 120px;
+}
+
+
 #foot p {
+	color: #5d7cbb;
+	font: 11px/16px Arial, Helvetica, sans-serif;
+	margin: 6px 0;
+}
+
+#foot_big p {
 	color: #5d7cbb;
 	font: 11px/16px Arial, Helvetica, sans-serif;
 	margin: 6px 0;
@@ -535,6 +554,11 @@ ul.sublinks li a {
 	color: #7f97c9;
 	font-weight: bold;
 }
+#foot_big #privacy_tos {
+      padding: 12px 24px;
+      width: 30%;
+      float: left;
+}
 #foot #privacy_tos {
       padding: 12px 24px;
       width: 30%;
@@ -549,6 +573,13 @@ ul.sublinks li a {
 
 #foot #copyright .bullet {
 color: #7f97c9;
+}
+
+#foot_big #copyright {
+	text-align: right;
+	padding: 12px 24px;
+        width: 30%;
+	float: right;
 }
 
 #mini_consent {
