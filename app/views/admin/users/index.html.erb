@@ -26,6 +26,12 @@
   <%= submit_tag 'Search' %>
 <% end %>
 </li>
+<li>
+<% form_tag admin_users_path, { :method => 'get' } do  %>
+  Hex id: <%= text_field_tag :hex %>
+  <%= submit_tag 'Search' %>
+<% end %>
+</li>
 </ul>
 
 <h3>Eligibility Actions</h3>

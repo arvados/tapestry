@@ -185,6 +185,13 @@ class Admin::UsersController < Admin::AdminControllerBase
     elsif params[:test]
       @unpaginated_users = User.test
       @result = "Test users"
+    elsif params[:hex]
+      if params[:hex] != '' then
+        @unpaginated_users = User.find_all_by_hex(params[:hex])
+      else
+        @unpaginated_users = []
+      end
+       @result = "User with hex #{params[:hex]}"
     else
       @unpaginated_users = []
       @result = ''
