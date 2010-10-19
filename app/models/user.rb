@@ -297,8 +297,9 @@ class User < ActiveRecord::Base
   end
 
   def consent_passed
-    if self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('participation_consent') } then
-      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('participation_consent') }.created_at.to_s + ' (passed v' + self.consent_version.gsub(/^v/,'') + ')'
+    if !self.latest_doc('consent').nil? then
+      c = self.latest_doc('consent')
+      return "#{c.created_at.to_s} (passed #{c.version})"
     else
       return 'Not consented yet.'
     end
@@ -310,7 +311,7 @@ class User < ActiveRecord::Base
   #   consent
   #   exam
   def latest_doc(doctype)
-    self.documents.kind(doctype).first
+    self.documents.kind_any_version(doctype).first
   end
 
   def has_recent_safety_questionnaire
