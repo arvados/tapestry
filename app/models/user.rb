@@ -183,7 +183,7 @@ class User < ActiveRecord::Base
     self.activated_at = Time.now.utc
     self.activation_code = nil
     signup_enrollment_step = EnrollmentStep.find_by_keyword('signup')
-    log('Signed mini consent form version 20100315',signup_enrollment_step)
+    log('Account was activated (e-mail address verified)',signup_enrollment_step)
     self.complete_enrollment_step(signup_enrollment_step)
     save(false)
   end
