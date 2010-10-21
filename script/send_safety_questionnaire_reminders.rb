@@ -1,4 +1,4 @@
-#!/bin/ruby
+#!/usr/bin/env ruby
 
 # Send out Safety Questionnaire reminders for people who have not filled one
 # out in the last 3 months. Repeat reminders every 2 weeks. 
