@@ -13,32 +13,22 @@ class PhrccrsController < ApplicationController
   end
 
   def review
-    ccr_list = Dir.glob(get_ccr_path(current_user.id) + '*').reverse
-    ccr_list.delete_if { |s| true if not File.file?(s) or s.scan(/.+\/ccr(.+)\.xml/).empty? }
-    if ccr_list.length == 0
-      if flash[:error] == '' then
-        flash[:error] = 'You do not have any PHRs saved. Click the "Refresh PHR" button to get the latest version.'
-      end
-      return
-    end
-    
-    @ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }
+    @ccr_history = Ccr.find(:all, :conditions => {:user_id => current_user.id},
+                            :order => 'version DESC')
 
     version = params[:version]
     if version && !version.empty?
       for i in 0.. ccr_list.length - 1 do
-        if @ccr_history[i] == version
-          feed = File.new(ccr_list[i])
+        if @ccr_history[i].version == version
           @current_version = version
+          @ccr = @ccr_history[i]
           break
         end
       end
-    else
-      feed = File.new(ccr_list[0])
-      @current_version = @ccr_history[0]
+    elsif @ccr_history && @ccr_history.length > 0
+      @current_version = @ccr_history[0].version
+      @ccr = @ccr_history[0]
     end
-    @ccr = Ccr.find(:first, :conditions => {:user_id => current_user.id, :version => @current_version })
-    #@ccr = Nokogiri::XML(feed)
   end
 
   def create
@@ -65,7 +55,7 @@ class PhrccrsController < ApplicationController
           File.delete(ccr_filename)
           current_user.log("Deleted PHR (#{ccr_filename})")
           ccr_to_delete = Ccr.find(:first, :conditions => {:user_id => current_user.id, :version => timestamp })
-          Ccr.destroy(ccr_to_delete.id)
+          Ccr.destroy(ccr_to_delete.id)          
         else
           current_user.log("Unabled to delete PHR (#{ccr_filename}): file not found")
         end

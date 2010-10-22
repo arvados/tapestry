@@ -30,14 +30,14 @@ Your Google Health account has been linked, but you have not imported any PHRs i
 <% if @ccr && @ccr_history.length > 0 %>
 <h3>All PHRs</h3>
 <table>
-<% @ccr_history.each { |version| %>
+<% @ccr_history.each { |ccr| %>
 <tr>
-  <td><a href="review?version=<%= version %>"><%= version %></a>
-    <% if version == @current_version %>
+  <td><a href="review?version=<%= ccr.version %>"><%= ccr.version %></a>
+    <% if ccr.version == @current_version %>
     (currently viewing)
     <% end %>
   </td>
-  <td><button name="deleteccr" value="<%= version %>">Delete</button></td></tr>
+  <td><button name="deleteccr" value="<%= ccr.version %>">Delete</button></td></tr>
 <% } %>
 </table>
 <% end %>

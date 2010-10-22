@@ -44,7 +44,7 @@ Only show users who have indicated they have family members enrolled<br />
 <% @condition_options.each {|c|
    next if c.description.nil? || c.description.empty? %>
 <div style="margin-right: 5px; float:left; width: 173px; height: 20px">
-<div style="float: left; width: 15px"><%= check_box_tag 'condition_filter[]', c.description, (params[:condition_filter] || {}).include?(c.description) %></div>
+<div style="float: left; width: 15px"><%= check_box_tag 'condition_filter[]', c.id, (params[:condition_filter] || {}).include?(c.id.to_s) %></div>
 <div style="overflow: hidden; width: 150px; float: left; height: 20px"><%= c.description %></div></div>
 <% } %>
 

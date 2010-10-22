@@ -139,7 +139,6 @@ module PhrccrsHelper
   end
 
   def dose_frequency(dose, frequency)
-    logger.error 'dose: ' + dose.class.to_s + ' / frequency: ' + frequency.class.to_s
     if dose.class == String || frequency.class == String
       s = ''
       if dose && !dose.empty?
@@ -394,7 +393,21 @@ module PhrccrsHelper
       o.start_date = get_date_element(medication, 'Prescription Date') if o.start_date.nil?
       o.end_date = get_date_element(medication, 'End date')
       d = get_element(product, 'ProductName')
-      o.name = get_element_text(d, 'Text') unless d.nil?
+
+      name = get_element_text(d, 'Text') unless d.nil?
+      #skip if invalid item (occurs frequently on CCR exported by BCBS
+      next if name.nil? || name.empty?
+      medication_name = MedicationName.new
+      medication_name.name = name
+
+      # if unsuccessful save, medication is already in db due to uniqueness constraint       
+      begin
+        medication_name.save
+      rescue
+        medication_name = MedicationName.find_by_name(name)
+      end
+
+      o.medication_name_id = medication_name.id
       o.codes = get_codes(d)
       o.status = get_status(medication)
       
@@ -432,7 +445,20 @@ module PhrccrsHelper
       o.start_date = get_date_element(allergy, 'Start date')
       o.end_date = get_date_element(allergy, 'Stop date')
       d = get_element(allergy, 'Description')
-      o.description = get_element_text(d, 'Text') unless d.nil?
+      description = get_element_text(d, 'Text') unless d.nil?
+      #skip if invalid item (occurs frequently on CCR exported by BCBS
+      next if description.nil? || description.empty?
+      allergy_description = AllergyDescription.new
+      allergy_description.description = description
+
+      # if unsuccessful save, allergy is already in db due to uniqueness constraint       
+      begin
+        allergy_description.save
+      rescue
+        allergy_description = AllergyDescription.find_by_description(description)
+      end
+
+      o.allergy_description_id = allergy_description.id
       o.codes = get_codes(d)
       o.status = get_status(allergy)
       r = get_element(allergy, 'Reaction')
@@ -447,7 +473,20 @@ module PhrccrsHelper
       o.end_date = get_date_element(problem, 'Stop date')
       d = get_element(problem, 'Description')
       o.status = get_status(problem)
-      o.description = get_element_text(d, 'Text') unless d.nil?
+      description = get_element_text(d, 'Text') unless d.nil?
+      #skip if invalid item (occurs frequently on CCR exported by BCBS
+      next if description.nil? || description.empty?
+      condition_description = ConditionDescription.new
+      condition_description.description = description
+
+      # if unsuccessful save, condition is already in db due to uniqueness constraint       
+      begin
+	condition_description.save
+      rescue
+        condition_description = ConditionDescription.find_by_description(description)
+      end
+
+      o.condition_description_id = condition_description.id
       o.codes = get_codes(d)
       conditions << o
     }
@@ -457,7 +496,21 @@ module PhrccrsHelper
       o.start_date = get_date_element(immunization, 'Start date')
       p = get_element(immunization, 'Product')
       d = get_element(p, 'ProductName')
-      o.name = get_element_text(d, 'Text') unless d.nil?
+
+      name = get_element_text(d, 'Text') unless d.nil?
+      #skip if invalid item (occurs frequently on CCR exported by BCBS
+      next if name.nil? || name.empty?
+      immunization_name = ImmunizationName.new
+      immunization_name.name = name
+
+      # if unsuccessful save, immunization is already in db due to uniqueness constraint       
+      begin
+        immunization_name.save
+      rescue
+        immunization_name = ImmunizationName.find_by_name(name)
+      end
+
+      o.immunization_name_id = immunization_name.id
       o.codes = get_codes(d)
       immunizations << o
     }
@@ -466,7 +519,21 @@ module PhrccrsHelper
       o = LabTestResult.new
       t = get_element(result, 'Test')
       d = get_element(t, 'Description')
-      o.description = get_element_text(d, 'Text') unless d.nil?
+      description = get_element_text(d, 'Text') unless d.nil?
+      #skip if invalid item (occurs frequently on CCR exported by BCBS
+      next if description.nil? || description.empty?
+      lab_test_result_description = LabTestResultDescription.new
+      lab_test_result_description.description = description
+
+      # if unsuccessful save, assume lab test is already in db due to uniqueness constraint
+      begin
+	lab_test_result_description.save
+      rescue
+        lab_test_result_description = LabTestResultDescription.find_by_description(description)
+      end
+
+      o.lab_test_result_description_id = lab_test_result_description.id
+
       tr = get_element(t, 'TestResult')
       u = tr.nil? ? nil : get_element(tr, 'Units')
       o.value = get_element_text(tr, 'Value') unless tr.nil?
@@ -479,7 +546,20 @@ module PhrccrsHelper
     get_results(ccr_xml,'PROCEDURE','Procedure').each { |procedure|
       o = Procedure.new
       d = get_element(procedure, 'Description')
-      o.description = get_element_text(d, 'Text') unless d.nil?
+      description = get_element_text(d, 'Text') unless d.nil?
+      #skip if invalid item (occurs frequently on CCR exported by BCBS
+      next if description.nil? || description.empty?
+      procedure_description = ProcedureDescription.new
+      procedure_description.description = description
+
+      # if unsuccessful save, procedure is already in db due to uniqueness constraint       
+      begin
+        procedure_description.save
+      rescue
+        procedure_description = ProcedureDescription.find_by_description(description)
+      end
+
+      o.procedure_description_id = procedure_description.id
       o.start_date = get_date_element(procedure, 'Start date')
       o.codes = get_codes(d)
       procedures << o
@@ -492,12 +572,12 @@ module PhrccrsHelper
     ccr.conditions = conditions
     ccr.immunizations = immunizations
     ccr.lab_test_results = lab_test_results
-    logger.error '>> allergies: ' + allergies.length.to_s
-    logger.error '>> procedures: ' + procedures.length.to_s
-    logger.error '>> medications: ' + medications.length.to_s
-    logger.error '>> conditions: ' + conditions.length.to_s
-    logger.error '>> immunizations: ' + immunizations.length.to_s
-    logger.error '>> lab test results: ' + lab_test_results.length.to_s
+    #logger.error '>> allergies: ' + allergies.length.to_s
+    #logger.error '>> procedures: ' + procedures.length.to_s
+    #logger.error '>> medications: ' + medications.length.to_s
+    #logger.error '>> conditions: ' + conditions.length.to_s
+    #logger.error '>> immunizations: ' + immunizations.length.to_s
+    #logger.error '>> lab test results: ' + lab_test_results.length.to_s
     return ccr
   end
 

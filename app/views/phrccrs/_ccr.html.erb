@@ -31,7 +31,7 @@
   <th class="date">Start Date</th>
   <th class="date">End Date</th>
 </tr>
-<% @ccr.conditions.each { |condition| %>
+<% Condition.find(:all, :include => :condition_description, :conditions => ['ccr_id = ?', @ccr.id]).each { |condition| %>
 <tr>
   <td><%= condition.description %></td>
   <td><%= condition.start_date %></td>
@@ -47,7 +47,7 @@
   <th class="dosage">Dosage</th>
   <th class="frequency">Frequency</th>
 </tr>
-<% @ccr.medications.each { |medication| %>
+<% Medication.find(:all, :include => :medication_name, :conditions => ['ccr_id = ?', @ccr.id]).each { |medication| %>
 <tr>
   <td><%= medication.name %></td>
   <td><%= medication.strength %></td>
@@ -64,7 +64,7 @@
   <th class="date">Start Date</th>
   <th class="date">End Date</th>
 </tr>
-<% @ccr.allergies.each { |allergy| %>
+<% Allergy.find(:all, :include => :allergy_description, :conditions => ['ccr_id = ?', @ccr.id]).each { |allergy| %>
 <tr>
   <td><%= allergy.description %></td>
   <td><%= allergy.severity %></td>
@@ -80,7 +80,7 @@
   <th>Name</th>
   <th class="date">Date</th>
 </tr>
-<% @ccr.procedures.each { |procedure| %>
+<% Procedure.find(:all, :include => :procedure_description, :conditions => ['ccr_id = ?', @ccr.id]).each { |procedure| %>
 <tr>
   <td><%= procedure.description %></td>
   <td><%= procedure.start_date %></td>
@@ -95,7 +95,7 @@
   <th class="result">Result</th>
   <th class="date">Date</th>
 </tr>
-<% @ccr.lab_test_results.each { |result| %>
+<% LabTestResult.find(:all, :include => :lab_test_result_description, :conditions => ['ccr_id = ?', @ccr.id]).each { |result| %>
 <tr>
   <td><%= result.description %></td>
   <td><%= result.value %> <%= result.units %></td>
@@ -110,7 +110,7 @@
   <th>Name</th>
   <th class="date">Date</th>
 </tr>
-<% @ccr.immunizations.each { |immunization| %>
+<% Immunization.find(:all, :include => :immunization_name, :conditions => ['ccr_id = ?', @ccr.id]).each { |immunization| %>
 <tr>
   <td><%= immunization.name %></td>
   <td><%= immunization.start_date %></td>
