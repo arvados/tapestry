@@ -3,6 +3,10 @@ class Condition < ActiveRecord::Base
       belongs_to :condition_description
 
   def description
-    condition_description.description
+    if not condition_description.nil? then 
+      condition_description.description
+    else
+      ''
+    end
   end
 end

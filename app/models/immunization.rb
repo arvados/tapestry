@@ -3,6 +3,10 @@ class Immunization < ActiveRecord::Base
       belongs_to :immunization_name
 
   def name
-    immunization_name.name
+    if not immunization_name.nil? then
+      immunization_name.name
+    else
+      ''
+    end
   end
 end

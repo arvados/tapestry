@@ -3,6 +3,10 @@ class Procedure < ActiveRecord::Base
       belongs_to :procedure_description
   
   def description
-    procedure_description.description
+    if not procedure_description.nil? then 
+      procedure_description.description
+    else
+      ''
+    end
   end
 end

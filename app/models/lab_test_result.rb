@@ -3,6 +3,10 @@ class LabTestResult < ActiveRecord::Base
       belongs_to :lab_test_result_description
 
   def description
-    lab_test_result_description.description
+    if not lab_test_result_description.nil? then 
+      lab_test_result_description.description
+    else
+      ''
+    end
   end
 end
