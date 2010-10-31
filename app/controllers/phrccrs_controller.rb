@@ -109,8 +109,8 @@ class PhrccrsController < ApplicationController
     scope = GOOGLE_HEALTH_URL + '/feeds'
     if ROOT_URL == "enroll-si.personalgenomes.org"
       next_url = 'http://enroll-si.personalgenomes.org/phrccr/authsub'
-    elsif ROOT_URL == "enroll-dev.personalgenomes.org"
-      next_url = 'http://enroll-dev.personalgenomes.org/phrccr/authsub'
+    elsif ROOT_URL == "my-dev.personalgenomes.org"
+      next_url = 'http://my-dev.personalgenomes.org/phrccr/authsub'
     else
       next_url = 'https://my.personalgenomes.org/phrccr/authsub'
     end

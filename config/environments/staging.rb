@@ -21,11 +21,11 @@ config.action_controller.perform_caching             = true
 # config.action_mailer.raise_delivery_errors = false
 
 ActionMailer::Base.smtp_settings = {
-  :domain => "enroll-dev.personalgenomes.org",
+  :domain => "my-dev.personalgenomes.org",
   :address => 'outgoing.personalgenomes.org'
 }
 
-ROOT_URL = 'enroll-dev.personalgenomes.org'
+ROOT_URL = 'my-dev.personalgenomes.org'
 ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'
 
 ENV['RECAPTCHA_PUBLIC_KEY'] = 'yyyyyyyyyyyyyyyyyyyyyyyy-xxxxxxxx'
