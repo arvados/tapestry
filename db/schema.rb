@@ -9,17 +9,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101011200437) do
+ActiveRecord::Schema.define(:version => 20101021175113) do
 
   create_table "allergies", :force => true do |t|
     t.integer "ccr_id"
     t.date    "start_date"
     t.date    "end_date"
-    t.string  "description"
     t.string  "severity"
     t.string  "codes"
     t.string  "status"
+    t.integer "allergy_description_id"
   end
+
+  add_index "allergies", ["allergy_description_id"], :name => "index_allergies_on_allergy_description_id"
+  add_index "allergies", ["ccr_id"], :name => "index_allergies_on_ccr_id"
+
+  create_table "allergy_descriptions", :force => true do |t|
+    t.string "description", :null => false
+  end
+
+  add_index "allergy_descriptions", ["description"], :name => "index_allergy_descriptions_on_description", :unique => true
 
   create_table "answer_options", :force => true do |t|
     t.integer  "exam_question_id"
@@ -62,14 +71,23 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
     t.datetime "updated_at"
   end
 
+  create_table "condition_descriptions", :force => true do |t|
+    t.string "description", :null => false
+  end
+
+  add_index "condition_descriptions", ["description"], :name => "index_condition_descriptions_on_description", :unique => true
+
   create_table "conditions", :force => true do |t|
     t.integer "ccr_id"
     t.date    "start_date"
     t.date    "end_date"
-    t.string  "description"
     t.string  "codes"
     t.string  "status"
+    t.integer "condition_description_id"
   end
+
+  add_index "conditions", ["ccr_id"], :name => "index_conditions_on_ccr_id"
+  add_index "conditions", ["condition_description_id"], :name => "index_conditions_on_condition_description_id"
 
   create_table "content_areas", :force => true do |t|
     t.string   "title"
@@ -193,12 +211,21 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
 
   add_index "family_survey_responses", ["user_id"], :name => "index_family_survey_responses_on_user_id"
 
+  create_table "immunization_names", :force => true do |t|
+    t.string "name", :null => false
+  end
+
+  add_index "immunization_names", ["name"], :name => "index_immunization_names_on_name", :unique => true
+
   create_table "immunizations", :force => true do |t|
     t.integer "ccr_id"
     t.date    "start_date"
-    t.string  "name"
     t.string  "codes"
+    t.integer "immunization_name_id"
   end
+
+  add_index "immunizations", ["ccr_id"], :name => "index_immunizations_on_ccr_id"
+  add_index "immunizations", ["immunization_name_id"], :name => "index_immunizations_on_immunization_name_id"
 
   create_table "informed_consent_responses", :force => true do |t|
     t.integer  "twin",       :limit => 1
@@ -223,14 +250,23 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
     t.datetime "updated_at"
   end
 
+  create_table "lab_test_result_descriptions", :force => true do |t|
+    t.string "description", :null => false
+  end
+
+  add_index "lab_test_result_descriptions", ["description"], :name => "index_lab_test_result_descriptions_on_description", :unique => true
+
   create_table "lab_test_results", :force => true do |t|
     t.integer "ccr_id"
     t.date    "start_date"
-    t.string  "description"
     t.string  "codes"
     t.string  "value"
     t.string  "units"
+    t.integer "lab_test_result_description_id"
   end
+
+  add_index "lab_test_results", ["ccr_id"], :name => "index_lab_test_results_on_ccr_id"
+  add_index "lab_test_results", ["lab_test_result_description_id"], :name => "index_lab_test_results_on_lab_test_result_description_id"
 
   create_table "mailing_list_subscriptions", :id => false, :force => true do |t|
     t.integer "user_id"
@@ -245,11 +281,16 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
     t.datetime "updated_at"
   end
 
+  create_table "medication_names", :force => true do |t|
+    t.string "name", :null => false
+  end
+
+  add_index "medication_names", ["name"], :name => "index_medication_names_on_name", :unique => true
+
   create_table "medications", :force => true do |t|
     t.integer "ccr_id"
     t.date    "start_date"
     t.date    "end_date"
-    t.string  "name"
     t.string  "codes"
     t.string  "strength"
     t.string  "dose"
@@ -257,7 +298,11 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
     t.string  "route"
     t.string  "route_codes"
     t.string  "status"
+    t.integer "medication_name_id"
   end
+
+  add_index "medications", ["ccr_id"], :name => "index_medications_on_ccr_id"
+  add_index "medications", ["medication_name_id"], :name => "index_medications_on_medication_name_id"
 
   create_table "named_proxies", :force => true do |t|
     t.integer  "user_id"
@@ -287,12 +332,21 @@ ActiveRecord::Schema.define(:version => 20101011200437) do
 
   add_index "privacy_survey_responses", ["user_id"], :name => "index_privacy_survey_responses_on_user_id"
 
+  create_table "procedure_descriptions", :force => true do |t|
+    t.string "description", :null => false
+  end
+
+  add_index "procedure_descriptions", ["description"], :name => "index_procedure_descriptions_on_description", :unique => true
+
   create_table "procedures", :force => true do |t|
     t.integer "ccr_id"
     t.date    "start_date"
-    t.string  "description"
     t.string  "codes"
+    t.integer "procedure_description_id"
   end
+
+  add_index "procedures", ["ccr_id"], :name => "index_procedures_on_ccr_id"
+  add_index "procedures", ["procedure_description_id"], :name => "index_procedures_on_procedure_description_id"
 
   create_table "question_responses", :force => true do |t|
     t.integer  "exam_response_id"
