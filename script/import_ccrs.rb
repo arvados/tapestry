@@ -45,9 +45,13 @@ ccr_files_to_import.each { |f|
   #begin
   user_id = m[1].gsub('/','').to_i
 
-  # skip test users
-  u = User.find :first, user_id
-  next if u.nil? || u.is_test
+  u = User.find(user_id)
+  if u.nil?
+    puts f.to_s
+    puts m[1]
+    puts "nil"
+  end
+  next if u.nil?
 
   ccr_version = m[2]
   # We don't want duplicates
@@ -57,7 +61,7 @@ ccr_files_to_import.each { |f|
   ccr.user_id = user_id
   ccr.version = ccr_version
   begin
-  ccr.save
+    ccr.save
   rescue
     puts 'Error saving ccr version: ' + ccr_version + " for user: " + user_id.to_s
   end
