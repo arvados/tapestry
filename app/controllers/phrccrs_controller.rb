@@ -42,7 +42,8 @@ class PhrccrsController < ApplicationController
     elsif commit_action.eql?('Refresh PHR')
       begin
         download_phr()
-      rescue
+      rescue Exception => e
+        current_user.log("Error retrieving/saving PHR: #{e.exception}")
         flash[:error] = 'There was an error saving your PHR.'
       end
       redirect_to :action => :review
