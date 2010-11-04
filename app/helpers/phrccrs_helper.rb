@@ -204,7 +204,11 @@ module PhrccrsHelper
 
   # Returns location of private key used to sign Google Health requests
   def private_key
-    return 'config/pgpenrollkey.pem'
+    if File.exists?('config/pgpenrollkey.pem') then
+      return 'config/pgpenrollkey.pem'
+    else
+      return nil
+    end
   end
 
   def ccr_profile_url
@@ -269,7 +273,7 @@ module PhrccrsHelper
     a = []
     node.children.each { |c|
       if c.name == name
-	a << c
+        a << c
       end
     }
     return a
@@ -279,7 +283,7 @@ module PhrccrsHelper
     return nil if node.nil?
     node.children.each { |c|
       if c.name == name
-	return c
+        return c
       end
     }
     return nil
@@ -294,19 +298,19 @@ module PhrccrsHelper
     return nil if node.nil?
     node.children.each { |c|
       if c.name == 'DateTime'
-      	t = get_element(c, 'Type')
-	next if t.nil?
-	tx = get_element(t, 'Text')
-	tx_s = tx.inner_text
-	next if tx.nil? || tx_s != name
-	edt = get_element(c, 'ExactDateTime')
-	return nil if edt.nil?
-	edt_text = edt.inner_text
-	return nil if edt_text == '--T00:00:00Z'
-	if edt_text.length == 4
-	  edt_text += '-01-01' #Append dummy date for entries with just the year
+        t = get_element(c, 'Type')
+        next if t.nil?
+        tx = get_element(t, 'Text')
+        tx_s = tx.inner_text
+        next if tx.nil? || tx_s != name
+        edt = get_element(c, 'ExactDateTime')
+        return nil if edt.nil?
+        edt_text = edt.inner_text
+        return nil if edt_text == '--T00:00:00Z'
+        if edt_text.length == 4
+          edt_text += '-01-01' #Append dummy date for entries with just the year
         end
-	return DateTime.parse(edt_text)
+        return DateTime.parse(edt_text)
       end
     }
     return nil
@@ -360,7 +364,7 @@ module PhrccrsHelper
       else
         dob_s = get_inner_text(dob) 
         dem.dob = dob_s == '--T00:00:00Z' ? nil : DateTime.parse(dob_s)
-      end	 
+      end
     rescue
       dem.dob = nil
     end
@@ -481,7 +485,7 @@ module PhrccrsHelper
 
       # if unsuccessful save, condition is already in db due to uniqueness constraint       
       begin
-	condition_description.save
+        condition_description.save
       rescue
         condition_description = ConditionDescription.find_by_description(description)
       end
@@ -527,7 +531,7 @@ module PhrccrsHelper
 
       # if unsuccessful save, assume lab test is already in db due to uniqueness constraint
       begin
-	lab_test_result_description.save
+        lab_test_result_description.save
       rescue
         lab_test_result_description = LabTestResultDescription.find_by_description(description)
       end

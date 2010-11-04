@@ -68,9 +68,14 @@ class PhrccrsController < ApplicationController
   end
 
   def unlink_googlehealth(redirect = nil)
-    authsub_revoke(current_user)
-    current_user.log('Unlinked from Google Health')
-    flash[:notice] = 'Unlinked from Google Health'
+    begin
+      authsub_revoke(current_user)
+      current_user.log('Unlinked from Google Health')
+      flash[:notice] = 'Unlinked from Google Health'
+    rescue Exception => e
+      current_user.log("Error unlinking from Google Health: #{e.exception}")
+      flash[:error] = 'There was an error unlinking from your Google Health account.'
+    end
     if !redirect
       redirect_to edit_user_url(current_user)
     else
@@ -90,7 +95,8 @@ class PhrccrsController < ApplicationController
         download_phr
         flash[:notice] = 'Your Google Health Profile was successfully linked'
         redirect_to :action => :show
-      rescue GData::Client::Error => ex
+      rescue Exception => e
+        current_user.log("Error linking Google Health profile: #{e.exception}")
         flash[:error] = 'We could not link your Google Health profile. Please try again.'
         redirect_to :action => :show
       end
@@ -107,15 +113,20 @@ class PhrccrsController < ApplicationController
       return
     end
     scope = GOOGLE_HEALTH_URL + '/feeds'
-    if ROOT_URL == "enroll-si.personalgenomes.org"
+    if ROOT_URL == "localhost:3000"
+      next_url = 'http://localhost:3000/phrccr/authsub'
+      secure = false # when using localhost, secure has to be off (cf. http://code.google.com/apis/health/getting_started.html#RegisterGoogle)
+    elsif ROOT_URL == "enroll-si.personalgenomes.org"
       next_url = 'http://enroll-si.personalgenomes.org/phrccr/authsub'
+      secure = true  # set secure = true for signed AuthSub requests
     elsif ROOT_URL == "my-dev.personalgenomes.org"
-      next_url = 'http://my-dev.personalgenomes.org/phrccr/authsub'
+      next_url = 'https://my-dev.personalgenomes.org/phrccr/authsub'
+      secure = true  # set secure = true for signed AuthSub requests
     else
       next_url = 'https://my.personalgenomes.org/phrccr/authsub'
+      secure = true  # set secure = true for signed AuthSub requests
     end
 
-    secure = true  # set secure = true for signed AuthSub requests
     sess = 1
     authsub_link = AuthSub.get_url(next_url, scope, secure, sess)
     redirect_to authsub_link    
