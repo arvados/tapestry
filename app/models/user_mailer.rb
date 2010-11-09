@@ -47,7 +47,8 @@ class UserMailer < ActionMailer::Base
   def safety_questionnaire_reminder(user)
     setup_email(user)
     @subject += 'PGP Safety Questionnaire'
-    user.log("Sent PGP Safety Questionnaire reminder")
+    # DO NOT modify the user.log line below without also modifying script/send_safety_questionnaire_reminders.rb which depends on it!
+    user.log("Sent PGP Safety Questionnaire Reminder")
   end
 
   def enrollment_decision_notification(user)
