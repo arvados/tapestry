@@ -277,15 +277,21 @@ class User < ActiveRecord::Base
   end
 
   def eligibility_screening_passed
-    if self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_survey_results') } then
-      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_survey_results') }.created_at.to_s + ' (passed ' + self.eligibility_survey_version + ')'
-    elsif self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_surveys') } then
-      # In v1 of the enrollment application, the eligibility questionnaire results step right after taking the eligibility questionnaire did not exist
-      # So, we just take the timestamp of the questionnaire itself, which will hold the date it was last taken. 
-      return self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_surveys') }.created_at.to_s + ' (passed ' + self.eligibility_survey_version + ')'
+    # In v1 of the enrollment application, the eligibility questionnaire results step right after taking the eligibility questionnaire did not exist
+    # So, we just take the timestamp of the questionnaire itself, which will hold the date it was last taken. 
+    @step_v1 = self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_surveys') }
+    @step_v2 = self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_survey_results') }
+    if self.screening_survey_response.nil? or not self.screening_survey_response.passed?
+      return 'Not passed yet.'
+    end
+    if not @step_v2.nil? then
+      @step = @step_v2
+    elsif @step_v1 then
+      @step = @step_v1
     else
       return 'Not passed yet.'
     end
+    return @step.created_at.to_s + " (passed " + self.eligibility_survey_version + ')'
   end
 
   def exam_passed
