@@ -73,7 +73,7 @@ class Admin::PhrReportsController < Admin::AdminControllerBase
     @seen = []
     skipped = 0
     unless params[:commit].nil? or queries.empty? or query_params.empty? 
-      ccr_results = Ccr.find(:all, :joins => joins.join(' '), :conditions => ['(' + queries.join(') AND (') + ')', query_params].flatten, :order => 'id, version')
+      ccr_results = Ccr.find(:all, :joins => joins.join(' '), :conditions => ['(' + queries.join(') AND (') + ')', query_params].flatten, :order => 'id, version', :include => :user)
       ccr_results.each {|ccr|
         unless ccr.user.nil? or ccr.user.is_test or @seen.include?(ccr.user)
           @ccrs << ccr
