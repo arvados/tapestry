@@ -1,0 +1,13 @@
+<h2>International Users</h2>
+<table class="admin_table">
+<tr>
+  <th>Country</th>
+  <th>Count</th>
+</tr>
+<% @internationalUserCount.each do |u| %>
+<tr>
+  <td><%= u.country %></td>
+  <td><%= u.count %></td>
+</tr>
+<% end %>
+</table>
