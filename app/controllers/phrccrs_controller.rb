@@ -18,7 +18,7 @@ class PhrccrsController < ApplicationController
 
     version = params[:version]
     if version && !version.empty?
-      for i in 0.. ccr_list.length - 1 do
+      for i in 0.. @ccr_history.length - 1 do
         if @ccr_history[i].version == version
           @current_version = version
           @ccr = @ccr_history[i]
