@@ -70,14 +70,14 @@ class Admin::PhrReportsController < Admin::AdminControllerBase
     #flash[:notice] = '(' + queries.join(') AND (') + ')'
 
     @ccrs = []
-    @seen = []
+    @users = []
     skipped = 0
     unless params[:commit].nil? or queries.empty? or query_params.empty? 
-      ccr_results = Ccr.find(:all, :joins => joins.join(' '), :conditions => ['(' + queries.join(') AND (') + ')', query_params].flatten, :order => 'id, version')
+      ccr_results = Ccr.find(:all, :joins => joins.join(' '), :conditions => ['(' + queries.join(') AND (') + ')', query_params].flatten, :order => 'id, version', :group => 'user_id', :include => :user)
       ccr_results.each {|ccr|
-        unless ccr.user.nil? or ccr.user.is_test or @seen.include?(ccr.user)
+        unless ccr.user.nil? or ccr.user.is_test
           @ccrs << ccr
-          @seen << ccr.user
+          @users << ccr.user
         else
           skipped += 1
         end

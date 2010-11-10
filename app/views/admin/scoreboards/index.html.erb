@@ -1,11 +1,15 @@
 <h2>International Users</h2>
+
+There are currently <%= InternationalParticipant.find(:all).count %> international users registered.
 <table class="admin_table">
 <tr>
+  <th>#</th>
   <th>Country</th>
   <th>Count</th>
 </tr>
-<% @internationalUserCount.each do |u| %>
+<% @internationalUsers.each_with_index do |u,i| %>
 <tr>
+  <td><%= i+1 %></td>
   <td><%= u.country %></td>
   <td><%= u.count %></td>
 </tr>

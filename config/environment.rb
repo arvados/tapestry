@@ -81,6 +81,8 @@ Rails::Initializer.run do |config|
     :lib => 'will_paginate', 
     :source => 'http://gems.github.com'
   config.gem 'alexdunae-validates_email_format_of', :lib => 'validates_email_format_of'
+  config.gem "ruby-prof"
+
 end
 
 require 'csv'

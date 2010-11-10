@@ -1,0 +1,11 @@
+<h3>Enrollment History</h3>
+
+<table class="admin_table">
+<tr><td>Participant ID:</td><td><%= @user.hex -%></td></tr>
+<tr><td>Account created:</td><td><%= @user.created_at.to_s -%></td></tr>
+<tr><td>Eligibility screening:</td><td><%= @user.eligibility_screening_passed -%></td></tr>
+<tr><td>Exam:</td><td><%= @user.exam_passed -%></td></tr>
+<tr><td>Consent:</td><td><%= @user.consent_passed -%></td></tr>
+<tr><td>Enrolled:</td><td><%= @user.enrolled.to_s -%></td></tr>
+</table>
+ 

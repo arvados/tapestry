@@ -11,13 +11,9 @@ function clearForm() {
 <h2>PHR Reports</h2>
 
 <% if params[:commit] %>
-<h3><%= @ccrs.length %> result(s) found</h3>
-<% @ccrs.each {|ccr| %>
-<% if ccr.user.nil? %>
-User not found - CCR's user_id reference is [<%= ccr.user_id %>] <br />
-<% else %>
-<a href="<%= public_profile_url(ccr.user) %>"><%= ccr.user.hex %></a><br />
-<% end %>
+<h3><%= @users.length %> result(s) found</h3>
+<% @users.each {|user| %>
+<a href="<%= public_profile_url(user) %>"><%= user.hex %></a><br />
 <% } %>
 <% end %>
 

@@ -46,9 +46,7 @@ Public profile url: <a href="<%= public_profile_url(@user) %>"><%= public_profil
   </ol>
 <% end -%>
 
-<% if @user.eligibility_survey_version -%>
-  <p>This user has passed eligibility survey version <%= @user.eligibility_survey_version %>.
-<% end -%>
+<%= render :partial => 'profiles/enrollment_history' %>
 
 <% if @user.next_enrollment_step -%>
   <p>Promote to the next enrollment step:<br/>
@@ -56,7 +54,7 @@ Public profile url: <a href="<%= public_profile_url(@user) %>"><%= public_profil
 <% end -%>
 
 <% if @user.ineligible_for_enrollment.length != 0 and @user.ineligible_for_enrollment[0] != 'Already enrolled' -%>
-<h2>Enrollment eligibility</h2>
+<h3>Enrollment eligibility</h3>
 Not eligible for enrollment for the following reason(s):
 <ul>
 <% @user.ineligible_for_enrollment.each do |reason| -%>
