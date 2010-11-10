@@ -309,6 +309,8 @@ module PhrccrsHelper
         return nil if edt_text == '--T00:00:00Z'
         if edt_text.length == 4
           edt_text += '-01-01' #Append dummy date for entries with just the year
+        elsif edt_text.length == 7
+          edt_text += '-01' #Some ccrs have month, but not day
         end
         return DateTime.parse(edt_text)
       end
