@@ -50,24 +50,24 @@ protected
         if ccr_list.length > 0
           feed = File.new(ccr_list[0])
           ccr = Nokogiri::XML(feed)
-	  etag = CGI.unescapeHTML(ccr.root.xpath('@gd:etag').inner_text)
+          etag = CGI.unescapeHTML(ccr.root.xpath('@gd:etag').inner_text)
           begin
-	    result = get_ccr(current_user, etag)
-	    ccr = Nokogiri::XML(result)
+            result = get_ccr(current_user, etag)
+            ccr = Nokogiri::XML(result)
             updated = ccr.xpath('/xmlns:feed/xmlns:updated').inner_text
             ccr_filename = get_ccr_filename(current_user.id, true, updated)
-	    if !File.exist?(ccr_filename)
+            if !File.exist?(ccr_filename)
               outFile = File.new(ccr_filename, 'w')
-      	      outFile.write(ccr)
-      	      outFile.close
-	      current_user.log("Autoupdated PHR (#{ccr_filename})")
-	    end
-	  rescue
-	  end  
-	end
+              outFile.write(ccr)
+              outFile.close
+              current_user.log("Autoupdated PHR (#{ccr_filename})")
+            end
+          rescue
+          end  
+        end
       end
     rescue
-	flash[:error] = 'Could not update your PHR. Please try refreshing it manually'
+        flash[:error] = 'Could not update your PHR. Please try refreshing it manually'
     end
   end
 end
