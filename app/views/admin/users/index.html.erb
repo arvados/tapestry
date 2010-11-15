@@ -47,16 +47,11 @@
   <li><%= link_to "Bulk waitlist some users (e-mail list)", new_admin_bulk_waitlist_path(:phase => 'enroll') %></li>
 </ul>
 
-<h3>current activity</h3>
+<h3>reports</h3>
 
 <ul>
 <li><%= link_to "current user activity", admin_active_users_path() %></li>
-</ul>
-
-<h3>report</h3>
-
-<ul>
-<li><%= link_to "ineligible user report", admin_ineligible_users_path() %></li>
+<li><%= link_to "ineligible users", admin_ineligible_users_path() %></li>
 </ul>
 
 <h3>Export</h3>
