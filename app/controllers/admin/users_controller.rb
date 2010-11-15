@@ -142,6 +142,15 @@ class Admin::UsersController < Admin::AdminControllerBase
     redirect_to :action => 'edit'
   end
 
+  def ineligible
+    @ineligible = Hash.new(0)
+    User.ineligible_for_enrollment.each do |u|
+      u.ineligible_for_enrollment.each do |r|
+        @ineligible[r] += 1
+      end
+    end
+  end
+
   protected
 
   def user_list_worker
@@ -203,5 +212,4 @@ class Admin::UsersController < Admin::AdminControllerBase
     @result += ": #{@unpaginated_users.to_a.size} found" if (@result != '')
     @users = @unpaginated_users.paginate(:page => params[:page] || 1)
   end
-
 end

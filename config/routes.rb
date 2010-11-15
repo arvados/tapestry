@@ -69,6 +69,7 @@ ActionController::Routing::Routes.draw do |map|
   map.admin_enroll_users '/admin/users/enroll',    :controller => 'admin/users',    :action => 'enroll'
   map.admin_active_users '/admin/users/active',    :controller => 'admin/users',    :action => 'active'
   map.admin_activity_users '/admin/users/activity',    :controller => 'admin/users',    :action => 'activity'
+  map.admin_ineligible_users '/admin/users/ineligible',    :controller => 'admin/users',    :action => 'ineligible'
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
     admin.resources :users, :member => { :activate => :put,

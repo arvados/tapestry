@@ -1,0 +1,15 @@
+<h2>Users Ineligible for Enrollment</h2>
+
+There are currently <%= User.ineligible_for_enrollment.count %> ineligible users registered.
+<table class="admin_table">
+<tr>
+  <th>Reason</th>
+  <th>Number</th>
+</tr>
+<% @ineligible.sort { |a,b| b[1] <=> a[1] }.each do |k,v| %>
+<tr>
+  <td><%= k %></td>
+  <td><%= v %></td>
+</tr>
+<% end %>
+</table>
