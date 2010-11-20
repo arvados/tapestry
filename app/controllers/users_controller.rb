@@ -2,11 +2,11 @@ class UsersController < ApplicationController
   before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent ]
   skip_before_filter :login_required, :only => [:new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form ]
   #before_filter :ensure_invited, :only => [:new, :new2, :create]
-  skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :logout ]
+  skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos ]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
-  skip_before_filter :ensure_latest_consent, :only => [:tos, :accept_tos, :consent, :logout ]
+  skip_before_filter :ensure_latest_consent, :only => [:tos, :accept_tos, :consent ]
   # Make sure people sign the latest TOS and Consent before they do safety questionnaires
-  skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :logout ]
+  skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent ]
 
   def new
     @user = User.new(params[:user])

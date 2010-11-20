@@ -2,8 +2,13 @@
 class SessionsController < ApplicationController
   include PhrccrsHelper
   skip_before_filter :login_required, :only => [:new, :create]
-  # Allow user to log out when they have not agreed to the TOS yet
+  # Allow user to log out when they have not 
+  # * agreed to the TOS yet
+  # * taken latest consent yet
+  # * taken safety questionnaire yet
   skip_before_filter :ensure_tos_agreement, :only => [:destroy]
+  skip_before_filter :ensure_latest_consent, :only => [:destroy]
+  skip_before_filter :ensure_recent_safety_questionnaire, :only => [:destroy]
 
   def new
   end
