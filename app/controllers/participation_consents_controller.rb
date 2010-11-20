@@ -1,5 +1,6 @@
 class ParticipationConsentsController < ApplicationController
   skip_before_filter :ensure_latest_consent, :only => [:show, :create ]
+  skip_before_filter :ensure_recent_safety_questionnaire, :only => [:show, :create ]
 
   def show
     @informed_consent_response = InformedConsentResponse.new()

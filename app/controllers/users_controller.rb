@@ -5,6 +5,8 @@ class UsersController < ApplicationController
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :logout ]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
   skip_before_filter :ensure_latest_consent, :only => [:tos, :accept_tos, :consent, :logout ]
+  # Make sure people sign the latest TOS and Consent before they do safety questionnaires
+  skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :logout ]
 
   def new
     @user = User.new(params[:user])
