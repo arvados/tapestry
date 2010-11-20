@@ -330,7 +330,7 @@ class User < ActiveRecord::Base
       # No SQ results, but account younger than 3 months. They are ok.
       return true
     end
-    3.months.ago < self.safety_questionnaires.last.datetime
+    3.months.ago < self.safety_questionnaires.find(:all, :order => 'datetime').last.datetime
   end
 
   def ineligible_for_enrollment

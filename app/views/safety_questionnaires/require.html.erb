@@ -8,7 +8,7 @@ adverse events are occurring.
 <p>You were enrolled in the PGP on <%= current_user.enrolled -%> (more than three months ago), and have not
 yet taken a safety questionnaire.</p>
 <% elsif not current_user.safety_questionnaires.empty? -%>
-<p>You took your last safety questionnaire on <%= current_user.safety_questionnaires.last.datetime -%>.</p>
+<p>You took your last safety questionnaire on <%= current_user.safety_questionnaires.find(:all, :order => 'datetime').last.datetime -%>.</p>
 <% end -%>
 
 <p>Please take the safety questionnaire by following the link below.</p>
