@@ -23,14 +23,8 @@ class SafetyQuestionnairesController < ApplicationController
 
   def create
     @safety_questionnaire = SafetyQuestionnaire.new(params[:safety_questionnaire])
-
-STDERR.puts params[:safety_questionnaire]
-
     @safety_questionnaire.user = current_user
     @safety_questionnaire.datetime = Time.now()
-STDERR.puts @safety_questionnaire.changes.to_s    
-STDERR.puts @safety_questionnaire.changes.class
-
     if @safety_questionnaire.save
       flash[:notice] = 'Safety Questionnaire answers successfully saved.'
       redirect_to root_path
