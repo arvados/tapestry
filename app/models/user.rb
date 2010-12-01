@@ -368,7 +368,7 @@ class User < ActiveRecord::Base
     elsif (other.pgp_id.nil?)
       return -1
     else
-      return pgp_id <=> other.pgp_id
+      return pgp_id.sub(/PGP/,'').to_i <=> other.pgp_id.sub(/PGP/,'').to_i
     end
   end
 
