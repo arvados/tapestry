@@ -66,6 +66,7 @@ ActionController::Routing::Routes.draw do |map|
   map.require_safety_questionnaire '/safety_questionnaires/require',    :controller => 'safety_questionnaires',    :action => 'require'
   map.resources :safety_questionnaires
 
+  map.admin_safety_questionnaires '/admin/safety_questionnaires',    :controller => 'admin/safety_questionnaires',    :action => 'index'
   map.admin_enroll_users '/admin/users/enroll',    :controller => 'admin/users',    :action => 'enroll'
   map.admin_active_users '/admin/users/active',    :controller => 'admin/users',    :action => 'active'
   map.admin_activity_users '/admin/users/activity',    :controller => 'admin/users',    :action => 'activity'

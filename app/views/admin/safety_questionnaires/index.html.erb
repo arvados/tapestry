@@ -1,0 +1,32 @@
+<h2>Safety Questionnaire Responses</h2>
+
+<% if @safety_questionnaires != [] %>
+
+<h3>Export</h3>
+Download this list of safety questionnaire responses as <%= link_to 'CSV',
+  admin_safety_questionnaires_url(:format => 'csv') %>
+
+<h3>Responses</h3>
+<table class="admin_table">
+  <tr>
+    <th>User</th>
+    <th>Submitted</th>
+    <th>Changes reported</th>
+  </tr>
+  <% @safety_questionnaires.each do |sq| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=h sq.user.full_name %></td>
+      <td><%=h sq.datetime %></td>
+      <td>
+        <%= h sq.changes ? 'yes' : 'no' -%>
+      </td>
+      <td><%= link_to 'View', safety_questionnaire_path(sq) %></td>
+    </tr>
+  <% end %>
+</table>
+
+<% else %>
+
+No safety questionnaire results found.
+
+<% end %>

@@ -15,7 +15,7 @@ class SafetyQuestionnairesController < ApplicationController
   def show
     # find_by_id returns nil when the record does not exist; find throws an ActiveRecord::RecordNotFound
     @safety_questionnaire = SafetyQuestionnaire.find_by_id(params[:id])
-    if @safety_questionnaire.nil? or @safety_questionnaire.user != current_user then
+    if @safety_questionnaire.nil? or (!current_user.is_admin? && @safety_questionnaire.user != current_user) then
       flash[:error] = 'Invalid id'
       redirect_to root_url
     end
