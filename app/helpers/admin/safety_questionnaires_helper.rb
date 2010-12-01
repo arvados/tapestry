@@ -4,7 +4,7 @@ module Admin::SafetyQuestionnairesHelper
 
     # precache associations
     safety_questionnaires = SafetyQuestionnaire.find(safety_questionnaires.map(&:id),
-        :include => [:user])
+        :include => [:user]).sort { |x,y| x.datetime <=> y.datetime }
 
     user_fields = %w(full_name).freeze
     safety_questionnaire_fields = %w(datetime changes events reactions contact healthcare).freeze
