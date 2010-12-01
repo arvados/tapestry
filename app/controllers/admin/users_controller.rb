@@ -75,6 +75,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     @user = User.find params[:id]
     @user.is_admin = params[:user].delete(:is_admin)
     @user.is_test = params[:user].delete(:is_test)
+    if (params[:user][:pgp_id] == '') then
+      params[:user][:pgp_id] = nil
+    end
 
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'
@@ -160,6 +163,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     elsif params[:enrolled]
       @unpaginated_users = User.enrolled
       @result = "Searching for enrolled users"
+    elsif params[:pgp_id]
+      @unpaginated_users = User.pgp_ids
+      @result = "Searching for enrolled users with PGP #"
     elsif params[:eligible_for_enrollment]
       @unpaginated_users = User.eligible_for_enrollment
       @result = "Searching for users eligible for enrollment"
@@ -210,6 +216,6 @@ class Admin::UsersController < Admin::AdminControllerBase
     # See https://rails.lighthouseapp.com/projects/8994/tickets/1349-named-scope-with-group-by-bug 
     # TODO: after upgrade to 2.3, check if this is still needed. Ward, 2010-10-14
     @result += ": #{@unpaginated_users.to_a.size} found" if (@result != '')
-    @users = @unpaginated_users.paginate(:page => params[:page] || 1)
+    @users = @unpaginated_users.sort.paginate(:page => params[:page] || 1)
   end
 end

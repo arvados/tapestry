@@ -5,6 +5,7 @@
   <ul>
     <li><%= link_to "Show all users", admin_users_path(:all => true) %></li>
     <li><%= link_to "Show enrolled users", admin_users_path(:enrolled => true) %></li>
+    <li><%= link_to "Show enrolled users with PGP #", admin_users_path(:pgp_id => true) %></li>
     <li><%= link_to "Show users eligible to be enrolled (who have submitted their enrollment application)", admin_users_path(:eligible_for_enrollment => true) %></li>
     <li><%= link_to "Show users ineligible to be enrolled (who have submitted their enrollment application)", admin_users_path(:ineligible_for_enrollment => true) %></li>
     <li><%= link_to "Show waitlisted users", admin_users_path(:waitlisted => true) %></li>

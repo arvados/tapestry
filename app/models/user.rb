@@ -48,6 +48,13 @@ class User < ActiveRecord::Base
   validates_presence_of     :email
   validates_length_of       :email,    :within => 6..100 #r@a.wk
   validates_uniqueness_of   :email,    :case_sensitive => false
+  validates_uniqueness_of   :pgp_id,   :case_sensitive => false, :allow_nil => true
+
+  validates_format_of :pgp_id,
+                      :with => %r{^PGP(\d+)$},
+                      :message => "must be of the format PGPXXX with XXX a number",
+                      :allow_nil => true
+
   # this comes from the alexdunae-validates_email_format_of gem, see http://code.dunae.ca/validates_email_format_of.html
   # ward, 2010-10-13
   validates_email_format_of :email, :message => MSG_EMAIL_BAD
@@ -70,6 +77,7 @@ class User < ActiveRecord::Base
 
   named_scope :inactive, { :conditions => "activated_at IS NULL and is_test = false" }
   named_scope :enrolled, { :conditions => "enrolled IS NOT NULL and is_test = false" }
+  named_scope :pgp_ids, { :conditions => "enrolled IS NOT NULL and pgp_id IS NOT NULL and is_test = false" }
   named_scope :test, { :conditions => "is_test = true" }
   named_scope :exclude_test, { :conditions => "is_test = false" }
 
@@ -172,7 +180,7 @@ class User < ActiveRecord::Base
   before_create :make_activation_code
   attr_accessible :email, :email_confirmation,
                   :password, :password_confirmation,
-                  :first_name, :middle_name, :last_name,
+                  :first_name, :middle_name, :last_name, :pgp_id,
                   :security_question, :security_answer,
                   :address1, :address2, :city, :state, :zip,
                   :phr_profile_name, :mailing_list_ids, :authsub_token
@@ -350,6 +358,18 @@ class User < ActiveRecord::Base
     # Empty array -> eligible
     # Non-empty array -> ineligible
     return reasons
+  end
+
+  def <=> other
+    if (pgp_id.nil? && other.pgp_id.nil?) then
+      return full_name <=> other.full_name
+    elsif (pgp_id.nil?)
+      return 1
+    elsif (other.pgp_id.nil?)
+      return -1
+    else
+      return pgp_id <=> other.pgp_id
+    end
   end
 
   protected
