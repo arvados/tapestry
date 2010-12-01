@@ -3,7 +3,9 @@ class Admin::SafetyQuestionnairesController < Admin::AdminControllerBase
   include Admin::SafetyQuestionnairesHelper
 
   def index
-    @unpaginated_safety_questionnaires = SafetyQuestionnaire.find(:all).sort { |x,y| y.datetime <=> x.datetime }
+    @unpaginated_safety_questionnaires = SafetyQuestionnaire.find(:all, 
+                                                                  :include => 'user', 
+                                                                  :conditions => { 'users.is_test' => 'false' }).sort { |x,y| y.datetime <=> x.datetime }
     @safety_questionnaires = @unpaginated_safety_questionnaires.paginate(:page => params[:page] || 1)
     respond_to do |format|
       format.html
