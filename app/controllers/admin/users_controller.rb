@@ -79,6 +79,14 @@ class Admin::UsersController < Admin::AdminControllerBase
       params[:user].delete(:pgp_id)
       @user.pgp_id = nil
     end
+    if (params[:user][:security_question] == '') then
+      params[:user].delete(:security_question)
+      @user.security_question = nil
+    end
+    if (params[:user][:security_answer] == '') then
+      params[:user].delete(:security_answer)
+      @user.security_answer = nil
+    end
 
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'
