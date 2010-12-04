@@ -1,0 +1,48 @@
+<h2>Absolute Pitch Prelimary Screening Responses</h2>
+<% if @survey_end_no_absolute_pitch %>
+<h3 style="font-size: 120%"><%= @survey.survey_sections[0].heading %></h3>
+<% @survey.survey_sections[0].survey_questions.each {|q|%>
+    <div style="margin-bottom: 20px">
+      <% if q.question_type != 'end' %>
+        <div style="font-weight:bold">
+          <%= q.text %>
+        </div>
+        <div>
+            <% if @answer_mapping[@answers[q.id].to_s].nil? %>
+            <%= @answers[q.id] %>
+            <% elsif @answers[q.id].length > 1 %>
+            <%= @answers[q.id].join(', ') %>
+            <% else %>  
+            <%= @answer_mapping[@answers[q.id].to_s] %>
+            <% end %>
+        </div>
+      <% end %>
+    </div>
+<% } %>  
+<% elsif @survey_end_yes_absolute_pitch %>
+<% @survey.survey_sections.each {|s| %>
+  <h3 style="font-size: 120%"><%= s.heading %></h3>
+  <% s.survey_questions.each {|q| %>
+    <div style="margin-bottom: 20px">
+      <% if q.question_type != 'end' %>
+        <div style="font-weight:bold">
+          <%= q.text %>
+        </div>
+        <div>
+          <% if @answers[q.id].nil? or @answers[q.id].to_s.empty? %>
+          No response given
+          <% else %>
+            <% if @answers[q.id].length > 1%>
+            <%= @answers[q.id].join(', ') %>
+            <% elsif @answer_mapping[@answers[q.id].to_s].nil? %>
+            <%= @answers[q.id] %>
+            <% else %>  
+            <%= @answer_mapping[@answers[q.id].to_s] %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% } %>  
+<% } %>
+<% end %>

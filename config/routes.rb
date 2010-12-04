@@ -107,4 +107,7 @@ ActionController::Routing::Routes.draw do |map|
   map.unlink_googlehealth '/phrccr/unlink_googlehealth', :controller => 'phrccrs', :action => 'unlink_googlehealth'
 
   map.public_profile '/profile/:hex',    :controller => 'profiles',    :action => 'public'
+
+  map.absolute_pitch_surveys_section '/absolute_pitch_surveys/:id', :controller => 'absolute_pitch_survey', :action => 'index'
+  map.save_absolute_pitch_surveys '/absolute_pitch_surveys/save', :controller => 'absolute_pitch_survey', :action => 'save'
 end

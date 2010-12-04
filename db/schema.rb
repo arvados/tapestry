@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101021175113) do
+ActiveRecord::Schema.define(:version => 20101204225206) do
 
   create_table "allergies", :force => true do |t|
     t.integer "ccr_id"
@@ -397,6 +397,58 @@ ActiveRecord::Schema.define(:version => 20101021175113) do
     t.datetime "updated_at"
   end
 
+  create_table "survey_answer_choices", :force => true do |t|
+    t.integer  "survey_question_id"
+    t.string   "text"
+    t.string   "value"
+    t.integer  "order"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "survey_answer_choices", ["survey_question_id"], :name => "index_survey_answer_choices_on_survey_question_id"
+
+  create_table "survey_answers", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "survey_question_id"
+    t.string   "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "survey_answers", ["survey_question_id"], :name => "index_survey_answers_on_survey_question_id"
+  add_index "survey_answers", ["user_id"], :name => "index_survey_answers_on_user_id"
+
+  create_table "survey_questions", :force => true do |t|
+    t.integer  "survey_section_id"
+    t.string   "text"
+    t.string   "question_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "note"
+  end
+
+  add_index "survey_questions", ["survey_section_id"], :name => "index_survey_questions_on_survey_section_id"
+
+  create_table "survey_sections", :force => true do |t|
+    t.integer  "survey_id"
+    t.string   "name"
+    t.integer  "previous_section_id"
+    t.integer  "next_section_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "heading"
+  end
+
+  add_index "survey_sections", ["survey_id"], :name => "index_survey_sections_on_survey_id"
+
+  create_table "surveys", :force => true do |t|
+    t.string   "name"
+    t.string   "version"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "user_logs", :force => true do |t|
     t.integer  "user_id"
     t.integer  "enrollment_step_id"
@@ -407,14 +459,14 @@ ActiveRecord::Schema.define(:version => 20101021175113) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "email",                       :limit => 100
-    t.string   "crypted_password",            :limit => 40
-    t.string   "salt",                        :limit => 40
+    t.string   "email",                            :limit => 100
+    t.string   "crypted_password",                 :limit => 40
+    t.string   "salt",                             :limit => 40
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_token",              :limit => 40
+    t.string   "remember_token",                   :limit => 40
     t.datetime "remember_token_expires_at"
-    t.string   "activation_code",             :limit => 40
+    t.string   "activation_code",                  :limit => 40
     t.datetime "activated_at"
     t.boolean  "is_admin"
     t.string   "first_name"
@@ -432,20 +484,22 @@ ActiveRecord::Schema.define(:version => 20101021175113) do
     t.string   "zip"
     t.text     "enrollment_essay"
     t.string   "phr_profile_name"
-    t.boolean  "has_sequence",                               :default => false, :null => false
+    t.boolean  "has_sequence",                                    :default => false, :null => false
     t.string   "has_sequence_explanation"
     t.text     "family_members_passed_exam"
+    t.string   "authsub_token"
     t.string   "security_question"
     t.string   "security_answer"
     t.string   "eligibility_survey_version"
     t.datetime "enrolled"
-    t.string   "authsub_token"
-    t.string   "hex",                                        :default => ""
+    t.string   "hex",                                             :default => ""
     t.string   "exam_version"
     t.datetime "enrollment_accepted"
     t.string   "consent_version"
-    t.boolean  "is_test",                                    :default => false
     t.string   "has_family_members_enrolled"
+    t.boolean  "is_test",                                         :default => false
+    t.string   "pgp_id"
+    t.datetime "absolute_pitch_survey_completion"
   end
 
   create_table "waitlists", :force => true do |t|

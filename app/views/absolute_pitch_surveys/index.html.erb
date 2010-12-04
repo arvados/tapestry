@@ -1,0 +1,81 @@
+<h2>Absolute Pitch Prelimary Screening</h2>
+<% if @survey_end_no_absolute_pitch %>
+<h3>Thank You!</h3>
+<p><%= link_to "Review survey responses", '/absolute_pitch_surveys/review' %></p>
+<p>
+To learn more about absolute pitch, please visit: 
+</p>
+<p><a href="www.absolutepitchstudy.com">www.absolutepitchstudy.com </a></p>
+<% elsif @survey_end_yes_absolute_pitch %>
+<h3>Thank You!</h3>
+<p><%= link_to "Review survey responses", '/absolute_pitch_surveys/review' %></p>
+<p>
+To learn more about absolute pitch, please visit: 
+</p>
+<p><a href="www.absolutepitchstudy.com">www.absolutepitchstudy.com </a></p>
+<% else %>
+<% if @survey_section.previous_section_id.nil? %>
+<p>The PGP is collaborating on a research study about absolute pitch with Dr. Peter K. Gregersen of the Robert S. Boas Center for Genomics and Human Genetics at the Feinstein Institute for Medical Research.</p>
+
+<p>Goal: We are interested in better understanding the ability of some individuals to discriminate musical tones or absolute pitch.  [Insert description of absolute pitch]</p>
+
+<p>Eligibility: Any enrolled PGP participant may participate in this survey.</p>
+
+<p>Results: If you participate, your responses to the survey will be added to your PGP public profile.  PGP participants with absolute pitch may be invited to participate in additional screening.</p>
+<% end %>
+<% form_for(@user, :url => {:controller => "absolute_pitch_surveys", :action => "save"}) do |f| %>
+  <% if @survey_section.heading %><h3 style="font-size: 130%"><%= @survey_section.heading %></h3><% end %>
+  <%= hidden_field_tag :id, @survey_section.id %> 
+  <% @survey_section.survey_questions.each_with_index do |q,i| %>
+  <% fields_for "user[survey_answers][]", q do |fields| 
+    context = 'user[survey_answers][' + i.to_s + ']'
+    context_survey_question_id = context + '[survey_question_id]'
+    context_text = context + '[text]'
+  %>
+    <div style="margin-bottom: 20px">
+      <% if q.question_type != 'end' %>
+           <div style="font-weight:bold">
+             <%= q.text %>
+           </div>
+           <% if q.note %>
+             <div style="color: #666"><%= q.note %></div>
+           <% end %>
+      <% end %>
+    <%= hidden_field_tag context_survey_question_id, q.id %>
+    <% if q.question_type == 'radio' %>
+      <% q.survey_answer_choices.each do |a| %>
+        <%= radio_button_tag context_text, a.value, !@answers[q.id].nil? && @answers[q.id].include?(a.value) %>
+        <%= label_tag context_text + '_' + a.value, a.text %><br />
+      <% end %>
+    <% elsif q.question_type == 'checkbox' %>
+      <% q.survey_answer_choices.each do |a| %>
+        <input type="checkbox" id="<%= 'user_survey_answers_' + i.to_s + '_text_' + a.value %>" name="<%= context_text %>[]" value="<%= a.value %>" <%if !@answers[q.id].nil? && @answers[q.id].include?(a.value) %>checked="checked"<%end%>/>
+        <%= label_tag context_text + '_' + a.value, a.text %><br />
+      <% end %>
+    <% elsif q.question_type == 'textarea' %>      
+      <%= text_area_tag context_text, @answers[q.id], :rows => 8, :cols => 60 %>
+    <% elsif q.question_type == 'text' %>
+      <%= text_field_tag context_text, @answers[q.id], :size => 60, :maxlength => 255 %>
+    <% elsif q.question_type == 'dropdown' %>
+      <select name="<%= context_text %>">
+        <option value="">&nbsp;</option>
+      <% q.survey_answer_choices.each do |a| %>
+        <option value="<%= a.value %>" <%if !@answers[q.id].nil? && @answers[q.id].include?(a.value)%>selected="selected"<%end%>><%= h a.text %></option>
+      <% end %>
+      </select>
+    <% elsif q.question_type == 'end' %>
+      <input type="hidden" name="<%= context_text %>" value="true" />
+    <% end %>
+   </div>
+  <% end %>
+  <% end %>
+  <% if @survey_section.previous_section_id %>
+  <%= submit_tag "Back" %>
+  <% end %>
+  <% if @survey_section.next_section_id %>
+  <%= submit_tag "Continue" %>
+  <% else %>
+  <%= submit_tag "Submit survey" %>
+  <% end %>
+<% end %>
+<% end %>

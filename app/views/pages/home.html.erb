@@ -64,6 +64,12 @@
   &nbsp;&nbsp;<%= link_to "Review previous", url_for(:controller => 'safety_questionnaires', :action => 'index') %></li>
   <li><strong>Enrollment Application</strong><br>
   &nbsp;&nbsp;<%= link_to "Review results", enrollment_application_results_path %></li>
+  <li><strong>Absolute Pitch Survey</strong><br>
+  <% if current_user.absolute_pitch_survey_completion.nil? %>
+  &nbsp;&nbsp;<%= link_to "Take Preliminary Screening",'/absolute_pitch_surveys' %></li>
+  <% else %>
+  &nbsp;&nbsp;<%= link_to "See my responses",'/absolute_pitch_surveys/review' %></li>
+  <% end %>
 </ul>
 </div>
 

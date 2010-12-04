@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
   has_many :user_logs, :dependent => :destroy
   has_many :safety_questionnaires, :dependent => :destroy
   has_many :ccrs, :dependent => :destroy
+  has_many :survey_answers, :dependent => :destroy
 
   has_attached_file :phr
 
