@@ -42,9 +42,10 @@ class PhrccrsController < ApplicationController
     elsif commit_action.eql?('Refresh PHR')
       begin
         download_phr()
+        flash[:notice] = 'Your PHR will be downloaded shortly; a request has been queued.'
       rescue Exception => e
-        current_user.log("Error retrieving/saving PHR: #{e.exception}")
-        flash[:error] = 'There was an error saving your PHR.'
+        current_user.log("Error requesting PHR download: #{e.exception} #{e.inspect()}",nil,nil,'Error requesting PHR download.')
+        flash[:error] = 'There was an error requesting your PHR download. Please try again later.'
       end
       redirect_to :action => :review
     elsif params[:deleteccr]
@@ -96,8 +97,8 @@ class PhrccrsController < ApplicationController
         flash[:notice] = 'Your Google Health Profile was successfully linked'
         redirect_to :action => :show
       rescue Exception => e
-        current_user.log("Error linking Google Health profile: #{e.exception}")
-        flash[:error] = 'We could not link your Google Health profile. Please try again.'
+        current_user.log("Error linking Google Health profile: #{e.exception}",'Error linking with your Google Health profile.')
+        flash[:error] = 'We could not link your Google Health profile. Please try again later.'
         redirect_to :action => :show
       end
     else
@@ -133,30 +134,9 @@ class PhrccrsController < ApplicationController
   end
 
   def download_phr
-    feed = get_ccr(current_user)
-    ccr = Nokogiri::XML(feed)
-    updated = ccr.xpath('/xmlns:feed/xmlns:updated').inner_text
-
-    if (updated == '1970-01-01T00:00:00.000Z') then
-      flash[:error] = 'Your PHR at Google Health is empty, it has not been downloaded.'
-      return
-    end
-      
-    ccr_filename = get_ccr_filename(current_user.id, true, updated)
-    if !File.exist?(ccr_filename)
-      current_user.log("Downloaded PHR (#{ccr_filename})")
-    else
-      current_user.log("Downloaded and replaced PHR (#{ccr_filename})")
-    end
-    outFile = File.new(ccr_filename, 'w')
-    outFile.write(feed)
-    outFile.close
-
-    # We don't want duplicates
-    Ccr.find_by_user_id_and_version(current_user.id,updated).destroy unless Ccr.find_by_user_id_and_version(current_user.id,updated).nil?
-
-    db_ccr = parse_xml_to_ccr_object(ccr_filename)
-    db_ccr.user_id = current_user.id
-    db_ccr.save
+    server = DRbObject.new nil, "druby://#{DRB_SERVER}:#{DRB_PORT}"
+    out = server.get_ccr(current_user.id, current_user.authsub_token, nil, ccr_profile_url)
+    current_user.log("PHR download requested.",nil,nil,"PHR download requested.")
   end
+
 end

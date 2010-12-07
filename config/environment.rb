@@ -86,5 +86,5 @@ Rails::Initializer.run do |config|
 end
 
 require 'csv'
-
+require 'drb'
 

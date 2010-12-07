@@ -35,3 +35,8 @@ ENV['RECAPTCHA_PRIVATE_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-yyyyyyyy'
 GOOGLE_HEALTH_URL = "https://www.google.com/health"
 
 LATEST_CONSENT_VERSION = 'v20100331'
+
+DRB_SERVER = '127.0.0.1'
+DRB_PORT = '9900'
+DRB_CALLBACK_SOURCE_IP = '127.0.0.1'
+

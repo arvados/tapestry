@@ -27,6 +27,7 @@ ActionMailer::Base.smtp_settings = {
 
 ROOT_URL = 'my-dev.personalgenomes.org'
 ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'
+SYSTEM_EMAIL = 'sysadmin@clinicalfuture.com'
 
 ENV['RECAPTCHA_PUBLIC_KEY'] = 'yyyyyyyyyyyyyyyyyyyyyyyy-xxxxxxxx'
 ENV['RECAPTCHA_PRIVATE_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-yyyyyyyy'
@@ -34,3 +35,8 @@ ENV['RECAPTCHA_PRIVATE_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-yyyyyyyy'
 GOOGLE_HEALTH_URL = "https://www.google.com/h9"
 
 LATEST_CONSENT_VERSION = 'v20100331'
+
+DRB_SERVER = '127.0.0.1'
+DRB_PORT = '9900'
+DRB_CALLBACK_SOURCE_IP = '127.0.0.1'
+

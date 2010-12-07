@@ -1,0 +1,22 @@
+development:
+  workers: 2
+  host: 0.0.0.0
+  port: 9901
+  callback_port: 3000
+  callback_host: localhost
+
+staging:
+  workers: 2
+  host: 0.0.0.0
+  port: 9900
+  callback_port: 80
+  callback_host: your.ip.address.here
+
+production:
+  workers: 5
+  host: 0.0.0.0
+  port: 9900
+  callback_port: 80
+  callback_host: your.ip.address.here
+
+

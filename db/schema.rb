@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101204225206) do
+ActiveRecord::Schema.define(:version => 20101207193107) do
 
   create_table "allergies", :force => true do |t|
     t.integer "ccr_id"
@@ -422,10 +422,10 @@ ActiveRecord::Schema.define(:version => 20101204225206) do
   create_table "survey_questions", :force => true do |t|
     t.integer  "survey_section_id"
     t.string   "text"
+    t.string   "note"
     t.string   "question_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "note"
   end
 
   add_index "survey_questions", ["survey_section_id"], :name => "index_survey_questions_on_survey_section_id"
@@ -433,11 +433,11 @@ ActiveRecord::Schema.define(:version => 20101204225206) do
   create_table "survey_sections", :force => true do |t|
     t.integer  "survey_id"
     t.string   "name"
+    t.string   "heading"
     t.integer  "previous_section_id"
     t.integer  "next_section_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "heading"
   end
 
   add_index "survey_sections", ["survey_id"], :name => "index_survey_sections_on_survey_id"
@@ -456,6 +456,7 @@ ActiveRecord::Schema.define(:version => 20101204225206) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "origin"
+    t.string   "user_comment"
   end
 
   create_table "users", :force => true do |t|
@@ -487,17 +488,17 @@ ActiveRecord::Schema.define(:version => 20101204225206) do
     t.boolean  "has_sequence",                                    :default => false, :null => false
     t.string   "has_sequence_explanation"
     t.text     "family_members_passed_exam"
-    t.string   "authsub_token"
     t.string   "security_question"
     t.string   "security_answer"
     t.string   "eligibility_survey_version"
     t.datetime "enrolled"
+    t.string   "authsub_token"
     t.string   "hex",                                             :default => ""
     t.string   "exam_version"
     t.datetime "enrollment_accepted"
     t.string   "consent_version"
-    t.string   "has_family_members_enrolled"
     t.boolean  "is_test",                                         :default => false
+    t.string   "has_family_members_enrolled"
     t.string   "pgp_id"
     t.datetime "absolute_pitch_survey_completion"
   end

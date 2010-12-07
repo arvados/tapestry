@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
       handle_remember_cookie! new_cookie_flag
       redirect_back_or_default('/')
       flash[:notice] = "Logged in successfully"
-      #update_ccr_if_exists
+      update_ccr_if_exists
     else
       note_failed_signin
       @email       = params[:email]
@@ -53,26 +53,14 @@ protected
       unless current_user.authsub_token.blank?
         ccr_list = Dir.glob(get_ccr_path(current_user.id) + '*').reverse
         if ccr_list.length > 0
-          feed = File.new(ccr_list[0])
-          ccr = Nokogiri::XML(feed)
-          etag = CGI.unescapeHTML(ccr.root.xpath('@gd:etag').inner_text)
+          server = DRbObject.new nil, "druby://#{DRB_SERVER}:#{DRB_PORT}"
           begin
-            result = get_ccr(current_user, etag)
-            ccr = Nokogiri::XML(result)
-            updated = ccr.xpath('/xmlns:feed/xmlns:updated').inner_text
-            ccr_filename = get_ccr_filename(current_user.id, true, updated)
-            if !File.exist?(ccr_filename)
-              outFile = File.new(ccr_filename, 'w')
-              outFile.write(ccr)
-              outFile.close
-              current_user.log("Autoupdated PHR (#{ccr_filename})")
-            end
-          rescue
-          end  
+            out = server.get_ccr(current_user.id, current_user.authsub_token, nil, ccr_profile_url)
+          rescue Exception => e
+            current_user.log("DRB server error when trying to update CCR: #{e.exception}",nil,nil,'Error requesting PHR update.')
+          end
         end
       end
-    rescue
-        flash[:error] = 'Could not update your PHR. Please try refreshing it manually'
     end
   end
 end

@@ -8,6 +8,9 @@ ActionController::Routing::Routes.draw do |map|
   map.accept_tos_user '/users/accept_tos',    :controller => 'users',    :action => 'accept_tos'
   map.consent_user '/users/consent',    :controller => 'users',    :action => 'consent'
   map.created_user '/users/created/:id',    :controller => 'users',    :action => 'created'
+  map.show_log_user '/users/show_log',    :controller => 'users',    :action => 'show_log'
+
+  map.userlog_drb '/drb/userlog/:user_id',    :controller => 'drb',    :action => 'userlog'
 
   map.resend_signup_notification_form '/users/resend_signup_notification_form',    :controller => 'users',    :action => 'resend_signup_notification_form'
   map.resend_signup_notification_user '/users/resend_signup_notification/:id',    :controller => 'users',    :action => 'resend_signup_notification'

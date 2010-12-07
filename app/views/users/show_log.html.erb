@@ -1,0 +1,24 @@
+<h2>Your user log</h2>
+
+<% if @log != [] %>
+
+<h3>Log entries - newest first</h3>
+<table class="admin_table">
+  <tr>
+    <th>Timestamp</th>
+    <th>Comment</th>
+  </tr>
+  <% @log.each do |l| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=h l.created_at %></td>
+      <td><%=h l.user_comment %></td>
+    </tr>
+  <% end %>
+</table>
+<%= will_paginate @log %>
+
+<% else %>
+
+No log entries found.
+
+<% end %>

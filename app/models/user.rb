@@ -197,8 +197,8 @@ class User < ActiveRecord::Base
     save(false)
   end
 
-  def log(comment,step=nil,origin=nil)
-    UserLog.new(:user => self, :comment => comment, :enrollment_step => step, :origin => origin).save!
+  def log(comment,step=nil,origin=nil,user_comment=nil)
+    UserLog.new(:user => self, :comment => comment, :user_comment => user_comment, :enrollment_step => step, :origin => origin).save!
   end
 
   def promote!
