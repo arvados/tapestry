@@ -29,7 +29,7 @@ namespace :backup do
     system_dir = path.basename
     outfile    = (Pathname.new(RAILS_ROOT) + '../../backups').realpath + 'system.tgz'
 
-    cd base_dir
+    FileUtils.cd base_dir
     `tar -czf #{outfile} #{system_dir}`
     puts "Assets => #{outfile}"
   end
