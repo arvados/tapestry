@@ -1,7 +1,7 @@
 class AbsolutePitchSurveysController < ApplicationController
 
   def review
-    @survey = Survey.find(1);
+    @survey = Survey.find(:first, :conditions => { :name => 'Absolute Pitch Survey' });
     @answers = {}
     @answer_mapping = { 'y' => 'Yes', 'n' => 'No', 'ns' => 'Not sure', 'na' => 'Not available', 13 => '>12' }
     user_answers = current_user.survey_answers
@@ -24,7 +24,7 @@ class AbsolutePitchSurveysController < ApplicationController
     if !current_user.absolute_pitch_survey_completion.nil?
       redirect_to :action => 'review'
     end
-    survey = Survey.find(1);   
+    survey = Survey.find(:first, :conditions => { :name => 'Absolute Pitch Survey' });   
     @answers = {}
 
     user_answers = current_user.survey_answers
