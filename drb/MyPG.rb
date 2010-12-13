@@ -82,7 +82,7 @@ class MyPG
   end
 
   def read_config
-    file = File.dirname(__FILE__) + '/MyPG.yaml'
+    file = File.dirname(__FILE__) + '/MyPG.yml'
     @config = Hash.new()
     if not FileTest.file?(file)
       puts "Config file #{file} not found - aborting."
