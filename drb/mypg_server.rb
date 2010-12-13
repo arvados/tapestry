@@ -7,6 +7,7 @@ mode = 'staging' if (ARGV[0] == "staging")
 
 ENV["RAILS_ENV"] = "development"
 ENV["RAILS_ENV"] = "production" if mode == 'production'
+ENV["RAILS_ENV"] = "staging" if mode == 'staging'
 
 # Flush output immediately
 STDOUT.sync = true
