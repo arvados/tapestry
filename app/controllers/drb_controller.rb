@@ -26,7 +26,7 @@ class DrbController < ApplicationController
   def valid_callback
     if request.remote_ip != DRB_CALLBACK_SOURCE_IP then
       # Uh-oh, something is wrong. E-mail sysadmins...
-      SystemMailer.error_notification("Callback from invalid IP: #{request.remote_ip}","Only callbacks from CALLBACK_SOURCE_IP (#{CALLBACK_SOURCE_IP}) are allowed.")
+      SystemMailer.error_notification("Callback from invalid IP: #{request.remote_ip}","Only callbacks from DRB_CALLBACK_SOURCE_IP (#{DRB_CALLBACK_SOURCE_IP}) are allowed.")
       return false
     else
       return true
