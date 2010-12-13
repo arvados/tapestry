@@ -17,7 +17,7 @@ require 'drb'
 require 'MyPG'
 require 'yaml'
 
-file = File.dirname(__FILE__) + '/MyPG.yaml'
+file = File.dirname(__FILE__) + '/MyPG.yml'
 @config = Hash.new()
 if not FileTest.file?(file)
   puts "Config file #{file} not found - aborting."
