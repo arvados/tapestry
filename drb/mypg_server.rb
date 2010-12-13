@@ -3,6 +3,7 @@
 # Default to development
 mode = 'development'
 mode = 'production' if (ARGV[0] == "production")
+mode = 'staging' if (ARGV[0] == "staging")
 
 ENV["RAILS_ENV"] = "development"
 ENV["RAILS_ENV"] = "production" if mode == 'production'
