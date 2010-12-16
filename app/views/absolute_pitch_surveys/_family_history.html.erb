@@ -1,0 +1,48 @@
+<h3><%= @survey_section.heading %></h3>
+<p>Please indicate whether any family members are musical or have absolute pitch, as far as you know. Give as much detail as you can. Please do not include names of family members in your comments.</p>
+<input type="hidden" name="remove_sibling_id" id="remove_sibling_id" value="" />
+<table id="family_relations">
+<tr>
+  <th style="width: 80px; text-align: left;">Relation</th>
+  <th style="width: 110px; text-align: left;">Plays instrument</th>
+  <th style="width: 120px; text-align: left;">Has absolute pitch</th>
+  <th style="width: 220px; text-align: left;">Comments</th>
+  <th style="width: auto"></th>
+</tr>
+<% @family_history.each_with_index {|fh,i| %>
+<tr>
+<% if fh.relation == 'father' || fh.relation == 'mother' %>
+  <td>&nbsp;<%= fh.relation.capitalize %>:<input type="hidden" name="family_history[<%=i%>][relation]" value="<%= fh.relation %>" /><input type="hidden" name="family_history[<%=i%>][id]" value="<%= fh.id %>" /></td>
+<% else %>
+<td><input type="hidden" name="family_history[<%=i%>][id]" value="<%= fh.id %>" /><select name="family_history[<%=i%>][relation]">
+<% ['brother','sister'].each {|o| %>  
+   <option value="<%=o%>"<%= 'selected="selected"' if fh.relation == o%>><%= o.capitalize %></option>
+<% } %>
+</select>
+</td>
+<% end %>
+  <td><select name="family_history[<%=i%>][plays_instrument]">
+<% [['',''],['Yes','y'],['No','n'],['Not sure','ns']].each {|o| %>
+    <option value="<%=o[1]%>"<%= 'selected="selected"' if fh.plays_instrument==o[1]%>><%=o[0]%></option>
+<% } %>
+    </select>
+  </td>
+  <td><select name="family_history[<%=i%>][has_absolute_pitch]">
+<% [['',''],['Yes','y'],['No','n'],['Not sure','ns']].each {|o| %>
+    <option value="<%=o[1]%>"<%= 'selected="selected"' if fh.has_absolute_pitch==o[1]%>><%=o[0]%></option>
+<% } %>
+    </select>
+  </td>
+  <td><input style="width: 215px" maxlength="255" type="text" name="family_history[<%=i%>][comments]" value="<%=h fh.comments %>"/>
+  </td>
+<% if fh.relation != 'father' && fh.relation != 'mother' %>
+  <td><input type="submit" name="commit" value="Remove Sibling" style="font-size:80%" onclick="$('#remove_sibling_id').val(<%=fh.id%>);"></td>
+<% else %>
+  <td></td>
+<% end %>
+</tr>
+<% } %>
+</table>
+
+&nbsp;<%= submit_tag "Add Sibling", :style => "font-size: 80%" %>
+

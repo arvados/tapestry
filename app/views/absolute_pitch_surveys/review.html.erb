@@ -1,4 +1,9 @@
 <h2>Absolute Pitch Prelimary Screening Responses</h2>
+<% if logged_in? %>
+<%= form_tag('/absolute_pitch_surveys') %>
+  <%= submit_tag('Retake Survey') %>
+</form>
+<% end %>
 <% if @survey_end_no_absolute_pitch %>
 <h3 style="font-size: 120%"><%= @survey.survey_sections[0].heading %></h3>
 <% @survey.survey_sections[0].survey_questions.each {|q|%>
@@ -43,6 +48,28 @@
         </div>
       <% end %>
     </div>
-  <% } %>  
+  <% } %>
+  <% if s.name == 'Family History' %>
+    <% if @family_history.length > 0 %>
+      <table>
+      <tr>
+        <th style="width: 80px; text-align: left;">Relation</th>
+        <th style="width: 110px; text-align: left;">Plays instrument</th>
+        <th style="width: 120px; text-align: left;">Has absolute pitch</th>
+        <th style="width: 220px; text-align: left;">Comments</th>       
+      </tr>
+      <% @family_history.each {|fh| %>
+        <tr>
+          <td><%= fh.relation.capitalize %></td>
+          <td><%= @answer_mapping[fh.plays_instrument] %></td>
+          <td><%= @answer_mapping[fh.has_absolute_pitch] %></td>
+          <td><%= h fh.comments %></td>
+        </tr>
+      <% } %>
+      </table>
+    <% else %>
+      No response given
+    <% end %>
+  <% end %>
 <% } %>
 <% end %>

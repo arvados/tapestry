@@ -113,4 +113,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.absolute_pitch_surveys_section '/absolute_pitch_surveys/:id', :controller => 'absolute_pitch_survey', :action => 'index'
   map.save_absolute_pitch_surveys '/absolute_pitch_surveys/save', :controller => 'absolute_pitch_survey', :action => 'save'
+  map.review_absolute_pitch_surveys '/absolute_pitch_surveys/review/:id', :controller => 'absolute_pitch_survey', :action => 'review'
+  map.trait_surveys '/trait_surveys', :controller => 'trait_survey', :action => 'index'
 end
