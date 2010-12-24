@@ -13,6 +13,7 @@ class GeneticData < ActiveRecord::Base
 
   validates_presence_of    :data_type, :message => ': please select a data type.'
   validates_attachment_presence   :dataset, :message => ': please select a file for upload.'
+  validates_attachment_size :dataset, :less_than => 10485760, :message => ': maximum file size is 10 MB'
 
   DATA_TYPES = { '23andMe' => '23andMe', 
                   'Good Start Genetics' => 'Good Start Genetics', 
