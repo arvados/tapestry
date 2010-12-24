@@ -5,12 +5,11 @@
 This information is private and not part of your public profile.
 
 <% form_for :user, :url => user_path, :html => { :method => :put } do |f| -%>
-  <%= error_messages_for :user %>
+  <%= error_messages_for :user, :header_message => 'Error: data could not be saved.', :message => nil %>
   <p><label for="name">Name</label>: <%=h @user.full_name %></p>
 
   <p>
-  <%= f.label :email %>
-  <%= error_message_on :user, :email, :append_text => '.' %><br/>
+  <%= f.label :email %><br/>
   <%= f.text_field :email %>
   </p>
 
@@ -24,16 +23,12 @@ This information is private and not part of your public profile.
 
   <p>
   <%= f.label :security_question %>
-  <% if @user.errors.on(:security_question).nil? -%>(minimum 5 characters)<% end -%>
-  <%= error_message_on :user, :security_question, :append_text => '.' %>
   <br/>
   <%= f.text_field :security_question, :size => 80 %>
   </p>
 
   <p>
   <%= f.label :security_answer %>
-  <% if @user.errors.on(:security_answer).nil? -%><% end -%>
-  <%= error_message_on :user, :security_answer, :append_text => '.' %>
   <br/>
   <%= f.text_field :security_answer, :size => 80 %>
   </p>

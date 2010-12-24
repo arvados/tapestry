@@ -77,11 +77,10 @@ Rails::Initializer.run do |config|
   config.gem 'carmen', :source => 'http://gemcutter.org'
   config.gem 'hoptoad_notifier'
 
-  config.gem 'mislav-will_paginate', 
-    :lib => 'will_paginate', 
-    :source => 'http://gems.github.com'
+  config.gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
   config.gem 'alexdunae-validates_email_format_of', :lib => 'validates_email_format_of'
   config.gem "ruby-prof"
+  config.gem "thoughtbot-paperclip", :lib => 'paperclip', :source => 'http://gems.github.com'
 
 end
 

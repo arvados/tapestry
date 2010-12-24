@@ -1,0 +1,28 @@
+<p>
+  <b>Name:</b>
+  <%=h @genetic_data.name %>
+</p>
+
+<p>
+  <b>Path:</b>
+  <%=h @genetic_data.path %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%=h @genetic_data.type %>
+</p>
+
+<p>
+  <b>Date:</b>
+  <%=h @genetic_data.date %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @genetic_data.description %>
+</p>
+
+
+<%= link_to 'Edit', edit_genetic_data_path(@genetic_data) %> |
+<%= link_to 'Back', genetic_data_path %>

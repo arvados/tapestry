@@ -8,3 +8,8 @@
 #   inflect.irregular 'person', 'people'
 #   inflect.uncountable %w( fish sheep )
 # end
+
+ActiveSupport::Inflector.inflections do |inflect|
+  # The plural of data is data
+  inflect.irregular 'data', 'data'
+end

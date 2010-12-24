@@ -53,6 +53,8 @@ ActionController::Routing::Routes.draw do |map|
   map.done_identity_verification_notification '/identity_verification_notifications/done', :controller => 'identity_verification_notifications', :action => 'done'
   map.done_named_proxy '/named_proxies/done', :controller => 'named_proxies', :action => 'done'
   map.resources :named_proxies
+  map.resources :genetic_data, :singular => :genetic_data_instance
+  map.genetic_data_download '/genetic_data/download/:id',    :controller => 'genetic_data',    :action => 'download'
   map.resource :trait_collection
   map.resource :distinctive_traits_survey
   map.resource :pledge

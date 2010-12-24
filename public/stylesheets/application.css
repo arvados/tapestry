@@ -703,6 +703,52 @@ form.signup {
   border-left: 1px solid #EEE;
 }
 
+#errorExplanation {
+  width: 400px;
+  border: 2px solid #c00;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+/*
+div.errorExplanation {
+  margin-left: 25px;
+  margin-top: 25px;
+  padding: 10px;
+  width: 500px;
+  font-size: 16px;
+  border: 2px solid;
+}
+
+div.errorExplanation.errorExplanation {
+  color: #fff;
+  background: #c33;
+  border-color: #800;
+}
+*/
 div.flash {
   margin-left: 25px;
   margin-top: 25px;
@@ -736,15 +782,21 @@ label {
 }
 */
 
-div.fieldWithErrors, div.fieldWithErrors label {
+/*div.fieldWithErrors, div.fieldWithErrors label {
   display: inline;
+}*/
+
+.fieldWithErrors input, .fieldWithErrors select, .fieldWithErrors textarea {
+  border: 1px solid red;
 }
+
 div.formError {
   display: inline;
   color: #f00;
   font-weight: bold;
 }
 
+/*
 .errorExplanation {
   font-weight: bold;
   font-size: 16px;
@@ -756,6 +808,7 @@ div.formError {
   color:#c00;
 }
 
+*/
 /* Navigation bar */
 
 /* Admin */

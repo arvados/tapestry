@@ -62,10 +62,12 @@
   <li><strong>Safety Questionnaires</strong><br>
   &nbsp;&nbsp;<%= link_to "Submit new", url_for(:controller => 'safety_questionnaires', :action => 'new') %><br>
   &nbsp;&nbsp;<%= link_to "Review previous", url_for(:controller => 'safety_questionnaires', :action => 'index') %></li>
-  <li><strong>Enrollment Application</strong><br>
-  &nbsp;&nbsp;<%= link_to "Review results", enrollment_application_results_path %></li>
   <li><strong>Trait Surveys</strong><br>
   &nbsp;&nbsp;<%= link_to "Learn more", "/trait_surveys" %></li>
+  <li><strong>Genetic data</strong><br>
+  &nbsp;&nbsp;<%= link_to "Manage your data",'/genetic_data' %></li>
+  <li><strong>Enrollment Application</strong><br>
+  &nbsp;&nbsp;<%= link_to "Review results", enrollment_application_results_path %></li>
   <li><strong>User log</strong><br>
   &nbsp;&nbsp;<%= link_to "Show", url_for(:controller => 'users', :action => 'show_log') %></li>
 </ul>

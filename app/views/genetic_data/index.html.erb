@@ -1,0 +1,38 @@
+<h2>Genetic data</h2>
+
+<p>This information will appear in your public profile.</p>
+
+<% if @genetic_data != [] %>
+
+<h3>Uploaded datasets</h3>
+<table class="admin_table">
+  <tr>
+    <th>Date</th>
+    <th>Data Type</th>
+    <th>Name</th>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
+  </tr>
+  <% @genetic_data.each do |g| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=h g.date %></td>
+      <td><%=h g.data_type %></td>
+      <td><%=h g.name %></td>
+      <td><%= link_to 'Download', genetic_data_download_path(g.id) %></td>
+      <td><%= link_to 'Edit', edit_genetic_data_instance_path(g) %></td>
+      <td><%= link_to 'Delete', genetic_data_instance_path(g.id), :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+<%= will_paginate @genetic_data %>
+
+<% else %>
+
+  You have no uploaded datasets.
+
+<% end %>
+
+<p />
+
+<%= link_to 'Upload a new dataset', new_genetic_data_instance_path %>

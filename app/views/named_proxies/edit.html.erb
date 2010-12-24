@@ -1,7 +1,7 @@
 <h2>Update a designated proxy</h2>
 
 <% form_for @named_proxy do |f| %>
-  <%= error_messages_for :named_proxy, :header_message => nil, :message => nil %>
+  <%= error_messages_for :named_proxy, :header_message => 'Error: data could not be saved.', :message => nil %>
 
   <p>
     <%= f.label :name %><br />
