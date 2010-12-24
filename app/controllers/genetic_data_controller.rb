@@ -46,6 +46,7 @@ class GeneticDataController < ApplicationController
     respond_to do |format|
       if @genetic_data.save
         flash[:notice] = 'Dataset was successfully uploaded.'
+        current_user.log("Uploaded new genetic dataset '#{@genetic_data.name}'")
         format.html { redirect_to(genetic_data_path) }
         format.xml  { render :xml => @genetic_data, :status => :created, :location => @genetic_data }
       else
@@ -63,6 +64,7 @@ class GeneticDataController < ApplicationController
     respond_to do |format|
       if @genetic_data.update_attributes(params[:genetic_data])
         flash[:notice] = 'Dataset was updated successfully.'
+        current_user.log("Updated genetic dataset '#{@genetic_data.name}'")
         format.html { redirect_to(genetic_data_path) }
         format.xml  { head :ok }
       else
@@ -76,6 +78,7 @@ class GeneticDataController < ApplicationController
   # DELETE /genetic_data/1.xml
   def destroy
     @genetic_data = GeneticData.find(params[:id])
+    current_user.log("Deleting genetic dataset '#{@genetic_data.name}'")
 
     begin
       @genetic_data.destroy
