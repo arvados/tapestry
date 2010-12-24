@@ -21,6 +21,30 @@
 None added.
 <% end -%>
 
+<h3>Genetic data <% if logged_in? and @user == current_user -%><%= link_to "[edit]", genetic_data_path() %><% end -%></h3>
+
+<% if (@user.genetic_data.size > 0) -%>
+
+<table class="admin_table">
+  <tr>
+    <th>Date</th>
+    <th>Data Type</th>
+    <th>Name</th>
+    <th>&nbsp;</th>
+  </tr>
+  <% @user.genetic_data.each do |g| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%=h g.date %></td>
+      <td><%=h g.data_type %></td>
+      <td><%=h g.name %></td>
+      <td><%= link_to 'Download', genetic_data_download_path(g.id) %></td>
+    </tr>
+  <% end %>
+</table>
+<% else -%>
+None available.
+<% end -%>
+
 <h3>Geographic Information <% if logged_in? and @user == current_user -%><%= link_to "[edit]", edit_geographic_information_path(@user) %><% end -%></h3>
 
 <% if (@user.state != '' and not @user.state.nil?) or (@user.zip != '' and not @user.zip.nil?) -%>
@@ -51,7 +75,7 @@ Not added.
   <% end %>
 </table>
 <% else %>
-None added
+None added.
 <% end %>
 
 <h3>Absolute Pitch Survey
@@ -64,7 +88,7 @@ None added
 <% end %>
 </h3>
 <% if @user.absolute_pitch_survey_completion.nil? %>
-Survey not taken
+Survey not taken.
 <% else %>
 <% @absolute_pitch_questions.each{ |q| %>
   <% if q.question_type != 'end' %>
