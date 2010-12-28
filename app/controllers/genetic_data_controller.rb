@@ -42,6 +42,13 @@ class GeneticDataController < ApplicationController
   def create
     params[:genetic_data][:user_id] = current_user.id
     @genetic_data = GeneticData.new(params[:genetic_data])
+    if not params[:read_and_agreed] then
+      flash[:error] = 'You must agree to the terms and conditions for uploading data to your PGP participant profile.'
+      respond_to do |format|
+        format.html { render :action => "new" }
+      end
+      return
+    end
 
     respond_to do |format|
       if @genetic_data.save

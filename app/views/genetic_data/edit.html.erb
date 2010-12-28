@@ -4,11 +4,11 @@
   <%= f.error_messages :header_message => 'Error: dataset could not be saved', :message => nil %>
 
   <div>
-    <%= f.label :name %><br />
+    <%= f.label :name %><span style="color: red"> * </span><br />
     <%= f.text_field :name %>
   </div>
   <p>
-    <%= f.label :data_type %><br />
+    <%= f.label :data_type %><span style="color: red"> * </span><br />
     <%= f.select :data_type, GeneticData::DATA_TYPES, :include_blank => true  %>
   </p>
   <p>

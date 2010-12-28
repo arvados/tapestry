@@ -6,25 +6,44 @@ You can upload a genetic dataset here. File size is limited to 10 MB. You are en
   <%= f.error_messages :header_message => 'Error: dataset could not be uploaded', :message => nil %>
 
   <p>
-    <%= f.label :data_type %><br />
+    <%= f.label :data_type %><span style="color: red"> * </span><br />
     <%= f.select :data_type, GeneticData::DATA_TYPES, :include_blank => true  %>
   </p>
   <p>
-    <%= f.label :name %><br />
+    <%= f.label :name %><span style="color: red"> * </span><br />
     <%= f.text_field :name %>
   </p>
   <p>
-    <label for="upload_file">Select File</label><br /> 
+    <label for="upload_file">Select File</label><span style="color: red">* </span><br /> 
     <%= f.file_field :dataset %>
   </p>
   <p>
-    <%= f.label :date %><br />
+    <label for="date">Dataset creation date:</label><br />
     <%= f.date_select :date, { :include_blank => true, :start_year => 2000, :end_year => Time.now.year } %>
   </p>
   <p>
     <%= f.label :description %><br />
     <%= f.text_area :description, :size => "60x5" %>
   </p>
+  <p>
+  You must read and agree to the following terms and conditions before uploading any data to your PGP participant profile.
+  </p>
+  <p>
+  <strong>1. Upload Your Own, Accurate Information.</strong> Pursuant to <a href="http://www.personalgenomes.org/tos.html">PersonalGenomes.org’s Terms of Service</a>, you may only upload to PG.org data, including genetic data, that you own or otherwise have the right to use. You also agree that you will not intentionally upload any false, misleading or inaccurate data. If you find out that you’ve uploaded any data that is not yours or that is inaccurate, please delete the data and <a href="mailto:support@personalgenomes.org">notify us immediately</a>.
+  </p>
+  <p>
+  <strong>2. Information You Upload Will Be Public.</strong> Remember that all data uploaded to PG.org, including all genetic data, will become part of the PG.org’s public database. All data will be publicly distributed under the CC0 universal waiver and will be available without restriction to any third party visiting the PG.org website or otherwise accessing the database, all as described in more detail in PG.org’s Terms of Service.
+  </p>
+  <p>
+It is important that you are aware that <strong>you will have a limited ability to alter or remove any data once uploaded</strong>. Please remember to review all of your data prior to upload to ensure that all unwanted identifying information (including names, email addresses and social security numbers) has been removed. You should remove or redact any information you do not feel comfortable sharing publicly. You may also wish to review the <a href="http://www.personalgenomes.org/consent">participant informed consent agreement</a>, particularly Section 7 which describes the risks of making data, including genetic data, publicly available, prior to uploading any data.
+  </p>
+  <p>
+<strong>3. The Rest of PG.org’s Terms of Service Apply.</strong> Please review PG.org’s terms of use, which apply to all data uploaded to your participant profile. 
+  </p>
+  <p>
+    <%= check_box_tag :read_and_agreed %><span style="color: red"> * </span>I have read and agree to the terms and conditions for uploading data to my PGP participant profile. 
+  </p>
+
   <p>
     <%= f.submit "Upload" %>
   </p>
