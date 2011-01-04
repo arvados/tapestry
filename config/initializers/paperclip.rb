@@ -10,3 +10,8 @@ Paperclip::Attachment.interpolations[:user_id] = proc do |attachment, style|
   end
   f.gsub!(/\/$/,'')
 end
+
+Paperclip::Attachment.interpolations[:filename] = proc do |attachment, style|
+  hex = User.find(attachment.instance.user_id).hex
+  hex + '_' + attachment.instance.created_at.strftime("%Y%m%d%H%M%S")
+end

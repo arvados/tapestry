@@ -107,7 +107,7 @@ class GeneticDataController < ApplicationController
       f = File.new(@genetic_data.dataset.path)
       data = f.read()
       f.close()
-      filename = @genetic_data.dataset_file_name
+      filename = @genetic_data.dataset.path.gsub(/^.*\//,'')
     rescue Exception => e
       current_user.log("Error downloading genetic data: #{e.exception} #{e.inspect()}",nil,nil,"Error retrieving dataset '#{@genetic_data.name}' for download.")
       flash[:error] = 'There was an error retrieving the dataset. Please try again later.'

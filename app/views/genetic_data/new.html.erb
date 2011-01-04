@@ -1,16 +1,22 @@
 <h2>Upload genetic data</h2>
 
-You can upload a genetic dataset here. File size is limited to 10 MB. You are encouraged to upload compressed files. Please make sure to select your data type from the 'Data type' dropdown box. If your data is from a data provider not listed under data types, please <a href="mailto:support@personalgenomes.org">let us know</a> and we will add your provider to the list.
+You can upload a genetic dataset here. File size is limited to 10 MB. You are
+encouraged to upload compressed files. Please make sure to select your data
+provider from the 'Data Provider' dropdown box. If your data is from a data
+provider that is not listed, please <a
+href="mailto:support@personalgenomes.org">let us know</a> and we will add your
+provider to the list. If your dataset is larger than 10MB, please <a
+href="mailto:support@personalgenomes.org">contact us</a>.
 
 <% form_for(@genetic_data, :url => {:action => 'create'}, :html => {:multipart => true}) do |f| %>
   <%= f.error_messages :header_message => 'Error: dataset could not be uploaded', :message => nil %>
 
   <p>
-    <%= f.label :data_type %><span style="color: red"> * </span><br />
+    Data provider<span style="color: red"> * </span><br />
     <%= f.select :data_type, GeneticData::DATA_TYPES, :include_blank => true  %>
   </p>
   <p>
-    <%= f.label :name %><span style="color: red"> * </span><br />
+    Label your dataset<span style="color: red"> * </span><br />
     <%= f.text_field :name %>
   </p>
   <p>

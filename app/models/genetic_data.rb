@@ -1,7 +1,7 @@
 class GeneticData < ActiveRecord::Base
 
-  # See config/initializers/paperclip.rb for the definition of :user_id
-  has_attached_file :dataset, :path => "/data/#{ROOT_URL}/genetic_data/:user_id/:id/:style/:basename.:extension"
+  # See config/initializers/paperclip.rb for the definition of :user_id and :filename
+  has_attached_file :dataset, :path => "/data/#{ROOT_URL}/genetic_data/:user_id/:id/:style/:filename.:extension"
 
   belongs_to :user
 
@@ -16,9 +16,12 @@ class GeneticData < ActiveRecord::Base
   validates_attachment_size :dataset, :less_than => 10485760, :message => ': maximum file size is 10 MB'
 
   DATA_TYPES = { '23andMe' => '23andMe', 
-                  'Good Start Genetics' => 'Good Start Genetics', 
                   'Pathway Genomics' => 'Pathway genomics', 
                   'Counsyl' => 'Counsyl', 
+                  'DeCode' => 'DeCode', 
+                  'Knome' => 'Knome', 
+                  'Illumina' => 'Illumina', 
+                  'Navigenics' => 'Navigenics', 
                   'Family Tree DNA' => 'Family Tree DNA' }.sort
 
   def <=> other
