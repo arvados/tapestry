@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def ensure_recent_safety_questionnaire
-    if logged_in? and current_user and not current_user.has_recent_safety_questionnaire
+    if logged_in? and current_user and current_user.enrolled and not current_user.has_recent_safety_questionnaire
       redirect_to require_safety_questionnaire_url
     end
   end
