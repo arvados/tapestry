@@ -2,6 +2,11 @@ class SafetyQuestionnairesController < ApplicationController
   skip_before_filter :ensure_recent_safety_questionnaire
 
   def require
+    # This is just a sanity check; unenrolled users accessing this view would otherwise
+    # get a rails error.
+    if not current_user.enrolled then
+      redirect_to root_url
+    end
   end
 
   def index
