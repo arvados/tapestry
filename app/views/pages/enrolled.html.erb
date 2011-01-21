@@ -1,0 +1,14 @@
+<h2>Enrolled participants</h2>
+
+The participants in the PGP, have volunteered to share their DNA sequences, medical information, and other personal information with the research community and the general public.
+
+  <%= will_paginate @enrolled %>
+  <ul id="participants">
+    <% @enrolled.each do |e| -%>
+      <li>
+        <%= link_to e.hex, url_for(:controller => 'profiles', :action => 'public', :hex => e.hex) %>
+      </li>
+    <% end -%>
+  </ul>
+  <%= will_paginate @enrolled %>
+

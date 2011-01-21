@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :pages
   map.root :controller => 'pages', :action => 'show', :id => 'home'
+  map.enrolled '/enrolled',    :controller => 'pages',    :action => 'show', :id => 'enrolled'
 
   map.new2_user '/users/new2',    :controller => 'users',    :action => 'new2'
   map.accept_enrollment_user '/users/accept_enrollment',    :controller => 'users',    :action => 'accept_enrollment'

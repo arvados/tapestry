@@ -12,6 +12,8 @@ class PagesController < ApplicationController
       return
     end
 
+    @enrolled = User.enrolled.find(:all).paginate(:page => params[:page] || 1, :per_page => 100)
+
     fetch_ivars
     render :template => current_page
   end
