@@ -12,7 +12,7 @@ class PagesController < ApplicationController
       return
     end
 
-    @enrolled = User.enrolled.find(:all).paginate(:page => params[:page] || 1, :per_page => 100)
+    @enrolled = User.enrolled.find(:all).sort{ |a,b| a.enrolled <=> b.enrolled }.paginate(:page => params[:page] || 1, :per_page => 100)
 
     fetch_ivars
     render :template => current_page
