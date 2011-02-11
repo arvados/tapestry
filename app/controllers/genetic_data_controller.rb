@@ -1,4 +1,7 @@
 class GeneticDataController < ApplicationController
+
+  skip_before_filter :login_required, :only => [:download]
+
   # GET /genetic_data
   # GET /genetic_data.xml
   def index
@@ -109,7 +112,7 @@ class GeneticDataController < ApplicationController
       f.close()
       filename = @genetic_data.dataset.path.gsub(/^.*\//,'')
     rescue Exception => e
-      current_user.log("Error downloading genetic data: #{e.exception} #{e.inspect()}",nil,nil,"Error retrieving dataset '#{@genetic_data.name}' for download.")
+      @genetic_data.user.log("Error downloading genetic data: #{e.exception} #{e.inspect()}",nil,nil,"Error retrieving dataset '#{@genetic_data.name}' for download.")
       flash[:error] = 'There was an error retrieving the dataset. Please try again later.'
       redirect_to genetic_data_url
       return
