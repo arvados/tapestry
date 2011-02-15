@@ -138,6 +138,17 @@ class User < ActiveRecord::Base
     }
   }
 
+  named_scope :trios, lambda {
+    joins = [:family_relations]
+    conditions_sql = "relation = 'parent'"
+    group_by = "user_id having count(*) = 2"
+    {
+      :conditions => conditions_sql,
+      :group => group_by,
+      :joins => joins
+    }
+  }
+
   named_scope :limit, lambda { |num| { :limit => num } }
 
   # For mislav-will_paginate (WillPaginate), which we use in the admin interface

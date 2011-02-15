@@ -1,0 +1,18 @@
+<h2>Trios Enrolled</h2>
+<p>
+There are currently <%= @trios.length %> trios enrolled.
+<p/>
+<table class="admin_table">
+<tr>
+  <th>User</th>
+  <th>Parents</th>
+</tr>
+<% @trios.each do |t| 
+    parents = t.family_relations.select {|r| r.relation = 'parent'}
+%>
+<tr>
+  <td><a href="<%= public_profile_url(t) %>"><%= t.hex %></a></td>
+  <td><% parents.each do |p| %><a href="<%= public_profile_url(p.relative) %>"><%= p.relative.hex %></a>&nbsp; <% end %></td>
+</tr>
+<% end %>
+</table>

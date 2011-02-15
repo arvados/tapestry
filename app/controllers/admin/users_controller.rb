@@ -163,6 +163,10 @@ class Admin::UsersController < Admin::AdminControllerBase
     end
   end
 
+  def trios
+    @trios = User.trios
+  end
+
   protected
 
   def user_list_worker
