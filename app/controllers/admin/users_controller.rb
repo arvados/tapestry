@@ -167,6 +167,12 @@ class Admin::UsersController < Admin::AdminControllerBase
     @trios = User.trios
   end
 
+  def genetic_data_report
+    @genetic_data = GeneticData.find(:all,
+       :joins => "INNER JOIN users ON users.id = genetic_data.user_id",
+       :order => "data_type, user_id")
+  end
+
   protected
 
   def user_list_worker
