@@ -174,7 +174,71 @@ class Admin::UsersController < Admin::AdminControllerBase
        :order => "data_type, user_id")
   end
 
+  def absolute_pitch_survey_questions
+    aps = Survey.find_by_name("Absolute Pitch Survey")
+    survey_users = User.find(:all, :conditions => 'absolute_pitch_survey_completion IS NOT NULL AND NOT is_test = true', :order => 'hex')
+    questions = []
+    aps.survey_sections.each {|s|
+      questions << s.survey_questions
+    }
+    questions = questions.flatten.sort{|x,y| x.id <=> y.id }.select{|q| q.question_type != 'end'}
+    csv_string = ''
+    questions.each_with_index {|q, i|
+      csv_string += (i + 1).to_s + "," + escape_csv(q.text) + "\n"
+    }
+    send_data csv_string,
+            :type => 'text/csv; charset=iso-8859-1; header=present',
+            :disposition => "attachment; filename=absolute_pitch_survey_questions.csv"
+  end
+
+  def absolute_pitch_survey_export
+    aps = Survey.find_by_name("Absolute Pitch Survey")
+    survey_users = User.find(:all, :conditions => 'absolute_pitch_survey_completion IS NOT NULL AND NOT is_test = true', :order => 'hex')
+    questions = []
+    aps.survey_sections.each {|s|
+      questions << s.survey_questions
+    }
+    questions = questions.flatten.sort{|x,y| x.id <=> y.id }.select{|q| q.question_type != 'end'}
+
+    header = ['hexid']
+    questions.each_with_index {|q, i| 
+      header << "Question " + (i + 1).to_s
+      #q = q.name.sub("\"", "\"\"")
+      #q = "\"" + q + "\"" if q.include?(",") || q.include?("\"")
+      #header << q
+    }
+
+    user_answers = []
+    survey_users.each {|u|
+      answers = [u.hex]
+      questions.each_with_index {|q, i|
+        answer = u.survey_answers.select { |a| a.survey_question_id == q.id }
+        if answer.nil? || answer.length == 0
+          answers << ''
+        else
+          answer = answer.map {|a| a.text}.join(";")
+          answers << escape_csv(answer)
+        end
+      }
+      user_answers << answers
+    }
+
+    csv_string = header.join(",") + "\n"
+    user_answers.each {|r|
+      csv_string += r.join(",") + "\n"
+    }
+
+    send_data csv_string,
+            :type => 'text/csv; charset=iso-8859-1; header=present',
+            :disposition => "attachment; filename=absolute_pitch_survey_results.csv"
+  end
+
   protected
+  def escape_csv(s)
+    s = s.sub("\"", "\"\"")
+    s = "\"" + s + "\"" if s.include?(",") || s.include?("\"")
+    return s
+  end
 
   def user_list_worker
     if params[:completed]

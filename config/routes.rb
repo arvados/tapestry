@@ -78,6 +78,8 @@ ActionController::Routing::Routes.draw do |map|
   map.admin_activity_users '/admin/users/activity',    :controller => 'admin/users',    :action => 'activity'
   map.admin_ineligible_users '/admin/users/ineligible',    :controller => 'admin/users',    :action => 'ineligible'
   map.admin_trios '/admin/users/trios',    :controller => 'admin/users',    :action => 'trios'
+  map.admin_absolute_pitch_survey_export '/admin/users/absolute_pitch_survey_export', :controller => 'admin/users', :action => 'absolute_pitch_survey_export'
+  map.admin_absolute_pitch_survey_questions '/admin/users/absolute_pitch_survey_questions', :controller => 'admin/users', :action => 'absolute_pitch_survey_questions'
   map.admin_genetic_data_report '/admin/users/genetic_data_report', :controller => 'admin/users', :action => 'genetic_data_report'
   map.namespace 'admin' do |admin|
     admin.root :controller => 'homes'
