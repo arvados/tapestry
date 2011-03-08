@@ -182,11 +182,17 @@ class Admin::UsersController < Admin::AdminControllerBase
       questions << s.survey_questions
     }
     questions = questions.flatten.sort{|x,y| x.id <=> y.id }.select{|q| q.question_type != 'end'}
-    csv_string = ''
-    questions.each_with_index {|q, i|
-      csv_string += (i + 1).to_s + "," + escape_csv(q.text) + "\n"
-    }
-    send_data csv_string,
+
+    report = StringIO.new
+
+    CSV::Writer.generate(report) do |csv|
+      questions.each_with_index { |q, i|
+        csv << [ i+1, q.text ]
+      }
+    end
+    report.rewind
+
+    send_data report.read,
             :type => 'text/csv; charset=iso-8859-1; header=present',
             :disposition => "attachment; filename=absolute_pitch_survey_questions.csv"
   end
@@ -203,9 +209,6 @@ class Admin::UsersController < Admin::AdminControllerBase
     header = ['hexid']
     questions.each_with_index {|q, i| 
       header << "Question " + (i + 1).to_s
-      #q = q.name.sub("\"", "\"\"")
-      #q = "\"" + q + "\"" if q.include?(",") || q.include?("\"")
-      #header << q
     }
 
     user_answers = []
@@ -216,30 +219,28 @@ class Admin::UsersController < Admin::AdminControllerBase
         if answer.nil? || answer.length == 0
           answers << ''
         else
-          answer = answer.map {|a| a.text}.join(";")
-          answers << escape_csv(answer)
+          answers << answer.map {|a| a.text}.join(";")
         end
       }
       user_answers << answers
     }
 
-    csv_string = header.join(",") + "\n"
-    user_answers.each {|r|
-      csv_string += r.join(",") + "\n"
-    }
+    report = StringIO.new
 
-    send_data csv_string,
+    CSV::Writer.generate(report) do |csv|
+      csv << header
+      user_answers.each {|r|
+        csv << r
+      }
+    end
+    report.rewind
+
+    send_data report.read,
             :type => 'text/csv; charset=iso-8859-1; header=present',
             :disposition => "attachment; filename=absolute_pitch_survey_results.csv"
   end
 
   protected
-  def escape_csv(s)
-    s = s.sub("\"", "\"\"")
-    s = "\"" + s + "\"" if s.include?(",") || s.include?("\"")
-    return s
-  end
-
   def user_list_worker
     if params[:completed]
       @unpaginated_users = User.has_completed(params[:completed]).exclude_test

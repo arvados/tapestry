@@ -84,6 +84,7 @@ Rails::Initializer.run do |config|
 
 end
 
+require 'stringio'
 require 'csv'
 require 'drb'
 
