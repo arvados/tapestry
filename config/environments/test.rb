@@ -33,4 +33,4 @@ config.gem "redgreen"
 ENV['RECAPTCHA_PUBLIC_KEY'] = 'yyyyyyyyyyyyyyyyyyyyyyyy-xxxxxxxx'
 ENV['RECAPTCHA_PRIVATE_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-yyyyyyyy'
 
-LATEST_CONSENT_VERSION = 'v20100331'
+LATEST_CONSENT_VERSION = 'v20110222'

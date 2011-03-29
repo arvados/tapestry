@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101213214957) do
+ActiveRecord::Schema.define(:version => 20110329163713) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -412,7 +412,7 @@ ActiveRecord::Schema.define(:version => 20101213214957) do
 
   create_table "screening_survey_responses", :force => true do |t|
     t.integer  "user_id"
-    t.boolean  "us_citizen"
+    t.boolean  "us_citizen_or_resident"
     t.boolean  "age_21"
     t.string   "monozygotic_twin"
     t.string   "worrisome_information_comfort_level"
