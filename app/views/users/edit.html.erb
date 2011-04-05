@@ -34,6 +34,7 @@ This information is private and not part of your public profile.
   </p>
 <p>
 <% if current_user.has_completed?('named_proxies') %>
+  <h2>Manage designated proxies</h2>
   <%= link_to 'Manage designated proxies', named_proxies_path %>
 <% end %>
 </p>
