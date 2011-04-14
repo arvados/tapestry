@@ -40,3 +40,6 @@ DRB_SERVER = '127.0.0.1'
 DRB_PORT = '9900'
 DRB_CALLBACK_SOURCE_IP = '10.6.3.27'
 
+TRAITWISE_LOGIN = "traitwise@personalgenomes.org"
+TRAITWISE_PASSWORD = "xxxxxxxx"
+	
