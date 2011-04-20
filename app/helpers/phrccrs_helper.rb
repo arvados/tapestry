@@ -570,6 +570,8 @@ module PhrccrsHelper
       o.codes = get_codes(d)
       procedures << o
     }
+    
+    fix_height_weight_issue(dem, lab_test_results)
 
     ccr.demographic = dem
     ccr.allergies = allergies
@@ -587,4 +589,49 @@ module PhrccrsHelper
     return ccr
   end
 
+  # Fix Google Health problem where if vital signs cannot be updated through Google Health if it
+  # was previously added by another CCR provider
+  def fix_height_weight_issue(dem, results)
+    return if results.nil?
+
+    latest_height_in = dem.height_in
+    if (latest_height_in.nil? || latest_height_in == '')
+      latest_height_in = 0
+    end
+    latest_weight_oz = dem.weight_oz
+    if (latest_weight_oz.nil? || latest_height_in == '')
+      latest_weight_oz = 0
+    end
+    latest_height_date = DateTime.parse('0000-01-01')
+    latest_weight_date = DateTime.parse('0000-01-01')
+    results.each{|r|
+      if (r.description == 'Height')
+        if r.start_date.nil? && latest_height_in == 0 ||
+            !r.start_date.nil? && (r.start_date > latest_height_date)
+          tvalue = SimpleTextNode.new
+          tvalue.text = '' + r.value
+          tunits = SimpleTextNode.new
+          tunits.text = r.units
+          latest_height_in = normalize_to_in(tvalue, tunits)
+          latest_height_date = r.start_date unless r.start_date.nil?
+        end
+      elsif (r.description == 'Weight')
+        if r.start_date.nil? && latest_weight_oz == 0 ||
+            !r.start_date.nil? && (r.start_date > latest_weight_date)
+          tvalue = SimpleTextNode.new
+          tvalue.text = '' + r.value
+          tunits = SimpleTextNode.new
+          tunits.text = r.units
+          latest_weight_oz = normalize_to_oz(tvalue, tunits)
+          latest_weight_date = r.start_date unless r.start_date.nil?
+        end
+      end      
+    }
+    dem.height_in = latest_height_in if latest_height_in > 0
+    dem.weight_oz = latest_weight_oz if latest_weight_oz > 0
+  end
+  
+  class SimpleTextNode
+    attr_accessor :text
+  end
 end
