@@ -6,7 +6,7 @@ class TraitwiseController < ApplicationController
   protect_from_forgery :only => [:index]
 
   def index
-    @stream_from_tw = Traitwise.stream( current_user.hex, request, cookies )
+    @stream_from_tw = Traitwise.stream( current_user.hex, request, cookies, current_user )
   end
 
 	def proxy

@@ -61,34 +61,35 @@ class Traitwise
 		return data_from_tw
 	end
 
-	def self.tw_post url, params, request, cookies
+	def self.tw_post url, params, request, cookies, current_user=nil
 		http = Net::HTTP.new( @@server, @@port )
 		http.use_ssl = @@use_ssl
 
-STDERR.puts url
-STDERR.puts params
-
-		resp_from_tw, stream_from_tw = http.post(
-			url,
-			params,
-			{'User-Agent'=>request.env['HTTP_USER_AGENT']}
-		)
-		
-		# This returns some cookies as Set-Cookie which have to be passed along
-		set_cookies = resp_from_tw.get_fields("Set-Cookie")
-		if set_cookies
-			set_cookies.each do |c|
-				c = CGI.unescape( c )
-				parts = c.match( /([^=]*)=([^;]*)/ )
-				cookies[parts[1]] = parts[2]
-			end
-		end
-		
+    begin
+  		resp_from_tw, stream_from_tw = http.post(
+  			url,
+  			params,
+  			{'User-Agent'=>request.env['HTTP_USER_AGENT']}
+  		)
+  		# This returns some cookies as Set-Cookie which have to be passed along
+  		set_cookies = resp_from_tw.get_fields("Set-Cookie")
+  		if set_cookies
+  			set_cookies.each do |c|
+  				c = CGI.unescape( c )
+  				parts = c.match( /([^=]*)=([^;]*)/ )
+  				cookies[parts[1]] = parts[2]
+  			end
+  		end
+	  rescue Exception => e
+      stream_from_tw = "We're sorry, the Traitwise service is currently unavailable. Please try again later."
+      current_user.log("Error connecting to Traitwise service: #{ e } (#{ e.class })")
+    end
+	
 		return stream_from_tw
 		
 	end
 	
-	def self.stream local_user_id, request, cookies
+	def self.stream local_user_id, request, cookies, current_user=nil
 		postArgs = ""
 		@@opts.keys.each_with_index do |k,i|
 			postArgs += (i==0 ? "" : "&") + k + "=" + URI.escape( @@opts[k].to_s )
@@ -98,7 +99,8 @@ STDERR.puts params
 			"/hosted/stream", 
 			postArgs + "&foreign_user_id=" + local_user_id.to_s + "&proxy_mode=rails",
 			request,
-			cookies
+			cookies,
+			current_user
 		)
 	end
 	
@@ -107,7 +109,8 @@ STDERR.puts params
 			"/hosted/merge_user_data",
 			"host_signin=" + @@login.to_s + "&host_password=" + @@password.to_s + "&old_foreign_user_id=" + old_foreign_user_id + "&new_foreign_user_id=" + new_foreign_user_id,
 			request,
-			cookies
+			cookies,
+			current_user
 		)
 	end		
 
