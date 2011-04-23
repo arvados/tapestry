@@ -20,7 +20,7 @@ class Traitwise
 		'suppress_tabs' => false,
 		'include_restart_link' => false,
 		'suppress_jquery_load' => true,
-		'suppress_jquery_ui_load' => true,
+		'suppress_jquery_ui_load' => false,
 		'suppress_jquery_qtip_load' => false,
 		'suppress_jquery_flash_load' => false
 	}
