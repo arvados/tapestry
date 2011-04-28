@@ -218,10 +218,11 @@ form .submit input.long {
 	color: #5d7cbb;
 }
 
+/* This interferes with the traitwise iframe. Do we even still need it? Ward, 2011-04-28
 #body td {
 	color: #000;
 	font: 12px/18px Arial, Helvetica, sans-serif;
-}
+} */
 
 
 #body .menu {
@@ -362,7 +363,7 @@ ul.sublinks li a {
 
 #body .main {
 	float: left;
-	width: 678px;
+	width: 878px;
 	padding: 0 12px 24px 24px;
 }
 
