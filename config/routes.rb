@@ -8,6 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   map.tos_user '/users/tos',    :controller => 'users',    :action => 'tos'
   map.accept_tos_user '/users/accept_tos',    :controller => 'users',    :action => 'accept_tos'
   map.consent_user '/users/consent',    :controller => 'users',    :action => 'consent'
+  map.unauthorized_user '/users/unauthorized',    :controller => 'users',    :action => 'unauthorized'
   map.created_user '/users/created/:id',    :controller => 'users',    :action => 'created'
   map.show_log_user '/users/show_log',    :controller => 'users',    :action => 'show_log'
 
