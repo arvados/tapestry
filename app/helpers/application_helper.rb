@@ -44,7 +44,7 @@ EOS
     request.path =~ %r{^/admin/}
   end
 
-  def public_profile_url(user)
+  def public_profile_url_string(user)
     return "#{request.protocol}#{ROOT_URL}#{public_profile_path(:hex => user.hex) }"
   end
 

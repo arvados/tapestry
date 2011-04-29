@@ -13,7 +13,7 @@ function clearForm() {
 <% if params[:commit] %>
 <h3><%= @users.length %> result(s) found</h3>
 <% @users.each {|user| %>
-<a href="<%= public_profile_url(user) %>"><%= user.hex %></a><br />
+<%= link_to user.hex, public_profile_path(:hex => user.hex) %><br />
 <% } %>
 <% end %>
 

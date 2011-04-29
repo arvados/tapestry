@@ -9,7 +9,7 @@ class ProfilesController < ApplicationController
   def public
     @user = User.find_by_hex(params[:hex])
     # Invalid hex code
-    return if not @user
+    return if @user.nil?
 
     @family_members = @user.family_relations
 

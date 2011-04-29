@@ -10,7 +10,7 @@
 </tr>
 <% @genetic_data.each do |g|%>
 <tr>
-  <td><%= link_to g.user.hex, public_profile_url(g.user) %></td>
+  <td><%= link_to g.user.hex, public_profile_path(:hex => g.user.hex) %></td>
   <td><%= g.data_type %></td>
   <td><%= g.date %></td>
   <td><%= g.user.first_name%> <%= g.user.last_name %></td>
