@@ -88,6 +88,19 @@ class Admin::UsersController < Admin::AdminControllerBase
       @user.security_answer = nil
     end
 
+    if (@user.first_name != params[:user][:first_name]) then
+      @user.log("Admin: #{current_user.full_name} changed first name from '#{@user.first_name}' to '#{params[:user][:first_name]}'")
+    end
+    if (@user.middle_name != params[:user][:middle_name]) then
+      @user.log("Admin: #{current_user.full_name} changed middle name from '#{@user.middle_name}' to '#{params[:user][:middle_name]}'")
+    end
+    if (@user.last_name != params[:user][:last_name]) then
+      @user.log("Admin: #{current_user.full_name} changed last name from '#{@user.last_name}' to '#{params[:user][:last_name]}'")
+    end
+    if (@user.email != params[:user][:email]) then
+      @user.log("Admin: #{current_user.full_name} changed email address from '#{@user.email}' to '#{params[:user][:email]}'")
+    end
+
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'
       redirect_to admin_users_url
