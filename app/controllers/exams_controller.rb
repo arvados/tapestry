@@ -1,6 +1,7 @@
 class ExamsController < ApplicationController
   before_filter :set_content_area
   before_filter :set_exam_version, :only => [:start, :retake]
+  skip_before_filter :ensure_enrolled
 
   def index
     redirect_to @content_area

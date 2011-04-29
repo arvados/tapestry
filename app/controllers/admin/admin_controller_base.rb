@@ -1,5 +1,6 @@
 class Admin::AdminControllerBase < ApplicationController
   before_filter :admin_required
+  skip_before_filter :ensure_enrolled
 
   private
 

@@ -1,5 +1,6 @@
 class DrbController < ApplicationController
   skip_before_filter :login_required
+  skip_before_filter :ensure_enrolled
   before_filter :valid_callback
   include PhrccrsHelper
 

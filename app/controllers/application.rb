@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
   before_filter :ensure_tos_agreement
   before_filter :ensure_latest_consent
   before_filter :ensure_recent_safety_questionnaire
+  before_filter :ensure_enrolled
+
   around_filter :profile
 
 
@@ -23,6 +25,12 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   protected
+
+  def ensure_enrolled
+    if not logged_in? or current_user.nil? or not current_user.enrolled
+      redirect_to unauthorized_user_url
+    end
+  end
 
   def ensure_recent_safety_questionnaire
     if logged_in? and current_user and current_user.enrolled and not current_user.has_recent_safety_questionnaire

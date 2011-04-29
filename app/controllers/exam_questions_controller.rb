@@ -1,6 +1,7 @@
 class ExamQuestionsController < ApplicationController
   layout 'exam'
   before_filter :load_exam_models, :only => [:show, :answer]
+  skip_before_filter :ensure_enrolled
 
   def show
     @answer_options = @exam_question.answer_options

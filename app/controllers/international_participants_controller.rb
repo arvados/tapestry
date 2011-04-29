@@ -1,5 +1,6 @@
 class InternationalParticipantsController < ApplicationController
-  skip_before_filter :login_required, :only => [:index, :new, :create, :done]
+  skip_before_filter :login_required
+  skip_before_filter :ensure_enrolled
 
   def index
     new

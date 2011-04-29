@@ -1,6 +1,7 @@
 class GeneticDataController < ApplicationController
 
   skip_before_filter :login_required, :only => [:download]
+  skip_before_filter :ensure_enrolled, :only => [:download]
 
   # GET /genetic_data
   # GET /genetic_data.xml

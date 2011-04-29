@@ -1,4 +1,5 @@
 class ParticipationConsentsController < ApplicationController
+  skip_before_filter :ensure_enrolled
   skip_before_filter :ensure_latest_consent, :only => [:show, :create ]
   skip_before_filter :ensure_recent_safety_questionnaire, :only => [:show, :create ]
 

@@ -1,5 +1,6 @@
 class PasswordsController < ApplicationController
   skip_before_filter :login_required
+  skip_before_filter :ensure_enrolled
 
   def new
   end

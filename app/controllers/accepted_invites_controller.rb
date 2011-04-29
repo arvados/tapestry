@@ -1,5 +1,6 @@
 class AcceptedInvitesController < ApplicationController
   skip_before_filter :login_required, :only => [:create]
+  skip_before_filter :ensure_enrolled, :only => [:create]
 
   def create
     @invite = InvitedEmail.first(:conditions => { :email => params[:email] })

@@ -1,4 +1,5 @@
 class ContentAreasController < ApplicationController
+  skip_before_filter :ensure_enrolled
   layout 'exam'
 
   def index

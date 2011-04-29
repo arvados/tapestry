@@ -1,4 +1,5 @@
 class NamedProxiesController < ApplicationController
+  skip_before_filter :ensure_enrolled
   before_filter :set_named_proxy, :only => [:show, :edit, :update]
 
   def done

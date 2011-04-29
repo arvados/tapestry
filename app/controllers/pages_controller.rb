@@ -5,6 +5,7 @@ class PagesController < ApplicationController
   before_filter :ensure_valid
   helper_method :total_user_count, :recent_students, :recent_sponsors, :recent_causes
   skip_before_filter :login_required, :only => [:show]
+  skip_before_filter :ensure_enrolled, :only => [:show]
 
   def show
     if current_user and current_user.enrolled and not current_user.enrollment_accepted

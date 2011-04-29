@@ -2,6 +2,7 @@ class ProfilesController < ApplicationController
   layout 'profile'
   
   skip_before_filter :login_required, :only => [:public]
+  skip_before_filter :ensure_enrolled, :only => [:public]
 
   include PhrccrsHelper
 

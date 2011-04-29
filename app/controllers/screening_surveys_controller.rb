@@ -1,4 +1,5 @@
 class ScreeningSurveysController < ApplicationController
+  skip_before_filter :ensure_enrolled
   before_filter :redirect_to_enrollment_steps_if_screening_surveys_complete, :only => :index
   before_filter :fetch_or_create_response
 

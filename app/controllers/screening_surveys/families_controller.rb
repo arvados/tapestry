@@ -1,5 +1,5 @@
 class ScreeningSurveys::FamiliesController < ApplicationController
-
+  skip_before_filter :ensure_enrolled
   before_filter :fetch_or_create_response
 
   def edit
