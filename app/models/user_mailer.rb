@@ -34,14 +34,21 @@ class UserMailer < ActionMailer::Base
     @family_relation = family_relation
     @body[:url] = "http://#{ROOT_URL}/family_relations"
     @body[:login_url]  = "http://#{ROOT_URL}/login"
-    family_relation.user.log("Sent family relation notification: added as a family member")
+    family_relation.relative.log("Sent family relation notification: added as a family member (#{@family_relation.relation}) by #{@family_relation.user.hex}")
   end
 
   def family_relation_rejection(family_relation)
     setup_email(family_relation.user)
     @subject += 'Your family relation request was rejected'
     @body[:user] = family_relation.relative
-    family_relation.user.log("Sent family relation notification: family relation request was rejected")
+    family_relation.user.log("Sent family relation notification: family relation request was rejected by #{family_relation.relative.hex}")
+  end
+
+  def family_relation_deletion(family_relation)
+    setup_email(family_relation.user)
+    @subject += 'Your family relation was deleted'
+    @body[:user] = family_relation.relative
+    family_relation.user.log("Sent family relation notification: family relation was deleted by #{family_relation.relative.hex} (#{FamilyRelation::relations[family_relation.relation]})")
   end
 
   def safety_questionnaire_reminder(user)

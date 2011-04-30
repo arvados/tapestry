@@ -1,4 +1,4 @@
-<% if @family_members.blank? %>
+<% if @family_members.blank? and @pending_family_members.blank? %>
 <h2>Family Relationships</h2>
   <% form_tag update_has_family_relations_url do %>
   <p>Please specify whether you have family members enrolled: </p>
@@ -44,6 +44,7 @@ You have not added any family relationships.</p>
 
 <% end %>
 <%= link_to 'Add family_member', new_family_relation_path %>
+<% end #if has_family_members_enrolled %>
 
 <h2>Pending Relationship Requests</h2>
 <% if @pending_family_members.blank? %>
@@ -66,7 +67,6 @@ You have not added any family relationships.</p>
 <% } %>
 </table>
 <% end %>
-<% end #if has_family_members_enrolled %>
 <br />
 <%= link_to 'Back to public profile', public_profile_path(current_user.hex) %>
 

@@ -45,6 +45,8 @@ class FamilyRelationsController < ApplicationController
       family_relation.is_confirmed = true
       family_relation.save!
       flash[:notice] = 'Family member confirmed'
+      current_user.log("Confirmed family relation with #{family_relation.user.hex} (#{reverse_relation.relation})")
+      family_relation.user.log("Family relation with #{family_relation.relative.hex} (#{family_relation.relation}) was confirmed")
     end
     redirect_to(family_relations_url)
   end
@@ -54,6 +56,8 @@ class FamilyRelationsController < ApplicationController
     if family_relation.relative_id = current_user.id
       family_relation.destroy
       UserMailer.deliver_family_relation_rejection(family_relation)
+      current_user.log("Rejected family relation with #{family_relation.user.hex}")
+      family_relation.user.log("Family relation with #{family_relation.relative.hex} was rejected")
     end
     redirect_to(family_relations_url)
   end
@@ -119,6 +123,9 @@ class FamilyRelationsController < ApplicationController
       	flash[:notice] += ' An email has been sent to confirm this relationship.'
         UserMailer.deliver_family_relation_notification(@family_relation)
       end
+      relative.has_family_members_enrolled = 'yes'
+      relative.save!
+      current_user.log("Created family relation with #{relative.hex} (#{@family_relation.relation})")
       redirect_to family_relations_path
     else
       flash[:error] = 'Error adding this family member'
@@ -128,9 +135,19 @@ class FamilyRelationsController < ApplicationController
 
 
   def destroy
-    @family_relation = FamilyRelation.find(params[:id])
-    @family_relation.destroy
+    @relation = FamilyRelation.find(params[:id])
+    @reverse_relation = FamilyRelation.find_by_user_id_and_relative_id(@relation.relative_id,@relation.user_id)
 
+    if not @reverse_relation.nil? then
+      # If the reverse relation is still pending, it does not exist yet in the database
+      UserMailer.deliver_family_relation_deletion(@reverse_relation)
+      @reverse_relation.destroy
+    else
+      # TODO: should we send e-mail when a family relation request is repealed before it is accepted/rejected?
+    end
+    @relation.destroy
+
+    current_user.log("Deleted family relation with #{@relation.relative.hex} (#{@relation.relation})")
     redirect_to(family_relations_url)
   end
 end
