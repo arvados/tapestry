@@ -32,16 +32,9 @@ class Traitwise
 		http.use_ssl = @@use_ssl
 
 		cookie_str = ""
-    # Prior to Rails 2.3.2, the cookies hash contains elements with a string key 
-    # and a CGI::Cookie object as value.
-    # From Rails 2.3.2, the hash has elements with a string key and string value.
-    # TODO: Fixme: when upgrading to Rails 2.3.2 or higher, make sure to adjust the code below:
-    # cookies.each do |k,v|
-    #   cookie_str += k[0].to_s + "=" + k[1].value.to_s + ";"
-    # end
     if cookies
-      cookies.each do |k|
-        cookie_str += k[0].to_s + "=" + k[1].value.to_s + ";"
+      cookies.each do |k,v|
+        cookie_str += k.to_s + "=" + v.to_s + ";"
       end
 		else
 			cookies = {}

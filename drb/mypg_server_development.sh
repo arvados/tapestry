@@ -1,7 +1,7 @@
 #!/bin/sh
 
 RUBY=/usr/local/bin/ruby
-P=/data/personal/data/2010/projects/sequencing/PGP/pgp-enroll/drb
+P=/data/personal/data/2011/projects/sequencing/PGP/pgp-enroll/drb
 SERVER=mypg_server.rb
 DELAY_BETWEEN_RESTART=5
 
