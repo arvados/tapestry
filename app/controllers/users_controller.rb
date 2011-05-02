@@ -34,6 +34,8 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find params[:id]
+    # If no mailing lists are selected, we don't get the parameter back from the browser
+    params[:user]['mailing_list_ids'] = [] if not params[:user].has_key?('mailing_list_ids')
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'
       redirect_to root_url
