@@ -4,9 +4,11 @@ class Admin::ExamResponsesController < Admin::AdminControllerBase
   helper_method :user
 
   def index
-    @exam_responses = user.exam_responses.sort_by { |r|
-      [r.exam_version.exam.content_area.ordinal,
-       r.exam_version.exam.ordinal] }
+    # There is some bad data in our database. 
+    # TODO: remove dead records (i.e. ExamResponse objects that point to non-existing exam versions)
+    @exam_responses = user.exam_responses.delete_if { |e| e.exam_version.nil? }.sort_by { |r|
+         [r.exam_version.exam.content_area.ordinal,
+          r.exam_version.exam.ordinal] }
   end
 
   def show
