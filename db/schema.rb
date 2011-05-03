@@ -515,17 +515,17 @@ ActiveRecord::Schema.define(:version => 20110503112214) do
     t.boolean  "has_sequence",                                    :default => false, :null => false
     t.string   "has_sequence_explanation"
     t.text     "family_members_passed_exam"
+    t.string   "authsub_token"
     t.string   "security_question"
     t.string   "security_answer"
     t.string   "eligibility_survey_version"
     t.datetime "enrolled"
-    t.string   "authsub_token"
     t.string   "hex",                                             :default => ""
     t.string   "exam_version"
     t.datetime "enrollment_accepted"
     t.string   "consent_version"
-    t.boolean  "is_test",                                         :default => false
     t.string   "has_family_members_enrolled"
+    t.boolean  "is_test",                                         :default => false
     t.string   "pgp_id"
     t.datetime "absolute_pitch_survey_completion"
   end

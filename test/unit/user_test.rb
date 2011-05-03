@@ -1,24 +1,33 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class UserTest < Test::Unit::TestCase
-  should_have_many :enrollment_step_completions
-  should_have_many :completed_enrollment_steps
-  should_have_many :exam_responses
-  should_have_many :waitlists
-  should_have_many :distinctive_traits
-  should_have_one  :residency_survey_response
-  should_have_one  :family_survey_response
-  should_have_one  :privacy_survey_response
-  should_have_one  :informed_consent_response
-  should_have_one  :baseline_traits_survey
+  should have_many :enrollment_step_completions
+  should have_many :completed_enrollment_steps
+  should have_many :exam_responses
+  should have_many :waitlists
+  should have_many :distinctive_traits
+  should have_one  :residency_survey_response
+  should have_one  :family_survey_response
+  should have_one  :privacy_survey_response
+  should have_one  :informed_consent_response
+  should have_one  :baseline_traits_survey
 
-  should_allow_mass_assignment_of :email, :email_confirmation,
-                                  :password, :password_confirmation,
-                                  :first_name, :middle_name, :last_name,
-                                  :address1, :address2, :city, :state, :zip,
-                                  :phr_profile_name
-
-  should_have_attached_file :phr
+  should allow_mass_assignment_of :email
+  should allow_mass_assignment_of :email_confirmation
+  should allow_mass_assignment_of :password
+  should allow_mass_assignment_of :password_confirmation
+  should allow_mass_assignment_of :first_name
+  should allow_mass_assignment_of :middle_name
+  should allow_mass_assignment_of :last_name
+  should allow_mass_assignment_of :address1
+  should allow_mass_assignment_of :address2
+  should allow_mass_assignment_of :city
+  should allow_mass_assignment_of :state
+  should allow_mass_assignment_of :zip
+  should allow_mass_assignment_of :phr_profile_name
+  
+# FIXME: this macro should be provided by paperclip, but for some reason it's not being picked up.
+#  should_have_attached_file :phr
 
   context 'a user' do
     setup do
@@ -31,7 +40,9 @@ class UserTest < Test::Unit::TestCase
                       :password_confirmation => @password)
     end
 
-    should_validate_presence_of :first_name, :last_name, :email
+    should validate_presence_of :first_name
+    should validate_presence_of :last_name
+    should validate_presence_of :email
     # should_allow_values_for ... maybe swap RESTful Auth for clearance,
     # so don't worry about this yet.
     should_allow_values_for :email, 'a@b.cc', 'test@harvard.edu', 'jason.p.morrison@gmail.com'
@@ -242,7 +253,8 @@ class UserTest < Test::Unit::TestCase
     end
   end
 
-  should_validate_presence_of :email, :password
+  should validate_presence_of :email
+  should validate_presence_of :password
 
   should "require password confirmation" do
     assert_no_difference 'User.count' do

@@ -1,8 +1,7 @@
-require 'factory_girl'
-
 Factory.define(:user) do |f|
   f.first_name            'Jason'
   f.last_name             'Morrison'
+  f.pgp_id                { Factory.next :pgp_id }
   f.email                 { Factory.next :email }
   f.security_question     'security_question'
   f.security_answer       'security_answer'
@@ -13,6 +12,7 @@ end
 Factory.define(:activated_user, :class => :user) do |f|
   f.first_name            'Jason'
   f.last_name             'Morrison'
+  f.pgp_id                { Factory.next :pgp_id }
   f.email                 { Factory.next :email }
   f.security_question     'security_question'
   f.security_answer       'security_answer'
@@ -24,6 +24,7 @@ end
 Factory.define(:admin_user, :class => User) do |f|
   f.first_name            'Jason'
   f.last_name             'Morrison'
+  f.pgp_id                { Factory.next :pgp_id }
   f.email                 { Factory.next :email }
   f.security_question     'security_question'
   f.security_answer       'security_answer'
@@ -33,6 +34,8 @@ Factory.define(:admin_user, :class => User) do |f|
 end
 
 Factory.sequence(:email) { |n| "person#{n}@example.org" }
+
+Factory.sequence(:pgp_id) { |n| "PGP#{n}" }
 
 Factory.sequence(:enrollment_step_ordinal) { |n| n }
 
@@ -50,15 +53,16 @@ end
 
 # Is there a better way?  These enrollment_step are necessary, and torn down before tests.
 # These are not in any particular order, AFAIK
-%w(signup content_areas screening_surveys consent_review screening_submission
-   participation_consent eligibility_screening_results phr trait_collection
-   pledge identity_confirmation enrollment_application
-   distinctive_traits_survey).each do |step|
-  Factory(:enrollment_step,
-          :keyword     => step,
-          :title       => step,
-          :description => step)
-end
+# TODO: FIXME - this breaks rake:db:migrate when you have a blank database. Why? Ward, 2011-05-03
+#%w(signup content_areas screening_surveys consent_review screening_submission
+#   participation_consent eligibility_screening_results phr trait_collection
+#   pledge identity_confirmation enrollment_application
+#   distinctive_traits_survey).each do |step|
+#  Factory(:enrollment_step,
+#          :keyword     => step,
+#          :title       => step,
+#          :description => step)
+#end
 
 Factory.define(:enrollment_step_completion) do |f|
   f.user            { |u| u.association :user }

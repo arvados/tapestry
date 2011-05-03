@@ -58,6 +58,7 @@ PgpEnroll::Application.routes.draw do
   match '/identity_verification_notifications/done' => 'identity_verification_notifications#done', :as => :done_identity_verification_notification
   match '/named_proxies/done' => 'named_proxies#done', :as => :done_named_proxy
   resources :named_proxies
+  #resources :genetic_data_instance
   resources :genetic_data
   match '/genetic_data/download/:id' => 'genetic_data#download', :as => :genetic_data_download
   resource :trait_collection
