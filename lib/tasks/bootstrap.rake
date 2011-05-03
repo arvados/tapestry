@@ -7,9 +7,9 @@ namespace :db do
     task :load => :environment do
       require 'active_record/fixtures'
       if ENV['FIXTURES']
-        fixture_files = ENV['FIXTURES'].split(/\s*,\s*/).map {|file| [File.join(RAILS_ROOT, 'db', 'bootstrap', file), file]}
+        fixture_files = ENV['FIXTURES'].split(/\s*,\s*/).map {|file| [Rails.root.join('db', 'bootstrap', file), file]}
       else
-        found_files = Dir.glob(File.join(RAILS_ROOT, 'db', 'bootstrap', '*.{yml,csv}'))
+        found_files = Dir.glob(Rails.root.join('db', 'bootstrap', '*.{yml,csv}'))
         numbered_files = found_files.select {|path| path =~ /\d+_[^.]+\.yml\Z/i }
         fixture_files = numbered_files.sort {|x,y| x[/(\d+)_.*\Z/,1].to_i <=> y[/(\d+)_.*\Z/,1].to_i }.
           map {|fixture_path| [fixture_path[/(.*)\.(yml|csv)\Z/i,1], fixture_path[/\d+_([^.]+)\.(yml|csv)\Z/i, 1]] }
@@ -17,7 +17,7 @@ namespace :db do
         raise "No fixtures found matching \"db/bootstrap/*.{yml,csv}\"! Specify fixtures using \"FIXTURES=\"" if fixture_files.empty?
       end
 
-      ActiveRecord::Base.establish_connection(RAILS_ENV.to_sym)
+      ActiveRecord::Base.establish_connection(Rails.env.to_sym)
       connection = ActiveRecord::Base.connection
       fixtures = fixture_files.map do |fixture_path, table_name|
         Fixtures.new(connection, table_name, nil, fixture_path)

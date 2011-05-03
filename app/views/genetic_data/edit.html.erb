@@ -1,6 +1,6 @@
 <h2>Edit dataset</h2>
 
-<% form_for(@genetic_data, :url => {:action => 'update'}) do |f| %>
+<%= form_for(@genetic_data, :url => {:action => 'update'}) do |f| %>
   <%= f.error_messages :header_message => 'Error: dataset could not be saved', :message => nil %>
 
   <div>

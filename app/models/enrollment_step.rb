@@ -4,7 +4,7 @@ class EnrollmentStep < ActiveRecord::Base
   has_many :enrollment_step_completions
   has_many :completers, :through => :enrollment_step_completions, :source => :user
 
-  named_scope :ordered, { :order => 'ordinal' }
+  scope :ordered, { :order => 'ordinal' }
 
   #FIXME test
   def duration_amount

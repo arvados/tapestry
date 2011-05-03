@@ -1,6 +1,6 @@
 <h2>Consent Form</h2>
 
-<% form_for @informed_consent_response, :url => participation_consent_path do |f| %>
+<%= form_for @informed_consent_response, :url => participation_consent_path do |f| %>
 <table border="1" cellspacing="0" cellpadding="2">
   <tr>
     <td width="468" valign="top"><br />
@@ -1193,7 +1193,7 @@ of the terms and conditions of my participation set forth above, and I am provid
 consent to participate in the Personal Genome Project.
 </p>
 
-  <% fields_for :participation_consent do |pcf| %>
+  <%= fields_for :participation_consent do |pcf| %>
     <div class="inputs">
       <%= pcf.label 'name' %>
       <%= pcf.text_field 'name' %>

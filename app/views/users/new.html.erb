@@ -13,7 +13,7 @@
 
 <% @user.password = @user.password_confirmation = nil %>
 
-<% form_for :user, :url => new2_user_url, :html => { :method => :get, :class => 'signup', :id => 'signup_form' } do |f| -%>
+<%= form_for :user, :url => new2_user_url, :html => { :method => :get, :class => 'signup', :id => 'signup_form' } do |f| -%>
 
 <table><tr><td>
   <%= f.label :first_name %>

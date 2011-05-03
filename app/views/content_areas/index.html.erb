@@ -1,14 +1,14 @@
 <h2>Entrance Exams</h2>
 <ol id="exam_listing">
-<% @content_areas.each do |area| -%>
-  <% content_tag_for 'li', area, :class => content_area_class(area)do %>
+<%= @content_areas.each do |area| -%>
+  <%= content_tag_for 'li', area, :class => content_area_class(area) do %>
     <span><%=h area.title %></span>
     <ol>
-    <% area.exams.each do |exam| -%>
-      <% if version = exam.version_for(current_user) %>
-        <% content_tag_for 'li', exam, :class => exam_class(exam) do %>
-          <% exam_response = version.exam_responses.for_user(current_user).first -%>
-          <% if exam.any_version_completed_by?(current_user) -%>
+    <%= area.exams.each do |exam| -%>
+      <%= if version = exam.version_for(current_user) %>
+        <%= content_tag_for 'li', exam, :class => exam_class(exam) do %>
+          <%= exam_response = version.exam_responses.for_user(current_user).first -%>
+          <%= if exam.any_version_completed_by?(current_user) -%>
             <span>
               <%=h version.title %>
               <div class="completion_time">

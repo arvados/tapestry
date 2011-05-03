@@ -48,4 +48,49 @@ EOS
     return "#{request.protocol}#{ROOT_URL}#{public_profile_path(:hex => user.hex) }"
   end
 
+  # Override error_messages_for to make error messages prettier
+  def error_messages_for(*params)
+    options = params.last.is_a?(Hash) ? params.pop.symbolize_keys : {}
+    objects = params.collect {|object_name| instance_variable_get("@#{object_name}") }.compact
+    count   = objects.inject(0) {|sum, object| sum + object.errors.count }
+    unless count.zero?
+      html = {}
+      [:id, :class].each do |key|
+        if options.include?(key)
+          value = options[key]
+          html[key] = value unless value.blank?
+        else
+          html[key] = 'awarning'
+        end
+      end
+
+      header_message = "Error!"
+      error_messages = raw(objects.map {|object| object.errors.full_messages.map {|msg| content_tag(:li, msg) } })
+
+      content_tag(:table,
+        content_tag(:tr,
+          content_tag(:td,
+            content_tag(:div,
+              content_tag(:table,
+                content_tag(:tr,
+                  content_tag(:td, header_message, :class => 'awarninghead')
+                  ) <<
+                content_tag(:tr,
+                  content_tag(:td,
+                      raw('The following problem' + (count > 1 ? 's were ' : ' was ') + 'detected:' <<
+                      content_tag(:ul, error_messages)),
+                    html
+                  )
+                )
+              ), :class => 'awarning'
+            ), :align => 'center'
+          )
+        ), :width => '100%'
+      )
+    else
+      ''
+    end
+  end
+  
+
 end

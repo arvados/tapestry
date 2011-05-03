@@ -7,12 +7,12 @@ Enrolled participants in the PGP are required to respond to a safety
 questionnaire once per quarter so the research study can monitor whether any
 adverse events are occurring. Thanks for your cooperation.
 </p>
-<% form_for @safety_questionnaire do |f| %>
+<%= form_for @safety_questionnaire do |f| %>
   <%= f.error_messages %>
 
   <p>
     <strong>1. Would you like to report changes in your safety, well-being, or interactions with others due to your participation in the PGP?</strong><br/>
-    <%= @safety_questionnaire.changes ? 'Yes' : 'No' -%>
+    <%= @safety_questionnaire.has_changes ? 'Yes' : 'No' -%>
   </p>
   <div id="questions">
   <p>

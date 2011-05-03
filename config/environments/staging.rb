@@ -1,45 +1,49 @@
-# Settings specified here will take precedence over those in config/environment.rb
+PgpEnroll::Application.configure do
+  # Settings specified here will take precedence over those in config/application.rb
 
-# The production environment is meant for finished, "live" apps.
-# Code is not reloaded between requests
-config.cache_classes = true
+  # The production environment is meant for finished, "live" apps.
+  # Code is not reloaded between requests
+  config.cache_classes = true
 
-# Use a different logger for distributed setups
-# config.logger = SyslogLogger.new
+  # Log error messages when you accidentally call methods on nil.
+  config.whiny_nils = true
 
-# Full error reports are disabled and caching is turned on
-config.action_controller.consider_all_requests_local = false
-config.action_controller.perform_caching             = true
+  # Show full error reports and disable caching
+  config.consider_all_requests_local       = false
+  config.action_view.debug_rjs             = false
+  config.action_controller.perform_caching = true
 
-# Use a different cache store in production
-# config.cache_store = :mem_cache_store
+  # Do care if the mailer can't send
+  config.action_mailer.raise_delivery_errors = true
 
-# Enable serving of images, stylesheets, and javascripts from an asset server
-# config.action_controller.asset_host                  = "http://assets.example.com"
+  # Print deprecation notices to the Rails logger
+  config.active_support.deprecation = :log
 
-# Disable delivery errors, bad email addresses will be ignored
-# config.action_mailer.raise_delivery_errors = false
+  # Only use best-standards-support built into browsers
+  config.action_dispatch.best_standards_support = :builtin
 
-ActionMailer::Base.smtp_settings = {
-  :domain => "my-dev.personalgenomes.org",
-  :address => 'outgoing.personalgenomes.org'
-}
+  ActionMailer::Base.smtp_settings = {
+    :domain => "my-dev.personalgenomes.org",
+    :address => 'outgoing.personalgenomes.org'
+  }
 
-ROOT_URL = 'my-dev.personalgenomes.org'
-ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'
-SYSTEM_EMAIL = 'sysadmin@clinicalfuture.com'
+  ROOT_URL = 'my-dev.personalgenomes.org'
+  ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'
+  SYSTEM_EMAIL = 'sysadmin@clinicalfuture.com'
+  
+  ENV['RECAPTCHA_PUBLIC_KEY'] = 'yyyyyyyyyyyyyyyyyyyyyyyy-xxxxxxxx'
+  ENV['RECAPTCHA_PRIVATE_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-yyyyyyyy'
+  
+  GOOGLE_HEALTH_URL = "https://www.google.com/h9"
+  
+  LATEST_CONSENT_VERSION = 'v20110222'
+  
+  DRB_SERVER = '127.0.0.1'
+  DRB_PORT = '9900'
+  DRB_CALLBACK_SOURCE_IP = '10.6.3.27'
+  
+  TRAITWISE_LOGIN = "traitwise@personalgenomes.org"
+  TRAITWISE_PASSWORD = "xxxxxxxx"
+  
+end
 
-ENV['RECAPTCHA_PUBLIC_KEY'] = 'yyyyyyyyyyyyyyyyyyyyyyyy-xxxxxxxx'
-ENV['RECAPTCHA_PRIVATE_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-yyyyyyyy'
-
-GOOGLE_HEALTH_URL = "https://www.google.com/h9"
-
-LATEST_CONSENT_VERSION = 'v20110222'
-
-DRB_SERVER = '127.0.0.1'
-DRB_PORT = '9900'
-DRB_CALLBACK_SOURCE_IP = '10.6.3.27'
-
-TRAITWISE_LOGIN = "traitwise@personalgenomes.org"
-TRAITWISE_PASSWORD = "xxxxxxxx"
-	

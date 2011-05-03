@@ -1,7 +1,7 @@
 <h2>Reset your password</h2>
 <p>Welcome back, <%= @user.full_name %>.  Enter your new password below and click "Reset my password" to reset it:</p>
 
-<% form_for :password, :url => password_url, :html => { :method => :put } do |form| %>
+<%= form_for :password, :url => password_url, :html => { :method => :put } do |form| %>
   <%= error_messages_for :user %>
 
   <%= form.hidden_field :id,  :value => params[:id]  || params[:password][:id] %>

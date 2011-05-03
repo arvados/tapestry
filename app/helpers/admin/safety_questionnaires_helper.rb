@@ -7,7 +7,7 @@ module Admin::SafetyQuestionnairesHelper
         :include => [:user]).sort { |x,y| x.datetime <=> y.datetime }
 
     user_fields = %w(full_name).freeze
-    safety_questionnaire_fields = %w(datetime changes events reactions contact healthcare).freeze
+    safety_questionnaire_fields = %w(datetime has_changes events reactions contact healthcare).freeze
 
     buf = ''
 

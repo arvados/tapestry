@@ -1,128 +1,134 @@
-ActionController::Routing::Routes.draw do |map|
-  map.resources :pages
-  map.root :controller => 'pages', :action => 'show', :id => 'home'
-  map.enrolled '/enrolled',    :controller => 'pages',    :action => 'show', :id => 'enrolled'
-
-  map.new2_user '/users/new2',    :controller => 'users',    :action => 'new2'
-  map.accept_enrollment_user '/users/accept_enrollment',    :controller => 'users',    :action => 'accept_enrollment'
-  map.tos_user '/users/tos',    :controller => 'users',    :action => 'tos'
-  map.accept_tos_user '/users/accept_tos',    :controller => 'users',    :action => 'accept_tos'
-  map.consent_user '/users/consent',    :controller => 'users',    :action => 'consent'
-  map.unauthorized_user '/users/unauthorized',    :controller => 'users',    :action => 'unauthorized'
-  map.created_user '/users/created/:id',    :controller => 'users',    :action => 'created'
-  map.show_log_user '/users/show_log',    :controller => 'users',    :action => 'show_log'
-
-  map.userlog_drb '/drb/userlog/:user_id',    :controller => 'drb',    :action => 'userlog'
-
-  map.resend_signup_notification_form '/users/resend_signup_notification_form',    :controller => 'users',    :action => 'resend_signup_notification_form'
-  map.resend_signup_notification_user '/users/resend_signup_notification/:id',    :controller => 'users',    :action => 'resend_signup_notification'
-  map.resources :users
-  map.resource  :session
-  map.login    '/login',          :controller => 'sessions', :action => 'new'
-  map.logout   '/logout',         :controller => 'sessions', :action => 'destroy'
-  map.signup   '/signup',         :controller => 'users',    :action => 'new'
-  map.register '/register',       :controller => 'users',    :action => 'create'
-  map.activate '/activate/:code', :controller => 'users',    :action => 'activate'
-
-  map.resource :password
-
-  map.resources :accepted_invites
-
-  map.resources :content_areas do |content_area|
-    # /content_areas/:content_area_id/exams/:id will show _a version of_ that exam;
-    # particularly, exam.version_for(current_user)
-    content_area.resources :exams, :member => { :start  => :post, :retake => :post } do |exam|
-      exam.resources :exam_questions, :member => { :answer => :post }
+PgpEnroll::Application.routes.draw do
+  resources :pages
+  match '/' => 'pages#show', :id => 'home'
+  match '/enrolled' => 'pages#show', :as => :enrolled, :id => 'enrolled'
+  match '/users/new2' => 'users#new2', :as => :new2_user
+  match '/users/accept_enrollment' => 'users#accept_enrollment', :as => :accept_enrollment_user
+  match '/users/tos' => 'users#tos', :as => :tos_user
+  match '/users/accept_tos' => 'users#accept_tos', :as => :accept_tos_user
+  match '/users/consent' => 'users#consent', :as => :consent_user
+  match '/users/unauthorized' => 'users#unauthorized', :as => :unauthorized_user
+  match '/users/created/:id' => 'users#created', :as => :created_user
+  match '/users/show_log' => 'users#show_log', :as => :show_log_user
+  match '/drb/userlog/:user_id' => 'drb#userlog', :as => :userlog_drb
+  match '/users/resend_signup_notification_form' => 'users#resend_signup_notification_form', :as => :resend_signup_notification_form
+  match '/users/resend_signup_notification/:id' => 'users#resend_signup_notification', :as => :resend_signup_notification_user
+  resources :users
+  resource :session
+  match '/login' => 'sessions#new', :as => :login
+  match '/logout' => 'sessions#destroy', :as => :logout
+  match '/signup' => 'users#new', :as => :signup
+  match '/register' => 'users#create', :as => :register
+  match '/activate/:code' => 'users#activate', :as => :activate
+  resource :password
+  resources :accepted_invites
+  resources :content_areas do
+  
+  
+      resources :exams do
+    
+    
+          resources :exam_questions do
+      
+            member do
+      post :answer
+      end
+      
+      end
     end
   end
 
-  # the following is legacy - to be removed when we remove eligibility exam v1 code
-  map.namespace :screening_surveys do |screening_surveys|
-    screening_surveys.resource :residency, :family, :privacy
+  namespace :screening_surveys do
+      resource :residency
+      resource :family
+      resource :privacy
   end
-  # /legacy
-  map.resource :screening_surveys
-  map.screening_survey_results '/screening_survey_results',    :controller => 'screening_surveys',    :action => 'results'
-  map.resources :waitlist_resubmissions
-  map.resource :phr
-  map.resource :consent_review
-  map.resource :screening_submission
-  map.resource :participation_consent
-  map.resource :enrollment_queue
-  map.resource :baseline_trait_collection_notification
-  map.done_baseline_trait_collection_notification '/baseline_trait_collection_notifications/done', :controller => 'baseline_trait_collection_notifications', :action => 'done'
-  map.resource :identity_verification_notification
-  map.done_identity_verification_notification '/identity_verification_notifications/done', :controller => 'identity_verification_notifications', :action => 'done'
-  map.done_named_proxy '/named_proxies/done', :controller => 'named_proxies', :action => 'done'
-  map.resources :named_proxies
-  map.resources :genetic_data, :singular => :genetic_data_instance
-  map.genetic_data_download '/genetic_data/download/:id',    :controller => 'genetic_data',    :action => 'download'
-  map.resource :trait_collection
-  map.resource :distinctive_traits_survey
-  map.resource :pledge
-  map.resource :identity_confirmation
-  map.resource :enrollment_application
-  map.resources :eligibility_screening_results
-  map.resources :enrollment_application_results
-  map.resources :mailing_list_subscriptions
-  map.resources :international_participants
-  map.confirm_family_relation '/family_relation/confirm/:id',    :controller => 'family_relations',    :action => 'confirm'
-  map.reject_family_relation '/family_relation/reject/:id',    :controller => 'family_relations',    :action => 'reject'
-  map.update_has_family_relations '/family_relations/update', :controller => 'family_relations', :action => 'update'
-  map.resources :family_relations
-  map.require_safety_questionnaire '/safety_questionnaires/require',    :controller => 'safety_questionnaires',    :action => 'require'
-  map.resources :safety_questionnaires
 
-  map.admin_safety_questionnaires '/admin/safety_questionnaires',    :controller => 'admin/safety_questionnaires',    :action => 'index'
-  map.admin_enroll_users '/admin/users/enroll',    :controller => 'admin/users',    :action => 'enroll'
-  map.admin_active_users '/admin/users/active',    :controller => 'admin/users',    :action => 'active'
-  map.admin_activity_users '/admin/users/activity',    :controller => 'admin/users',    :action => 'activity'
-  map.admin_ineligible_users '/admin/users/ineligible',    :controller => 'admin/users',    :action => 'ineligible'
-  map.admin_trios '/admin/users/trios',    :controller => 'admin/users',    :action => 'trios'
-  map.admin_absolute_pitch_survey_export '/admin/users/absolute_pitch_survey_export', :controller => 'admin/users', :action => 'absolute_pitch_survey_export'
-  map.admin_absolute_pitch_survey_questions '/admin/users/absolute_pitch_survey_questions', :controller => 'admin/users', :action => 'absolute_pitch_survey_questions'
-  map.admin_genetic_data_report '/admin/users/genetic_data_report', :controller => 'admin/users', :action => 'genetic_data_report'
-  map.namespace 'admin' do |admin|
-    admin.root :controller => 'homes'
-    admin.resources :users, :member => { :activate => :put,
-    		    	    	       	 :promote  => :put,
-					 :ccr => :get,
-					 :demote => :put } do |user|
-      user.resources :exam_responses
+  resource :screening_surveys
+  match '/screening_survey_results' => 'screening_surveys#results', :as => :screening_survey_results
+  resources :waitlist_resubmissions
+  resource :phr
+  resource :consent_review
+  resource :screening_submission
+  resource :participation_consent
+  resource :enrollment_queue
+  resource :baseline_trait_collection_notification
+  match '/baseline_trait_collection_notifications/done' => 'baseline_trait_collection_notifications#done', :as => :done_baseline_trait_collection_notification
+  resource :identity_verification_notification
+  match '/identity_verification_notifications/done' => 'identity_verification_notifications#done', :as => :done_identity_verification_notification
+  match '/named_proxies/done' => 'named_proxies#done', :as => :done_named_proxy
+  resources :named_proxies
+  resources :genetic_data
+  match '/genetic_data/download/:id' => 'genetic_data#download', :as => :genetic_data_download
+  resource :trait_collection
+  resource :distinctive_traits_survey
+  resource :pledge
+  resource :identity_confirmation
+  resource :enrollment_application
+  resources :eligibility_screening_results
+  resources :enrollment_application_results
+  resources :mailing_list_subscriptions
+  resources :international_participants
+  match '/family_relation/confirm/:id' => 'family_relations#confirm', :as => :confirm_family_relation
+  match '/family_relation/reject/:id' => 'family_relations#reject', :as => :reject_family_relation
+  match '/family_relations/update' => 'family_relations#update', :as => :update_has_family_relations
+  resources :family_relations
+  match '/safety_questionnaires/require' => 'safety_questionnaires#require', :as => :require_safety_questionnaire
+  resources :safety_questionnaires
+  match '/admin/safety_questionnaires' => 'admin/safety_questionnaires#index', :as => :admin_safety_questionnaires
+  match '/admin/users/enroll' => 'admin/users#enroll', :as => :admin_enroll_users
+  match '/admin/users/active' => 'admin/users#active', :as => :admin_active_users
+  match '/admin/users/activity' => 'admin/users#activity', :as => :admin_activity_users
+  match '/admin/users/ineligible' => 'admin/users#ineligible', :as => :admin_ineligible_users
+  match '/admin/users/trios' => 'admin/users#trios', :as => :admin_trios
+  match '/admin/users/absolute_pitch_survey_export' => 'admin/users#absolute_pitch_survey_export', :as => :admin_absolute_pitch_survey_export
+  match '/admin/users/absolute_pitch_survey_questions' => 'admin/users#absolute_pitch_survey_questions', :as => :admin_absolute_pitch_survey_questions
+  match '/admin/users/genetic_data_report' => 'admin/users#genetic_data_report', :as => :admin_genetic_data_report
+#    match '/' => 'homes#index'
+  namespace :admin do
+      root :to => 'homes#index'
+      resources :users do
+    
+    
+          resources :exam_responses
     end
-    admin.resources :bulk_promotions
-    admin.resources :bulk_waitlists
-    admin.resources :reports
-    admin.resources :content_areas do |content_area|
-      content_area.resources :exams do |exam|
-        exam.resources :exam_versions, :member => { :duplicate => :post } do |exam_version|
-          exam_version.resources :exam_questions do |exam_question|
-            exam_question.resources :answer_options
+      resources :bulk_promotions
+      resources :bulk_waitlists
+      resources :reports
+      resources :content_areas do
+    
+    
+          resources :exams do
+      
+      
+              resources :exam_versions do
+        
+        
+                  resources :exam_questions do
+          
+          
+                      resources :answer_options
           end
         end
       end
     end
-    admin.resources :mailing_lists
-    admin.resources :invited_emails
-    admin.resources :phr_reports
+      resources :mailing_lists
+      resources :invited_emails
+      resources :phr_reports
   end
 
-  map.resources :geographic_information
+  resources :geographic_information
+  match '/:controller(/:action(/:id))'
+  resource :phrccr
+  match '/phrccr/authsub' => 'phrccrs#authsub_update', :as => :authsub_phrccr
+  match '/phrccr/review' => 'phrccrs#review', :as => :review_phrccr
+  match '/phrccr/unlink_googlehealth' => 'phrccrs#unlink_googlehealth', :as => :unlink_googlehealth
+  match '/profile/:hex' => 'profiles#public', :as => :public_profile
+  match '/absolute_pitch_surveys/:id' => 'absolute_pitch_survey#index', :as => :absolute_pitch_surveys_section
+  match '/absolute_pitch_surveys/save' => 'absolute_pitch_survey#save', :as => :save_absolute_pitch_surveys
+  match '/absolute_pitch_surveys/review/:id' => 'absolute_pitch_survey#review', :as => :review_absolute_pitch_surveys
+  match '/trait_surveys' => 'trait_survey#index', :as => :trait_surveys
+  match '/traitwise' => 'traitwise#index', :as => :trait_surveys
 
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
-
-  map.resource :phrccr
-  map.authsub_phrccr '/phrccr/authsub', :controller => 'phrccrs', :action => 'authsub_update'
-  map.review_phrccr '/phrccr/review', :controller => 'phrccrs', :action => 'review'
-  map.unlink_googlehealth '/phrccr/unlink_googlehealth', :controller => 'phrccrs', :action => 'unlink_googlehealth'
-
-  map.public_profile '/profile/:hex',    :controller => 'profiles',    :action => 'public'
-
-  map.absolute_pitch_surveys_section '/absolute_pitch_surveys/:id', :controller => 'absolute_pitch_survey', :action => 'index'
-  map.save_absolute_pitch_surveys '/absolute_pitch_surveys/save', :controller => 'absolute_pitch_survey', :action => 'save'
-  map.review_absolute_pitch_surveys '/absolute_pitch_surveys/review/:id', :controller => 'absolute_pitch_survey', :action => 'review'
-  map.trait_surveys '/trait_surveys', :controller => 'trait_survey', :action => 'index'
-  map.trait_surveys '/traitwise', :controller => 'traitwise', :action => 'index'
-
+  root :to => 'pages#show', :action => 'home'
 end

@@ -1,6 +1,6 @@
 <h2>Eligibility Questionnaire</h2>
 
-<% form_for @screening_survey_response, :url => screening_surveys_path, :html => { :method => :put } do |f| -%>
+<%= form_for @screening_survey_response, :url => screening_surveys_path, :html => { :method => :put } do |f| -%>
 <%= error_messages_for :screening_survey_response %>
 
 <style type="text/css">

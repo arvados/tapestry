@@ -1,6 +1,6 @@
 <h1>New question</h1>
 
-<% form_for [:admin, @content_area, @exam, @exam_version, @exam_question] do |f| %>
+<%= form_for [:admin, @content_area, @exam, @exam_version, @exam_question] do |f| %>
   <%= f.error_messages %>
   <%= render :partial => 'form', :locals => { :f => f } %>
   <p>

@@ -1,3 +1,7 @@
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/
 log
 keys
 script/bring_virgin_user_up_to_just_pre_enrollment.rb

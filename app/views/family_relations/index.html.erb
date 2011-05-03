@@ -1,6 +1,6 @@
 <% if @family_members.blank? and @pending_family_members.blank? %>
 <h2>Family Relationships</h2>
-  <% form_tag update_has_family_relations_url do %>
+  <%= form_tag update_has_family_relations_url do %>
   <p>Please specify whether you have family members enrolled: </p>
   <p><label><%= radio_button_tag 'has_family_members_enrolled', 'yes', @current_user.has_family_members_enrolled == 'yes'%> Yes, I have family members currently enrolled in the PGP</label><br />
   <label><%= radio_button_tag 'has_family_members_enrolled', 'no', @current_user.has_family_members_enrolled == 'no' %> No, I do not have family members currently enrolled in the PGP</label>

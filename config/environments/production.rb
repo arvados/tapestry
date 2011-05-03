@@ -1,45 +1,73 @@
-# Settings specified here will take precedence over those in config/environment.rb
+PgpEnroll::Application.configure do
+  # Settings specified here will take precedence over those in config/application.rb
 
-# The production environment is meant for finished, "live" apps.
-# Code is not reloaded between requests
-config.cache_classes = true
+  # The production environment is meant for finished, "live" apps.
+  # Code is not reloaded between requests
+  config.cache_classes = true
 
-# Use a different logger for distributed setups
-# config.logger = SyslogLogger.new
+  # Full error reports are disabled and caching is turned on
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
 
-# Full error reports are disabled and caching is turned on
-config.action_controller.consider_all_requests_local = false
-config.action_controller.perform_caching             = true
+  # Specifies the header that your server uses for sending files
+  config.action_dispatch.x_sendfile_header = "X-Sendfile"
 
-# Use a different cache store in production
-# config.cache_store = :mem_cache_store
+  # For nginx:
+  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
 
-# Enable serving of images, stylesheets, and javascripts from an asset server
-# config.action_controller.asset_host                  = "http://assets.example.com"
+  # If you have no front-end server that supports something like X-Sendfile,
+  # just comment this out and Rails will serve the files
 
-# Disable delivery errors, bad email addresses will be ignored
-# config.action_mailer.raise_delivery_errors = false
+  # See everything in the log (default is :info)
+  # config.log_level = :debug
 
-ActionMailer::Base.smtp_settings = {
-  :domain => "my.personalgenomes.org",
-  :address => 'outgoing.personalgenomes.org'
-}
+  # Use a different logger for distributed setups
+  # config.logger = SyslogLogger.new
 
-ROOT_URL = 'my.personalgenomes.org'
-ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'
-SYSTEM_EMAIL = 'sysadmin@clinicalfuture.com'
+  # Use a different cache store in production
+  # config.cache_store = :mem_cache_store
 
-ENV['RECAPTCHA_PUBLIC_KEY'] = 'yyyyyyyyyyyyyyyyyyyyyyyy-xxxxxxxx'
-ENV['RECAPTCHA_PRIVATE_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-yyyyyyyy'
+  # Disable Rails's static asset server
+  # In production, Apache or nginx will already do this
+  config.serve_static_assets = false
 
-GOOGLE_HEALTH_URL = "https://www.google.com/health"
+  # Enable serving of images, stylesheets, and javascripts from an asset server
+  # config.action_controller.asset_host = "http://assets.example.com"
 
-LATEST_CONSENT_VERSION = 'v20110222'
+  # Disable delivery errors, bad email addresses will be ignored
+  # config.action_mailer.raise_delivery_errors = false
 
-DRB_SERVER = '127.0.0.1'
-DRB_PORT = '9900'
-DRB_CALLBACK_SOURCE_IP = '10.6.8.24'
+  # Enable threaded mode
+  # config.threadsafe!
 
-TRAITWISE_LOGIN = "traitwise@personalgenomes.org"
-TRAITWISE_PASSWORD = "xxxxxxxx"
-	
+  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+  # the I18n.default_locale when a translation can not be found)
+  config.i18n.fallbacks = true
+
+  # Send deprecation notices to registered listeners
+  config.active_support.deprecation = :notify
+
+  ActionMailer::Base.smtp_settings = {
+    :domain => "my.personalgenomes.org",
+    :address => 'outgoing.personalgenomes.org'
+  }
+  
+  ROOT_URL = 'my.personalgenomes.org'
+  ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'
+  SYSTEM_EMAIL = 'sysadmin@clinicalfuture.com'
+  
+  ENV['RECAPTCHA_PUBLIC_KEY'] = 'yyyyyyyyyyyyyyyyyyyyyyyy-xxxxxxxx'
+  ENV['RECAPTCHA_PRIVATE_KEY'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-yyyyyyyy'
+  
+  GOOGLE_HEALTH_URL = "https://www.google.com/health"
+  
+  LATEST_CONSENT_VERSION = 'v20110222'
+  
+  DRB_SERVER = '127.0.0.1'
+  DRB_PORT = '9900'
+  DRB_CALLBACK_SOURCE_IP = '10.6.8.24'
+  
+  TRAITWISE_LOGIN = "traitwise@personalgenomes.org"
+  TRAITWISE_PASSWORD = "xxxxxxxx"
+
+end

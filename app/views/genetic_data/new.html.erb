@@ -8,7 +8,7 @@ href="mailto:support@personalgenomes.org">let us know</a> and we will add your
 provider to the list. If your dataset is larger than 10MB, please <a
 href="mailto:support@personalgenomes.org">contact us</a>.
 
-<% form_for(@genetic_data, :url => {:action => 'create'}, :html => {:multipart => true}) do |f| %>
+<%= form_for(@genetic_data, :url => {:action => 'create'}, :html => {:multipart => true}) do |f| %>
   <%= f.error_messages :header_message => 'Error: dataset could not be uploaded', :message => nil %>
 
   <p>

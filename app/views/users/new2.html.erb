@@ -7,7 +7,7 @@
 <h2>Choose a password</h2>
 <p>Please enter a password for your PGP account:</p>
 
-<% form_for :user, :url => users_url, :html => { :class => 'signup' } do |f| -%>
+<%= form_for :user, :url => users_url, :html => { :class => 'signup' } do |f| -%>
 
 <% %w(first_name middle_name last_name email).each do |attr| -%>
   <%= f.hidden_field attr %>

@@ -4,9 +4,9 @@ Enrolled participants in the PGP are required to respond to this questionnaire
 once per quarter so the research study can monitor whether any adverse events
 are occurring. Thanks for your cooperation.
 
-<% content_for :js do %>
+<%= content_for :js do %>
 function toggleQuestions() {
-  reportingChanges = $('#safety_questionnaire_changes_true')[0].checked;
+  reportingChanges = $('#safety_questionnaire_has_changes_true')[0].checked;
   if (reportingChanges) {
     $('#questions').show('fast');
   } else {
@@ -16,13 +16,13 @@ function toggleQuestions() {
 <% end -%>
 
 
-<% form_for @safety_questionnaire do |f| %>
+<%= form_for @safety_questionnaire do |f| %>
   <%= f.error_messages %>
 
   <p>
     <strong>1. Would you like to report changes in your safety, well-being, or interactions with others due to your participation in the PGP?</strong><br/>
-    <%= f.radio_button(:changes, "true", :onChange => 'javascript:toggleQuestions()') %> Yes, I would like to report changes to the PGP.<br/>
-    <%= f.radio_button(:changes, "false", :onChange => 'javascript:toggleQuestions()') %> No, I would like to report no changes to the PGP. 
+    <%= f.radio_button(:has_changes, "true", :onChange => 'javascript:toggleQuestions()') %> Yes, I would like to report changes to the PGP.<br/>
+    <%= f.radio_button(:has_changes, "false", :onChange => 'javascript:toggleQuestions()') %> No, I would like to report no changes to the PGP. 
   </p>
   <div id="questions" style="display:none">
   <p>

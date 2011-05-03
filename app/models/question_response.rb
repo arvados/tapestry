@@ -5,7 +5,7 @@ class QuestionResponse < ActiveRecord::Base
   after_save :check_for_entrance_exam_completion
   before_validation :normalize_answer, :cache_correct
 
-  named_scope :correct, { :conditions => { :correct => true } }
+  scope :correct, { :conditions => { :correct => true } }
 
   def correct?
     cache_correct if read_attribute(:correct).nil?

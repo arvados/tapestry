@@ -1,6 +1,6 @@
 <h2>Submit Enrollment Application</h2>
 
-<% form_for :enrollment_application do |f| %>
+<%= form_for :enrollment_application do |f| %>
   <p>By clicking the submit button below, your application materials will be made available to researchers at the PGP for review.  Your enrollment application will be reviewed as soon as possible, although the process may take time, possibly 1-2 months or more.  Once a determination has been made you will be notified by email that you are either (1) selected to continue, (2) waitlisted, or (3) rejected.</p>
 
   <% if current_user.has_completed?('enrollment_application') then %>

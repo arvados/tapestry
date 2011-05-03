@@ -1,6 +1,6 @@
 <h2>Edit Geographic Information</h2>
 
-<% form_for :user, :url => geographic_information_path, :html => { :method => :put } do |f| -%>
+<%= form_for :user, :url => geographic_information_path, :html => { :method => :put } do |f| -%>
   <%= error_messages_for :user %>
   <p>This information will appear in your public profile.</p>
 

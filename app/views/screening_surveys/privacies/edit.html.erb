@@ -1,6 +1,6 @@
 <h2>Privacy Survey</h2>
 
-<% form_for @privacy_survey_response, :url => screening_surveys_privacy_path, :html => { :method => :put } do |f| -%>
+<%= form_for @privacy_survey_response, :url => screening_surveys_privacy_path, :html => { :method => :put } do |f| -%>
 <%= error_messages_for :privacy_survey_response %>
 
 <style type="text/css">

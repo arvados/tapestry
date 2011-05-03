@@ -6,7 +6,7 @@ Thanks for submitting your eligibility application for the Personal Genome Proje
 
 <% if current_user.waitlists.not_resubmitted.any? -%>
   <p>You have been waitlisted due to one or more of your eligibility screening responses.  If your circumstances have changed, you may retake the eligibility survey and resubmit your application for enrollment.  Otherwise, we will contact you with more information about next steps when enrollment begins for the PGP-1000.</p>
-  <% form_tag waitlist_resubmissions_path(:waitlist_id => current_user.waitlists.ordered.last.id) do -%>
+  <%= form_tag waitlist_resubmissions_path(:waitlist_id => current_user.waitlists.ordered.last.id) do -%>
   <%# form_tag screening_submission_path, :method => 'delete' do -%>
     <%= submit_tag 'Retake eligibility screening' %>
   <% end -%>

@@ -4,7 +4,7 @@
 
 This information is private and not part of your public profile.
 
-<% form_for :user, :url => user_path, :html => { :method => :put } do |f| -%>
+<%= form_for :user, :url => user_path, :html => { :method => :put } do |f| -%>
   <%= error_messages_for :user, :header_message => 'Error: data could not be saved.', :message => nil %>
   <p><label for="name">Name</label>: <%=h @user.full_name %></p>
 

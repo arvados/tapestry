@@ -7,5 +7,5 @@ class InvitedEmail < ActiveRecord::Base
     update_attributes!({:accepted_at => Time.now})
   end
 
-  named_scope :accepted, { :conditions => ['accepted_at is not null'] }
+  scope :accepted, { :conditions => ['accepted_at is not null'] }
 end

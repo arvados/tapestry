@@ -5,14 +5,14 @@
   <%= stylesheet_link_tag 'application', 'ui.slider.extras', 'redmond/jquery-ui-1.8.11.custom' %>
   <!--[if lte IE 7]><%= stylesheet_link_tag 'application-ie' %><![endif]-->
   <%= javascript_include_tag 'jquery-1.5.2.min', 'jquery-custom-extensions' %>
-  <% javascript_tag do %>
+  <%= javascript_tag do %>
     <%= yield :js %>
   <% end %>
 
 </head>
 <body>
   <div id="body">
-    <h1 class="verbose"><%= link_to '<span>Personal Genome Project</span>', root_url %></h1>
+    <h1 class="verbose"><%= link_to raw('<span>Personal Genome Project</span>'), root_url %></h1>
 
     <%= render :partial => 'layouts/navigation' %>
     <div class="clear"><!-- --></div>

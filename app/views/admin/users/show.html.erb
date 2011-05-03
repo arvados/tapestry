@@ -9,7 +9,7 @@ Public profile url: <a href="<%= public_profile_url(@user) %>"><%= public_profil
 
 <% @user.password = @user.password_confirmation = nil %>
 
-<% form_for [:admin, @user], :html => { :method => :put } do |f| -%>
+<%= form_for [:admin, @user], :html => { :method => :put } do |f| -%>
 <%= error_messages_for :user %>
 
 <p>Completed Content Areas:<br/>

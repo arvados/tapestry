@@ -1,6 +1,6 @@
 <p>List the emails to invite, each on a separate line.  This will not send any emails, or affect current users.</p>
 
-<% form_tag(admin_invited_emails_path) do %>
+<%= form_tag(admin_invited_emails_path) do %>
   <%= text_area_tag 'emails', '', { :style => 'width: 100%; height: 400px;' } %>
 
   <%= submit_tag 'Add these to the invited email addresses and allow them to sign up.' %>

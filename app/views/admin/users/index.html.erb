@@ -1,7 +1,7 @@
 <h2>Users</h2>
 
 <h3>Filter users</h3>
-<% form_tag admin_users_path, { :method => 'get' } do  %>
+<%= form_tag admin_users_path, { :method => 'get' } do  %>
   <ul>
     <li><%= link_to "Show all users", admin_users_path(:all => true) %></li>
     <li><%= link_to "Show enrolled users", admin_users_path(:enrolled => true) %></li>
@@ -21,14 +21,14 @@
 <% end %>
 
 <li>
-<% form_tag admin_users_path, { :method => 'get' } do  %>
+<%= form_tag admin_users_path, { :method => 'get' } do  %>
   Name: <%= text_field_tag :name %>
   E-mail: <%= text_field_tag :email %>
   <%= submit_tag 'Search' %>
 <% end %>
 </li>
 <li>
-<% form_tag admin_users_path, { :method => 'get' } do  %>
+<%= form_tag admin_users_path, { :method => 'get' } do  %>
   Hex id: <%= text_field_tag :hex %>
   <%= submit_tag 'Search' %>
 <% end %>

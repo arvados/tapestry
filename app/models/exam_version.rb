@@ -7,8 +7,8 @@ class ExamVersion < ActiveRecord::Base
 
   validate :cannot_publish_without_questions
 
-  named_scope :published, :conditions => [ 'published = ?', true ]
-  named_scope :by_version, :order => 'version'
+  scope :published, :conditions => [ 'published = ?', true ]
+  scope :by_version, :order => 'version'
 
   before_create :assign_version
 

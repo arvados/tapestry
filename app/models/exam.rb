@@ -15,9 +15,10 @@ class Exam < ActiveRecord::Base
   end
 
   def version_for(user)
-    versions.find :first,
-      :conditions => [ 'created_at < ? and published = ?', user.created_at, true ],
-      :order => 'version DESC'
+    versions.where('created_at < ? and published = ?', user.created_at, true).order('version DESC').limit(1)
+#    versions.find :first,
+#      :conditions => [ 'created_at < ? and published = ?', user.created_at, true ],
+#      :order => 'version DESC'
   end
 
   def version_for!(user)

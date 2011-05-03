@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   include AuthenticatedSystem
 
-  filter_parameter_logging "password"
   before_filter :login_required
   before_filter :ensure_tos_agreement
   before_filter :ensure_latest_consent
@@ -77,10 +76,11 @@ class ApplicationController < ActionController::Base
     response.content_type = "text/plain"
   end
 
-  def template_exists?(path)
-    self.view_paths.find_template(path, response.template.template_format)
-    rescue ActionView::MissingTemplate
-      false
-  end
+#  def template_exists?(path)
+#    self.view_paths.find_template(path, response.template.template_format)
+#    rescue ActionView::MissingTemplate
+#      false
+#  end
 
+  protect_from_forgery
 end

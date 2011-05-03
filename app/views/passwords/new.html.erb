@@ -1,7 +1,7 @@
 <h2>Forgot your password?</h2>
 <p>No problem.  Enter your email address, and we will email you a link to reset your password.</p>
 
-<% form_for :password, :url => password_url, :html => { :method => :post } do |form| %>
+<%= form_for :password, :url => password_url, :html => { :method => :post } do |form| %>
   <p><%= form.label :email %><br/>
   <%= form.text_field :email %></p>
 

@@ -787,8 +787,36 @@ label {
   display: inline;
 }*/
 
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
 .fieldWithErrors input, .fieldWithErrors select, .fieldWithErrors textarea {
   border: 1px solid red;
+}
+
+.awarninghead {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.awarningbody {
+  color: #ff0000;
+  font-weight: normal;
+}
+
+.awarning table {
+  color: #000000;
+  font-weight: normal;
+  border: 2px solid #FF0000;
+  padding: 12px;
+  border-spacing: 0px;
+  background: #ffffff;
+  border-style: solid;
+  border-width: thin;
+  background-color:#fffbb8;
 }
 
 div.formError {

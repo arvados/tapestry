@@ -14,7 +14,7 @@ Review your submitted safety questionnaire answers below.</p>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=h sq.datetime %></td>
       <td>
-        <%= h sq.changes ? 'yes' : 'no' -%>
+        <%= h sq.has_changes ? 'yes' : 'no' -%>
       </td>
       <td><%= link_to 'View', safety_questionnaire_path(sq) %></td>
     </tr>

@@ -1,15 +1,16 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of Active Record to incrementally modify your database, and
-# then regenerate this schema definition.
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your database schema. If you need
-# to create the application database on another system, you should be using db:schema:load, not running
-# all the migrations from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110329163713) do
+ActiveRecord::Schema.define(:version => 20110503112214) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -112,8 +113,8 @@ ActiveRecord::Schema.define(:version => 20110329163713) do
     t.integer "ccr_id"
     t.date    "dob"
     t.string  "gender"
-    t.integer "weight_oz",  :limit => 10, :precision => 10, :scale => 0
-    t.integer "height_in",  :limit => 10, :precision => 10, :scale => 0
+    t.decimal "weight_oz",  :precision => 10, :scale => 0
+    t.decimal "height_in",  :precision => 10, :scale => 0
     t.string  "blood_type"
     t.string  "race"
   end
@@ -401,7 +402,7 @@ ActiveRecord::Schema.define(:version => 20110329163713) do
   create_table "safety_questionnaires", :force => true do |t|
     t.integer  "user_id"
     t.datetime "datetime"
-    t.boolean  "changes"
+    t.boolean  "has_changes"
     t.text     "events"
     t.text     "reactions"
     t.text     "contact"

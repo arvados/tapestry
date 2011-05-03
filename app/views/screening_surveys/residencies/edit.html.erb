@@ -1,6 +1,6 @@
 <h2>Residency Survey</h2>
 
-<% form_for @residency_survey_response, :url => screening_surveys_residency_path, :html => { :method => :put } do |f| -%>
+<%= form_for @residency_survey_response, :url => screening_surveys_residency_path, :html => { :method => :put } do |f| -%>
 <%= error_messages_for :residency_survey_response %>
 
 <style type="text/css">
@@ -10,7 +10,7 @@
   form div.fieldWithErrors { display: inline; }
 </style>
 
-<% content_for :js do %>
+<%= content_for :js do %>
 $(document).ready(function() {
   $('#residency_survey_response_us_resident_true').click(toggleResidencyQuestions);
   $('#residency_survey_response_us_resident_false').click(toggleResidencyQuestions);

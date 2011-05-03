@@ -1,6 +1,6 @@
 <h2>Bulk Promote Users</h2>
 
-<% form_tag admin_bulk_promotions_path, { :method => 'post' } do  %>
+<%= form_tag admin_bulk_promotions_path, { :method => 'post' } do  %>
   <% if @require %>
     <p> Prerequisite: <b><%= @require.title %></b> </p>
     <%= hidden_field_tag 'require', @require.keyword %>

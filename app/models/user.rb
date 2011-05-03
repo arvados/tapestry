@@ -70,23 +70,23 @@ class User < ActiveRecord::Base
   # temporarily removed requirement
   # validate_on_create :email_confirmed
 
-  named_scope :has_completed, lambda { |keyword|
+  scope :has_completed, lambda { |keyword|
     {
       :conditions => ["enrollment_steps.keyword = ?", keyword],
       :joins => :completed_enrollment_steps
     }
   }
 
-  named_scope :inactive, { :conditions => "activated_at IS NULL and is_test = false" }
-  named_scope :enrolled, { :conditions => "enrolled IS NOT NULL and is_test = false" }
-  named_scope :pgp_ids, { :conditions => "enrolled IS NOT NULL and pgp_id IS NOT NULL and is_test = false" }
-  named_scope :test, { :conditions => "is_test = true" }
-  named_scope :exclude_test, { :conditions => "is_test = false" }
+  scope :inactive, { :conditions => "activated_at IS NULL and is_test = false" }
+  scope :enrolled, { :conditions => "enrolled IS NOT NULL and is_test = false" }
+  scope :pgp_ids, { :conditions => "enrolled IS NOT NULL and pgp_id IS NOT NULL and is_test = false" }
+  scope :test, { :conditions => "is_test = true" }
+  scope :exclude_test, { :conditions => "is_test = false" }
 
 
   # Beware of NULL: "screening_survey_responses.us_citizen_or_resident!=1"
   # does not match rows that have us_citizen_or_resident set to NULL.
-  named_scope :ineligible_for_enrollment, lambda { 
+  scope :ineligible_for_enrollment, lambda { 
     joins = [:enrollment_step_completions, :screening_survey_response]
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
     conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and 
@@ -105,7 +105,7 @@ class User < ActiveRecord::Base
     }
   }
 
-  named_scope :waitlisted, lambda { 
+  scope :waitlisted, lambda { 
     joins = [ :waitlists ]
     conditions_sql = "users.is_test = 'f' and users.id = waitlists.user_id"
     {
@@ -120,7 +120,7 @@ class User < ActiveRecord::Base
     }
   }
 
-  named_scope :eligible_for_enrollment, lambda { 
+  scope :eligible_for_enrollment, lambda { 
     joins = [:enrollment_step_completions, :screening_survey_response]
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
     conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and 
@@ -138,7 +138,7 @@ class User < ActiveRecord::Base
     }
   }
 
-  named_scope :trios, lambda {
+  scope :trios, lambda {
     joins = [:family_relations]
     conditions_sql = "relation = 'parent'"
     group_by = "user_id having count(*) = 2"
@@ -149,7 +149,7 @@ class User < ActiveRecord::Base
     }
   }
 
-  named_scope :limit, lambda { |num| { :limit => num } }
+  scope :limit, lambda { |num| { :limit => num } }
 
   # For mislav-will_paginate (WillPaginate), which we use in the admin interface
   cattr_reader :per_page

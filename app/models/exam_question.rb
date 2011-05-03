@@ -8,7 +8,7 @@ class ExamQuestion < ActiveRecord::Base
   attr_accessible :kind, :ordinal, :question, :exam_version_id
   validates_inclusion_of :kind, :in => ExamQuestion::KINDS
 
-  named_scope :ordered, { :order => 'ordinal' }
+  scope :ordered, { :order => 'ordinal' }
 
   def next_question
     exam_version.exam_questions.find(:first, :conditions => ['ordinal > ?', ordinal], :order => 'ordinal')
