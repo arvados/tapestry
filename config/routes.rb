@@ -2,6 +2,8 @@ PgpEnroll::Application.routes.draw do
   resources :pages
   match '/' => 'pages#show', :id => 'home'
   match '/enrolled' => 'pages#show', :as => :enrolled, :id => 'enrolled'
+  match '/users/initial' => 'users#initial', :as => :initial_user
+  match '/users/create_initial' => 'users#create_initial', :as => :create_initial_user
   match '/users/new2' => 'users#new2', :as => :new2_user
   match '/users/accept_enrollment' => 'users#accept_enrollment', :as => :accept_enrollment_user
   match '/users/tos' => 'users#tos', :as => :tos_user

@@ -8,6 +8,13 @@ class PagesController < ApplicationController
   skip_before_filter :ensure_enrolled, :only => [:show]
 
   def show
+
+    # Allow easy creation of initial admin user when the db is empty
+    if !current_user and User.all.count == 0 then
+      redirect_to initial_user_url
+      return
+    end
+
     if current_user and current_user.enrolled and not current_user.enrollment_accepted
       redirect_to enrollment_application_results_url
       return

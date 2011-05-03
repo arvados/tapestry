@@ -1,14 +1,47 @@
 class UsersController < ApplicationController
   skip_before_filter :ensure_enrolled
 
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :show_log, :unauthorized ]
-  skip_before_filter :login_required, :only => [:new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :unauthorized ]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :show_log, :unauthorized ]
+  skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :unauthorized ]
   #before_filter :ensure_invited, :only => [:new, :new2, :create]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos ]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
   skip_before_filter :ensure_latest_consent, :only => [:tos, :accept_tos, :consent ]
   # Make sure people sign the latest TOS and Consent before they do safety questionnaires
   skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent ]
+
+  def initial
+    @user = User.new(params[:user])
+  end
+
+  def create_initial
+    if current_user or User.all.count != 0 then
+      # Something fishy going on here
+      redirect_to root_url
+      return
+    end
+    logout_keeping_session!
+    @user = User.new(params[:user])
+    @user.is_test = true
+    success = @user && @user.save 
+    errors = @user.errors
+
+    if success && errors.empty?
+      # We deliberately do not use @user.activate! here because that presumes an enrollment step, and the database is presumably entirely empty at this point.
+      @user.activated_at = Time.now.utc
+      @user.activation_code = nil
+      @user.is_admin = true
+      @user.save!
+      @user.log('Initial admin account created and activated.')
+      flash[:notice]  = "Your account was created."
+      redirect_to root_url
+    else
+      # TODO FIXME
+      puts errors
+      flash[:error]  = "Please double-check your signup information below."
+      redirect_to initial_user_url
+    end
+  end
 
   def new
     @user = User.new(params[:user])
