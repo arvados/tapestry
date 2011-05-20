@@ -79,6 +79,7 @@ PgpEnroll::Application.routes.draw do
   match '/safety_questionnaires/require' => 'safety_questionnaires#require', :as => :require_safety_questionnaire
   resources :safety_questionnaires
   match '/admin/safety_questionnaires' => 'admin/safety_questionnaires#index', :as => :admin_safety_questionnaires
+  match '/admin/scoreboards' => 'admin/scoreboards#index', :as => :admin_scoreboards
   match '/admin/users/enroll' => 'admin/users#enroll', :as => :admin_enroll_users
   match '/admin/users/active' => 'admin/users#active', :as => :admin_active_users
   match '/admin/users/activity' => 'admin/users#activity', :as => :admin_activity_users
@@ -87,14 +88,14 @@ PgpEnroll::Application.routes.draw do
   match '/admin/users/absolute_pitch_survey_export' => 'admin/users#absolute_pitch_survey_export', :as => :admin_absolute_pitch_survey_export
   match '/admin/users/absolute_pitch_survey_questions' => 'admin/users#absolute_pitch_survey_questions', :as => :admin_absolute_pitch_survey_questions
   match '/admin/users/genetic_data_report' => 'admin/users#genetic_data_report', :as => :admin_genetic_data_report
+  match '/admin/users/activate/:id' => 'admin/users#activate', :as => :activate_admin_user
+  match '/admin/users/promote/:id' => 'admin/users#promote', :as => :promote_admin_user
 #    match '/' => 'homes#index'
   namespace :admin do
       root :to => 'homes#index'
       resources :users do
-    
-    
-          resources :exam_responses
-    end
+        resources :exam_responses
+      end
       resources :bulk_promotions
       resources :bulk_waitlists
       resources :reports

@@ -191,9 +191,11 @@ class Admin::UsersController < Admin::AdminControllerBase
     aps = Survey.find_by_name("Absolute Pitch Survey")
     survey_users = User.find(:all, :conditions => 'absolute_pitch_survey_completion IS NOT NULL AND NOT is_test = true', :order => 'hex')
     questions = []
-    aps.survey_sections.each {|s|
-      questions << s.survey_questions
-    }
+    if not aps.nil? then
+      aps.survey_sections.each {|s|
+        questions << s.survey_questions
+      }
+    end
     questions = questions.flatten.sort{|x,y| x.id <=> y.id }.select{|q| q.question_type != 'end'}
 
     report = StringIO.new
@@ -214,9 +216,11 @@ class Admin::UsersController < Admin::AdminControllerBase
     aps = Survey.find_by_name("Absolute Pitch Survey")
     survey_users = User.find(:all, :conditions => 'absolute_pitch_survey_completion IS NOT NULL AND NOT is_test = true', :order => 'hex')
     questions = []
-    aps.survey_sections.each {|s|
-      questions << s.survey_questions
-    }
+    if not aps.nil? then
+      aps.survey_sections.each {|s|
+        questions << s.survey_questions
+      }
+    end
     questions = questions.flatten.sort{|x,y| x.id <=> y.id }.select{|q| q.question_type != 'end'}
 
     header = ['hexid']

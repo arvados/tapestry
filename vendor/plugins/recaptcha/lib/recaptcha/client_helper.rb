@@ -36,10 +36,7 @@ module Recaptcha
           html << %{</noscript>\n}
         end
       end
-# TODO FIXME when moving to rails 3, re-enable the line below.
-# Ward, 2011-04-28
-#      return html.html_safe
-      return html
+      return html.html_safe
     end # recaptcha_tags
   end # ClientHelper
 end # Recaptcha

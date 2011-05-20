@@ -1,4 +1,4 @@
-Paperclip::Attachment.interpolations[:user_id] = proc do |attachment, style|
+Paperclip.interpolates :user_id do |attachment, style| 
   id = attachment.instance.user_id.to_s
   if id.length % 2 == 1
     id = '0' + id
@@ -11,7 +11,7 @@ Paperclip::Attachment.interpolations[:user_id] = proc do |attachment, style|
   f.gsub!(/\/$/,'')
 end
 
-Paperclip::Attachment.interpolations[:filename] = proc do |attachment, style|
+Paperclip.interpolates :filename do |attachment, style| 
   hex = User.find(attachment.instance.user_id).hex
   hex + '_' + attachment.instance.created_at.strftime("%Y%m%d%H%M%S")
 end

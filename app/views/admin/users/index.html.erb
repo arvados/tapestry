@@ -61,7 +61,7 @@
 <h3>Export</h3>
 Download Absolute Pitch Survey results as <%= link_to 'CSV', admin_absolute_pitch_survey_export_path() %> (<%= link_to 'Question Key', admin_absolute_pitch_survey_questions_path() %>)<br />
 Download this list of users as <%= link_to 'CSV',
-  formatted_admin_users_url(:format => 'csv',
+  admin_users_url(:format => 'csv',
                             :all                         => params[:all],
                             :enrolled                    => params[:enrolled],
                             :eligible_for_enrollment     => params[:eligible_for_enrollment],
