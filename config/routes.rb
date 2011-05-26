@@ -100,22 +100,17 @@ PgpEnroll::Application.routes.draw do
       resources :bulk_waitlists
       resources :reports
       resources :content_areas do
-    
-    
           resources :exams do
-      
-      
               resources :exam_versions do
-        
-        
+                  member do
+                    match 'duplicate' => 'exam_versions#duplicate'
+                  end
                   resources :exam_questions do
-          
-          
                       resources :answer_options
+                  end
+              end
           end
-        end
       end
-    end
       resources :mailing_lists
       resources :invited_emails
       resources :phr_reports

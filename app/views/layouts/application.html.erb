@@ -8,6 +8,7 @@
   <%= javascript_tag do %>
     <%= yield :js %>
   <% end %>
+  <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
 </head>
 <body>

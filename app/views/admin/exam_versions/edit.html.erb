@@ -1,7 +1,7 @@
-<h1>Editing exam version</h1>
+<h2>Editing exam version</h2>
 
 <%= form_for [:admin, @content_area, @exam, @exam_version] do |f| %>
-  <%= f.error_messages %>
+  <%= error_messages_for :exam_version, :header_message => 'Error: data could not be saved.', :message => nil %>
   <%= render :partial => 'form', :locals => { :f => f } %>
   <p>
     <%= f.submit "Update" %>

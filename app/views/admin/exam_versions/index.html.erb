@@ -22,7 +22,7 @@
     <td><%= time_ago_in_words(exam_version.updated_at) %> ago</td>
     <td><%= link_to 'Edit', [:edit, :admin, @content_area, @exam, exam_version] %></td>
     <td><%= link_to 'Duplicate', duplicate_admin_content_area_exam_exam_version_url(@content_area, @exam, exam_version), :method => :post %></td>
-    <td><%= link_to 'Destroy',   [:admin, @content_area, @exam, exam_version], :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Destroy', [:admin, @content_area, @exam, exam_version], :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end -%>
 </table>

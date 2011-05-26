@@ -1,6 +1,6 @@
-<h1>Editing answer option</h1>
+<h2>Editing answer option</h2>
 
-<% form_for :answer_option, @answer_option,
+<%= form_for :answer_option, @answer_option,
             :url => admin_content_area_exam_exam_version_exam_question_answer_option_path(
               @content_area,
               @exam,
@@ -9,7 +9,7 @@
               @answer_option),
             :html => { :method => :put } do |f| %>
 
-  <%= f.error_messages %>
+  <%= error_messages_for :answer_option, :header_message => 'Error: data could not be saved.', :message => nil %>
   <%= render :partial => 'form', :locals => { :f => f } %>
   <p>
     <%= f.submit "Update" %>

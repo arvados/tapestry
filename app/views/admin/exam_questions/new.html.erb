@@ -1,7 +1,7 @@
-<h1>New question</h1>
+<h2>New question</h2>
 
 <%= form_for [:admin, @content_area, @exam, @exam_version, @exam_question] do |f| %>
-  <%= f.error_messages %>
+  <%= error_messages_for :exam_question, :header_message => 'Error: data could not be saved.', :message => nil %>
   <%= render :partial => 'form', :locals => { :f => f } %>
   <p>
     <%= f.submit "Create" %>

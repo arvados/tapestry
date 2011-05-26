@@ -17,8 +17,8 @@ class ExamVersion < ActiveRecord::Base
   end
 
   def duplicate!
-    new_version = self.clone(:except  => [:published, :version],
-                             :include => { :exam_questions => :answer_options })
+    new_version = self.clone(:include => { :exam_questions => :answer_options })
+    new_version.published = false
     if new_version.save
       return new_version
     else

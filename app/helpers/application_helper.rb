@@ -28,6 +28,7 @@ module ApplicationHelper
         #{breadcrumb_content}
       </div>
 EOS
+    raw(content)
   end
 
   def nav_element(text, link)
