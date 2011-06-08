@@ -1,18 +1,17 @@
 <h2>Edit Geographic Information</h2>
 
+<%= error_messages_for :user, :header_message => 'Error: data could not be saved.', :message => nil %>
+
 <%= form_for :user, :url => geographic_information_path, :html => { :method => :put } do |f| -%>
-  <%= error_messages_for :user %>
   <p>This information will appear in your public profile.</p>
 
   <p>
   <%= f.label :state %>
-  <%= error_message_on :user, :state, :append_text => '.' %><br/>
   <%= f.state_select(:state, 'US', {:include_blank => "Select a State", :selected => @user.state }, { :style => "width: 230px;"}) -%>
   </p>
 
   <p>
   <%= f.label :zip %>
-  <%= error_message_on :user, :zip, :append_text => '.' %><br/>
   <%= f.text_field :zip %>
   </p>
 

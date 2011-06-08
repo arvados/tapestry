@@ -26,7 +26,7 @@ class Admin::UsersController < Admin::AdminControllerBase
     flash.delete(:error)
     flash.delete(:notice)
     params[:eligible_for_enrollment] = true
-    if request.method == :put then
+    if request.put? then
       enrolled = 0
       if params[:number] then
         User.eligible_for_enrollment.limit(params[:number]*1).each do |u|

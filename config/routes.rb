@@ -24,20 +24,17 @@ PgpEnroll::Application.routes.draw do
   match '/activate/:code' => 'users#activate', :as => :activate
   resource :password
   resources :accepted_invites
+
   resources :content_areas do
-  
-  
-      resources :exams do
-    
-    
-          resources :exam_questions do
-      
-            member do
-      post :answer
-      end
-      
+    resources :exams do
+      resources :exam_questions do
+        member do
+          post :answer
+        end
       end
     end
+    match 'exams/:id/start' => 'exams#start', :via => [:get, :post], :as => 'start_exam'
+    match 'exams/:id/start' => 'exams#retake', :via => [:post], :as => 'retake_exam'
   end
 
   namespace :screening_surveys do
@@ -61,7 +58,9 @@ PgpEnroll::Application.routes.draw do
   match '/named_proxies/done' => 'named_proxies#done', :as => :done_named_proxy
   resources :named_proxies
   #resources :genetic_data_instance
-  resources :genetic_data
+# TODO: fixme
+  resource :genetic_data
+#  resources :genetic_data
   match '/genetic_data/download/:id' => 'genetic_data#download', :as => :genetic_data_download
   resource :trait_collection
   resource :distinctive_traits_survey

@@ -12,4 +12,5 @@
 ActiveSupport::Inflector.inflections do |inflect|
   # The plural of data is data
   inflect.irregular 'data', 'data'
+  inflect.irregular 'genetic data', 'genetic data'
 end

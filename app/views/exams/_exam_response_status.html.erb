@@ -1,9 +1,9 @@
-<% if ! exam_response.nil? -%>
+<% if ! exam_response.nil? %>
   <%= link_to "
-        Retake: #{h(exam_version.title)}
+        Retake: #{exam_version.title}
         (#{exam_response.correct_response_count} of #{exam_version.question_count} correct)
-      ", retake_content_area_exam_path(content_area, exam), :method => 'post' %>
-<% else -%>
-  <%= link_to h("#{exam.title} (#{pluralize exam_version.exam_questions.count, 'question'})"),
-              start_content_area_exam_path(content_area, exam), :method => 'post' %>
-<% end -%>
+      ", content_area_retake_exam_path(content_area, exam), :method => 'post' %>
+<% else %>
+  <%= link_to "#{exam.title} (#{pluralize exam_version.exam_questions.count, 'question'})",
+              content_area_start_exam_path(content_area, exam), :method => 'post' %>
+<% end %>

@@ -47,7 +47,9 @@ class AbsolutePitchSurveysController < ApplicationController
       redirect_to :action => 'review', :id => current_user.hex
     end
 
-    survey = Survey.find(:first, :conditions => { :name => 'Absolute Pitch Survey' });
+    survey = Survey.find(:first, :conditions => { :name => 'Absolute Pitch Survey' })
+
+    return if survey.nil?
 
     all_sections = survey.survey_sections
     if params[:id].nil?

@@ -1,7 +1,8 @@
 <h2>Add a designated proxy</h2>
 
+<%= error_messages_for :named_proxy, :header_message => 'Error: data could not be saved.', :message => nil %>
+
 <%= form_for @named_proxy do |f| %>
-  <%= f.error_messages :header_message => 'Error: data could not be saved.', :message => nil %>
 
   <p>
     <%= f.label :name %><br />

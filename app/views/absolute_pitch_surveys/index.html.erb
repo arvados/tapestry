@@ -41,12 +41,11 @@ To learn more about absolute pitch, please visit:
 <%= render :partial => 'family_history' %>
 <% end %>
   <% if @survey_section.name != 'Family History' && @survey_section.heading %><h3 style="font-size: 130%"><%= @survey_section.heading %></h3><% end %>
-  <%= @survey_section.survey_questions.each_with_index do |q,i| %>
+  <% @survey_section.survey_questions.each_with_index do |q,i| %>
   <% fields_for "user[survey_answers][]", q do |fields| 
     context = 'user[survey_answers][' + i.to_s + ']'
     context_survey_question_id = context + '[survey_question_id]'
     context_text = context + '[text]'
-puts q.inspect()
   %>
     <div style="margin-bottom: 20px">
       <% if q.question_type != 'end' %>

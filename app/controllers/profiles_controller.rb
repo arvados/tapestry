@@ -16,7 +16,8 @@ class ProfilesController < ApplicationController
     @ccr = Ccr.find(:first, :conditions => {:user_id => @user.id}, :order => 'version DESC')
 
     survey = Survey.find(:first, :conditions => { :name => 'Absolute Pitch Survey' });
-    @absolute_pitch_questions = survey.survey_sections[0].survey_questions
+    @absolute_pitch_questions = []
+    @absolute_pitch_questions = survey.survey_sections[0].survey_questions if not survey.nil? and not survey.survey_sections.nil?
     @absolute_pitch_answers = {}
     absolute_pitch_answer_mapping = { 'y' => 'Yes', 'n' => 'No', 'ns' => 'Not sure', 'na' => 'Not available', 13 => '>12' }
     @user.survey_answers.each {|a|
