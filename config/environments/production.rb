@@ -65,8 +65,8 @@ PgpEnroll::Application.configure do
   
   DRB_SERVER = '127.0.0.1'
   DRB_PORT = '9900'
-  DRB_CALLBACK_SOURCE_IP = '10.6.8.24'
-  
+  DRB_CALLBACK_SOURCE_IP = '10.2.180.29'
+
   TRAITWISE_LOGIN = "traitwise@personalgenomes.org"
   TRAITWISE_PASSWORD = "xxxxxxxx"
 
