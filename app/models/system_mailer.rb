@@ -8,7 +8,7 @@ class SystemMailer < ActionMailer::Base
 
   protected
 
-  def setup_email(user)
+  def setup_email()
     @recipients  = "#{SYSTEM_EMAIL}"
     @from        = "#{SYSTEM_EMAIL}"
     @subject     = "[#{ROOT_URL}] "
