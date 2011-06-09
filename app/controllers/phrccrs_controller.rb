@@ -44,7 +44,7 @@ class PhrccrsController < ApplicationController
         download_phr()
         flash[:notice] = 'Your PHR will be downloaded shortly; a request has been queued.'
       rescue Exception => e
-        current_user.log("Error requesting PHR download: #{e.exception} #{e.inspect()}",nil,nil,'Error requesting PHR download.')
+        current_user.log("Error requesting PHR download: #{e.exception} #{e.inspect()}",nil,request.remote_ip,'Error requesting PHR download.')
         flash[:error] = 'There was an error requesting your PHR download. Please try again later.'
       end
       redirect_to :action => :review
@@ -97,7 +97,7 @@ class PhrccrsController < ApplicationController
         flash[:notice] = 'Your Google Health Profile was successfully linked'
         redirect_to :action => :show
       rescue Exception => e
-        current_user.log("Error linking Google Health profile: #{e.exception}",'Error linking with your Google Health profile.')
+        current_user.log("Error linking Google Health profile: #{e.exception}",nil,request.remote_ip,'Error linking with your Google Health profile.')
         flash[:error] = 'We could not link your Google Health profile. Please try again later.'
         redirect_to :action => :show
       end
@@ -136,7 +136,7 @@ class PhrccrsController < ApplicationController
   def download_phr
     server = DRbObject.new nil, "druby://#{DRB_SERVER}:#{DRB_PORT}"
     out = server.get_ccr(current_user.id, current_user.authsub_token, nil, ccr_profile_url)
-    current_user.log("PHR download requested.",nil,nil,"PHR download requested.")
+    current_user.log("PHR download requested.",nil,request.remote_ip,"PHR download requested.")
   end
 
 end

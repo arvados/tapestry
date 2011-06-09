@@ -58,7 +58,7 @@ protected
           begin
             out = server.get_ccr(current_user.id, current_user.authsub_token, nil, ccr_profile_url)
           rescue Exception => e
-            current_user.log("DRB server error when trying to update CCR: #{e.exception}",nil,nil,'Error requesting PHR update.')
+            current_user.log("DRB server error when trying to update CCR: #{e.exception}",nil,request.remote_ip,'Error requesting PHR update.')
           end
         end
       end
