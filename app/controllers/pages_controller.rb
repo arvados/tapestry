@@ -20,6 +20,9 @@ class PagesController < ApplicationController
       return
     end
 
+    params[:page] = params[:page].to_i
+    params[:page] = 1 if params[:page] == 0
+
     @enrolled = User.enrolled.find(:all).sort{ |a,b| a.enrolled <=> b.enrolled }.paginate(:page => params[:page] || 1, :per_page => 100)
 
     fetch_ivars
