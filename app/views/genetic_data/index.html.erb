@@ -20,8 +20,8 @@
       <td><%=h g.data_type %></td>
       <td><%=h g.name %></td>
       <td><%= link_to 'Download', genetic_data_download_path(g.id) %></td>
-      <td><%= link_to 'Edit', edit_genetic_data_instance_path(g) %></td>
-      <td><%= link_to 'Delete', genetic_data_instance_path(g.id), :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to 'Edit', edit_genetic_data_path(g) %></td>
+      <td><%= link_to 'Delete', genetic_data_path(g.id), :confirm => 'Are you sure?', :method => :delete %></td>
     </tr>
   <% end %>
 </table>
@@ -35,4 +35,4 @@
 
 <p />
 
-<%= link_to 'Upload a new dataset', new_genetic_data_instance_path %>
+<%= link_to 'Upload a new dataset', new_genetic_data_path %>

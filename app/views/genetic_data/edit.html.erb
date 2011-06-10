@@ -1,7 +1,8 @@
 <h2>Edit dataset</h2>
 
+ <%= error_messages_for :genetic_data, :header_message => 'Error: dataset could not be updated', :message => nil %>
+
 <%= form_for(@genetic_data, :url => {:action => 'update'}) do |f| %>
-  <%= f.error_messages :header_message => 'Error: dataset could not be saved', :message => nil %>
 
   <div>
     <%= f.label :name %><span style="color: red"> * </span><br />

@@ -58,7 +58,7 @@ class GeneticDataController < ApplicationController
       if @genetic_data.save
         flash[:notice] = 'Dataset was successfully uploaded.'
         current_user.log("Uploaded new genetic dataset '#{@genetic_data.name}'")
-        format.html { redirect_to(genetic_data_path) }
+        format.html { redirect_to(genetic_data_index_path) }
         format.xml  { render :xml => @genetic_data, :status => :created, :location => @genetic_data }
       else
         format.html { render :action => "new" }
@@ -76,7 +76,7 @@ class GeneticDataController < ApplicationController
       if @genetic_data.update_attributes(params[:genetic_data])
         flash[:notice] = 'Dataset was updated successfully.'
         current_user.log("Updated genetic dataset '#{@genetic_data.name}'")
-        format.html { redirect_to(genetic_data_path) }
+        format.html { redirect_to(genetic_data_index_path) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -99,7 +99,7 @@ class GeneticDataController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to(genetic_data_url) }
+      format.html { redirect_to(genetic_data_index_path) }
       format.xml  { head :ok }
     end
   end

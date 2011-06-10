@@ -21,7 +21,7 @@
 None added.
 <% end -%>
 
-<h3>Genetic data <% if logged_in? and @user == current_user -%><%= link_to "[edit]", genetic_data_path() %><% end -%></h3>
+<h3>Genetic data <% if logged_in? and @user == current_user -%><%= link_to "[edit]", genetic_data_index_path() %><% end -%></h3>
 
 <% if (@user.genetic_data.size > 0) -%>
 
