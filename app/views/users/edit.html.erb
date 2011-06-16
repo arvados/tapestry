@@ -2,10 +2,13 @@
 
 <% @user.password = @user.password_confirmation = nil %>
 
+<% if @user.enrolled then %>
 This information is private and not part of your public profile.
+<% end %>
+  
+<%= error_messages_for :user, :header_message => 'Error: data could not be saved.', :message => nil %>
 
 <%= form_for :user, :url => user_path, :html => { :method => :put } do |f| -%>
-  <%= error_messages_for :user, :header_message => 'Error: data could not be saved.', :message => nil %>
   <p><label for="name">Name</label>: <%=h @user.full_name %></p>
 
   <p>
@@ -38,6 +41,9 @@ This information is private and not part of your public profile.
   <%= link_to 'Manage designated proxies', named_proxies_path %>
 <% end %>
 </p>
+
+<% if @user.enrolled then %>
+
 <h2>Manage mailing list subscriptions</h2>
 <table class="admin_table">
   <tr>
@@ -53,10 +59,11 @@ This information is private and not part of your public profile.
     </tr>
   <% end %>
 </table>
-
+<% end %>
   <p><%= submit_tag 'Save Changes' %></p>
 <% end -%>
 
+<% if @user.enrolled then %>
 <% unless @user.authsub_token.blank? %>
 <h2>Unlink my Google Health account</h2>
 <p>If you wish to stop sharing your Google Health information, click below to unlink your health profile:</p>
@@ -71,3 +78,5 @@ This information is private and not part of your public profile.
               user_url(@user),
               :confirm => 'Are you sure?  This will send an email requestion an account deletion.  A PGP administrator will remove your account.',
               :method => 'delete' %>
+
+<% end %>

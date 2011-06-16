@@ -1,0 +1,58 @@
+<div id="contentbody">
+
+<div class="clear"><!-- --></div>
+<div class="submenu">
+<ul>
+  <li><strong>Your studies</strong><br/>
+  <% @studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
+  &nbsp;&nbsp;<%= link_to study.name, edit_study_path(study.id) %><br/>
+  <% end %>
+  &nbsp;&nbsp;<%= link_to raw("<strong>New Study</strong>"), url_for(:controller => 'studies', :action => 'new') %></li>
+  <li><strong>Your kit designs</strong><br/>
+  <% current_user.kit_designs.sort { |a,b| a.name <=> b.name }.each do |kd| %>
+  &nbsp;&nbsp;<%= link_to kd.name, edit_kit_design_path(kd.id) %><br/>
+  <% end %>
+  &nbsp;&nbsp;<%= link_to raw("<strong>New Kit Design</strong>"), url_for(:controller => 'kit_designs', :action => 'new') %></li>
+  <li><strong>User log</strong><br>
+  &nbsp;&nbsp;<%= link_to "Show", url_for(:controller => 'users', :action => 'show_log') %></li>
+</ul>
+</div>
+
+
+
+<div class="narrow main">
+<h2>Researcher Tools</h2>
+
+<p>
+You can manage your studies here.
+</p>
+
+<p>
+Your IRB status: <strong><%= current_user.researcher_onirb? ? 'on the IRB roster' : 'not on the IRB roster' %></strong>
+</p>
+
+<h3>Your studies</h3>
+
+  <ul>
+  <% @studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
+  <li><%= study.name %><br/>
+    <% if study.kit_designs.count > 0 %>
+      <strong>Kit designs</strong><br/>
+      <% study.kit_designs.sort { |a,b| a.name <=> b.name }.each do |kd| %>
+      &nbsp;&nbsp;&nbsp;&nbsp;<%= kd.name %><br/>
+      <% end %>
+    <% end %>
+  </li>
+  <% end %>
+  <ul>
+
+</div>
+
+<div class="clear"><!-- --></div>
+
+
+  <div style="width: 480px;">
+
+  </div>
+
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110503112214) do
+ActiveRecord::Schema.define(:version => 20110616013316) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -276,6 +276,20 @@ ActiveRecord::Schema.define(:version => 20110503112214) do
     t.datetime "updated_at"
   end
 
+  create_table "kit_designs", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "creator_id"
+    t.integer  "study_id"
+    t.boolean  "frozen"
+    t.text     "errata"
+    t.string   "instructions_file_name"
+    t.string   "instructions_content_type"
+    t.integer  "instructions_file_size"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "lab_test_result_descriptions", :force => true do |t|
     t.string "description", :null => false
   end
@@ -423,6 +437,18 @@ ActiveRecord::Schema.define(:version => 20110503112214) do
     t.datetime "updated_at"
   end
 
+  create_table "studies", :force => true do |t|
+    t.string   "name"
+    t.text     "participant_description"
+    t.text     "researcher_description"
+    t.integer  "researcher_id"
+    t.integer  "irb_associate_id"
+    t.boolean  "requested"
+    t.boolean  "approved"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "survey_answer_choices", :force => true do |t|
     t.integer  "survey_question_id"
     t.string   "text"
@@ -528,6 +554,9 @@ ActiveRecord::Schema.define(:version => 20110503112214) do
     t.boolean  "is_test",                                         :default => false
     t.string   "pgp_id"
     t.datetime "absolute_pitch_survey_completion"
+    t.boolean  "researcher",                                      :default => false
+    t.string   "researcher_affiliation",                          :default => ""
+    t.boolean  "researcher_onirb",                                :default => false
   end
 
   create_table "waitlists", :force => true do |t|

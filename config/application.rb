@@ -40,5 +40,6 @@ module PgpEnroll
     config.filter_parameters += [:password]
 
     config.autoload_paths << "#{Rails.root}/lib"
+
   end
 end

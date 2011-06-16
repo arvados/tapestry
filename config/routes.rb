@@ -1,4 +1,8 @@
 PgpEnroll::Application.routes.draw do
+  resources :kit_designs
+
+  resources :studies
+
   resources :pages
   match '/' => 'pages#show', :id => 'home'
   match '/enrolled' => 'pages#show', :as => :enrolled, :id => 'enrolled'
@@ -15,11 +19,14 @@ PgpEnroll::Application.routes.draw do
   match '/drb/userlog/:user_id' => 'drb#userlog', :as => :userlog_drb
   match '/users/resend_signup_notification_form' => 'users#resend_signup_notification_form', :as => :resend_signup_notification_form
   match '/users/resend_signup_notification/:id' => 'users#resend_signup_notification', :as => :resend_signup_notification_user
+  match '/users/create_researcher', :as => :create_researcher, :via => :post
   resources :users
   resource :session
   match '/login' => 'sessions#new', :as => :login
   match '/logout' => 'sessions#destroy', :as => :logout
   match '/signup' => 'users#new', :as => :signup
+  match '/researcher_signup' => 'users#new_researcher', :as => :researcher_signup
+  match '/signup_researcher' => 'users#new_researcher', :as => :researcher_signup
   match '/register' => 'users#create', :as => :register
   match '/activate/:code' => 'users#activate', :as => :activate
   resource :password

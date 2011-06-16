@@ -61,7 +61,7 @@ EOS
           value = options[key]
           html[key] = value unless value.blank?
         else
-          html[key] = 'awarning'
+          html[key] = 'flash error'
         end
       end
 
@@ -83,7 +83,7 @@ EOS
                     html
                   )
                 )
-              ), :class => 'awarning'
+              ), :class => 'flash error'
             ), :align => 'center'
           )
         ), :width => '100%'

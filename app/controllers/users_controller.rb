@@ -1,9 +1,8 @@
 class UsersController < ApplicationController
   skip_before_filter :ensure_enrolled
 
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :show_log, :unauthorized ]
-  skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new2, :create, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :unauthorized ]
-  #before_filter :ensure_invited, :only => [:new, :new2, :create]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :show_log, :unauthorized ]
+  skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized ]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos ]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
   skip_before_filter :ensure_latest_consent, :only => [:tos, :accept_tos, :consent ]
@@ -43,6 +42,10 @@ class UsersController < ApplicationController
     end
   end
 
+  def new_researcher
+    @user = User.new(params[:user])
+  end
+
   def new
     @user = User.new(params[:user])
   end
@@ -75,6 +78,30 @@ class UsersController < ApplicationController
     else
       @mailing_lists = MailingList.all
       render :action => 'edit'
+    end
+  end
+
+  def create_researcher
+    logout_keeping_session!
+    @user = User.new(params[:user])
+
+    # Just in case, force the 'researcher' flag to true
+    @user.researcher = true
+
+    success = @user && verify_recaptcha(@user) && @user.save
+    errors = @user.errors
+
+    if success && errors.empty?
+      accept_invite!
+      # Sometimes the error flash remains on the page, which is confusing. Kill it here if all is well.
+      flash.delete(:error)
+      # Same for recaptcha_error. Why does this happen?
+      flash.delete(:recaptcha_error)
+      flash.now[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from general@personalgenomes.org"
+      redirect_to :action => 'created', :id => @user, :notice => "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from general@personalgenomes.org"
+    else
+      flash.delete(:recaptcha_error)
+      render :action => 'new_researcher'
     end
   end
 

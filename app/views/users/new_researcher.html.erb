@@ -1,0 +1,78 @@
+<h2>Researcher signup</h2>
+
+<p>
+If you are a researcher interested in doing a study with PGP participants, you can sign up here.
+</p>
+<p>
+If you are interested in joining the PGP as a participant, please go to the <a href="http://www.personalgenomes.org/signup">Participant signup page</a>.
+</p>
+
+<%= error_messages_for :user, :header_message => 'Please double check your name and e-mail address below', :message => nil %>
+
+<% @user.password = @user.password_confirmation = nil %>
+
+<%= form_for :user, :url => create_researcher_url, :method => :post, :html => { :class => 'signup' } do |f| -%>
+  
+<%= f.hidden_field :researcher, :value => true %>
+
+<br/>
+<span style="color: red"> * </span><%= f.label :researcher_affiliation, 'Affiliation' %>
+<br/>
+<%= f.text_field :researcher_affiliation %>
+<br/>
+
+<br/>
+<span style="color: red"> * </span><%= f.label :first_name %>
+<br/>
+<%= f.text_field :first_name %>
+<br/>
+
+<br/>
+<%= f.label :middle_name, "Middle initial(s)" %> (optional)
+<br/>
+<%= f.text_field :middle_name %>
+<br/>
+
+<br/>
+<span style="color: red"> * </span><%= f.label :last_name %>
+<br/>
+<%= f.text_field :last_name %>
+<br/>
+
+<br/>
+<span style="color: red"> * </span><%= f.label :email %>
+<br/>
+<%= f.text_field :email %>
+<br/>
+
+<br/>
+<span style="color: red"> * </span><%= f.label :password %> (minimum 6 characters)
+<br/>
+<%= f.password_field :password %>
+<br/>
+
+<br/>
+<span style="color: red"> * </span><%= f.label :password_confirmation, 'Confirm password' %>
+<br/>
+<%= f.password_field :password_confirmation %>
+<br/>
+
+<br/>
+<span style="color: red"> * </span><%= f.label :security_question %> (minimum 5 characters)
+<br/>
+<%= f.text_field :security_question, :size => 80 %>
+<br/>
+
+<br/>
+<span style="color: red"> * </span><%= f.label :security_answer %>
+<br/>
+<%= f.text_field :security_answer, :size => 80 %>
+<br/>
+
+<h2>Are you a robot?</h2>
+<p>Please type the two words you see below to confirm that you&rsquo;re a real person.</p>
+<%= recaptcha_tags :ssl => true %>
+
+<p><%= submit_tag 'Sign up' %></p>
+<% end -%>
+

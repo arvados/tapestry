@@ -34,10 +34,15 @@ class User < ActiveRecord::Base
   has_many :ccrs, :dependent => :destroy
   has_many :survey_answers, :dependent => :destroy
 
+  # Researchers only
+  has_many :kit_designs, :foreign_key => "creator_id"
+
   has_attached_file :phr
 
   # temporarily removed requirement
   # attr_accessor :email_confirmation
+
+  validates_length_of :researcher_affiliation, :within => 6..100, :if => :is_researcher?
 
   validates_presence_of     :first_name
   validates_presence_of     :last_name
@@ -155,6 +160,10 @@ class User < ActiveRecord::Base
   cattr_reader :per_page
   @@per_page = 30
 
+  def is_researcher?
+    self.researcher
+  end
+
   def self.promoted_ids
     step_id = EnrollmentStep.find_by_keyword('eligibility_screening_results').id
     connection.select_values("select users.id from users
@@ -196,7 +205,7 @@ class User < ActiveRecord::Base
                   :first_name, :middle_name, :last_name, :pgp_id,
                   :security_question, :security_answer,
                   :address1, :address2, :city, :state, :zip,
-                  :phr_profile_name, :mailing_list_ids, :authsub_token
+                  :phr_profile_name, :mailing_list_ids, :authsub_token, :researcher_affiliation
 
   # Activates the user in the database.
   def activate!

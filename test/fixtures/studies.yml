@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  participant_description: MyText
+  researcher_description: MyText
+  researcher_id: 1
+  irb_associate_id: 1
+  requested: false
+  approved: false
+
+two:
+  name: MyString
+  participant_description: MyText
+  researcher_description: MyText
+  researcher_id: 1
+  irb_associate_id: 1
+  requested: false
+  approved: false

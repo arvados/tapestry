@@ -15,3 +15,11 @@ Paperclip.interpolates :filename do |attachment, style|
   hex = User.find(attachment.instance.user_id).hex
   hex + '_' + attachment.instance.created_at.strftime("%Y%m%d%H%M%S")
 end
+
+Paperclip.interpolates :study_id do |attachment, style| 
+  attachment.instance.study.id
+end
+
+Paperclip.interpolates :instructions_filename do |attachment, style| 
+  attachment.instance.instructions_file_name
+end

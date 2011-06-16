@@ -775,26 +775,21 @@ div.flash.error {
   color: #fff;
   background: #c33;
   border-color: #800;
+	font-size: 16px;
 }
-
-/*
-label {
-  font-weight: bold;
-}
-*/
-
-/*div.fieldWithErrors, div.fieldWithErrors label {
-  display: inline;
-}*/
 
 .field_with_errors {
   padding: 2px;
   background-color: red;
-  display: table;
+  display: inline-table;
 }
 
 .field_with_errors input, .field_with_errors select, .field_with_errors textarea {
   border: 1px solid red;
+}
+
+div.field label {
+  font-weight: bold;
 }
 
 .field_with_errors label {
@@ -803,7 +798,6 @@ label {
 }
 
 .awarninghead {
-  color: #ff0000;
   font-weight: bold;
 }
 

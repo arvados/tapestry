@@ -1,0 +1,58 @@
+
+<%= error_messages_for :kit_design, :header_message => 'Error: data could not be saved.', :message => nil %>
+
+<%= form_for(@kit_design, :html => { :multipart => true }) do |f| %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, :size => 80 %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description, :cols => 80 %>
+  </div>
+  <div class="field">
+    <%= f.label :creator %><br />
+    <% if @kit_design.creator then %>
+      <%= @kit_design.creator.full_name %>
+    <% else %>
+      <%= f.hidden_field :creator_id, :value => current_user.id %>
+      <%= current_user.full_name %>
+    <% end %>
+  </div>
+  <div class="field">
+    <%= f.label :study %><br />
+    <%= f.select :study_id, Study.find_all_by_researcher_id(current_user.id).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :frozen %><br />
+    <%= @kit_design.frozen ? 'Yes' : 'No' %>
+  </div>
+  <% if @kit_design.frozen then %>
+    <div class="field">
+      <%= f.label :errata %><br />
+      <%= f.text_area :errata, :cols => 80 %>
+    </div>
+  <% end %>
+  <% if not @kit_design.instructions_file_name.nil? then %>
+    <strong>Instructions file</strong><br />
+    <%= @kit_design.instructions_file_name %><br />
+    <div class="field">
+      <%= f.label :instructions, 'Replace instructions File' %><br />
+      <%= f.file_field :instructions %>
+    </div>
+  <% else %>
+    <div class="field">
+      <%= f.label :instructions, 'Select instructions File' %><br />
+      <%= f.file_field :instructions %>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= f.label :instructions_content_type %><br />
+    <%= f.select :instructions_content_type, %w(PDF) %>
+  </div>
+  <p></p>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
