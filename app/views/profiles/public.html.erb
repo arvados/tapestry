@@ -10,7 +10,7 @@
 
 <h2>Public Profile -- <%= @user.hex -%></h2>
 
-<div align="right">Public profile url: <%= link_to public_profile_url_string(@user), public_profile_path(:hex => current_user.hex) %></div>
+<div align="right">Public profile url: <%= link_to public_profile_url_string(@user), public_profile_path(:hex => @user.hex) %></div>
 
 <h3>Google Health <% if logged_in? and @user == current_user -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
 <% if @ccr != nil -%>
