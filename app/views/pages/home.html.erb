@@ -50,40 +50,6 @@
       </li>
     <% end -%>
   </ol>
-<% elsif current_user.researcher -%>
-
-<div id="contentbody">
-
-<div class="clear"><!-- --></div>
-<div class="submenu">
-<ul>
-  <li><strong>Your studies</strong><br>
-  &nbsp;&nbsp;<%= link_to "Create new", url_for(:controller => 'studies', :action => 'new') %></li>
-  <li><strong>User log</strong><br>
-  &nbsp;&nbsp;<%= link_to "Show", url_for(:controller => 'users', :action => 'show_log') %></li>
-</ul>
-</div>
-
-
-
-<div class="narrow main">
-<h2>Researcher Tools</h2>
-
-<p>
-You can manage your studies here.
-</p>
-
-</div>
-
-<div class="clear"><!-- --></div>
-
-
-  <div style="width: 480px;">
-
-  </div>
-
-</div>
-
 <% else -%>
 
 <div id="contentbody">
