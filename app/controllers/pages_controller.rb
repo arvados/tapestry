@@ -21,12 +21,12 @@ class PagesController < ApplicationController
     end
 
     # For users who are researchers but *not* enrolled
-    if logged_in? and params[:id] != 'researcher_tools' and current_user and !current_user.enrolled and current_user.researcher then
+    if logged_in? and params[:id] != 'researcher_tools' and current_user and current_user.enrolled.nil? and current_user.researcher then
       redirect_to "/pages/researcher_tools"
       return
     end
 
-    if logged_in? and params[:id] = 'researcher_tools' then
+    if logged_in? and params[:id] == 'researcher_tools' then
       @studies = Study.find_all_by_researcher_id(current_user.id)
     end
 
