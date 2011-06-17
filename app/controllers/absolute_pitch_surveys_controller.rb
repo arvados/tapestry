@@ -1,5 +1,6 @@
 class AbsolutePitchSurveysController < ApplicationController
   skip_before_filter :login_required, :only => [:review]
+  skip_before_filter :ensure_enrolled, :only => [:review]
 
   @@SURVEY_END_YES_ABSOLUTE_PITCH = 'End (answered yes to absolute pitch)'
   @@SURVEY_END_NO_ABSOLUTE_PITCH = 'End (answered no to absolute pitch)'
