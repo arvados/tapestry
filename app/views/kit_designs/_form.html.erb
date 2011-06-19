@@ -12,11 +12,11 @@
     <%= f.text_area :description, :cols => 80 %>
   </div>
   <div class="field">
-    <%= f.label :creator %><br />
-    <% if @kit_design.creator then %>
-      <%= @kit_design.creator.full_name %>
+    <%= f.label :owner %><br />
+    <% if @kit_design.owner then %>
+      <%= @kit_design.owner.full_name %>
     <% else %>
-      <%= f.hidden_field :creator_id, :value => current_user.id %>
+      <%= f.hidden_field :owner_id, :value => current_user.id %>
       <%= current_user.full_name %>
     <% end %>
   </div>

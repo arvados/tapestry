@@ -1,4 +1,6 @@
 class Study < ActiveRecord::Base
+  stampable
+  acts_as_paranoid_versioned :version_column => :lock_version
 
   belongs_to :researcher, :class_name => "User"
   belongs_to :irb_associate, :class_name => "User"

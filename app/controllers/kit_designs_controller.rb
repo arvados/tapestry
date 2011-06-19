@@ -28,7 +28,7 @@ class KitDesignsController < ApplicationController
     @kit_design = KitDesign.new(params[:kit_design])
 
     # Override this field just in case; it comes in as a hidden form field
-    @kit_design.creator = current_user
+    @kit_design.owner = current_user
 
     respond_to do |format|
       if @kit_design.save
@@ -48,7 +48,7 @@ class KitDesignsController < ApplicationController
     @kit_design = KitDesign.find(params[:id])
 
     # Override this field just in case; it comes in as a hidden form field
-    @kit_design.creator = current_user
+    @kit_design.owner = current_user
 
     respond_to do |format|
       if @kit_design.update_attributes(params[:kit_design])

@@ -4,6 +4,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   include AuthenticatedSystem
+  include Userstamp  
 
   before_filter :login_required
   before_filter :ensure_tos_agreement

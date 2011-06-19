@@ -1,4 +1,7 @@
 class GeneticData < ActiveRecord::Base
+  stampable
+  acts_as_paranoid_versioned :version_column => :lock_version
+
 
   # See config/initializers/paperclip.rb for the definition of :user_id and :filename
   has_attached_file :dataset, :path => "/data/#{ROOT_URL}/genetic_data/:user_id/:id/:style/:filename.:extension"

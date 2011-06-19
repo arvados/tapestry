@@ -1,4 +1,7 @@
 class InternationalParticipant < ActiveRecord::Base
+  stampable
+  acts_as_paranoid_versioned :version_column => :lock_version
+
   validates_length_of       :country,    :within => 3..100
 
   validates_length_of       :email,    :within => 6..100 #r@a.wk

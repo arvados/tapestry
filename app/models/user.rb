@@ -2,6 +2,10 @@ require 'digest/sha1'
 require 'user_eligibility_groupings'
 
 class User < ActiveRecord::Base
+  model_stamper
+  stampable
+  acts_as_paranoid_versioned :version_column => :lock_version
+
   include Authentication
   include Authentication::ByPassword
   include Authentication::ByCookieToken
@@ -35,7 +39,7 @@ class User < ActiveRecord::Base
   has_many :survey_answers, :dependent => :destroy
 
   # Researchers only
-  has_many :kit_designs, :foreign_key => "creator_id"
+  has_many :kit_designs, :foreign_key => "owner_id"
 
   has_attached_file :phr
 
@@ -214,7 +218,10 @@ class User < ActiveRecord::Base
     self.activation_code = nil
     signup_enrollment_step = EnrollmentStep.find_by_keyword('signup')
     log('Account was activated (e-mail address verified)',signup_enrollment_step)
-    self.complete_enrollment_step(signup_enrollment_step)
+    # Researchers have a separate signup procedure
+    unless self.is_researcher?
+      self.complete_enrollment_step(signup_enrollment_step)
+    end
     save(false)
   end
 

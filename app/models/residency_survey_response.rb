@@ -1,4 +1,7 @@
 class ResidencySurveyResponse < ActiveRecord::Base
+  stampable
+  acts_as_paranoid_versioned :version_column => :lock_version
+
   after_save :complete_enrollment_step
   validate :zip_is_5_characters_if_us_resident
   attr_protected :user_id
