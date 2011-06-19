@@ -279,7 +279,7 @@ ActiveRecord::Schema.define(:version => 20110616013316) do
   create_table "kit_designs", :force => true do |t|
     t.string   "name"
     t.text     "description"
-    t.integer  "creator_id"
+    t.integer  "owner_id"
     t.integer  "study_id"
     t.boolean  "frozen"
     t.text     "errata"
