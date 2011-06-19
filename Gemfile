@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 source 'http://gemcutter.org'
 source 'http://gems.github.com'
 
-gem 'rails', '3.0.7'
+gem 'rails', '3.0.9'
 
 gem 'mysql'
 
@@ -22,6 +22,8 @@ gem 'newrelic_rpm'
 
 gem 'factory_girl_rails'
 gem 'mocha'
+gem 'recaptcha'
+gem 'limerick_rake'
 group :development, :test do
   gem 'redgreen'
 end
