@@ -3,7 +3,7 @@ class CreateKitDesigns < ActiveRecord::Migration
     create_table :kit_designs do |t|
       t.string :name
       t.text :description
-      t.belongs_to :creator, :class_name => User
+      t.belongs_to :owner, :class_name => User
       t.belongs_to :study
       t.boolean :frozen
       t.text :errata
