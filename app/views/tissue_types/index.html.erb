@@ -1,0 +1,22 @@
+<h2>Tissue types</h2>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @tissue_types.each do |tissue_type| %>
+  <tr>
+    <td><%= tissue_type.name %></td>
+    <td><%= link_to 'Edit', edit_tissue_type_path(tissue_type) %></td>
+    <td><%= link_to 'Destroy', tissue_type, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New tissue type', new_tissue_type_path %>

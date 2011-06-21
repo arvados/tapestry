@@ -1,0 +1,33 @@
+<h2>List sample types</h2>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Tissue type</th>
+    <th>Device type</th>
+    <th>Description</th>
+    <th>Target amount</th>
+    <th>Unit</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @sample_types.each do |sample_type| %>
+  <tr>
+    <td><%= sample_type.name %></td>
+    <td><%= sample_type.tissue_type.name %></td>
+    <td><%= sample_type.device_type.name %></td>
+    <td><%= sample_type.description %></td>
+    <td><%= sample_type.target_amount %></td>
+    <td><%= sample_type.unit.name %></td>
+    <td><%= link_to 'Show', sample_type %></td>
+    <td><%= link_to 'Edit', edit_sample_type_path(sample_type) %></td>
+    <td><%= link_to 'Destroy', sample_type, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New sample type', new_sample_type_path %>

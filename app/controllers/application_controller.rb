@@ -56,6 +56,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def ensure_admin
+    if not logged_in? or current_user.nil? or not current_user.is_admin?
+      redirect_to unauthorized_user_url
+    end
+  end
+
   def add_breadcrumb name, url = ''
     @breadcrumbs ||= []
     url = eval(url) if url =~ /_path|_url|@/

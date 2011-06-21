@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @sample_type.name %>
+</p>
+
+<p>
+  <b>Tissue type:</b>
+  <%= @sample_type.tissue_type.name %>
+</p>
+
+<p>
+  <b>Device type:</b>
+  <%= @sample_type.device_type.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @sample_type.description %>
+</p>
+
+<p>
+  <b>Target amount:</b>
+  <%= @sample_type.target_amount %>
+</p>
+
+<p>
+  <b>Unit:</b>
+  <%= @sample_type.unit.name %>
+</p>
+
+
+<%= link_to 'Edit', edit_sample_type_path(@sample_type) %> |
+<%= link_to 'Back', sample_types_path %>

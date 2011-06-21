@@ -1,6 +1,10 @@
 PgpEnroll::Application.routes.draw do
+  resources :kit_design_samples
+  resources :sample_types
+  resources :units
+  resources :device_types
+  resources :tissue_types
   resources :kit_designs
-
   resources :studies
 
   resources :pages
@@ -83,6 +87,7 @@ PgpEnroll::Application.routes.draw do
   resources :safety_questionnaires
   match '/admin/safety_questionnaires' => 'admin/safety_questionnaires#index', :as => :admin_safety_questionnaires
   match '/admin/scoreboards' => 'admin/scoreboards#index', :as => :admin_scoreboards
+  match '/admin/researchers' => 'admin/researchers#index', :as => :admin_researchers
   match '/admin/users/enroll' => 'admin/users#enroll', :as => :admin_enroll_users
   match '/admin/users/active' => 'admin/users#active', :as => :admin_active_users
   match '/admin/users/activity' => 'admin/users#activity', :as => :admin_activity_users

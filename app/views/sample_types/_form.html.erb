@@ -1,0 +1,31 @@
+<%= error_messages_for :unit, :header_message => 'Error: data could not be saved.', :message => nil %>
+
+<%= form_for(@sample_type) do |f| %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :tissue_type %><br />
+    <%= f.select :tissue_type_id, TissueType.find(:all).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :device_type %><br />
+    <%= f.select :device_type_id, DeviceType.find(:all).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :target_amount %><br />
+    <%= f.text_field :target_amount %>
+  </div>
+  <div class="field">
+    <%= f.label :unit %><br />
+    <%= f.select :unit_id, Unit.find(:all).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

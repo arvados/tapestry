@@ -1,0 +1,2 @@
+module TissueTypesHelper
+end

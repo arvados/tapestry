@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @kit_design_sample.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @kit_design_sample.description %>
+</p>
+
+<p>
+  <b>Kitdesign:</b>
+  <%= @kit_design_sample.kit_design.name %>
+</p>
+
+<p>
+  <b>Tissue:</b>
+  <%= @kit_design_sample.tissue %>
+</p>
+
+<p>
+  <b>Device:</b>
+  <%= @kit_design_sample.device %>
+</p>
+
+<p>
+  <b>Sort order:</b>
+  <%= @kit_design_sample.sort_order %>
+</p>
+
+<p>
+  <b>Target amount:</b>
+  <%= @kit_design_sample.target_amount %>
+</p>
+
+<p>
+  <b>Unit:</b>
+  <%= @kit_design_sample.unit %>
+</p>
+
+
+<%= link_to 'Edit', edit_kit_design_sample_path(@kit_design_sample) %> |
+<%= link_to 'Back', kit_design_samples_path %>

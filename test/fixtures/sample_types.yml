@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  tissue_type: 
+  device_type: 
+  description: MyText
+  target_amount: MyString
+  unit: 
+
+two:
+  name: MyString
+  tissue_type: 
+  device_type: 
+  description: MyText
+  target_amount: MyString
+  unit: 

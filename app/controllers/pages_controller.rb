@@ -28,6 +28,7 @@ class PagesController < ApplicationController
 
     if logged_in? and params[:id] == 'researcher_tools' then
       @studies = Study.find_all_by_researcher_id(current_user.id)
+      @kit_design_samples = KitDesignSample.find_all_by_kit_design_id(current_user.kit_designs).sort { |a,b| a.name <=> b.name }
     end
 
     params[:page] = params[:page].to_i

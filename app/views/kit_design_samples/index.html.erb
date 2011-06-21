@@ -1,0 +1,37 @@
+<h2>List kit design samples</h2>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Kit design</th>
+    <th>Tissue</th>
+    <th>Device</th>
+    <th>Sort order</th>
+    <th>Target amount</th>
+    <th>Unit</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @kit_design_samples.each do |kit_design_sample| %>
+  <tr>
+    <td><%= kit_design_sample.name %></td>
+    <td><%= kit_design_sample.description %></td>
+    <td><%= kit_design_sample.kit_design.name %></td>
+    <td><%= kit_design_sample.tissue %></td>
+    <td><%= kit_design_sample.device %></td>
+    <td><%= kit_design_sample.sort_order %></td>
+    <td><%= kit_design_sample.target_amount %></td>
+    <td><%= kit_design_sample.unit %></td>
+    <td><%= link_to 'Show', kit_design_sample %></td>
+    <td><%= link_to 'Edit', edit_kit_design_sample_path(kit_design_sample) %></td>
+    <td><%= link_to 'Destroy', kit_design_sample, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New kit design sample', new_kit_design_sample_path %>

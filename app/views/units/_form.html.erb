@@ -1,0 +1,11 @@
+<%= error_messages_for :unit, :header_message => 'Error: data could not be saved.', :message => nil %>
+
+<%= form_for(@unit) do |f| %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110616194700) do
+ActiveRecord::Schema.define(:version => 20110621180657) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -321,6 +321,31 @@ ActiveRecord::Schema.define(:version => 20110616194700) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "device_type_versions", :force => true do |t|
+    t.integer  "device_type_id"
+    t.integer  "lock_version"
+    t.string   "name"
+    t.text     "description"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "device_type_versions", ["device_type_id"], :name => "index_device_type_versions_on_device_type_id"
+
+  create_table "device_types", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "lock_version"
   end
 
@@ -713,6 +738,47 @@ ActiveRecord::Schema.define(:version => 20110616194700) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "kit_design_sample_versions", :force => true do |t|
+    t.integer  "kit_design_sample_id"
+    t.integer  "lock_version"
+    t.string   "name"
+    t.text     "description"
+    t.integer  "kit_design_id"
+    t.integer  "sample_type_id"
+    t.string   "tissue"
+    t.string   "device"
+    t.integer  "sort_order"
+    t.string   "target_amount"
+    t.string   "unit"
+    t.boolean  "frozen"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "kit_design_sample_versions", ["kit_design_sample_id"], :name => "index_kit_design_sample_versions_on_kit_design_sample_id"
+
+  create_table "kit_design_samples", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "kit_design_id"
+    t.integer  "sample_type_id"
+    t.string   "tissue"
+    t.string   "device"
+    t.integer  "sort_order"
+    t.string   "target_amount"
+    t.string   "unit"
+    t.boolean  "frozen"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "lock_version"
   end
 
@@ -1134,6 +1200,39 @@ ActiveRecord::Schema.define(:version => 20110616194700) do
     t.integer  "lock_version"
   end
 
+  create_table "sample_type_versions", :force => true do |t|
+    t.integer  "sample_type_id"
+    t.integer  "lock_version"
+    t.string   "name"
+    t.integer  "tissue_type_id"
+    t.integer  "device_type_id"
+    t.text     "description"
+    t.string   "target_amount"
+    t.integer  "unit_id"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sample_type_versions", ["sample_type_id"], :name => "index_sample_type_versions_on_sample_type_id"
+
+  create_table "sample_types", :force => true do |t|
+    t.string   "name"
+    t.integer  "tissue_type_id"
+    t.integer  "device_type_id"
+    t.text     "description"
+    t.string   "target_amount"
+    t.integer  "unit_id"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
   create_table "screening_survey_response_versions", :force => true do |t|
     t.integer  "screening_survey_response_id"
     t.integer  "lock_version"
@@ -1353,6 +1452,52 @@ ActiveRecord::Schema.define(:version => 20110616194700) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "tissue_type_versions", :force => true do |t|
+    t.integer  "tissue_type_id"
+    t.integer  "lock_version"
+    t.string   "name"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tissue_type_versions", ["tissue_type_id"], :name => "index_tissue_type_versions_on_tissue_type_id"
+
+  create_table "tissue_types", :force => true do |t|
+    t.string   "name"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "unit_versions", :force => true do |t|
+    t.integer  "unit_id"
+    t.integer  "lock_version"
+    t.string   "name"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "unit_versions", ["unit_id"], :name => "index_unit_versions_on_unit_id"
+
+  create_table "units", :force => true do |t|
+    t.string   "name"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "lock_version"
   end
 

@@ -1,0 +1,27 @@
+<%= error_messages_for :kit_design_sample, :header_message => 'Error: data could not be saved.', :message => nil %>
+
+<%= form_for(@kit_design_sample) do |f| %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :kit_design %><br />
+    <%= f.select :kit_design_id, KitDesign.find(:all).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :sample_type %><br />
+    <%= f.select :sample_type_id, SampleType.find(:all).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :sort_order %><br />
+    <%= f.text_field :sort_order %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
