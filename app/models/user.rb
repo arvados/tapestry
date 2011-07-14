@@ -91,6 +91,7 @@ class User < ActiveRecord::Base
   scope :pgp_ids, { :conditions => "enrolled IS NOT NULL and pgp_id IS NOT NULL and is_test = false" }
   scope :test, { :conditions => "is_test = true" }
   scope :exclude_test, { :conditions => "is_test = false" }
+  scope :researcher, { :conditions => "researcher = true" }
 
 
   # Beware of NULL: "screening_survey_responses.us_citizen_or_resident!=1"
@@ -107,7 +108,7 @@ class User < ActiveRecord::Base
       :conditions => conditions_sql,
       :order => 'enrollment_step_completions.created_at',
       :joins => joins,
-      # when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
+      # TODO: when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
       # Cf. http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
       # Ward, 2010-10-09.
       :readonly => false
@@ -122,7 +123,7 @@ class User < ActiveRecord::Base
       :order => 'users.created_at',
       :group => 'users.id',
       :joins => joins,
-      # when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
+      # TODO: when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
       # Cf. http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
       # Ward, 2010-10-09.
       :readonly => false
@@ -140,7 +141,7 @@ class User < ActiveRecord::Base
       :conditions => conditions_sql,
       :order => 'enrollment_step_completions.created_at',
       :joins => joins,
-      # when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
+      # TODO: when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
       # Cf. http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
       # Ward, 2010-10-09.
       :readonly => false
@@ -166,6 +167,10 @@ class User < ActiveRecord::Base
 
   def is_researcher?
     self.researcher
+  end
+
+  def is_researcher_onirb?
+    self.researcher_onirb
   end
 
   def self.promoted_ids

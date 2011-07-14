@@ -87,6 +87,15 @@
 <p><label for="is_test">Is test user?</label><br/>
 <%= f.check_box :is_test%></p>
 
+<p><label for="researcher">Is researcher?</label><br/>
+<%= f.check_box :researcher%></p>
+
+<p><label for="researcher_affiliation">Researcher Affiliation</label><br/>
+<%= f.text_field :researcher_affiliation, :size => 80 %></p>
+
+<p><label for="researcher_onirb">Researcher on IRB roster?</label><br/>
+<%= f.check_box :researcher_onirb%></p>
+
 <p><label for="mailing_list_subscriptions">Mailing list subscriptions</label><br/>
 <table class="admin_table">
   <tr>

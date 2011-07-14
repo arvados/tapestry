@@ -14,4 +14,20 @@ class Study < ActiveRecord::Base
   validates_presence_of   :participant_description
   validates_presence_of   :researcher_description
 
+  validates_presence_of :irb_associate, :message => ' is required if the study is approved', :if => :is_approved?
+
+  def is_approved?
+    self.approved
+  end
+
+  def status
+    if self.approved then
+      return 'approved'
+    elsif self.requested then
+      return 'requested'
+    else
+      return 'draft'
+    end
+  end
+
 end

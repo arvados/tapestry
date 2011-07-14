@@ -75,6 +75,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     @user = User.find params[:id]
     @user.is_admin = params[:user].delete(:is_admin)
     @user.is_test = params[:user].delete(:is_test)
+    @user.researcher = params[:user].delete(:researcher)
+    @user.researcher_onirb = params[:user].delete(:researcher_onirb)
+
     if (params[:user][:pgp_id] == '') then
       params[:user].delete(:pgp_id)
       @user.pgp_id = nil
@@ -299,6 +302,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     elsif params[:all]
       @unpaginated_users = User.exclude_test
       @result = "All users"
+    elsif params[:researcher]
+      @unpaginated_users = User.researcher
+      @result = "Test users"
     elsif params[:test]
       @unpaginated_users = User.test
       @result = "Test users"

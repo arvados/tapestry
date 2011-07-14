@@ -98,12 +98,16 @@ PgpEnroll::Application.routes.draw do
   match '/admin/users/genetic_data_report' => 'admin/users#genetic_data_report', :as => :admin_genetic_data_report
   match '/admin/users/activate/:id' => 'admin/users#activate', :as => :activate_admin_user
   match '/admin/users/promote/:id' => 'admin/users#promote', :as => :promote_admin_user
+
+  match '/admin/study/approve/:id' => 'admin/study#approve', :as => :approve_admin_study
+  match '/admin/study/deny/:id' => 'admin/study#deny', :as => :deny_admin_study
 #    match '/' => 'homes#index'
   namespace :admin do
       root :to => 'homes#index'
       resources :users do
         resources :exam_responses
       end
+      resources :studies
       resources :bulk_promotions
       resources :bulk_waitlists
       resources :reports

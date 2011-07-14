@@ -44,7 +44,7 @@ Your IRB status: <strong><%= current_user.researcher_onirb? ? 'on the IRB roster
 
   <ul>
   <% @studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
-  <li><%= study.name %><br/>
+  <li><%= study.name %> (<%= study.status %>)<br/>
     <% if study.kit_designs.count > 0 %>
       <strong>Kit designs</strong><br/>
       <% study.kit_designs.sort { |a,b| a.name <=> b.name }.each do |kd| %>

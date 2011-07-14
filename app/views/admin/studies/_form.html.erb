@@ -1,42 +1,37 @@
 
 <%= error_messages_for :study, :header_message => 'Error: data could not be saved.', :message => nil %>
 
-<%= form_for(@study) do |f| %>
+<%= form_for [:admin, @study], :html => { :method => :put } do |f| -%>
 
   <div class="field">
     <%= f.label :name %><br />
-    <%= f.text_field :name, :size => 80 %>
+    <%= @study.name %>
   </div>
   <div class="field">
     <%= f.label :participant_description %><br />
-    <%= f.text_area :participant_description, :cols => 80 %>
+    <%= @study.participant_description %>
   </div>
   <div class="field">
     <%= f.label :researcher_description %><br />
-    <%= f.text_area :researcher_description, :cols => 80 %>
+    <%= @study.researcher_description %>
   </div>
   <div class="field">
     <%= f.label :researcher_id %><br />
-    <% if @study.researcher then %>
-      <%= @study.researcher.full_name %>
-    <% else %>
-      <%= f.hidden_field :researcher_id, :value => current_user.id %>
-      <%= current_user.full_name %>
-    <% end %>
+    <%= @study.researcher.full_name %>
   </div>
   <div class="field">
     <%= f.label :irb_associate_id %><br />
-    <%= @study.irb_associate ? @study.irb_associate.full_name : 'unassigned' %>
+    <%= f.select :irb_associate_id, User.where('researcher_onirb = ?',true).collect {|r| [ r.full_name, r.id ] }, :include_blank => true %>
   </div>
   <% if not @study.approved then %>
     <div class="field">
       <%= f.label :requested %><br />
-      <%= f.check_box :requested %>
+      <%= @study.requested ? 'Yes' : 'No' %>
     </div>
   <% end %>
   <div class="field">
     <%= f.label :approved %><br />
-    <%= @study.approved ? 'Yes' : 'No' %>
+    <%= f.check_box :approved %>
   </div>
   <div class="actions">
     <%= f.submit %>

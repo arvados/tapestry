@@ -1,5 +1,19 @@
 <h2>Researcher Admin Tools</h2>
 
+<h3>Studies</h3>
+
+<h4>Requested studies</h4>
+
+<%= render :partial => 'studiestable', :locals => { :studies => @requested_studies, :type => 'requested' } %>
+
+<h4>Approved studies</h4>
+
+<%= render :partial => 'studiestable', :locals => { :studies => @approved_studies, :type => 'approved' } %>
+
+<h4>Draft studies</h4>
+
+<%= render :partial => 'studiestable', :locals => { :studies => @draft_studies, :type => 'draft' } %>
+
 <h3>Parameters</h3>
 
 <ul>

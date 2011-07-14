@@ -1,0 +1,34 @@
+<% if studies.count > 0 %>
+<table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th>Researcher</th>
+    <th>IRB associate</th>
+    <th>Status</th>
+    <% if type != 'draft' %>
+    <th></th>
+    <% end %>
+  </tr>
+  <% studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%= link_to study.name, edit_admin_study_url(study) %></td>
+      <td><%= link_to study.researcher.full_name, admin_user_url(study.researcher) %></td>
+      <td>
+          <% if study.irb_associate.nil? then %>
+            <%= link_to 'unassigned', edit_admin_study_url(study) %>
+          <% else %>
+            <%= link_to study.irb_associate.full_name, admin_user_url(study.irb_associate) %>
+          <% end %>
+      </td>
+      <td><%= study.status %></td>
+      <% if type == 'requested' %>
+        <td><%= link_to 'Approve', edit_admin_study_url(study.id) %></td>
+      <% end %>
+      <% if type == 'approved' %>
+        <td><%= link_to 'Remove approval', edit_admin_study_url(study.id) %></td>
+      <% end %>
+    </tr>
+  <% end %>
+  </table>
+<% end %>
+
