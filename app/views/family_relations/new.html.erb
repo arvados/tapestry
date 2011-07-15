@@ -10,7 +10,7 @@ Your family member will be asked to confirm the relationship before the informat
     <%= text_field_tag 'email' %>
   </p
   <p>
- The person above is my <%= select_tag :relation, options_for_select(['Select relation','parent','child', 'sibling', 'grandparent', 'grandchild', 'aunt/uncle', 'nephew/niece', 'half sibling', 'cousin or more distant', 'not genetically related (e.g. husband/wife)' ].map { |r| [r,r]}) %>
+ The person above is my <%= select_tag :relation, options_for_select(['Select relation','monozygotic/identical twin','parent','child', 'sibling', 'grandparent', 'grandchild', 'aunt/uncle', 'nephew/niece', 'half sibling', 'cousin or more distant', 'not genetically related (e.g. husband/wife)' ].map { |r| [r,r]}) %>
   </p>
 
   <p>

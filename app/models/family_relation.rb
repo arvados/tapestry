@@ -6,6 +6,7 @@ class FamilyRelation < ActiveRecord::Base
   belongs_to :relative, :class_name => "User", :foreign_key => "relative_id"
 
   @@relations = {
+    'monozygotic/identical twin' => 'monozygotic/identical twin',
     'parent' => 'child',
     'child' => 'parent',
     'sibling' => 'sibling',
