@@ -10,7 +10,12 @@ class FamilyRelation < ActiveRecord::Base
     'child' => 'parent',
     'sibling' => 'sibling',
     'grandparent' => 'grandchild',
-    'grandchild' => 'grandparent'
+    'grandchild' => 'grandparent',
+    'aunt/uncle' => 'nephew/niece',
+    'nephew/niece' => 'aunt/uncle',
+    'half sibling' => 'half sibling',
+    'cousin or more distant' => 'cousin or more distant',
+    'not genetically related (e.g. husband/wife)' => 'not genetically related (e.g. husband/wife)'
   }
   
   def self.relations
