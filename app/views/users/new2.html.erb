@@ -5,7 +5,7 @@
   &nbsp;&nbsp;<strong><%=h @user.full_name %></strong> &lt;<%= link_to h(@user.email), "mailto:#{h(@user.email)}" %>&gt;</p>
 
 <h2>Choose a password and security question/answer</h2>
-<%= error_messages_for :user, :header_message => 'Please double check your name and e-mail address below', :message => nil %>
+<%= error_messages_for :user, :header_message => 'Your data could not be saved, please correct these problems:', :message => nil %>
 <%= form_for :user, :url => users_url, :html => { :class => 'signup' } do |f| -%>
 
 <% %w(first_name middle_name last_name email).each do |attr| -%>

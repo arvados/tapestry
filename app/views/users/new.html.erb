@@ -1,6 +1,17 @@
 <h2>Informed Consent for Eligibility Screening</h2>
 
-<%= error_messages_for :user, :header_message => 'Please double check your name and e-mail address below', :message => nil %>
+<% if @user.errors.any? %>
+<table width="100%"><tr><td align="center">
+<div id="errorExplanation">
+  <h2><%= pluralize(@user.errors.reject { |k,v| k != :first_name and k != :last_name and k != :email }.count, "error") %> prohibited this record from being saved:</h2>
+  <ul>
+  <% @user.errors.reject { |k,v| k != :first_name and k != :last_name and k != :email }.full_messages.each do |msg| %>
+    <li><%= msg %></li>
+  <% end %>
+  </ul>
+</div>
+</td></tr></table>
+<% end %>
 
 <%= render :partial => 'mini_consent' %>
 
