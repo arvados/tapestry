@@ -187,7 +187,7 @@ class UsersController < ApplicationController
       render :template => 'users/resend_signup_notification_form'
       return
     end
-    UserMailer.deliver_signup_notification(@user)
+    UserMailer.signup_notification(@user).deliver
     flash.now[:notice] = "We have re-sent an e-mail to #{@user.email} in order to confirm your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from general@personalgenomes.org"
     render :template => 'users/created'
   end
