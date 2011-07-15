@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   skip_before_filter :ensure_enrolled
 
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :show_log, :unauthorized ]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :participant_survey, :show_log, :unauthorized ]
   skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized ]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos ]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
@@ -226,6 +226,13 @@ class UsersController < ApplicationController
       redirect_to root_url
     end
   end
+
+  def participant_survey
+    @secret = Digest::MD5.hexdigest( SURVEY_SALT + current_user.hex )
+    current_user.log("Clicked through to participant survey: #{@secret} -> #{current_user.hex}")
+    redirect_to "https://spreadsheets.google.com/spreadsheet/viewform?hl=en_US&formkey=dHRaNUxmUHdVaktxZXdsRlVyMlIwUUE6MQ&entry_71=" + @secret
+  end
+
 
   def show_log
     @log = UserLog.find(:all, :conditions => "user_id = #{current_user.id} and user_comment is not null", :order => 'created_at DESC')

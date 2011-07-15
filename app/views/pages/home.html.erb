@@ -63,7 +63,7 @@
   &nbsp;&nbsp;<%= link_to "Submit new", url_for(:controller => 'safety_questionnaires', :action => 'new') %><br>
   &nbsp;&nbsp;<%= link_to "Review previous", url_for(:controller => 'safety_questionnaires', :action => 'index') %></li>
   <li><strong>Surveys</strong><br>
-  &nbsp;&nbsp;<%= link_to "Participant survey", "https://spreadsheets.google.com/spreadsheet/viewform?hl=en_US&formkey=dHRaNUxmUHdVaktxZXdsRlVyMlIwUUE6MQ&entry_71=" + Digest::MD5.hexdigest( SURVEY_SALT + current_user.hex) %><br>
+  &nbsp;&nbsp;<%= link_to "Participant survey", "/users/participant_survey" %><br>
   &nbsp;&nbsp;<%= link_to "Learn more", "/trait_surveys" %></li>
   <li><strong>Genetic data</strong><br>
   &nbsp;&nbsp;<%= link_to "Manage your data",'/genetic_data' %></li>

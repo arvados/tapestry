@@ -24,6 +24,7 @@ PgpEnroll::Application.routes.draw do
   match '/users/resend_signup_notification_form' => 'users#resend_signup_notification_form', :as => :resend_signup_notification_form
   match '/users/resend_signup_notification/:id' => 'users#resend_signup_notification', :as => :resend_signup_notification_user
   match '/users/create_researcher', :as => :create_researcher, :via => :post
+  match '/users/participant_survey' => 'users#participant_survey'
   resources :users
   resource :session
   match '/login' => 'sessions#new', :as => :login
