@@ -61,29 +61,21 @@ EOS
           value = options[key]
           html[key] = value unless value.blank?
         else
-          html[key] = 'flash error'
+          html[key] = 'errorExplanation'
         end
       end
 
       header_message = "Error!"
+      header_message = options[:header_message] if options.has_key?(:header_message)
       error_messages = raw(objects.map {|object| object.errors.full_messages.map {|msg| content_tag(:li, msg) } })
 
       content_tag(:table,
         content_tag(:tr,
           content_tag(:td,
             content_tag(:div,
-              content_tag(:table,
-                content_tag(:tr,
-                  content_tag(:td, header_message, :class => 'awarninghead')
-                  ) <<
-                content_tag(:tr,
-                  content_tag(:td,
-                      raw('The following problem' + (count > 1 ? 's were ' : ' was ') + 'detected:' <<
-                      content_tag(:ul, error_messages)),
-                    html
-                  )
-                )
-              ), :class => 'flash error'
+                  content_tag(:h2, header_message) +
+                      content_tag(:ul, error_messages), :id => 'errorExplanation'
+
             ), :align => 'center'
           )
         ), :width => '100%'
