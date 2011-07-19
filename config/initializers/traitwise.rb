@@ -5,7 +5,7 @@ class Traitwise
 	@@opts = {
 		'host_signin' => TRAITWISE_LOGIN.to_s,
 		'host_password' => TRAITWISE_PASSWORD.to_s,
-		'embed_id' => 'pgp',
+		'embed_id' => 'pgp', # We should pass something here that identifies the researcher + survey. We're free to put whatever we want.
 		'tags' => 'core-demographics',
 		'charity_id' => 1,
 		'suppress_survey_intro_panel' => false,
