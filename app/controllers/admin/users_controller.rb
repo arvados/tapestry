@@ -210,7 +210,7 @@ class Admin::UsersController < Admin::AdminControllerBase
     @google_phrs = Ccr.find(:all,
        :joins => "INNER JOIN users ON users.id = ccrs.user_id",
        :conditions => "users.is_test = false",
-       :order => "user_id")
+       :order => "user_id, created_at")
   end
 
   def genetic_data_report
