@@ -359,7 +359,7 @@ class Admin::UsersController < Admin::AdminControllerBase
       @logs = UserLog.find(:all).sort { |x,y| y.created_at <=> x.created_at }
       @filtered = ''
     end
-    if paginate then
+    if paginate == 1 then
       @logs = @logs.paginate(:page => params[:page] || 1, :per_page => 30)
     end
     return @logs, @filtered
