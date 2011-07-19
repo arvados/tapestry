@@ -1,0 +1,19 @@
+<h2>Users with Google PHR</h2>
+
+<table class="admin_table">
+<tr>
+  <th>User Id</th>
+  <th>Date</th>
+  <th>Name</th>
+  <th>Download</th>
+</tr>
+<% @google_phrs.each do |g|%>
+<tr>
+  <td><%= link_to g.user.hex, public_profile_path(:hex => g.user.hex) %></td>
+  <td><%= g.date %></td>
+  <td><%= g.user.first_name%> <%= g.user.last_name %></td>
+  <td><%= link_to 'Download', genetic_data_download_path(g.id) %></td>
+</tr>
+<% end %>
+
+</table>

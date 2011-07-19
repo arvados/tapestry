@@ -99,6 +99,7 @@ PgpEnroll::Application.routes.draw do
   match '/admin/users/absolute_pitch_survey_export' => 'admin/users#absolute_pitch_survey_export', :as => :admin_absolute_pitch_survey_export
   match '/admin/users/absolute_pitch_survey_questions' => 'admin/users#absolute_pitch_survey_questions', :as => :admin_absolute_pitch_survey_questions
   match '/admin/users/genetic_data_report' => 'admin/users#genetic_data_report', :as => :admin_genetic_data_report
+  match '/admin/users/google_phr_report' => 'admin/users#google_phr_report', :as => :admin_google_phr_report
   match '/admin/users/activate/:id' => 'admin/users#activate', :as => :activate_admin_user
   match '/admin/users/promote/:id' => 'admin/users#promote', :as => :promote_admin_user
 

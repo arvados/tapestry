@@ -206,6 +206,13 @@ class Admin::UsersController < Admin::AdminControllerBase
     @trios = User.trios
   end
 
+  def google_phr_report
+    @google_phrs = Ccr.find(:all,
+       :joins => "INNER JOIN users ON users.id = ccrs.user_id",
+       :conditions => "users.is_test = false",
+       :order => "user_id")
+  end
+
   def genetic_data_report
     @genetic_data = GeneticData.find(:all,
        :joins => "INNER JOIN users ON users.id = genetic_data.user_id",
