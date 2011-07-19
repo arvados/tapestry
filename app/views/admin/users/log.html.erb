@@ -1,0 +1,34 @@
+<p>&nbsp;</p>
+
+<h2>User Logs</h2>
+
+<%= form_tag admin_log_users_path, { :method => 'get' } do  %>
+  Filter: <%= text_field_tag :filter %>
+  <%= submit_tag 'Search' %>
+<% end %>
+
+<% if @filtered != '' then %>
+  <p>Showing results filtered by "<strong><%= @filtered %></strong>"</p>
+<% end %>
+
+<%= error_messages_for :user %>
+
+<%= will_paginate @logs %>
+<table class="admin_table">
+  <tr>
+    <th>When</th>
+    <th>Who</th>
+    <th>Log entry</th>
+  </tr>
+  <% @logs.each do |entry| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td width="150"><%= entry.created_at %></td>
+      <td><%= entry.user.hex == '' ? link_to('unenrolled', admin_user_url(entry.user)) : link_to(entry.user.hex, admin_user_url(entry.user)) %></td>
+      <td><%= entry.comment %></td>
+    </tr>
+  <% end -%>
+</table>
+<%= will_paginate @logs %>
+
+Download results as <%= link_to 'CSV', admin_export_log_users_path(:filter => params[:filter]) %><br />
+

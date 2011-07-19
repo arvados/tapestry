@@ -14,6 +14,29 @@ class Admin::UsersController < Admin::AdminControllerBase
     end
   end
 
+  def log
+    (@logs, @filtered) = log_worker(params)
+  end
+
+  def export_log
+    (@logs, @filtered) = log_worker(params,0)
+    report = StringIO.new
+
+    header = ['When','Who','Log entry']
+
+    CSV::Writer.generate(report) do |csv|
+      csv << header
+      @logs.each {|r|
+        csv << [ r.created_at, r.user.hex, r.comment ]
+      }
+    end
+    report.rewind
+
+    send_data report.read,
+            :type => 'text/csv; charset=iso-8859-1; header=present',
+            :disposition => "attachment; filename=user_log.csv"
+  end
+
   def active
   end
 
@@ -326,4 +349,20 @@ class Admin::UsersController < Admin::AdminControllerBase
     @result += ": #{@unpaginated_users.to_a.size} found" if (@result != '')
     @users = @unpaginated_users.sort.paginate(:page => params[:page] || 1)
   end
+
+  def log_worker(params,paginate=1)
+    if params[:filter] then
+      filter = '%' + params[:filter] + '%'
+      @logs = UserLog.where('comment like ?',filter).sort { |x,y| y.created_at <=> x.created_at }
+      @filtered = params[:filter]
+    else
+      @logs = UserLog.find(:all).sort { |x,y| y.created_at <=> x.created_at }
+      @filtered = ''
+    end
+    if paginate then
+      @logs = @logs.paginate(:page => params[:page] || 1, :per_page => 30)
+    end
+    return @logs, @filtered
+  end
+
 end
