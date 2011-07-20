@@ -23,7 +23,13 @@
   <% @logs.each do |entry| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td width="150"><%= entry.created_at %></td>
-      <td><%= entry.user.hex == '' ? link_to('unenrolled', admin_user_url(entry.user)) : link_to(entry.user.hex, admin_user_url(entry.user)) %></td>
+      <td>
+        <% if entry.user.nil? then %>
+          No user.
+        <% else %>
+          <%= entry.user.hex == '' ? link_to('unenrolled', admin_user_url(entry.user)) : link_to(entry.user.hex, admin_user_url(entry.user)) %>
+        <% end %>
+      </td>
       <td><%= entry.comment %></td>
     </tr>
   <% end -%>
