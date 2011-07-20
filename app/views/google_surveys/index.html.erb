@@ -1,0 +1,29 @@
+<h2>Google surveys</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>Survey name</th>
+    <th>Researcher</th>
+    <th>OAuth Service</th>
+    <th>Results downloaded</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @google_surveys.each do |google_survey| %>
+  <tr>
+    <td><%= google_survey.name %></td>
+    <td><%= google_survey.user.full_name %></td>
+    <td><%= google_survey.oauth_service.name %></td>
+    <td><%= google_survey.last_downloaded_at %></td>
+    <td><%= link_to 'Show', google_survey %></td>
+    <td><%= link_to 'Edit', edit_google_survey_path(google_survey) if current_user.is_admin? or current_user.id == google_survey.user.id %></td>
+    <td><%= button_to 'Destroy', google_survey, :confirm => 'Are you sure?', :method => :delete if current_user.is_admin? or current_user.id == google_survey.user.id %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Google survey', new_google_survey_path %>

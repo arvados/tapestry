@@ -1,0 +1,27 @@
+<h2><%= link_to 'OAuth services', admin_oauth_services_path %> &gt; show</h2>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @admin_oauth_service.name %>
+</p>
+
+<p>
+  <b>Scope:</b>
+  <%= @admin_oauth_service.scope %>
+</p>
+
+<p>
+  <b>Consumerkey:</b>
+  <%= @admin_oauth_service.consumerkey %>
+</p>
+
+<p>
+  <b>Privatekey:</b>
+  <blockquote><small><pre><%=h @admin_oauth_service.privatekey %></pre></small></blockquote>
+</p>
+
+
+<%= link_to 'Edit', edit_admin_oauth_service_path(@admin_oauth_service) %> |
+<%= link_to 'Back', admin_oauth_services_path %>

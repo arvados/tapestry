@@ -1,0 +1,37 @@
+<%= form_for(@google_survey) do |f| %>
+  <% if @google_survey.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@google_survey.errors.count, "error") %> prohibited this google_survey from being saved:</h2>
+
+      <ul>
+      <% @google_survey.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, 'Survey Name' %><br />
+    <%= f.text_field(:name) %>
+  </div>
+  <div class="field">
+    <%= f.label(:oauth_service, 'OAuth service') %><br />
+    <%= collection_select(:google_survey, :oauth_service_id, OauthService.all, :id, :name) %>
+  </div>
+  <div class="field">
+    <%= f.label(:form_url, 'Google Form URL') %><br />
+    <%= f.text_field(:form_url, :size => 64) %>
+  </div>
+  <div class="field">
+    <%= f.label(:spreadsheet_key, 'Google Spreadsheet key or URL (where results appear)') %><br />
+    <%= f.text_field(:spreadsheet_key, :size => 64) %>
+  </div>
+  <div class="field">
+    <%= f.label(:userid_populate_entry, 'ID number of entry to pre-populate with user-identifying token') %><br />
+    <%= f.text_field(:userid_populate_entry, :size => 6) %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

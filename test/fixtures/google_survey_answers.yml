@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  google_survey: 
+  column: 
+  answer: MyText
+
+two:
+  google_survey: 
+  column: 
+  answer: MyText

@@ -1,0 +1,63 @@
+<h2><%= link_to 'Google surveys', google_surveys_path %> &gt; Show</h2>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Researcher:</b>
+  <%=h @google_survey.user.full_name %>
+</p>
+
+<p>
+  <b>Survey name:</b>
+  <%=h @google_survey.name %>
+</p>
+
+<p>
+  <b>OAuth service:</b>
+  <%=h @google_survey.oauth_service.name %>
+</p>
+
+<p>
+  <b>Google Form URL:</b>
+  <%=h @google_survey.form_url %>
+</p>
+
+<p>
+  <b>Key or URL for Google Docs spreadsheet where results appear:</b>
+  <%=h @google_survey.spreadsheet_key %>
+</p>
+
+<p>
+  <b>ID number of entry to pre-populate with user-identifying token:</b>
+  <%=h @google_survey.userid_populate_entry %>
+</p>
+
+<p>
+  <b>Spreadsheet column where user-identifying token appears:</b>
+  <%=h @google_survey.userid_response_column %>
+</p>
+
+<p>
+  <b>Results downloaded:</b>
+  <%=h @google_survey.last_downloaded_at %>
+</p>
+
+<p>
+  <%= button_to 'Participate in this survey', participate_google_survey_path(@google_survey) %>
+</p>
+
+<% if current_user.is_admin? or @google_survey.user_id == current_user.id %>
+<p>
+  <%= button_to 'Synchronize results from Google now', synchronize_google_survey_path(@google_survey) %>
+</p>
+<% end %>
+
+<% if @google_survey.last_downloaded_at %>
+<p>
+  <%= button_to 'Download results', download_google_survey_path(@google_survey) %>
+</p>
+<% end %>
+
+
+<%= link_to 'Edit', edit_google_survey_path(@google_survey) %> |
+<%= link_to 'Back', google_surveys_path %>

@@ -1,0 +1,24 @@
+<h2>Authorizations for external data sources (OAuth tokens)</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>Service</th>
+    <th>Status</th>
+    <th>&nbsp;</th>
+  </tr>
+  <% @services.each do |s| -%>
+  <tr class="<%= cycle 'even', 'odd' %>">
+    <td><%=h s.name %></td>
+    <td>
+      <%=h @authorized[s.id] ? "Authorized" : "-" %>
+    </td>
+    <td>
+      <% if !@authorized[s.id] %>
+      <%= button_to "Authorize", { :action => "authorize", :id => s.id } %>
+      <% else %>
+      <%= button_to "Revoke", { :action => "revoke", :id => s.id } %>
+      <% end %>
+    </td>
+  </tr>
+  <% end %>
+</table>

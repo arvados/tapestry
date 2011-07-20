@@ -14,6 +14,17 @@ PgpEnroll::Application.routes.draw do
   match '/kits/:id/sent' => 'kits#sent', :as => :sent_kit, :via => :post
   match '/kits/:id/returned' => 'kits#returned', :as => :returned_kit, :via => :post
 
+  resources :google_surveys do
+    post 'participate', :on => :member
+    post 'synchronize', :on => :member
+    post 'download', :on => :member
+  end
+
+  get "oauth_tokens/authorize"
+  get "oauth_tokens/revoke"
+  get "oauth_tokens/get_access_token"
+  resources :oauth_tokens
+
   resources :kit_design_samples
   resources :sample_types
   resources :units
@@ -153,6 +164,7 @@ PgpEnroll::Application.routes.draw do
       resources :mailing_lists
       resources :invited_emails
       resources :phr_reports
+      resources :oauth_services
   end
 
   resources :geographic_information

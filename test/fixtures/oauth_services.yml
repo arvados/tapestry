@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  scope: MyString
+  consumerkey: MyString
+  privatekey: MyString
+
+two:
+  name: MyString
+  scope: MyString
+  consumerkey: MyString
+  privatekey: MyString

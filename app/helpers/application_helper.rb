@@ -1,5 +1,7 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  require 'uri'
+
   def activerecord_error_list(errors)
     error_list = '<ul class="error_list">'
     error_list << errors.collect do |e, m|
@@ -84,6 +86,12 @@ EOS
       ''
     end
   end
-  
 
+  def uriencode(s)
+    URI.escape(s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+  end
+
+  def uridecode(s)
+    URI.unescape(s)
+  end
 end

@@ -613,6 +613,37 @@ ActiveRecord::Schema.define(:version => 20110801040513) do
 
   add_index "genetic_data_versions", ["genetic_data_id"], :name => "index_genetic_data_versions_on_genetic_data_id"
 
+  create_table "google_survey_answers", :force => true do |t|
+    t.integer  "google_survey_id"
+    t.integer  "column"
+    t.text     "answer"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "nonce_id"
+  end
+
+  create_table "google_survey_questions", :force => true do |t|
+    t.integer  "google_survey_id"
+    t.integer  "column"
+    t.text     "question"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "google_surveys", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "oauth_service_id"
+    t.string   "spreadsheet_key"
+    t.string   "userid_hash_secret"
+    t.integer  "userid_populate_entry"
+    t.integer  "userid_response_column"
+    t.datetime "last_downloaded_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.string   "form_url"
+  end
+
   create_table "immunization_name_versions", :force => true do |t|
     t.integer  "immunization_name_id"
     t.integer  "lock_version"
@@ -1083,6 +1114,36 @@ ActiveRecord::Schema.define(:version => 20110801040513) do
   end
 
   add_index "named_proxy_versions", ["named_proxy_id"], :name => "index_named_proxy_versions_on_named_proxy_id"
+
+  create_table "nonces", :force => true do |t|
+    t.integer  "owner_id"
+    t.string   "nonce"
+    t.datetime "created_at"
+    t.datetime "used_at"
+    t.datetime "updated_at"
+    t.string   "owner_class"
+  end
+
+  add_index "nonces", ["nonce"], :name => "index_nonces_on_nonce"
+
+  create_table "oauth_services", :force => true do |t|
+    t.string   "name"
+    t.string   "scope"
+    t.string   "consumerkey"
+    t.text     "privatekey"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "oauth_tokens", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "oauth_service_id"
+    t.string   "requesttoken"
+    t.string   "accesstoken"
+    t.string   "nonce"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "phase_completions", :force => true do |t|
     t.string   "phase"
