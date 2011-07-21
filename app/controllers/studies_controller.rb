@@ -5,6 +5,18 @@ class StudiesController < ApplicationController
   skip_before_filter :ensure_recent_safety_questionnaire
 
   before_filter :ensure_researcher
+  skip_before_filter :ensure_researcher, :only => [:show]
+
+  # GET /studies/1
+  # GET /studies/1.xml
+  def show
+    @study = Study.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @studies }
+    end
+  end
 
   # GET /studies/new
   # GET /studies/new.xml

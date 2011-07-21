@@ -1,0 +1,32 @@
+<h2>Studies</h2>
+
+<% if ShippingAddress.find_by_user_id(current_user.id).nil? %>
+  <p>Most studies require that your shipping address is up to date. Please <%= link_to 'add a shipping address', "/users/#{current_user.id}/shipping_address" %>.</p>
+<% else %>
+  Please make sure that your shipping address is up to date:
+  <p>
+  <%= link_to 'Update shipping address', "/users/#{current_user.id}/shipping_address" %>
+  </p>
+  <p>You last updated your shipping address <%= distance_of_time_in_words(Time.now(),ShippingAddress.find_by_user_id(current_user.id).updated_at) %> ago.</p>
+<% end %>
+
+<% if Study.where('open = ?',true).size > 0 %>
+
+The following stud<%= Study.where('open = ?',true).size > 1 ? 'ies are' : 'y is' %> currently ongoing. 
+
+ <table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th>Researcher</th>
+    <th>Affiliation</th>
+  </tr>
+  <% Study.where('open = ?', true).each do |s| %>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%= link_to s.name, study_url(s.id) %></td>
+      <td><%= s.researcher.full_name %></td>
+      <td><%= s.researcher.researcher_affiliation %></td>
+    </tr>
+  <% end %>
+</table>
+
+<% end %>
