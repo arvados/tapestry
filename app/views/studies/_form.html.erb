@@ -30,7 +30,7 @@
   </div>
   <% if not @study.approved then %>
     <div class="field">
-      <%= f.label :requested %><br />
+      <%= f.label :requested, 'Request project approval' %><br />
       <%= f.check_box :requested %>
     </div>
   <% end %>
