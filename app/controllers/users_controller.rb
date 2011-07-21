@@ -239,6 +239,16 @@ class UsersController < ApplicationController
     @log = @log.paginate(:page => params[:page] || 1, :per_page => 20)
   end
 
+  # GET /users/:user_id/shipping_address
+  def shipping_address
+    # If there is a shipping address for this user, show edit form, otherwise show new form
+    if User.find(params[:id]).shipping_address.nil? then
+      redirect_to(new_shipping_address_path)
+    else
+      redirect_to(edit_shipping_address_path(User.find(params[:id]).shipping_address.id))
+    end
+  end
+
   private
 
   def ensure_current_user_may_edit_this_user

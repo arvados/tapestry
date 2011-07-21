@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
   has_many :relatives, :class_name => 'User', :through => :family_relations
   has_many :genetic_data, :dependent => :destroy
 
+  has_one  :shipping_address, :dependent => :destroy
+
   # Next three are legacy and will go away when we drop the code for v1 of the eligibility survey
   has_one  :residency_survey_response, :dependent => :destroy
   has_one  :family_survey_response, :dependent => :destroy

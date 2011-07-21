@@ -44,6 +44,9 @@ This information is private and not part of your public profile.
 
 <% if @user.enrolled then %>
 
+<h2>Shipping address</h2>
+<%= link_to 'Update shipping address', "/users/#{@user.id}/shipping_address" %>
+
 <h2>Manage mailing list subscriptions</h2>
 <table class="admin_table">
   <tr>

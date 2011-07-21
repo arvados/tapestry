@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110721101010) do
+ActiveRecord::Schema.define(:version => 20110721144313) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1266,6 +1266,41 @@ ActiveRecord::Schema.define(:version => 20110721101010) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+  end
+
+  create_table "shipping_address_versions", :force => true do |t|
+    t.integer  "shipping_address_id"
+    t.integer  "lock_version"
+    t.integer  "user_id"
+    t.string   "address_line_1"
+    t.string   "address_line_2"
+    t.string   "address_line_3"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "shipping_address_versions", ["shipping_address_id"], :name => "index_shipping_address_versions_on_shipping_address_id"
+
+  create_table "shipping_addresses", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "address_line_1"
+    t.string   "address_line_2"
+    t.string   "address_line_3"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
   end
 
   create_table "studies", :force => true do |t|

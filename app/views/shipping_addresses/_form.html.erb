@@ -1,0 +1,41 @@
+<%= error_messages_for :shipping_address, :header_message => 'Error: data could not be saved.', :message => nil %>
+
+
+<%= form_for(@shipping_address) do |f| %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <% if @shipping_address.user.nil? %>
+      <%= current_user.full_name %>
+    <% else %>
+      <%= @shipping_address.user.full_name %>
+    <% end %>
+  </div>
+  <div class="field">
+    <span style="color: red"> * </span><%= f.label :address_line_1 %><br />
+    <%= f.text_field :address_line_1 %>
+  </div>
+  <div class="field">
+    <%= f.label :address_line_2 %><br />
+    <%= f.text_field :address_line_2 %>
+  </div>
+  <div class="field">
+    <%= f.label :address_line_3 %><br />
+    <%= f.text_field :address_line_3 %>
+  </div>
+  <div class="field">
+    <span style="color: red"> * </span><%= f.label :city %><br />
+    <%= f.text_field :city %>
+  </div>
+  <div class="field">
+    <span style="color: red"> * </span><%= f.label :state %><br />
+    <%= f.state_select(:state, 'US', {:include_blank => "Select a State", :selected => @shipping_address.state }, { :style => "width: 230px;"}) -%>
+  </div>
+  <div class="field">
+    <span style="color: red"> * </span><%= f.label :zip %><br />
+    <%= f.text_field :zip, :size=> 10 %>
+  </div>
+  <p/>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

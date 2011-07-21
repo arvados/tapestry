@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user: 
+  line1: MyString
+  line2: MyString
+  line3: MyString
+  city: MyString
+  state: MyString
+
+two:
+  user: 
+  line1: MyString
+  line2: MyString
+  line3: MyString
+  city: MyString
+  state: MyString
