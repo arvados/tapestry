@@ -52,9 +52,9 @@ This information is private and not part of your public profile.
   </tr>
   <% @mailing_lists.each do |mailing_list| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%=h mailing_list.name %></td>
-      <td>
-        <%= check_box_tag "user[mailing_list_ids][]", mailing_list.id, @user.mailing_list_ids.include?(mailing_list.id) -%> <%= mailing_list.name -%>
+      <td><%= mailing_list.name %></td>
+      <td align="right">
+        <%= check_box_tag "user[mailing_list_ids][]", mailing_list.id, @user.mailing_list_ids.include?(mailing_list.id) -%>
       </td>
     </tr>
   <% end %>
