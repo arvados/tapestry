@@ -20,6 +20,10 @@ class Study < ActiveRecord::Base
     self.approved
   end
 
+  def is_open?
+    self.open
+  end
+
   def status
     if self.approved then
       return 'approved'

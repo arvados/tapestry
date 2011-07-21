@@ -38,6 +38,12 @@
     <%= f.label :approved %><br />
     <%= @study.approved ? 'Yes' : 'No' %>
   </div>
+  <% if @study.approved then %>
+    <div class="field">
+      <%= f.label :open %><br />
+      <%= f.check_box :open %>
+    </div>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

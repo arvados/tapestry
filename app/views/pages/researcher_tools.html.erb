@@ -5,7 +5,7 @@
 <ul>
   <li><strong>Your studies</strong><br/>
   <% @studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
-  &nbsp;&nbsp;<%= link_to study.name, edit_study_path(study.id) %><br/>
+  &nbsp;&nbsp;<%= link_to study.name + (study.is_open? ? ' (OPEN)' : ''), edit_study_path(study.id) %><br/>
   <% end %>
   &nbsp;&nbsp;<%= link_to raw("<strong>New Study</strong>"), url_for(:controller => 'studies', :action => 'new') %></li>
   <li><strong>Your kit designs</strong><br/>
