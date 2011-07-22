@@ -9,9 +9,10 @@ class ShippingAddress < ActiveRecord::Base
   validates_presence_of     :city
   validates_presence_of     :state
   validates_presence_of     :zip
+  validates_presence_of     :phone
 
   attr_accessible :address_line_1, :address_line_2, :address_line_3,
-                  :city, :state, :zip
+                  :city, :state, :zip, :phone
 
 
 end
