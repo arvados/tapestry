@@ -8,11 +8,13 @@
     <%= f.text_field :name, :size => 80 %>
   </div>
   <div class="field">
-    <%= f.label :participant_description %><br />
+    <%= f.label :participant_description, 'Description of study, to be seen by
+participants (displayed on recruitment page)' %><br />
     <%= f.text_area :participant_description, :cols => 80 %>
   </div>
   <div class="field">
-    <%= f.label :researcher_description %><br />
+    <%= f.label :researcher_description, 'Technical description of study for other
+researchers and internal use' %><br />
     <%= f.text_area :researcher_description, :cols => 80 %>
   </div>
   <div class="field">
