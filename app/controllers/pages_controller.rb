@@ -31,6 +31,12 @@ class PagesController < ApplicationController
       @kit_design_samples = KitDesignSample.find_all_by_kit_design_id(current_user.kit_designs).sort { |a,b| a.name <=> b.name }
     end
 
+    # Only enrolled users can go to the studies page
+    if (not logged_in? or not current_user.enrolled?) and params[:id] == 'studies' then
+      redirect_to root_url
+      return
+    end
+
     params[:page] = params[:page].to_i
     params[:page] = 1 if params[:page] == 0
 
