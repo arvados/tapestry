@@ -11,7 +11,7 @@ class Admin::PhrReportsController < Admin::AdminControllerBase
 
     @gender_options = ['Female', 'Male']
 
-    @condition_options = ConditionDescription.find(:all, :joins => 'INNER JOIN conditions on conditions.condition_description_id = condition_descriptions.id group by condition_descriptions.id', :order => 'description')
+    @condition_options = ConditionDescription.find(:all, :joins => 'INNER JOIN conditions on conditions.condition_description_id = condition_descriptions.id', :group => 'condition_descriptions.id', :order => 'description')
 
     queries = []
     query_params = []
