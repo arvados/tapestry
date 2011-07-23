@@ -16,8 +16,9 @@ function toggleQuestions() {
 <% end -%>
 
 
+<%= error_messages_for :safety_questionnaire, :header_message => 'Error: data could not be saved.', :message => nil %>
+
 <%= form_for @safety_questionnaire do |f| %>
-  <%= f.error_messages %>
 
   <p>
     <strong>1. Would you like to report changes in your safety, well-being, or interactions with others due to your participation in the PGP?</strong><br/>
