@@ -13,16 +13,13 @@ class InternationalParticipantsController < ApplicationController
 
   def create
     @international_participant = InternationalParticipant.new(params[:international_participant])
+    # We prefer to store the full country name in the table
+    @international_participant.country = Carmen::country_name(params[:international_participant]['country'])
     if @international_participant.save
       flash.delete(:error)
       flash[:notice] = 'You have been added.'
       render :action => 'done'
     else
-      flash.delete(:notice)
-      flash[:error] = "Please double-check your e-mail address:<br/>&nbsp;"
-      @international_participant.errors.each { |k,v|
-        flash[:error] += "<br/>* #{CGI.escapeHTML(k)} #{CGI.escapeHTML(v)}"
-      }
       render :action => 'new'
     end
   end
