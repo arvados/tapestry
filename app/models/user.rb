@@ -42,6 +42,8 @@ class User < ActiveRecord::Base
 
   # Researchers only
   has_many :kit_designs, :foreign_key => "owner_id"
+  has_many :study_participants, :dependent => :destroy
+  has_many :studies, :through => :study_participants
 
   has_attached_file :phr
 

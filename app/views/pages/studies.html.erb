@@ -22,13 +22,15 @@ The following stud<%= Study.where('open = ?',true).size > 1 ? 'ies are' : 'y is'
 
  <table class="admin_table">
   <tr>
+    <th>Your participation status</th>
     <th>Name</th>
     <th>Researcher</th>
-    <th>Affiliation</th>
+    <th>Researcher Affiliation</th>
   </tr>
   <% Study.where('open = ?', true).each do |s| %>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= link_to s.name, study_url(s.id) %></td>
+      <td><%= s.study_participants.where('user_id = ?',current_user.id).empty? ? 'Undecided' : StudyParticipant::STATUSES[s.study_participants.where('user_id = ?',current_user.id).first.status] %></td>
+      <td><%= link_to s.name, user_edit_study_url(:id => current_user.id, :study_id => s.id) %></td>
       <td><%= s.researcher.full_name %></td>
       <td><%= s.researcher.researcher_affiliation %></td>
     </tr>

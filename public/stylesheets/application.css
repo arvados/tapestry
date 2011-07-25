@@ -825,6 +825,14 @@ div.formError {
   font-weight: bold;
 }
 
+.prominent {
+  border: 2px solid #a99;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  padding: 5px 15px;
+}
+
 /*
 .errorExplanation {
   font-weight: bold;

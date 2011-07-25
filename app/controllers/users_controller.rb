@@ -249,6 +249,41 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit_study
+    @user = User.find(params[:id])
+    @study = Study.find(params[:study_id])
+    if not @user.study_participants.empty? and not @user.study_participants.where('study_id = ?',@study.id).empty? then
+      @study_participant = @user.study_participants.where('study_id = ?',@study.id).first
+    else
+      @study_participant = nil
+    end
+
+
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => @studies }
+    end
+  end
+
+  def update_study
+    @user = current_user
+    @study = Study.find(params[:study_id])
+
+    if @user.study_participants.empty? or @user.study_participants.where('study_id = ?',@study.id).empty? then
+      @user.studies << @study
+    end
+
+    @sp = @user.study_participants.where('study_id = ?',@study.id).first
+    @sp.status = StudyParticipant::STATUSES[params[:study_participant]['status']]
+
+    if @sp.save
+      flash[:notice] = 'Participation status updated.'
+      redirect_to('/pages/studies')
+    else
+      format.html { render :action => "edit_study" }
+    end
+  end
+
   private
 
   def ensure_current_user_may_edit_this_user

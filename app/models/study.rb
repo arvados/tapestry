@@ -6,6 +6,8 @@ class Study < ActiveRecord::Base
   belongs_to :irb_associate, :class_name => "User"
 
   has_many :kit_designs
+  has_many :study_participants, :dependent => :destroy
+  has_many :users, :through => :study_participants
 
   validates_uniqueness_of :name
   validates_presence_of   :name

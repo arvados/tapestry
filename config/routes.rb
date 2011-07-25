@@ -21,6 +21,8 @@ PgpEnroll::Application.routes.draw do
   match '/users/created/:id' => 'users#created', :as => :created_user
   match '/users/show_log' => 'users#show_log', :as => :show_log_user
   match '/drb/userlog/:user_id' => 'drb#userlog', :as => :userlog_drb
+  match '/user/:id/study/:study_id' => 'users#edit_study', :as => :user_edit_study, :via => :get
+  match '/user/:id/study/:study_id' => 'users#update_study', :as => :user_update_study, :via => :post
   match '/users/resend_signup_notification_form' => 'users#resend_signup_notification_form', :as => :resend_signup_notification_form
   match '/users/resend_signup_notification/:id' => 'users#resend_signup_notification', :as => :resend_signup_notification_user
   match '/users/create_researcher', :as => :create_researcher, :via => :post

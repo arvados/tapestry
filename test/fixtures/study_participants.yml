@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user: 
+  study: 
+  status: 1
+
+two:
+  user: 
+  study: 
+  status: 1

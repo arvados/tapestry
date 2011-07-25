@@ -1322,6 +1322,35 @@ ActiveRecord::Schema.define(:version => 201107220722141414) do
     t.boolean  "open",                    :default => false
   end
 
+  create_table "study_participant_versions", :force => true do |t|
+    t.integer  "study_participant_id"
+    t.integer  "lock_version"
+    t.integer  "user_id"
+    t.integer  "study_id"
+    t.integer  "status",               :default => 0
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "study_participant_versions", ["study_participant_id"], :name => "index_study_participant_versions_on_study_participant_id"
+
+  create_table "study_participants", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "study_id"
+    t.integer  "status",       :default => 0
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  add_index "study_participants", ["user_id", "study_id"], :name => "index_study_participants_on_user_id_and_study_id", :unique => true
+
   create_table "study_versions", :force => true do |t|
     t.integer  "study_id"
     t.integer  "lock_version"

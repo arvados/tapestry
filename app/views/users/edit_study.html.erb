@@ -1,0 +1,24 @@
+<h2>Study details</h2>
+
+    <strong>Name</strong><br />
+    <p><%= @study.name %></p>
+    <strong>Description</strong><br />
+    <p><%= @study.participant_description %></p>
+    <strong>Researcher</strong><br />
+    <p><%= @study.researcher.full_name %></p>
+    <strong>IRB Researcher</strong><br />
+    <p><%= @study.irb_associate.full_name %></p>
+
+
+    <div  class="prominent">
+    <%= form_for :study_participant, :url => user_update_study_url, :html => { :method => :post, :class => 'study_participant', :id => 'create' } do |f| -%>
+    <%= f.radio_button :status, 'undecided', :checked => (@study_participant.nil? or @study_participant.is_undecided? ? true : false) %> 
+    <%= label :status, 'undecided' %>
+    <%= f.radio_button :status, 'interested', :checked => (not @study_participant.nil? and @study_participant.is_interested? ? true : false) %>
+    <%= label :status, 'interested' %>
+    <%= f.radio_button :status, 'not interested', :checked => (not @study_participant.nil? and @study_participant.is_not_interested? ? true : false) %>
+    <%= label :status, 'not interested' %>
+    <p><%= submit_tag raw('Submit') %></p>
+    <% end -%>
+    </div>
+
