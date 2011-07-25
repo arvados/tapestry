@@ -36,7 +36,7 @@ This information is private and not part of your public profile.
   <%= f.text_field :security_answer, :size => 80 %>
   </p>
 <p>
-<% if current_user.has_completed?('named_proxies') %>
+<% if @user.enrolled or @user.has_completed?('named_proxies') %>
   <h2>Manage designated proxies</h2>
   <%= link_to 'Manage designated proxies', named_proxies_path %>
 <% end %>
