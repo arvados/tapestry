@@ -1,24 +1,31 @@
-<h2>Studies</h2>
+<h2>Studies &amp; Specimen Collection</h2>
 
-<p>Many studies will involve us sending you kits, to participate in these
-you need to provide us with a shipping address.</p>
+<p>To organize specimen collection for scientific studies, researchers
+can list studies and specimen collection events here and participants
+can tell us whether they are interested in a particular study. Tissue
+samples and other specimens submitted to the PGP and collaborating
+groups will be used for a range of research purposes. This can include
+a variety of derived data and samples which will become public,
+including whole genome sequences and cell lines. As described in the
+full consent form, the results will initially be privately available
+to you. After 30 days, provided you do not withdraw from the project,
+they will automatically become publicly available.</p>
+
+<p>Some studies will involve us sending you kits for self-collection of
+specimens, while others may arrange for collection of specimens by a
+trained professional. To arrange these, your shipping address and/or
+phone number may be needed.</p>
 
 <% if ShippingAddress.find_by_user_id(current_user.id).nil? %>
   <p>Please <%= link_to 'add a shipping address', user_shipping_address_url %>.</p>
 <% else %>
-  <p>Please make sure that <%= link_to 'your shipping address is up to date', user_shipping_address_url %>.</p>
+  <p>Please make sure that <%= link_to 'your shipping address', user_shipping_address_url %> is up to date.</p>
   <p>You last updated your shipping address <%= distance_of_time_in_words(Time.now(),ShippingAddress.find_by_user_id(current_user.id).updated_at) %> ago.</p>
 <% end %>
 
-<p>Some studies involve making an arrangement with another organization
-for sample collection (e.g. a phlebotomist for blood draws), to
-participate in these you need to provide us with a phone number where
-you can be contacted. Please add a phone number / make sure your phone
-number is up to date.</p>
-
 <% if Study.where('open = ?',true).size > 0 %>
 
-The following stud<%= Study.where('open = ?',true).size > 1 ? 'ies are' : 'y is' %> currently ongoing:
+The following stud<%= Study.where('open = ?',true).size > 1 ? 'ies are' : 'y is' %> currently seeking interested participants:
 
  <table class="admin_table">
   <tr>
@@ -37,4 +44,6 @@ The following stud<%= Study.where('open = ?',true).size > 1 ? 'ies are' : 'y is'
   <% end %>
 </table>
 
+<% else %>
+There are currently no open studies. We hope to create some soon, please check again later!
 <% end %>

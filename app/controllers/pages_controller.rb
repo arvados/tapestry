@@ -37,6 +37,13 @@ class PagesController < ApplicationController
       return
     end
 
+    # This page has now been replaced by the studies page
+    # This redirect can probably go in a few months. I removed the specimen_collection page on 2011-07-26
+    if params[:id] == 'specimen_collection' then
+      redirect_to "/pages/studies"
+      return
+    end
+
     params[:page] = params[:page].to_i
     params[:page] = 1 if params[:page] == 0
 
