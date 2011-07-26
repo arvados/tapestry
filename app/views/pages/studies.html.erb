@@ -4,9 +4,9 @@
 you need to provide us with a shipping address.</p>
 
 <% if ShippingAddress.find_by_user_id(current_user.id).nil? %>
-  <p>Please <%= link_to 'add a shipping address', "/users/#{current_user.id}/shipping_address" %>.</p>
+  <p>Please <%= link_to 'add a shipping address', user_shipping_address_url %>.</p>
 <% else %>
-  <p>Please make sure that <%= link_to 'your shipping address is up to date', "/users/#{current_user.id}/shipping_address" %>.</p>
+  <p>Please make sure that <%= link_to 'your shipping address is up to date', user_shipping_address_url %>.</p>
   <p>You last updated your shipping address <%= distance_of_time_in_words(Time.now(),ShippingAddress.find_by_user_id(current_user.id).updated_at) %> ago.</p>
 <% end %>
 
