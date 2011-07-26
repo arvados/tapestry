@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
   before_filter :ensure_latest_consent
   before_filter :ensure_recent_safety_questionnaire
   before_filter :ensure_enrolled
+  before_filter :only_owner_can_change, :only => [:edit, :update, :destroy]
+  before_filter :prevent_setting_ownership, :only => [:create, :update]
 
   around_filter :profile
 
@@ -25,6 +27,40 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
 
   protected
+
+  def model_name
+    controller_name.classify
+  end
+
+  def model
+    model_name.constantize
+  end
+
+  def only_owner_can_change
+    return true if current_user.is_admin?
+    if (params[:id] and
+        (m=model.find(params[:id])) and
+        (cols=m.class.columns_hash))
+      ['user_id', 'owner_id', 'created_by'].each do |col|
+        if cols.has_key? col and m.attributes[col] != current_user.id
+          flash[:error] = "You do not have permission to edit #{m.class} ##{m.id} -- it belongs to a different user."
+          redirect_to :controller => '/'+controller_path
+          return false
+        end
+      end
+    end
+    true
+  end
+
+  def prevent_setting_ownership
+    return true if current_user.is_admin?
+    ['user_id', 'owner_id', 'created_by'].each do |col|
+      re = Regexp.new("\\[#{col}\\]$")
+      params.each do |k,v|
+        params.delete k if re.match k
+      end
+    end
+  end
 
   def ensure_enrolled
     if not logged_in? or current_user.nil? or not current_user.enrolled
