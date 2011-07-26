@@ -209,7 +209,7 @@ class User < ActiveRecord::Base
 
   def valid_for_attrs?(attrs)
     valid?
-    return !attrs.any? { |attr| errors.on(attr) }
+    return !attrs.any? { |attr| errors[attr].empty? ? false : true }
   end
 
   before_create :make_activation_code
