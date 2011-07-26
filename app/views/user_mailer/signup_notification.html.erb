@@ -1,8 +1,14 @@
-Your account has been created.
+<html>
+<body>
+<p>Your account has been created.</p>
 
-  Name: <%=h @user.full_name %>
-  Email: <%=h @user.email %>
+<ul>
+<li>Name: <%=h @user.full_name %></li>
+<li>Email: <%=h @user.email %></li>
+</ul>
+<p>Visit this url to activate your account:</p>
 
-Visit this url to activate your account:
+<p><%=h @url %></p>
 
-  <%=h @url %>
+</body>
+</html>

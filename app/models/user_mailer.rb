@@ -3,7 +3,8 @@ class UserMailer < ActionMailer::Base
   def signup_notification(user)
     @url  = "http://#{ROOT_URL}/activate/#{user.activation_code}"
     @user = user
-    mail(:to => user.email,
+    mail(:from => ADMIN_EMAIL,
+         :to => user.email,
          :subject => 'Please activate your new account')
   end
 
