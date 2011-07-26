@@ -74,7 +74,7 @@ class Admin::OauthServicesController < Admin::AdminControllerBase
   # DELETE /admin/oauth_services/1.xml
   def destroy
     @admin_oauth_service = OauthService.find(params[:id])
-    raise "OAuth service is in use by tokens -- cannot destroy." if !@admin_oauth_services.oauth_tokens.empty?
+    raise "OAuth service is in use by tokens -- cannot destroy." if !@admin_oauth_service.oauth_tokens.empty?
 
     @admin_oauth_service.destroy
 
