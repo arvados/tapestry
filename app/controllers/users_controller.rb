@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   skip_before_filter :ensure_enrolled
 
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :participant_survey, :show_log, :unauthorized ]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :participant_survey, :show_log, :unauthorized, :shipping_address ]
   skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized ]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos ]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
@@ -239,13 +239,13 @@ class UsersController < ApplicationController
     @log = @log.paginate(:page => params[:page] || 1, :per_page => 20)
   end
 
-  # GET /users/:user_id/shipping_address
+  # GET /users/shipping_address
   def shipping_address
     # If there is a shipping address for this user, show edit form, otherwise show new form
-    if User.find(params[:id]).shipping_address.nil? then
+    if current_user.shipping_address.nil? then
       redirect_to(new_shipping_address_path)
     else
-      redirect_to(edit_shipping_address_path(User.find(params[:id]).shipping_address.id))
+      redirect_to(edit_shipping_address_path(current_user.shipping_address.id))
     end
   end
 
