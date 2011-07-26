@@ -8,6 +8,9 @@
     <% if type != 'draft' %>
     <th></th>
     <% end %>
+    <th>U</th>
+    <th>I</th>
+    <th>NI</th>
   </tr>
   <% studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
     <tr class="<%= cycle 'even', 'odd' %>">
@@ -27,6 +30,9 @@
       <% if type == 'approved' %>
         <td><%= link_to 'Remove approval', edit_admin_study_url(study.id) %></td>
       <% end %>
+      <td><%= study.study_participants.undecided.count %></td>
+      <td><%= study.study_participants.interested.count %></td>
+      <td><%= study.study_participants.not_interested.count %></td>
     </tr>
   <% end %>
   </table>
