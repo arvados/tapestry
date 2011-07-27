@@ -1,8 +1,6 @@
 class Nonce < ActiveRecord::Base
   validates_uniqueness_of :nonce
 
-  attr_protected :created_at, :used_at, :nonce
-
   def after_initialize
     return if self.nonce
     self.nonce = rand(2**256-1).to_s(36)

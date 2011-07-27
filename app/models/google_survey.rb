@@ -9,6 +9,29 @@ class GoogleSurvey < ActiveRecord::Base
 
   CACHE_DIR = "/data/" + ROOT_URL + "/google_surveys"
 
+  def self.create_legacy_nonces!
+    added = 0
+    default_survey = GoogleSurvey.where(:open => true)[0] rescue return
+    logre = Regexp.new('^Clicked through to participant survey: (\S+) -> (hu[A-F0-9]+)')
+    UserLog.where("comment like '%Clicked through to participant survey:%'").each do |log|
+      (md5, huID) = logre.match(log.comment)[1..2] rescue next
+      next if !log.user or log.user.hex != huID
+      nonce = Nonce.new(:created_at => log.created_at,
+                        :owner_class => log.user.class.to_s,
+                        :owner_id => log.user.id,
+                        :target_class => default_survey.class.to_s,
+                        :target_id => default_survey.id,
+                        :nonce => md5)
+      begin
+        nonce.save!
+        $stderr.puts "Added nonce #{nonce.nonce} for user ##{log.user.id} #{log.user.hex}"
+        added += 1
+      rescue ActiveRecord::RecordInvalid
+      end
+    end
+    added
+  end
+
   def synchronize!
     token = OauthToken.find_by_user_id_and_oauth_service_id(self.user.id, self.oauth_service.id)
     if token.nil?
@@ -61,7 +84,6 @@ class GoogleSurvey < ActiveRecord::Base
 
     nonce_column = nil
     datarow_count = 0
-    tried_creating_legacy_nonces = false
     nonce_re = Regexp.new('^[0-9a-z]{24,}$')
     md5_re = Regexp.new('^[0-9a-f]{32}$')
     datarows.each do |row|
@@ -75,23 +97,6 @@ class GoogleSurvey < ActiveRecord::Base
           if nonce_re.match(value) and Nonce.find_by_nonce(value)
             nonce_column = c
             break
-          end
-          if !tried_creating_legacy_nonces and md5_re.match(value) and defined? SURVEY_SALT
-            $stderr.puts "Creating legacy nonces"
-            tried_creating_legacy_nonces = true
-            User.all.each do |u|
-              next unless u.hex and u.hex.length > 0
-              nonce = Nonce.new(:created_at => Time.now,
-                                :owner_class => u.class.to_s,
-                                :owner_id => u.id)
-              nonce.nonce = Digest::MD5.hexdigest(SURVEY_SALT + u.hex)
-              begin
-                nonce.save!
-              rescue ActiveRecord::RecordInvalid
-                # assume this legacy nonce has already been saved
-              end
-            end
-            redo
           end
         end
       end
