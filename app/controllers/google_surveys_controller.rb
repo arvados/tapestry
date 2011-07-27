@@ -62,6 +62,9 @@ class GoogleSurveysController < ApplicationController
     get_object
     decide_view_mode
 
+    @nonces = Nonce.where(:owner_class => 'User', :owner_id => current_user.id,
+                          :target_class => 'GoogleSurvey', :target_id => @google_survey.id)
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @google_survey }
