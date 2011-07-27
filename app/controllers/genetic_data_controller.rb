@@ -14,17 +14,6 @@ class GeneticDataController < ApplicationController
     end
   end
 
-  # GET /genetic_data/1
-  # GET /genetic_data/1.xml
-  def show
-    @genetic_data = GeneticData.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @genetic_data }
-    end
-  end
-
   # GET /genetic_data/new
   # GET /genetic_data/new.xml
   def new
