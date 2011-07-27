@@ -5,9 +5,9 @@
     <strong>Description</strong><br />
     <p><pre><%= @study.participant_description %></pre></p>
     <strong>Researcher</strong><br />
-    <p><%= @study.researcher.full_name %></p>
+    <p><%= @study.researcher.nil? ? '' : @study.researcher.full_name %></p>
     <strong>IRB Researcher</strong><br />
-    <p><%= @study.irb_associate.full_name %></p>
+    <p><%= @study.irb_associate.nil? ? '' : @study.irb_associate.full_name %></p>
 
 
     <div  class="prominent">
