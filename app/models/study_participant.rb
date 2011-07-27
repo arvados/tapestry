@@ -10,12 +10,12 @@ class StudyParticipant < ActiveRecord::Base
 
   validates_inclusion_of    :status,      :in => [0, 1, 2, 3, 4, 5]
 
-  scope :undecided, { :conditions => "status = 0" }
-  scope :not_interested, { :conditions => "status = 1" }
-  scope :interested, { :conditions => "status = 2" }
-  scope :accepted, { :conditions => "status = 3" }
-  scope :not_accepted, { :conditions => "status = 4" }
-  scope :removed, { :conditions => "status = 5" }
+  scope :undecided,      joins(:user).where('status = 0').merge(User.real)
+  scope :not_interested, joins(:user).where('status = 1').merge(User.real)
+  scope :interested,     joins(:user).where('status = 2').merge(User.real)
+  scope :accepted,       joins(:user).where('status = 3').merge(User.real)
+  scope :not_accepted,   joins(:user).where('status = 4').merge(User.real)
+  scope :removed,        joins(:user).where('status = 5').merge(User.real)
 
   STATUSES = { 'undecided' => 0 ,
                'not interested' => 1,

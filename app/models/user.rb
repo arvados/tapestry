@@ -94,7 +94,7 @@ class User < ActiveRecord::Base
   scope :enrolled, { :conditions => "enrolled IS NOT NULL and is_test = false" }
   scope :pgp_ids, { :conditions => "enrolled IS NOT NULL and pgp_id IS NOT NULL and is_test = false" }
   scope :test, { :conditions => "is_test = true" }
-  scope :exclude_test, { :conditions => "is_test = false" }
+  scope :real, { :conditions => "is_test = false" }
   scope :researcher, { :conditions => "researcher = true" }
 
 

@@ -11,6 +11,9 @@
     <th>U</th>
     <th>I</th>
     <th>NI</th>
+    <th>A</th>
+    <th>NA</th>
+    <th>R</th>
   </tr>
   <% studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
     <tr class="<%= cycle 'even', 'odd' %>">
@@ -33,6 +36,9 @@
       <td><%= study.study_participants.undecided.count %></td>
       <td><%= study.study_participants.interested.count %></td>
       <td><%= study.study_participants.not_interested.count %></td>
+      <td><%= study.study_participants.accepted.count %></td>
+      <td><%= study.study_participants.not_accepted.count %></td>
+      <td><%= study.study_participants.removed.count %></td>
     </tr>
   <% end %>
   </table>

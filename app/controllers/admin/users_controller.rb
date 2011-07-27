@@ -293,7 +293,7 @@ class Admin::UsersController < Admin::AdminControllerBase
   protected
   def user_list_worker
     if params[:completed]
-      @unpaginated_users = User.has_completed(params[:completed]).exclude_test
+      @unpaginated_users = User.has_completed(params[:completed]).real
       @result = "Searching for users that have completed '#{params[:completed]}'"
     elsif params[:enrolled]
       @unpaginated_users = User.enrolled
@@ -330,7 +330,7 @@ class Admin::UsersController < Admin::AdminControllerBase
       end
       @result = "Searching for users that match name '" + params[:name] + "' or email '" + params[:email]
     elsif params[:all]
-      @unpaginated_users = User.exclude_test
+      @unpaginated_users = User.real
       @result = "All users"
     elsif params[:researcher]
       @unpaginated_users = User.researcher
