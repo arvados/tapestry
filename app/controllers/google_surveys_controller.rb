@@ -9,6 +9,7 @@ class GoogleSurveysController < ApplicationController
                          :target_class => 'GoogleSurvey', :target_id => @google_survey.id)
       qappend = '&entry_' + @google_survey.userid_populate_entry.to_s + '=' + @nonce.nonce
     end
+    current_user.log("Clicked through to GoogleSurvey #{@google_survey.id} (#{@google_survey.name}) with nonce #{@nonce.nonce}", nil, request.remote_ip, "Clicked through to survey: #{@google_survey.name}")
     redirect_to @google_survey.form_url + qappend
   end
 

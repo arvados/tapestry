@@ -98,9 +98,22 @@ class GoogleSurvey < ActiveRecord::Base
       nonce_value = nonce_column ? row[nonce_column-1] : nil
       nonce = nonce_value ? Nonce.find_by_nonce(nonce_value) : nil
       if nonce.nil?
-        $stderr.puts "Invalid nonce #{nonce_value} on data row #{datarow_count}"
+        $stderr.puts "Invalid nonce #{nonce_value} on data row #{datarow_count}."
         next
       end
+      if (nonce.owner_class != 'User' or
+          nonce.target_class != 'GoogleSurvey' or
+          nonce.target_id != self.id)
+        $stderr.puts "Nonce #{nonce_value} for data row #{datarow_count} was not issued for this survey."
+        next
+      end
+
+      u = User.find(nonce.owner_id)
+      if u.nil?
+        $stderr.puts "Nonce #{nonce_value} has non-existent user id ##{nonce.owner_id} as owner_id"
+        next
+      end
+
       processed_datarows[-1][0] = User.find(nonce.owner_id).hex
       next if nonce.used_at
 
@@ -112,6 +125,7 @@ class GoogleSurvey < ActiveRecord::Base
                                :column => column,
                                :answer => a_text).save
       end
+      u.log("Retrieved GoogleSurvey ##{self.id} (#{self.name}) nonce #{nonce.nonce} timestamp #{row[0]}", nil, nil, "Retrieved results for survey: #{self.name}")
       nonce.use!
     end
 
