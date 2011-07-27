@@ -5,7 +5,8 @@ class GoogleSurveysController < ApplicationController
     @google_survey = GoogleSurvey.find(params[:id])
     qappend = ''
     if !@google_survey.userid_populate_entry.nil?
-      @nonce = Nonce.new(:owner_class => 'User', :owner_id => current_user.id)
+      @nonce = Nonce.new(:owner_class => 'User', :owner_id => current_user.id,
+                         :target_class => 'GoogleSurvey', :target_id => @google_survey.id)
       qappend = '&entry_' + @google_survey.userid_populate_entry.to_s + '=' + @nonce.nonce
     end
     redirect_to @google_survey.form_url + qappend

@@ -1124,6 +1124,8 @@ ActiveRecord::Schema.define(:version => 20110801040513) do
     t.datetime "used_at"
     t.datetime "updated_at"
     t.string   "owner_class"
+    t.integer  "target_id"
+    t.string   "target_class"
   end
 
   add_index "nonces", ["nonce"], :name => "index_nonces_on_nonce"
