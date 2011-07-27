@@ -4,7 +4,8 @@ class GoogleSurvey < ActiveRecord::Base
   belongs_to :user
   belongs_to :oauth_service
 
-  attr_protected :last_downloaded_at, :user_id
+  attr_protected :last_downloaded_at
+  attr_protected :user_id
 
   CACHE_DIR = "/data/" + ROOT_URL + "/google_surveys"
 

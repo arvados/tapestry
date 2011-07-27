@@ -1,16 +1,35 @@
-<h2><%= link_to 'Google surveys', google_surveys_path %> &gt; Show</h2>
+<h2><% unless @min_view %><%= link_to 'Google surveys', google_surveys_path %> &gt; <% end %><%=h @google_survey.name %></h2>
 
 <p id="notice"><%= notice %></p>
 
 <p>
   <b>Researcher:</b>
-  <%=h @google_survey.user.full_name %>
+  <%=h @google_survey.user.full_name %>,
+  <%=h @google_survey.user.researcher_affiliation %>
 </p>
 
+<p><%=raw CGI.escapeHTML(@google_survey.description).gsub("\r","").gsub("\n\n","</p><p>") %></p>
+
+<% if @google_survey.open or @can_edit %>
 <p>
-  <b>Survey name:</b>
-  <%=h @google_survey.name %>
+  <%= button_to 'Participate in this survey', participate_google_survey_path(@google_survey) %>
 </p>
+<% end %>
+<% if !@google_survey.open %>
+<p>
+  This survey is currently <%=raw '<b>not</b>' unless @google_survey.open %> open to participants.
+</p>
+<% end %>
+
+<% if @google_survey.last_downloaded_at %>
+<p>
+  <%= button_to 'Download results', download_google_survey_path(@google_survey) %>
+</p>
+<% end %>
+
+
+<% if !@min_view %>
+<h3>Technical details (this section is only displayed to researchers and admins)</h3>
 
 <p>
   <b>OAuth service:</b>
@@ -38,26 +57,15 @@
 </p>
 
 <p>
-  <b>Results downloaded:</b>
+  <b>Results last synchronized:</b>
   <%=h @google_survey.last_downloaded_at %>
 </p>
 
-<p>
-  <%= button_to 'Participate in this survey', participate_google_survey_path(@google_survey) %>
-</p>
-
-<% if current_user.is_admin? or @google_survey.user_id == current_user.id %>
+<% if @can_edit %>
 <p>
   <%= button_to 'Synchronize results from Google now', synchronize_google_survey_path(@google_survey) %>
 </p>
+
+<%= link_to 'Edit', edit_google_survey_path(@google_survey) %>
 <% end %>
-
-<% if @google_survey.last_downloaded_at %>
-<p>
-  <%= button_to 'Download results', download_google_survey_path(@google_survey) %>
-</p>
 <% end %>
-
-
-<%= link_to 'Edit', edit_google_survey_path(@google_survey) %> |
-<%= link_to 'Back', google_surveys_path %>

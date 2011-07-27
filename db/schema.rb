@@ -642,6 +642,8 @@ ActiveRecord::Schema.define(:version => 20110801040513) do
     t.datetime "updated_at"
     t.string   "name"
     t.string   "form_url"
+    t.boolean  "open"
+    t.text     "description"
   end
 
   create_table "immunization_name_versions", :force => true do |t|

@@ -1,19 +1,15 @@
 <%= form_for(@google_survey) do |f| %>
-  <% if @google_survey.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@google_survey.errors.count, "error") %> prohibited this google_survey from being saved:</h2>
-
-      <ul>
-      <% @google_survey.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="field">
     <%= f.label :name, 'Survey Name' %><br />
-    <%= f.text_field(:name) %>
+    <%= f.text_field(:name, :size => 40) %>
+  </div>
+  <div class="field">
+    <%= f.label :open, 'Open?' %><br />
+    <%= f.check_box :open, :size => 40, :checked_value => true, :unchecked_value => false %>
+  </div>
+  <div class="field">
+    <%= f.label :description, 'Description' %><br />
+    <%= f.text_area :description, :cols => 80, :rows => 10 %>
   </div>
   <div class="field">
     <%= f.label(:oauth_service, 'OAuth service') %><br />
@@ -21,11 +17,11 @@
   </div>
   <div class="field">
     <%= f.label(:form_url, 'Google Form URL') %><br />
-    <%= f.text_field(:form_url, :size => 64) %>
+    <%= f.text_field(:form_url, :size => 80) %>
   </div>
   <div class="field">
     <%= f.label(:spreadsheet_key, 'Google Spreadsheet key or URL (where results appear)') %><br />
-    <%= f.text_field(:spreadsheet_key, :size => 64) %>
+    <%= f.text_field(:spreadsheet_key, :size => 80) %>
   </div>
   <div class="field">
     <%= f.label(:userid_populate_entry, 'ID number of entry to pre-populate with user-identifying token') %><br />

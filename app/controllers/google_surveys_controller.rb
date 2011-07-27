@@ -1,5 +1,5 @@
 class GoogleSurveysController < ApplicationController
-  before_filter :ensure_researcher, :except => [:participate]
+  before_filter :ensure_researcher, :except => [:participate, :show, :index]
 
   def participate
     @google_survey = GoogleSurvey.find(params[:id])
@@ -11,15 +11,26 @@ class GoogleSurveysController < ApplicationController
     redirect_to @google_survey.form_url + qappend
   end
 
+  def get_object
+    @google_survey = GoogleSurvey.find(params[:id]) if params[:id] and !@google_survey
+  end
+
+  def decide_view_mode
+    @can_edit = current_user.is_admin? or (@google_survey and @google_survey.user_id == current_user.id)
+    @min_view = !@can_edit and !current_user.is_researcher?
+  end
+
   def synchronize
-    @google_survey = GoogleSurvey.find(params[:id])
+    get_object
+    decide_view_mode
     @google_survey.synchronize!
     flash[:notice] = 'Results synchronized at ' + @google_survey.last_downloaded_at.to_s
     redirect_to google_survey_path(@google_survey)
   end
 
   def download
-    @google_survey = GoogleSurvey.find(params[:id])
+    get_object
+    decide_view_mode
     filename = @google_survey.name.gsub(' ','_').camelcase + '-' + @google_survey.last_downloaded_at.strftime('%Y%m%d%H%M%S') + '.csv'
     send_data(File.open(@google_survey.processed_csv_file, "rb").read,
               :filename => filename,
@@ -30,7 +41,13 @@ class GoogleSurveysController < ApplicationController
   # GET /google_surveys
   # GET /google_surveys.xml
   def index
-    @google_surveys = GoogleSurvey.all
+    decide_view_mode
+    if @min_view
+      @google_surveys = GoogleSurvey.where(:open => true)
+      # (should also include closed surveys which have results)
+    else
+      @google_surveys = GoogleSurvey.all
+    end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -41,7 +58,8 @@ class GoogleSurveysController < ApplicationController
   # GET /google_surveys/1
   # GET /google_surveys/1.xml
   def show
-    @google_survey = GoogleSurvey.find(params[:id])
+    get_object
+    decide_view_mode
 
     respond_to do |format|
       format.html # show.html.erb
@@ -62,7 +80,7 @@ class GoogleSurveysController < ApplicationController
 
   # GET /google_surveys/1/edit
   def edit
-    @google_survey = GoogleSurvey.find(params[:id])
+    get_object
   end
 
   # POST /google_surveys
@@ -85,7 +103,7 @@ class GoogleSurveysController < ApplicationController
   # PUT /google_surveys/1
   # PUT /google_surveys/1.xml
   def update
-    @google_survey = GoogleSurvey.find(params[:id])
+    get_object
 
     respond_to do |format|
       if @google_survey.update_attributes(params[:google_survey])
@@ -101,7 +119,7 @@ class GoogleSurveysController < ApplicationController
   # DELETE /google_surveys/1
   # DELETE /google_surveys/1.xml
   def destroy
-    @google_survey = GoogleSurvey.find(params[:id])
+    get_object
     @google_survey.destroy
 
     respond_to do |format|
