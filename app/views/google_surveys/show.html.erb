@@ -38,9 +38,9 @@
   <tbody>
     <% @nonces.each do |nonce| %>
     <tr>
-      <td><%= nonce.created_at.ctime %></td>
+      <td><%= nonce.created_at.localtime.ctime %></td>
       <td><%= a=GoogleSurveyAnswer.where(:google_survey_id => @google_survey.id, :nonce_id => nonce.id, :column => 1); (t=Time.parse(a[0].answer)) and t.ctime if a and a.size==1 and a[0].answer %></td>
-      <td><%= nonce.used_at.ctime if nonce.used_at %></td>
+      <td><%= nonce.used_at.localtime.ctime if nonce.used_at %></td>
     </tr>
     <% end %>
   </tbody>
