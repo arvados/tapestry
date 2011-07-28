@@ -3,6 +3,10 @@ class GoogleSurveysController < ApplicationController
 
   def participate
     @google_survey = GoogleSurvey.find(params[:id])
+    if !@google_survey.open
+      flash[:error] = "This survey is not open for participation now."
+      return redirect_to google_survey_path(@google_survey)
+    end
     qappend = ''
     if !@google_survey.userid_populate_entry.nil?
       @nonce = Nonce.new(:owner_class => 'User', :owner_id => current_user.id,
