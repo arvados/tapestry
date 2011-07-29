@@ -119,7 +119,7 @@ class GoogleSurvey < ActiveRecord::Base
         next
       end
 
-      processed_datarows[-1][0] = User.find(nonce.owner_id).hex
+      processed_datarows[-1][0] = u.hex
       next if nonce.used_at
 
       column = 0
