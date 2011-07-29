@@ -1959,6 +1959,9 @@ ActiveRecord::Schema.define(:version => 20110807153230) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.datetime "deactivated_at"
+    t.datetime "suspended_at"
+    t.boolean  "can_unsuspend_self"
   end
 
   create_table "waitlist_versions", :force => true do |t|

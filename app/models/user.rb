@@ -92,12 +92,13 @@ class User < ActiveRecord::Base
     }
   }
 
-  scope :inactive, { :conditions => "activated_at IS NULL and is_test = false" }
-  scope :enrolled, { :conditions => "enrolled IS NOT NULL and is_test = false" }
-  scope :pgp_ids, { :conditions => "enrolled IS NOT NULL and pgp_id IS NOT NULL and is_test = false" }
-  scope :test, { :conditions => "is_test = true" }
-  scope :real, { :conditions => "is_test = false" }
+  scope :inactive, { :conditions => "activated_at IS NULL AND NOT (is_test <=> 1)" }
+  scope :enrolled, { :conditions => "enrolled IS NOT NULL AND NOT (is_test <=> 1)" }
+  scope :pgp_ids, { :conditions => "enrolled IS NOT NULL and pgp_id IS NOT NULL and NOT (is_test <=> 1)" }
+  scope :test, { :conditions => "is_test = 1" }
+  scope :real, { :conditions => "NOT (is_test <=> 1)" }
   scope :researcher, { :conditions => "researcher = true" }
+  scope :publishable, where("enrolled IS NOT NULL AND suspended_at IS NULL").real
 
 
   # Beware of NULL: "screening_survey_responses.us_citizen_or_resident!=1"
@@ -368,17 +369,35 @@ class User < ActiveRecord::Base
     self.documents.kind_any_version(doctype).first
   end
 
-  def has_recent_safety_questionnaire
+  def has_recent_safety_questionnaire(howrecent=3)
     # this only applies to enrolled users; for all others, this function should be a no-op
     return true if self.enrolled.nil?
-    if self.safety_questionnaires.empty? and 3.months.ago > self.enrolled then
-      # No SQ results, and account older than 3 months. They have to take one
+    if self.safety_questionnaires.empty? and howrecent.months.ago > self.enrolled then
+      # No SQ results, and account older than N months. They have to take one
       return false
     elsif self.safety_questionnaires.empty?
-      # No SQ results, but account younger than 3 months. They are ok.
+      # No SQ results, but account younger than N months. They are ok.
       return true
     end
-    3.months.ago < self.safety_questionnaires.find(:all, :order => 'datetime').last.datetime
+    howrecent.months.ago < self.safety_questionnaires.find(:all, :order => 'datetime').last.datetime
+  end
+
+  def auto_suspend_if_necessary
+    if !self.suspended_at and !has_recent_safety_questionnaire(4)
+      self.suspended_at = Time.now
+      self.can_unsuspend_self = true
+      save
+      log("Account automatically suspended")
+    end
+  end
+
+  def auto_unsuspend_if_possible
+    if self.suspended_at and self.can_unsuspend_self and has_recent_safety_questionnaire
+      self.suspended_at = nil
+      self.can_unsuspend_self = false
+      save
+      log("Account automatically unsuspended")
+    end
   end
 
   def ineligible_for_enrollment
@@ -415,10 +434,7 @@ class User < ActiveRecord::Base
   protected
 
   def make_hex_code
-    code = nil
-    while User.find_by_hex(code) or code == nil
-      code = "hu" + ("%x%x%x%x%x%x" % [ rand(16), rand(16), rand(16), rand(16), rand(16), rand(16) ]).upcase
-    end
+    begin code = "%06X" % rand(2**24) end while User.unscoped.find_by_hex(code)
     return code
   end
 
@@ -429,4 +445,5 @@ class User < ActiveRecord::Base
   def self.pending_family_relations
     return FamilyRelations.find(:all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id])
   end
+
 end
