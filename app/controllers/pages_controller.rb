@@ -57,7 +57,7 @@ class PagesController < ApplicationController
     params[:page] = 1 if params[:page] == 0
 
     if params[:id] == 'enrolled'
-      @enrolled = User.enrolled.find(:all).sort{ |a,b| a.enrolled <=> b.enrolled }.paginate(:page => params[:page] || 1, :per_page => 100)
+      @enrolled = User.enrolled.publishable.find(:all).sort{ |a,b| a.enrolled <=> b.enrolled }.paginate(:page => params[:page] || 1, :per_page => 100)
     end
 
     fetch_ivars

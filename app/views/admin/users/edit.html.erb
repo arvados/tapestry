@@ -87,6 +87,15 @@
 <p><label for="is_test">Is test user?</label><br/>
 <%= f.check_box :is_test%></p>
 
+<p><label for="suspended_at">Is suspended?</label>  <i>(no public profile: e.g., requested deletion of data, safety questionnaire requirement not satisfied)</i><br/>
+<%= f.check_box :suspended_at %> <%= 'since '+@user.suspended_at.ctime if @user.suspended_at %></p>
+
+<p><label for="can_unsuspend_self">Can auto-unsuspend by completing a safety questionnaire?</label><br/>
+<%= f.check_box :can_unsuspend_self %></p>
+
+<p><label for="deactivated_at">Is deactivated?</label>  <i>(cannot "access or update" account; home page replaced by "your account was deactivated" message)</i><br/>
+<%= f.check_box :deactivated_at %> <%= 'since '+@user.deactivated_at.ctime if @user.deactivated_at %></p>
+
 <p><label for="researcher">Is researcher?</label><br/>
 <%= f.check_box :researcher%></p>
 

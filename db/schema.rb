@@ -1390,6 +1390,13 @@ ActiveRecord::Schema.define(:version => 20110819230959) do
   add_index "question_responses", ["exam_question_id"], :name => "index_question_responses_on_exam_question_id"
   add_index "question_responses", ["exam_response_id"], :name => "index_question_responses_on_exam_response_id"
 
+  create_table "removal_requests", :force => true do |t|
+    t.integer  "user_id"
+    t.text     "items_to_remove"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "residency_survey_response_versions", :force => true do |t|
     t.integer  "residency_survey_response_id"
     t.integer  "lock_version"
@@ -2079,6 +2086,9 @@ ActiveRecord::Schema.define(:version => 20110819230959) do
     t.integer  "updater_id"
     t.datetime "deleted_at"
     t.integer  "lock_version"
+    t.datetime "deactivated_at"
+    t.datetime "suspended_at"
+    t.boolean  "can_unsuspend_self"
   end
 
   create_table "waitlist_versions", :force => true do |t|
@@ -2108,6 +2118,13 @@ ActiveRecord::Schema.define(:version => 20110819230959) do
     t.integer  "updater_id"
     t.datetime "deleted_at"
     t.integer  "lock_version"
+  end
+
+  create_table "withdrawal_comments", :force => true do |t|
+    t.integer  "user_id"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

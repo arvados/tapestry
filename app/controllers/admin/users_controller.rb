@@ -126,6 +126,22 @@ class Admin::UsersController < Admin::AdminControllerBase
     if (@user.email != params[:user][:email]) then
       @user.log("Admin: #{current_user.full_name} changed email address from '#{@user.email}' to '#{params[:user][:email]}'")
     end
+    if (!@user.deactivated_at and params[:user][:deactivated_at]=='1')
+      @user.deactivated_at = Time.now
+      @user.log("Admin: #{current_user.full_name} account was deactivated")
+    elsif (@user.deactivated_at and params[:user][:deactivated_at]=='0')
+      @user.deactivated_at = nil
+      @user.log("Admin: #{current_user.full_name} account was reactivated")
+    end
+    params[:user].delete :is_deactivated
+    if (!@user.suspended_at and params[:user][:suspended_at]=='1')
+      @user.suspended_at = Time.now
+      @user.log("Admin: #{current_user.full_name} account was suspended")
+    elsif (@user.suspended_at and params[:user][:suspended_at]=='0')
+      @user.suspended_at = nil
+      @user.log("Admin: #{current_user.full_name} account was unsuspended")
+    end
+    params[:user].delete :is_suspended
 
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'

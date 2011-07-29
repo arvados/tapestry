@@ -7,7 +7,7 @@ class ProfilesController < ApplicationController
   include PhrccrsHelper
 
   def public
-    @user = User.find_by_hex(params[:hex])
+    @user = User.publishable.find_by_hex(params[:hex])
     # Invalid hex code
     return if @user.nil?
 
