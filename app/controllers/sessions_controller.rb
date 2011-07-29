@@ -3,6 +3,8 @@ class SessionsController < ApplicationController
   include PhrccrsHelper
   skip_before_filter :login_required, :only => [:new, :create]
   skip_before_filter :ensure_enrolled
+  skip_before_filter :prevent_setting_ownership, :only => [:create]
+
   # Allow user to log out when they have not 
   # * agreed to the TOS yet
   # * taken latest consent yet
