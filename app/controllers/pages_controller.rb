@@ -32,9 +32,9 @@ class PagesController < ApplicationController
     end
 
     # Only enrolled users can go to the studies page
-    if (not logged_in? or not current_user.enrolled?) and params[:id] == 'studies' then
-      redirect_to root_url
-      return
+    if params[:id] == 'studies'
+      authorized? or return access_denied
+      current_user.enrolled? or return redirect_to root_url
     end
 
     # This page has now been replaced by the studies page
