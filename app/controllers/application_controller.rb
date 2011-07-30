@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   end
 
   def prevent_setting_ownership
-    return true if current_user.is_admin?
+    return true if current_user and current_user.is_admin?
     ['user_id', 'owner_id', 'created_by'].each do |col|
       re = Regexp.new("^#{col}$")
       params.each do |k,v|
