@@ -5,12 +5,22 @@
 
   <div class="field">
     <%= f.label :name %><br />
-    <%= f.text_field :name, :size => 80 %>
+    <% if @study.approved then %>
+      <%= @study.name %>
+    <% else %>
+      <%= f.text_field :name, :size => 80 %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :participant_description, 'Description of study, to be seen by
 participants (displayed on recruitment page)' %><br />
-    <%= f.text_area :participant_description, :cols => 80 %>
+    <% if @study.approved then %>
+      <pre>
+      <%= @study.participant_description %>
+      </pre>
+    <% else %>
+      <%= f.text_area :participant_description, :cols => 80 %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :researcher_description, 'Technical description of study for other
@@ -34,6 +44,7 @@ researchers and internal use' %><br />
     <div class="field">
       <%= f.label :requested, 'Request project approval' %><br />
       <%= f.check_box :requested %>
+      <br/><strong>Please note</strong>: when your study is approved, the study name and participant description fields will be frozen.
     </div>
   <% end %>
   <div class="field">

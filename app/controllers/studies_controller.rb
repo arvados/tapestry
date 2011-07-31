@@ -42,6 +42,10 @@ class StudiesController < ApplicationController
     # Override this field just in case; it comes in as a hidden form field
     @study.researcher = current_user
 
+    # These fields are immutable for the researcher
+    params[:study].delete(:approved)
+    params[:study].delete(:irb_associate_id)
+
     respond_to do |format|
       if @study.save
         flash[:notice] = 'Study was successfully created.'
@@ -61,6 +65,16 @@ class StudiesController < ApplicationController
 
     # Override this field just in case; it comes in as a hidden form field
     @study.researcher = current_user
+
+    # These fields are immutable for the researcher
+    params[:study].delete(:approved)
+    params[:study].delete(:irb_associate_id)
+
+    if (@study.approved) then
+      # Study name and participant description fields are immutable once the study is approved
+      params[:study].delete(:name)
+      params[:study].delete(:participant_description)
+    end
 
     respond_to do |format|
       if @study.update_attributes(params[:study])
