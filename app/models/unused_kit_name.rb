@@ -2,9 +2,10 @@ class UnusedKitName < ActiveRecord::Base
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
 
-
   def self.random
-    self.first(:order => 'RAND()')
+    name = self.first(:order => 'RAND()')
+    name = '' if name.nil? 
+    return name
   end
 
 end
