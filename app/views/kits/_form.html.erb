@@ -1,9 +1,22 @@
 <%= error_messages_for :kit, :header_message => 'Error: data could not be saved.', :message => nil %>
 
 <%= form_for(@kit) do |f| %>
+<% 
+	if @kit.name.nil? then
+		ukn = UnusedKitName.random
+		if ukn.nil? then
+			kitname = '' 
+		else
+			kitname = ukn.name
+		end
+	else
+		kitname = @kit.name
+	end
+ %>
+
   <div class="field">
     <%= f.label :name %><br />
-    <%= f.text_field :name, :value => (@kit.name.nil? ? UnusedKitName.random.name : @kit.name) %>
+    <%= f.text_field :name, :value => kitname %>
   </div>
   <div class="field">
     <%= f.label :study_id %><br />
