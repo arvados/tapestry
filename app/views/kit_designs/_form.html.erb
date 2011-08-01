@@ -1,15 +1,30 @@
 
+<% if @kit_design.frozen then %>
+<div class="prominent">
+<p>This kit design has been frozen because kits based on its design have been marked as sent.<br/> The errata field is the only field that can be modified for this kit design.</p>
+</div>
+<% end %>
 <%= error_messages_for :kit_design, :header_message => 'Error: data could not be saved.', :message => nil %>
 
 <%= form_for(@kit_design, :html => { :multipart => true }) do |f| %>
 
   <div class="field">
     <%= f.label :name %><br />
-    <%= f.text_field :name, :size => 80 %>
+    <% if @kit_design.frozen then %>
+      <%= @kit_design.name %>
+    <% else %>
+      <%= f.text_field :name, :size => 80 %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :description %><br />
-    <%= f.text_area :description, :cols => 80 %>
+    <% if @kit_design.frozen then %>
+      <pre>
+        <%= @kit_design.description %>
+      </pre>
+    <% else %>
+      <%= f.text_area :description, :cols => 80 %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :owner %><br />
@@ -22,7 +37,11 @@
   </div>
   <div class="field">
     <%= f.label :study %><br />
-    <%= f.select :study_id, Study.find_all_by_researcher_id(current_user.id).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+    <% if @kit_design.frozen then %>
+      <%= @kit_design.study.name %>
+    <% else %>
+      <%= f.select :study_id, Study.find_all_by_researcher_id(current_user.id).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :frozen %><br />
@@ -37,19 +56,27 @@
   <% if not @kit_design.instructions_file_name.nil? then %>
     <strong>Instructions file</strong><br />
     <%= @kit_design.instructions_file_name %><br />
-    <div class="field">
-      <%= f.label :instructions, 'Replace instructions File' %><br />
-      <%= f.file_field :instructions %>
-    </div>
-  <% else %>
-    <div class="field">
-      <%= f.label :instructions, 'Select instructions File' %><br />
-      <%= f.file_field :instructions %>
-    </div>
-  <% end %>
+    <% if not @kit_design.frozen then %>
+      <div class="field">
+        <%= f.label :instructions, 'Replace instructions File' %><br />
+        <%= f.file_field :instructions %>
+      </div>
+     <% end %>
+    <% else %>
+      <% if not @kit_design.frozen then %>
+      <div class="field">
+        <%= f.label :instructions, 'Select instructions File' %><br />
+        <%= f.file_field :instructions %>
+      </div>
+     <% end %>
+    <% end %>
   <div class="field">
     <%= f.label :instructions_content_type %><br />
-    <%= f.select :instructions_content_type, %w(PDF) %>
+    <% if @kit_design.frozen then %>
+      <%= @kit_design.instructions_content_type %>
+    <% else %>
+      <%= f.select :instructions_content_type, %w(PDF) %>
+    <% end %>
   </div>
   <p></p>
   <div class="actions">

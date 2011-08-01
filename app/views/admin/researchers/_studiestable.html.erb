@@ -1,11 +1,14 @@
-<% if studies.count > 0 %>
 <table class="admin_table">
   <tr>
     <th>Name</th>
+    <% if who != 'researcher' %>
     <th>Researcher</th>
+    <% end %>
     <th>IRB associate</th>
+    <% if who != 'researcher' %>
     <th>Status</th>
-    <% if type != 'draft' %>
+    <% end %>
+    <% if type != 'draft' and who != 'researcher' %>
     <th></th>
     <% end %>
     <th>U</th>
@@ -14,18 +17,24 @@
     <th>A</th>
     <th>NA</th>
     <th>R</th>
+    <% if type == 'approved' %>
+    <th></th>
+    <% end %>
   </tr>
   <% studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= link_to study.name, edit_admin_study_url(study) %></td>
+      <td><%= link_to study.name, (who == 'admin' ? edit_admin_study_url(study) : edit_study_url(study) ) %></td>
+      <% if who != 'researcher' %>
       <td><%= link_to study.researcher.full_name, admin_user_url(study.researcher) %></td>
+      <% end %>
       <td>
           <% if study.irb_associate.nil? then %>
-            <%= link_to 'unassigned', edit_admin_study_url(study) %>
+            <%= link_to 'unassigned', (who == 'admin' ? edit_admin_study_url(study) : edit_study_url(study) ) %>
           <% else %>
-            <%= link_to study.irb_associate.full_name, admin_user_url(study.irb_associate) %>
+            <%= ( who == 'admin' ? link_to(study.irb_associate.full_name, admin_user_url(study.irb_associate)) : study.irb_associate.full_name ) %>
           <% end %>
       </td>
+      <% if who != 'researcher' %>
       <td><%= study.status %></td>
       <% if type == 'requested' %>
         <td><%= link_to 'Approve', edit_admin_study_url(study.id) %></td>
@@ -33,14 +42,16 @@
       <% if type == 'approved' %>
         <td><%= link_to 'Remove approval', edit_admin_study_url(study.id) %></td>
       <% end %>
-      <td><%= study.study_participants.undecided.count %></td>
-      <td><%= study.study_participants.interested.count %></td>
-      <td><%= study.study_participants.not_interested.count %></td>
-      <td><%= study.study_participants.accepted.count %></td>
-      <td><%= study.study_participants.not_accepted.count %></td>
-      <td><%= study.study_participants.removed.count %></td>
+      <% end %>
+      <td><%= link_to(study.study_participants.undecided.count, study_users_path(study, :format => 'csv', :type => 'undecided')) %></td>
+      <td><%= link_to(study.study_participants.interested.count, study_users_path(study, :format => 'csv', :type => 'interested')) %></td>
+      <td><%= link_to(study.study_participants.not_interested.count, study_users_path(study, :format => 'csv', :type => 'not_interested')) %></td>
+      <td><%= link_to(study.study_participants.accepted.count, study_users_path(study, :format => 'csv', :type => 'accepted')) %></td>
+      <td><%= link_to(study.study_participants.not_accepted.count, study_users_path(study, :format => 'csv', :type => 'not_accepted')) %></td>
+      <td><%= link_to(study.study_participants.removed.count, study_users_path(study, :format => 'csv', :type => 'removed')) %></td>
+      <% if type == 'approved' %>
+      <td><%= link_to('Manage participants', study_users_path(study)) %></td>
+      <% end %>
     </tr>
   <% end %>
-  </table>
-<% end %>
-
+</table>

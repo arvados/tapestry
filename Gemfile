@@ -28,6 +28,7 @@ gem 'factory_girl_rails'
 gem 'mocha'
 gem 'recaptcha'
 gem 'limerick_rake'
+gem 'verhoeff'
 group :development, :test do
   gem 'redgreen'
 end

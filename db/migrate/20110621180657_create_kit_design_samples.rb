@@ -2,15 +2,15 @@ class CreateKitDesignSamples < ActiveRecord::Migration
   def self.up
     create_table :kit_design_samples do |t|
       t.string :name
-      t.text :description
       t.references :kit_design
-      t.references :sample_type
       t.string :tissue
       t.string :device
-      t.integer :sort_order
+      t.text :description
       t.string :target_amount
       t.string :unit
+      t.integer :sort_order
       t.boolean :frozen
+      t.text :errata
 
       t.integer :creator_id
       t.integer :updater_id

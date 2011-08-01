@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 201107220722141414) do
+ActiveRecord::Schema.define(:version => 20110801040513) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -121,10 +121,10 @@ ActiveRecord::Schema.define(:version => 201107220722141414) do
     t.boolean  "correct"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "answer_options", ["exam_question_id"], :name => "index_answer_options_on_exam_question_id"
@@ -745,15 +745,15 @@ ActiveRecord::Schema.define(:version => 201107220722141414) do
     t.integer  "kit_design_sample_id"
     t.integer  "lock_version"
     t.string   "name"
-    t.text     "description"
     t.integer  "kit_design_id"
-    t.integer  "sample_type_id"
     t.string   "tissue"
     t.string   "device"
-    t.integer  "sort_order"
+    t.text     "description"
     t.string   "target_amount"
     t.string   "unit"
+    t.integer  "sort_order"
     t.boolean  "frozen"
+    t.text     "errata"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
@@ -765,15 +765,15 @@ ActiveRecord::Schema.define(:version => 201107220722141414) do
 
   create_table "kit_design_samples", :force => true do |t|
     t.string   "name"
-    t.text     "description"
     t.integer  "kit_design_id"
-    t.integer  "sample_type_id"
     t.string   "tissue"
     t.string   "device"
-    t.integer  "sort_order"
+    t.text     "description"
     t.string   "target_amount"
     t.string   "unit"
+    t.integer  "sort_order"
     t.boolean  "frozen"
+    t.text     "errata"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
@@ -808,7 +808,7 @@ ActiveRecord::Schema.define(:version => 201107220722141414) do
     t.text     "description"
     t.integer  "owner_id"
     t.integer  "study_id"
-    t.boolean  "frozen"
+    t.boolean  "frozen",                    :default => false
     t.text     "errata"
     t.string   "instructions_file_name"
     t.string   "instructions_content_type"
@@ -820,6 +820,80 @@ ActiveRecord::Schema.define(:version => 201107220722141414) do
     t.integer  "updater_id"
     t.datetime "deleted_at"
   end
+
+  create_table "kit_log_versions", :force => true do |t|
+    t.integer  "kit_log_id"
+    t.integer  "lock_version"
+    t.integer  "kit_id"
+    t.integer  "actor_id"
+    t.text     "comment"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "kit_log_versions", ["kit_log_id"], :name => "index_kit_log_versions_on_kit_log_id"
+
+  create_table "kit_logs", :force => true do |t|
+    t.integer  "kit_id"
+    t.integer  "actor_id"
+    t.text     "comment"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "kit_versions", :force => true do |t|
+    t.integer  "kit_id"
+    t.integer  "lock_version"
+    t.string   "name"
+    t.integer  "crc_id"
+    t.integer  "study_id"
+    t.integer  "kit_design_id"
+    t.integer  "participant_id"
+    t.integer  "owner_id"
+    t.integer  "originator_id"
+    t.integer  "shipper_id"
+    t.datetime "last_mailed"
+    t.datetime "last_received"
+    t.string   "url_code"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "kit_versions", ["kit_id"], :name => "index_kit_versions_on_kit_id"
+
+  create_table "kits", :force => true do |t|
+    t.string   "name"
+    t.integer  "crc_id"
+    t.integer  "study_id"
+    t.integer  "kit_design_id"
+    t.integer  "participant_id"
+    t.integer  "owner_id"
+    t.integer  "originator_id"
+    t.integer  "shipper_id"
+    t.datetime "last_mailed"
+    t.datetime "last_received"
+    t.string   "url_code"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  add_index "kits", ["crc_id"], :name => "index_kits_on_crc_id", :unique => true
+  add_index "kits", ["name"], :name => "index_kits_on_name", :unique => true
+  add_index "kits", ["url_code"], :name => "index_kits_on_url_code", :unique => true
 
   create_table "lab_test_result_description_versions", :force => true do |t|
     t.integer  "lab_test_result_description_id"
@@ -1200,6 +1274,33 @@ ActiveRecord::Schema.define(:version => 201107220722141414) do
     t.datetime "deleted_at"
   end
 
+  create_table "sample_log_versions", :force => true do |t|
+    t.integer  "sample_log_id"
+    t.integer  "lock_version"
+    t.integer  "sample_id"
+    t.integer  "actor_id"
+    t.text     "comment"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sample_log_versions", ["sample_log_id"], :name => "index_sample_log_versions_on_sample_log_id"
+
+  create_table "sample_logs", :force => true do |t|
+    t.integer  "sample_id"
+    t.integer  "actor_id"
+    t.text     "comment"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
   create_table "sample_type_versions", :force => true do |t|
     t.integer  "sample_type_id"
     t.integer  "lock_version"
@@ -1232,6 +1333,66 @@ ActiveRecord::Schema.define(:version => 201107220722141414) do
     t.datetime "updated_at"
     t.integer  "lock_version"
   end
+
+  create_table "sample_versions", :force => true do |t|
+    t.integer  "sample_id"
+    t.integer  "lock_version"
+    t.string   "name"
+    t.integer  "crc_id"
+    t.integer  "study_id"
+    t.integer  "kit_id"
+    t.integer  "participant_id"
+    t.integer  "original_kit_design_sample_id"
+    t.integer  "kit_design_sample_id"
+    t.datetime "when_originated"
+    t.integer  "owner_id"
+    t.datetime "last_mailed"
+    t.datetime "last_received"
+    t.string   "participant_note"
+    t.string   "researcher_note"
+    t.string   "concentration"
+    t.string   "amount"
+    t.string   "unit"
+    t.string   "material"
+    t.string   "url_code"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sample_versions", ["sample_id"], :name => "index_sample_versions_on_sample_id"
+
+  create_table "samples", :force => true do |t|
+    t.string   "name"
+    t.integer  "crc_id"
+    t.integer  "study_id"
+    t.integer  "kit_id"
+    t.integer  "participant_id"
+    t.integer  "original_kit_design_sample_id"
+    t.integer  "kit_design_sample_id"
+    t.datetime "when_originated"
+    t.integer  "owner_id"
+    t.datetime "last_mailed"
+    t.datetime "last_received"
+    t.string   "participant_note"
+    t.string   "researcher_note"
+    t.string   "concentration"
+    t.string   "amount"
+    t.string   "unit"
+    t.string   "material"
+    t.string   "url_code"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  add_index "samples", ["crc_id"], :name => "index_samples_on_crc_id", :unique => true
+  add_index "samples", ["url_code"], :name => "index_samples_on_url_code", :unique => true
 
   create_table "screening_survey_response_versions", :force => true do |t|
     t.integer  "screening_survey_response_id"
@@ -1311,8 +1472,8 @@ ActiveRecord::Schema.define(:version => 201107220722141414) do
     t.text     "researcher_description"
     t.integer  "researcher_id"
     t.integer  "irb_associate_id"
-    t.boolean  "requested"
-    t.boolean  "approved"
+    t.boolean  "requested",               :default => false
+    t.boolean  "approved",                :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "lock_version"
@@ -1568,6 +1729,31 @@ ActiveRecord::Schema.define(:version => 201107220722141414) do
     t.datetime "updated_at"
     t.integer  "lock_version"
   end
+
+  create_table "unused_kit_name_versions", :force => true do |t|
+    t.integer  "unused_kit_name_id"
+    t.integer  "lock_version"
+    t.string   "name"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "unused_kit_name_versions", ["unused_kit_name_id"], :name => "index_unused_kit_name_versions_on_unused_kit_name_id"
+
+  create_table "unused_kit_names", :force => true do |t|
+    t.string   "name"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  add_index "unused_kit_names", ["name"], :name => "index_unused_kit_names_on_name", :unique => true
 
   create_table "user_log_versions", :force => true do |t|
     t.integer  "user_log_id"

@@ -27,14 +27,22 @@ class PagesController < ApplicationController
     end
 
     if logged_in? and params[:id] == 'researcher_tools' then
-      @studies = Study.find_all_by_researcher_id(current_user.id)
+      @studies = Study.where('researcher_id = ?',current_user.id)
       @kit_design_samples = KitDesignSample.find_all_by_kit_design_id(current_user.kit_designs).sort { |a,b| a.name <=> b.name }
+
+      @requested_studies = Study.requested.where('researcher_id = ?',current_user.id)
+      @approved_studies = Study.approved.where('researcher_id = ?',current_user.id)
+      @draft_studies = Study.draft.where('researcher_id = ?',current_user.id)
     end
 
     # Only enrolled users can go to the studies page
     if params[:id] == 'studies'
       authorized? or return access_denied
       current_user.enrolled? or return redirect_to root_url
+    end
+
+    if params[:id] == 'studies'
+      @kits = Kit.participant(current_user.id).sort{ |a,b| b.updated_at <=> a.updated_at }
     end
 
     # This page has now been replaced by the studies page

@@ -1,0 +1,80 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Study:</b>
+  <%= @sample.study_id %>
+</p>
+
+<p>
+  <b>Kit:</b>
+  <%= @sample.kit_id %>
+</p>
+
+<p>
+  <b>Participant:</b>
+  <%= @sample.participant_id %>
+</p>
+
+<p>
+  <b>Original kit design sample:</b>
+  <%= @sample.original_kit_design_sample_id %>
+</p>
+
+<p>
+  <b>Kit design sample:</b>
+  <%= @sample.kit_design_sample_id %>
+</p>
+
+<p>
+  <b>When originated:</b>
+  <%= @sample.when_originated %>
+</p>
+
+<p>
+  <b>Owner:</b>
+  <%= @sample.owner_id %>
+</p>
+
+<p>
+  <b>Last mailed:</b>
+  <%= @sample.last_mailed %>
+</p>
+
+<p>
+  <b>Last received:</b>
+  <%= @sample.last_received %>
+</p>
+
+<p>
+  <b>Participant note:</b>
+  <%= @sample.participant_note %>
+</p>
+
+<p>
+  <b>Researcher note:</b>
+  <%= @sample.researcher_note %>
+</p>
+
+<p>
+  <b>Concentration:</b>
+  <%= @sample.concentration %>
+</p>
+
+<p>
+  <b>Amount:</b>
+  <%= @sample.amount %>
+</p>
+
+<p>
+  <b>Amount unit:</b>
+  <%= @sample.amount_unit %>
+</p>
+
+<p>
+  <b>Material:</b>
+  <%= @sample.material %>
+</p>
+
+
+<%= link_to 'Edit', edit_sample_path(@sample) %> |
+<%= link_to 'Back', samples_path %>

@@ -47,3 +47,27 @@ The following stud<%= Study.where('open = ?',true).size > 1 ? 'ies are' : 'y is'
 <% else %>
 There are currently no open studies. We hope to create some soon, please check again later!
 <% end %>
+
+<h3>Your kits</h3>
+<% if not @kits.empty? then %>
+<table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th>Study</th>
+    <th>Status</th>
+    <th>Last change</th>
+    <th></th>
+  </tr>
+  <% @kits.each do |k| %>
+    <tr>
+      <td><%= k.name %></td>
+      <td><%= k.study.name %></td>
+      <td><%= k.status %></td>
+      <td><%= k.updated_at %></td>
+      <td><%= k.status == 'Participant has kit' ? link_to('Mark as returned', returned_kit_path(k), :method => :post, :confirm => "Are you sure you want to mark kit #{k.name} as returned to the researcher?") : '' %></td>
+    </tr>
+  <% end %>
+</table>
+<% else %>
+  You currently do not have any kits.
+<% end %>

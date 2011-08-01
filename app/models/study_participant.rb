@@ -10,6 +10,8 @@ class StudyParticipant < ActiveRecord::Base
 
   validates_inclusion_of    :status,      :in => [0, 1, 2, 3, 4, 5]
 
+  scope :real, joins(:user).merge(User.real)
+
   scope :undecided,      joins(:user).where('status = 0').merge(User.real)
   scope :not_interested, joins(:user).where('status = 1').merge(User.real)
   scope :interested,     joins(:user).where('status = 2').merge(User.real)
@@ -30,6 +32,10 @@ class StudyParticipant < ActiveRecord::Base
                4 => 'Not Accepted',
                5 => 'Removed',
                }
+
+  def pretty_status
+    STATUSES[self.status]
+  end
 
   def is_undecided?
     status == 0

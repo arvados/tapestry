@@ -1,0 +1,15 @@
+<h2>Claim a kit</h2>
+
+<p>If you have received a sample collection kit in the mail, please claim your kit here.</p>
+
+<p>What is the nickname of your kit?</p>
+
+<%= form_tag kit_claim_path, :method => 'post' do %>
+  <div class="field">
+    <%= text_field_tag :name %>
+    <%= submit_tag("Claim", :name => nil) %>
+  </div>
+  </p>
+<% end %>
+
+

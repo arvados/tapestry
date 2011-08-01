@@ -7,7 +7,14 @@ class KitDesignSample < ActiveRecord::Base
 
   validates_presence_of    :description
   validates_presence_of    :kit_design_id
-  validates_presence_of    :sample_type_id
+
+  validates_numericality_of    :sort_order
+  validates_presence_of    :sort_order
 
   belongs_to :kit_design
+
+  def editable?
+    not self.frozen
+  end
+
 end

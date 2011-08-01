@@ -1,0 +1,23 @@
+<h1>Listing unused_kit_names</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @unused_kit_names.each do |unused_kit_name| %>
+  <tr>
+    <td><%= unused_kit_name.name %></td>
+    <td><%= link_to 'Show', unused_kit_name %></td>
+    <td><%= link_to 'Edit', edit_unused_kit_name_path(unused_kit_name) %></td>
+    <td><%= link_to 'Destroy', unused_kit_name, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Unused kit name', new_unused_kit_name_path %>

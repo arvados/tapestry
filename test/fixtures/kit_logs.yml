@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  kit: 
+  actor: 
+  comment: MyText
+
+two:
+  kit: 
+  actor: 
+  comment: MyText

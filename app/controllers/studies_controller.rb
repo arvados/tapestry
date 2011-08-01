@@ -1,11 +1,12 @@
 class StudiesController < ApplicationController
 
-  skip_before_filter :ensure_enrolled
-  skip_before_filter :ensure_latest_consent
-  skip_before_filter :ensure_recent_safety_questionnaire
+  skip_before_filter :ensure_enrolled, :except => [:show, :claim]
+  skip_before_filter :ensure_latest_consent, :except => [:show, :claim]
+  skip_before_filter :ensure_recent_safety_questionnaire, :except => [:show, :claim]
 
   before_filter :ensure_researcher
-  skip_before_filter :ensure_researcher, :only => [:show]
+
+  skip_before_filter :ensure_researcher, :only => [:show, :claim]
 
   # GET /studies/1
   # GET /studies/1.xml
@@ -16,6 +17,35 @@ class StudiesController < ApplicationController
       format.html # show.html.erb
       format.xml  { render :xml => @studies }
     end
+  end
+
+  # GET /studies/claim
+  def claim
+  end
+
+  # GET /studies/1/users
+  def users
+    @study = Study.find(params[:id])
+    @participants = @study.study_participants.real
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_for_study(@study,params[:type]), {
+                     :filename    => 'StudyUsers.csv',
+                     :type        => 'application/csv',
+                     :disposition => 'attachment' } }
+    end
+  end
+
+  def update_user_status
+    @study = Study.find(params[:study_id])
+    @user = User.find(params[:user_id])
+
+    @status = StudyParticipant::STATUSES[params[:status]]
+
+    @sp = @study.study_participants.where('user_id = ?',@user.id).first
+    @sp.status = @status
+    @sp.save
+    redirect_to(study_users_path(@study))
   end
 
   # GET /studies/new

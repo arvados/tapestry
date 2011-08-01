@@ -96,4 +96,35 @@ class ApplicationController < ActionController::Base
 #  end
 
   protect_from_forgery
+
+  # TODO: Move to a separate presenter class instead of a helper.
+  def csv_for_study(study,type)
+
+    user_fields = %w(hex e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip).freeze
+
+    header_row = user_fields.map(&:humanize)
+    buf = ''
+
+    CSV.generate_row(header_row, header_row.size, buf)
+
+    study.study_participants.real.send(type).each do |u|
+      row = []
+
+      row.push u.hex
+      row.push u.email
+      row.push u.ccrs.count > 0 ? 'y' : 'n'
+      row.push u.genetic_data.count > 0 ? 'y' : 'n'
+      row.push u.shipping_address.address_line_1
+      row.push u.shipping_address.address_line_2
+      row.push u.shipping_address.address_line_3
+      row.push u.shipping_address.city
+      row.push u.shipping_address.state
+      row.push u.shipping_address.zip
+
+      CSV.generate_row(row, row.size, buf)
+    end
+    buf
+  end
+
+private
 end

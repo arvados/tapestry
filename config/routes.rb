@@ -1,10 +1,24 @@
 PgpEnroll::Application.routes.draw do
+  resources :samples
+
+  resources :unused_kit_names
+
+  match '/kits/:id/log' => 'kits#show_log', :as => :show_kit_log, :via => :get
+  match '/kits/:id/confirm_claim' => 'kits#confirm_claim', :as => :kit_confirm_claim, :via => :post
+  match '/kits/claim' => 'kits#claim', :as => :kit_claim
+  resources :kits
+  match '/kits/:id/sent' => 'kits#sent', :as => :sent_kit, :via => :post
+  match '/kits/:id/returned' => 'kits#returned', :as => :returned_kit, :via => :post
+
   resources :kit_design_samples
   resources :sample_types
   resources :units
   resources :device_types
   resources :tissue_types
   resources :kit_designs
+  match '/studies/claim' => 'studies#claim', :as => :study_claim_kit
+  match '/studies/:id/users' => 'studies#users', :as => :study_users
+  match '/studies/:study_id/users/:user_id/:status' => 'studies#update_user_status', :as => :study_update_user_status
   resources :studies
 
   resources :pages

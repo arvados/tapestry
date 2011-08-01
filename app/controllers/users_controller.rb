@@ -251,7 +251,7 @@ class UsersController < ApplicationController
 
   def edit_study
     @user = User.find(params[:id])
-    @study = Study.where('id = ? and open = 1',params[:study_id]).first
+    @study = Study.where('id = ? and open = ?',params[:study_id],true).first
     if @study.nil? then
       # Only open studies should be available here
       redirect_to('/pages/studies')

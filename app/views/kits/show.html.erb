@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @kit.name %>
+</p>
+
+<p>
+  <b>References:</b>
+  <%= @kit.references %>
+</p>
+
+<p>
+  <b>References:</b>
+  <%= @kit.references %>
+</p>
+
+<p>
+  <b>Participant:</b>
+  <%= @kit.participant_id %>
+</p>
+
+<p>
+  <b>Owner:</b>
+  <%= @kit.owner_id %>
+</p>
+
+<p>
+  <b>Creator:</b>
+  <%= @kit.creator_id %>
+</p>
+
+<p>
+  <b>Shipper:</b>
+  <%= @kit.shipper_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_kit_path(@kit) %> |
+<%= link_to 'Back', kits_path %>

@@ -1,0 +1,42 @@
+<h2><%= @study.name %>: participants</h2>
+
+<table class="admin_table">
+<tr>
+<td>Undecided:</td><td><%= @participants.undecided.count %></td>
+<td>Interested:</td><td><%= @participants.interested.count %></td>
+<td>Not accepted:</td><td><%= @participants.not_accepted.count %></td>
+</tr>
+<tr>
+<td>Not interested:</td><td><%= @participants.not_interested.count %></td>
+<td>Accepted:</td><td><%= @participants.accepted.count %></td>
+<td>Removed:</td><td><%= @participants.removed.count %></td>
+</tr>
+</table>
+
+<% if not @participants.empty? %>
+
+<table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th>Status</th>
+    <th></th>
+  </tr>
+  <% @participants.sort { |a,b| a.name <=> b.name }.each do |p| %>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%= link_to p.user.full_name, user_url(p.user) %></td>
+      <td><%= p.pretty_status %></td>
+      <td>
+      <% if p.status == 2 %>
+        <%= link_to('accept', study_update_user_status_path(p.study,p.user,'accepted'), :method => :post) %>
+      <% end %>
+      <% if p.status == 3 %>
+        <%= link_to('remove', study_update_user_status_path(p.study,p.user,'removed'), :method => :post) %>
+      <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<% else %>
+<p>This study has no participants yet.</p>
+<% end %>

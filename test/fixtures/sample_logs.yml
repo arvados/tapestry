@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  sample: 
+  actor: 
+  comment: MyText
+
+two:
+  sample: 
+  actor: 
+  comment: MyText

@@ -1,0 +1,77 @@
+<%= form_for(@sample) do |f| %>
+  <% if @sample.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sample.errors.count, "error") %> prohibited this sample from being saved:</h2>
+
+      <ul>
+      <% @sample.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :study_id %><br />
+    <%= f.text_field :study_id %>
+  </div>
+  <div class="field">
+    <%= f.label :kit_id %><br />
+    <%= f.text_field :kit_id %>
+  </div>
+  <div class="field">
+    <%= f.label :participant_id %><br />
+    <%= f.text_field :participant_id %>
+  </div>
+  <div class="field">
+    <%= f.label :original_kit_design_sample_id %><br />
+    <%= f.text_field :original_kit_design_sample_id %>
+  </div>
+  <div class="field">
+    <%= f.label :kit_design_sample_id %><br />
+    <%= f.text_field :kit_design_sample_id %>
+  </div>
+  <div class="field">
+    <%= f.label :when_originated %><br />
+    <%= f.datetime_select :when_originated %>
+  </div>
+  <div class="field">
+    <%= f.label :owner_id %><br />
+    <%= f.text_field :owner_id %>
+  </div>
+  <div class="field">
+    <%= f.label :last_mailed %><br />
+    <%= f.datetime_select :last_mailed %>
+  </div>
+  <div class="field">
+    <%= f.label :last_received %><br />
+    <%= f.datetime_select :last_received %>
+  </div>
+  <div class="field">
+    <%= f.label :participant_note %><br />
+    <%= f.text_field :participant_note %>
+  </div>
+  <div class="field">
+    <%= f.label :researcher_note %><br />
+    <%= f.text_field :researcher_note %>
+  </div>
+  <div class="field">
+    <%= f.label :concentration %><br />
+    <%= f.text_field :concentration %>
+  </div>
+  <div class="field">
+    <%= f.label :amount %><br />
+    <%= f.text_field :amount %>
+  </div>
+  <div class="field">
+    <%= f.label :amount_unit %><br />
+    <%= f.text_field :amount_unit %>
+  </div>
+  <div class="field">
+    <%= f.label :material %><br />
+    <%= f.text_field :material %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

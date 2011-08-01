@@ -1,0 +1,45 @@
+<h2>Confirm your kit claim</h2>
+
+
+Your kit has been located in our records. Please double check that the following information is correct:
+
+
+<p>
+<strong>Kit name</strong><br/>
+<%= @kit.name %>
+</p>
+<p>
+<strong>Study name</strong><br/>
+<%= @kit.study.name %>
+</p>
+<p>
+<strong>Kit contents:</strong><br/>
+<table class="admin_table">
+  <tr>
+    <th>Sample ID</th>
+    <th>Kit name</th>
+    <th>Sample name</th>
+  </tr>
+  <% @kit.samples.sort { |a,b| a.original_kit_design_sample.sort_order <=> b.original_kit_design_sample.sort_order }.each do |s| %>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%= s.crc_id %></td>
+      <td><%= @kit.name %></td>
+      <td><%= s.name %></td>
+    </tr>
+  <% end %>
+</table>
+</p>
+
+<p><strong>Legal</strong><br/>
+FILL ME IN
+</p>
+
+<%= form_tag kit_confirm_claim_path(@kit), :method => 'post' do %>
+  <div class="field">
+    <%= check_box_tag :agreed, nil, params[:agreed] -%> I agree<p/>
+    <%= submit_tag("Confirm", :name => nil) %>
+  </div>
+  </p>
+<% end %>
+
+

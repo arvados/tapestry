@@ -47,11 +47,19 @@ class KitDesignsController < ApplicationController
   def update
     @kit_design = KitDesign.find(params[:id])
 
+    p = Hash.new
+    if not @kit_design.editable? then
+      # When frozen, only the errata field can be modified
+      p['errata'] = params[:kit_design]['errata']
+    else
+      p = params[:kit_design]
+    end
+
     # Override this field just in case; it comes in as a hidden form field
     @kit_design.owner = current_user
 
     respond_to do |format|
-      if @kit_design.update_attributes(params[:kit_design])
+      if @kit_design.update_attributes(p)
         flash[:notice] = 'Kit design was successfully updated.'
         format.html { redirect_to(:controller => 'pages', :action => 'show', :id => 'researcher_tools') }
         format.xml  { head :ok }
@@ -66,6 +74,13 @@ class KitDesignsController < ApplicationController
   # DELETE /kit_designs/1.xml
   def destroy
     @kit_design = KitDesign.find(params[:id])
+
+    if not @kit_design.editable? then
+      flash[:error] = 'This kit design is frozen; it can not be deleted.'
+      redirect_to(:controller => 'pages', :action => 'show', :id => 'researcher_tools')
+      return
+    end
+
     @kit_design.destroy
 
     respond_to do |format|

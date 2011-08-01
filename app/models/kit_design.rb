@@ -21,5 +21,8 @@ class KitDesign < ActiveRecord::Base
 
   DATA_TYPES = { 'PDF' => 'PDF' }.sort
 
+  def editable?
+    not self.frozen
+  end
 
 end

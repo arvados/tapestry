@@ -1,0 +1,51 @@
+<h1>Listing samples</h1>
+
+<table>
+  <tr>
+    <th>Study</th>
+    <th>Kit</th>
+    <th>Participant</th>
+    <th>Original kit design sample</th>
+    <th>Kit design sample</th>
+    <th>When originated</th>
+    <th>Owner</th>
+    <th>Last mailed</th>
+    <th>Last received</th>
+    <th>Participant note</th>
+    <th>Researcher note</th>
+    <th>Concentration</th>
+    <th>Amount</th>
+    <th>Amount unit</th>
+    <th>Material</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @samples.each do |sample| %>
+  <tr>
+    <td><%= sample.study_id %></td>
+    <td><%= sample.kit_id %></td>
+    <td><%= sample.participant_id %></td>
+    <td><%= sample.original_kit_design_sample_id %></td>
+    <td><%= sample.kit_design_sample_id %></td>
+    <td><%= sample.when_originated %></td>
+    <td><%= sample.owner_id %></td>
+    <td><%= sample.last_mailed %></td>
+    <td><%= sample.last_received %></td>
+    <td><%= sample.participant_note %></td>
+    <td><%= sample.researcher_note %></td>
+    <td><%= sample.concentration %></td>
+    <td><%= sample.amount %></td>
+    <td><%= sample.amount_unit %></td>
+    <td><%= sample.material %></td>
+    <td><%= link_to 'Show', sample %></td>
+    <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
+    <td><%= link_to 'Destroy', sample, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Sample', new_sample_path %>

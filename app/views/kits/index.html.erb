@@ -1,0 +1,36 @@
+<h2>Kits</h2>
+
+<%= link_to 'New Kit', new_kit_path %><br/>
+
+<table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th>Number</th>
+    <th>Study</th>
+    <th>Kit design</th>
+    <th>Participant</th>
+    <th>Owner</th>
+    <th>Originator</th>
+    <th>Shipper</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @kits.each do |kit| %>
+  <tr>
+    <td><%= kit.name %></td>
+    <td><%= sprintf("%08d", kit.crc_id) %></td>
+    <td><%= kit.study.name %></td>
+    <td><%= kit.kit_design.name %></td>
+    <td><%= kit.participant.nil? ? '' : link_to(kit.participant.full_name, admin_user_path(kit.participant)) %></td>
+    <td><%= kit.owner.nil? ? '' : kit.owner.full_name %></td>
+    <td><%= kit.originator.nil? ? '' : kit.originator.full_name %></td>
+    <td><%= kit.shipper.nil? ? link_to('Mark as sent', sent_kit_path(kit), :method => :post, :confirm => "Are you sure you want to mark kit #{kit.name} as sent?") : kit.shipper.full_name %></td>
+    <td><%= link_to 'Log', show_kit_log_path(kit), :class => "iframe", :title => "Kit log for #{kit.name}" %></td>
+    <td><%= link_to 'Edit', edit_kit_path(kit) %></td>
+    <td><%= kit.last_mailed.nil? ? link_to('Destroy', kit, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
+  </tr>
+<% end %>
+</table>
+

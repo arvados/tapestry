@@ -1,0 +1,43 @@
+<%= error_messages_for :kit, :header_message => 'Error: data could not be saved.', :message => nil %>
+
+<%= form_for(@kit) do |f| %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, :value => (@kit.name.nil? ? UnusedKitName.random.name : @kit.name) %>
+  </div>
+  <div class="field">
+    <%= f.label :study_id %><br />
+    <%= f.select :study_id, Study.where('researcher_id = ?',current_user.id).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :kit_design_id %><br />
+    <%= f.select :kit_design_id, KitDesign.where('owner_id = ?',current_user.id).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+  </div>
+  <% if @kit.participant then %>
+  <div class="field">
+    <%= f.label :participant_id %><br />
+    <%= @kit.participant.full_name %>
+  </div>
+  <% end %>
+  <% if @kit.owner then %>
+  <div class="field">
+    <%= f.label :owner_id %><br />
+    <%= @kit.owner.full_name %>
+  </div>
+  <% end %>
+  <% if @kit.originator then %>
+  <div class="field">
+    <%= f.label :originator_id %><br />
+    <%= @kit.originator.full_name %>
+  </div>
+  <% end %>
+  <% if @kit.shipper then %>
+  <div class="field">
+    <%= f.label :shipper_id %><br />
+    <%= @kit.shipper.full_name %>
+  </div>
+  <% end %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

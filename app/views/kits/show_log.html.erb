@@ -1,0 +1,22 @@
+<h2>Kit log for <%= @kit.name %></h2>
+
+<% if not @kit_log.empty? then %>
+
+  <table class="admin_table">
+    <tr>
+      <th>When</th>
+      <th>Who</th>
+      <th>What</th>
+    </tr>
+  <% @kit_log.each do |log| %>
+    <tr>
+      <td><%= log.updated_at %></td>
+      <td><%= log.actor.full_name %></td>
+      <td><%= log.comment %></td>
+    </tr>
+  <% end %>
+  </table>
+<% else %>
+  There are no log entries yet for this kit.
+<% end %>
+

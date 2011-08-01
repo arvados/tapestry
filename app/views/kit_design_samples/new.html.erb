@@ -1,5 +1,25 @@
 <h2>New kit design sample</h2>
 
-<%= render 'form' %>
+<%= error_messages_for :kit_design_sample, :header_message => 'Error: data could not be saved.', :message => nil %>
 
-<%= link_to 'Back', kit_design_samples_path %>
+<%= form_for(@kit_design_sample) do |f| %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :kit_design %><br />
+    <%= f.select :kit_design_id, KitDesign.where('owner_id = ? and frozen = ?',current_user.id,false).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :sample_type %><br />
+    <%= select_tag :sample_type_id, options_for_select(SampleType.all.map{|r| [ r.name, r.id ] }, params[:sample_type_id]), :include_blank => true %>
+  </div>
+  <div class="field">
+    <%= f.label :sort_order %><br />
+    <%= f.text_field :sort_order %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,21 @@
+<%= form_for(@unused_kit_name) do |f| %>
+  <% if @unused_kit_name.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@unused_kit_name.errors.count, "error") %> prohibited this unused_kit_name from being saved:</h2>
+
+      <ul>
+      <% @unused_kit_name.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

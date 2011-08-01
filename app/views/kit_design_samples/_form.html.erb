@@ -1,26 +1,67 @@
+
+<% if @kit_design_sample.frozen then %>
+  <div class="prominent">
+  <p>This kit design sample has been frozen because kits based on its parent kit design have been marked as sent.<br/> The errata field is the only field that can be modified for this kit design sample.</p>
+  </div>
+<% end %>
+
 <%= error_messages_for :kit_design_sample, :header_message => 'Error: data could not be saved.', :message => nil %>
 
 <%= form_for(@kit_design_sample) do |f| %>
   <div class="field">
     <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
+    <% if @kit_design_sample.frozen then %>
+      <%= @kit_design_sample.name %>
+    <% else %>
+      <%= f.text_field :name %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :kit_design %><br />
-    <%= f.select :kit_design_id, KitDesign.find(:all).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+    <% if @kit_design_sample.frozen then %>
+      <%= @kit_design_sample.kit_design.name %>
+    <% else %>
+      <%= f.select :kit_design_id, KitDesign.where('owner_id = ? and frozen = ?',current_user.id,false).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+    <% end %>
   </div>
   <div class="field">
-    <%= f.label :sample_type %><br />
-    <%= f.select :sample_type_id, SampleType.find(:all).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+    <%= f.label :tissue %><br />
+    <% if @kit_design_sample.frozen then %>
+      <%= @kit_design_sample.tissue %>
+    <% else %>
+      <%= f.text_field :tissue %>
+    <% end %>
+  </div>
+  <div class="field">
+    <%= f.label :device %><br />
+    <% if @kit_design_sample.frozen then %>
+      <%= @kit_design_sample.device %>
+    <% else %>
+      <%= f.text_field :device %>
+    <% end %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <% if @kit_design_sample.frozen then %>
+      <%= @kit_design_sample.description %>
+    <% else %>
+      <%= f.text_area :description, :cols => 80 %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :sort_order %><br />
-    <%= f.text_field :sort_order %>
+    <% if @kit_design_sample.frozen then %>
+      <%= @kit_design_sample.sort_order %>
+    <% else %>
+      <%= f.text_field :sort_order %>
+    <% end %>
   </div>
+  <% if @kit_design_sample.frozen then %>
+    <div class="field">
+      <%= f.label :errata %><br />
+      <%= f.text_area :errata, :cols => 80 %>
+    </div>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

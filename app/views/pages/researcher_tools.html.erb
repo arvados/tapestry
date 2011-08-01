@@ -10,20 +10,19 @@
   &nbsp;&nbsp;<%= link_to raw("<strong>New Study</strong>"), url_for(:controller => 'studies', :action => 'new') %></li>
   <li><strong>Your kit designs</strong><br/>
   <% current_user.kit_designs.sort { |a,b| a.name <=> b.name }.each do |kd| %>
-  &nbsp;&nbsp;<%= link_to kd.name, edit_kit_design_path(kd.id) %><br/>
+  &nbsp;&nbsp;<%= link_to kd.name + (kd.frozen ? ' (FROZEN)' : ''), edit_kit_design_path(kd.id) %><br/>
   <% end %>
   &nbsp;&nbsp;<%= link_to raw("<strong>New Kit Design</strong>"), url_for(:controller => 'kit_designs', :action => 'new') %></li>
   <li><strong>Kit design samples</strong><br/>
   <% @kit_design_samples.each do |kd| %>
-  &nbsp;&nbsp;<%= link_to kd.name, edit_kit_design_sample_path(kd.id) %><br/>
+  &nbsp;&nbsp;<%= link_to kd.name + (kd.frozen ? ' (FROZEN)' : ''), edit_kit_design_sample_path(kd.id) %><br/>
   <% end %>
   &nbsp;&nbsp;<%= link_to raw("<strong>New Kit Design Sample</strong>"), url_for(:controller => 'kit_design_samples', :action => 'new') %></li>
 
+  <li><%= link_to raw("<strong>Kits</strong>"), url_for(:controller => 'kits', :action => 'index') %></li>
   <li><%= link_to raw("<strong>Device Types</strong>"), url_for(:controller => 'device_types', :action => 'index') %></li>
   <li><%= link_to raw("<strong>Sample Types</strong>"), url_for(:controller => 'sample_types', :action => 'index') %></li>
 
-  <li><strong>User log</strong><br>
-  &nbsp;&nbsp;<%= link_to "Show", url_for(:controller => 'users', :action => 'show_log') %></li>
 </ul>
 </div>
 
@@ -42,18 +41,26 @@ Your IRB status: <strong><%= current_user.researcher_onirb? ? 'on the IRB roster
 
 <h3>Your studies</h3>
 
-  <ul>
-  <% @studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
-  <li><%= study.name %> (<%= study.status %>)<br/>
-    <% if study.kit_designs.count > 0 %>
-      <strong>Kit designs</strong><br/>
-      <% study.kit_designs.sort { |a,b| a.name <=> b.name }.each do |kd| %>
-      &nbsp;&nbsp;&nbsp;&nbsp;<%= kd.name %><br/>
-      <% end %>
-    <% end %>
-  </li>
-  <% end %>
-  <ul>
+<% if @requested_studies.count > 0 %>
+<h4>Requested studies</h4>
+<%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @requested_studies, :type => 'requested', :who => 'researcher' } %>
+<% end %>
+
+<% if @approved_studies.count > 0 %>
+<h4>Approved studies</h4>
+<%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @approved_studies, :type => 'approved', :who => 'researcher' } %>
+<% end %>
+
+<% if @draft_studies.count > 0 %>
+<h4>Draft studies</h4>
+<%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @draft_studies, :type => 'draft', :who => 'researcher' } %>
+<% end %>
+
+<% if @requested_studies.count > 0 or @approved_studies.count > 0 or @draft_studies.count > 0 then %>
+Legend: U: Undecided | I: Interested | NI: Not interested | A: Accepted | NA: Not accepted | R: Removed
+<% else %>
+You do not have any studies yet.
+<% end %>
 
 </div>
 
