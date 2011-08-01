@@ -2,7 +2,14 @@
 
 <p>If you have received a sample collection kit in the mail, please claim your kit here.</p>
 
-<p>What is the nickname of your kit?</p>
+<p>Each kit has a nickname, which was randomly chosen from boston area street
+names. You can locate the kit nickname here:</p>
+
+<div align="center">
+<%= link_to image_tag('kit_label_circled_small.jpg', :size => '400x300'), image_path('kit_label_circled.jpg') %>
+</div>
+
+<h3>What is the nickname of your kit?</h3>
 
 <%= form_tag kit_claim_path, :method => 'post' do %>
   <div class="field">
