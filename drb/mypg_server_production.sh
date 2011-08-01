@@ -20,7 +20,7 @@ case "$1" in
 				/usr/bin/daemon --restart -n mypg_server_production
 			else
 				echo "mypg_server was not running. Starting it now..."
-				/usr/bin/daemon -r -U -o $P/../log/mypg_server.error1 -E $P/../log/mypg_server.error -O $P/../log/mypg_server.log -n mypg_server_production $RUBY $P/SERVER production
+				/usr/bin/daemon -r -U -o $P/../log/mypg_server.error1 -E $P/../log/mypg_server.error -O $P/../log/mypg_server.log -n mypg_server_production $RUBY $P/$SERVER production
 			fi
   ;;
   *)
