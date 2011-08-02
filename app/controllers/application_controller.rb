@@ -43,6 +43,7 @@ class ApplicationController < ActionController::Base
         (cols=m.class.columns_hash))
       ['user_id', 'owner_id', 'created_by'].each do |col|
         if cols.has_key? col and m.attributes[col] != current_user.id
+          current_user.log("SECURITY: Tried to modify #{model_name}: value change for unowned record: id #{params[:id]}; params: #{params.inspect()}")
           flash[:error] = "You do not have permission to edit #{m.class} ##{m.id} -- it belongs to a different user."
           redirect_to :controller => '/'+controller_path
           return false
@@ -55,9 +56,26 @@ class ApplicationController < ActionController::Base
   def prevent_setting_ownership
     return true if current_user.is_admin?
     ['user_id', 'owner_id', 'created_by'].each do |col|
-      re = Regexp.new("\\[#{col}\\]$")
+      re = Regexp.new("^#{col}$")
       params.each do |k,v|
-        params.delete k if re.match k
+        if k == controller_name.singularize.underscore then
+          begin
+            v.each do |k2,v2|
+              if re.match k2 then
+                v.delete k2
+                current_user.log("SECURITY: Tried to modify #{model_name}: ownership change: #{k2} to #{v2}; params: #{params.inspect()}")
+              end
+            end
+          rescue
+            # Make sure we don't blow up if this object is not a real hash.
+            # The common object as of Rails 3.0.9 is ActiveSupport::HashWithIndifferentAccess
+            # which is a Hash derivative (but the parent is just 'Object').
+            # Ward, 2011-08-02
+          end
+        elsif re.match k then
+          params.delete k
+          current_user.log("SECURITY: Tried to modify #{model_name}: ownership change: #{k} to #{v}; params: #{params.inspect()}")
+        end
       end
     end
   end
