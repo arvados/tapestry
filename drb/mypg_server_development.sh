@@ -15,20 +15,20 @@ DELAY_BETWEEN_RESTART=5
 case "$1" in
     start)
 			echo "Starting mypg_server..."
-			/usr/bin/daemon -r -U -o $P/../log/mypg_server.error1 -E $P/../log/mypg_server.error -O $P/../log/mypg_server.log -n mypg_server_dev $RUBY $P/$SERVER development
+			/usr/bin/daemon -u www-data -r -U -o $P/../log/mypg_server.error1 -E $P/../log/mypg_server.error -O $P/../log/mypg_server.log -n mypg_server_dev $RUBY $P/$SERVER development
   ;;
     stop)
 			echo "Stopping mypg_server..."
-			/usr/bin/daemon --stop -n mypg_server_dev
+			/usr/bin/daemon -u www-data --stop -n mypg_server_dev
   ;;
     restart)
-			/usr/bin/daemon --running -n mypg_server_dev
+			/usr/bin/daemon -u www-data --running -n mypg_server_dev
 			if [ "$?" = "0" ]; then
 				echo "Restarting mypg_server..."
-				/usr/bin/daemon --restart -n mypg_server_dev
+				/usr/bin/daemon -u www-data --restart -n mypg_server_dev
 			else
 				echo "mypg_server was not running. Starting it now..."
-				/usr/bin/daemon -r -U -o $P/../log/mypg_server.error1 -E $P/../log/mypg_server.error -O $P/../log/mypg_server.log -n mypg_server_dev $RUBY $P/$SERVER development
+				/usr/bin/daemon -u www-data -r -U -o $P/../log/mypg_server.error1 -E $P/../log/mypg_server.error -O $P/../log/mypg_server.log -n mypg_server_dev $RUBY $P/$SERVER development
 			fi
   ;;
   *)
