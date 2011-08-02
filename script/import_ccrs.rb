@@ -1,4 +1,5 @@
-#!/bin/ruby
+#!/usr/bin/env ruby
+
 # This script parses CCR xml files in the data directory and saves them as
 # objects in the database.
 #

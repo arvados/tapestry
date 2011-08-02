@@ -1,4 +1,4 @@
-#!/usr/bin/ruby1.8
+#!/usr/bin/env ruby
 
 # Default is development
 production = ARGV[0] == "production"
