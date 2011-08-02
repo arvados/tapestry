@@ -75,11 +75,8 @@ This information is private and not part of your public profile.
               :action => 'unlink_googlehealth' %>
 <% end %>
 
-<h2>Delete my account</h2>
-<p>If you would like to delete your account, click below to request an account deletion:</p>
-<%= button_to 'Delete my account',
-              user_url(@user),
-              :confirm => 'Are you sure?  This will send an email requestion an account deletion.  A PGP administrator will remove your account.',
-              :method => 'delete' %>
+<h2>Withdraw from the PGP</h2>
+<p>Participation in this study is voluntary.  You may withdraw your participation (including your data, subject to certain limitations) from this study at any time.  You will never have to provide a reason for your withdrawal.</p>
+<p><%= button_to 'Withdraw from the PGP...', page_path(:withdrawal_menu), :method => :get %></p>
 
 <% end %>

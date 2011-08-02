@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @removal_request.user %>
+</p>
+
+<p>
+  <b>Items to remove:</b>
+  <%=raw h(@removal_request.items_to_remove).gsub("\n","<br />") %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%= @removal_request.created_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_removal_request_path(@removal_request) %> |
+<%= link_to 'Back', removal_requests_path %>

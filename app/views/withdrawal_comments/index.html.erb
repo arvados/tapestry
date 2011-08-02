@@ -1,0 +1,24 @@
+<h2>Listing withdrawal comments</h2>
+
+<table class="admin_table">
+  <thead>
+    <tr>
+      <th>Hex id</th>
+      <th>Name</th>
+      <th>Comment</th>
+      <th>Created at</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @withdrawal_comments.each do |withdrawal_comment| %>
+    <tr>
+      <td><%= withdrawal_comment.user.hex %></td>
+      <td><%= withdrawal_comment.user.full_name %></td>
+      <td><%=raw h(withdrawal_comment.comment).gsub("\n","<br />") %></td>
+      <td><%= withdrawal_comment.created_at %></td>
+      <td><%= link_to 'Show', withdrawal_comment %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

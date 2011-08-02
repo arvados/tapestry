@@ -1,0 +1,32 @@
+<h2>Withdraw from the PGP<%= ' and request removal' if @request_removal %></h2>
+
+<p>Please confirm that you want to withdraw from the PGP and
+deactivate your account.  After doing so, you will no longer be able
+to access or update your account and the PGP will no longer contact
+you.</p>
+
+<%= form_for(@user, { :url => withdraw_confirm_user_path(@user.id) }) do |f| %>
+
+<% if @request_removal %>
+
+<p>Please specify the items you want removed from the PGP research study.</p>
+
+<%= f.fields_for :removal_requests do |x| %>
+<div class="field">
+  <%= x.text_area :items_to_remove, :cols => 72, :rows => 8 %>
+</div>
+<% end %>
+
+<div class="actions">
+  <%= f.submit 'Confirm and send request' %>
+</div>
+
+<% else %>
+
+<div class="actions">
+  <%= f.submit 'Confirm' %>
+</div>
+
+<% end %>
+
+<% end %>

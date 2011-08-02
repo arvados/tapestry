@@ -1,0 +1,2 @@
+module RemovalRequestsHelper
+end

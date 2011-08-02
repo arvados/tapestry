@@ -1,0 +1,16 @@
+<h2>Comments recorded at time of withdrawal</h2>
+
+<p>
+  <b>Participant:</b>
+  <%= @withdrawal_comment.user.full_name %>
+</p>
+
+<p>
+  <b>Comment:</b>
+  <%=raw h(@withdrawal_comment.comment).gsub("\n","<br />") %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%= @withdrawal_comment.created_at %>
+</p>

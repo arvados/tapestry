@@ -1,4 +1,6 @@
 PgpEnroll::Application.routes.draw do
+  resources :withdrawal_comments
+
   resources :samples
 
   resources :unused_kit_names
@@ -50,6 +52,8 @@ PgpEnroll::Application.routes.draw do
   match '/users/unauthorized' => 'users#unauthorized', :as => :unauthorized_user
   match '/users/created/:id' => 'users#created', :as => :created_user
   match '/users/show_log' => 'users#show_log', :as => :show_log_user
+  match '/users/:id/withdraw' => 'users#withdraw', :as => :withdraw_user
+  match '/users/:id/withdraw_confirm' => 'users#withdraw_confirm', :as => :withdraw_confirm_user
   match '/drb/userlog/:user_id' => 'drb#userlog', :as => :userlog_drb
   match '/user/:id/study/:study_id' => 'users#edit_study', :as => :user_edit_study, :via => :get
   match '/user/:id/study/:study_id' => 'users#update_study', :as => :user_update_study, :via => :post
@@ -166,6 +170,7 @@ PgpEnroll::Application.routes.draw do
       resources :invited_emails
       resources :phr_reports
       resources :oauth_services
+      resources :removal_requests
   end
 
   resources :geographic_information

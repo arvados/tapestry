@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110807153230) do
+ActiveRecord::Schema.define(:version => 20110807230848) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1271,6 +1271,13 @@ ActiveRecord::Schema.define(:version => 20110807153230) do
   add_index "question_responses", ["exam_question_id"], :name => "index_question_responses_on_exam_question_id"
   add_index "question_responses", ["exam_response_id"], :name => "index_question_responses_on_exam_response_id"
 
+  create_table "removal_requests", :force => true do |t|
+    t.integer  "user_id"
+    t.text     "items_to_remove"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "residency_survey_response_versions", :force => true do |t|
     t.integer  "residency_survey_response_id"
     t.integer  "lock_version"
@@ -1991,6 +1998,13 @@ ActiveRecord::Schema.define(:version => 20110807153230) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+  end
+
+  create_table "withdrawal_comments", :force => true do |t|
+    t.integer  "user_id"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end

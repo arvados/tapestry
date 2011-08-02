@@ -1,0 +1,25 @@
+<h2>Listing removal requests</h2>
+
+<table class="admin_table">
+  <thead>
+    <tr>
+      <th>Hex ID</th>
+      <th>Name</th>
+      <th>Items to remove</th>
+      <th>Created at</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @admin_removal_requests.each do |admin_removal_request| %>
+    <tr>
+      <td><%= admin_removal_request.user.hex %></td>
+      <td><%= admin_removal_request.user.full_name %></td>
+      <td><%=raw h(admin_removal_request.items_to_remove).gsub("\n","<br />") %></td>
+      <td><%= admin_removal_request.created_at %></td>
+      <td><%= link_to 'Show', [:admin, admin_removal_request] %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+

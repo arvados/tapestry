@@ -1,0 +1,20 @@
+<h2>Withdraw from the PGP</h2>
+
+<p>Participation in this study is voluntary.  You may withdraw your
+participation from this study at any time.  If you choose to withdraw,
+your account will be deactivated.  This means that the <b>PGP will
+maintain your tissues, cell lines, genetic data, trait data and all
+other participant data</b> and information associated with your
+account, but the PGP will no longer contact you and you will not be
+able to access or update your account.</p>
+
+<%= button_to 'Withdraw and deactivate my account now', withdraw_user_path(current_user.id), :method => :post %>
+
+<p>You are free to decide at any time that <b>you no longer want your
+tissue samples, DNA sequence or other specimen analysis data, cell
+lines or other information to be used</b> as part of this study.  As
+described in the consent form, it may not be possible to prevent the
+future use of your data, cell lines and/or other information in
+certain circumstances.</p>
+
+<%= button_to 'Withdraw and request removal', {:controller => 'users', :id => current_user.id, :action => 'withdraw', :request_removal => 1 }, { :method => :post } %>

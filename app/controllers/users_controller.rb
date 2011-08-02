@@ -285,10 +285,32 @@ class UsersController < ApplicationController
     end
   end
 
+  def withdraw
+    @user = User.find(params[:id])
+    @request_removal = params[:request_removal]
+  end
+
+  def withdraw_confirm
+    @user = User.find(params[:id])
+    if params[:user] and params[:user][:removal_requests]
+      rr = RemovalRequest.new(:user => @user)
+      rr.update_attributes(params[:user][:removal_requests])
+      rr.save!
+    end
+    if @user.deactivated_at.nil?
+      @user.log('Withdrew from the PGP.')
+      @user.deactivated_at = Time.now
+      @user.suspended_at = Time.now unless @user.suspended_at
+      @user.can_unsuspend_self = false
+      @user.save!
+    end
+    redirect_to new_withdrawal_comment_path
+  end
+
   private
 
   def ensure_current_user_may_edit_this_user
-    redirect_to root_url unless current_user && ( current_user.id == params[:id].to_i ) # || current_user.admin?
+    redirect_to root_url unless current_user && ( current_user.id == params[:id].to_i ) && !current_user.deactivated_at # || current_user.admin?
   end
 
   def ensure_invited
