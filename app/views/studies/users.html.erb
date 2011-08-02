@@ -21,7 +21,7 @@
     <th>Status</th>
     <th></th>
   </tr>
-  <% @participants.sort { |a,b| a.name <=> b.name }.each do |p| %>
+  <% @participants.each do |p| %>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%= current_user.is_admin? ? link_to(p.user.full_name, admin_user_url(p.user)) : p.user.full_name %></td>
       <td><%= p.pretty_status %></td>
