@@ -29,15 +29,15 @@ class KitsController < ApplicationController
 
   # GET /kit/claim
   def claim
-    @kit = Kit.where('last_mailed is not ? and name = ?',nil,params[:name]).first
+    # TMP TO DEAL WITH DUPLICATE KIT NAME
+    if (params[:name] =~ /^(D|d)anforth$/ and not params.has_key?('for_real')) then
+        redirect_to(:controller => 'kits', :action => 'claim_danforth', :name => params[:name])
+        return
+    end
+    @kit = Kit.where('last_mailed is not ? and participant_id is ? and name = ?',nil,nil,params[:name]).first
     if (@kit.nil?) then
         flash[:error] = 'We do not have a record of a kit with this name. Please double check the spelling. If you are certain the spelling is correct, please contact support@personalgenomes.org.'
         redirect_to(:controller => 'studies', :action => 'claim')
-        return
-    end
-    # TMP TO DEAL WITH DUPLICATE KIT NAME
-    if (@kit.name == 'Danforth' and not params.has_key?('for_real')) then
-        redirect_to(:controller => 'kits', :action => 'claim_danforth', :name => params[:name])
         return
     end
   end
