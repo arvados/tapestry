@@ -29,7 +29,11 @@ class KitObserver < ActiveRecord::Observer
       s.unit = kds.unit
       s.material = kds.tissue
       s.save
-STDERR.puts      s.errors.to_s
+      errors = ''
+      s.errors.each_full{|msg| errors += msg }
+      if errors != '' then
+        KitLog.new(:actor => kit.owner, :comment => "Sample could not be created: #{errors}", :kit_id => kit.id).save
+      end
       SampleLog.new(:actor => kit.owner, :comment => 'Sample created', :sample_id => s.id).save
     end
   end
