@@ -26,7 +26,8 @@ class StudiesController < ApplicationController
   # GET /studies/1/users
   def users
     @study = Study.find(params[:id])
-    @participants = @study.study_participants.real
+    @all_participants = @study.study_participants.real
+    @participants = @study.study_participants.real.sort { |a,b| a.user.full_name <=> b.user.full_name }
     respond_to do |format|
       format.html
       format.csv { send_data csv_for_study(@study,params[:type]), {

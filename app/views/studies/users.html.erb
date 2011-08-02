@@ -2,14 +2,14 @@
 
 <table class="admin_table">
 <tr>
-<td>Undecided:</td><td><%= @participants.undecided.count %></td>
-<td>Interested:</td><td><%= @participants.interested.count %></td>
-<td>Not accepted:</td><td><%= @participants.not_accepted.count %></td>
+<td>Undecided:</td><td><%= @all_participants.undecided.count %></td>
+<td>Interested:</td><td><%= @all_participants.interested.count %></td>
+<td>Not accepted:</td><td><%= @all_participants.not_accepted.count %></td>
 </tr>
 <tr>
-<td>Not interested:</td><td><%= @participants.not_interested.count %></td>
-<td>Accepted:</td><td><%= @participants.accepted.count %></td>
-<td>Removed:</td><td><%= @participants.removed.count %></td>
+<td>Not interested:</td><td><%= @all_participants.not_interested.count %></td>
+<td>Accepted:</td><td><%= @all_participants.accepted.count %></td>
+<td>Removed:</td><td><%= @all_participants.removed.count %></td>
 </tr>
 </table>
 
@@ -23,7 +23,7 @@
   </tr>
   <% @participants.sort { |a,b| a.name <=> b.name }.each do |p| %>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= link_to p.user.full_name, user_url(p.user) %></td>
+      <td><%= current_user.is_admin? ? link_to(p.user.full_name, admin_user_url(p.user)) : p.user.full_name %></td>
       <td><%= p.pretty_status %></td>
       <td>
       <% if p.status == 2 %>
