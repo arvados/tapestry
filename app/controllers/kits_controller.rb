@@ -15,7 +15,7 @@ class KitsController < ApplicationController
         redirect_to(:controller => 'kits', :action => 'claim', :name => 'Danforth', :for_real => '1')
         return
       elsif params.has_key?('danforth_or_adair') and params[:danforth_or_adair] == '79615591' then
-        flash[:notice] = 'Thank you, the real name for your kit is <strong>Adair</strong>. If you wish, you may relabel the sample tubes as <strong>Adair</strong>, but you do not need to. We now know which kit you have, so please proceed with the confirmation process below.'
+        flash[:notice] = 'Thank you, the real name for your kit is <strong>Adair</strong>. To be sure everything is right, please check that the sample IDs below are correct (please contact <a href="mailto:support@personalgenomes.org">support@personalgenomes.org</a> if they are not). If you wish, you may relabel the sample tubes as <strong>Adair</strong>, but you do not need to. We now know which kit you have, so please proceed with the confirmation process below.'
         redirect_to(:controller => 'kits', :action => 'claim', :name => 'Adair')
         return
       else
