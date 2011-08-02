@@ -37,13 +37,13 @@ class ApplicationController < ActionController::Base
   end
 
   def only_owner_can_change
-    return true if current_user.is_admin?
+    return true if current_user and current_user.is_admin?
     if (params[:id] and
         (m=model.find(params[:id])) and
         (cols=m.class.columns_hash))
       ['user_id', 'owner_id', 'created_by'].each do |col|
         if cols.has_key? col and m.attributes[col] != current_user.id
-          current_user.log("SECURITY: Tried to modify #{model_name}: value change for unowned record: id #{params[:id]}; params: #{params.inspect()}")
+          current_user.log("SECURITY: Tried to modify #{model_name}: value change for unowned record: id #{params[:id]}; params: #{params.inspect()}") if current_user
           flash[:error] = "You do not have permission to edit #{m.class} ##{m.id} -- it belongs to a different user."
           redirect_to :controller => '/'+controller_path
           return false
@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
             v.each do |k2,v2|
               if re.match k2 then
                 v.delete k2
-                current_user.log("SECURITY: Tried to modify #{model_name}: ownership change: #{k2} to #{v2}; params: #{params.inspect()}")
+                current_user.log("SECURITY: Tried to modify #{model_name}: ownership change: #{k2} to #{v2}; params: #{params.inspect()}") if current_user
               end
             end
           rescue
@@ -74,7 +74,7 @@ class ApplicationController < ActionController::Base
           end
         elsif re.match k then
           params.delete k
-          current_user.log("SECURITY: Tried to modify #{model_name}: ownership change: #{k} to #{v}; params: #{params.inspect()}")
+          current_user.log("SECURITY: Tried to modify #{model_name}: ownership change: #{k} to #{v}; params: #{params.inspect()}") if current_user
         end
       end
     end
