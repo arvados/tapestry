@@ -5,12 +5,39 @@ class KitsController < ApplicationController
 
   before_filter :ensure_researcher, :except => ['claim']
 
+  # TMP TO DEAL WITH DUPLICATE KIT NAME
+  def claim_danforth
+    @kit = Kit.where('last_mailed is not ? and name = ?',nil,params[:name]).first
+
+    if request.post? then
+      if params.has_key?('danforth_or_adair') and params[:danforth_or_adair] == '37764001' then
+        flash[:notice] = 'Thank you, you have the real kit named <strong>Danforth</strong>. We now know which kit you have, please proceed with the confirmation process below.'
+        redirect_to(:controller => 'kits', :action => 'claim', :name => 'Danforth', :for_real => '1')
+        return
+      elsif params.has_key?('danforth_or_adair') and params[:danforth_or_adair] == '79615591' then
+        flash[:notice] = 'Thank you, the real name for your kit is <strong>Adair</strong>. If you wish, you may relabel the sample tubes as <strong>Adair</strong>, but you do not need to. We now know which kit you have, so please proceed with the confirmation process below.'
+        redirect_to(:controller => 'kits', :action => 'claim', :name => 'Adair')
+        return
+      else
+        flash[:notice] = 'Please select a kit id number'
+        redirect_to(:controller => 'kits', :action => 'claim_danforth', :name => 'Danforth')
+        return
+      end
+    end
+
+  end
+
   # GET /kit/claim
   def claim
     @kit = Kit.where('last_mailed is not ? and name = ?',nil,params[:name]).first
     if (@kit.nil?) then
         flash[:error] = 'We do not have a record of a kit with this name. Please double check the spelling. If you are certain the spelling is correct, please contact support@personalgenomes.org.'
         redirect_to(:controller => 'studies', :action => 'claim')
+        return
+    end
+    # TMP TO DEAL WITH DUPLICATE KIT NAME
+    if (@kit.name == 'Danforth' and not params.has_key?('for_real')) then
+        redirect_to(:controller => 'kits', :action => 'claim_danforth', :name => params[:name])
         return
     end
   end

@@ -6,6 +6,10 @@ PgpEnroll::Application.routes.draw do
   match '/kits/:id/log' => 'kits#show_log', :as => :show_kit_log, :via => :get
   match '/kits/:id/confirm_claim' => 'kits#confirm_claim', :as => :kit_confirm_claim, :via => :post
   match '/kits/claim' => 'kits#claim', :as => :kit_claim
+
+  # TMP TO DEAL WITH DUPLICATE KIT NAME
+  match '/kits/claim_danforth' => 'kits#claim_danforth', :as => :kit_claim_danforth
+
   resources :kits
   match '/kits/:id/sent' => 'kits#sent', :as => :sent_kit, :via => :post
   match '/kits/:id/returned' => 'kits#returned', :as => :returned_kit, :via => :post
