@@ -15,6 +15,7 @@ class Admin::OauthServicesController < Admin::AdminControllerBase
   # GET /admin/oauth_services/1.xml
   def show
     @admin_oauth_service = OauthService.find(params[:id])
+    @admin_oauth_service[:privatekey_ok] = @admin_oauth_service.privatekey.nil? ? '-' : 'OK'
 
     respond_to do |format|
       format.html # show.html.erb
