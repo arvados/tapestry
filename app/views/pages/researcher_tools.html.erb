@@ -32,6 +32,9 @@
   <%= link_to 'Create new', url_for(:controller => 'google_surveys', :action => 'new') %>
   </small></li>
 
+  <li><strong>External data sources</strong><br/>
+  &nbsp;&nbsp;<%= link_to raw("Authorizations"), url_for(:controller => 'oauth_tokens', :action => 'index') %></li>
+
 </ul>
 </div>
 
