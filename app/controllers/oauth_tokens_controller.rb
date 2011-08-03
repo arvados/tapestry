@@ -15,8 +15,18 @@ class OauthTokensController < ApplicationController
       token = OauthToken.new(:user => current_user,
                              :oauth_service => OauthService.find(params[:id]))
     end
-    if token.authorize!(oauth_tokens_path)
-      redirect_to token.redirect_to
+    if token.authorized? then
+      flash[:notice] = 'You have already authorized this service.'
+      redirect_to oauth_tokens_path
+      return
+    end
+
+    (status,destination) = token.authorize!(oauth_tokens_path)
+    if not status.nil?
+      redirect_to destination
+    else
+      flash[:error] = "Unable to authorize: #{destination}. Please try again later."
+      redirect_to request.env['HTTP_REFERER']
     end
   end
 

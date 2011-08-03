@@ -8,7 +8,6 @@ class OauthToken < ActiveRecord::Base
   belongs_to :oauth_service
   validates_uniqueness_of :user_id, :oauth_service_id
 
-  attr_reader :redirect_to
   attr_protected :requesttoken
   attr_protected :accesstoken
 
@@ -22,14 +21,7 @@ class OauthToken < ActiveRecord::Base
   end
 
   def authorize!(next_page)
-    if authorized?
-      flash[:notice] = 'You have already authorized this service.'
-      @redirect_to = next_page
-      return nil
-    end
-    callback_uri = ROOT_URL + '/oauth_tokens/get_access_token?next_page=' + uriencode(next_page)
-    base_uri = self.oauth_service.getrequesttoken_uri
-    uri = URI.parse(base_uri)
+    callback_uri = 'https://' + ROOT_URL + '/oauth_tokens/get_access_token?next_page=' + uriencode(next_page)
     formdata = {
       'oauth_callback' => callback_uri,
       'oauth_consumer_key' => self.oauth_service.consumerkey,
@@ -39,17 +31,25 @@ class OauthToken < ActiveRecord::Base
       'scope' => self.oauth_service.scope,
       'oauth_version' => '1.0'
     }
+    base_uri = self.oauth_service.getrequesttoken_uri
+    uri = URI.parse(base_uri)
     formdata['oauth_signature'] = oauth_service.sign('POST', base_uri, formdata)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true if uri.scheme == 'https'
     req = Net::HTTP::Post.new(uri.request_uri)
     req.set_form_data(formdata)
     resp = http.request(req)
-    @oauth_token = uridecode(resp.body.scan(/oauth_token=([^&]*)/)[0][0])
+    oauth_token_scan = resp.body.scan(/oauth_token=([^&]*)/)
+    if resp.nil? then
+      return nil,''
+    elsif oauth_token_scan.empty? then
+      return nil,resp.body
+    end
+    @oauth_token = uridecode(oauth_token_scan[0][0])
     @oauth_token_secret = uridecode(resp.body.scan(/oauth_token_secret=([^&]*)/)[0][0])
     self.requesttoken = @oauth_token + ' ' + @oauth_token_secret
-    @redirect_to = @oauth_service.authorizetoken_uri + '?oauth_token=' + uriencode(@oauth_token)
     save!
+    return true,@oauth_service.authorizetoken_uri + '?oauth_token=' + uriencode(@oauth_token)
   end
 
   def get_access_token(token, verifier)
