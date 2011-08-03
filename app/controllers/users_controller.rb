@@ -228,11 +228,8 @@ class UsersController < ApplicationController
   end
 
   def participant_survey
-    @secret = Digest::MD5.hexdigest( SURVEY_SALT + current_user.hex )
-    current_user.log("Clicked through to participant survey: #{@secret} -> #{current_user.hex}")
-    redirect_to "https://spreadsheets.google.com/spreadsheet/viewform?hl=en_US&formkey=dHRaNUxmUHdVaktxZXdsRlVyMlIwUUE6MQ&entry_71=" + @secret
+     redirect_to google_survey_url(GoogleSurvey.find(1))
   end
-
 
   def show_log
     @log = UserLog.find(:all, :conditions => "user_id = #{current_user.id} and user_comment is not null", :order => 'created_at DESC')
