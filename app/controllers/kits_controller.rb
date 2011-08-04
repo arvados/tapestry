@@ -3,7 +3,7 @@ class KitsController < ApplicationController
   skip_before_filter :ensure_latest_consent
   skip_before_filter :ensure_recent_safety_questionnaire
 
-  before_filter :ensure_researcher, :except => ['claim']
+  before_filter :ensure_researcher, :except => ['claim', 'confirm_claim', 'claim_danforth', 'returned']
 
   # TMP TO DEAL WITH DUPLICATE KIT NAME
   def claim_danforth
