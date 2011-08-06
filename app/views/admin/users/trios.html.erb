@@ -8,11 +8,10 @@ There are currently <%= @trios.length %> trios enrolled.
   <th>Parents</th>
 </tr>
 <% @trios.each do |t| 
-    parents = t.family_relations.select {|r| r.relation = 'parent'}
+    parents = t.family_relations.select {|r| r.relation == 'parent'}
 %>
 <tr>
   <td><%= link_to t.hex, public_profile_path(:hex => t.hex) %></td>
-  <td><a href="<%= public_profile_url(t) %>"><%= t.hex %></a></td>
   <td><% parents.each do |p| %><%= link_to p.relative.hex, public_profile_path(:hex => p.relative.hex) %>&nbsp; <% end %></td>
 </tr>
 <% end %>
