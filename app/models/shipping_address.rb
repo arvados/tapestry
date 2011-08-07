@@ -6,7 +6,7 @@ class ShippingAddress < ActiveRecord::Base
   acts_as_gmappable :check_process => false
 
   def gmaps4rails_marker_picture
-    # TODO FIXME: this function is currently hardcoded for Study.find(1). That's not good.
+    # TODO FIXME: this function is currently hardcoded for Study.find(2). That's not good.
     # yellow: shipped
     # green: claimed
     # blue: returned
@@ -15,11 +15,11 @@ class ShippingAddress < ActiveRecord::Base
     # we can not distinguish between these 2 states.
     @picture = '/images/yellow.png'
     # Claimed by participant
-    @picture = '/images/green.png' if Study.find(1).kits.claimed.collect { |x| x.participant.shipping_address.id }.include?(id)
+    @picture = '/images/green.png' if Study.find(2).kits.claimed.collect { |x| x.participant.shipping_address.id }.include?(id)
     # Returned to researcher
-    @picture = '/images/blue.png' if Study.find(1).kits.returned.collect { |x| x.participant.shipping_address.id }.include?(id)
+    @picture = '/images/blue.png' if Study.find(2).kits.returned.collect { |x| x.participant.shipping_address.id }.include?(id)
     # Received by researcher
-    @picture = '/images/brown.png' if Study.find(1).kits.received.collect { |x| x.participant.shipping_address.id }.include?(id)
+    @picture = '/images/brown.png' if Study.find(2).kits.received.collect { |x| x.participant.shipping_address.id }.include?(id)
     {
       "picture" => @picture,    # string, mandatory
        "width" =>  23,          # string, mandatory
