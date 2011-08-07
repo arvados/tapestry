@@ -31,6 +31,12 @@ class StudiesController < ApplicationController
   def show
     @study = Study.find(params[:id])
 
+    if not current_user.is_admin? and @study.approved == nil then
+      # Only approved studies should be available here for ordinary users
+      redirect_to('/pages/studies')
+      return
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @studies }
@@ -124,6 +130,12 @@ class StudiesController < ApplicationController
       params[:study].delete(:name)
       params[:study].delete(:participant_description)
     end
+
+    @open = params[:study].delete(:open)
+    if ((@study.open != @open) and (@study.open == false)) then
+      @study.date_opened = Time.now()
+    end
+    @study.open = @open
 
     respond_to do |format|
       if @study.update_attributes(params[:study])

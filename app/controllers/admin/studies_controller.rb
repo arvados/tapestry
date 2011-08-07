@@ -17,7 +17,11 @@ class Admin::StudiesController < Admin::AdminControllerBase
   def update
     @study = Study.find(params[:id])
     @study.irb_associate = params[:study].delete(:irb_associate)
-    @study.approved = params[:study].delete(:approved)
+    @approved = params[:study].delete(:approved)
+    if ((@study.approved != @approved) and (@study.approved == false)) then
+      @study.date_approved = Time.now()
+    end
+    @study.approved = @approved
     @study.requested = false if @study.approved
 
     if @study.update_attributes(params[:study])

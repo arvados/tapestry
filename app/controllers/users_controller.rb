@@ -260,7 +260,6 @@ class UsersController < ApplicationController
       @study_participant = nil
     end
 
-
     respond_to do |format|
       format.html
       format.xml  { render :xml => @studies }
