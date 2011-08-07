@@ -33,6 +33,7 @@ PgpEnroll::Application.routes.draw do
   resources :kit_designs
   match '/studies/claim' => 'studies#claim', :as => :study_claim_kit
   match '/studies/:id/users' => 'studies#users', :as => :study_users
+  match '/studies/:id/map' => 'studies#map', :as => :study_map
   match '/studies/:study_id/users/:user_id/:status' => 'studies#update_user_status', :as => :study_update_user_status
   resources :studies
 

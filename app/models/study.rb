@@ -6,10 +6,11 @@ class Study < ActiveRecord::Base
   belongs_to :irb_associate, :class_name => "User"
 
   has_many :kit_designs
+  has_many :kits
   # BEWARE: study.study_participants includes test users... I can't find a way to exclude them here. Use
   # study.study_participants.real (a scope on the study_participants model) instead. Ward, 2011-07-31
   has_many :study_participants, :dependent => :destroy
-  has_many :users, :through => :study_participants, :conditions => ['is_test = ?', false]
+  has_many :users, :through => :study_participants, :conditions => ['users.is_test = ?', false]
 
   validates_uniqueness_of :name
   validates_presence_of   :name

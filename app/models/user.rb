@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
 
   has_one  :shipping_address, :dependent => :destroy
 
+  scope :shipping_address, joins(:shipping_addresses)
+
   # Next three are legacy and will go away when we drop the code for v1 of the eligibility survey
   has_one  :residency_survey_response, :dependent => :destroy
   has_one  :family_survey_response, :dependent => :destroy

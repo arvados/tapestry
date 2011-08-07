@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110801040513) do
+ActiveRecord::Schema.define(:version => 20110806235946) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1529,6 +1529,9 @@ ActiveRecord::Schema.define(:version => 20110801040513) do
     t.datetime "updated_at"
     t.integer  "lock_version"
     t.string   "phone"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.boolean  "gmaps"
   end
 
   create_table "studies", :force => true do |t|

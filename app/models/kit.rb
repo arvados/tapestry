@@ -20,6 +20,11 @@ class Kit < ActiveRecord::Base
   scope :owned_by, lambda { |user_id| where('owner_id = ?', user_id) }
   scope :participant, lambda { |user_id| where('participant_id = ?', user_id) }
 
+  scope :shipped, where('participant_id is ? and shipper_id is not ? and owner_id is ?',nil,nil,nil)
+  scope :claimed, where('participant_id is not ? and owner_id=participant_id',nil)
+  scope :returned, where('participant_id is not ? and owner_id is ?',nil,nil)
+  scope :received, where('participant_id is not ? and owner_id is not ? and owner_id != participant_id',nil,nil)
+
   def status
     if self.participant.nil? and self.shipper.nil? then
       'Kit created'
@@ -29,7 +34,7 @@ class Kit < ActiveRecord::Base
       'Kit shipped to participant'
     elsif self.participant and self.owner = self.participant then
       'Participant has kit'
-    elsif self.participant and self.owner != self.participant then
+    elsif self.participant and not self.owner.nil? and self.owner != self.participant then
       'Kit has been received by researcher'
     end
   end

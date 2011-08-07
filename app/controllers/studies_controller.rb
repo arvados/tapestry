@@ -8,6 +8,16 @@ class StudiesController < ApplicationController
 
   skip_before_filter :ensure_researcher, :only => [:show, :claim]
 
+  # GET /studies/1/map
+  def map
+    @study = Study.find(params[:id])
+
+    @json = @study.study_participants.accepted.collect { |p| p.user.shipping_address }.to_gmaps4rails
+    flash[:notice] = "No approved participants with valid shipping addresses were found" if @json == '[]'
+
+    render :layout => "gmaps"
+  end
+
   # GET /studies/1
   # GET /studies/1.xml
   def show

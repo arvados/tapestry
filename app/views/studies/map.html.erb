@@ -1,0 +1,6 @@
+
+<h2><%= @study.name %></h2>
+
+<%= gmaps("markers" => {"data" => @json, "options" => {"custom_infowindow_class" => "yellow" } }) %>
+
+<p><%= image_tag('/images/yellow.png') %> Kit created/shipped | <%= image_tag('/images/green.png') %> Kit claimed | <%= image_tag('/images/blue.png') %> Kit returned | <%= image_tag('/images/brown.png') %> Kit received by researcher</p>
