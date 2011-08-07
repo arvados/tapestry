@@ -20,8 +20,7 @@ class OauthToken < ActiveRecord::Base
     self.destroy if self.oauth_service.revoke_token(self)
   end
 
-  def authorize!(next_page)
-    callback_uri = 'https://' + ROOT_URL + '/oauth_tokens/get_access_token?next_page=' + uriencode(next_page)
+  def authorize!(callback_uri)
     formdata = {
       'oauth_callback' => callback_uri,
       'oauth_consumer_key' => self.oauth_service.consumerkey,

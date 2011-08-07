@@ -1,4 +1,6 @@
 class OauthTokensController < ApplicationController
+  include ApplicationHelper
+
   def index
     @services = OauthService.all
     @mytokens = OauthToken.where(:user_id => current_user.id)
@@ -21,7 +23,8 @@ class OauthTokensController < ApplicationController
       return
     end
 
-    (status,destination) = token.authorize!(oauth_tokens_path)
+    callback_uri = get_access_token_oauth_tokens_url + '?next_page=' + uriencode(oauth_tokens_path)
+    (status,destination) = token.authorize!(callback_uri)
     if not status.nil?
       redirect_to destination
     else
