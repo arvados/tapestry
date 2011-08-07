@@ -8,6 +8,14 @@ class StudiesController < ApplicationController
 
   skip_before_filter :ensure_researcher, :only => [:show, :claim]
 
+  def index
+    if current_user.is_admin? then
+      @studies = Study.all
+    else
+      @studies = Study.all.where('researcher_id = ?',current_user.id)
+    end
+  end
+
   # GET /studies/1/map
   def map
     @study = Study.find(params[:id])

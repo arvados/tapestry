@@ -7,7 +7,11 @@
   <% @studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
   &nbsp;&nbsp;<%= link_to study.name + (study.is_open? ? ' (OPEN)' : ''), edit_study_path(study.id) %><br/>
   <% end %>
-  &nbsp;&nbsp;<%= link_to raw("<strong>New Study</strong>"), url_for(:controller => 'studies', :action => 'new') %></li>
+  &nbsp;&nbsp;<small><%= link_to 'View all', url_for(:controller => 'studies', :action => 'index') %>
+  /
+  <%= link_to 'Create new', url_for(:controller => 'studies', :action => 'new') %>
+  </small>
+  </li>
   <li><strong>Your kit designs</strong><br/>
   <% current_user.kit_designs.sort { |a,b| a.name <=> b.name }.each do |kd| %>
   &nbsp;&nbsp;<%= link_to kd.name + (kd.frozen ? ' (FROZEN)' : ''), edit_kit_design_path(kd.id) %><br/>
