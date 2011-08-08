@@ -33,13 +33,31 @@ class ApplicationController < ActionController::Base
   end
 
   def model
-    model_name.constantize
+    begin
+      model_name.constantize
+    rescue
+      # These are exceptions where the controller name does not match the model name
+      if model_name == 'GeographicInformation' then
+        User
+      elsif model_name == 'Password' then
+        User
+      else
+        nil
+      end
+    end
   end
 
   def only_owner_can_change
     return true if current_user and current_user.is_admin?
+    @model = model
+    if @model.nil? then
+      # This is bad; we've got an unhandled controller -> model translation. E-mail site admins.
+      UserMailer.error_notification(current_user,"Unable to translate '#{controller_name}' to model name</p><p>#{request.inspect()}</p>").deliver
+      return true
+    end
     if (params[:id] and
-        (m=model.find(params[:id])) and
+        (m=@model.exists?(params[:id])) and
+        (m=@model.find(params[:id])) and
         (cols=m.class.columns_hash))
       ['user_id', 'owner_id', 'created_by'].each do |col|
         if cols.has_key? col and m.attributes[col] != current_user.id

@@ -8,6 +8,19 @@ class UserMailer < ActionMailer::Base
          :subject => 'Please activate your new account')
   end
 
+  def error_notification(user,message)
+    @user = user
+    if @user.nil? then
+      @user = User.new()
+      @user.first_name = 'Anonymous'
+      @user.last_name = 'user'
+    end
+    @message = message
+    mail(:from => SYSTEM_EMAIL,
+         :to => SYSTEM_EMAIL,
+         :subject => "Critical error at #{ROOT_URL}")
+  end
+
   def delete_request(user)
     setup_email(user)
     @recipients  = "delete-account@personalgenomes.org"
