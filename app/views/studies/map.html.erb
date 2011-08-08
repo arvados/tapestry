@@ -1,6 +1,53 @@
 
 <h2><%= @study.name %></h2>
 
+
 <%= gmaps("markers" => {"data" => @json, "options" => {"custom_infowindow_class" => "yellow" } }) %>
 
 <p><%= image_tag('/images/yellow.png') %> Kit created/shipped | <%= image_tag('/images/green.png') %> Kit claimed | <%= image_tag('/images/blue.png') %> Kit returned | <%= image_tag('/images/brown.png') %> Kit received by researcher</p>
+
+<table>
+<tr>
+<td>
+<table class="admin_table">
+<tr>
+<th colspan="4" align="center">Kits</th>
+</tr>
+<tr>
+<td>Shipped:</td><td><%= @study.kits.shipped.count %></td>
+<td>Claimed:</td><td><%= @study.kits.claimed.count %></td>
+</tr>
+<tr>
+<td>Returned:</td><td><%= @study.kits.returned.count %></td>
+<td>Received:</td><td><%= @study.kits.received.count %></td>
+</tr>
+<tr>
+<td colspan="2" align="right">Total:</td><td colspan="2" align="left"><%= @study.kits.count %></td>
+</tr>
+</table>
+</td>
+<td>
+<table class="admin_table">
+<tr>
+<th colspan="6" align="center">Participants</th>
+</tr>
+<tr>
+<td>Undecided:</td><td><%= @study.study_participants.undecided.count %></td>
+<td>Interested:</td><td><%= @study.study_participants.interested.count %></td>
+<td>Not accepted:</td><td><%= @study.study_participants.not_accepted.count %></td>
+</tr>
+<tr>
+<td>Not interested:</td><td><%= @study.study_participants.not_interested.count %></td>
+<td>Accepted:</td><td><%= @study.study_participants.accepted.count %></td>
+<td>Removed:</td><td><%= @study.study_participants.removed.count %></td>
+</tr>
+<tr>
+<td>&nbsp;</td><td>&nbsp;</td>
+<td>Total:</td><td><%= @study.study_participants.count %></td>
+<td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+</table>
+</tr>
+</table>
+
+
