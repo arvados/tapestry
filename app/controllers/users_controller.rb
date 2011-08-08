@@ -303,6 +303,8 @@ class UsersController < ApplicationController
       @user.suspended_at = Time.now unless @user.suspended_at
       @user.can_unsuspend_self = false
       @user.save!
+      UserMailer.withdrawal_notification(@user).deliver
+      UserMailer.withdrawal_staff_notification(@user).deliver
     end
     redirect_to new_withdrawal_comment_path
   end

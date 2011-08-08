@@ -73,6 +73,22 @@ class UserMailer < ActionMailer::Base
     user.log("Sent PGP Enrollment decision notification")
   end
 
+  def withdrawal_notification(user)
+    setup_email(user)
+    @subject += 'PGP withdrawal'
+    user.log("Sent PGP withdrawal notification")
+  end
+
+  def withdrawal_staff_notification(user)
+    setup_email(user)
+    @subject += 'PGP withdrawal'
+    if defined? WITHDRAWAL_NOTIFICATION_EMAIL
+      @recipients = "#{WITHDRAWAL_NOTIFICATION_EMAIL}"
+    else
+      @recipients = "#{ADMIN_EMAIL}"
+    end
+  end
+
   protected
 
   def setup_email(user)
