@@ -182,16 +182,16 @@ class ApplicationController < ActionController::Base
     study.study_participants.real.send(type).each do |u|
       row = []
 
-      row.push u.hex
-      row.push u.email
-      row.push u.ccrs.count > 0 ? 'y' : 'n'
-      row.push u.genetic_data.count > 0 ? 'y' : 'n'
-      row.push u.shipping_address.address_line_1
-      row.push u.shipping_address.address_line_2
-      row.push u.shipping_address.address_line_3
-      row.push u.shipping_address.city
-      row.push u.shipping_address.state
-      row.push u.shipping_address.zip
+      row.push u.user.hex
+      row.push u.user.email
+      row.push u.user.ccrs.count > 0 ? 'y' : 'n'
+      row.push u.user.genetic_data.count > 0 ? 'y' : 'n'
+      row.push u.user.shipping_address.address_line_1
+      row.push u.user.shipping_address.address_line_2
+      row.push u.user.shipping_address.address_line_3
+      row.push u.user.shipping_address.city
+      row.push u.user.shipping_address.state
+      row.push u.user.shipping_address.zip
 
       CSV.generate_row(row, row.size, buf)
     end
