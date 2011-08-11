@@ -3,8 +3,10 @@ class UserMailer < ActionMailer::Base
   def signup_notification(user)
     @url  = "http://#{ROOT_URL}/activate/#{user.activation_code}"
     @user = user
+    @recipient = user.email
+    @recipient = SEND_ALL_USER_EMAIL_TO if defined? SEND_ALL_USER_EMAIL_TO
     mail(:from => ADMIN_EMAIL,
-         :to => user.email,
+         :to => @recipient,
          :subject => 'Please activate your new account')
   end
 
@@ -97,5 +99,6 @@ class UserMailer < ActionMailer::Base
     @subject     = "[#{ROOT_URL}] "
     @sent_on     = Time.now
     @body[:user] = user
+    @recipients = SEND_ALL_USER_EMAIL_TO if defined? SEND_ALL_USER_EMAIL_TO
   end
 end
