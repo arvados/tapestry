@@ -54,6 +54,7 @@ PgpEnroll::Application.configure do
   
   ROOT_URL = 'my.personalgenomes.org'
   ADMIN_EMAIL = 'PGP <general@personalgenomes.org>'
+  WITHDRAWAL_NOTIFICATION_EMAIL = 'PGP <delete-account@personalgenomes.org>'
   SYSTEM_EMAIL = 'sysadmin@clinicalfuture.com'
   
   ENV['RECAPTCHA_PUBLIC_KEY'] = 'yyyyyyyyyyyyyyyyyyyyyyyy-xxxxxxxx'
