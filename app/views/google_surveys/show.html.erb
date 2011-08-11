@@ -10,7 +10,7 @@
 
 <p><%=raw CGI.escapeHTML(@google_survey.description).gsub("\r","").gsub("\n\n","</p><p>") %></p>
 
-<% if @google_survey.open or @can_edit %>
+<% if @can_edit or (current_user.enrolled and @google_survey.open) %>
 <p>
   <%= button_to 'Participate in this survey', participate_google_survey_path(@google_survey) %>
 </p>

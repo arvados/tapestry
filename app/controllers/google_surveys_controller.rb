@@ -1,5 +1,6 @@
 class GoogleSurveysController < ApplicationController
   before_filter :ensure_researcher, :except => [:participate, :show, :index]
+  skip_before_filter :ensure_enrolled, :except => [:participate]
 
   def participate
     @google_survey = GoogleSurvey.find(params[:id])
