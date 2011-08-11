@@ -1,5 +1,5 @@
 class GoogleSurveysController < ApplicationController
-  before_filter :ensure_researcher, :except => [:participate, :show, :index]
+  before_filter :ensure_researcher, :except => [:participate, :show, :index, :download]
   skip_before_filter :ensure_enrolled, :except => [:participate]
 
   def participate
