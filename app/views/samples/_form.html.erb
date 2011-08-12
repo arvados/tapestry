@@ -13,47 +13,49 @@
 
   <div class="field">
     <%= f.label :study_id %><br />
-    <%= f.text_field :study_id %>
+    <%= @sample.study.name %>
   </div>
   <div class="field">
     <%= f.label :kit_id %><br />
-    <%= f.text_field :kit_id %>
+    <%= @sample.kit.name %>
   </div>
   <div class="field">
     <%= f.label :participant_id %><br />
-    <%= f.text_field :participant_id %>
+    <%= @sample.participant.nil? ? '' : @sample.participant.full_name %>
   </div>
   <div class="field">
     <%= f.label :original_kit_design_sample_id %><br />
-    <%= f.text_field :original_kit_design_sample_id %>
+    <%= @sample.original_kit_design_sample.name %>
   </div>
   <div class="field">
     <%= f.label :kit_design_sample_id %><br />
-    <%= f.text_field :kit_design_sample_id %>
+    <%= @sample.kit_design_sample.name %>
   </div>
   <div class="field">
     <%= f.label :when_originated %><br />
-    <%= f.datetime_select :when_originated %>
+    <%= @sample.when_originated %>
   </div>
   <div class="field">
     <%= f.label :owner_id %><br />
-    <%= f.text_field :owner_id %>
+    <%= @sample.owner.nil? ? '' : @sample.owner.full_name %>
   </div>
   <div class="field">
     <%= f.label :last_mailed %><br />
-    <%= f.datetime_select :last_mailed %>
+    <%= @sample.last_mailed %>
   </div>
   <div class="field">
     <%= f.label :last_received %><br />
-    <%= f.datetime_select :last_received %>
+    <%= @sample.last_received %>
   </div>
   <div class="field">
     <%= f.label :participant_note %><br />
-    <%= f.text_field :participant_note %>
+    <pre>
+    <%= @sample.participant_note %>
+    </pre>
   </div>
   <div class="field">
     <%= f.label :researcher_note %><br />
-    <%= f.text_field :researcher_note %>
+    <%= f.text_area :researcher_note, :cols => 80 %>
   </div>
   <div class="field">
     <%= f.label :concentration %><br />
@@ -64,8 +66,8 @@
     <%= f.text_field :amount %>
   </div>
   <div class="field">
-    <%= f.label :amount_unit %><br />
-    <%= f.text_field :amount_unit %>
+    <%= f.label :unit %><br />
+    <%= f.text_field :unit %>
   </div>
   <div class="field">
     <%= f.label :material %><br />

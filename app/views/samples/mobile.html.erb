@@ -1,0 +1,32 @@
+
+<html>
+<head>
+<link href="/stylesheets/none.css" media="screen" rel="stylesheet" type="text/css" /> 
+</head>
+<body>
+
+<div align="center" width="100%">
+  <% flash.each do |key, value| -%>
+    <div class="flash <%= raw(key) %>"><%= raw(value) %></div>
+  <% end -%>
+</div>
+
+<p align="center"><font size="+9"><strong><%= @sample.crc_id %></strong></font><br/><font size="+3"><%= @sample.name %></font></p>
+
+<font size="+9">
+<% if @sample.owner == current_user then %>
+<p align="center"><font color="darkgreen"><strong>RECEIVED</strong></font></p>
+
+<p align="center"><font color="red"><%= link_to('UNMARK AS RECEIVED', mobile_sample_undo_reception_path(@sample.url_code)) %></font></p>
+
+<% else %>
+<p align="center"><font color="darkred"><strong>NOT RECEIVED</strong></font></p>
+
+<p align="center"><font color="green"><%= link_to('MARK AS RECEIVED', mobile_sample_path(@sample.url_code), :method => :get) %></font></p>
+
+<% end %>
+</font>
+
+</body>
+</html>
+

@@ -1,7 +1,13 @@
 <h2>Kits</h2>
 
-<%= link_to 'New Kit', new_kit_path %><br/>
+<% if current_user.is_admin? %>
+<p>Because you are an administrator, this page lists all kits by any researcher.</p>
+<% else %>
+<p>This is the list of your kits.</p>
+<% end %>
 
+<% if @kits.count > 0 %>
+<%= will_paginate @kits %>
 <table class="admin_table">
   <tr>
     <th>Name</th>
@@ -19,7 +25,7 @@
 
 <% @kits.each do |kit| %>
   <tr>
-    <td><%= kit.name %></td>
+    <td><%= link_to(kit.name, kit_path(kit)) %></td>
     <td><%= sprintf("%08d", kit.crc_id) %></td>
     <td><%= kit.study.name %></td>
     <td><%= kit.kit_design.name %></td>
@@ -29,8 +35,11 @@
     <td><%= kit.shipper.nil? ? link_to('Mark as sent', sent_kit_path(kit), :method => :post, :confirm => "Are you sure you want to mark kit #{kit.name} as sent?") : kit.shipper.full_name %></td>
     <td><%= link_to 'Log', show_kit_log_path(kit), :class => "iframe", :title => "Kit log for #{kit.name}" %></td>
     <td><%= link_to 'Edit', edit_kit_path(kit) %></td>
-    <td><%= kit.last_mailed.nil? ? link_to('Destroy', kit, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
+    <td><%= kit.last_mailed.nil? ? link_to('Delete', kit, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
   </tr>
 <% end %>
 </table>
+<%= will_paginate @kits %>
+<% end %>
+
 

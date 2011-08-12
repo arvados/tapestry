@@ -1,0 +1,22 @@
+<h2>Sample log for <%= @sample.name %></h2>
+
+<% if not @sample_log.empty? then %>
+
+  <table class="admin_table">
+    <tr>
+      <th>When</th>
+      <th>Who</th>
+      <th>What</th>
+    </tr>
+  <% @sample_log.each do |log| %>
+    <tr>
+      <td><%= log.updated_at %></td>
+      <td><%= log.actor.full_name %></td>
+      <td><%= log.comment %></td>
+    </tr>
+  <% end %>
+  </table>
+<% else %>
+  There are no log entries yet for this sample.
+<% end %>
+

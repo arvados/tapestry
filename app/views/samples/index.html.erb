@@ -1,22 +1,20 @@
-<h1>Listing samples</h1>
+<h2>Samples</h2>
 
-<table>
+<% if current_user.is_admin? %>
+<p>Because you are an administrator, this page lists all samples by any researcher.</p>
+<% else %>
+<p>This is the list of your samples.</p>
+<% end %>
+
+<% if @samples.count > 0 %>
+<%= will_paginate @samples %>
+<table class="admin_table">
   <tr>
+    <th>Number</th>
     <th>Study</th>
     <th>Kit</th>
     <th>Participant</th>
-    <th>Original kit design sample</th>
-    <th>Kit design sample</th>
-    <th>When originated</th>
     <th>Owner</th>
-    <th>Last mailed</th>
-    <th>Last received</th>
-    <th>Participant note</th>
-    <th>Researcher note</th>
-    <th>Concentration</th>
-    <th>Amount</th>
-    <th>Amount unit</th>
-    <th>Material</th>
     <th></th>
     <th></th>
     <th></th>
@@ -24,28 +22,17 @@
 
 <% @samples.each do |sample| %>
   <tr>
-    <td><%= sample.study_id %></td>
-    <td><%= sample.kit_id %></td>
-    <td><%= sample.participant_id %></td>
-    <td><%= sample.original_kit_design_sample_id %></td>
-    <td><%= sample.kit_design_sample_id %></td>
-    <td><%= sample.when_originated %></td>
-    <td><%= sample.owner_id %></td>
-    <td><%= sample.last_mailed %></td>
-    <td><%= sample.last_received %></td>
-    <td><%= sample.participant_note %></td>
-    <td><%= sample.researcher_note %></td>
-    <td><%= sample.concentration %></td>
-    <td><%= sample.amount %></td>
-    <td><%= sample.amount_unit %></td>
-    <td><%= sample.material %></td>
-    <td><%= link_to 'Show', sample %></td>
+    <td><%= link_to sprintf("%08d", sample.crc_id), sample %></td>
+    <td><%= sample.study.name %></td>
+    <td><%= sample.kit.name %></td>
+    <td><%= sample.participant.nil? ? '' : sample.participant.full_name %></td>
+    <td><%= sample.owner.nil? ? '' : sample.owner.full_name %></td>
+    <td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
     <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
-    <td><%= link_to 'Destroy', sample, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= sample.last_mailed.nil? ? link_to('Delete', sample, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
   </tr>
 <% end %>
 </table>
+<%= will_paginate @samples %>
 
-<br />
-
-<%= link_to 'New Sample', new_sample_path %>
+<% end %>

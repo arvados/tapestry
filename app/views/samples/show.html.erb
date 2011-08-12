@@ -1,18 +1,36 @@
+
+<h2>Sample '<%= @sample.name %>'</h2>
+
 <p id="notice"><%= notice %></p>
 
 <p>
   <b>Study:</b>
-  <%= @sample.study_id %>
+  <%= @sample.study.name %>
 </p>
 
 <p>
   <b>Kit:</b>
-  <%= @sample.kit_id %>
+  <%= link_to(@sample.kit.name, kit_path(@sample.kit)) %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @sample.name %>
+</p>
+
+<p>
+  <b>Number:</b>
+  <%= sprintf("%08d", @sample.crc_id) %>
+</p>
+
+<p>
+  <b>ULR code:</b>
+  <%= @sample.url_code %>
 </p>
 
 <p>
   <b>Participant:</b>
-  <%= @sample.participant_id %>
+  <%= @sample.participant.nil? ? '' : @sample.participant.full_name %>
 </p>
 
 <p>
@@ -66,8 +84,8 @@
 </p>
 
 <p>
-  <b>Amount unit:</b>
-  <%= @sample.amount_unit %>
+  <b>Unit:</b>
+  <%= @sample.unit %>
 </p>
 
 <p>
@@ -75,6 +93,3 @@
   <%= @sample.material %>
 </p>
 
-
-<%= link_to 'Edit', edit_sample_path(@sample) %> |
-<%= link_to 'Back', samples_path %>

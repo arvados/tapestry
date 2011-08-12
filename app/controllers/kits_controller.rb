@@ -101,7 +101,7 @@ class KitsController < ApplicationController
     redirect_to(:controller => 'pages', :action => 'show', :id => 'studies')
   end
 
-   # POST /kit/1/sent
+   # POST /kits/1/sent
   def sent
     @kit = Kit.find(params[:id])
 
@@ -127,7 +127,12 @@ class KitsController < ApplicationController
   # GET /kits
   # GET /kits.xml
   def index
-    @kits = Kit.where('originator_id = ?',current_user.id)
+    if current_user.is_admin? then
+      @kits = Kit.all
+    else
+      @kits = Kit.where('originator_id = ?',current_user.id)
+    end
+    @kits = @kits.paginate(:page => params[:page] || 1, :per_page => 30)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -145,6 +150,7 @@ class KitsController < ApplicationController
   # GET /kits/1.xml
   def show
     @kit = Kit.find(params[:id])
+    @samples = @kit.samples
 
     respond_to do |format|
       format.html # show.html.erb

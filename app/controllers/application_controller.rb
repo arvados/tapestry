@@ -198,5 +198,9 @@ class ApplicationController < ActionController::Base
     buf
   end
 
+  def not_found
+    raise ActionController::RoutingError.new('Not Found')
+  end
+
 private
 end
