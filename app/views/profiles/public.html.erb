@@ -78,6 +78,37 @@ Not added.
 None added.
 <% end %>
 
+<h3>Completed Surveys</h3>
+<% unless @google_survey_results.empty? %>
+<div class="profile-data">
+<table>
+  <tbody>
+    <% @google_survey_results.each {|survey_result| %>
+    <tr>
+      <th>
+	<%= link_to_if logged_in?, survey_result[:survey].name, google_survey_path(survey_result[:survey]) %>
+      </th>
+      <td>
+	Responses collected <%= survey_result[:nonce].used_at %>.
+	<a href="#" onclick="jQuery('.survey_result_<%= survey_result[:nonce].id %>').toggle(); jQuery(this).html(jQuery('.survey_result_<%= survey_result[:nonce].id %>').is(':visible') ? 'Hide responses' : 'Show responses'); return false;">Show responses</a>
+      </td>
+    </tr>
+    <% survey_result[:answers].each {|answer| %>
+    <% if answer.answer and answer.column != survey_result[:survey].userid_response_column %>
+    <tr class="survey_result_<%= survey_result[:nonce].id %> ui-helper-hidden">
+      <td><%= answer.google_survey_question.question %></td>
+      <td class="hoverable"><%= answer.answer %></td>
+    </tr>
+    <% end %>
+    <% } %>
+  </tbody>
+</table>
+<% } %>
+</div>
+<% else %>
+None completed.
+<% end %>
+
 <h3>Absolute Pitch Survey
 <% if @user.absolute_pitch_survey_completion.nil? && @user == current_user %>
 <%= link_to "[take survey]", "/absolute_pitch_surveys" %>

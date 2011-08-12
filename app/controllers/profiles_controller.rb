@@ -25,5 +25,14 @@ class ProfilesController < ApplicationController
         @absolute_pitch_answers[a.survey_question_id] = absolute_pitch_answer_mapping[a.text]
       end
     }
+    nonces = Nonce.where(:owner_class => "User", :owner_id => @user.id, :target_class => "GoogleSurvey")
+    @google_survey_results = []
+    nonces.each {|n|
+      response = {}
+      response[:nonce] = n
+      response[:survey] = GoogleSurvey.find(n.target_id)
+      response[:answers] = GoogleSurveyAnswer.find_all_by_nonce_id(n.id)
+      @google_survey_results.push response unless response[:answers].empty?
+    }
   end
 end

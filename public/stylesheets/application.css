@@ -1088,3 +1088,19 @@ pre {
   word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
+.profile-data table { width: 100%; padding: 0px; margin: 2px 0px; border-collapse: collapse}
+.profile-data td, .profile-data th { border: 1px solid #ccc; padding-left: 2px}
+.profile-data th { background-color: #eee }
+.profile-data th { text-align: left; vertical-align: top}
+.profile-data td { text-align: left; vertical-align: top }
+.profile-data td.hoverable:hover { background-color: #C7D1E7 }    
+.profile-data table td, .profile-data table th {
+    vertical-align: top;
+}
+.profile-data table td:first-child, .profile-data table th:first-child {
+    width: 20em;
+}
+.profile-data table tr, .profile-data table td, .profile-data table th {
+  padding: 5px;
+  margin: 20px 0 0 0;
+}
