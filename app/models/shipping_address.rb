@@ -10,7 +10,7 @@ class ShippingAddress < ActiveRecord::Base
     # yellow: shipped
     # green: claimed
     # blue: returned
-    # red: something went wrong
+    # brown: received by researcher
     # Kit is created / possibly shipped. We currently do not keep track of which addresses kits are shipped to so
     # we can not distinguish between these 2 states.
     @picture = '/images/yellow.png'

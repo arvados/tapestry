@@ -1,0 +1,29 @@
+div.flash {
+  margin-left: 25px;
+  margin-top: 25px;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid;
+}
+
+div.flash.notice {
+  color: #fff;
+  background: #3c3;
+  border-color: #080;
+	font-size: 40px;
+}
+
+div.flash.warning {
+  color: #fff;
+  background: #f90;
+  border-color: #c60;
+}
+
+div.flash.error {
+  color: #fff;
+  background: #c33;
+  border-color: #800;
+	font-size: 40px;
+}
+
+

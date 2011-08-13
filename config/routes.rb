@@ -1,7 +1,11 @@
 PgpEnroll::Application.routes.draw do
   resources :withdrawal_comments
 
+  match '/samples/:id/log' => 'samples#show_log', :as => :show_sample_log, :via => :get
   resources :samples
+  match '/samples/:id/received' => 'samples#received', :as => :received_sample, :via => :post
+  match '/samples/m/:url_code/undo_reception' => 'samples#mobile_undo_reception', :as => :mobile_sample_undo_reception, :via => :get
+  match '/samples/m/:url_code' => 'samples#mobile', :as => :mobile_sample, :via => :get
 
   resources :unused_kit_names
 

@@ -1,13 +1,74 @@
 class SamplesController < ApplicationController
+
+  before_filter :ensure_researcher
+
   # GET /samples
   # GET /samples.xml
   def index
-    @samples = Sample.all
+    if current_user.is_admin? then
+      @samples = Sample.all
+    else
+      @samples = Sample.where('originator_id = ?',current_user.id)
+    end
+    @samples = @samples.paginate(:page => params[:page] || 1, :per_page => 30)
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @samples }
     end
+  end
+
+  # GET /samples/m/:url_code
+  def mobile
+    # This url will be arrived at based on a QR code, printed on the sample.
+    @sample = Sample.find_by_url_code(params[:url_code])
+
+    not_found if @sample.nil? 
+
+    # If the sample has a participant and is not yet owned by this researcher, mark it as such
+    if @sample.participant.nil? then
+      flash.delete(:notice)
+      flash[:error]  = "Sample unclaimed"
+    else
+      flash.delete(:error)
+      flash.delete(:notice)
+      if @sample.owner != current_user then
+        flash.delete(:error)
+        flash[:notice]  = "Sample received"
+        sample_received(@sample)
+      end
+    end
+
+    # Log this
+    SampleLog.new(:actor_id => @current_user.id, :comment => "Sample received by researcher (scan)", :sample_id => @sample.id).save
+
+    # Mobile friendly
+    render :layout => "none"
+  end
+
+  # POST /samples/m/:url_code/undo_reception
+  def mobile_undo_reception
+    @sample = Sample.find_by_url_code(params[:url_code])
+
+    # If the sample is owned by this researcher, undo that
+    if @sample.owner == current_user then
+      @sample.owner = nil
+      @sample.save!
+    end
+
+    # Log this
+    SampleLog.new(:actor_id => @current_user.id, :comment => "Undo: sample received by researcher (scan)", :sample_id => @sample.id).save
+
+    # Mobile friendly
+    flash.delete(:error)
+    flash.delete(:notice)
+    render :template => 'samples/mobile', :layout => "none"
+  end
+
+  # GET /samples/1/log
+  def show_log
+    @sample = Sample.find(params[:id])
+    @sample_log = SampleLog.where('sample_id = ?', @sample.id).sort { |a,b| b.updated_at <=> a.updated_at }
   end
 
   # GET /samples/1
@@ -19,6 +80,18 @@ class SamplesController < ApplicationController
       format.html # show.html.erb
       format.xml  { render :xml => @sample }
     end
+  end
+
+   # POST /samples/1/received
+  def received
+    @sample = Sample.find(params[:id])
+
+    sample_received(@sample)
+
+    # Log this
+    SampleLog.new(:actor_id => @current_user.id, :comment => "Sample received by researcher", :sample_id => @sample.id).save
+
+    redirect_to(kit_path(@sample.kit.id))
   end
 
   # GET /samples/new
@@ -80,4 +153,18 @@ class SamplesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  private
+
+  def sample_received(sample)
+    sample.last_received = Time.now()
+    sample.owner = current_user
+    sample.save!
+    # If the researcher has the sample, they have the kit
+    kit = sample.kit
+    kit.last_received = Time.now()
+    kit.owner = current_user
+    kit.save!
+  end
+
 end

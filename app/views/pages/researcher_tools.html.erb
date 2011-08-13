@@ -23,7 +23,18 @@
   <% end %>
   &nbsp;&nbsp;<%= link_to raw("<strong>New Kit Design Sample</strong>"), url_for(:controller => 'kit_design_samples', :action => 'new') %></li>
 
-  <li><%= link_to raw("<strong>Kits</strong>"), url_for(:controller => 'kits', :action => 'index') %></li>
+  <li><strong>Kits</strong><br/>
+  &nbsp;&nbsp;<small><%= link_to 'View all', url_for(:controller => 'kits', :action => 'index') %>
+  /
+  <%= link_to 'Create new', url_for(:controller => 'kits', :action => 'new') %>
+  </small>
+  </li>
+
+  <li><strong>Samples</strong><br/>
+  &nbsp;&nbsp;<small><%= link_to 'View all', url_for(:controller => 'samples', :action => 'index') %>
+  </small>
+  </li>
+
   <li><%= link_to raw("<strong>Device Types</strong>"), url_for(:controller => 'device_types', :action => 'index') %></li>
   <li><%= link_to raw("<strong>Sample Types</strong>"), url_for(:controller => 'sample_types', :action => 'index') %></li>
 
