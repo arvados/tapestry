@@ -35,8 +35,7 @@ class SamplesController < ApplicationController
       if @sample.owner != current_user then
         flash.delete(:error)
         flash[:notice]  = "Sample received"
-        @sample.owner = current_user 
-        @sample.save!
+        sample_received(@sample)
       end
     end
 
@@ -87,15 +86,12 @@ class SamplesController < ApplicationController
   def received
     @sample = Sample.find(params[:id])
 
-    @sample.last_received = Time.now()
-    @sample.owner_id = current_user.id
-    @sample.save
+    sample_received(@sample)
 
     # Log this
     SampleLog.new(:actor_id => @current_user.id, :comment => "Sample received by researcher", :sample_id => @sample.id).save
 
     redirect_to(kit_path(@sample.kit.id))
-    #:controller => 'kits', :action => 'show', :id => @sample.kit.id)
   end
 
   # GET /samples/new
@@ -157,4 +153,18 @@ class SamplesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  private
+
+  def sample_received(sample)
+    sample.last_received = Time.now()
+    sample.owner = current_user
+    sample.save!
+    # If the researcher has the sample, they have the kit
+    kit = sample.kit
+    kit.last_received = Time.now()
+    kit.owner = current_user
+    kit.save!
+  end
+
 end
