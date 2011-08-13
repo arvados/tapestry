@@ -35,12 +35,12 @@
 
 <p>
   <b>Original kit design sample:</b>
-  <%= @sample.original_kit_design_sample_id %>
+  <%= @sample.original_kit_design_sample.name %>
 </p>
 
 <p>
   <b>Kit design sample:</b>
-  <%= @sample.kit_design_sample_id %>
+  <%= @sample.kit_design_sample.name %>
 </p>
 
 <p>
@@ -50,7 +50,7 @@
 
 <p>
   <b>Owner:</b>
-  <%= @sample.owner_id %>
+  <%= @sample.owner.nil? ? '' : @sample.owner.full_name %>
 </p>
 
 <p>
@@ -65,12 +65,16 @@
 
 <p>
   <b>Participant note:</b>
+  <pre>
   <%= @sample.participant_note %>
+  </pre>
 </p>
 
 <p>
   <b>Researcher note:</b>
+  <pre>
   <%= @sample.researcher_note %>
+  </pre>
 </p>
 
 <p>
