@@ -1,4 +1,12 @@
 PgpEnroll::Application.routes.draw do
+  resources :plates
+  match '/plates/m/:url_code' => 'plates#mobile', :as => :mobile_plate, :via => :get
+  match '/plates/:plate_id/assign/:plate_layout_position_id/:sample_id' => 'plates#mobile_assign_position', :as => :mobile_assign_plate_position, :via => :post
+  match '/plates/:plate_id/destroy/:plate_layout_position_id' => 'plates#mobile_destroy_position', :as => :mobile_destroy_plate_position, :via => :post
+  match '/plates/select_layout_mask/:url_code/:plate_layout_mask_id' => 'plates#mobile_select_layout_mask', :as => :mobile_select_plate_layout_mask, :via => :post
+  match '/plates/mobile_stop/:id' => 'plates#mobile_stop', :as => :mobile_stop_plate, :via => :post
+  match '/plates/:plate_id/destroy_sample/:plate_layout_position_id' => 'plates#destroy_sample', :as => :destroy_plate_sample, :via => :post
+
   match '/samples/:id/log' => 'samples#show_log', :as => :show_sample_log, :via => :get
   resources :samples
   match '/samples/:id/received' => 'samples#received', :as => :received_sample, :via => :post

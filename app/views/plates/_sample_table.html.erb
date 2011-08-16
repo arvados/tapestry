@@ -1,0 +1,24 @@
+<div style="width:400px; margin-top:1em">
+  <div style="width:385px">
+    <table class="plate-samples">
+      <thead>
+	<tr>
+	  <td>Well</td>
+	  <td>Sample</td>
+	  <td>Participant</td>
+	  <td>&nbsp;</td>
+	</tr>
+      </thead>
+      <tbody>
+	<% @plate.plate_samples.sort {|a,b| a.plate_layout_position <=> b.plate_layout_position }.each { |ps| %>
+	<tr plate_layout_position="<%= ps.plate_layout_position.name %>">
+	  <td><%= ps.plate_layout_position.name %></td>
+	  <td><%= link_to_if(!ps.is_unusable, ps.sample.crc_id, sample_path(ps.sample)) if ps.sample %> <%= 'destroyed' if ps.is_unusable %></td>
+	  <td><%= ps.sample.participant.hex if ps.sample and ps.sample.participant %></td>
+	  <td><%= link_to 'destroy', destroy_plate_sample_path(:plate_id => @plate.id, :plate_layout_position_id => ps.plate_layout_position.id), :method => :post, :confirm => "You really destroyed #{ps.plate_layout_position.name}?" if ps.sample and !ps.is_unusable %></td>
+	</tr>
+	<% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

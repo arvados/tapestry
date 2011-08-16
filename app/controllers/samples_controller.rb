@@ -23,7 +23,17 @@ class SamplesController < ApplicationController
     # This url will be arrived at based on a QR code, printed on the sample.
     @sample = Sample.find_by_url_code(params[:url_code])
 
-    not_found if @sample.nil? 
+    not_found if @sample.nil?
+
+    if session[:scan_context_path] and session[:scan_context_timestamp] > Time.now.to_i - 1800
+      if @sample.participant and @sample.owner and @sample.last_received
+        session[:scan_sample_url_code] = params[:url_code]
+        return redirect_to session[:scan_context_path]
+      else
+        flash[:error] = "You seem to be processing a sample that has not been received yet."
+        return render :layout => "none"
+      end
+    end
 
     # If the sample has a participant and is not yet owned by this researcher, mark it as such
     if @sample.participant.nil? then

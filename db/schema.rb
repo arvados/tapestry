@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110807153230) do
+ActiveRecord::Schema.define(:version => 20110816161750) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1157,6 +1157,123 @@ ActiveRecord::Schema.define(:version => 20110807153230) do
   end
 
   add_index "phase_completions", ["user_id"], :name => "index_phase_completions_on_user_id"
+
+  create_table "plate_layout_masks", :force => true do |t|
+    t.string   "name"
+    t.integer  "xmodulus"
+    t.integer  "ymodulus"
+    t.integer  "xtarget"
+    t.integer  "ytarget"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "plate_layout_masks", ["xmodulus", "ymodulus", "xtarget", "ytarget"], :name => "plate_layout_masks_on_modulus_and_target", :unique => true
+
+  create_table "plate_layout_position_versions", :force => true do |t|
+    t.integer  "plate_layout_position_id"
+    t.integer  "lock_version"
+    t.integer  "plate_layout_id"
+    t.integer  "xpos"
+    t.integer  "ypos"
+    t.string   "name"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "plate_layout_position_versions", ["plate_layout_position_id"], :name => "index_plate_layout_position_versions_on_plate_layout_position_i"
+
+  create_table "plate_layout_positions", :force => true do |t|
+    t.integer  "plate_layout_id"
+    t.integer  "xpos"
+    t.integer  "ypos"
+    t.string   "name"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  add_index "plate_layout_positions", ["plate_layout_id", "name"], :name => "index_plate_layout_positions_on_plate_layout_id_and_name", :unique => true
+  add_index "plate_layout_positions", ["plate_layout_id", "xpos", "ypos"], :name => "index_plate_layout_positions_on_plate_layout_id_xpos_ypos", :unique => true
+
+  create_table "plate_layout_versions", :force => true do |t|
+    t.integer  "plate_layout_id"
+    t.integer  "lock_version"
+    t.string   "name"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "plate_layout_versions", ["plate_layout_id"], :name => "index_plate_layout_versions_on_plate_layout_id"
+
+  create_table "plate_layouts", :force => true do |t|
+    t.string   "name"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "plate_sample_versions", :force => true do |t|
+    t.integer  "plate_sample_id"
+    t.integer  "lock_version"
+    t.integer  "plate_id"
+    t.integer  "plate_layout_position_id"
+    t.integer  "sample_id"
+    t.boolean  "is_unusable"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "plate_sample_versions", ["plate_sample_id"], :name => "index_plate_sample_versions_on_plate_sample_id"
+
+  create_table "plate_samples", :force => true do |t|
+    t.integer  "plate_id"
+    t.integer  "plate_layout_position_id"
+    t.integer  "sample_id"
+    t.boolean  "is_unusable"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  add_index "plate_samples", ["plate_id", "plate_layout_position_id"], :name => "index_plate_samples_on_plate_id_and_plate_layout_position_id", :unique => true
+
+  create_table "plate_versions", :force => true do |t|
+    t.integer  "plate_id"
+    t.integer  "lock_version"
+    t.integer  "crc_id"
+    t.string   "url_code"
+    t.integer  "creator_id"
+    t.integer  "plate_layout_id"
+    t.text     "description"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "plate_versions", ["plate_id"], :name => "index_plate_versions_on_plate_id"
+
+  create_table "plates", :force => true do |t|
+    t.integer  "crc_id"
+    t.string   "url_code"
+    t.integer  "creator_id"
+    t.integer  "plate_layout_id"
+    t.text     "description"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  add_index "plates", ["crc_id"], :name => "index_plates_on_crc_id", :unique => true
+  add_index "plates", ["url_code"], :name => "index_plates_on_url_code", :unique => true
 
   create_table "privacy_survey_response_versions", :force => true do |t|
     t.integer  "privacy_survey_response_id"

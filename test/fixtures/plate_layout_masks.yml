@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  xmodulus: 1
+  ymodulus: 1
+  xtarget: 1
+  ytarget: 1
+
+two:
+  name: MyString
+  xmodulus: 1
+  ymodulus: 1
+  xtarget: 1
+  ytarget: 1

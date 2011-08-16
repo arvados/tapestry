@@ -1,0 +1,43 @@
+<%= form_for(@plate) do |f| %>
+  <% if @plate.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@plate.errors.count, "error") %> prohibited this plate from being saved:</h2>
+
+      <ul>
+      <% @plate.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label 'Layout' %><br />
+    <% if @plate.plate_layout %>
+    <%= @plate.plate_layout.name %>
+    <% else %>
+      <%= f.select :plate_layout_id, PlateLayout.all.collect {|l| [l.name, l.id]} %>
+    <% end %>
+  </div>
+  <div class="field">
+    <%= f.label 'CRC' %><br />
+    <%= if @plate.crc_id then @plate.crc_id else 'unassigned' end %>
+  </div>
+  <div class="field">
+    <%= f.label 'URL code' %><br />
+    <%= if @plate.url_code then @plate.url_code else 'unassigned' end %>
+  </div>
+<% if @plate.creator %>
+  <div class="field">
+    <%= f.label :creator %><br />
+    <%= @plate.creator.full_name %>
+  </div>
+<% end %>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description, :rows => 12, :cols => 72 %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

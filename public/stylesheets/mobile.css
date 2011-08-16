@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+body {
+    font: 1em Helvetica, Aria, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    font-size: 1.5em;
+}
+div#title {
+    background: #91a9d1;
+    border-bottom: 2px solid #9ab0d5;
+    color: #fff;
+    text-align: center;
+}
+div.buttons {
+    text-align: center;
+}
+div.buttons table {
+    width: 100%;
+}
+div.buttons table td {
+    width: 50%;
+    text-align: center;
+}
+div.buttons input, div.buttons button {
+    margin: 0.25em 0;
+    padding: 1em 3em 1em 3em;
+    width: 100%;
+}
+table.plate_layout {
+    width: 100%;
+}

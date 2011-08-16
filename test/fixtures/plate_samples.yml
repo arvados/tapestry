@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  plate: 
+  plate_layout_position: 
+  sample: 
+
+two:
+  plate: 
+  plate_layout_position: 
+  sample: 
