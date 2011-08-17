@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <%= f.label :participant_id %><br />
-    <%= @sample.participant.nil? ? '' : @sample.participant.full_name %>
+    <%= @sample.participant.nil? ? '' : @sample.participant.hex %>
   </div>
   <div class="field">
     <%= f.label :original_kit_design_sample_id %><br />
@@ -37,7 +37,12 @@
   </div>
   <div class="field">
     <%= f.label :owner_id %><br />
-    <%= @sample.owner.nil? ? '' : @sample.owner.full_name %>
+    <% if @sample.owner.nil? %>
+    <% elsif @sample.owner.is_researcher? %>
+    <%= @sample.owner.full_name %>
+    <% else %>
+    <%= @sample.owner.hex %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :last_mailed %><br />

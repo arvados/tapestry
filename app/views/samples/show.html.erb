@@ -30,7 +30,7 @@
 
 <p>
   <b>Participant:</b>
-  <%= @sample.participant.nil? ? '' : @sample.participant.full_name %>
+  <%= @sample.participant.nil? ? '' : link_to(@sample.participant.hex, public_profile_path(@sample.participant.hex)) %>
 </p>
 
 <p>
@@ -50,7 +50,12 @@
 
 <p>
   <b>Owner:</b>
-  <%= @sample.owner.nil? ? '' : @sample.owner.full_name %>
+  <% if @sample.owner.nil? %>
+  <% elsif @sample.owner.is_researcher? %>
+  <%= @sample.owner.full_name %>
+  <% else %>
+  <%= @sample.owner.hex %>
+  <% end %>
 </p>
 
 <p>
