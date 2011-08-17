@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <%= f.label :participant_id %><br />
-    <%= @sample.participant.nil? ? '' : @sample.participant.full_name %>
+    <%= @sample.participant.nil? ? '' : @sample.participant.hex %>
   </div>
   <div class="field">
     <%= f.label :original_kit_design_sample_id %><br />
