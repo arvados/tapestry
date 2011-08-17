@@ -50,7 +50,12 @@
 
 <p>
   <b>Owner:</b>
-  <%= @sample.owner.nil? ? '' : @sample.owner.full_name %>
+  <% if @sample.owner.nil? %>
+  <% elsif @sample.owner.is_researcher? %>
+  <%= @sample.owner.full_name %>
+  <% else %>
+  <%= @sample.owner.hex %>
+  <% end %>
 </p>
 
 <p>
