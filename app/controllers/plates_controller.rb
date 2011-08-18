@@ -136,6 +136,7 @@ class PlatesController < ApplicationController
     # Tell the "scan sample bar code" handler to come back here
     session[:scan_context_timestamp] = Time.now.to_i
     session[:scan_context_path] = mobile_plate_path(@plate.url_code)
+    session[:scan_context_gerund] = "transferring samples to plate #{@plate.crc_id}"
 
     prepare_layout_grid
 
