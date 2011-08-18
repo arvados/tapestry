@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  crc_id: 1
+  url_code: MyString
+  creator: 
+  description: MyText
+
+two:
+  crc_id: 1
+  url_code: MyString
+  creator: 
+  description: MyText

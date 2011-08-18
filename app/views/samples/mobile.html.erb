@@ -1,4 +1,3 @@
-
 <html>
 <head>
 <link href="/stylesheets/none.css" media="screen" rel="stylesheet" type="text/css" /> 
@@ -7,8 +6,9 @@
 
 <div align="center" width="100%">
   <% flash.each do |key, value| -%>
-    <div class="flash <%= raw(key) %>"><%= raw(value) %></div>
+    <div class="flash <%= raw(key) %>"><%= raw(flash.delete key) %></div>
   <% end -%>
+  <% flash = {} -%>
 </div>
 
 <p align="center"><font size="+9"><strong><%= @sample.crc_id %></strong></font><br/><font size="+3"><%= @sample.name %></font></p>
@@ -22,9 +22,12 @@
 <% else %>
 <p align="center"><font color="darkred"><strong>NOT RECEIVED</strong></font></p>
 
-<p align="center"><font color="green"><%= link_to('MARK AS RECEIVED', mobile_sample_path(@sample.url_code), :method => :get) %></font></p>
+<p align="center"><font color="green"><%= link_to('MARK AS RECEIVED', mobile_sample_receive_path(@sample.url_code), :method => :get) %></font></p>
 
 <% end %>
+
+<p align="center"><%= button_to "Resume #{session[:scan_context_gerund]}", session[:scan_context_path], :method => :get if @have_scan_context %></p>
+
 </font>
 
 </body>

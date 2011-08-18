@@ -35,6 +35,11 @@
   </small>
   </li>
 
+  <li><strong>Plates</strong><br/>
+  &nbsp;&nbsp;<small><%= link_to 'View all', url_for(:controller => 'plates', :action => 'index') %>
+  </small>
+  </li>
+
   <li><%= link_to raw("<strong>Device Types</strong>"), url_for(:controller => 'device_types', :action => 'index') %></li>
   <li><%= link_to raw("<strong>Sample Types</strong>"), url_for(:controller => 'sample_types', :action => 'index') %></li>
 

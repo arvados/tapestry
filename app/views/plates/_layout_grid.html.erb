@@ -1,0 +1,11 @@
+<table class="plate_layout <%= @xpositions.size %>columns">
+  <% @ypositions.each {|y| %>
+  <tr>
+    <% @xpositions.each {|x| g = @grid[y][x] %>
+    <td class="<%= g[:class] %>" plate_layout_position="<%= g[:position].name %>">
+      <%= @next_pos.name if @next_pos == g[:position] %>
+    </td>
+    <% } %>
+  </tr>
+  <% } %>
+</table>

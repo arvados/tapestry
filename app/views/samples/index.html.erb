@@ -25,8 +25,15 @@
     <td><%= link_to sprintf("%08d", sample.crc_id), sample %></td>
     <td><%= sample.study.name %></td>
     <td><%= sample.kit.name %></td>
-    <td><%= sample.participant.nil? ? '' : sample.participant.full_name %></td>
-    <td><%= sample.owner.nil? ? '' : sample.owner.full_name %></td>
+    <td><%= sample.participant.nil? ? '' : link_to(sample.participant.hex, public_profile_path(sample.participant.hex)) %></td>
+    <td>
+      <% if sample.owner.nil? %>
+      <% elsif sample.owner.is_researcher? %>
+      <%= sample.owner.full_name %>
+      <% else %>
+      <%= sample.owner.hex %>
+      <% end %>
+    </td>
     <td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
     <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
     <td><%= sample.last_mailed.nil? ? link_to('Delete', sample, :confirm => 'Are you sure?', :method => :delete) : '' %></td>

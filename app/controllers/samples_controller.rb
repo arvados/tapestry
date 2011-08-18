@@ -23,7 +23,28 @@ class SamplesController < ApplicationController
     # This url will be arrived at based on a QR code, printed on the sample.
     @sample = Sample.find_by_url_code(params[:url_code])
 
-    not_found if @sample.nil? 
+    return not_found if @sample.nil?
+
+    if check_for_scan_context
+      session[:scan_sample_url_code] = params[:url_code]
+      if @sample.participant and @sample.owner and @sample.last_received
+        return redirect_to session[:scan_context_path]
+      else
+        flash[:error] = "You seem to be processing a sample that has not been received yet."
+        return render :layout => "none"
+      end
+    else
+      # No scan_context_path -- assume the current activity is "receive samples"
+      mobile_receive
+    end
+  end
+
+  def mobile_receive
+    @sample = Sample.find_by_url_code(params[:url_code]) unless @sample
+
+    return not_found if @sample.nil?
+
+    check_for_scan_context
 
     # If the sample has a participant and is not yet owned by this researcher, mark it as such
     if @sample.participant.nil? then
@@ -43,7 +64,7 @@ class SamplesController < ApplicationController
     SampleLog.new(:actor_id => @current_user.id, :comment => "Sample received by researcher (scan)", :sample_id => @sample.id).save
 
     # Mobile friendly
-    render :layout => "none"
+    render :action => :mobile, :layout => "none"
   end
 
   # POST /samples/m/:url_code/undo_reception
@@ -62,7 +83,10 @@ class SamplesController < ApplicationController
     # Mobile friendly
     flash.delete(:error)
     flash.delete(:notice)
-    render :template => 'samples/mobile', :layout => "none"
+
+    check_for_scan_context
+
+    render :action => :mobile, :layout => "none"
   end
 
   # GET /samples/1/log
@@ -167,4 +191,7 @@ class SamplesController < ApplicationController
     kit.save!
   end
 
+  def check_for_scan_context
+    @have_scan_context = session[:scan_context_path] and session[:scan_context_gerund] and session[:scan_context_timestamp] > Time.now.to_i - 1800
+  end
 end

@@ -1104,3 +1104,14 @@ pre {
   padding: 5px;
   margin: 20px 0 0 0;
 }
+img.qr {
+    border: 0;
+    margin: 0;
+}
+table.plate_layout {
+    width: 400px;
+}
+table.plate-samples {
+    border-spacing: 0;
+    width: 385px;
+}

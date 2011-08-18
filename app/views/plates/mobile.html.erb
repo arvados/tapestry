@@ -1,0 +1,60 @@
+<%= render 'layout_grid' %>
+
+<div class="buttons">
+  <table>
+    <tr>
+      <td>
+	<% if @next_pos and @scanned_sample %>
+	<%= button_to raw("#{h(@scanned_sample.crc_id)}&rarr;#{h(@next_pos.name)}"), mobile_assign_plate_position_path(:plate_id => @plate.id, :sample_id => @scanned_sample.id, :plate_layout_position_id => @next_pos.id), :method => :post %>
+	<% end %>
+      </td>
+      <td>
+	<% if @next_pos %>
+	<%= button_to 'Scan a sample', 'http://zxing.appspot.com/scan', :method => :get, :class => 'launch_scanner' %>
+	<% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      </td>
+      <td>
+	<% if @next_pos %>
+	<%= button_to "Destroy #{@next_pos.name}", mobile_destroy_plate_position_path(:plate_id => @plate.id, :plate_layout_position_id => @next_pos.id), :confirm => "Really mark #{@next_pos.name} as unusable?" %>
+	<% end %>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!--
+<div class="tabsme">
+  <ul><li><a href="#select_layout_mask">Select layout mask</a></li></ul>
+-->
+<div style="border: 1px dashed #ddd; margin: 1em 2em; text-align: center">
+  <p><b>Select layout mask:</b></p>
+  <div id="select_layout_mask" class="select_layout_mask">
+    <table>
+      <tr>
+	<% last=nil %>
+	<% @masks.each { |m| %>
+	<%= raw('</tr><tr>') if last and (last.xmodulus != m.xmodulus or last.ymodulus != m.ymodulus or last.ytarget != m.ytarget) %>
+	<td>
+	  <%= button_to m.name, mobile_select_plate_layout_mask_path(:url_code => @plate.url_code, :plate_layout_mask_id => m.id), :method => :post %>
+	</td>
+	<% last = m } %>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div style="border: 1px dashed #ddd; margin: 1em 2em; text-align: center">
+  <p>
+    <b>Plate description:</b>
+  </p><p>
+    <%= @plate.description %>
+  </p>
+</div>
+
+<div style="border: 1px dashed #ddd; margin: 1em 2em; text-align: center">
+  <%= button_to "Stop plating", mobile_stop_plate_path(@plate) %>
+</div>
