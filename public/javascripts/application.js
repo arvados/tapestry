@@ -30,4 +30,3 @@ jQuery(function($){
 		    });
 	    });
     });
-o
