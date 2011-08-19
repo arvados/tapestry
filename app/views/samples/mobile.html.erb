@@ -26,7 +26,9 @@
 
 <% end %>
 
-<p align="center"><%= button_to "Resume #{session[:scan_context_gerund]}", session[:scan_context_path], :method => :get if @have_scan_context %></p>
+<div style="width:60%; margin:0 auto"><%= button_to "Resume #{session[:scan_context_gerund]}", session[:scan_context_path], :method => :get, :style => "width:100%; padding:1em 2em; white-space:normal" if @have_scan_context %></div>
+
+<div style="width:60%; margin:0 auto"><%= button_to "Scan another", "http://zxing.appspot.com/scan", :method => :get, :class => "launch_scanner", :style => "width:100%; padding:1em 2em; white-space:normal" %></div>
 
 </font>
 
