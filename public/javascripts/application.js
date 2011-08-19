@@ -8,6 +8,9 @@ jQuery(function($){
 		if (ncolumns)
 		    $('table.plate_layout.'+c+' td').css('width', ''+(100.0/ncolumns[1])+'%');
 	    });
+	$('table.plate_layout td.next_available[plate_layout_position]').each(function(){
+		$(this).html($(this).attr('plate_layout_position'));
+	    });
 	// $('div.tabsme').tabs();
 	// $('div.buttons input[type=submit],div.buttons button').button();
 	$('.launch_scanner').click(function(){
