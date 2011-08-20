@@ -95,7 +95,8 @@ class User < ActiveRecord::Base
   scope :inactive, { :conditions => "activated_at IS NULL and is_test = false" }
   scope :enrolled, { :conditions => "enrolled IS NOT NULL and is_test = false" }
   scope :pgp_ids, { :conditions => "enrolled IS NOT NULL and pgp_id IS NOT NULL and is_test = false" }
-  scope :test, { :conditions => "is_test = true" }
+  # User.test is a built-in method, so we have to call our scope something else
+  scope :is_test, { :conditions => "is_test = true" }
   scope :real, { :conditions => "is_test = false" }
   scope :researcher, { :conditions => "researcher = true" }
 
@@ -164,8 +165,6 @@ class User < ActiveRecord::Base
       :joins => joins
     }
   }
-
-  scope :limit, lambda { |num| { :limit => num } }
 
   # For mislav-will_paginate (WillPaginate), which we use in the admin interface
   cattr_reader :per_page

@@ -336,7 +336,7 @@ class Admin::UsersController < Admin::AdminControllerBase
       @unpaginated_users = User.researcher
       @result = "Test users"
     elsif params[:test]
-      @unpaginated_users = User.test
+      @unpaginated_users = User.is_test
       @result = "Test users"
     elsif params[:hex]
       if params[:hex] != '' then
