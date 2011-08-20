@@ -15,5 +15,7 @@ class Sample < ActiveRecord::Base
   validates_presence_of :study_id
   validates_presence_of :kit_id
 
+  scope :real, where('is_destroyed is ?',nil)
+  scope :destroyed, where('is_destroyed is not ?',nil)
 
 end

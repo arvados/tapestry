@@ -87,7 +87,7 @@ phone number may be needed.</p>
   </tr>
   <% @kits.each do |k| %>
     <tr>
-      <td><%= k.name %></td>
+      <td><%= link_to(k.name, kit_path(k)) %></td>
       <td><%= k.study.name %></td>
       <td><%= k.status %></td>
       <td><%= k.updated_at %></td>

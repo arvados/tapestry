@@ -171,6 +171,10 @@ class User < ActiveRecord::Base
   cattr_reader :per_page
   @@per_page = 30
 
+  def is_unprivileged?
+    not self.researcher and not self.researcher_onirb and not self.is_admin?
+  end
+
   def is_researcher?
     self.researcher
   end

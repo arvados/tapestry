@@ -8,6 +8,9 @@ PgpEnroll::Application.routes.draw do
   match '/plates/:plate_id/destroy_sample/:plate_layout_position_id' => 'plates#destroy_sample', :as => :destroy_plate_sample, :via => :post
 
   match '/samples/:id/log' => 'samples#show_log', :as => :show_sample_log, :via => :get
+  match '/samples/:id/participant_note' => 'samples#participant_note', :as => :sample_participant_note, :via => :get
+  match '/samples/:id/participant_note' => 'samples#update_participant_note', :as => :sample_update_participant_note, :via => :put
+  match '/samples/:id/destroyed' => 'samples#mark_as_destroyed', :as => :sample_destroyed, :via => :post
   resources :samples
   match '/samples/:id/received' => 'samples#received', :as => :received_sample, :via => :post
   match '/samples/m/:url_code/undo_reception' => 'samples#mobile_undo_reception', :as => :mobile_sample_undo_reception, :via => :get
@@ -153,7 +156,7 @@ PgpEnroll::Application.routes.draw do
 
   match '/admin/study/approve/:id' => 'admin/study#approve', :as => :approve_admin_study
   match '/admin/study/deny/:id' => 'admin/study#deny', :as => :deny_admin_study
-#    match '/' => 'homes#index'
+
   namespace :admin do
       root :to => 'homes#index'
       resources :users do

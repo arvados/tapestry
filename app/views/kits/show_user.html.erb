@@ -1,0 +1,58 @@
+
+<h2>Kit '<%= @kit.name %>'</h2>
+
+<p id="notice"><%= notice %></p>
+
+<%= @kit.status == 'Participant has kit' ? link_to('Mark as returned', returned_kit_path(@kit), :method => :post, :confirm => "Are you sure you want to mark kit #{@kit.name} as returned to the researcher?") : '' %>
+
+<p>
+  <b>Name:</b>
+  <%= @kit.name %>
+</p>
+
+<p>
+  <b>Number:</b>
+  <%= sprintf("%08d", @kit.crc_id) %>
+</p>
+
+<p>
+  <b>Study:</b>
+  <%= @kit.study.name %>
+</p>
+
+<p>
+  <b>Participant:</b>
+  <%= @kit.participant.nil? ? '' : @kit.participant.full_name %></td>
+</p>
+
+<h2>Samples</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th>Number</th>
+    <th>Owner</th>
+    <th></th>
+    <th></th>
+    <%= @kit.status == 'Participant has kit' ? '<th></th>' : '' %>
+  </tr>
+
+<% @samples.each do |sample| %>
+  <tr>
+    <td><%= sample.name %></td>
+    <td><%= sprintf("%08d", sample.crc_id) %></td>
+    <td><%= sample.owner.nil? ? '' : sample.owner.full_name %></td>
+    <td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
+    <td><%= link_to 'Note', sample_participant_note_path(sample) %></td>
+    <% if sample.last_mailed.nil? %>
+    <td><%= link_to('Delete', sample, :confirm => 'Are you sure?', :method => :delete) %></td>
+    <% elsif not sample.is_destroyed.nil? %>
+    <td><%= 'Marked as destroyed on ' + sample.is_destroyed.to_s %></td>
+    <% elsif sample.is_destroyed.nil? %>
+    <td><%= @kit.status == 'Participant has kit' ? link_to('Mark as destroyed', sample_destroyed_path(sample), :confirm => 'Are you sure?', :method => :post) : '' %></td>
+    <% end %>
+  </tr>
+<% end %>
+</table>
+
+

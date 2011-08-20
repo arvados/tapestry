@@ -1571,6 +1571,7 @@ ActiveRecord::Schema.define(:version => 20110816161750) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "lock_version"
+    t.datetime "is_destroyed"
   end
 
   add_index "samples", ["crc_id"], :name => "index_samples_on_crc_id", :unique => true
