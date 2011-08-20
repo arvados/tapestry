@@ -12,7 +12,7 @@ class PrivacySurveyResponse < ActiveRecord::Base
 
       if not user.eligibility_survey_version then
         user.eligibility_survey_version = 'v1'
-        user.save(false)
+        user.save(:validate => false)
       end
 
       step = EnrollmentStep.find_by_keyword('screening_surveys')

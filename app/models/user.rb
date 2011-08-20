@@ -236,7 +236,7 @@ class User < ActiveRecord::Base
     unless self.is_researcher?
       self.complete_enrollment_step(signup_enrollment_step)
     end
-    save(false)
+    save(:validate => false)
   end
 
   def log(comment,step=nil,origin=nil,user_comment=nil)
