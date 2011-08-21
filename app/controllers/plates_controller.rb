@@ -197,10 +197,11 @@ class PlatesController < ApplicationController
   def mobile_stop
     session.delete :scan_context_path
     session.delete :scan_context_timestamp
-    if params[:id]
-      redirect_to Plate.find(params[:id])
+    session.delete :scan_context_gerund
+    if params[:id] and (p=Plate.find(params[:id]))
+      redirect_to p
     else
-      redirect_to nil rescue redirect_to page_url('researcher_tools')
+      redirect_to page_url('researcher_tools')
     end
   end
 
