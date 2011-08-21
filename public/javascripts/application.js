@@ -3,6 +3,11 @@
 
 // plates setup
 jQuery(function($){
+	// This is a hack; this code should not be here, it should be loaded only on the relevant
+	// pages.
+	if ($('table.plate_layout').attr('class')==undefined) {
+	  return false;
+	}
 	$.each($('table.plate_layout').attr('class').split(' '), function(i,c){
 		ncolumns = /^(\d+)columns$/.exec(c);
 		if (ncolumns)
