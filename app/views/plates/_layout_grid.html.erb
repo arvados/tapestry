@@ -1,4 +1,4 @@
-<table class="plate_layout <%= @xpositions.size %>columns">
+<table class="plate_layout has<%= @xpositions.size %>columns">
   <% @ypositions.each {|y| %>
   <tr>
     <% @xpositions.each {|x| g = @grid[y][x] %>
