@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110816161750) do
+ActiveRecord::Schema.define(:version => 20110819230959) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -644,6 +644,8 @@ ActiveRecord::Schema.define(:version => 20110816161750) do
     t.string   "form_url"
     t.boolean  "open"
     t.text     "description"
+    t.boolean  "is_result_public",       :default => true
+    t.boolean  "is_listed",              :default => true
   end
 
   create_table "immunization_name_versions", :force => true do |t|

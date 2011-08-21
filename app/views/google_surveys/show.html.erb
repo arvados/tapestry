@@ -21,7 +21,7 @@
 </p>
 <% end %>
 
-<% if @google_survey.last_downloaded_at %>
+<% if @can_download %>
 <p>
   <%= button_to 'Download results', download_google_survey_path(@google_survey) %>
 </p>

@@ -4,8 +4,16 @@
     <%= f.text_field(:name, :size => 40) %>
   </div>
   <div class="field">
-    <%= f.label :open, 'Open?' %><br />
-    <%= f.check_box :open, :size => 40, :checked_value => true, :unchecked_value => false %>
+    <%= f.label :open, 'Open?' %> (i.e., participants can respond click the "participate in this survey" button)<br />
+    <%= f.check_box :open, :checked_value => true, :unchecked_value => false %>
+  </div>
+  <div class="field">
+    <%= f.label :is_listed, 'Listed?' %> (in "available surveys" lists shown to participants)<br />
+    <%= f.check_box :is_listed, :checked_value => true, :unchecked_value => false %>
+  </div>
+  <div class="field">
+    <%= f.label :is_result_public, 'Results public?' %> (i.e., displayed on participants' public profiles, and downloadable as CSV by participants)<br />
+    <%= f.check_box :is_result_public, :checked_value => true, :unchecked_value => false %>
   </div>
   <div class="field">
     <%= f.label :description, 'Description' %><br />
