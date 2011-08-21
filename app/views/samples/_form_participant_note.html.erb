@@ -1,0 +1,21 @@
+<%= error_messages_for :sample, :header_message => 'Error: data could not be saved.', :message => nil %>
+<% if not @sample.is_destroyed.nil? %>
+  <div class="flash error">This sample was marked as destroyed on <%= @sample.is_destroyed %>.</div> 
+<% end %>
+<%= form_for @sample, :url => sample_update_participant_note_url, :html => { :method => :put, :class => 'update_participant_note' } do |f| %>
+  <div class="field">
+    <%= f.label :study_id %><br />
+    <%= @sample.study.name %>
+  </div>
+  <div class="field">
+    <%= f.label :kit_id %><br />
+    <%= @sample.kit.name %>
+  </div>
+  <div class="field">
+    <%= f.label :participant_note %><br />
+    <%= f.text_area :participant_note, :cols => 80 %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

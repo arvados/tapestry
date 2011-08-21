@@ -1,16 +1,8 @@
+<%= error_messages_for :sample, :header_message => 'Error: data could not be saved.', :message => nil %>
+<% if not @sample.is_destroyed.nil? %>
+  <div class="flash error">This sample was marked as destroyed on <%= @sample.is_destroyed %>.</div> 
+<% end %>
 <%= form_for(@sample) do |f| %>
-  <% if @sample.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@sample.errors.count, "error") %> prohibited this sample from being saved:</h2>
-
-      <ul>
-      <% @sample.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="field">
     <%= f.label :study_id %><br />
     <%= @sample.study.name %>
@@ -64,19 +56,35 @@
   </div>
   <div class="field">
     <%= f.label :concentration %><br />
-    <%= f.text_field :concentration %>
+    <% if @sample.is_destroyed.nil? then %>
+      <%= f.text_field :concentration %>
+    <% else %>
+      <%= @sample.concentration %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :amount %><br />
-    <%= f.text_field :amount %>
+    <% if @sample.is_destroyed.nil? then %>
+      <%= f.text_field :amount %>
+    <% else %>
+      <%= @sample.amount %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :unit %><br />
-    <%= f.text_field :unit %>
+    <% if @sample.is_destroyed.nil? then %>
+      <%= f.text_field :unit %>
+    <% else %>
+      <%= @sample.unit %>
+    <% end %>
   </div>
   <div class="field">
     <%= f.label :material %><br />
-    <%= f.text_field :material %>
+    <% if @sample.is_destroyed.nil? then %>
+      <%= f.text_field :material %>
+    <% else %>
+      <%= @sample.material %>
+    <% end %>
   </div>
   <div class="actions">
     <%= f.submit %>

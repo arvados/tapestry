@@ -200,7 +200,7 @@ class PlatesController < ApplicationController
     if params[:id]
       redirect_to Plate.find(params[:id])
     else
-      redirect_to nil rescue redirect_to page_url ('researcher_tools')
+      redirect_to nil rescue redirect_to page_url('researcher_tools')
     end
   end
 

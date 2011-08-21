@@ -1,6 +1,6 @@
 class SamplesController < ApplicationController
 
-  before_filter :ensure_researcher
+  before_filter :ensure_researcher, :except => [ 'show_log', 'participant_note', 'update_participant_note', 'mark_as_destroyed' ]
 
   # GET /samples
   # GET /samples.xml
@@ -89,10 +89,36 @@ class SamplesController < ApplicationController
     render :action => :mobile, :layout => "none"
   end
 
+  # POST /samples/1/destroyed
+  def mark_as_destroyed
+    @sample = Sample.find(params[:id])
+
+    if current_user.is_unprivileged? and @sample.participant != current_user
+      redirect_to unauthorized_user_url
+      return
+    end
+
+    @sample.is_destroyed = Time.now()
+    @sample.save()
+
+    # Log this
+    SampleLog.new(:actor_id => @current_user.id, :comment => "Marked sample as destroyed", :sample_id => @sample.id).save
+
+    flash[:notice]  = "Sample #{sprintf("%08d", @sample.crc_id)} marked as destroyed"
+
+    redirect_to(kit_path(@sample.kit.id))
+  end
+
   # GET /samples/1/log
   def show_log
     @sample = Sample.find(params[:id])
     @sample_log = SampleLog.where('sample_id = ?', @sample.id).sort { |a,b| b.updated_at <=> a.updated_at }
+
+    if current_user.is_unprivileged? and @sample.participant != current_user
+      redirect_to unauthorized_user_url
+      return
+    end
+
   end
 
   # GET /samples/1
@@ -126,6 +152,36 @@ class SamplesController < ApplicationController
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @sample }
+    end
+  end
+
+  # GET /samples/1/participant_note
+  def participant_note
+    @sample = Sample.find(params[:id])
+
+    if current_user.is_unprivileged? and @sample.participant != current_user
+      redirect_to unauthorized_user_url
+      return
+    end
+  end
+
+  # PUT /samples/1/participant_note
+  def update_participant_note
+    @sample = Sample.find(params[:id])
+
+    if current_user.is_unprivileged? and @sample.participant != current_user
+      redirect_to unauthorized_user_url
+      return
+    end
+
+    respond_to do |format|
+      if @sample.update_attributes(params[:sample])
+        format.html { redirect_to(@sample.kit, :controller => :kits, :notice => 'Participant note was successfully updated.') }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "participant_note" }
+        format.xml  { render :xml => @sample.errors, :status => :unprocessable_entity }
+      end
     end
   end
 

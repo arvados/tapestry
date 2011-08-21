@@ -67,7 +67,13 @@
     <% end %>
     <td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
     <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
-    <td><%= sample.last_mailed.nil? ? link_to('Destroy', sample, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
+    <% if sample.last_mailed.nil? %>
+    <td><%= link_to('Delete', sample, :confirm => 'Are you sure?', :method => :delete) %></td>
+    <% elsif not sample.is_destroyed.nil? %>
+    <td><%= 'Marked as destroyed on ' + sample.is_destroyed.to_s %></td>
+    <% elsif sample.is_destroyed.nil? %>
+    <td><%= link_to('Mark as destroyed', sample_destroyed_path(sample), :confirm => 'Are you sure?', :method => :post) %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>

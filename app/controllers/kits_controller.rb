@@ -3,7 +3,7 @@ class KitsController < ApplicationController
   skip_before_filter :ensure_latest_consent
   skip_before_filter :ensure_recent_safety_questionnaire
 
-  before_filter :ensure_researcher, :except => ['claim', 'confirm_claim', 'claim_danforth', 'returned']
+  before_filter :ensure_researcher, :except => ['claim', 'confirm_claim', 'claim_danforth', 'returned', 'show']
 
   # TMP TO DEAL WITH DUPLICATE KIT NAME
   def claim_danforth
@@ -152,9 +152,14 @@ class KitsController < ApplicationController
     @kit = Kit.find(params[:id])
     @samples = @kit.samples
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @kit }
+    if current_user.is_unprivileged? then
+      if @kit.participant != current_user
+        redirect_to unauthorized_user_url
+        return
+      end
+      render :action => "show_user"
+    else
+      render
     end
   end
 

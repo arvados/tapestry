@@ -96,7 +96,8 @@ class User < ActiveRecord::Base
   scope :inactive, { :conditions => "activated_at IS NULL AND NOT (is_test <=> 1)" }
   scope :enrolled, { :conditions => "enrolled IS NOT NULL AND NOT (is_test <=> 1)" }
   scope :pgp_ids, { :conditions => "enrolled IS NOT NULL and pgp_id IS NOT NULL and NOT (is_test <=> 1)" }
-  scope :test, { :conditions => "is_test = 1" }
+  # User.test is a built-in method, so we have to call our scope something else
+  scope :is_test, { :conditions => "is_test = 1" }
   scope :real, { :conditions => "NOT (is_test <=> 1)" }
   scope :researcher, { :conditions => "researcher = true" }
   scope :publishable, where("enrolled IS NOT NULL AND suspended_at IS NULL").real
@@ -167,11 +168,13 @@ class User < ActiveRecord::Base
     }
   }
 
-  scope :limit, lambda { |num| { :limit => num } }
-
   # For mislav-will_paginate (WillPaginate), which we use in the admin interface
   cattr_reader :per_page
   @@per_page = 30
+
+  def is_unprivileged?
+    not self.researcher and not self.researcher_onirb and not self.is_admin?
+  end
 
   def is_researcher?
     self.researcher
@@ -235,7 +238,7 @@ class User < ActiveRecord::Base
     unless self.is_researcher?
       self.complete_enrollment_step(signup_enrollment_step)
     end
-    save(false)
+    save(:validate => false)
   end
 
   def log(comment,step=nil,origin=nil,user_comment=nil)

@@ -87,7 +87,7 @@ phone number may be needed.</p>
   </tr>
   <% @kits.each do |k| %>
     <tr>
-      <td><%= k.name %></td>
+      <td><%= link_to(k.name, kit_path(k)) %></td>
       <td><%= k.study.name %></td>
       <td><%= k.status %></td>
       <td><%= k.updated_at %></td>
@@ -96,5 +96,6 @@ phone number may be needed.</p>
   <% end %>
 </table>
 <% else %>
-  You currently do not have any kits.
+  <p>You currently do not have any kits.</p>
+  <p><%= link_to "Claim a kit", "/studies/claim" %></p>
 <% end %>

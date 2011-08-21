@@ -38,7 +38,7 @@ class ScreeningSurveyResponse < ActiveRecord::Base
 
       if not user.eligibility_survey_version or user.eligibility_survey_version == 'v1' then
         user.eligibility_survey_version = 'v2'
-        user.save(false)
+        user.save(:validate => false)
       end
 
       step = EnrollmentStep.find_by_keyword('screening_surveys')

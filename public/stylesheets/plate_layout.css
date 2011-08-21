@@ -3,9 +3,18 @@
 table.plate_layout {
     border-collapse: collapse;
 }
-table.plate_layout.12columns td {
+
+/*
+From http://jigsaw.w3.org/css-validator:
+In CSS1, a class name could start with a digit (".55ft"), unless it was a
+dimension (".55in"). In CSS2, such classes are parsed as unknown dimensions (to
+allow for future additions of new units) To make "12columns" a valid class,
+CSS2 requires the first digit to be escaped ".\31 2columns" [12columns td]
+*/
+table.plate_layout.\31 2columns td {
     width: 8.3333333%;
 }
+
 table.plate_layout td {
     height: 1.5em;
     border: 1px solid #d9d9d9;
