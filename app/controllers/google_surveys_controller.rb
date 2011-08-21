@@ -25,6 +25,11 @@ class GoogleSurveysController < ApplicationController
   def decide_view_mode
     @can_edit = current_user.is_admin? or (@google_survey and @google_survey.user_id == current_user.id)
     @min_view = !@can_edit and !current_user.is_researcher?
+    @can_download = (@google_survey and
+                     @google_survey.last_downloaded_at and
+                     (@google_survey.is_result_public or
+                      @google_survey.user_id == current_user.id or
+                      current_user.is_admin?))
   end
 
   def synchronize
@@ -38,6 +43,7 @@ class GoogleSurveysController < ApplicationController
   def download
     get_object
     decide_view_mode
+    return access_denied unless @can_download
     filename = @google_survey.name.gsub(' ','_').camelcase + '-' + @google_survey.last_downloaded_at.strftime('%Y%m%d%H%M%S') + '.csv'
     send_data(File.open(@google_survey.processed_csv_file, "rb").read,
               :filename => filename,
@@ -50,8 +56,7 @@ class GoogleSurveysController < ApplicationController
   def index
     decide_view_mode
     if @min_view
-      @google_surveys = GoogleSurvey.where(:open => true)
-      # (should also include closed surveys which have results)
+      @google_surveys = GoogleSurvey.where(:is_listed => true)
     else
       @google_surveys = GoogleSurvey.all
     end
