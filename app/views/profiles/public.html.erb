@@ -86,7 +86,7 @@ None added.
     <% @google_survey_results.each {|survey_result| %>
     <tr>
       <th>
-	<%= link_to_if logged_in?, survey_result[:survey].name, google_survey_path(survey_result[:survey]) %>
+	<%= link_to_if((logged_in? and survey_result[:survey].is_listed), survey_result[:survey].name, google_survey_path(survey_result[:survey])) %>
       </th>
       <td>
 	Responses collected <%= survey_result[:nonce].used_at %>.

@@ -31,8 +31,10 @@ class ProfilesController < ApplicationController
       response = {}
       response[:nonce] = n
       response[:survey] = GoogleSurvey.find(n.target_id)
+      next if !response[:survey].is_result_public?
       response[:answers] = GoogleSurveyAnswer.find_all_by_nonce_id(n.id)
-      @google_survey_results.push response unless response[:answers].empty?
+      next if response[:answers].empty?
+      @google_survey_results.push response
     }
   end
 end
