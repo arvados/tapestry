@@ -1,6 +1,9 @@
 class SamplesController < ApplicationController
 
   before_filter :ensure_researcher, :except => [ 'show_log', 'participant_note', 'update_participant_note', 'mark_as_destroyed' ]
+  skip_before_filter :ensure_enrolled, :except => [ 'participant_note', 'update_participant_note' ]
+  skip_before_filter :ensure_latest_consent, :except => [ 'participant_note', 'update_participant_note' ]
+  skip_before_filter :ensure_recent_safety_questionnaire, :except => [ 'participant_note', 'update_participant_note' ]
 
   # GET /samples
   # GET /samples.xml
