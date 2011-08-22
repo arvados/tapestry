@@ -27,6 +27,13 @@
 </p>
 <% end %>
 
+<% if !@google_survey.is_result_public %>
+<p>
+  Currently, responses to this survey are <b>not</b> publicly available.
+</p>
+<% end %>
+
+
 <h3>Your participation in this survey</h3>
 <% if !@nonces.empty? %>
 <table class="admin_table">
@@ -52,6 +59,16 @@
 
 <% if !@min_view %>
 <h3>Technical details (this section is only displayed to researchers and admins)</h3>
+
+<p>
+  <b>Listed in "available surveys"?</b>
+  <%= @google_survey.is_listed ? "Yes" : "No" %>
+</p>
+
+<p>
+  <b>Responses available to public?</b>
+  <%= @google_survey.is_result_public ? "Yes" : "No" %>
+</p>
 
 <p>
   <b>OAuth service:</b>
