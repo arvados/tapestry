@@ -8,4 +8,4 @@ ENV["RAILS_ENV"] = "production" if production
 require File.dirname(__FILE__) + '/../config/boot'
 require File.dirname(__FILE__) + '/../config/environment'
 
-GoogleSurvey.find(1).synchronize!
+GoogleSurvey.where(:open => true).each { |x| x.synchronize! }
