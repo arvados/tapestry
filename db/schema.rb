@@ -2089,6 +2089,9 @@ ActiveRecord::Schema.define(:version => 20110819230959) do
     t.datetime "suspended_at"
     t.boolean  "can_unsuspend_self"
     t.integer  "lock_version"
+    t.datetime "deactivated_at"
+    t.datetime "suspended_at"
+    t.boolean  "can_unsuspend_self"
   end
 
   create_table "waitlist_versions", :force => true do |t|
