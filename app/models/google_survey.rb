@@ -34,7 +34,7 @@ class GoogleSurvey < ActiveRecord::Base
 
   def synchronize!
     token = OauthToken.find_by_user_id_and_oauth_service_id(self.user.id, self.oauth_service.id)
-    if token.nil?
+    if token.nil? or !token.authorized?
       flash[:error] = "I do not have authorization to get #{self.user.full_name}'s data from #{self.oauth_service.name}."
       return nil
     end
