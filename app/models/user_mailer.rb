@@ -24,8 +24,12 @@ class UserMailer < ActionMailer::Base
   end
 
   def delete_request(user)
-    setup_email(user)
-    @recipients  = "delete-account@personalgenomes.org"
+    if defined? WITHDRAWAL_NOTIFICATION_EMAIL
+      @recipients = "#{WITHDRAWAL_NOTIFICATION_EMAIL}"
+    else
+      @recipients = "#{ADMIN_EMAIL}"
+    end
+    setup_email
     @subject     = "PGP account deletion request"
     @body[:url]  = "http://#{ROOT_URL}/admin/users"
     @body[:user] = user
@@ -82,23 +86,24 @@ class UserMailer < ActionMailer::Base
   end
 
   def withdrawal_staff_notification(user)
-    setup_email(user)
-    @subject += 'PGP withdrawal'
     if defined? WITHDRAWAL_NOTIFICATION_EMAIL
       @recipients = "#{WITHDRAWAL_NOTIFICATION_EMAIL}"
     else
       @recipients = "#{ADMIN_EMAIL}"
     end
+    setup_email
+    @subject += 'PGP withdrawal'
+    @body[:user] = user
   end
 
   protected
 
-  def setup_email(user)
-    @recipients  = "#{user.email}"
+  def setup_email(user=nil)
+    @recipients  = "#{user.email}" if user
     @from        = "#{ADMIN_EMAIL}"
     @subject     = "[#{ROOT_URL}] "
     @sent_on     = Time.now
-    @body[:user] = user
+    @body[:user] = user if user
     @recipients = SEND_ALL_USER_EMAIL_TO if defined? SEND_ALL_USER_EMAIL_TO
   end
 end
