@@ -35,8 +35,12 @@ class GoogleSurveysController < ApplicationController
   def synchronize
     get_object
     decide_view_mode
-    @google_survey.synchronize!
-    flash[:notice] = 'Results synchronized at ' + @google_survey.last_downloaded_at.to_s
+    ok, error_message = @google_survey.synchronize!
+    if ok
+      flash[:notice] = 'Results synchronized at ' + @google_survey.last_downloaded_at.to_s
+    else
+      flash[:error] = error_message
+    end
     redirect_to google_survey_path(@google_survey)
   end
 

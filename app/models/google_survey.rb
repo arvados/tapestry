@@ -24,7 +24,7 @@ class GoogleSurvey < ActiveRecord::Base
                         :nonce => md5)
       begin
         nonce.save!
-        $stderr.puts "Added nonce #{nonce.nonce} for user ##{log.user.id} #{log.user.hex}"
+        logger.info "Added nonce #{nonce.nonce} for user ##{log.user.id} #{log.user.hex}"
         added += 1
       rescue ActiveRecord::RecordInvalid
       end
@@ -35,15 +35,13 @@ class GoogleSurvey < ActiveRecord::Base
   def synchronize!
     token = OauthToken.find_by_user_id_and_oauth_service_id(self.user.id, self.oauth_service.id)
     if token.nil? or !token.authorized?
-      flash[:error] = "I do not have authorization to get #{self.user.full_name}'s data from #{self.oauth_service.name}."
-      return nil
+      return nil, "I do not have authorization to get #{self.user.full_name}'s data from #{self.oauth_service.name}."
     end
     skey = Regexp.new('^(.*key=)?([-_a-zA-Z0-9]+)(\&.*)?$').match(self.spreadsheet_key)[2]
     uri = URI.parse("https://spreadsheets.google.com/feeds/download/spreadsheets/Export?key=#{skey}")
     resp = token.oauth_request('GET', uri, {'format' => 'csv', 'exportFormat' => 'csv' })
     if resp.code != '200' or resp.body.nil?
-      $stderr.puts "Unexpected response from #{uri.to_s} -- #{resp.code} #{resp.message} #{resp.body}"
-      return nil
+      return nil, "Unexpected response from #{uri.to_s} -- #{resp.code} #{resp.message} #{resp.body}"
     end
 
     cache_file = "#{CACHE_DIR}/#{self.id}.csv"
@@ -55,7 +53,7 @@ class GoogleSurvey < ActiveRecord::Base
       self.last_downloaded_at = Time.now
       save
     rescue SystemCallError
-      $stderr.puts "Error writing CSV to #{cache_file}: #{$!}"
+      logger.error "Error writing CSV to #{cache_file}: #{$!}"
       begin
         File.delete(cache_file+stamp)
       rescue SystemCallError
@@ -72,8 +70,7 @@ class GoogleSurvey < ActiveRecord::Base
       if q.nil?
         q = GoogleSurveyQuestion.new(:google_survey => self, :column => column)
         if q.nil?
-          $stderr.puts "#{self.class} #{self.id} cannot find or create question for column #{column}.  Giving up."
-          return nil
+          return nil, "#{self.class} #{self.id} cannot find or create question for column #{column}.  Giving up."
         end
       end
       q.question = q_text
@@ -103,19 +100,19 @@ class GoogleSurvey < ActiveRecord::Base
       nonce_value = nonce_column ? row[nonce_column-1] : nil
       nonce = nonce_value ? Nonce.find_by_nonce(nonce_value) : nil
       if nonce.nil?
-        $stderr.puts "Invalid nonce #{nonce_value} on data row #{datarow_count}."
+        logger.info "Invalid nonce #{nonce_value} on data row #{datarow_count}."
         next
       end
       if (nonce.owner_class != 'User' or
           nonce.target_class != 'GoogleSurvey' or
           nonce.target_id != self.id)
-        $stderr.puts "Nonce #{nonce_value} for data row #{datarow_count} was not issued for this survey."
+        logger.warn "Nonce #{nonce_value} for data row #{datarow_count} was not issued for this survey."
         next
       end
 
       u = User.find(nonce.owner_id)
       if u.nil?
-        $stderr.puts "Nonce #{nonce_value} has non-existent user id ##{nonce.owner_id} as owner_id"
+        logger.warn "Nonce #{nonce_value} has non-existent user id ##{nonce.owner_id} as owner_id"
         next
       end
 
@@ -144,7 +141,7 @@ class GoogleSurvey < ActiveRecord::Base
       end
       File.rename processed_csv_file+stamp, processed_csv_file
     rescue SystemCallError
-      $stderr.puts "Error writing processed CSV to #{processed_csv_file}: #{$!}"
+      logger.error "Error writing processed CSV to #{processed_csv_file}: #{$!}"
       begin
         File.delete(processed_csv_file+stamp)
       rescue SystemCallError
