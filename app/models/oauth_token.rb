@@ -6,7 +6,7 @@ class OauthToken < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :oauth_service
-  validates_uniqueness_of :user_id, :oauth_service_id
+  validates_uniqueness_of :user_id, :scope => :oauth_service_id
 
   attr_protected :requesttoken
   attr_protected :accesstoken

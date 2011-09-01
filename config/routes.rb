@@ -40,7 +40,7 @@ PgpEnroll::Application.routes.draw do
 
   get "oauth_tokens/authorize"
   get "oauth_tokens/revoke"
-  get "oauth_tokens/get_access_token"
+  match "oauth_tokens/get_access_token" => 'oauth_tokens#get_access_token', :as => :get_oauth_access_token, :via => :get
   resources :oauth_tokens
 
   resources :kit_design_samples

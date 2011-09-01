@@ -23,7 +23,7 @@ class OauthTokensController < ApplicationController
       return
     end
 
-    callback_uri = get_access_token_oauth_tokens_url + '?next_page=' + uriencode(oauth_tokens_path)
+    callback_uri = get_oauth_access_token_url + '?next_page=' + uriencode(oauth_tokens_path)
     (status,destination) = token.authorize!(callback_uri)
     if not status.nil?
       redirect_to destination
