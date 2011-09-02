@@ -26,6 +26,16 @@ class ApplicationController < ActionController::Base
   # from your application log (in this case, all fields with names like "password"). 
   # filter_parameter_logging :password
 
+  def page_title
+    if @page_title
+      @page_title
+    elsif action_name == 'index'
+      controller_name.titleize
+    else
+      "#{controller_name.titleize}: #{action_name.titleize}"
+    end
+  end
+
   protected
 
   def model_name

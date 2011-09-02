@@ -8,6 +8,7 @@ class PagesController < ApplicationController
   skip_before_filter :ensure_enrolled, :only => [:show]
 
   def show
+    @page_title = params[:id].titleize
 
     # Allow easy creation of initial admin user when the db is empty
     if !current_user and User.all.count == 0 then
@@ -58,6 +59,7 @@ class PagesController < ApplicationController
 
     if params[:id] == 'enrolled'
       @enrolled = User.enrolled.publishable.find(:all).sort{ |a,b| a.enrolled <=> b.enrolled }.paginate(:page => params[:page] || 1, :per_page => 100)
+      @page_title = 'Enrolled Participants'
     end
 
     fetch_ivars

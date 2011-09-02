@@ -8,8 +8,11 @@ class ProfilesController < ApplicationController
 
   def public
     @user = User.publishable.find_by_hex(params[:hex])
+
     # Invalid hex code
     return if @user.nil?
+
+    @page_title = @user.hex
 
     @family_members = @user.family_relations
 

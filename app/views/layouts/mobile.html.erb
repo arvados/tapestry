@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
-  <title><%= if @page_title then "PGP: #{@page_title}" else "PGP" end %></title>
+  <title>PGP: <%= controller.page_title %></title>
   <%= stylesheet_link_tag 'mobile', 'plate_layout', 'ui.slider.extras', 'redmond/jquery-ui-1.8.11.custom' %>
   <!--[if lte IE 7]><%= stylesheet_link_tag 'application-ie' %><![endif]-->
   <%= javascript_include_tag :defaults %>

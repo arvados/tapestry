@@ -66,6 +66,7 @@ class UsersController < ApplicationController
   def edit
     @user = User.find params[:id]
     @mailing_lists = MailingList.all
+    @page_title = 'My Account' if @user == current_user
   end
 
   def update
