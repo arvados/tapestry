@@ -34,6 +34,7 @@ class SamplesController < ApplicationController
         return redirect_to session[:scan_context_path]
       else
         flash[:error] = "You seem to be processing a sample that has not been received yet."
+        set_page_title
         return render :layout => "none"
       end
     else
@@ -67,6 +68,7 @@ class SamplesController < ApplicationController
     SampleLog.new(:actor_id => @current_user.id, :comment => "Sample received by researcher (scan)", :sample_id => @sample.id).save
 
     # Mobile friendly
+    set_page_title
     render :action => :mobile, :layout => "none"
   end
 
@@ -89,6 +91,7 @@ class SamplesController < ApplicationController
 
     check_for_scan_context
 
+    set_page_title
     render :action => :mobile, :layout => "none"
   end
 
@@ -116,6 +119,7 @@ class SamplesController < ApplicationController
   def show_log
     @sample = Sample.find(params[:id])
     @sample_log = SampleLog.where('sample_id = ?', @sample.id).sort { |a,b| b.updated_at <=> a.updated_at }
+    @page_title = "Sample Logs: #{@sample.crc_id} #{@sample.name}"
 
     if current_user.is_unprivileged? and @sample.participant != current_user
       redirect_to unauthorized_user_url
@@ -252,5 +256,9 @@ class SamplesController < ApplicationController
 
   def check_for_scan_context
     @have_scan_context = session[:scan_context_path] and session[:scan_context_gerund] and session[:scan_context_timestamp] > Time.now.to_i - 1800
+  end
+
+  def set_page_title
+    @page_title = "Samples: #{@sample.crc_id} #{@sample.name}" if @sample
   end
 end
