@@ -25,17 +25,22 @@
 
 <p>
   <b>Participant:</b>
-  <%= @kit.participant.nil? ? '' : link_to(@kit.participant.full_name, admin_user_path(@kit.participant)) %></td>
+  <%= @kit.participant.nil? ? '' : link_to(@kit.participant.hex, public_profile_path(@kit.participant.hex)) %></td>
 </p>
 
 <p>
   <b>Owner:</b>
-  <%= @kit.owner.nil? ? '' : @kit.owner.full_name %>
+  <% if @kit.owner.nil? %>
+  <% elsif @kit.owner.is_researcher? %>
+  <%= @kit.owner.full_name %>
+  <% else %>
+  <%= @kit.owner.hex %>
+  <% end %>
 </p>
 
 <p>
   <b>Originator:</b>
-  <%= @kit.originator.nil? ? '' : @kit.originator.full_name %></td>
+  <%= (@kit.originator.nil? || !@kit.originator.is_researcher?) ? '' : @kit.originator.full_name %></td>
   <%= @kit.creator_id %>
 </p>
 
@@ -61,9 +66,9 @@
     <td><%= link_to(sample.name, sample_path(sample)) %></td>
     <td><%= sprintf("%08d", sample.crc_id) %></td>
     <% if sample.owner.nil? and not sample.participant.nil? then %>
-    <td><%= sample.owner.nil? ? link_to('Mark as received', received_sample_path(sample), :method => :post, :confirm => "Are you sure you want to mark sample #{sample.name} as received?") : sample.owner.full_name %></td>
+    <td><%= link_to('Mark as received', received_sample_path(sample), :method => :post, :confirm => "Are you sure you want to mark sample #{sample.name} as received?") %></td>
     <% else %>
-    <td><%= sample.owner.nil? ? '' : sample.owner.full_name %></td>
+    <td><%= sample.owner.nil? ? '' : (sample.owner.is_researcher? ? sample.owner.full_name : sample.owner.hex) %></td>
     <% end %>
     <td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
     <td><%= link_to 'Edit', edit_sample_path(sample) %></td>

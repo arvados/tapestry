@@ -29,9 +29,9 @@
     <td><%= sprintf("%08d", kit.crc_id) %></td>
     <td><%= kit.study.name %></td>
     <td><%= kit.kit_design.name %></td>
-    <td><%= kit.participant.nil? ? '' : link_to(kit.participant.full_name, admin_user_path(kit.participant)) %></td>
-    <td><%= kit.owner.nil? ? '' : kit.owner.full_name %></td>
-    <td><%= kit.originator.nil? ? '' : kit.originator.full_name %></td>
+    <td><%= kit.participant.nil? ? '' : link_to(kit.participant.hex, admin_user_path(kit.participant)) %></td>
+    <td><%= kit.owner.nil? ? '' : (kit.owner.is_researcher? ? kit.owner.full_name : kit.owner.hex) %></td>
+    <td><%= (kit.originator.nil? || !kit.originator.is_researcher?) ? '' : kit.originator.full_name %></td>
     <td><%= kit.shipper.nil? ? link_to('Mark as sent', sent_kit_path(kit), :method => :post, :confirm => "Are you sure you want to mark kit #{kit.name} as sent?") : kit.shipper.full_name %></td>
     <td><%= link_to 'Log', show_kit_log_path(kit), :class => "iframe", :title => "Kit log for #{kit.name}" %></td>
     <td><%= link_to 'Edit', edit_kit_path(kit) %></td>

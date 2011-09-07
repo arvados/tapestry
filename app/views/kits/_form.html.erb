@@ -29,13 +29,13 @@
   <% if @kit.participant then %>
   <div class="field">
     <%= f.label :participant_id %><br />
-    <%= @kit.participant.full_name %>
+    <%= @kit.participant.hex %>
   </div>
   <% end %>
   <% if @kit.owner then %>
   <div class="field">
     <%= f.label :owner_id %><br />
-    <%= @kit.owner.full_name %>
+    <%= @kit.owner.is_researcher? ? @kit.owner.full_name : link_to(@kit.owner.hex, public_profile_path(@kit.owner.hex)) %>
   </div>
   <% end %>
   <% if @kit.originator then %>
