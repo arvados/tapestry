@@ -98,6 +98,7 @@ class Admin::UsersController < Admin::AdminControllerBase
     @user = User.find params[:id]
     @user.is_admin = params[:user].delete(:is_admin)
     @user.is_test = params[:user].delete(:is_test)
+    @user.can_unsuspend_self = params[:user].delete(:can_unsuspend_self)
     @user.researcher = params[:user].delete(:researcher)
     @user.researcher_onirb = params[:user].delete(:researcher_onirb)
 
