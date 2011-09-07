@@ -129,18 +129,18 @@ class Admin::UsersController < Admin::AdminControllerBase
     end
     if (!@user.deactivated_at and params[:user][:deactivated_at]=='1')
       @user.deactivated_at = Time.now
-      @user.log("Admin: #{current_user.full_name} account was deactivated")
+      @user.log("Admin: #{current_user.full_name} deactivated account")
     elsif (@user.deactivated_at and params[:user][:deactivated_at]=='0')
       @user.deactivated_at = nil
-      @user.log("Admin: #{current_user.full_name} account was reactivated")
+      @user.log("Admin: #{current_user.full_name} reactivated account")
     end
     params[:user].delete :is_deactivated
     if (!@user.suspended_at and params[:user][:suspended_at]=='1')
       @user.suspended_at = Time.now
-      @user.log("Admin: #{current_user.full_name} account was suspended")
+      @user.log("Admin: #{current_user.full_name} suspended account")
     elsif (@user.suspended_at and params[:user][:suspended_at]=='0')
       @user.suspended_at = nil
-      @user.log("Admin: #{current_user.full_name} account was unsuspended")
+      @user.log("Admin: #{current_user.full_name} unsuspended account")
     end
     params[:user].delete :is_suspended
 
