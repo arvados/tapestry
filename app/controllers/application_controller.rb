@@ -21,19 +21,28 @@ class ApplicationController < ActionController::Base
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '0123456789abcdef0123456789abcdef'
 
-  # See ActionController::Base for details 
+  # See ActionController::Base for details
   # Uncomment this to filter the contents of submitted sensitive data parameters
-  # from your application log (in this case, all fields with names like "password"). 
+  # from your application log (in this case, all fields with names like "password").
   # filter_parameter_logging :password
 
   def page_title
-    if @page_title
-      @page_title
-    elsif action_name == 'index'
-      controller_name.titleize
-    else
-      "#{controller_name.titleize}: #{action_name.titleize}"
+    return @page_title if @page_title
+    return controller_name.titleize if action_name == 'index'
+    item_name = action_name.titleize
+    if (action_name == 'show' or action_name == 'edit')
+      if params[:id] and model and (ob = model.find(params[:id]))
+        item_name = nil
+        if defined? ob.hex
+          item_name = ob.hex
+        elsif defined? ob.name and ob.name and model != User
+          item_name = ob.name
+        end
+        item_name = "#{ob.crc_id} #{item_name}" if ob.crc_id
+        item_name ||= "##{ob.id}"
+      end
     end
+    "#{controller_name.titleize}: #{item_name}"
   end
 
   protected
