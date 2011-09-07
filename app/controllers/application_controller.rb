@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
         elsif defined? ob.name and ob.name and model != User
           item_name = ob.name
         end
-        item_name = "#{ob.crc_id} #{item_name}" if ob.crc_id
+        item_name = "#{ob.crc_id} #{item_name}" if defined? ob.crc_id and ob.crc_id
         item_name ||= "##{ob.id}"
       end
     end
