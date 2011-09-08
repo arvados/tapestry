@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   skip_before_filter :ensure_enrolled
 
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :participant_survey, :show_log, :unauthorized, :shipping_address ]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :participant_survey, :show_log, :unauthorized, :shipping_address, :switch_to ]
   skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized ]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos ]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
@@ -155,7 +155,6 @@ class UsersController < ApplicationController
     logout_killing_session!
     flash[:notice] = "A request to delete your account has been sent."
     redirect_back_or_default page_url(:logged_out)
-    
   end
 
   def activate
@@ -169,7 +168,7 @@ class UsersController < ApplicationController
     when params[:code].blank?
       flash[:error] = "The activation code was missing.  Please follow the URL from your email."
       redirect_back_or_default('/')
-    else 
+    else
       flash[:error]  = "We couldn't find a user with that activation code -- check your email? Or maybe you've already activated -- try signing in."
       redirect_back_or_default('/')
     end
@@ -308,6 +307,20 @@ class UsersController < ApplicationController
       UserMailer.withdrawal_staff_notification(@user).deliver
     end
     redirect_to new_withdrawal_comment_path
+  end
+
+  def switch_to
+    if session[:real_uid].to_s == params[:switch_to_id].to_s
+      session[:user_id] = session[:real_uid].to_i
+      session.delete :real_uid
+    elsif current_user.is_admin?
+      session[:user_id] = params[:switch_to_id].to_i
+      session[:real_uid] = current_user.id
+    else
+      return access_denied
+    end
+    flash[:notice] = "Switched to #{User.find(session[:user_id]).full_name}'s account (id=#{session[:user_id]})"
+    redirect_to '/'
   end
 
   private

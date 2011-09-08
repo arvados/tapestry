@@ -4,7 +4,8 @@
 
 <% if @user.enrolled %>
 Unique identifier: <%= @user.hex %><br/>
-Public profile url: <%= link_to public_profile_url_string(@user), public_profile_path(:hex => @user.hex) %>
+Public profile url: <%= link_to public_profile_url_string(@user), public_profile_path(:hex => @user.hex) %><br/>
+<%= button_to "Log in as #{@user.full_name}", switch_to_user_path(@user.id), :method => :post %>
 <% end %>
 
 <% @user.password = @user.password_confirmation = nil %>

@@ -1115,3 +1115,11 @@ table.plate-samples {
     border-spacing: 0;
     width: 385px;
 }
+
+.sudo-warning {
+    padding: 4px 10px;
+    background: #944;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px
+}
