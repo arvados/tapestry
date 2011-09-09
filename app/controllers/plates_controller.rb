@@ -153,6 +153,10 @@ class PlatesController < ApplicationController
       break if @next_pos
     }
 
+    if params[:s] and (s=Sample.find_by_crc_id(params[:s].to_i))
+      session[:scan_sample_url_code] = s.url_code
+    end
+
     # Look up last sample scanned
     if session[:scan_sample_url_code]
       @scanned_sample = Sample.find_by_url_code(session[:scan_sample_url_code])
