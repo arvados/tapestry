@@ -41,7 +41,7 @@ None added.
 	<% end %>
 	<td style="width: 75%">
 	  Sample
-	  <%= link_to_if current_user.is_researcher?, s.crc_id.to_s, sample_path(s) %>
+	  <%= link_to_if(current_user && current_user.is_researcher?, s.crc_id.to_s, sample_path(s)) %>
 	  (<%= s.material.downcase -%>)
 	  <% if s.last_received.nil? or s.last_mailed > s.last_received %>
 	  mailed
