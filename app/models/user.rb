@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
   has_many :relatives, :class_name => 'User', :through => :family_relations
   has_many :genetic_data, :dependent => :destroy
   has_many :removal_requests, :dependent => :destroy
+  has_many :samples, :foreign_key => 'participant_id'
 
   has_one  :shipping_address, :dependent => :destroy
 

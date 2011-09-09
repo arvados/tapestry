@@ -10,6 +10,8 @@ class Sample < ActiveRecord::Base
   belongs_to :participant, :class_name => "User"
   belongs_to :owner, :class_name => "User"
 
+  has_many :sample_logs
+
   validates_uniqueness_of :crc_id
   validates_uniqueness_of :url_code
   validates_presence_of :study_id
