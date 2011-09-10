@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110819230959) do
+ActiveRecord::Schema.define(:version => 20110909225031) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1067,6 +1067,8 @@ ActiveRecord::Schema.define(:version => 20110819230959) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.boolean  "is_refill"
+    t.string   "author_name"
   end
 
   add_index "medication_versions", ["medication_id"], :name => "index_medication_versions_on_medication_id"
@@ -1087,6 +1089,8 @@ ActiveRecord::Schema.define(:version => 20110819230959) do
     t.integer  "updater_id"
     t.datetime "deleted_at"
     t.integer  "lock_version"
+    t.boolean  "is_refill"
+    t.string   "author_name"
   end
 
   add_index "medications", ["ccr_id"], :name => "index_medications_on_ccr_id"

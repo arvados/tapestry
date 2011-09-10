@@ -302,7 +302,7 @@ module PhrccrsHelper
         next if t.nil?
         tx = get_element(t, 'Text')
         tx_s = tx.inner_text
-        next if tx.nil? || tx_s != name
+        next if tx.nil? || tx_s.downcase != name.downcase
         edt = get_element(c, 'ExactDateTime')
         return nil if edt.nil?
         edt_text = edt.inner_text
@@ -395,7 +395,13 @@ module PhrccrsHelper
       o.dose = ''
       o.strength = ''
       product = get_element(medication, 'Product')
+
+      # determine whether this is a prescription, or just a dispensing event (refill)
+      o.is_refill = !!get_element(medication, 'Refills')
+      o.author_name = medication.at_css('author name').text rescue nil
+
       o.start_date = get_date_element(medication, 'Start date')
+      o.start_date = get_date_element(medication.xpath('.//ccr:Fulfillment')[0], 'Dispense Date') if o.start_date.nil? and o.is_refill
       o.start_date = get_date_element(medication, 'Prescription Date') if o.start_date.nil?
       o.end_date = get_date_element(medication, 'End date')
       d = get_element(product, 'ProductName')
@@ -403,6 +409,7 @@ module PhrccrsHelper
       name = get_element_text(d, 'Text') unless d.nil?
       #skip if invalid item (occurs frequently on CCR exported by BCBS
       next if name.nil? || name.empty?
+
       medication_name = MedicationName.new
       medication_name.name = name
 

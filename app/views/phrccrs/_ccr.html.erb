@@ -4,7 +4,7 @@
   .phr .demographics th { width: 100px; }
   .phr th.dosage { width: 175px; }
   .phr th.frequency { width: 175px; }
-  .phr th.date { width: 175px; }
+  .phr th.date { width: 100px; }
   .phr td, .phr th { border: 1px solid #ccc; padding-left: 2px}
   .phr th { background-color: #eee }
   .phr th { text-align: left; vertical-align: top}
@@ -40,16 +40,26 @@
 <% } %>
 </table>
 
-<h3>Medications</h3>
+<% meds = Medication.find(:all, :include => :medication_name, :conditions => ['ccr_id = ?', @ccr.id]) %>
+
+<h3>Medications
+<% if meds.select {|m| m.is_refill}.size %>
+ (<a href="#" style="font-weight: normal" onclick="jQuery('.medication-refill').toggle(); jQuery(this).html(jQuery('.medication-refill').is(':visible') ? 'hide refills' : 'show refills'); return false;">show refills</a>)
+<% end %>
+</h3>
 <table>
 <tr>
   <th>Name</th>
+  <th class="date">Start Date</th>
+  <th class="date">End Date</th>
   <th class="dosage">Dosage</th>
   <th class="frequency">Frequency</th>
 </tr>
-<% Medication.find(:all, :include => :medication_name, :conditions => ['ccr_id = ?', @ccr.id]).each { |medication| %>
-<tr>
+<% meds.each { |medication| %>
+<tr <%=raw 'class="medication-refill ui-helper-hidden"' if medication.is_refill -%>>
   <td><%= medication.name %></td>
+  <td><%= medication.start_date %><%= ' (refill)' if medication.is_refill -%></td>
+  <td><%= medication.end_date %></td>
   <td><%= medication.strength %></td>
   <td><%= dose_frequency(medication.dose, medication.frequency) %></td>
 </tr>
