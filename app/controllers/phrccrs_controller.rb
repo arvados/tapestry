@@ -59,7 +59,7 @@ class PhrccrsController < ApplicationController
           ccr_to_delete = Ccr.find(:first, :conditions => {:user_id => current_user.id, :version => timestamp })
           Ccr.destroy(ccr_to_delete.id)          
         else
-          current_user.log("Unabled to delete PHR (#{ccr_filename}): file not found")
+          current_user.log("Unable to delete PHR (#{ccr_filename}): file not found")
         end
       end
       redirect_to :action => :review
