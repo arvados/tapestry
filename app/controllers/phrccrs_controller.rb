@@ -115,22 +115,15 @@ class PhrccrsController < ApplicationController
     end
     scope = GOOGLE_HEALTH_URL + '/feeds'
     if ROOT_URL == "localhost:3000"
-      next_url = 'http://localhost:3000/phrccr/authsub'
       secure = false # when using localhost, secure has to be off (cf. http://code.google.com/apis/health/getting_started.html#RegisterGoogle)
-    elsif ROOT_URL == "enroll-si.personalgenomes.org"
-      next_url = 'http://enroll-si.personalgenomes.org/phrccr/authsub'
-      secure = true  # set secure = true for signed AuthSub requests
-    elsif ROOT_URL == "my-dev.personalgenomes.org"
-      next_url = 'https://my-dev.personalgenomes.org/phrccr/authsub'
-      secure = true  # set secure = true for signed AuthSub requests
     else
-      next_url = 'https://my.personalgenomes.org/phrccr/authsub'
       secure = true  # set secure = true for signed AuthSub requests
     end
+    next_url = authsub_phrccr_url
 
     sess = 1
     authsub_link = AuthSub.get_url(next_url, scope, secure, sess)
-    redirect_to authsub_link    
+    redirect_to authsub_link
   end
 
   def download_phr
