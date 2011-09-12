@@ -436,6 +436,27 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Generate a cookie that can be used to grant access to the specified account.
+  def create_userswitch_cookie
+    r = rand(2**64).to_s(36)
+    t = Time.now.to_i
+    secret = PgpEnroll::Application.config.secret_token
+    h = Digest::SHA1.hexdigest("#{secret}#{r}#{t}#{self.id}")
+    "#{r},#{t},#{self.id},#{h}"
+  end
+
+  # Verify that the cookie is legitimate.  If so, return the target UID.
+  def verify_userswitch_cookie(cookie)
+    r, t, uid, hash = cookie.split ',' rescue return nil
+    t, uid = t.to_i, uid.to_i
+    secret = PgpEnroll::Application.config.secret_token
+    throw :secret_token_undefined_or_inadequate if secret.length < 16
+    if uid == self.id and t >= Time.now.to_i - 86400 and hash == Digest::SHA1.hexdigest("#{secret}#{r}#{t}#{uid}")
+      return uid
+    end
+    return nil
+  end
+
   protected
 
   def make_hex_code

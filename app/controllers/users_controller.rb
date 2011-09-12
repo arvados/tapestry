@@ -310,12 +310,16 @@ class UsersController < ApplicationController
   end
 
   def switch_to
-    if session[:real_uid].to_s == params[:switch_to_id].to_s
-      session[:user_id] = session[:real_uid].to_i
+    target_uid = params[:switch_to_id].to_i
+    return access_denied unless target_uid > 0
+    if target_uid == User.find(target_uid).verify_userswitch_cookie(session[:switch_back_to])
+      session[:user_id] = target_uid
       session.delete :real_uid
+      session.delete :switch_back_to
     elsif current_user.is_admin?
-      session[:user_id] = params[:switch_to_id].to_i
       session[:real_uid] = current_user.id
+      session[:switch_back_to] = current_user.create_userswitch_cookie
+      session[:user_id] = target_uid
     else
       return access_denied
     end
