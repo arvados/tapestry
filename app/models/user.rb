@@ -440,8 +440,8 @@ class User < ActiveRecord::Base
   def create_userswitch_cookie
     r = rand(2**64).to_s(36)
     t = Time.now.to_i
-    raise "Installation problem: Application.config.secret_token not properly defined" if secret.length < 16
     secret = Tapestry::Application.config.secret_token
+    raise "Installation problem: Application.config.secret_token not properly defined" if secret.length < 16
     h = Digest::SHA1.hexdigest("#{secret}#{r}#{t}#{self.id}")
     "#{r},#{t},#{self.id},#{h}"
   end
