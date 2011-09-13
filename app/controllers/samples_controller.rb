@@ -11,7 +11,7 @@ class SamplesController < ApplicationController
     if current_user.is_admin? then
       @samples = Sample.all
     else
-      @samples = Sample.where('originator_id = ?',current_user.id)
+      @samples = Sample.where('owner_id = ?',current_user.id)
     end
     @samples = @samples.paginate(:page => params[:page] || 1, :per_page => 30)
 
