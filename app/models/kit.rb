@@ -32,7 +32,7 @@ class Kit < ActiveRecord::Base
       'Participant returned kit to researcher'
     elsif self.shipper and self.owner.nil? then
       'Kit shipped to participant'
-    elsif self.participant and self.owner = self.participant then
+    elsif self.participant and self.owner == self.participant then
       'Participant has kit'
     elsif self.participant and not self.owner.nil? and self.owner != self.participant then
       'Kit has been received by researcher'
