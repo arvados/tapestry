@@ -151,6 +151,29 @@ class SamplesController < ApplicationController
     redirect_to(kit_path(@sample.kit.id))
   end
 
+  def receive_by_crc_id
+    response = { :ok => false }
+    @sample = Sample.find_by_crc_id(params[:crc_id])
+    if @sample.nil?
+      response[:message] = 'No sample has been issued with that ID number.'
+    elsif @sample.owner.nil? or @sample.owner == @sample.participant or (@sample.last_mailed and !@sample.last_received)
+      sample_received(@sample)
+      SampleLog.new(:actor_id => @current_user.id, :comment => "Sample received by researcher", :sample_id => @sample.id).save
+      response[:ok] = true
+      response[:message] = 'Sample marked as received.'
+    elsif @sample.owner == current_user
+      response[:ok] = true
+      response[:message] = "You already received this sample at #{@sample.last_received}."
+    elsif @sample.owner.is_researcher?
+      response[:message] = "Sample owner (#{@sample.owner.full_name}) has not shipped this sample."
+    else
+      response[:message] = 'Sample owner (##{@sample.owner.id) has not shipped this sample.'
+    end
+    respond_to do |format|
+      format.json { render :json => response.to_json }
+    end
+  end
+
   # GET /samples/new
   # GET /samples/new.xml
   def new

@@ -15,6 +15,7 @@ Tapestry::Application.routes.draw do
   match '/samples/:id/destroyed' => 'samples#mark_as_destroyed', :as => :sample_destroyed, :via => :post
   resources :samples
   match '/samples/:id/received' => 'samples#received', :as => :received_sample, :via => :post
+  match '/samples/:crc_id/receive_by_crc_id' => 'samples#receive_by_crc_id', :as => :receive_by_crc_id_sample, :via => :post
   match '/samples/m/:url_code/undo_reception' => 'samples#mobile_undo_reception', :as => :mobile_sample_undo_reception, :via => :get
   match '/samples/m/:url_code/receive' => 'samples#mobile_receive', :as => :mobile_sample_receive, :via => :get
   match '/samples/m/:url_code' => 'samples#mobile', :as => :mobile_sample, :via => :get
