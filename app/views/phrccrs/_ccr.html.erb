@@ -43,7 +43,7 @@
 <% meds = Medication.find(:all, :include => :medication_name, :conditions => ['ccr_id = ?', @ccr.id]) %>
 
 <h3>Medications
-<% if meds.select {|m| m.is_refill}.size %>
+<% unless meds.select {|m| m.is_refill}.empty? %>
  (<a href="#" style="font-weight: normal" onclick="jQuery('.medication-refill').toggle(); jQuery(this).html(jQuery('.medication-refill').is(':visible') ? 'hide refills' : 'show refills'); return false;">show refills</a>)
 <% end %>
 </h3>
