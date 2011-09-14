@@ -46,7 +46,7 @@
 
 <p>
   <b>Shipper:</b>
-  <%= @kit.shipper.nil? ? link_to('Mark as sent', sent_kit_path(@kit), :method => :post, :confirm => "Are you sure you want to mark kit #{@kit.name} as sent?") : @kit.shipper.full_name %>
+  <%= (@kit.shipper.nil? or (@kit.owner == current_user and @kit.owner.is_researcher?)) ? link_to('Mark as sent', sent_kit_path(@kit), :method => :post, :confirm => "Are you sure you want to mark kit #{@kit.name} as sent?") : @kit.shipper.full_name %>
 </p>
 
 <h2>Samples</h2>
