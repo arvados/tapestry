@@ -272,9 +272,12 @@ class SamplesController < ApplicationController
     sample.save!
     # If the researcher has the sample, they have the kit
     kit = sample.kit
-    kit.last_received = Time.now()
-    kit.owner = current_user
-    kit.save!
+    if kit.owner != current_user
+      KitLog.new(:actor_id => @current_user.id, :comment => "Kit received", :kit_id => kit.id).save
+      kit.last_received = Time.now
+      kit.owner = current_user
+      kit.save!
+    end
   end
 
   def check_for_scan_context
