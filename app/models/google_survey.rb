@@ -37,7 +37,13 @@ class GoogleSurvey < ActiveRecord::Base
     if token.nil? or !token.authorized?
       return nil, "I do not have authorization to get #{self.user.full_name}'s data from #{self.oauth_service.name}."
     end
-    skey = Regexp.new('^(.*key=)?([-_a-zA-Z0-9]+)(\&.*)?$').match(self.spreadsheet_key)[2] rescue return nil, "Could not parse spreadsheet URL"
+
+    begin
+      skey = Regexp.new('^(.*key=)?([-_a-zA-Z0-9]+)(\&.*)?$').match(self.spreadsheet_key)[2]
+    rescue
+      return nil, "Could not parse spreadsheet URL"
+    end
+
     uri = URI.parse("https://spreadsheets.google.com/feeds/download/spreadsheets/Export?key=#{skey}")
     resp = token.oauth_request('GET', uri, {'format' => 'csv', 'exportFormat' => 'csv' })
     if resp.code != '200' or resp.body.nil?
