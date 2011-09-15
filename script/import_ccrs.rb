@@ -46,7 +46,7 @@ ccr_files_to_import.each { |f|
   #begin
   user_id = m[1].gsub('/','').to_i
 
-  u = User.find(user_id)
+  u = User.find(user_id) rescue next
   if u.nil?
     puts f.to_s
     puts m[1]

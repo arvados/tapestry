@@ -418,6 +418,11 @@ module PhrccrsHelper
         medication_name.save
       rescue
         medication_name = MedicationName.find_by_name(name)
+        if medication_name.nil?
+          $stderr.puts "medication_name is nil for #{name}; skipping."
+          logger.error "medication_name is nil for #{name}; skipping."
+          next
+        end
       end
 
       o.medication_name_id = medication_name.id
