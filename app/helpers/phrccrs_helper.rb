@@ -410,25 +410,31 @@ module PhrccrsHelper
       #skip if invalid item (occurs frequently on CCR exported by BCBS
       next if name.nil? || name.empty?
 
+      if name.length > 255
+        name = name[0..239].concat('... [truncated]')
+      end
+
       medication_name = MedicationName.new
       medication_name.name = name
 
-      # if unsuccessful save, medication is already in db due to uniqueness constraint       
+      # if unsuccessful save, medication is already in db due to uniqueness constraint
       begin
         medication_name.save
       rescue
         medication_name = MedicationName.find_by_name(name)
-        if medication_name.nil?
-          $stderr.puts "medication_name is nil for #{name}; skipping."
-          logger.error "medication_name is nil for #{name}; skipping."
-          next
-        end
+      end
+
+      if medication_name.nil?
+        $stderr.puts "Skipping unsaveable medication name: #{name}."
+        logger.error "Skipping unsaveable medication name: #{name}." rescue nil
+        next
       end
 
       o.medication_name_id = medication_name.id
       o.codes = get_codes(d)
       o.status = get_status(medication)
-      
+
+
       strength = get_element(product, 'Strength')
       o.strength = get_element_text(strength, 'Value') unless strength.nil?
       u = get_element(strength, 'Units') unless strength.nil?
@@ -442,7 +448,8 @@ module PhrccrsHelper
       elsif !form_text.nil?
         o.strength += ' ' + form_text
       end
-      
+
+
       directions = get_element(medication, 'Directions')
       direction = get_element(directions, 'Direction') unless directions.nil?
       dose = get_element(direction, 'Dose')
@@ -456,7 +463,7 @@ module PhrccrsHelper
       o.frequency = get_element_text(frequency, 'Value')
 
       medications << o
-    }      
+    }
 
     get_results(ccr_xml,'ALLERGY','Alert').each { |allergy|
       o = Allergy.new
