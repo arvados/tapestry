@@ -12,6 +12,16 @@
 
 <div align="right">Public profile url: <%= link_to public_profile_url_string(@user), public_profile_path(:hex => @user.hex) %></div>
 
+<% unless @user.datasets.empty? %>
+<h3>Genomic Variants</h3>
+
+<ul>
+  <% @user.datasets.each { |d| %>
+  <li><%= link_to(d.name || d.location.gsub(Regexp.new('^https?://'),''), d.location) %></li>
+  <% } %>
+</ul>
+<% end %>
+
 <h3>Google Health <% if logged_in? and @user == current_user -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
 <% if @ccr != nil -%>
 <div class="admin_table">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110916175717) do
+ActiveRecord::Schema.define(:version => 20110916191334) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -292,6 +292,40 @@ ActiveRecord::Schema.define(:version => 20110916175717) do
     t.datetime "deleted_at"
     t.integer  "lock_version"
   end
+
+  create_table "dataset_versions", :force => true do |t|
+    t.integer  "dataset_id"
+    t.integer  "version"
+    t.integer  "participant_id"
+    t.string   "human_id"
+    t.string   "sha1"
+    t.string   "location"
+    t.string   "build"
+    t.string   "name"
+    t.text     "researcher_notes"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "dataset_versions", ["dataset_id"], :name => "index_dataset_versions_on_dataset_id"
+
+  create_table "datasets", :force => true do |t|
+    t.integer  "participant_id"
+    t.string   "human_id"
+    t.string   "sha1"
+    t.string   "location"
+    t.string   "build"
+    t.string   "name"
+    t.text     "researcher_notes"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "version"
+  end
+
+  add_index "datasets", ["participant_id"], :name => "index_datasets_on_participant_id"
+  add_index "datasets", ["sha1"], :name => "index_datasets_on_sha1"
 
   create_table "demographic_versions", :force => true do |t|
     t.integer  "demographic_id"
