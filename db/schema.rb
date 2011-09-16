@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110909225031) do
+ActiveRecord::Schema.define(:version => 20110916175717) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -628,6 +628,7 @@ ActiveRecord::Schema.define(:version => 20110909225031) do
     t.text     "question"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_hidden"
   end
 
   create_table "google_surveys", :force => true do |t|
