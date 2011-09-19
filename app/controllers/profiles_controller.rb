@@ -48,5 +48,7 @@ class ProfilesController < ApplicationController
       end
       @sample_groups[-1].push s
     end
+
+    @genetic_data_and_datasets = @user.datasets | @user.genetic_data
   end
 end

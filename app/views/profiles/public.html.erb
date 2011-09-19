@@ -12,16 +12,6 @@
 
 <div align="right">Public profile url: <%= link_to public_profile_url_string(@user), public_profile_path(:hex => @user.hex) %></div>
 
-<% unless @user.datasets.empty? %>
-<h3>Genomic Variants</h3>
-
-<ul>
-  <% @user.datasets.each { |d| %>
-  <li><%= link_to(d.name || d.location.gsub(Regexp.new('^https?://'),''), d.location) %></li>
-  <% } %>
-</ul>
-<% end %>
-
 <h3>Google Health <% if logged_in? and @user == current_user -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
 <% if @ccr != nil -%>
 <div class="admin_table">
@@ -90,7 +80,7 @@ None available.
 
 <h3>Genetic data <% if logged_in? and @user == current_user -%><%= link_to "[edit]", genetic_data_index_path() %><% end -%></h3>
 
-<% if (@user.genetic_data.size > 0) -%>
+<% if (@genetic_data_and_datasets.size > 0) -%>
 
 <table class="admin_table">
   <tr>
@@ -98,13 +88,15 @@ None available.
     <th>Data Type</th>
     <th>Name</th>
     <th>&nbsp;</th>
+    <th>&nbsp;</th>
   </tr>
-  <% @user.genetic_data.each do |g| -%>
+  <% @genetic_data_and_datasets.each do |g| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=h g.date %></td>
       <td><%=h g.data_type %></td>
       <td><%=h g.name %></td>
-      <td><%= link_to 'Download', genetic_data_download_path(g.id) %></td>
+      <td><%=h link_to 'View Report', g.location if g.location %></td>
+      <td><%=h link_to 'Download', g.class == GeneticData ? genetic_data_download_path(g.id) : g.download_url %></td>
     </tr>
   <% end %>
 </table>

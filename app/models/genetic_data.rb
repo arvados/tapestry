@@ -39,4 +39,8 @@ class GeneticData < ActiveRecord::Base
     end
   end
 
+  def location
+    # "view" url, if any
+    nil
+  end
 end
