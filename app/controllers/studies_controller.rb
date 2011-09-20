@@ -12,7 +12,7 @@ class StudiesController < ApplicationController
     if current_user.is_admin? then
       @studies = Study.all
     else
-      @studies = Study.all.where('researcher_id = ?',current_user.id)
+      @studies = Study.where('researcher_id = ?',current_user.id)
     end
   end
 
