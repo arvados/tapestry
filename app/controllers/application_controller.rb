@@ -205,12 +205,18 @@ class ApplicationController < ActionController::Base
       row.push u.user.email
       row.push u.user.ccrs.count > 0 ? 'y' : 'n'
       row.push u.user.genetic_data.count > 0 ? 'y' : 'n'
-      row.push u.user.shipping_address.address_line_1
-      row.push u.user.shipping_address.address_line_2
-      row.push u.user.shipping_address.address_line_3
-      row.push u.user.shipping_address.city
-      row.push u.user.shipping_address.state
-      row.push u.user.shipping_address.zip
+      if u.user.shipping_address then
+        row.push u.user.shipping_address.address_line_1
+        row.push u.user.shipping_address.address_line_2
+        row.push u.user.shipping_address.address_line_3
+        row.push u.user.shipping_address.city
+        row.push u.user.shipping_address.state
+        row.push u.user.shipping_address.zip
+      else
+        6.times do
+          row.push ''
+        end
+      end
 
       CSV.generate_row(row, row.size, buf)
     end
