@@ -103,7 +103,7 @@ Tapestry::Application.routes.draw do
       end
     end
     match 'exams/:id/start' => 'exams#start', :via => [:get, :post], :as => 'start_exam'
-    match 'exams/:id/start' => 'exams#retake', :via => [:post], :as => 'retake_exam'
+    match 'exams/:id/retake' => 'exams#retake', :via => [:get, :post], :as => 'retake_exam'
   end
 
   namespace :screening_surveys do
