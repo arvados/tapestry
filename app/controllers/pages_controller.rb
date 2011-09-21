@@ -16,6 +16,11 @@ class PagesController < ApplicationController
       return
     end
 
+    if !current_user and params[:id] == 'researcher_tools' then
+      redirect_to unauthorized_user_url
+      return
+    end
+
     if current_user and current_user.enrolled and not current_user.enrollment_accepted
       redirect_to enrollment_application_results_url
       return
