@@ -51,7 +51,9 @@ class Admin::PhrReportsController < Admin::AdminControllerBase
       query_params << 'yes'
     end
     queries << family_relationship_filter_sql unless family_relationship_filter_sql.empty?
-    joins << 'INNER JOIN users ON users.id = ccrs.user_id' unless family_relationship_filter_sql.empty?
+    if params['condition_filter'].nil?
+      joins << 'INNER JOIN users ON users.id = ccrs.user_id' unless family_relationship_filter_sql.empty?
+    end
 
     condition_inner_sql = "ccrs.id IN (SELECT ccrs.id FROM ccrs INNER JOIN conditions ON ccrs.id = conditions.ccr_id WHERE condition_description_id IN ("
     condition_filter_sql = ''
