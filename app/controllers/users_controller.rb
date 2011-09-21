@@ -144,6 +144,11 @@ class UsersController < ApplicationController
 
   def created
     @user = User.find_by_id(params[:id])
+    if not @user then
+      flash[:error] = "User not found. Please try again."
+      redirect_to root_path
+      return
+    end
     flash.now[:notice] = params[:notice] if params[:notice]
     signup_enrollment_step = EnrollmentStep.find_by_keyword('signup')
     @user.log('Signed mini consent form version ' + LATEST_CONSENT_VERSION,signup_enrollment_step)
