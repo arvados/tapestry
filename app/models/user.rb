@@ -441,7 +441,7 @@ class User < ActiveRecord::Base
     r = rand(2**64).to_s(36)
     t = Time.now.to_i
     raise "Installation problem: Application.config.secret_token not properly defined" if secret.length < 16
-    secret = PgpEnroll::Application.config.secret_token
+    secret = Tapestry::Application.config.secret_token
     h = Digest::SHA1.hexdigest("#{secret}#{r}#{t}#{self.id}")
     "#{r},#{t},#{self.id},#{h}"
   end
@@ -450,7 +450,7 @@ class User < ActiveRecord::Base
   def verify_userswitch_cookie(cookie)
     r, t, uid, hash = cookie.split ',' rescue return nil
     t, uid = t.to_i, uid.to_i
-    secret = PgpEnroll::Application.config.secret_token
+    secret = Tapestry::Application.config.secret_token
     raise "Installation problem: Application.config.secret_token not properly defined" if secret.length < 16
     if uid == self.id and t >= Time.now.to_i - 86400 and hash == Digest::SHA1.hexdigest("#{secret}#{r}#{t}#{uid}")
       return uid

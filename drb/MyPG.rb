@@ -196,8 +196,8 @@ class MyPG
 
   # Returns location of private key used to sign Google Health requests
   def private_key
-    if File.exists?(File.dirname(__FILE__) + '/../config/pgpenrollkey.pem')
-      return File.dirname(__FILE__) + '/../config/pgpenrollkey.pem'
+    if File.exists?(File.dirname(__FILE__) + '/../config/private_key.pem')
+      return File.dirname(__FILE__) + '/../config/private_key.pem'
     else
       return nil
     end

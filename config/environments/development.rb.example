@@ -1,0 +1,46 @@
+Tapestry::Application.configure do
+  # Settings specified here will take precedence over those in config/application.rb
+
+  # In the development environment your application's code is reloaded on
+  # every request.  This slows down response time but is perfect for development
+  # since you don't have to restart the webserver when you make code changes.
+  config.cache_classes = false
+
+  # Log error messages when you accidentally call methods on nil.
+  config.whiny_nils = true
+
+  # Show full error reports and disable caching
+  config.consider_all_requests_local       = true
+  config.action_controller.perform_caching = false
+
+  # Don't care if the mailer can't send
+  config.action_mailer.raise_delivery_errors = false
+
+  # Print deprecation notices to the Rails logger
+  config.active_support.deprecation = :log
+
+  # Only use best-standards-support built into browsers
+  config.action_dispatch.best_standards_support = :builtin
+
+  ROOT_URL = 'localhost:3000'
+  ADMIN_EMAIL = 'This Should Be You <you@example.com>'
+  WITHDRAWAL_NOTIFICATION_EMAIL = 'This Should Be You <you@example.com>'
+  SYSTEM_EMAIL = 'sysadmin@example.com'
+  SEND_ALL_USER_EMAIL_TO = 'you@example.com'
+  
+  ENV['RECAPTCHA_PUBLIC_KEY'] = 'YOUR_RECAPTCHA_PUBLIC_KEY'
+  ENV['RECAPTCHA_PRIVATE_KEY'] = 'YOUR_RECAPTCHA_PRIVATE_KEY'
+  
+  GOOGLE_HEALTH_URL = "https://www.google.com/h9"
+  
+  LATEST_CONSENT_VERSION = 'v20110912'
+  
+  DRB_SERVER = '127.0.0.1'
+  DRB_PORT = '9901'
+  DRB_CALLBACK_SOURCE_IP = '127.0.0.1'
+  
+  TRAITWISE_LOGIN = "you@example.com"
+  TRAITWISE_PASSWORD = "your_traitwise_password"
+  
+end
+

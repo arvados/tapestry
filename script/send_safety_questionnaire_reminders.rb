@@ -15,13 +15,13 @@ require File.dirname(__FILE__) + '/../config/environment'
 
 User.find(:all).each do |u|
   next if u.enrolled.nil? # shortcut for speed
-  if (u.user_logs.find_by_comment('Sent PGP Safety Questionnaire Reminder').nil?) or 
-     (u.user_logs.find_by_comment('Sent PGP Safety Questionnaire Reminder') and
-      6.weeks.ago > u.user_logs.find(:last, :conditions => "comment = 'Sent PGP Safety Questionnaire Reminder'").created_at) then
+  if (u.user_logs.find_by_comment('Sent Safety Questionnaire Reminder').nil?) or 
+     (u.user_logs.find_by_comment('Sent Safety Questionnaire Reminder') and
+      6.weeks.ago > u.user_logs.find(:last, :conditions => "comment = 'Sent Safety Questionnaire Reminder'").created_at) then
     if not u.has_recent_safety_questionnaire then
-      # The UserMailer call will also add the 'Sent PGP Safety Questionnaire Reminder' user log entry
+      # The UserMailer call will also add the 'Sent Safety Questionnaire Reminder' user log entry
       UserMailer.deliver_safety_questionnaire_reminder(u)
-      puts "Sent PGP Safety Questionnaire Reminder for #{u.full_name} (#{u.id})"
+      puts "Sent Safety Questionnaire Reminder for #{u.full_name} (#{u.id})"
     end
   end
 end

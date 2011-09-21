@@ -4,11 +4,6 @@ db/*.sqlite3
 log/*.log
 tmp/
 log
-keys
-script/bring_virgin_user_up_to_just_pre_enrollment.rb
-script/harmonize-email-sed-script
-script/PGPSafetyQuestionnaires.csv
-script/PGPSafetyQuestionnaires-unharmonized.csv
 config/initializers/secret_token.rb
 drb/MyPG.yml
 vendor/plugins/rails_upgrade/

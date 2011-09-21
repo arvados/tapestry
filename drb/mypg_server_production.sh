@@ -1,7 +1,7 @@
 #!/bin/sh
 
-RUBY=/usr/local/bin/ruby
-P=/var/www/my.personalgenomes.org/current/drb
+RUBY=/usr/bin/env ruby
+P=/path/to/your/drb/folder
 SERVER=mypg_server.rb
 
 case "$1" in

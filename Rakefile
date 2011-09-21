@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-PgpEnroll::Application.load_tasks
+Tapestry::Application.load_tasks

@@ -1,16 +1,9 @@
 #!/bin/sh
 
-RUBY=/usr/local/bin/ruby
-P=/data/personal/data/2011/projects/sequencing/PGP/pgp-enroll/drb
+RUBY=/usr/bin/env ruby
+P=/path/to/your/drb/folder
 SERVER=mypg_server.rb
 DELAY_BETWEEN_RESTART=5
-
-#while : 
-#do 
-#	$RUBY $SERVER $1
-#	echo "Sleeping $DELAY_BETWEEN_RESTART seconds before restart..."
-#	sleep $DELAY_BETWEEN_RESTART
-#done
 
 case "$1" in
     start)

@@ -1,4 +1,4 @@
-PgpEnroll::Application.routes.draw do
+Tapestry::Application.routes.draw do
   resources :withdrawal_comments
 
   resources :plates
