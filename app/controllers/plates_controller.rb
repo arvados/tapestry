@@ -124,6 +124,11 @@ class PlatesController < ApplicationController
 
   def mobile
     @plate = Plate.find_by_url_code(params[:url_code])
+    if not @plate then
+      # They mistyped a url
+      redirect_to page_url('researcher_tools')
+      return
+    end
     @page_title = "Plate #{@plate.crc_id}"
 
     # Determine the currently selected mask
