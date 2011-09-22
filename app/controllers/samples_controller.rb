@@ -21,6 +21,9 @@ class SamplesController < ApplicationController
     end
   end
 
+  def receive
+  end
+
   # GET /samples/m/:url_code
   def mobile
     # This url will be arrived at based on a QR code, printed on the sample.

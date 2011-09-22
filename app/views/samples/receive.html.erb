@@ -1,0 +1,28 @@
+<h2><%= link_to 'Samples', samples_path %> &rarr; receive</h2>
+
+<% content_for :js do %>
+jQuery(function(){
+        var $ = jQuery.noConflict();
+        $('form.receive-sample').bind('submit', function(){
+                var thisform = this;
+		var $crc_input = $('input[name=crc_id]',this);
+                var crc_id = $crc_input.val();
+                $('.response', thisform).html('[loading]');
+                $.ajax( { 'dataType': 'json',
+                            'type': 'POST',
+                            'url': '/samples/'+crc_id+'/receive_by_crc_id',
+                            'success': function(d,t,r) {
+                            $('.response', thisform).html(crc_id + (d.ok ? ': ' : ': Error: ') + d.message);
+			    if (d.ok)
+				$crc_input.attr('value', '');
+			    $crc_input.focus();
+                        }
+                    } );
+                return false;
+            });
+    });
+<% end %>
+
+<p>When you receive a sample from a participant or another researcher, enter the sample ID number here.</p>
+<form action="#" class="receive-sample"><input type="text" name="crc_id" isindex /> <input type="submit" value="I have received this sample" /><br /><span class="response">&nbsp;</span></form>
+

@@ -9,6 +9,7 @@ Tapestry::Application.routes.draw do
   match '/plates/mobile_stop/:id' => 'plates#mobile_stop', :as => :mobile_stop_plate, :via => :post
   match '/plates/:plate_id/destroy_sample/:plate_layout_position_id' => 'plates#destroy_sample', :as => :destroy_plate_sample, :via => :post
 
+  match '/samples/receive' => 'samples#receive', :as => :receive_sample
   match '/samples/:id/log' => 'samples#show_log', :as => :show_sample_log, :via => :get
   match '/samples/:id/participant_note' => 'samples#participant_note', :as => :sample_participant_note, :via => :get
   match '/samples/:id/participant_note' => 'samples#update_participant_note', :as => :sample_update_participant_note, :via => :put
