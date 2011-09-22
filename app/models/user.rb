@@ -464,7 +464,7 @@ class User < ActiveRecord::Base
   protected
 
   def make_hex_code
-    begin code = "%06X" % rand(2**24) end while User.unscoped.find_by_hex(code)
+    begin code = "hu%06X" % rand(2**24) end while User.unscoped.find_by_hex(code)
     return code
   end
 
