@@ -96,6 +96,7 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   def update
     @user = User.find params[:id]
+    @user.controlling_user = current_user
     @user.is_admin = params[:user].delete(:is_admin)
     @user.is_test = params[:user].delete(:is_test)
     @user.can_unsuspend_self = params[:user].delete(:can_unsuspend_self)
@@ -116,31 +117,31 @@ class Admin::UsersController < Admin::AdminControllerBase
     end
 
     if (@user.first_name != params[:user][:first_name]) then
-      @user.log("Admin: #{current_user.full_name} changed first name from '#{@user.first_name}' to '#{params[:user][:first_name]}'")
+      @user.log("Admin changed first name from '#{@user.first_name}' to '#{params[:user][:first_name]}'")
     end
     if (@user.middle_name != params[:user][:middle_name]) then
-      @user.log("Admin: #{current_user.full_name} changed middle name from '#{@user.middle_name}' to '#{params[:user][:middle_name]}'")
+      @user.log("Admin changed middle name from '#{@user.middle_name}' to '#{params[:user][:middle_name]}'")
     end
     if (@user.last_name != params[:user][:last_name]) then
-      @user.log("Admin: #{current_user.full_name} changed last name from '#{@user.last_name}' to '#{params[:user][:last_name]}'")
+      @user.log("Admin changed last name from '#{@user.last_name}' to '#{params[:user][:last_name]}'")
     end
     if (@user.email != params[:user][:email]) then
-      @user.log("Admin: #{current_user.full_name} changed email address from '#{@user.email}' to '#{params[:user][:email]}'")
+      @user.log("Admin changed email address from '#{@user.email}' to '#{params[:user][:email]}'")
     end
     if (!@user.deactivated_at and params[:user][:deactivated_at]=='1')
       @user.deactivated_at = Time.now
-      @user.log("Admin: #{current_user.full_name} deactivated account")
+      @user.log("Admin deactivated account")
     elsif (@user.deactivated_at and params[:user][:deactivated_at]=='0')
       @user.deactivated_at = nil
-      @user.log("Admin: #{current_user.full_name} reactivated account")
+      @user.log("Admin reactivated account")
     end
     params[:user].delete :is_deactivated
     if (!@user.suspended_at and params[:user][:suspended_at]=='1')
       @user.suspended_at = Time.now
-      @user.log("Admin: #{current_user.full_name} suspended account")
+      @user.log("Admin suspended account")
     elsif (@user.suspended_at and params[:user][:suspended_at]=='0')
       @user.suspended_at = nil
-      @user.log("Admin: #{current_user.full_name} unsuspended account")
+      @user.log("Admin unsuspended account")
     end
     params[:user].delete :is_suspended
 

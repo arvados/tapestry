@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110916191334) do
+ActiveRecord::Schema.define(:version => 20110922062359) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -902,6 +902,7 @@ ActiveRecord::Schema.define(:version => 20110916191334) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "controlling_user_id"
   end
 
   add_index "kit_log_versions", ["kit_log_id"], :name => "index_kit_log_versions_on_kit_log_id"
@@ -916,6 +917,7 @@ ActiveRecord::Schema.define(:version => 20110916191334) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "lock_version"
+    t.integer  "controlling_user_id"
   end
 
   create_table "kit_versions", :force => true do |t|
@@ -1515,6 +1517,7 @@ ActiveRecord::Schema.define(:version => 20110916191334) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "controlling_user_id"
   end
 
   add_index "sample_log_versions", ["sample_log_id"], :name => "index_sample_log_versions_on_sample_log_id"
@@ -1529,6 +1532,7 @@ ActiveRecord::Schema.define(:version => 20110916191334) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "lock_version"
+    t.integer  "controlling_user_id"
   end
 
   create_table "sample_type_versions", :force => true do |t|
@@ -2004,6 +2008,7 @@ ActiveRecord::Schema.define(:version => 20110916191334) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "controlling_user_id"
   end
 
   add_index "user_log_versions", ["user_log_id"], :name => "index_user_log_versions_on_user_log_id"
@@ -2020,6 +2025,7 @@ ActiveRecord::Schema.define(:version => 20110916191334) do
     t.integer  "updater_id"
     t.datetime "deleted_at"
     t.integer  "lock_version"
+    t.integer  "controlling_user_id"
   end
 
   create_table "user_versions", :force => true do |t|

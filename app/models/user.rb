@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   include Authentication::ByPassword
   include Authentication::ByCookieToken
 
+  attr_accessor :controlling_user
+
   has_many :enrollment_step_completions, :dependent => :destroy
   has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step, :dependent => :destroy
   has_many :exam_responses, :dependent => :destroy
@@ -244,7 +246,7 @@ class User < ActiveRecord::Base
   end
 
   def log(comment,step=nil,origin=nil,user_comment=nil)
-    UserLog.new(:user => self, :comment => comment, :user_comment => user_comment, :enrollment_step => step, :origin => origin).save!
+    UserLog.new(:user => self, :comment => comment, :user_comment => user_comment, :enrollment_step => step, :origin => origin, :controlling_user => self.controlling_user).save!
   end
 
   def promote!

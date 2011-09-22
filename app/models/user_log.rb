@@ -4,8 +4,9 @@ class UserLog < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :enrollment_step
+  belongs_to :controlling_user, :class_name => 'User'
 
   validates_presence_of :user_id
 
-  attr_accessible :user, :comment, :user_comment, :enrollment_step, :origin
+  attr_accessible :user, :comment, :user_comment, :enrollment_step, :origin, :controlling_user
  end

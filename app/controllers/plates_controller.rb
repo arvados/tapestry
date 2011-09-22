@@ -187,7 +187,7 @@ class PlatesController < ApplicationController
     @next_pos = PlateLayoutPosition.find(params[:plate_layout_position_id])
     @ps = PlateSample.new(:plate => @plate, :sample => @sample, :plate_layout_position => @next_pos)
     @ps.save!
-    SampleLog.new(:actor_id => @current_user.id,
+    SampleLog.new(:actor => current_user,
                   :comment => "Sample transferred to plate #{@plate.crc_id} (id=#{@plate.id}) well #{@next_pos.name} (id=#{@next_pos.id})",
                   :sample_id => @sample.id).save
     session[:scan_sample_url_code] = nil
@@ -218,7 +218,7 @@ class PlatesController < ApplicationController
     # Mark an already-filled well as destroyed/unusable
     @ps = PlateSample.find_by_plate_id_and_plate_layout_position_id(params[:plate_id], params[:plate_layout_position_id])
     @pos = @ps.plate_layout_position
-    SampleLog.new(:actor_id => @current_user.id,
+    SampleLog.new(:actor => current_user,
                   :comment => "Plate #{@ps.plate.crc_id} (id=#{@ps.plate.id}) well #{@pos.name} (id=#{@pos.id}) destroyed",
                   :sample_id => @ps.sample.id).save if @ps.sample and !@ps.is_unusable
     @ps.is_unusable = true

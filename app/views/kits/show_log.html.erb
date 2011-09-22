@@ -12,7 +12,12 @@
     <tr>
       <td><%= log.updated_at %></td>
       <td><%= log.actor.is_researcher? ? log.actor.full_name : link_to(log.actor.hex, public_profile_path(log.actor.hex)) %></td>
-      <td><%= log.comment %></td>
+      <td>
+	<%= log.comment %>
+      	<% if log.controlling_user and log.controlling_user != log.actor %>
+	<i>(action performed by <%= log.controlling_user.full_name %>)</i>
+	<% end %>
+      </td>
     </tr>
   <% end %>
   </table>

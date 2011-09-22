@@ -62,11 +62,11 @@ class KitsController < ApplicationController
       s.participant = current_user
       s.owner = current_user
       s.save
-      SampleLog.new(:actor_id => @current_user.id, :comment => 'Sample received by participant', :sample_id => s.id).save
+      SampleLog.new(:actor => current_user, :comment => 'Sample received by participant', :sample_id => s.id).save
     end
 
     # Log this
-    KitLog.new(:actor_id => @current_user.id, :comment => 'Kit received by participant', :kit_id => @kit.id).save
+    KitLog.new(:actor => current_user, :comment => 'Kit received by participant', :kit_id => @kit.id).save
     current_user.log("Kit #{@kit.name} (#{@kit.id}) received",nil,request.remote_ip,"Kit #{@kit.name} received")
 
     redirect_to(:controller => 'pages', :action => 'show', :id => 'studies' )
@@ -91,11 +91,11 @@ class KitsController < ApplicationController
       s.last_mailed = Time.now()
       s.owner = nil
       s.save
-      SampleLog.new(:actor_id => @current_user.id, :comment => 'Sample returned to researcher', :sample_id => s.id).save
+      SampleLog.new(:actor => current_user, :comment => 'Sample returned to researcher', :sample_id => s.id).save
     end
 
     # Log this
-    KitLog.new(:actor_id => @current_user.id, :comment => 'Kit returned to researcher', :kit_id => @kit.id).save
+    KitLog.new(:actor => current_user, :comment => 'Kit returned to researcher', :kit_id => @kit.id).save
     current_user.log("Kit #{@kit.name} (#{@kit.id}) returned to researcher",nil,request.remote_ip,"Kit #{@kit.name} returned to researcher")
 
     redirect_to(:controller => 'pages', :action => 'show', :id => 'studies')
@@ -115,11 +115,11 @@ class KitsController < ApplicationController
       s.last_mailed = Time.now()
       s.owner = nil
       s.save
-      SampleLog.new(:actor_id => @current_user.id, :comment => 'Sample sent', :sample_id => s.id).save
+      SampleLog.new(:actor => current_user, :comment => 'Sample sent', :sample_id => s.id).save
     end
 
     # Log this
-    KitLog.new(:actor_id => @current_user.id, :comment => 'Kit sent', :kit_id => @kit.id).save
+    KitLog.new(:actor => current_user, :comment => 'Kit sent', :kit_id => @kit.id).save
 
     redirect_to(:controller => 'kits', :action => 'index')
   end
@@ -199,7 +199,7 @@ class KitsController < ApplicationController
           UnusedKitName.find_by_name(@kit.name).destroy
         end
         # Log this
-        KitLog.new(:actor_id => @current_user.id, :comment => 'Kit created', :kit_id => @kit.id).save
+        KitLog.new(:actor => current_user, :comment => 'Kit created', :kit_id => @kit.id).save
         flash[:notice] = 'Kit was successfully created.'
         format.html { redirect_to(:controller => 'kits', :action => 'index') }
         format.xml  { render :xml => @kit, :status => :created, :location => @kit }
@@ -218,7 +218,7 @@ class KitsController < ApplicationController
     respond_to do |format|
       if @kit.update_attributes(params[:kit])
         flash[:notice] = 'Kit was successfully updated.'
-        KitLog.new(:actor_id => @current_user.id, :comment => 'Kit updated', :kit_id => @kit.id).save
+        KitLog.new(:actor => current_user, :comment => 'Kit updated', :kit_id => @kit.id).save
         format.html { redirect_to(:controller => 'kits', :action => 'index') }
         format.xml  { head :ok }
       else

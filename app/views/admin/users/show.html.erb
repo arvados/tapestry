@@ -68,7 +68,11 @@ Not eligible for enrollment for the following reason(s):
 
 <ul>
 <% @user.user_logs.sort { |x,y| y.created_at <=> x.created_at }.each do |entry| -%>
-  <li><%= entry.created_at %>: <%= h entry.comment %></li>
+  <li><%= entry.created_at %>: <%= h entry.comment %>
+    <% if entry.controlling_user and entry.controlling_user != entry.user %>
+    (action performed by <%= link_to entry.controlling_user.full_name, admin_user_path(entry.controlling_user) -%>)
+    <% end %>
+  </li>
 <% end -%>
 </ul>
 

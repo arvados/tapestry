@@ -4,4 +4,14 @@ class KitLog < ActiveRecord::Base
 
   belongs_to :kit
   belongs_to :actor, :class_name => "User"
+  belongs_to :controlling_user, :class_name => "User"
+
+  before_create :set_controlling_user
+
+  private
+
+  def set_controlling_user
+    self.controlling_user ||= self.actor.controlling_user || self.actor if self.actor
+    true
+  end
 end

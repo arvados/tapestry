@@ -68,7 +68,7 @@ class SamplesController < ApplicationController
     end
 
     # Log this
-    SampleLog.new(:actor_id => @current_user.id, :comment => "Sample received by researcher (scan)", :sample_id => @sample.id).save
+    SampleLog.new(:actor => current_user, :comment => "Sample received by researcher (scan)", :sample_id => @sample.id).save
 
     # Mobile friendly
     set_page_title
@@ -86,7 +86,7 @@ class SamplesController < ApplicationController
     end
 
     # Log this
-    SampleLog.new(:actor_id => @current_user.id, :comment => "Undo: sample received by researcher (scan)", :sample_id => @sample.id).save
+    SampleLog.new(:actor => current_user, :comment => "Undo: sample received by researcher (scan)", :sample_id => @sample.id).save
 
     # Mobile friendly
     flash.delete(:error)
@@ -111,7 +111,7 @@ class SamplesController < ApplicationController
     @sample.save()
 
     # Log this
-    SampleLog.new(:actor_id => @current_user.id, :comment => "Marked sample as destroyed", :sample_id => @sample.id).save
+    SampleLog.new(:actor => current_user, :comment => "Marked sample as destroyed", :sample_id => @sample.id).save
 
     flash[:notice]  = "Sample #{sprintf("%08d", @sample.crc_id)} marked as destroyed"
 
@@ -149,7 +149,7 @@ class SamplesController < ApplicationController
     sample_received(@sample)
 
     # Log this
-    SampleLog.new(:actor_id => @current_user.id, :comment => "Sample received by researcher", :sample_id => @sample.id).save
+    SampleLog.new(:actor => current_user, :comment => "Sample received by researcher", :sample_id => @sample.id).save
 
     redirect_to(kit_path(@sample.kit.id))
   end
@@ -161,7 +161,7 @@ class SamplesController < ApplicationController
       response[:message] = 'No sample has been issued with that ID number.'
     elsif @sample.owner.nil? or @sample.owner == @sample.participant or (@sample.last_mailed and !@sample.last_received)
       sample_received(@sample)
-      SampleLog.new(:actor_id => @current_user.id, :comment => "Sample received by researcher", :sample_id => @sample.id).save
+      SampleLog.new(:actor => current_user, :comment => "Sample received by researcher", :sample_id => @sample.id).save
       response[:ok] = true
       response[:message] = 'Sample marked as received.'
     elsif @sample.owner == current_user
@@ -276,7 +276,7 @@ class SamplesController < ApplicationController
     # If the researcher has the sample, they have the kit
     kit = sample.kit
     if kit.owner != current_user
-      KitLog.new(:actor_id => @current_user.id, :comment => "Kit received", :kit_id => kit.id).save
+      KitLog.new(:actor => current_user, :comment => "Kit received", :kit_id => kit.id).save
       kit.last_received = Time.now
       kit.owner = current_user
       kit.save!
