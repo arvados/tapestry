@@ -1,13 +1,123 @@
 class UsersController < ApplicationController
   skip_before_filter :ensure_enrolled
 
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :participant_survey, :show_log, :unauthorized, :shipping_address, :switch_to ]
-  skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized ]
-  skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :switch_to ]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :participant_survey, :show_log, :unauthorized, :shipping_address, :switch_to, :index ]
+  skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized, :index ]
+  skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :switch_to, :index ]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
-  skip_before_filter :ensure_latest_consent, :only => [:tos, :accept_tos, :consent, :switch_to ]
+  skip_before_filter :ensure_latest_consent, :only => [:tos, :accept_tos, :consent, :switch_to, :index ]
   # Make sure people sign the latest TOS and Consent before they do safety questionnaires
-  skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :switch_to ]
+  skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :switch_to, :index ]
+
+  def index
+    page = (1 + params[:iDisplayStart].to_i / params[:iDisplayLength].to_i).to_i rescue nil
+    page ||= params[:page].to_i
+    page ||= 1
+    page = 1 unless page > 0
+    per_page = [(params[:iDisplayLength] || 10).to_i, 100].min
+
+    must_do_custom_sort = false
+    sortcol_max = [params[:iSortingCols].to_i - 1, 5].min
+    sql_orders = []
+    joins = {}
+    (0..sortcol_max).each do |sortcol|
+      sql_column = case params["iSortCol_#{sortcol}".to_sym]
+                   when '0'
+                     'hex'
+                   when '1'
+                     'enrolled'
+                   when '2'
+                     joins[:samples] = {}
+                     'count(samples.id)>0'
+                   when '3'
+                     joins[:ccrs] = {}
+                     'count(ccrs.id)>0'
+                   when '4'
+                     joins[:family_relations] = {}
+                     'count(family_relations.id)'
+                   when '5'
+                     joins[:datasets] = {}
+                     'count(datasets.id)'
+                   when '6'
+                     joins[:genetic_data] = {}
+                     'count(genetic_data.id)'
+                   else
+                     must_do_custom_sort = true
+                     'enrolled'
+                   end
+      sql_direction = params["sSortDir_#{sortcol}".to_sym] == 'desc' ? 'desc' : 'asc'
+      sql_orders.push "#{sql_column} #{sql_direction}"
+    end
+    sql_order = sql_orders.empty? ? 'enrolled asc' : sql_orders.join(',')
+    sql_search = '1'
+    if params[:sSearch]
+      sql_search = "hex LIKE :search"
+      if current_user and (current_user.is_admin? or
+                           current_user.is_researcher_onirb?)
+        sql_search << " OR concat(first_name,' ',if(middle_name='','',concat(middle_name,' ')),last_name) LIKE :search"
+      end
+    end
+    @total = User.enrolled.publishable
+    if false and must_do_custom_sort
+      # The following code gets horrendously slow when it invokes SQL
+      # queries in the sort function -- so slow it's surely better to
+      # not let the user search by a column if it can't be done by the
+      # database.  Hence "if false and..."
+      @filtered = @total.find(:all, :conditions => [ sql_search, { :search => "%#{params[:sSearch]}%" } ])
+      @filtered = @filtered.collect { |u| u.as_json(:for => current_user) }
+      @filtered.sort! { |a,b|
+        cmp = 0
+        (0..sortcol_max).each do |sortcol|
+          cmp = case params["iSortCol_#{sortcol}".to_sym]
+                when '0'
+                  a[:hex] <=> b[:hex]
+                when '1'
+                  a[:enrolled] <=> b[:enrolled]
+                when '2'
+                  # ...
+                else
+                  a[:enrolled] <=> b[:enrolled]
+                end
+          cmp = cmp * (params["sSortDir_#{sortcol}".to_sym] == 'desc' ? -1 : 1)
+          break unless cmp == 0
+        end
+        cmp == 0 ? a[:enrolled] <=> b[:enrolled] : cmp
+      }
+      @count_filtered = @filtered.size
+      @users = @filtered.paginate(:page => page, :per_page => per_page)
+    else
+      conditions = [ sql_search, { :search => "%#{params[:sSearch]}%" } ]
+      @users = @total.find(:all,
+                           :conditions => conditions,
+                           :order => sql_order,
+                           :joins => joins,
+                           :group => 'users.id',
+                           :offset => ((page-1) * per_page),
+                           :limit => per_page)
+      @filtered = @total.find(:all,
+                              :conditions => conditions,
+                              :joins => joins,
+                              :group => 'users.id')
+    end
+    respond_to do |format|
+      format.html {
+        @users = @filtered.paginate(:page => page, :per_page => per_page)
+        render :index
+      }
+      format.json {
+        render :json => {
+          'sEcho' => params[:sEcho].to_i,
+          'iTotalRecords' => @total.size,
+          'iTotalDisplayRecords' => @filtered.size,
+          'aaData' => @users.collect { |x|
+            j = x.as_json(:for => current_user)
+            j[:public_profile_url] = public_profile_url(x.hex) if x.hex and x.hex.length > 0
+            j
+          }
+        }
+      }
+    end
+  end
 
   def initial
     @user = User.new(params[:user])

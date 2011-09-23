@@ -461,6 +461,21 @@ class User < ActiveRecord::Base
     return nil
   end
 
+  def as_json(options)
+    j = {}
+    if options[:for] and options[:for].is_admin?
+      j[:full_name] = self.full_name
+    end
+    j[:hex] = self.hex
+    j[:enrolled] = self.enrolled
+    j[:received_sample_materials] = self.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq
+    j[:has_ccrs] = self.ccrs.size
+    j[:has_relatives_enrolled] = self.relatives.find_all { |u| u.enrolled }.size
+    j[:has_whole_genome_data] = self.datasets.size
+    j[:has_other_genetic_data] = self.genetic_data.size
+    j
+  end
+
   protected
 
   def make_hex_code

@@ -1,0 +1,98 @@
+<h2>Users</h2>
+
+<% content_for :js do %>
+jQuery(function() {
+    var $ = jQuery.noConflict();
+    $(document).ready(function() {
+	$("noscript").remove();
+	Date.prototype.to_metric = function() {
+	    return ('x' + (this.getFullYear()+90000) + '-x' + (this.getMonth()+1+900) + '-x' + (this.getDay()+900)).replace(/x9/g, '');
+	};
+	var render_hide_zeroes = function(mDataProp) {
+	    return function(oObj) {
+		if (oObj.aData[mDataProp] == 0)
+		    return '';
+		return oObj.aData[mDataProp];
+	    };
+	};
+	var render_yes_or_nothing = function(mDataProp) {
+	    return function(oObj) {
+		if (oObj.aData[mDataProp])
+		    return 'Yes';
+		return '';
+	    };
+	};
+	var render_date = function(mDataProp) {
+	    return function(oObj) {
+		if (oObj.aData[mDataProp])
+		    return new Date(oObj.aData[mDataProp]).to_metric();
+		return '';
+	    };
+	};
+	$('#participants').dataTable( {
+	    "bProcessing": true,
+	    "bServerSide": true,
+	    "bJQueryUI": true,
+	    "sAjaxSource": '<%=j(users_path)%>',
+	    "aoColumns": [
+		{ "fnRender": function(oObj) {
+		      var r = oObj.aData.hex;
+		      if(oObj.aData.public_profile_url)
+			  r = '<a href="'+oObj.aData.public_profile_url+'">'+r+'</a>'
+		      return r;
+		  }
+		},
+		{ 'fnRender': render_date('enrolled') },
+		{ 'mDataProp': 'received_sample_materials' },
+		{ 'fnRender': render_yes_or_nothing('has_ccrs') },
+		{ 'fnRender': render_hide_zeroes('has_relatives_enrolled') },
+		{ 'fnRender': render_hide_zeroes('has_whole_genome_data') },
+		{ 'fnRender': render_hide_zeroes('has_other_genetic_data') }
+		]
+	    } ).
+	    fnSetFilteringDelay();
+    } );
+});
+<% end %>
+<% content_for :head do %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSetFilteringDelay' %>
+<% end %>
+
+<p>The participants in the PGP have volunteered to share their DNA sequences, medical information, and other personal information with the research community and the general public.</p>
+
+<noscript><%= will_paginate @users %></noscript>
+<table id="participants">
+  <thead>
+    <tr>
+      <th>Participant ID</th>
+      <th>Date enrolled</th>
+      <th>Received sample materials</th>
+      <th>Health records</th>
+      <th>Relatives enrolled</th>
+      <th>Whole genome datasets</th>
+      <th>Other genetic data</th>
+    </tr>
+  </thead>
+  <tbody>
+    <noscript>
+      <% @users.collect { |e| e.as_json(:for => current_user) }.each do |e| -%>
+      <tr><td>
+          <%= link_to e[:hex], url_for(:controller => 'profiles', :action => 'public', :hex => e[:hex]) %>
+	</td><td>
+          <%= e[:enrolled] %>
+	</td><td>
+          <%= e[:received_sample_materials] %>
+	</td><td>
+          <%= e[:has_ccrs] %>
+	</td><td>
+          <%= e[:has_relatives_enrolled] %>
+	</td><td>
+          <%= e[:has_whole_genome_data] %>
+	</td><td>
+          <%= e[:has_other_genetic_data] %>
+      </td></tr>
+      <% end -%>
+    </noscript>
+  </tbody>
+</table>
+<noscript><%= will_paginate @users %></noscript>

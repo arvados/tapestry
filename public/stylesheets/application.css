@@ -1123,3 +1123,8 @@ table.plate-samples {
     -moz-border-radius: 3px;
     border-radius: 3px
 }
+
+.dataTables_processing {
+    background: #feffbb;
+    color: #2e6e9e;
+}
