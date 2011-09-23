@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 source 'http://gemcutter.org'
 source 'http://gems.github.com'
 
-gem 'rails', '3.0.9'
+gem 'rails', '3.0.10'
 
 gem 'mysql'
 
