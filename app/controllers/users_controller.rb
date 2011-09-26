@@ -20,37 +20,46 @@ class UsersController < ApplicationController
     sortcol_max = [params[:iSortingCols].to_i - 1, 5].min
     sql_orders = []
     joins = {}
-    (0..sortcol_max).each do |sortcol|
-      sql_column = case params["iSortCol_#{sortcol}".to_sym]
-                   when '0'
-                     'hex'
-                   when '1'
-                     'enrolled'
-                   when '2'
+    (0..sortcol_max).each do |sortcol_index|
+      # sortcol_index='0' === the first key we're sorting on
+
+      # sortcol === the column we're sorting on (0-based)
+      sortcol = params["iSortCol_#{sortcol_index}".to_sym]
+      next if !sortcol
+
+      # sortkey === the hash key (property name) of the data we're sorting on
+      sortkey = params["mDataProp_#{sortcol}".to_sym]
+      next if !sortkey
+
+      # sql_column === the sql expression we're sorting on
+      sql_column = case sortkey.to_sym
+                   when :hex, :enrolled
+                     sortkey
+                   when :received_sample_materials
                      joins[:samples] = {}
                      'count(samples.id)>0'
-                   when '3'
+                   when :ccrs
                      joins[:ccrs] = {}
                      'count(ccrs.id)>0'
-                   when '4'
+                   when :has_relatives_enrolled
                      joins[:family_relations] = {}
                      'count(family_relations.id)'
-                   when '5'
+                   when :has_whole_genome_data
                      joins[:datasets] = {}
                      'count(datasets.id)'
-                   when '6'
+                   when :has_other_genetic_data
                      joins[:genetic_data] = {}
                      'count(genetic_data.id)'
                    else
                      must_do_custom_sort = true
-                     'enrolled'
+                     'hex'
                    end
-      sql_direction = params["sSortDir_#{sortcol}".to_sym] == 'desc' ? 'desc' : 'asc'
+      sql_direction = params["sSortDir_#{sortcol_index}".to_sym] == 'desc' ? 'desc' : 'asc'
       sql_orders.push "#{sql_column} #{sql_direction}"
     end
     sql_order = sql_orders.empty? ? 'enrolled asc' : sql_orders.join(',')
     sql_search = '1'
-    if params[:sSearch]
+    if params[:sSearch] and params[:sSearch].length > 0
       sql_search = "hex LIKE :search"
       if current_user and (current_user.is_admin? or
                            current_user.is_researcher_onirb?)
@@ -68,15 +77,14 @@ class UsersController < ApplicationController
       @filtered.sort! { |a,b|
         cmp = 0
         (0..sortcol_max).each do |sortcol|
-          cmp = case params["iSortCol_#{sortcol}".to_sym]
-                when '0'
-                  a[:hex] <=> b[:hex]
-                when '1'
-                  a[:enrolled] <=> b[:enrolled]
-                when '2'
+          sortkey = params['mDataProp_'+params["iSortCol_#{sortcol}"]].to_sym
+          cmp = case sortkey
+                when :hex, :enrolled
+                  a[sortkey] <=> b[sortkey]
+                when :ccrs
                   # ...
                 else
-                  a[:enrolled] <=> b[:enrolled]
+                  a[:hex] <=> b[:hex]
                 end
           cmp = cmp * (params["sSortDir_#{sortcol}".to_sym] == 'desc' ? -1 : 1)
           break unless cmp == 0

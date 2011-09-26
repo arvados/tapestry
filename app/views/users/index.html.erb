@@ -35,19 +35,25 @@ jQuery(function() {
 	    "bJQueryUI": true,
 	    "sAjaxSource": '<%=j(users_path)%>',
 	    "aoColumns": [
-		{ "fnRender": function(oObj) {
+		{ 'mDataProp': 'hex',
+		  'fnRender': function(oObj) {
 		      var r = oObj.aData.hex;
 		      if(oObj.aData.public_profile_url)
-			  r = '<a href="'+oObj.aData.public_profile_url+'">'+r+'</a>'
+			  r = '<a href="'+oObj.aData.public_profile_url+'">'+r+'</a>';
 		      return r;
 		  }
 		},
-		{ 'fnRender': render_date('enrolled') },
+		{ 'mDataProp': 'enrolled',
+		  'fnRender': render_date('enrolled') },
 		{ 'mDataProp': 'received_sample_materials' },
-		{ 'fnRender': render_yes_or_nothing('has_ccrs') },
-		{ 'fnRender': render_hide_zeroes('has_relatives_enrolled') },
-		{ 'fnRender': render_hide_zeroes('has_whole_genome_data') },
-		{ 'fnRender': render_hide_zeroes('has_other_genetic_data') }
+		{ 'mDataProp': 'ccrs',
+		  'fnRender': render_yes_or_nothing('has_ccrs') },
+		{ 'mDataProp': 'has_relatives_enrolled',
+		  'fnRender': render_hide_zeroes('has_relatives_enrolled') },
+		{ 'mDataProp': 'has_whole_genome_data',
+		  'fnRender': render_hide_zeroes('has_whole_genome_data') },
+		{ 'mDataProp': 'has_other_genetic_data',
+		  'fnRender': render_hide_zeroes('has_other_genetic_data') }
 		]
 	    } ).
 	    fnSetFilteringDelay();
