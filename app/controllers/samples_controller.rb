@@ -121,7 +121,11 @@ class SamplesController < ApplicationController
   # GET /samples/1/log
   def show_log
     @sample = Sample.find(params[:id])
-    @sample_log = SampleLog.where('sample_id = ?', @sample.id).sort { |a,b| b.updated_at <=> a.updated_at }
+    @sample_log = SampleLog.where('sample_id = ?', @sample.id).sort { |a,b|
+      cmp = b.created_at <=> a.created_at
+      cmp = b.id <=> a.id if cmp == 0
+      cmp
+    }
     @page_title = "Sample Logs: #{@sample.crc_id} #{@sample.name}"
 
     if current_user.is_unprivileged? and @sample.participant != current_user

@@ -10,7 +10,7 @@
     </tr>
   <% @sample_log.each do |log| %>
     <tr>
-      <td><%= log.updated_at %></td>
+      <td><%= log.created_at %></td>
       <td><%= log.actor.is_researcher? ? log.actor.full_name : log.actor.hex -%></td>
       <td>
 	<%= log.comment %>

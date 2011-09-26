@@ -143,7 +143,11 @@ class KitsController < ApplicationController
   # GET /kits/1/log
   def show_log
     @kit = Kit.find(params[:id])
-    @kit_log = KitLog.where('kit_id = ?', @kit.id).sort { |a,b| b.updated_at <=> a.updated_at }
+    @kit_log = KitLog.where('kit_id = ?', @kit.id).sort { |a,b|
+      cmp = b.created_at <=> a.created_at
+      cmp = b.id <=> a.id if cmp == 0
+      cmp
+    }
   end
 
   # GET /kits/1
