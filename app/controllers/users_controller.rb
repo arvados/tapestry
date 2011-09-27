@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :switch_to, :index ]
 
   def index
+    @page_title = 'Participant profiles'
     page = (1 + params[:iDisplayStart].to_i / params[:iDisplayLength].to_i).to_i rescue nil
     page ||= params[:page].to_i
     page ||= 1

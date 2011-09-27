@@ -1128,3 +1128,9 @@ table.plate-samples {
     background: #feffbb;
     color: #2e6e9e;
 }
+
+table#participants {
+    cell-spacing: 0;
+    border: 0;
+    border-collapse: collapse;
+}

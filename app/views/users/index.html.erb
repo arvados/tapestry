@@ -1,4 +1,4 @@
-<h2>Users</h2>
+<h2>Participant profiles</h2>
 
 <% content_for :js do %>
 jQuery(function() {
@@ -66,8 +66,12 @@ jQuery(function() {
 
 <p>The participants in the PGP have volunteered to share their DNA sequences, medical information, and other personal information with the research community and the general public.</p>
 
+<% if current_user and (current_user.is_admin? or current_user.is_researcher_onirb?) %>
+<p><i>Because you are an IRB-listed researcher or administrator,</i> you can search for participants by full name or huID.  Regular users can only search by huID.</p>
+<% end %>
+
 <noscript><%= will_paginate @users %></noscript>
-<table id="participants">
+<table id="participants" style="width: 100%">
   <thead>
     <tr>
       <th>Participant ID</th>
