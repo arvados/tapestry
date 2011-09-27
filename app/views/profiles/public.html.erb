@@ -59,7 +59,7 @@ None added.
 	      <tbody>
 		<% s.sample_logs.sort { |a,b| b.id <=> a.id }.each do |sl| %>
 		<tr>
-		  <td style="width: 30%"><%= sl.updated_at -%></td>
+		  <td style="width: 30%"><%= sl.created_at -%></td>
 		  <td style="width: 20%"><%= sl.actor.is_researcher? ? sl.actor.full_name : sl.actor.hex -%></td>
 		  <td style="width: 50%"><%= sl.comment -%></td>
 		</tr>
