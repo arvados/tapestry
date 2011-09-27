@@ -105,6 +105,15 @@ class User < ActiveRecord::Base
   scope :real, { :conditions => "NOT (is_test <=> 1)" }
   scope :researcher, { :conditions => "researcher = 1" }
   scope :publishable, where("enrolled IS NOT NULL AND suspended_at IS NULL").real
+  scope :visible_to, lambda { |current_user|
+    if current_user.is_admin?
+      unscoped
+    elsif current_user.is_researcher_onirb?
+      real
+    else
+      real.scoped(:conditions => ['users.enrolled IS NOT NULL AND users.suspended_at IS NOT NULL'])
+    end
+  }
 
 
   # Beware of NULL: "screening_survey_responses.us_citizen_or_resident!=1"
@@ -470,7 +479,7 @@ class User < ActiveRecord::Base
     j[:enrolled] = self.enrolled
     j[:received_sample_materials] = self.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq
     j[:has_ccrs] = self.ccrs.size
-    j[:has_relatives_enrolled] = self.relatives.find_all { |u| u.enrolled }.size
+    j[:has_relatives_enrolled] = self.family_relations.find_all { |fr| fr.is_confirmed }.size
     j[:has_whole_genome_data] = self.datasets.size
     j[:has_other_genetic_data] = self.genetic_data.size
     j
@@ -489,6 +498,39 @@ class User < ActiveRecord::Base
 
   def self.pending_family_relations
     return FamilyRelations.find(:all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id])
+  end
+
+  def self.help_datatables_sort_by(sortkey, options={})
+    case sortkey
+    when :hex, :enrolled
+      sortkey
+    when :received_sample_materials
+      ['count(samples.id)>0', { :samples => {} }]
+    when :ccrs
+      ['count(ccrs.id)>0', { :ccrs => {} }]
+    when :has_relatives_enrolled
+      ['count(family_relations.id)', { :family_relations => {} }, 'family_relations.is_confirmed = 1']
+    when :has_whole_genome_data
+      ['count(datasets.id)', { :datasets => {} }]
+    when :has_other_genetic_data
+      ['count(genetic_data.id)', { :genetic_data => {} }]
+    else
+      :hex
+    end
+  end
+
+  def self.help_datatables_search(options={})
+    current_user = options[:for]
+    sql_search = "hex LIKE :search"
+    if current_user and (current_user.is_admin? or
+                         current_user.is_researcher_onirb?)
+      sql_search << " OR concat(first_name,' ',if(middle_name='','',concat(middle_name,' ')),last_name) LIKE :search"
+    end
+    sql_search
+  end
+
+  def self.include_for_json
+    [:ccrs, :genetic_data, :datasets, :samples, :family_relations]
   end
 
 end

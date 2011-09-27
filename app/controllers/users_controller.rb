@@ -11,119 +11,19 @@ class UsersController < ApplicationController
 
   def index
     @page_title = 'Participant profiles'
-    page = (1 + params[:iDisplayStart].to_i / params[:iDisplayLength].to_i).to_i rescue nil
-    page ||= params[:page].to_i
-    page ||= 1
-    page = 1 unless page > 0
-    per_page = [(params[:iDisplayLength] || 10).to_i, 100].min
-
-    must_do_custom_sort = false
-    sortcol_max = [params[:iSortingCols].to_i - 1, 5].min
-    sql_orders = []
-    joins = {}
-    (0..sortcol_max).each do |sortcol_index|
-      # sortcol_index='0' === the first key we're sorting on
-
-      # sortcol === the column we're sorting on (0-based)
-      sortcol = params["iSortCol_#{sortcol_index}".to_sym]
-      next if !sortcol
-
-      # sortkey === the hash key (property name) of the data we're sorting on
-      sortkey = params["mDataProp_#{sortcol}".to_sym]
-      next if !sortkey
-
-      # sql_column === the sql expression we're sorting on
-      sql_column = case sortkey.to_sym
-                   when :hex, :enrolled
-                     sortkey
-                   when :received_sample_materials
-                     joins[:samples] = {}
-                     'count(samples.id)>0'
-                   when :ccrs
-                     joins[:ccrs] = {}
-                     'count(ccrs.id)>0'
-                   when :has_relatives_enrolled
-                     joins[:family_relations] = {}
-                     'count(family_relations.id)'
-                   when :has_whole_genome_data
-                     joins[:datasets] = {}
-                     'count(datasets.id)'
-                   when :has_other_genetic_data
-                     joins[:genetic_data] = {}
-                     'count(genetic_data.id)'
-                   else
-                     must_do_custom_sort = true
-                     'hex'
-                   end
-      sql_direction = params["sSortDir_#{sortcol_index}".to_sym] == 'desc' ? 'desc' : 'asc'
-      sql_orders.push "#{sql_column} #{sql_direction}"
-    end
-    sql_order = sql_orders.empty? ? 'enrolled asc' : sql_orders.join(',')
-    sql_search = '1'
-    if params[:sSearch] and params[:sSearch].length > 0
-      sql_search = "hex LIKE :search"
-      if current_user and (current_user.is_admin? or
-                           current_user.is_researcher_onirb?)
-        sql_search << " OR concat(first_name,' ',if(middle_name='','',concat(middle_name,' ')),last_name) LIKE :search"
-      end
-    end
-    @total = User.enrolled.publishable
-    if false and must_do_custom_sort
-      # The following code gets horrendously slow when it invokes SQL
-      # queries in the sort function -- so slow it's surely better to
-      # not let the user search by a column if it can't be done by the
-      # database.  Hence "if false and..."
-      @filtered = @total.find(:all, :conditions => [ sql_search, { :search => "%#{params[:sSearch]}%" } ])
-      @filtered = @filtered.collect { |u| u.as_json(:for => current_user) }
-      @filtered.sort! { |a,b|
-        cmp = 0
-        (0..sortcol_max).each do |sortcol|
-          sortkey = params['mDataProp_'+params["iSortCol_#{sortcol}"]].to_sym
-          cmp = case sortkey
-                when :hex, :enrolled
-                  a[sortkey] <=> b[sortkey]
-                when :ccrs
-                  # ...
-                else
-                  a[:hex] <=> b[:hex]
-                end
-          cmp = cmp * (params["sSortDir_#{sortcol}".to_sym] == 'desc' ? -1 : 1)
-          break unless cmp == 0
-        end
-        cmp == 0 ? a[:enrolled] <=> b[:enrolled] : cmp
-      }
-      @count_filtered = @filtered.size
-      @users = @filtered.paginate(:page => page, :per_page => per_page)
-    else
-      conditions = [ sql_search, { :search => "%#{params[:sSearch]}%" } ]
-      @users = @total.find(:all,
-                           :conditions => conditions,
-                           :order => sql_order,
-                           :joins => joins,
-                           :group => 'users.id',
-                           :offset => ((page-1) * per_page),
-                           :limit => per_page)
-      @filtered = @total.find(:all,
-                              :conditions => conditions,
-                              :joins => joins,
-                              :group => 'users.id')
-    end
     respond_to do |format|
       format.html {
-        @users = @filtered.paginate(:page => page, :per_page => per_page)
+        page = params[:page] || 1
+        per_page = params[:per_page] || 20
+        @users = User.publishable.paginate(:page => page, :per_page => per_page)
         render :index
       }
       format.json {
-        render :json => {
-          'sEcho' => params[:sEcho].to_i,
-          'iTotalRecords' => @total.size,
-          'iTotalDisplayRecords' => @filtered.size,
-          'aaData' => @users.collect { |x|
-            j = x.as_json(:for => current_user)
-            j[:public_profile_url] = public_profile_url(x.hex) if x.hex and x.hex.length > 0
-            j
-          }
+        resp = datatables_index(User.publishable)
+        resp['aaData'].each { |j|
+          j[:public_profile_url] = public_profile_url(j[:hex]) if j[:hex] and j[:hex].length > 0
         }
+        render :json => resp
       }
     end
   end

@@ -5,30 +5,6 @@ jQuery(function() {
     var $ = jQuery.noConflict();
     $(document).ready(function() {
 	$("noscript").remove();
-	Date.prototype.to_metric = function() {
-	    return ('x' + (this.getFullYear()+90000) + '-x' + (this.getMonth()+1+900) + '-x' + (this.getDate()+900)).replace(/x9/g, '');
-	};
-	var render_hide_zeroes = function(mDataProp) {
-	    return function(oObj) {
-		if (oObj.aData[mDataProp] == 0)
-		    return '';
-		return oObj.aData[mDataProp];
-	    };
-	};
-	var render_yes_or_nothing = function(mDataProp) {
-	    return function(oObj) {
-		if (oObj.aData[mDataProp])
-		    return 'Yes';
-		return '';
-	    };
-	};
-	var render_date = function(mDataProp) {
-	    return function(oObj) {
-		if (oObj.aData[mDataProp])
-		    return new Date(oObj.aData[mDataProp]).to_metric();
-		return '';
-	    };
-	};
 	$('#participants').dataTable( {
 	    "bProcessing": true,
 	    "bServerSide": true,
@@ -44,16 +20,22 @@ jQuery(function() {
 		  }
 		},
 		{ 'mDataProp': 'enrolled',
-		  'fnRender': render_date('enrolled') },
-		{ 'mDataProp': 'received_sample_materials' },
+		  'fnRender': Renderer.date('enrolled') },
+		{ 'mDataProp': 'received_sample_materials',
+		  'asSorting': ['desc','asc']
+		},
 		{ 'mDataProp': 'ccrs',
-		  'fnRender': render_yes_or_nothing('has_ccrs') },
+		  'asSorting': ['desc','asc'],
+		  'fnRender': Renderer.yes_or_nothing('has_ccrs') },
 		{ 'mDataProp': 'has_relatives_enrolled',
-		  'fnRender': render_hide_zeroes('has_relatives_enrolled') },
+		  'asSorting': ['desc','asc'],
+		  'fnRender': Renderer.hide_zeroes('has_relatives_enrolled') },
 		{ 'mDataProp': 'has_whole_genome_data',
-		  'fnRender': render_hide_zeroes('has_whole_genome_data') },
+		  'asSorting': ['desc','asc'],
+		  'fnRender': Renderer.hide_zeroes('has_whole_genome_data') },
 		{ 'mDataProp': 'has_other_genetic_data',
-		  'fnRender': render_hide_zeroes('has_other_genetic_data') }
+		  'asSorting': ['desc','asc'],
+		  'fnRender': Renderer.hide_zeroes('has_other_genetic_data') }
 		]
 	    } ).
 	    fnSetFilteringDelay();
@@ -62,6 +44,7 @@ jQuery(function() {
 <% end %>
 <% content_for :head do %>
   <%= javascript_include_tag 'jquery.dataTables.fnSetFilteringDelay' %>
+  <%= javascript_include_tag 'jquery.dataTables.renderers' %>
 <% end %>
 
 <p>The participants in the PGP have volunteered to share their DNA sequences, medical information, and other personal information with the research community and the general public.</p>
