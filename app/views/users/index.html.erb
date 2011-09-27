@@ -6,7 +6,7 @@ jQuery(function() {
     $(document).ready(function() {
 	$("noscript").remove();
 	Date.prototype.to_metric = function() {
-	    return ('x' + (this.getFullYear()+90000) + '-x' + (this.getMonth()+1+900) + '-x' + (this.getDay()+900)).replace(/x9/g, '');
+	    return ('x' + (this.getFullYear()+90000) + '-x' + (this.getMonth()+1+900) + '-x' + (this.getDate()+900)).replace(/x9/g, '');
 	};
 	var render_hide_zeroes = function(mDataProp) {
 	    return function(oObj) {
