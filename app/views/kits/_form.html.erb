@@ -1,3 +1,12 @@
+<% content_for :js do %>
+jQuery(function(){
+    var $ = jQuery.noConflict();
+    $('form input[name=number_of_kits_to_create]').bind('input', function() {
+	$('form input#kit_name').attr('disabled',this.value!=1);
+    }).trigger('input');
+});
+<% end %>
+
 <%= error_messages_for :kit, :header_message => 'Error: data could not be saved.', :message => nil %>
 
 <%= form_for(@kit) do |f| %>
@@ -14,6 +23,10 @@
 	end
  %>
 
+  <div class="field">
+    <%= label_tag :number_of_kits_to_create %><br />
+    <%= number_field_tag :number_of_kits_to_create, params[:number_of_kits_to_create] || 1, :size => 5 %>
+  </div>
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name, :value => kitname %>

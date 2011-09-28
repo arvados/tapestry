@@ -183,9 +183,43 @@ class KitsController < ApplicationController
     @kit = Kit.find(params[:id])
   end
 
+  def create_many
+    n_created = 0
+    howmany = params[:number_of_kits_to_create].to_i
+    (1..howmany).each do
+      @kit = Kit.new(params[:kit].merge(:name => UnusedKitName.random.name))
+      @kit.originator = current_user
+      @kit.owner = current_user
+      @kit.crc_id = Kit.generate_verhoeff_number(@kit)
+      @kit.url_code = Kit.generate_url_code(@kit)
+      if @kit.save
+        n_created += 1
+        if not UnusedKitName.find_by_name(@kit.name).nil? then
+          UnusedKitName.find_by_name(@kit.name).destroy
+        end
+        KitLog.new(:actor => current_user, :comment => 'Kit created', :kit_id => @kit.id).save
+      else
+        if n_created > 0
+          # It's important to convey that some kits *did* get created
+          # (if any) before the error was encountered.  The following
+          # message shows up as "Id (after ...)".  There must be a
+          # better way...
+          @kit.errors.add :id, "(after creating #{n_created} of #{howmany} kits)"
+        end
+        params[:number_of_kits_to_create] = (howmany - n_created).to_s
+        render :action => "new"
+        return
+      end
+    end
+    flash[:notice] = "Created #{n_created} kits."
+    redirect_to(:controller => 'kits', :action => 'index')
+  end
+
   # POST /kits
   # POST /kits.xml
   def create
+    return create_many if params[:number_of_kits_to_create] != '1'
+
     @kit = Kit.new(params[:kit])
 
     # This user is the originator for the kit
