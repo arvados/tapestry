@@ -19,10 +19,11 @@ class SamplesController < ApplicationController
     respond_to do |format|
       format.csv {
         buf = ''
-        row = %w(sample_id sample_url_code kit_id kit_name participant_hex)
+        row = %w(sample_id sample_url_code kit_sample_name kit_id kit_name participant_hex)
         CSV.generate_row(row, row.size, buf)
+        @samples = @samples.includes(:kit_design_sample)
         @samples.each { |s|
-          row = [s.crc_id, s.url_code, s.kit.crc_id, s.kit.name, s.participant ? s.participant.hex : nil]
+          row = [s.crc_id, s.url_code, s.kit_design_sample.name, s.kit.crc_id, s.kit.name, s.participant ? s.participant.hex : nil]
           CSV.generate_row(row, row.size, buf)
         }
         forwhat = params[:study_id] ? "ForStudy#{params[:study_id]}" : ""
