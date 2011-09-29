@@ -17,8 +17,9 @@
     <th>A</th>
     <th>NA</th>
     <th>R</th>
+    <th>Samples</th>
     <% if type == 'approved' %>
-    <th></th>
+    <th>Participants</th>
     <% end %>
   </tr>
   <% studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
@@ -49,6 +50,11 @@
       <td><%= link_to(study.study_participants.accepted.count, study_users_path(study, :format => 'csv', :type => 'accepted')) %></td>
       <td><%= link_to(study.study_participants.not_accepted.count, study_users_path(study, :format => 'csv', :type => 'not_accepted')) %></td>
       <td><%= link_to(study.study_participants.removed.count, study_users_path(study, :format => 'csv', :type => 'removed')) %></td>
+      <td>
+      <% if !(samples = Sample.find_all_by_study_id(study.id)).empty? %>
+	<%= link_to("#{samples.size}", samples_path(:study_id => study.id, :format => 'csv')) %>
+      <% end %>
+      </td>
       <% if type == 'approved' %>
       <td><%= link_to('Manage participants', study_users_path(study)) %></td>
       <% end %>

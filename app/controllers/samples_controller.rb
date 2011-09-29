@@ -8,15 +8,33 @@ class SamplesController < ApplicationController
   # GET /samples
   # GET /samples.xml
   def index
-    if current_user.is_admin? then
-      @samples = Sample.all
-    else
-      @samples = Sample.where('owner_id = ?',current_user.id)
+    @samples = Sample.scoped.includes([:kit, :participant, :study])
+
+    @samples = @samples.where('samples.owner_id = ? OR studies.creator_id = ?', current_user.id, current_user.id) unless current_user.is_admin?
+
+    if params[:study_id]
+      @samples = @samples.where('samples.study_id = ?', params[:study_id])
     end
-    @samples = @samples.paginate(:page => params[:page] || 1, :per_page => 30)
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.csv {
+        buf = ''
+        row = %w(sample_id sample_url_code kit_id kit_name participant_hex)
+        CSV.generate_row(row, row.size, buf)
+        @samples.each { |s|
+          row = [s.crc_id, s.url_code, s.kit.crc_id, s.kit.name, s.participant ? s.participant.hex : nil]
+          CSV.generate_row(row, row.size, buf)
+        }
+        forwhat = params[:study_id] ? "ForStudy#{params[:study_id]}" : ""
+        send_data buf, {
+          :filename    => "Samples#{forwhat}.csv",
+          :type        => 'application/csv',
+          :disposition => 'attachment'
+        }
+      }
+      format.html {
+        @samples = @samples.paginate(:page => params[:page] || 1, :per_page => 30)
+      }
       format.xml  { render :xml => @samples }
     end
   end
