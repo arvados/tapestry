@@ -483,7 +483,7 @@ class User < ActiveRecord::Base
     j[:has_relatives_enrolled] = self.confirmed_family_relations.size
     j[:has_whole_genome_data] = self.datasets.size
     j[:has_other_genetic_data] = self.genetic_data.size
-    j
+    { self.class.to_s.underscore => j }
   end
 
   protected
@@ -502,6 +502,7 @@ class User < ActiveRecord::Base
   end
 
   def self.help_datatables_sort_by(sortkey, options={})
+    sortkey = sortkey.to_s.gsub(/^user\./,'').to_sym
     case sortkey
     when :hex, :enrolled
       sortkey
