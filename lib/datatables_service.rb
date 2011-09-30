@@ -30,15 +30,14 @@ module DatatablesService
       next if !sortkey
 
       # sql_column === the sql expression we're sorting on, or an
-      # array: [sql_expression, joins, conditions]
+      # array: [sql_expression, joins]
       sql_column = model.help_datatables_sort_by(sortkey.to_sym,
                                                  :for => current_user)
 
       if sql_column.class == Array
-        sql_column, j, c = sql_column
+        sql_column, j = sql_column
         joins.merge!(j) { |k,ov,nv| ov.merge(nv) } if j
-        subset = subset.scoped(:joins => j) if j
-        subset = subset.scoped(:conditions => c) if c
+        subset = subset.scoped(:include => j) if j
       end
       sql_column = sql_column.to_s
       sql_column = "#{model.table_name}.#{sql_column}" unless sql_column.index('.')
@@ -57,7 +56,7 @@ module DatatablesService
 
     conditions = [ sql_search, { :search => "%#{params[:sSearch]}%" } ]
     @filtered = @total.scoped(:conditions => conditions,
-                              :joins => joins)
+                              :include => joins)
 
     @selected = @filtered.scoped(:order => sql_order,
                                  :offset => page_start,

@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   has_many :distinctive_traits, :dependent => :destroy
   has_one  :screening_survey_response, :dependent => :destroy
   has_many :family_relations, :dependent => :destroy
+  has_many :confirmed_family_relations, :class_name => "FamilyRelation", :conditions => {:is_confirmed => true}
   has_many :relatives, :class_name => 'User', :through => :family_relations
   has_many :genetic_data, :dependent => :destroy
   has_many :removal_requests, :dependent => :destroy
@@ -479,7 +480,7 @@ class User < ActiveRecord::Base
     j[:enrolled] = self.enrolled
     j[:received_sample_materials] = self.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq
     j[:has_ccrs] = self.ccrs.size
-    j[:has_relatives_enrolled] = self.family_relations.find_all { |fr| fr.is_confirmed }.size
+    j[:has_relatives_enrolled] = self.confirmed_family_relations.size
     j[:has_whole_genome_data] = self.datasets.size
     j[:has_other_genetic_data] = self.genetic_data.size
     j
@@ -509,7 +510,7 @@ class User < ActiveRecord::Base
     when :ccrs
       ['count(ccrs.id)>0', { :ccrs => {} }]
     when :has_relatives_enrolled
-      ['count(family_relations.id)', { :family_relations => {} }, 'family_relations.is_confirmed = 1']
+      ['count(family_relations.id)', { :confirmed_family_relations => {} }]
     when :has_whole_genome_data
       ['count(datasets.id)', { :datasets => {} }]
     when :has_other_genetic_data
@@ -530,7 +531,7 @@ class User < ActiveRecord::Base
   end
 
   def self.include_for_json
-    [:ccrs, :genetic_data, :datasets, :samples, :family_relations]
+    [:ccrs, :genetic_data, :datasets, :samples, :confirmed_family_relations]
   end
 
 end
