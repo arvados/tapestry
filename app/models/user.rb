@@ -506,15 +506,15 @@ class User < ActiveRecord::Base
     when :hex, :enrolled
       sortkey
     when :received_sample_materials
-      ['count(samples.id)>0', { :samples => {} }]
+      ['count(distinct samples.id)>0', { :samples => {} }]
     when :ccrs
-      ['count(ccrs.id)>0', { :ccrs => {} }]
+      ['count(distinct ccrs.id)>0', { :ccrs => {} }]
     when :has_relatives_enrolled
-      ['count(family_relations.id)', { :confirmed_family_relations => {} }]
+      ['count(distinct family_relations.id)', { :confirmed_family_relations => {} }]
     when :has_whole_genome_data
-      ['count(datasets.id)', { :datasets => {} }]
+      ['count(distinct datasets.id)', { :datasets => {} }]
     when :has_other_genetic_data
-      ['count(genetic_data.id)', { :genetic_data => {} }]
+      ['count(distinct genetic_data.id)', { :genetic_data => {} }]
     else
       :hex
     end
