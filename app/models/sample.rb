@@ -48,8 +48,10 @@ class Sample < ActiveRecord::Base
   end
 
   def self.help_datatables_search(options)
-    s = 'id like :search or crc_id like :search'
-    s << ' or url_code like :search' if options[:for] and options[:for].is_admin?
+    s = "#{table_name}.id like :search or #{table_name}.crc_id like :search"
+    if options[:for] and options[:for].is_admin?
+      s << " or #{table_name}.url_code like :search"
+    end
     s
   end
 end
