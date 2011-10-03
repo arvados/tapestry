@@ -65,6 +65,7 @@ class Sample < ActiveRecord::Base
       s << " or #{table_name}.url_code like :search"
     end
     s << " or users.hex like :search"
-    s
+    s << " or kits.name like :search"
+    [s, { :kit => {}, :participant => {} }]
   end
 end
