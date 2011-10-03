@@ -36,7 +36,13 @@ class SamplesController < ApplicationController
         @samples = @samples.paginate(:page => params[:page] || 1, :per_page => 30)
       }
       format.xml  { render :xml => @samples }
-      format.json { render :json => datatables_index(@samples) }
+      format.json {
+        resp = datatables_index(@samples)
+        resp['aaData'].each { |s|
+          s['sample']['url'] = sample_url(s['sample']['id'])
+        }
+        render :json => resp
+      }
     end
   end
 

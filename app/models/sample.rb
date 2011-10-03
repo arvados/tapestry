@@ -41,6 +41,7 @@ class Sample < ActiveRecord::Base
                               :kit => { :only => [:name] }
                             }))
     j['sample'].delete 'url_code' unless options[:for] and (options[:for].is_admin? or options[:for].is_researcher_onirb?)
+    j['sample']['crc_id'] = crc_id_s
     j
   end
 
