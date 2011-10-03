@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   include AuthenticatedSystem
   include Userstamp  
-  include DatatablesService
 
   before_filter :login_required
   before_filter :ensure_tos_agreement
@@ -17,6 +16,26 @@ class ApplicationController < ActionController::Base
 
   around_filter :profile
 
+  respond_to :json, :xml
+  class MyResponder < ActionController::Responder
+    include PublicApiResponder
+    include DatatablesResponder
+  end
+  def self.responder
+    MyResponder
+  end
+  def respond_with(resource, options={})
+    def_template = :public
+    def_template = :privileged if (current_user and
+                                   (current_user.is_admin? or
+                                    current_user.is_researcher_onirb?))
+    super resource, {
+      :for => current_user,
+      :api_template => def_template,
+      :model => model,
+      :model_name => model_name
+    }.merge(options)
+  end
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store

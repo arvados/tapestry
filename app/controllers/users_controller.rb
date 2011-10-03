@@ -16,14 +16,9 @@ class UsersController < ApplicationController
         page = params[:page] || 1
         per_page = params[:per_page] || 20
         @users = User.publishable.paginate(:page => page, :per_page => per_page)
-        render :index
       }
       format.json {
-        resp = datatables_index(User.publishable)
-        resp['aaData'].each { |j|
-          j['user']['public_profile_url'] = public_profile_url(j['user']['hex']) if j['user']['hex'] and j['user']['hex'].length > 0
-        }
-        render :json => resp
+        respond_with User.publishable
       }
     end
   end

@@ -1,6 +1,7 @@
 class Sample < ActiveRecord::Base
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
+  acts_as_api
 
   belongs_to :study
   belongs_to :kit
@@ -21,9 +22,9 @@ class Sample < ActiveRecord::Base
   scope :destroyed, where('samples.is_destroyed is not ?',nil)
   scope :visible_to, lambda { |user|
     if user.is_admin?
-      unscoped
+      unscoped.scoped(:include => [:study, :participant, :owner])
     else
-      real.scoped(:include => [:study],
+      real.scoped(:include => [:study, :participant, :owner],
                   :conditions => ['samples.owner_id=? or studies.creator_id=?',
                                   user.id, user.id])
     end
@@ -33,18 +34,17 @@ class Sample < ActiveRecord::Base
     "%08d" % crc_id
   end
 
-  def as_json(options={})
-    j = super(options.merge(:include => {
-                              :study => { :only => [:name] },
-                              :participant => { :only => [:id] },
-                              :owner => { :only => [:id] },
-                              :kit => { :only => [:name] }
-                            }))
-    j['sample'].delete 'url_code' unless options[:for] and (options[:for].is_admin? or options[:for].is_researcher_onirb?)
-    j['sample']['crc_id'] = crc_id_s
-    j['sample'][:participant] = User.find(j['sample'][:participant]['id']).as_json()['user'] if j['sample'][:participant]
-    j['sample'][:owner] = User.find(j['sample'][:owner]['id']).as_json()['user'] if j['sample'][:owner]
-    j
+  api_accessible :researcher do |t|
+    t.add :id
+    t.add :study
+    t.add :participant, :template => :id
+    t.add :owner, :template => :id
+    t.add :kit, :template => :id
+    t.add :crc_id_s, :as => :crc_id
+  end
+
+  api_accessible :privileged, :extend => :researcher do |t|
+    t.add :url_code
   end
 
   def self.help_datatables_sort_by(sortkey, options={})

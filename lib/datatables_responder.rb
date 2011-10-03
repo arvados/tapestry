@@ -1,6 +1,22 @@
-module DatatablesService
-  def datatables_index(subset=nil)
-    subset = model.scoped if subset.nil?
+module DatatablesResponder
+  def to_format
+    if get? and
+        resource.respond_to?(:as_api_response) and
+        (format == :json or format == :xml) and
+        resource.respond_to?(:collect) then
+      render format => datatables_index
+    else
+      super
+    end
+  end
+
+  protected
+
+  def datatables_index
+    params = controller.params
+    model = options[:model]
+    subset = resource || model.scoped
+
     if params[:iDisplayStart]
       page_start = params[:iDisplayStart].to_i
       page = (1 + page_start / params[:iDisplayLength].to_i).to_i rescue nil
@@ -31,8 +47,7 @@ module DatatablesService
 
       # sql_column === the sql expression we're sorting on, or an
       # array: [sql_expression, joins]
-      sql_column = model.help_datatables_sort_by(sortkey.to_sym,
-                                                 :for => current_user)
+      sql_column = model.help_datatables_sort_by(sortkey.to_sym, options)
 
       if sql_column.class == Array
         sql_column, j = sql_column
@@ -49,7 +64,7 @@ module DatatablesService
     if (params[:sSearch] and
         params[:sSearch].length > 0 and
         model.respond_to? :help_datatables_search)
-      sql_search = model.help_datatables_search(:for => current_user)
+      sql_search = model.help_datatables_search(options)
       if sql_search.class == Array
         sql_search, j = sql_search
         joins.merge!(j) { |k,ov,nv| ov.merge(nv) } if j
@@ -57,7 +72,7 @@ module DatatablesService
       end
     end
 
-    @total = subset.visible_to(current_user)
+    @total = subset.visible_to(options[:for])
 
     conditions = [ sql_search, { :search => "%#{params[:sSearch]}%" } ]
     @filtered = @total.scoped(:conditions => conditions,
@@ -68,12 +83,12 @@ module DatatablesService
                                  :limit => per_page,
                                  :group => "#{model.table_name}.id")
 
-    if model.respond_to? :include_for_json
+    if model.respond_to? :include_for_api
       # re-fetch the desired records by id, using :include =>
-      # model.include_for_json this time; otherwise, ActiveRecord will
+      # model.include_for_api this time; otherwise, ActiveRecord will
       # look up the associations one by one during
       # @selected.each.
-      @retrieved = model.scoped(:include => model.include_for_json,
+      @retrieved = model.scoped(:include => model.include_for_api(options[:api_template]),
                                 :conditions => ["#{model.table_name}.id in (?)", @selected.collect{|x|x.id}])
       @retrieved.sort! { |a,b| @selected.index(a) <=> @selected.index(b) }
     else
@@ -81,11 +96,11 @@ module DatatablesService
     end
 
     {
-      'aModel' => model_name,
+      'aModel' => options[:model_name],
       'sEcho' => params[:sEcho].to_i,
       'iTotalRecords' => @total.size,
       'iTotalDisplayRecords' => @filtered.size,
-      'aaData' => @retrieved.as_json(:for => current_user)
+      'aaData' => @retrieved.as_api_response(options[:api_template])
     }
   end
 end

@@ -11,29 +11,29 @@ jQuery(function() {
             "bJQueryUI": true,
             "sAjaxSource": '<%=j(users_path)%>',
             "aoColumns": [
-                { 'mDataProp': 'user.pgp_id' },
-                { 'mDataProp': 'user.hex',
+                { 'mDataProp': 'pgp_id' },
+                { 'mDataProp': 'hex',
                   'fnRender': function(oObj) {
-                      var r = oObj.aData.user.hex;
-                      if(oObj.aData.user.public_profile_url)
-                          r = '<a href="'+oObj.aData.user.public_profile_url+'">'+r+'</a>';
+                      var r = oObj.aData.hex;
+                      if(r)
+                          r = '<a href="/profiles/'+r+'">'+r+'</a>';
                       return r;
                   }
                 },
-                { 'mDataProp': 'user.enrolled',
+                { 'mDataProp': 'enrolled',
                   'fnRender': Renderer.date },
-                { 'mDataProp': 'user.received_sample_materials',
+                { 'mDataProp': 'received_sample_materials',
                   'asSorting': ['desc','asc'] },
-                { 'mDataProp': 'user.has_ccrs',
+                { 'mDataProp': 'has_ccrs',
                   'asSorting': ['desc','asc'],
                   'fnRender': Renderer.yes_or_nothing },
-                { 'mDataProp': 'user.has_relatives_enrolled',
+                { 'mDataProp': 'has_relatives_enrolled',
                   'asSorting': ['desc','asc'],
                   'fnRender': Renderer.hide_zeroes },
-                { 'mDataProp': 'user.has_whole_genome_data',
+                { 'mDataProp': 'has_whole_genome_data',
                   'asSorting': ['desc','asc'],
                   'fnRender': Renderer.hide_zeroes },
-                { 'mDataProp': 'user.has_other_genetic_data',
+                { 'mDataProp': 'has_other_genetic_data',
                   'asSorting': ['desc','asc'],
                   'fnRender': Renderer.hide_zeroes }
                 ]
@@ -71,7 +71,7 @@ jQuery(function() {
   </thead>
   <tbody>
     <noscript>
-      <% @users.collect { |e| e.as_json(:for => current_user) }.each do |e| -%>
+      <% @users.as_api_response(:public).each do |e| -%>
       <tr><td>
           <%= e[:pgp_id] %>
 	</td><td>

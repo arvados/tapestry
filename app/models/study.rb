@@ -1,6 +1,7 @@
 class Study < ActiveRecord::Base
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
+  acts_as_api
 
   belongs_to :researcher, :class_name => "User"
   belongs_to :irb_associate, :class_name => "User"
@@ -41,6 +42,13 @@ class Study < ActiveRecord::Base
     else
       return 'draft'
     end
+  end
+
+  api_accessible :public do |t|
+    t.add :name
+  end
+
+  api_accessible :researcher, :extend => :public do |t|
   end
 
 end

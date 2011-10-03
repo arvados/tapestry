@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   model_stamper
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
+  acts_as_api
 
   include Authentication
   include Authentication::ByPassword
@@ -184,6 +185,32 @@ class User < ActiveRecord::Base
     }
   }
 
+  api_accessible :id do |t|
+    t.add :hex, :if => :is_enrolled?
+    t.add :full_name, :if => :is_researcher?
+    t.add :full_name, :if => :is_admin?
+    t.add :unique_hash, :as => :uuid
+    t.add :researcher_affiliation, :if => :is_researcher?
+  end
+
+  api_accessible :public, :extend => :id do |t|
+    t.add lambda{|user| user.hex unless user.is_researcher?}, :as => :hex
+    t.add :pgp_id
+    t.add :enrolled, :if => :is_enrolled?
+    t.add lambda{|user| user.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq}, :as => :received_sample_materials
+    t.add 'ccrs.size', :as => :has_ccrs
+    t.add 'confirmed_family_relations.size', :as => :has_relatives_enrolled
+    t.add 'datasets.size', :as => :has_whole_genome_data
+    t.add 'genetic_data.size', :as => :has_other_genetic_data
+  end
+
+  api_accessible :researcher, :extend => :public do |t|
+  end
+
+  api_accessible :privileged, :extend => :public do |t|
+    t.add :full_name
+  end
+
   # For mislav-will_paginate (WillPaginate), which we use in the admin interface
   cattr_reader :per_page
   @@per_page = 30
@@ -197,6 +224,10 @@ class User < ActiveRecord::Base
       end
     end
     return []
+  end
+
+  def is_enrolled?
+    self.enrolled and not self.researcher
   end
 
   def is_unprivileged?
@@ -490,22 +521,6 @@ class User < ActiveRecord::Base
     return nil
   end
 
-  def as_json(options={})
-    j = {}
-    if self.is_researcher? or (options[:for] and options[:for].is_admin?)
-      j['full_name'] = self.full_name
-    end
-    j['hex'] = self.hex unless self.is_researcher?
-    j['pgp_id'] = self.pgp_id
-    j['enrolled'] = self.enrolled
-    j['received_sample_materials'] = self.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq
-    j['has_ccrs'] = self.ccrs.size
-    j['has_relatives_enrolled'] = self.confirmed_family_relations.size
-    j['has_whole_genome_data'] = self.datasets.size
-    j['has_other_genetic_data'] = self.genetic_data.size
-    { self.class.to_s.underscore => j }
-  end
-
   # A unique hash for each user
   # This is used in the place of the hex id, if the user has not been enrolled yet. See
   # export_log in app/controllers/admin/users_controller.rb
@@ -562,7 +577,7 @@ class User < ActiveRecord::Base
     sql_search
   end
 
-  def self.include_for_json
+  def self.include_for_api(api_template)
     [:ccrs, :genetic_data, :datasets, :samples, :confirmed_family_relations]
   end
 

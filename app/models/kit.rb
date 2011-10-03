@@ -1,6 +1,7 @@
 class Kit < ActiveRecord::Base
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
+  acts_as_api
 
   belongs_to :study
   belongs_to :kit_design
@@ -24,6 +25,12 @@ class Kit < ActiveRecord::Base
   scope :claimed, where('participant_id is not ? and owner_id=participant_id',nil)
   scope :returned, where('participant_id is not ? and owner_id is ?',nil,nil)
   scope :received, where('participant_id is not ? and owner_id is not ? and owner_id != participant_id',nil,nil)
+
+  api_accessible :id do |t|
+    t.add :id
+    t.add :name
+    t.add :crc_id_s, :as => :crc_id
+  end
 
   def crc_id_s
     "%08d" % crc_id

@@ -35,13 +35,10 @@ class SamplesController < ApplicationController
       format.html {
         @samples = @samples.paginate(:page => params[:page] || 1, :per_page => 30)
       }
-      format.xml  { render :xml => @samples }
       format.json {
-        resp = datatables_index(@samples)
-        resp['aaData'].each { |s|
-          s['sample']['url'] = sample_url(s['sample']['id'])
-        }
-        render :json => resp
+        respond_with(@samples,
+                     :for => current_user,
+                     :api_template => :researcher)
       }
     end
   end
@@ -164,11 +161,7 @@ class SamplesController < ApplicationController
   # GET /samples/1.xml
   def show
     @sample = Sample.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @sample }
-    end
+    respond_with @sample, :api_template => :researcher
   end
 
    # POST /samples/1/received
