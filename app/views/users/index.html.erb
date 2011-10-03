@@ -14,8 +14,8 @@ jQuery(function() {
 		{ 'mDataProp': 'user.hex',
 		  'fnRender': function(oObj) {
 		      var r = oObj.aData.user.hex;
-		      if(oObj.aData.public_profile_url)
-			  r = '<a href="'+oObj.aData.public_profile_url+'">'+r+'</a>';
+		      if(oObj.aData.user.public_profile_url)
+			  r = '<a href="'+oObj.aData.user.public_profile_url+'">'+r+'</a>';
 		      return r;
 		  }
 		},

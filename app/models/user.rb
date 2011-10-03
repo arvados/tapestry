@@ -471,18 +471,18 @@ class User < ActiveRecord::Base
     return nil
   end
 
-  def as_json(options)
+  def as_json(options={})
     j = {}
     if options[:for] and options[:for].is_admin?
-      j[:full_name] = self.full_name
+      j['full_name'] = self.full_name
     end
-    j[:hex] = self.hex
-    j[:enrolled] = self.enrolled
-    j[:received_sample_materials] = self.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq
-    j[:has_ccrs] = self.ccrs.size
-    j[:has_relatives_enrolled] = self.confirmed_family_relations.size
-    j[:has_whole_genome_data] = self.datasets.size
-    j[:has_other_genetic_data] = self.genetic_data.size
+    j['hex'] = self.hex
+    j['enrolled'] = self.enrolled
+    j['received_sample_materials'] = self.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq
+    j['has_ccrs'] = self.ccrs.size
+    j['has_relatives_enrolled'] = self.confirmed_family_relations.size
+    j['has_whole_genome_data'] = self.datasets.size
+    j['has_other_genetic_data'] = self.genetic_data.size
     { self.class.to_s.underscore => j }
   end
 
