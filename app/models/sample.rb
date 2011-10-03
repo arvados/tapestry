@@ -29,6 +29,10 @@ class Sample < ActiveRecord::Base
     end
   }
 
+  def crc_id
+    "%08d" % super
+  end
+
   def as_json(options={})
     j = super(options.merge(:include => {
                               :study => { :only => [:name] },

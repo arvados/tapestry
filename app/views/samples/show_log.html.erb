@@ -1,4 +1,4 @@
-<h2>Sample log for <%= sprintf("%08d", @sample.crc_id) + ' (' + @sample.name + ')' %></h2>
+<h2>Sample log for <%= "#{@sample.crc_id} (#{@sample.name})" %></h2>
 
 <% if not @sample_log.empty? then %>
 

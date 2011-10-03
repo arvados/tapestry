@@ -10,7 +10,7 @@
 
 <p>
   <b>Number:</b>
-  <%= sprintf("%08d", @kit.crc_id) %>
+  <%= @kit.crc_id %>
 </p>
 
 <p>
@@ -64,7 +64,7 @@
 <% @samples.each do |sample| %>
   <tr>
     <td><%= link_to(sample.name, sample_path(sample)) %></td>
-    <td><%= sprintf("%08d", sample.crc_id) %></td>
+    <td><%= sample.crc_id %></td>
     <% if sample.owner.nil? and not sample.participant.nil? then %>
     <td><%= link_to('Mark as received', received_sample_path(sample), :method => :post, :confirm => "Are you sure you want to mark sample #{sample.name} as received?") %></td>
     <% else %>

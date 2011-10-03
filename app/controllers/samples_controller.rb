@@ -132,7 +132,7 @@ class SamplesController < ApplicationController
     # Log this
     SampleLog.new(:actor => current_user, :comment => "Marked sample as destroyed", :sample_id => @sample.id).save
 
-    flash[:notice]  = "Sample #{sprintf("%08d", @sample.crc_id)} marked as destroyed"
+    flash[:notice]  = "Sample #{@sample.crc_id} marked as destroyed"
 
     redirect_to(kit_path(@sample.kit.id))
   end

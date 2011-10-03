@@ -12,7 +12,7 @@
 
 <p>
   <b>Number:</b>
-  <%= sprintf("%08d", @kit.crc_id) %>
+  <%= @kit.crc_id %>
 </p>
 
 <p>
@@ -40,7 +40,7 @@
 <% @samples.each do |sample| %>
   <tr>
     <td><%= sample.name %></td>
-    <td><%= sprintf("%08d", sample.crc_id) %></td>
+    <td><%= sample.crc_id %></td>
     <td><%= sample.owner.nil? ? '' : sample.owner.full_name %></td>
     <td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
     <td><%= link_to 'Note', sample_participant_note_path(sample) %></td>
