@@ -195,35 +195,34 @@ class ApplicationController < ActionController::Base
 
     user_fields = %w(hex e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip).freeze
 
-    header_row = user_fields.map(&:humanize)
-    buf = ''
+    FasterCSV.generate(String.new, :force_quotes => true) do |csv|
 
-    CSV.generate_row(header_row, header_row.size, buf)
+      csv << user_fields.map(&:humanize)
 
-    study.study_participants.real.send(type).each do |u|
-      row = []
+      study.study_participants.real.send(type).each do |u|
+        row = []
 
-      row.push u.user.hex
-      row.push u.user.email
-      row.push u.user.full_name
-      row.push u.user.ccrs.count > 0 ? 'y' : 'n'
-      row.push u.user.genetic_data.count > 0 ? 'y' : 'n'
-      if u.user.shipping_address then
-        row.push u.user.shipping_address.address_line_1
-        row.push u.user.shipping_address.address_line_2
-        row.push u.user.shipping_address.address_line_3
-        row.push u.user.shipping_address.city
-        row.push u.user.shipping_address.state
-        row.push u.user.shipping_address.zip
-      else
-        6.times do
-          row.push ''
+        row.push u.user.hex
+        row.push u.user.email
+        row.push u.user.full_name
+        row.push u.user.ccrs.count > 0 ? 'y' : 'n'
+        row.push u.user.genetic_data.count > 0 ? 'y' : 'n'
+        if u.user.shipping_address then
+          row.push u.user.shipping_address.address_line_1
+          row.push u.user.shipping_address.address_line_2
+          row.push u.user.shipping_address.address_line_3
+          row.push u.user.shipping_address.city
+          row.push u.user.shipping_address.state
+          row.push u.user.shipping_address.zip
+        else
+          6.times do
+            row.push ''
+          end
         end
-      end
 
-      CSV.generate_row(row, row.size, buf)
+        csv << row
+      end
     end
-    buf
   end
 
   def not_found

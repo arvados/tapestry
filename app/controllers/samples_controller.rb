@@ -18,14 +18,13 @@ class SamplesController < ApplicationController
 
     respond_to do |format|
       format.csv {
-        buf = ''
-        row = %w(sample_id sample_url_code kit_sample_name kit_id kit_name participant_hex)
-        CSV.generate_row(row, row.size, buf)
-        @samples = @samples.includes(:kit_design_sample)
-        @samples.each { |s|
-          row = [s.crc_id, s.url_code, s.kit_design_sample.name, s.kit.crc_id, s.kit.name, s.participant ? s.participant.hex : nil]
-          CSV.generate_row(row, row.size, buf)
-        }
+        buf = FasterCSV.generate(String.new, :force_quotes => true) do |csv|
+          csv << %w(sample_id sample_url_code kit_sample_name kit_id kit_name participant_hex)
+          @samples = @samples.includes(:kit_design_sample)
+          @samples.each { |s|
+            csv << [s.crc_id, s.url_code, s.kit_design_sample.name, s.kit.crc_id, s.kit.name, s.participant ? s.participant.hex : nil]
+          }
+        end
         forwhat = params[:study_id] ? "ForStudy#{params[:study_id]}" : ""
         send_data buf, {
           :filename    => "Samples#{forwhat}.csv",
