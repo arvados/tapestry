@@ -79,7 +79,7 @@ jQuery(function() {
     <noscript>
       <% @samples.each do |sample| %>
       <tr>
-	<td><%= link_to sample.crc_id, sample %></td>
+	<td><%= link_to sample.crc_id_s, sample %></td>
 	<td><%= sample.study.name %></td>
 	<td><%= sample.kit.name %></td>
 	<td><%= sample.participant.nil? ? '' : link_to(sample.participant.hex, public_profile_path(sample.participant.hex)) %></td>

@@ -22,7 +22,7 @@ class SamplesController < ApplicationController
           csv << %w(sample_id sample_url_code kit_sample_name kit_id kit_name participant_hex)
           @samples = @samples.includes(:kit_design_sample)
           @samples.each { |s|
-            csv << [s.crc_id, s.url_code, s.kit_design_sample.name, s.kit.crc_id, s.kit.name, s.participant ? s.participant.hex : nil]
+            csv << [s.crc_id_s, s.url_code, s.kit_design_sample.name, s.kit.crc_id_s, s.kit.name, s.participant ? s.participant.hex : nil]
           }
         end
         forwhat = params[:study_id] ? "ForStudy#{params[:study_id]}" : ""
@@ -132,7 +132,7 @@ class SamplesController < ApplicationController
     # Log this
     SampleLog.new(:actor => current_user, :comment => "Marked sample as destroyed", :sample_id => @sample.id).save
 
-    flash[:notice]  = "Sample #{@sample.crc_id} marked as destroyed"
+    flash[:notice]  = "Sample #{@sample.crc_id_s} marked as destroyed"
 
     redirect_to(kit_path(@sample.kit.id))
   end
@@ -145,7 +145,7 @@ class SamplesController < ApplicationController
       cmp = b.id <=> a.id if cmp == 0
       cmp
     }
-    @page_title = "Sample Logs: #{@sample.crc_id} #{@sample.name}"
+    @page_title = "Sample Logs: #{@sample.crc_id_s} #{@sample.name}"
 
     if current_user.is_unprivileged? and @sample.participant != current_user
       redirect_to unauthorized_user_url
@@ -311,6 +311,6 @@ class SamplesController < ApplicationController
   end
 
   def set_page_title
-    @page_title = "Samples: #{@sample.crc_id} #{@sample.name}" if @sample
+    @page_title = "Samples: #{@sample.crc_id_s} ({@sample.name})" if @sample
   end
 end

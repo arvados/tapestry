@@ -26,7 +26,7 @@
 <% @kits.each do |kit| %>
   <tr>
     <td><%= link_to(kit.name, kit_path(kit)) %></td>
-    <td><%= kit.crc_id %></td>
+    <td><%= kit.crc_id_s %></td>
     <td><%= kit.study.name %></td>
     <td><%= kit.kit_design.name %></td>
     <td><%= kit.participant.nil? ? '' : link_to(kit.participant.hex, admin_user_path(kit.participant)) %></td>

@@ -29,8 +29,8 @@ class Sample < ActiveRecord::Base
     end
   }
 
-  def crc_id
-    "%08d" % super
+  def crc_id_s
+    "%08d" % crc_id
   end
 
   def as_json(options={})
