@@ -50,6 +50,11 @@ module DatatablesService
         params[:sSearch].length > 0 and
         model.respond_to? :help_datatables_search)
       sql_search = model.help_datatables_search(:for => current_user)
+      if sql_search.class == Array
+        sql_search, j = sql_search
+        joins.merge!(j) { |k,ov,nv| ov.merge(nv) } if j
+        subset = subset.scoped(:include => j) if j
+      end
     end
 
     @total = subset.visible_to(current_user)

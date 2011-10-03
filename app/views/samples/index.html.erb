@@ -1,5 +1,55 @@
 <h2>Samples</h2>
 
+<% content_for :js do %>
+jQuery(function() {
+    var $ = jQuery.noConflict();
+    $(document).ready(function() {
+	$("noscript").remove();
+	$("#samples").removeClass('admin_table');
+	$('#samples').dataTable( {
+	    "bProcessing": true,
+	    "bServerSide": true,
+	    "bJQueryUI": true,
+	    "sAjaxSource": '<%=j(samples_path)%>',
+	    "aoColumns": [
+		{ 'mDataProp': 'sample.crc_id',
+		  'fnRender': function(oObj) {
+		      var r = '' + oObj.aData.sample.crc_id;
+		      if(oObj.aData.sample.url)
+			  r = '<a href="'+oObj.aData.sample.url+'">'+r+'</a>';
+		      if (oObj.aData.sample.url_code)
+			  r += ' (' + oObj.aData.sample.url_code + ')';
+		      return r;
+		  }
+		},
+		{ 'mDataProp': 'sample.study.name' },
+		{ 'mDataProp': 'sample.kit.name' },
+		{ 'mDataProp': 'sample.participant.hex' },
+		{ 'mDataProp': 'sample.owner_id' },
+		{ 'bSortable': false,
+		  'fnRender': function(oObj) {
+		      if(!oObj.aData.sample.log_url)
+			  return null;
+		      return '<a href="'+oObj.aData.sample.log_url+'">log</a>';
+		  } },
+		{ 'bSortable': false,
+		  'fnRender': function(oObj) {
+		      if(!oObj.aData.sample.edit_url)
+			  return null;
+		      return '<a href="'+oObj.aData.sample.edit_url+'">edit</a>';
+		  } } ]
+	    } ).
+	    fnSetFilteringDelay().
+	    fnSkipMissingDataProps();
+    } );
+});
+<% end %>
+<% content_for :head do %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSetFilteringDelay' %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSkipMissingDataProps' %>
+  <%= javascript_include_tag 'jquery.dataTables.renderers' %>
+<% end %>
+
 <% if current_user.is_admin? %>
 <p>Because you are an administrator, this page lists all samples by any researcher.</p>
 <% else %>
@@ -11,40 +61,42 @@
   when you receive samples from a participant or researcher.
 </p>
 
-<% if @samples.count > 0 %>
-<%= will_paginate @samples %>
-<table class="admin_table">
-  <tr>
-    <th>Number</th>
-    <th>Study</th>
-    <th>Kit</th>
-    <th>Participant</th>
-    <th>Owner</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @samples.each do |sample| %>
-  <tr>
-    <td><%= link_to sprintf("%08d", sample.crc_id), sample %></td>
-    <td><%= sample.study.name %></td>
-    <td><%= sample.kit.name %></td>
-    <td><%= sample.participant.nil? ? '' : link_to(sample.participant.hex, public_profile_path(sample.participant.hex)) %></td>
-    <td>
-      <% if sample.owner.nil? %>
-      <% elsif sample.owner.is_researcher? %>
-      <%= sample.owner.full_name %>
-      <% else %>
-      <%= sample.owner.hex %>
+<noscript><%= will_paginate @samples %></noscript>
+<table id="samples" style="width: 100%" class="admin_table">
+  <thead>
+    <tr>
+      <th>Number</th>
+      <th>Study</th>
+      <th>Kit</th>
+      <th>Participant</th>
+      <th>Owner</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <noscript>
+      <% @samples.each do |sample| %>
+      <tr>
+	<td><%= link_to sprintf("%08d", sample.crc_id), sample %></td>
+	<td><%= sample.study.name %></td>
+	<td><%= sample.kit.name %></td>
+	<td><%= sample.participant.nil? ? '' : link_to(sample.participant.hex, public_profile_path(sample.participant.hex)) %></td>
+	<td>
+	  <% if sample.owner.nil? %>
+	  <% elsif sample.owner.is_researcher? %>
+	  <%= sample.owner.full_name %>
+	  <% else %>
+	  <%= sample.owner.hex %>
+	  <% end %>
+	</td>
+	<td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
+	<td><%= link_to 'Edit', edit_sample_path(sample) %></td>
+	<td><%= sample.last_mailed.nil? ? link_to('Delete', sample, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
+      </tr>
       <% end %>
-    </td>
-    <td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
-    <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
-    <td><%= sample.last_mailed.nil? ? link_to('Delete', sample, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
-  </tr>
-<% end %>
+    </noscript>
+  </tbody>
 </table>
-<%= will_paginate @samples %>
-
-<% end %>
+<noscript><%= will_paginate @samples %></noscript>
