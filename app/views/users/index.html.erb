@@ -37,12 +37,14 @@ jQuery(function() {
 		  'fnRender': Renderer.hide_zeroes }
 		]
 	    } ).
-	    fnSetFilteringDelay();
+	    fnSetFilteringDelay().
+            fnSkipMissingDataProps();
     } );
 });
 <% end %>
 <% content_for :head do %>
   <%= javascript_include_tag 'jquery.dataTables.fnSetFilteringDelay' %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSkipMissingDataProps' %>
   <%= javascript_include_tag 'jquery.dataTables.renderers' %>
 <% end %>
 
