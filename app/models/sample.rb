@@ -36,12 +36,14 @@ class Sample < ActiveRecord::Base
   def as_json(options={})
     j = super(options.merge(:include => {
                               :study => { :only => [:name] },
-                              :participant => { :only => [:hex] },
-                              :owner => { :only => [:hex] },
+                              :participant => { :only => [:id] },
+                              :owner => { :only => [:id] },
                               :kit => { :only => [:name] }
                             }))
     j['sample'].delete 'url_code' unless options[:for] and (options[:for].is_admin? or options[:for].is_researcher_onirb?)
     j['sample']['crc_id'] = crc_id_s
+    j['sample'][:participant] = User.find(j['sample'][:participant]['id']).as_json()['user'] if j['sample'][:participant]
+    j['sample'][:owner] = User.find(j['sample'][:owner]['id']).as_json()['user'] if j['sample'][:owner]
     j
   end
 
@@ -52,6 +54,8 @@ class Sample < ActiveRecord::Base
       "#{table_name}.#{sortkey}"
     when 'participant.hex'
       ['users.hex', { :participant => {} }]
+    when 'kit.name'
+      ['kits.name', { :kit => {} }]
     when 'url_code'
       (options[:for] and options[:for].is_admin?) ? 'samples.url_code' : 'sample.id'
     else

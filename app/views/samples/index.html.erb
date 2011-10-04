@@ -4,43 +4,62 @@
 jQuery(function() {
     var $ = jQuery.noConflict();
     $(document).ready(function() {
-	$("noscript").remove();
-	$("#samples").removeClass('admin_table');
-	$('#samples').dataTable( {
-	    "bProcessing": true,
-	    "bServerSide": true,
-	    "bJQueryUI": true,
-	    "sAjaxSource": '<%=j(samples_path)%>',
-	    "aoColumns": [
-		{ 'mDataProp': 'sample.crc_id',
-		  'fnRender': function(oObj) {
-		      var r = '' + oObj.aData.sample.crc_id;
-		      if(oObj.aData.sample.url)
-			  r = '<a href="'+oObj.aData.sample.url+'">'+r+'</a>';
-		      if (oObj.aData.sample.url_code)
-			  r += ' (' + oObj.aData.sample.url_code + ')';
-		      return r;
-		  }
-		},
-		{ 'mDataProp': 'sample.study.name' },
-		{ 'mDataProp': 'sample.kit.name' },
-		{ 'mDataProp': 'sample.participant.hex' },
-		{ 'mDataProp': 'sample.owner_id' },
-		{ 'bSortable': false,
-		  'fnRender': function(oObj) {
-		      if(!oObj.aData.sample.log_url)
-			  return null;
-		      return '<a href="'+oObj.aData.sample.log_url+'">log</a>';
-		  } },
-		{ 'bSortable': false,
-		  'fnRender': function(oObj) {
-		      if(!oObj.aData.sample.edit_url)
-			  return null;
-		      return '<a href="'+oObj.aData.sample.edit_url+'">edit</a>';
-		  } } ]
-	    } ).
-	    fnSetFilteringDelay().
-	    fnSkipMissingDataProps();
+        $("noscript").remove();
+        $("#samples").removeClass('admin_table');
+        $('#samples').dataTable( {
+            "bProcessing": true,
+            "bServerSide": true,
+            "bJQueryUI": true,
+            "sAjaxSource": '<%=j(samples_path)%>',
+            "aoColumns": [
+                { 'mDataProp': 'sample.crc_id',
+                  'fnRender': function(oObj) {
+                      var r = '' + oObj.aData.sample.crc_id;
+                      if(oObj.aData.sample.url)
+                          r = '<a href="'+oObj.aData.sample.url+'">'+r+'</a>';
+                      if (oObj.aData.sample.url_code)
+                          r += ' (' + oObj.aData.sample.url_code + ')';
+                      return r;
+                  }
+                },
+                { 'mDataProp': 'sample.study.name' },
+                { 'mDataProp': 'sample.kit.name' },
+                { 'mDataProp': 'sample.participant.hex',
+                  'fnRender': function(oObj) {
+                      if (!oObj.aData.sample.participant ||
+                          !oObj.aData.sample.participant.hex)
+                          return '';
+                      return '<a href="/profile/'+oObj.aData.sample.participant.hex+'">'+oObj.aData.sample.participant.hex+'</a>';
+                  }
+                },
+                { 'mDataProp': 'sample.owner.display_name',
+                  'bSortable': false,
+                  'fnRender': function(oObj) {
+                      if (!oObj.aData.sample.owner)
+                          return '';
+                      if (oObj.aData.sample.owner.hex)
+			  return '<a href="/profile/'+oObj.aData.sample.owner.hex+'">'+oObj.aData.sample.owner.hex+'</a>';
+                      else
+                          return oObj.aData.sample.owner.full_name;
+                  }
+                },
+                { 'mDataProp': 'sample.log_url',
+                  'bSortable': false,
+                  'fnRender': function(oObj) {
+                      if(!oObj.aData.sample.id)
+                          return null;
+                      return '<a href="/samples/'+oObj.aData.sample.id+'/log">log</a>';
+                  } },
+                { 'mDataProp': 'sample.edit_url',
+                  'bSortable': false,
+                  'fnRender': function(oObj) {
+                      if(!oObj.aData.sample.id)
+                          return null;
+                      return '<a href="/samples/'+oObj.aData.sample.id+'/edit">edit</a>';
+                  } } ]
+            } ).
+            fnSetFilteringDelay().
+            fnSkipMissingDataProps();
     } );
 });
 <% end %>

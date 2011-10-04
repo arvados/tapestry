@@ -32,15 +32,22 @@ jQuery.fn.dataTableExt.oApi.fnSkipMissingDataProps = function (oSettings) {
             if ( a.length == 2 )
             {
                 return function (data) {
-                    if(!data[a[0]]) return null;
+                    if(!data[a[0]])
+                        return '';
+                    if(typeof data[a[0]][a[1]] === 'undefined')
+                        return '';
                     return data[ a[0] ][ a[1] ];
                 };
             }
             else if ( a.length == 3 )
             {
                 return function (data) {
-                    if(!data[a[0]]) return null;
-                    if(!data[a[0]][a[1]]) return null;
+                    if(!data[a[0]])
+                        return '';
+                    if(!data[a[0]][a[1]])
+                        return '';
+                    if(typeof data[a[0]][a[1]][a[2]] === 'undefined')
+                        return '';
                     return data[ a[0] ][ a[1] ][ a[2] ];
                 };
             }
@@ -49,7 +56,8 @@ jQuery.fn.dataTableExt.oApi.fnSkipMissingDataProps = function (oSettings) {
                 return function (data) {
                     for ( var i=0, iLen=a.length ; i<iLen ; i++ )
                     {
-                        if(!data[a[i]]) return null;
+                        if(typeof data[a[i]] === 'undefined')
+                            return '';
                         data = data[ a[i] ];
                     }
                     return data;
@@ -60,6 +68,8 @@ jQuery.fn.dataTableExt.oApi.fnSkipMissingDataProps = function (oSettings) {
         {
             /* Array or flat object mapping */
             return function (data) {
+                if (typeof data[mSource] === 'undefined')
+                    return '';
                 return data[mSource];   
             };
         }

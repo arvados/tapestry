@@ -473,10 +473,10 @@ class User < ActiveRecord::Base
 
   def as_json(options={})
     j = {}
-    if options[:for] and options[:for].is_admin?
+    if self.is_researcher? or (options[:for] and options[:for].is_admin?)
       j['full_name'] = self.full_name
     end
-    j['hex'] = self.hex
+    j['hex'] = self.hex unless self.is_researcher?
     j['enrolled'] = self.enrolled
     j['received_sample_materials'] = self.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq
     j['has_ccrs'] = self.ccrs.size
