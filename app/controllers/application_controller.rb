@@ -69,6 +69,7 @@ class ApplicationController < ActionController::Base
 
   def only_owner_can_change
     return true if current_user and current_user.is_admin?
+    return true if controller_name == 'sessions' # There is no corresponding model for the sessions controller
     @model = model
     if @model.nil? then
       # This is bad; we've got an unhandled controller -> model translation. E-mail site admins.
