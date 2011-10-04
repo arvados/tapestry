@@ -53,23 +53,11 @@ class ApplicationController < ActionController::Base
   end
 
   def model
-    begin
-      model_name.constantize
-    rescue
-      # These are exceptions where the controller name does not match the model name
-      if model_name == 'GeographicInformation' then
-        User
-      elsif model_name == 'Password' then
-        User
-      else
-        nil
-      end
-    end
+    model_name.constantize rescue nil
   end
 
   def only_owner_can_change
     return true if current_user and current_user.is_admin?
-    return true if controller_name == 'sessions' # There is no corresponding model for the sessions controller
     @model = model
     if @model.nil? then
       # This is bad; we've got an unhandled controller -> model translation. E-mail site admins.
