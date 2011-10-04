@@ -13,6 +13,7 @@ class AbsolutePitchSurveysController < ApplicationController
     if @user.nil?
       return not_found
     end
+    user_answers = @user.survey_answers
 
     if user_answers.select{|a| a.text == @@SURVEY_END_NO_ABSOLUTE_PITCH }.length > 0
       @survey_end_no_absolute_pitch = true;
