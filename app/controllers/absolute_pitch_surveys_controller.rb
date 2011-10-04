@@ -11,9 +11,7 @@ class AbsolutePitchSurveysController < ApplicationController
     @answer_mapping = { 'y' => 'Yes', 'n' => 'No', 'ns' => 'Not sure', 'na' => 'Not available', 13 => '>12' }
     @user = User.find_by_hex(params[:id])
     if @user.nil?
-      user_answers = []
-    else
-      user_answers = @user.survey_answers
+      return not_found
     end
 
     if user_answers.select{|a| a.text == @@SURVEY_END_NO_ABSOLUTE_PITCH }.length > 0
