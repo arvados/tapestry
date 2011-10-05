@@ -508,7 +508,7 @@ class User < ActiveRecord::Base
       sortkey
     when :received_sample_materials
       ['count(distinct samples.id)>0', { :samples => {} }]
-    when :ccrs
+    when :has_ccrs
       ['count(distinct ccrs.id)>0', { :ccrs => {} }]
     when :has_relatives_enrolled
       ['count(distinct family_relations.id)', { :confirmed_family_relations => {} }]
