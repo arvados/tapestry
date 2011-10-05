@@ -52,6 +52,8 @@ class Sample < ActiveRecord::Base
     case sortkey
     when 'id', 'crc_id'
       "#{table_name}.#{sortkey}"
+    when 'study.name'
+      ['studies.name', { :study => {} }]
     when 'participant.hex'
       ['users.hex', { :participant => {} }]
     when 'kit.name'
