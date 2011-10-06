@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
     elsif current_user and current_user.is_researcher_onirb?
       real
     else
-      real.scoped(:conditions => ['users.enrolled IS NOT NULL AND users.suspended_at IS NOT NULL'])
+      publishable
     end
   }
 
