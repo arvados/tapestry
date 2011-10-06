@@ -4,40 +4,41 @@
 jQuery(function() {
     var $ = jQuery.noConflict();
     $(document).ready(function() {
-	$("noscript").remove();
-	$('#participants').dataTable( {
-	    "bProcessing": true,
-	    "bServerSide": true,
-	    "bJQueryUI": true,
-	    "sAjaxSource": '<%=j(users_path)%>',
-	    "aoColumns": [
-		{ 'mDataProp': 'user.hex',
-		  'fnRender': function(oObj) {
-		      var r = oObj.aData.user.hex;
-		      if(oObj.aData.user.public_profile_url)
-			  r = '<a href="'+oObj.aData.user.public_profile_url+'">'+r+'</a>';
-		      return r;
-		  }
-		},
-		{ 'mDataProp': 'user.enrolled',
-		  'fnRender': Renderer.date },
-		{ 'mDataProp': 'user.received_sample_materials',
-		  'asSorting': ['desc','asc'] },
-		{ 'mDataProp': 'user.has_ccrs',
-		  'asSorting': ['desc','asc'],
-		  'fnRender': Renderer.yes_or_nothing },
-		{ 'mDataProp': 'user.has_relatives_enrolled',
-		  'asSorting': ['desc','asc'],
-		  'fnRender': Renderer.hide_zeroes },
-		{ 'mDataProp': 'user.has_whole_genome_data',
-		  'asSorting': ['desc','asc'],
-		  'fnRender': Renderer.hide_zeroes },
-		{ 'mDataProp': 'user.has_other_genetic_data',
-		  'asSorting': ['desc','asc'],
-		  'fnRender': Renderer.hide_zeroes }
-		]
-	    } ).
-	    fnSetFilteringDelay().
+        $("noscript").remove();
+        $('#participants').dataTable( {
+            "bProcessing": true,
+            "bServerSide": true,
+            "bJQueryUI": true,
+            "sAjaxSource": '<%=j(users_path)%>',
+            "aoColumns": [
+                { 'mDataProp': 'user.pgp_id' },
+                { 'mDataProp': 'user.hex',
+                  'fnRender': function(oObj) {
+                      var r = oObj.aData.user.hex;
+                      if(oObj.aData.user.public_profile_url)
+                          r = '<a href="'+oObj.aData.user.public_profile_url+'">'+r+'</a>';
+                      return r;
+                  }
+                },
+                { 'mDataProp': 'user.enrolled',
+                  'fnRender': Renderer.date },
+                { 'mDataProp': 'user.received_sample_materials',
+                  'asSorting': ['desc','asc'] },
+                { 'mDataProp': 'user.has_ccrs',
+                  'asSorting': ['desc','asc'],
+                  'fnRender': Renderer.yes_or_nothing },
+                { 'mDataProp': 'user.has_relatives_enrolled',
+                  'asSorting': ['desc','asc'],
+                  'fnRender': Renderer.hide_zeroes },
+                { 'mDataProp': 'user.has_whole_genome_data',
+                  'asSorting': ['desc','asc'],
+                  'fnRender': Renderer.hide_zeroes },
+                { 'mDataProp': 'user.has_other_genetic_data',
+                  'asSorting': ['desc','asc'],
+                  'fnRender': Renderer.hide_zeroes }
+                ]
+            } ).
+            fnSetFilteringDelay().
             fnSkipMissingDataProps();
     } );
 });
@@ -58,9 +59,10 @@ jQuery(function() {
 <table id="participants" style="width: 100%">
   <thead>
     <tr>
+      <th>PGP#</th>
       <th>Participant ID</th>
       <th>Date enrolled</th>
-      <th>Received sample materials</th>
+      <th>Received samples</th>
       <th>Health records</th>
       <th>Relatives enrolled</th>
       <th>Whole genome datasets</th>
@@ -71,6 +73,8 @@ jQuery(function() {
     <noscript>
       <% @users.collect { |e| e.as_json(:for => current_user) }.each do |e| -%>
       <tr><td>
+          <%= e[:pgp_id] %>
+	</td><td>
           <%= link_to e[:hex], url_for(:controller => 'profiles', :action => 'public', :hex => e[:hex]) %>
 	</td><td>
           <%= e[:enrolled] %>

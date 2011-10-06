@@ -477,6 +477,7 @@ class User < ActiveRecord::Base
       j['full_name'] = self.full_name
     end
     j['hex'] = self.hex unless self.is_researcher?
+    j['pgp_id'] = self.pgp_id
     j['enrolled'] = self.enrolled
     j['received_sample_materials'] = self.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq
     j['has_ccrs'] = self.ccrs.size
@@ -504,6 +505,8 @@ class User < ActiveRecord::Base
   def self.help_datatables_sort_by(sortkey, options={})
     sortkey = sortkey.to_s.gsub(/^user\./,'').to_sym
     case sortkey
+    when :pgp_id
+      "pgp_id is null, 0+replace(pgp_id,'PGP','')"
     when :hex, :enrolled
       sortkey
     when :received_sample_materials
