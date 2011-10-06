@@ -107,9 +107,9 @@ class User < ActiveRecord::Base
   scope :researcher, { :conditions => "researcher = 1" }
   scope :publishable, where("enrolled IS NOT NULL AND suspended_at IS NULL").real
   scope :visible_to, lambda { |current_user|
-    if current_user.is_admin?
+    if current_user and current_user.is_admin?
       unscoped
-    elsif current_user.is_researcher_onirb?
+    elsif current_user and current_user.is_researcher_onirb?
       real
     else
       real.scoped(:conditions => ['users.enrolled IS NOT NULL AND users.suspended_at IS NOT NULL'])
