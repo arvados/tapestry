@@ -29,21 +29,39 @@ class Sample < ActiveRecord::Base
     end
   }
 
-  def as_json(options)
-    j = super
-    j.delete :participant_id
-    j.delete :url_code unless options[:for] and (options[:for].is_admin? or options[:for].is_researcher_onirb?)
+  def crc_id_s
+    "%08d" % crc_id
+  end
+
+  def as_json(options={})
+    j = super(options.merge(:include => {
+                              :study => { :only => [:name] },
+                              :participant => { :only => [:id] },
+                              :owner => { :only => [:id] },
+                              :kit => { :only => [:name] }
+                            }))
+    j['sample'].delete 'url_code' unless options[:for] and (options[:for].is_admin? or options[:for].is_researcher_onirb?)
+    j['sample']['crc_id'] = crc_id_s
+    j['sample'][:participant] = User.find(j['sample'][:participant]['id']).as_json()['user'] if j['sample'][:participant]
+    j['sample'][:owner] = User.find(j['sample'][:owner]['id']).as_json()['user'] if j['sample'][:owner]
     j
   end
 
   def self.help_datatables_sort_by(sortkey, options={})
+    sortkey = sortkey.to_s.gsub(/^sample\./, '')
     case sortkey
-    when :id, :crc_id
-      sortkey
-    when :url_code
-      (options[:for] and options[:for].is_admin?) ? sortkey : :id
+    when 'id', 'crc_id'
+      "#{table_name}.#{sortkey}"
+    when 'study.name'
+      ['studies.name', { :study => {} }]
+    when 'participant.hex'
+      ['users.hex', { :participant => {} }]
+    when 'kit.name'
+      ['kits.name', { :kit => {} }]
+    when 'url_code'
+      (options[:for] and options[:for].is_admin?) ? 'samples.url_code' : 'sample.id'
     else
-      :id
+      'samples.crc_id'
     end
   end
 
@@ -52,6 +70,8 @@ class Sample < ActiveRecord::Base
     if options[:for] and options[:for].is_admin?
       s << " or #{table_name}.url_code like :search"
     end
-    s
+    s << " or users.hex like :search"
+    s << " or kits.name like :search"
+    [s, { :kit => {}, :participant => {} }]
   end
 end

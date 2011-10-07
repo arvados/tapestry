@@ -18,14 +18,13 @@ class SamplesController < ApplicationController
 
     respond_to do |format|
       format.csv {
-        buf = ''
-        row = %w(sample_id sample_url_code kit_sample_name kit_id kit_name participant_hex)
-        CSV.generate_row(row, row.size, buf)
-        @samples = @samples.includes(:kit_design_sample)
-        @samples.each { |s|
-          row = [s.crc_id, s.url_code, s.kit_design_sample.name, s.kit.crc_id, s.kit.name, s.participant ? s.participant.hex : nil]
-          CSV.generate_row(row, row.size, buf)
-        }
+        buf = FasterCSV.generate(String.new, :force_quotes => true) do |csv|
+          csv << %w(sample_id sample_url_code kit_sample_name kit_id kit_name participant_hex)
+          @samples = @samples.includes(:kit_design_sample)
+          @samples.each { |s|
+            csv << [s.crc_id_s, s.url_code, s.kit_design_sample.name, s.kit.crc_id_s, s.kit.name, s.participant ? s.participant.hex : nil]
+          }
+        end
         forwhat = params[:study_id] ? "ForStudy#{params[:study_id]}" : ""
         send_data buf, {
           :filename    => "Samples#{forwhat}.csv",
@@ -37,7 +36,13 @@ class SamplesController < ApplicationController
         @samples = @samples.paginate(:page => params[:page] || 1, :per_page => 30)
       }
       format.xml  { render :xml => @samples }
-      format.json { render :json => datatables_index(@samples) }
+      format.json {
+        resp = datatables_index(@samples)
+        resp['aaData'].each { |s|
+          s['sample']['url'] = sample_url(s['sample']['id'])
+        }
+        render :json => resp
+      }
     end
   end
 
@@ -133,7 +138,7 @@ class SamplesController < ApplicationController
     # Log this
     SampleLog.new(:actor => current_user, :comment => "Marked sample as destroyed", :sample_id => @sample.id).save
 
-    flash[:notice]  = "Sample #{sprintf("%08d", @sample.crc_id)} marked as destroyed"
+    flash[:notice]  = "Sample #{@sample.crc_id_s} marked as destroyed"
 
     redirect_to(kit_path(@sample.kit.id))
   end
@@ -146,7 +151,7 @@ class SamplesController < ApplicationController
       cmp = b.id <=> a.id if cmp == 0
       cmp
     }
-    @page_title = "Sample Logs: #{@sample.crc_id} #{@sample.name}"
+    @page_title = "Sample Logs: #{@sample.crc_id_s} #{@sample.name}"
 
     if current_user.is_unprivileged? and @sample.participant != current_user
       redirect_to unauthorized_user_url
@@ -312,6 +317,6 @@ class SamplesController < ApplicationController
   end
 
   def set_page_title
-    @page_title = "Samples: #{@sample.crc_id} #{@sample.name}" if @sample
+    @page_title = "Samples: #{@sample.crc_id_s} ({@sample.name})" if @sample
   end
 end

@@ -1129,7 +1129,7 @@ table.plate-samples {
     color: #2e6e9e;
 }
 
-table#participants {
+.dataTables_wrapper>table {
     cell-spacing: 0;
     border: 0;
     border-collapse: collapse;

@@ -29,6 +29,7 @@ gem 'mocha'
 gem 'recaptcha'
 gem 'limerick_rake'
 gem 'verhoeff'
+gem 'fastercsv'
 group :development, :test do
   gem 'redgreen'
 end

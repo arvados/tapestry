@@ -1,5 +1,81 @@
 <h2>Samples</h2>
 
+<% content_for :js do %>
+jQuery(function() {
+    var $ = jQuery.noConflict();
+    $(document).ready(function() {
+        $("noscript").remove();
+        $("#samples").removeClass('admin_table');
+        $('#samples').dataTable( {
+            "bProcessing": true,
+            "bServerSide": true,
+            "bJQueryUI": true,
+            "sAjaxSource": '<%=j(samples_path)%>',
+            "aoColumns": [
+                { 'mDataProp': 'sample.crc_id',
+                  'fnRender': function(oObj) {
+                      var r = '' + oObj.aData.sample.crc_id;
+                      if(oObj.aData.sample.url)
+                          r = '<a href="'+oObj.aData.sample.url+'">'+r+'</a>';
+                      if (oObj.aData.sample.url_code)
+                          r += ' (' + oObj.aData.sample.url_code + ')';
+                      return r;
+                  }
+                },
+                { 'mDataProp': 'sample.study.name' },
+                { 'mDataProp': 'sample.kit.name' },
+                { 'mDataProp': 'sample.participant.hex',
+                  'fnRender': function(oObj) {
+                      if (!oObj.aData.sample.participant ||
+                          !oObj.aData.sample.participant.hex)
+                          return '';
+                      return '<a href="/profile/'+oObj.aData.sample.participant.hex+'">'+oObj.aData.sample.participant.hex+'</a>';
+                  }
+                },
+                { 'mDataProp': 'sample.owner.display_name',
+                  'bSortable': false,
+                  'fnRender': function(oObj) {
+                      if (!oObj.aData.sample.owner)
+                          return '';
+                      if (oObj.aData.sample.owner.hex)
+			  return '<a href="/profile/'+oObj.aData.sample.owner.hex+'">'+oObj.aData.sample.owner.hex+'</a>';
+                      else
+                          return oObj.aData.sample.owner.full_name;
+                  }
+                },
+                { 'mDataProp': 'sample.log_url',
+                  'bSortable': false,
+                  'fnRender': function(oObj) {
+                      if(!oObj.aData.sample.id)
+                          return null;
+                      return '&nbsp;<a href="/samples/'+oObj.aData.sample.id+'/log">log</a>&nbsp;';
+                  } },
+                { 'mDataProp': 'sample.edit_url',
+                  'bSortable': false,
+                  'fnRender': function(oObj) {
+                      if(!oObj.aData.sample.id)
+                          return null;
+                      return '&nbsp;<a href="/samples/'+oObj.aData.sample.id+'/edit">edit</a>&nbsp;';
+                  } },
+                { 'mDataProp': 'sample.delete_url',
+                  'bSortable': false,
+                  'fnRender': function(oObj) {
+                      if(!oObj.aData.sample.id || oObj.aData.sample.last_mailed)
+                          return null;
+                      return '&nbsp;<a href="/samples/'+oObj.aData.sample.id+'/delete">delete</a>&nbsp;';
+                  } } ]
+            } ).
+            fnSetFilteringDelay().
+            fnSkipMissingDataProps();
+    } );
+});
+<% end %>
+<% content_for :head do %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSetFilteringDelay' %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSkipMissingDataProps' %>
+  <%= javascript_include_tag 'jquery.dataTables.renderers' %>
+<% end %>
+
 <% if current_user.is_admin? %>
 <p>Because you are an administrator, this page lists all samples by any researcher.</p>
 <% else %>
@@ -11,40 +87,42 @@
   when you receive samples from a participant or researcher.
 </p>
 
-<% if @samples.count > 0 %>
-<%= will_paginate @samples %>
-<table class="admin_table">
-  <tr>
-    <th>Number</th>
-    <th>Study</th>
-    <th>Kit</th>
-    <th>Participant</th>
-    <th>Owner</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @samples.each do |sample| %>
-  <tr>
-    <td><%= link_to sprintf("%08d", sample.crc_id), sample %></td>
-    <td><%= sample.study.name %></td>
-    <td><%= sample.kit.name %></td>
-    <td><%= sample.participant.nil? ? '' : link_to(sample.participant.hex, public_profile_path(sample.participant.hex)) %></td>
-    <td>
-      <% if sample.owner.nil? %>
-      <% elsif sample.owner.is_researcher? %>
-      <%= sample.owner.full_name %>
-      <% else %>
-      <%= sample.owner.hex %>
+<noscript><%= will_paginate @samples %></noscript>
+<table id="samples" style="width: 100%" class="admin_table">
+  <thead>
+    <tr>
+      <th width="15%">Number</th>
+      <th width="35%">Study</th>
+      <th width="10%">Kit</th>
+      <th width="10%">Participant</th>
+      <th width="20%">Owner</th>
+      <th width="5%">&nbsp;</th>
+      <th width="5%">&nbsp;</th>
+      <th width="5%">&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <noscript>
+      <% @samples.each do |sample| %>
+      <tr>
+	<td><%= link_to sample.crc_id_s, sample %></td>
+	<td><%= sample.study.name %></td>
+	<td><%= sample.kit.name %></td>
+	<td><%= sample.participant.nil? ? '' : link_to(sample.participant.hex, public_profile_path(sample.participant.hex)) %></td>
+	<td>
+	  <% if sample.owner.nil? %>
+	  <% elsif sample.owner.is_researcher? %>
+	  <%= sample.owner.full_name %>
+	  <% else %>
+	  <%= sample.owner.hex %>
+	  <% end %>
+	</td>
+	<td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
+	<td><%= link_to 'Edit', edit_sample_path(sample) %></td>
+	<td><%= sample.last_mailed.nil? ? link_to('Delete', sample, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
+      </tr>
       <% end %>
-    </td>
-    <td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
-    <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
-    <td><%= sample.last_mailed.nil? ? link_to('Delete', sample, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
-  </tr>
-<% end %>
+    </noscript>
+  </tbody>
 </table>
-<%= will_paginate @samples %>
-
-<% end %>
+<noscript><%= will_paginate @samples %></noscript>

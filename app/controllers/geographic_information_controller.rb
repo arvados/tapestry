@@ -1,5 +1,9 @@
 class GeographicInformationController < ApplicationController
 
+  def model_name
+    "User"
+  end
+
   def show
     @user = current_user
     render :action => 'edit'

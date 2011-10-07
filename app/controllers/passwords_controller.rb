@@ -2,6 +2,10 @@ class PasswordsController < ApplicationController
   skip_before_filter :login_required
   skip_before_filter :ensure_enrolled
 
+  def model_name
+    "User"
+  end
+
   def new
   end
 

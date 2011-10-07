@@ -107,12 +107,12 @@ class User < ActiveRecord::Base
   scope :researcher, { :conditions => "researcher = 1" }
   scope :publishable, where("enrolled IS NOT NULL AND suspended_at IS NULL").real
   scope :visible_to, lambda { |current_user|
-    if current_user.is_admin?
+    if current_user and current_user.is_admin?
       unscoped
-    elsif current_user.is_researcher_onirb?
+    elsif current_user and current_user.is_researcher_onirb?
       real
     else
-      real.scoped(:conditions => ['users.enrolled IS NOT NULL AND users.suspended_at IS NOT NULL'])
+      publishable
     end
   }
 
@@ -471,19 +471,20 @@ class User < ActiveRecord::Base
     return nil
   end
 
-  def as_json(options)
+  def as_json(options={})
     j = {}
-    if options[:for] and options[:for].is_admin?
-      j[:full_name] = self.full_name
+    if self.is_researcher? or (options[:for] and options[:for].is_admin?)
+      j['full_name'] = self.full_name
     end
-    j[:hex] = self.hex
-    j[:enrolled] = self.enrolled
-    j[:received_sample_materials] = self.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq
-    j[:has_ccrs] = self.ccrs.size
-    j[:has_relatives_enrolled] = self.confirmed_family_relations.size
-    j[:has_whole_genome_data] = self.datasets.size
-    j[:has_other_genetic_data] = self.genetic_data.size
-    j
+    j['hex'] = self.hex unless self.is_researcher?
+    j['pgp_id'] = self.pgp_id
+    j['enrolled'] = self.enrolled
+    j['received_sample_materials'] = self.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq
+    j['has_ccrs'] = self.ccrs.size
+    j['has_relatives_enrolled'] = self.confirmed_family_relations.size
+    j['has_whole_genome_data'] = self.datasets.size
+    j['has_other_genetic_data'] = self.genetic_data.size
+    { self.class.to_s.underscore => j }
   end
 
   protected
@@ -502,12 +503,15 @@ class User < ActiveRecord::Base
   end
 
   def self.help_datatables_sort_by(sortkey, options={})
+    sortkey = sortkey.to_s.gsub(/^user\./,'').to_sym
     case sortkey
+    when :pgp_id
+      "pgp_id is null, 0+replace(pgp_id,'PGP','')"
     when :hex, :enrolled
       sortkey
     when :received_sample_materials
       ['count(distinct samples.id)>0', { :samples => {} }]
-    when :ccrs
+    when :has_ccrs
       ['count(distinct ccrs.id)>0', { :ccrs => {} }]
     when :has_relatives_enrolled
       ['count(distinct family_relations.id)', { :confirmed_family_relations => {} }]

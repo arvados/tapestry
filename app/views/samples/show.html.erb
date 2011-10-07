@@ -1,5 +1,5 @@
 
-<h2>Sample <%= sprintf("%08d", @sample.crc_id) + ' (' + @sample.name + ')' %></h2>
+<h2>Sample <%= "#{@sample.crc_id_s} (#{@sample.name})" %></h2>
 
 <p id="notice"><%= notice %></p>
 
@@ -20,7 +20,7 @@
 
 <p>
   <b>Number:</b>
-  <%= sprintf("%08d", @sample.crc_id) %>
+  <%= @sample.crc_id_s %>
 </p>
 
 <p>

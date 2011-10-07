@@ -21,7 +21,7 @@ class UsersController < ApplicationController
       format.json {
         resp = datatables_index(User.publishable)
         resp['aaData'].each { |j|
-          j[:public_profile_url] = public_profile_url(j[:hex]) if j[:hex] and j[:hex].length > 0
+          j['user']['public_profile_url'] = public_profile_url(j['user']['hex']) if j['user']['hex'] and j['user']['hex'].length > 0
         }
         render :json => resp
       }

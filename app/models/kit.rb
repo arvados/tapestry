@@ -25,6 +25,10 @@ class Kit < ActiveRecord::Base
   scope :returned, where('participant_id is not ? and owner_id is ?',nil,nil)
   scope :received, where('participant_id is not ? and owner_id is not ? and owner_id != participant_id',nil,nil)
 
+  def crc_id_s
+    "%08d" % crc_id
+  end
+
   def status
     if self.participant.nil? and self.shipper.nil? then
       'Kit created'
