@@ -273,7 +273,8 @@ class User < ActiveRecord::Base
     if last_step_completed.nil?
       EnrollmentStep.ordered.first
     else
-      EnrollmentStep.ordered.find :first, :conditions => ['ordinal > ?', last_step_completed.ordinal]
+      es = EnrollmentStep.ordered - completed_enrollment_steps
+      es.sort { |a,b| a.ordinal <=> b.ordinal }.first
     end
   end
 
