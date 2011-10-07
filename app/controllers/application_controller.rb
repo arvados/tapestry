@@ -138,7 +138,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_latest_consent
-    if logged_in? and current_user and current_user.enrolled and current_user.documents.kind('consent', LATEST_CONSENT_VERSION).empty?
+    if logged_in? and current_user and current_user.documents and current_user.documents.kind('consent', LATEST_CONSENT_VERSION).empty?
       redirect_to consent_user_url
     end
   end
