@@ -25,9 +25,9 @@ class KitDesignsController < ApplicationController
   # POST /kit_designs
   # POST /kit_designs.xml
   def create
-    @kit_design = KitDesign.new(params[:kit_design])
-
     remove_nil_params
+
+    @kit_design = KitDesign.new(params[:kit_design])
 
     # Override this field just in case; it comes in as a hidden form field
     @kit_design.owner = current_user
