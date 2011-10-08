@@ -860,6 +860,8 @@ div.formError {
 
 .admin_table th {
   background-color: #aaa;
+  color: #000;
+  text-align: left;
 }
 
 .admin_table tr.even td {

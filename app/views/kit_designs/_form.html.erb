@@ -1,3 +1,7 @@
+<%- content_for :head do -%>
+<%= javascript_include_tag 'add_dependent_row' %>
+<%= javascript_include_tag 'kit_designs' %>
+<%- end -%>
 
 <% if @kit_design.frozen then %>
 <div class="prominent">
@@ -79,7 +83,39 @@
     <% end %>
   </div>
   <p></p>
+  <div class="field">
+    <%= f.label :samples %>
+    <table class="kit_design_samples admin_table">
+      <thead>
+	<tr>
+	  <% unless @kit_design.frozen %>
+	  <th>reorder</th>
+	  <th>sample template</th>
+	  <% end %>
+	  <th>name</th>
+	  <th>tissue</th>
+	  <th>device</th>
+	  <th>target amount</th>
+	  <th>unit</th>
+	  <% unless @kit_design.frozen %>
+	  <th>&nbsp;</th>
+	  <% end %>
+	</tr>
+      </thead><tbody>
+	<%= f.fields_for :samples do |s| -%>
+	<%= render :partial => 'sample', :locals => { :f => s, :frozen => @kit_design.frozen } %>
+	<% end -%>
+      </tbody>
+    </table>
+    <% unless @kit_design.frozen %>
+    <div>
+      <%= add_child_link "Add sample", :samples, "table.kit_design_samples tbody" %>
+      <%= new_child_fields_template f, :samples, { :locals => { :frozen => false } } %>
+    </div>
+    <% end %>
+  </div>
+  <p></p>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit(f.object.blank? ? 'Create' : 'Save changes') %>
   </div>
 <% end %>

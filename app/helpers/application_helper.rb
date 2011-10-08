@@ -87,6 +87,29 @@ EOS
     end
   end
 
+  def new_child_fields_template(form_builder, association, options = {})
+    options[:object] ||= form_builder.object.class.reflect_on_association(association).klass.new
+    options[:partial] ||= association.to_s.singularize
+    options[:form_builder_local] ||= :f
+
+    content_for :jstemplates do
+      content_tag(:div, :id => "#{association}_fields_template", :style => "display: none") do
+        form_builder.fields_for(association, options[:object], :child_index => "new_#{association}") do |f|
+          x = controller.render_to_string(:partial => options[:partial], :locals => { options[:form_builder_local] => f }.merge(options[:locals] || {}))
+          render(:partial => 'layouts/escape_html', :locals => { :html => x })
+        end
+      end
+    end
+  end
+
+  def add_child_link(name, association, append_to_selector)
+    link_to(name, "javascript:void(0)", :class => "add_child", :"data-association" => association, :"append-to-selector" => append_to_selector)
+  end
+
+  def remove_child_link(name, f)
+    f.hidden_field(:_destroy) + link_to(name, "javascript:void(0)", :class => "remove_child")
+  end
+
   def uriencode(s)
     URI.escape(s, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end

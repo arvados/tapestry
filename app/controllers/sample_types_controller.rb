@@ -23,6 +23,13 @@ class SampleTypesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.json  {
+        render :json => @sample_type.as_json(:include => {
+                                               :device_type => {},
+                                               :unit => {},
+                                               :tissue_type => {}
+                                             })
+      }
       format.xml  { render :xml => @sample_type }
     end
   end

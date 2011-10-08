@@ -47,6 +47,12 @@ class KitDesignsController < ApplicationController
   def update
     @kit_design = KitDesign.find(params[:id])
 
+    # The collection_select widget submits a "nil" attribute for each
+    # sample, which throws an exception if we don't remove it.
+    params[:kit_design][:samples_attributes].each do |id, sa|
+      params[:kit_design][:samples_attributes][id].delete :nil
+    end
+
     p = Hash.new
     if not @kit_design.editable? then
       # When frozen, only the errata field can be modified

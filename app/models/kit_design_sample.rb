@@ -3,9 +3,6 @@ class KitDesignSample < ActiveRecord::Base
   acts_as_paranoid_versioned :version_column => :lock_version
 
   validates_presence_of    :name
-  validates_uniqueness_of  :name
-
-  validates_presence_of    :description
   validates_presence_of    :kit_design_id
 
   validates_numericality_of    :sort_order

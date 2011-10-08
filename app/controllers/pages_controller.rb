@@ -35,7 +35,6 @@ class PagesController < ApplicationController
     if logged_in? and params[:id] == 'researcher_tools' then
       @google_surveys = GoogleSurvey.find_all_by_user_id(current_user.id)
       @studies = Study.where('researcher_id = ?',current_user.id)
-      @kit_design_samples = KitDesignSample.find_all_by_kit_design_id(current_user.kit_designs).sort { |a,b| a.name <=> b.name }
 
       @requested_studies = Study.requested.where('researcher_id = ?',current_user.id)
       @approved_studies = Study.approved.where('researcher_id = ?',current_user.id)

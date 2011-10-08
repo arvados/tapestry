@@ -1,0 +1,37 @@
+<tr>
+  <% if frozen %>
+  <td>
+    <%= f.object.name %>
+  </td><td>
+    <%= f.object.tissue %>
+  </td><td>
+    <%= f.object.device %>
+  </td><td>
+    <%= f.object.target_amount %>
+  </td><td>
+    <%= f.object.unit %>
+  </td>
+  <% else %>
+  <td>
+    <%= button_to raw('&uarr;'), 'javascript:void(0)', :class => 'row_move_up' %>
+    <%= f.hidden_field :sort_order %>
+  </td><td>
+    <%= f.collection_select(:"nil?", SampleType.all, :id, :name, { :prompt => "(select to auto-fill)" }, { :class => "sample_type_autofill" }) %>
+  </td>
+  <td>
+    <%= f.text_field :name, :size => 20 %>
+  </td><td>
+    <%= f.collection_select(:tissue, TissueType.all, :name, :name, { :prompt => "(select)" }) %>
+  </td><td>
+    <%= f.text_field :device, :size => 30 %>
+  </td><td>
+    <%= f.text_field :target_amount, :size => 5 %>
+  </td><td>
+    <%= f.collection_select(:unit, Unit.all, :name, :name, { :prompt => "(select)" }) %>
+  </td>
+  <td>
+    <button href="javascript:void(0)" class="row_delete">delete</button>
+    <div style="display: none"><%= f.check_box :_destroy %></div>
+  </td>
+  <% end %>
+</tr>
