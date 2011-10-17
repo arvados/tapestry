@@ -4,7 +4,7 @@ class ExamResponse < ActiveRecord::Base
   belongs_to :exam_version
   has_many   :question_responses
 
-  scope :for_user, lambda { |user| { :conditions => ['user_id = ?', user ] } }
+  scope :for_user, lambda { |user| { :conditions => ['user_id = ?', user.id ] } }
 
   def discard_for_retake!
     # why does update_attributes!({:original_user_id => user_id, :user_id => nil}) not work in test?
