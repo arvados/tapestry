@@ -27,7 +27,14 @@ class Admin::UsersController < Admin::AdminControllerBase
     CSV::Writer.generate(report) do |csv|
       csv << header
       @logs.each {|r|
-        csv << [ r.created_at, r.user.nil? ? '' : r.user.hex, r.comment ]
+        if r.user.nil? then
+          id = ''
+        elsif r.user.hex == '' then
+          id = r.user.hash
+        else
+          id = r.user.hex
+        end
+        csv << [ r.created_at, id, r.comment ]
       }
     end
     report.rewind
