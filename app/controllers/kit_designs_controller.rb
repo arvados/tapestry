@@ -25,6 +25,8 @@ class KitDesignsController < ApplicationController
   # POST /kit_designs
   # POST /kit_designs.xml
   def create
+    remove_nil_params
+
     @kit_design = KitDesign.new(params[:kit_design])
 
     # Override this field just in case; it comes in as a hidden form field
@@ -46,6 +48,8 @@ class KitDesignsController < ApplicationController
   # PUT /kit_designs/1.xml
   def update
     @kit_design = KitDesign.find(params[:id])
+
+    remove_nil_params
 
     p = Hash.new
     if not @kit_design.editable? then
@@ -86,6 +90,16 @@ class KitDesignsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(kit_designs_url) }
       format.xml  { head :ok }
+    end
+  end
+
+  protected
+
+  def remove_nil_params
+    # The collection_select widget submits a "nil" attribute for each
+    # sample, which throws an exception if we don't remove it.
+    params[:kit_design][:samples_attributes].each do |id, sa|
+      params[:kit_design][:samples_attributes][id].delete :nil
     end
   end
 end

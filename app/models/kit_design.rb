@@ -8,7 +8,9 @@ class KitDesign < ActiveRecord::Base
   belongs_to :study
   belongs_to :owner, :class_name => 'User'
 
-  has_many :samples, :class_name => 'KitDesignSample'
+  has_many :samples, :class_name => 'KitDesignSample', :order => 'sort_order'
+
+  accepts_nested_attributes_for :samples, :allow_destroy => true
 
   validates_presence_of    :name
   validates_uniqueness_of  :name

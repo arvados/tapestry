@@ -17,11 +17,6 @@
   &nbsp;&nbsp;<%= link_to kd.name + (kd.frozen ? ' (FROZEN)' : ''), edit_kit_design_path(kd.id) %><br/>
   <% end %>
   &nbsp;&nbsp;<%= link_to raw("<strong>New Kit Design</strong>"), url_for(:controller => 'kit_designs', :action => 'new') %></li>
-  <li><strong>Kit design samples</strong><br/>
-  <% @kit_design_samples.each do |kd| %>
-  &nbsp;&nbsp;<%= link_to kd.name + (kd.frozen ? ' (FROZEN)' : ''), edit_kit_design_sample_path(kd.id) %><br/>
-  <% end %>
-  &nbsp;&nbsp;<%= link_to raw("<strong>New Kit Design Sample</strong>"), url_for(:controller => 'kit_design_samples', :action => 'new') %></li>
 
   <li><strong>Kits</strong><br/>
   &nbsp;&nbsp;<small><%= link_to 'View all', url_for(:controller => 'kits', :action => 'index') %>
