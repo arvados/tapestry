@@ -30,7 +30,7 @@ class Admin::UsersController < Admin::AdminControllerBase
         if r.user.nil? then
           id = ''
         elsif r.user.hex == '' then
-          id = r.user.hash
+          id = r.user.unique_hash
         else
           id = r.user.hex
         end

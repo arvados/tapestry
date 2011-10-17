@@ -491,7 +491,7 @@ class User < ActiveRecord::Base
   # A unique hash for each user
   # This is used in the place of the hex id, if the user has not been enrolled yet. See
   # export_log in app/controllers/admin/users_controller.rb
-  def hash
+  def unique_hash
     secret = Tapestry::Application.config.secret_token
     raise "Installation problem: Application.config.secret_token not properly defined" if secret.length < 16
     Digest::SHA1.hexdigest("#{secret}---#{self.id}")
