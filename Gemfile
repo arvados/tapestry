@@ -34,4 +34,4 @@ group :development, :test do
   gem 'redgreen'
 end
 
-gem "gmaps4rails", "~> 0.10.2"
+gem "gmaps4rails", "~> 1.3.0"

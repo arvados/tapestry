@@ -21,7 +21,28 @@ class StudiesController < ApplicationController
     @study = Study.find(params[:id])
 
     # The call to compact will filter out nil elements
-    @json = @study.study_participants.accepted.collect { |p| p.user.shipping_address }.compact.to_gmaps4rails
+    @json = @study.study_participants.accepted.collect { |p| p.user.shipping_address }.compact.to_gmaps4rails do |shipping_address, marker|
+      # green: claimed
+      # blue: returned
+      # brown: received by researcher
+      # Kit is created / possibly shipped. We currently do not keep track of which addresses kits are shipped to so
+      # we can not distinguish between these 2 states.
+      @picture = '/images/yellow.png'
+      # Claimed by participant
+      @picture = '/images/green.png' if @study.kits.claimed.collect { |x| x.participant.shipping_address.id }.include?(shipping_address.id)
+      # Returned to researcher
+      @picture = '/images/blue.png' if @study.kits.returned.collect { |x| x.participant.shipping_address.id }.include?(shipping_address.id)
+      # Received by researcher
+      @picture = '/images/brown.png' if @study.kits.received.collect { |x| x.participant.shipping_address.id }.include?(shipping_address.id)
+      marker.picture ({
+                        :picture => @picture,
+                        :width =>  23,
+                        :height => 34,
+                      })
+      # There is a marker.title option but it does strange things as of gmaps4rails v1.3.0
+      marker.json    "\"title\": \"#{shipping_address.user.hex}\""
+    end
+
     flash[:notice] = "No approved participants with valid shipping addresses were found" if @json == '[]'
 
     render :layout => "gmaps"
