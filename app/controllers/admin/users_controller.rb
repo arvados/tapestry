@@ -370,6 +370,13 @@ class Admin::UsersController < Admin::AdminControllerBase
         @unpaginated_users = []
       end
        @result = "User with hex #{params[:hex]}"
+    elsif params[:unenrolled_identifier]
+      if params[:unenrolled_identifier] != '' then
+        @unpaginated_users = User.locate_unenrolled_identifier(params[:unenrolled_identifier])
+      else
+        @unpaginated_users = []
+      end
+       @result = "User with unique identifier #{params[:unenrolled_identifier]}"
     else
       @unpaginated_users = []
       @result = ''

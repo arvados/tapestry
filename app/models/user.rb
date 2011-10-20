@@ -186,6 +186,17 @@ class User < ActiveRecord::Base
   cattr_reader :per_page
   @@per_page = 30
 
+  # This is less than ideal - it will be very slow with many users in the system
+  # TODO: store the unique hash in the user record, so that this lookup can be much simpler.
+  def self.locate_unenrolled_identifier(id)
+    User.all.each do |u|
+      if u.unique_hash == id then
+        return [ u ]
+      end
+    end
+    return []
+  end
+
   def is_unprivileged?
     not self.researcher and not self.researcher_onirb and not self.is_admin?
   end
