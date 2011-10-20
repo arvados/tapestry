@@ -20,7 +20,8 @@ class StudiesController < ApplicationController
   def map
     @study = Study.find(params[:id])
 
-    @json = @study.study_participants.accepted.collect { |p| p.user.shipping_address }.to_gmaps4rails
+    # The call to compact will filter out nil elements
+    @json = @study.study_participants.accepted.collect { |p| p.user.shipping_address }.compact.to_gmaps4rails
     flash[:notice] = "No approved participants with valid shipping addresses were found" if @json == '[]'
 
     render :layout => "gmaps"
