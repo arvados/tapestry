@@ -392,10 +392,18 @@ class Admin::UsersController < Admin::AdminControllerBase
   def log_worker(params,paginate=1)
     if params[:filter] then
       filter = '%' + params[:filter] + '%'
-      @logs = UserLog.includes(:user).where('comment like ?',filter).sort { |x,y| y.created_at <=> x.created_at }
+      if paginate == 1 then
+        @logs = UserLog.where('comment like ?',filter).sort { |x,y| y.created_at <=> x.created_at }
+      else
+        @logs = UserLog.includes(:user).where('comment like ?',filter).sort { |x,y| y.created_at <=> x.created_at }
+      end
       @filtered = params[:filter]
     else
-      @logs = UserLog.find(:all, :include => :user).sort { |x,y| y.created_at <=> x.created_at }
+      if paginate == 1 then
+        @logs = UserLog.find(:all).sort { |x,y| y.created_at <=> x.created_at }
+      else
+        @logs = UserLog.find(:all, :include => :user).sort { |x,y| y.created_at <=> x.created_at }
+      end
       @filtered = ''
     end
     if paginate == 1 then
