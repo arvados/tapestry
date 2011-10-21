@@ -18,6 +18,9 @@
     <th>NA</th>
     <th>R</th>
     <th>Samples</th>
+    <% if who == 'researcher' or (current_user.is_admin? and type == 'approved') %>
+    <th></th>
+    <% end %>
     <% if type == 'approved' %>
     <th>Participants</th>
     <% end %>
@@ -55,6 +58,9 @@
 	<%= link_to("#{samples.size}", samples_path(:study_id => study.id, :format => 'csv')) %>
       <% end %>
       </td>
+      <% if who == 'researcher' or (current_user.is_admin? and type == 'approved') %>
+      <td><%= link_to('map', study_map_path(study)) %></td>
+      <% end %>
       <% if type == 'approved' %>
       <td><%= link_to('Manage participants', study_users_path(study)) %></td>
       <% end %>
