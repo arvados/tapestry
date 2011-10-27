@@ -107,6 +107,7 @@ class User < ActiveRecord::Base
   scope :researcher, { :conditions => "researcher = 1" }
   scope :publishable, where("enrolled IS NOT NULL AND suspended_at IS NULL").real
   scope :suspended, where("suspended_at IS NOT NULL").real
+  scope :deactivated, where("deactivated_at IS NOT NULL").real
   scope :visible_to, lambda { |current_user|
     if current_user and current_user.is_admin?
       unscoped

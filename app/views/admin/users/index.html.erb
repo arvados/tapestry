@@ -11,6 +11,7 @@
     <li><%= link_to "Show waitlisted users", admin_users_path(:waitlisted => true) %></li>
     <li><%= link_to "Show inactive users", admin_users_path(:inactive => true) %></li>
     <li><%= link_to "Show suspended users", admin_users_path(:suspended => true) %></li>
+    <li><%= link_to "Show deactivated users", admin_users_path(:deactivated => true) %></li>
     <li>
       <label for="completed">Show users who have completed enrollment step:</label>
       <%= select_tag 'completed',

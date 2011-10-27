@@ -341,6 +341,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     elsif params[:suspended]
       @unpaginated_users = User.suspended
       @result = "Searching for suspended users"
+    elsif params[:deactivated]
+      @unpaginated_users = User.deactivated
+      @result = "Searching for deactivated users"
     elsif params[:name] or params[:email]
       # Test users are *not* excluded from this
       if (params[:name] == '' and params[:email] == '') then
