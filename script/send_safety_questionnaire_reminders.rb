@@ -13,8 +13,8 @@ ENV["RAILS_ENV"] = "production" if production
 require File.dirname(__FILE__) + '/../config/boot'
 require File.dirname(__FILE__) + '/../config/environment'
 
-User.find(:all).each do |u|
-  next if u.enrolled.nil? # shortcut for speed
+User.enrolled.each do |u|
+  next if not u.deactivated_at.nil? # shortcut for speed
   if (u.user_logs.find_by_comment('Sent Safety Questionnaire Reminder').nil?) or 
      (u.user_logs.find_by_comment('Sent Safety Questionnaire Reminder') and
       6.weeks.ago > u.user_logs.find(:last, :conditions => "comment = 'Sent Safety Questionnaire Reminder'").created_at) then
