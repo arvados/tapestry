@@ -34,11 +34,11 @@ class StudiesController < ApplicationController
       @picture = '/images/blue.png' if @study.kits.returned.collect { |x| x.participant.shipping_address.id }.include?(shipping_address.id)
       # Received by researcher
       @picture = '/images/brown.png' if @study.kits.received.collect { |x| x.participant.shipping_address.id }.include?(shipping_address.id)
-      marker.picture ({
+      marker.picture({
                         :picture => @picture,
                         :width =>  23,
                         :height => 34,
-                      })
+                     })
       # There is a marker.title option but it does strange things as of gmaps4rails v1.3.0
       marker.json    "\"title\": \"#{shipping_address.user.hex}\""
     end
