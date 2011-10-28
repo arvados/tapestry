@@ -8,4 +8,4 @@ ENV["RAILS_ENV"] = "production" if production
 require File.dirname(__FILE__) + '/../config/boot'
 require File.dirname(__FILE__) + '/../config/environment'
 
-User.all.each { |x| x.auto_suspend_if_necessary }
+User.all.each { |x| x.auto_deactivate_if_necessary }

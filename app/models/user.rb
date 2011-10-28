@@ -424,21 +424,21 @@ class User < ActiveRecord::Base
     howrecent.months.ago < self.safety_questionnaires.find(:all, :order => 'datetime').last.datetime
   end
 
-  def auto_suspend_if_necessary
-    if !self.suspended_at and !has_recent_safety_questionnaire(4)
-      self.suspended_at = Time.now
-      self.can_unsuspend_self = true
+  def auto_deactivate_if_necessary
+    if !self.deactivated_at and !has_recent_safety_questionnaire(4)
+      self.deactivated_at = Time.now
+      self.can_reactivate_self = true
       save
-      log("Account automatically suspended")
+      log("Account automatically deactivated")
     end
   end
 
-  def auto_unsuspend_if_possible
-    if self.suspended_at and self.can_unsuspend_self and has_recent_safety_questionnaire
-      self.suspended_at = nil
-      self.can_unsuspend_self = false
+  def auto_reactivate_if_possible
+    if self.deactivated_at and self.can_reactivate_self and has_recent_safety_questionnaire
+      self.deactivated_at = nil
+      self.can_reactivate_self = false
       save
-      log("Account automatically unsuspended")
+      log("Account automatically reactivated")
     end
   end
 

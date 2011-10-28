@@ -32,7 +32,7 @@ class SafetyQuestionnairesController < ApplicationController
     @safety_questionnaire.datetime = Time.now()
     if @safety_questionnaire.save
       flash[:notice] = 'Safety Questionnaire answers successfully saved.'
-      @safety_questionnaire.user.auto_unsuspend_if_possible
+      @safety_questionnaire.user.auto_reactivate_if_possible
       redirect_to root_path
     else
       render :action => 'new'

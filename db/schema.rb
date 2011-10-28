@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110922062359) do
+ActiveRecord::Schema.define(:version => 20111028180927) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2078,6 +2078,9 @@ ActiveRecord::Schema.define(:version => 20110922062359) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.datetime "deactivated_at"
+    t.datetime "suspended_at"
+    t.boolean  "can_reactivate_self"
   end
 
   add_index "user_versions", ["user_id"], :name => "index_user_versions_on_user_id"
@@ -2133,7 +2136,7 @@ ActiveRecord::Schema.define(:version => 20110922062359) do
     t.integer  "lock_version"
     t.datetime "deactivated_at"
     t.datetime "suspended_at"
-    t.boolean  "can_unsuspend_self"
+    t.boolean  "can_reactivate_self"
   end
 
   create_table "waitlist_versions", :force => true do |t|

@@ -106,7 +106,7 @@ class Admin::UsersController < Admin::AdminControllerBase
     @user.controlling_user = current_user
     @user.is_admin = params[:user].delete(:is_admin)
     @user.is_test = params[:user].delete(:is_test)
-    @user.can_unsuspend_self = params[:user].delete(:can_unsuspend_self)
+    @user.can_reactivate_self = params[:user].delete(:can_reactivate_self)
     @user.researcher = params[:user].delete(:researcher)
     @user.researcher_onirb = params[:user].delete(:researcher_onirb)
 

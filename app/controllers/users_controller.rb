@@ -327,10 +327,9 @@ class UsersController < ApplicationController
       rr.save!
     end
     if @user.deactivated_at.nil?
-      @user.log('Withdrew from the PGP.')
+      @user.log('Withdrew from the study.')
       @user.deactivated_at = Time.now
-      @user.suspended_at = Time.now unless @user.suspended_at
-      @user.can_unsuspend_self = false
+      @user.can_reactivate_self = false
       @user.save!
       UserMailer.withdrawal_notification(@user).deliver
       UserMailer.withdrawal_staff_notification(@user).deliver
