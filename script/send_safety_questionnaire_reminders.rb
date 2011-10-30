@@ -14,7 +14,7 @@ require File.dirname(__FILE__) + '/../config/boot'
 require File.dirname(__FILE__) + '/../config/environment'
 
 User.enrolled.each do |u|
-  next if not u.deactivated_at.nil? # shortcut for speed
+  next if not u.suspended_at.nil? # shortcut for speed
   if (u.user_logs.find_by_comment('Sent Safety Questionnaire Reminder').nil?) or 
      (u.user_logs.find_by_comment('Sent Safety Questionnaire Reminder') and
       6.weeks.ago > u.user_logs.find(:last, :conditions => "comment = 'Sent Safety Questionnaire Reminder'").created_at) then
