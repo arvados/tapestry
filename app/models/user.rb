@@ -415,7 +415,9 @@ class User < ActiveRecord::Base
   end
 
   def auto_deactivate_if_necessary
-    if !self.deactivated_at and !has_recent_safety_questionnaire(4)
+    if (!self.deactivated_at and
+        !has_recent_safety_questionnaire(4) and
+        safety_questionnaires.where('datetime >= ?', 12.months.ago).count < 3)
       self.deactivated_at = Time.now
       self.can_reactivate_self = true
       save
@@ -424,7 +426,10 @@ class User < ActiveRecord::Base
   end
 
   def auto_reactivate_if_possible
-    if self.deactivated_at and self.can_reactivate_self and has_recent_safety_questionnaire
+    if (self.deactivated_at and
+        self.can_reactivate_self and
+        (has_recent_safety_questionnaire or
+         safety_questionnaires.where('datetime >= ?', 12.months.ago).count > 2))
       self.deactivated_at = nil
       self.can_reactivate_self = false
       save
