@@ -9,7 +9,6 @@ gem 'rails', '3.0.9'
 gem 'mysql'
 
 gem "paperclip", "~> 2.3.3"
-gem "shoulda", "~> 2.11.0"
 gem 'gchart'
 gem 'nokogiri'
 gem 'gdata', :require => 'gdata'
@@ -30,7 +29,8 @@ gem 'recaptcha'
 gem 'limerick_rake'
 gem 'verhoeff'
 gem 'fastercsv'
-group :development, :test do
+group :test do
+  gem "shoulda", "~> 2.11.0"
   gem 'redgreen'
 end
 
