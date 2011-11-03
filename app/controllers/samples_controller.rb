@@ -159,7 +159,7 @@ class SamplesController < ApplicationController
   # GET /samples/1.xml
   def show
     @sample = Sample.find(params[:id])
-    respond_with @sample, :api_template => :researcher
+    respond_with @sample
   end
 
    # POST /samples/1/received
