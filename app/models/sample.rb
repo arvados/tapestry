@@ -36,7 +36,7 @@ class Sample < ActiveRecord::Base
 
   api_accessible :researcher do |t|
     t.add :id
-    t.add :study
+    t.add :study, :template => :researcher
     t.add :participant, :template => :id
     t.add :owner, :template => :id
     t.add :kit, :template => :id

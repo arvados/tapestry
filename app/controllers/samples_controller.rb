@@ -36,9 +36,7 @@ class SamplesController < ApplicationController
         @samples = @samples.paginate(:page => params[:page] || 1, :per_page => 30)
       }
       format.json {
-        respond_with(@samples,
-                     :for => current_user,
-                     :api_template => :researcher)
+        respond_with @samples
       }
     end
   end
