@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
   around_filter :profile
 
-  respond_to :json, :xml
+  respond_to :json, :xml, :html
   class MyResponder < ActionController::Responder
     include PublicApiResponder
     include DatatablesResponder
