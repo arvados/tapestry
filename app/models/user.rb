@@ -186,6 +186,7 @@ class User < ActiveRecord::Base
   }
 
   api_accessible :id do |t|
+    t.add :id
     t.add :hex, :if => :is_enrolled?
     t.add :full_name, :if => :is_researcher?
     t.add :full_name, :if => :is_admin?
@@ -194,7 +195,7 @@ class User < ActiveRecord::Base
   end
 
   api_accessible :public, :extend => :id do |t|
-    t.add lambda{|user| user.hex unless user.is_researcher?}, :as => :hex
+    t.add :hex, :unless => :is_researcher?
     t.add :pgp_id
     t.add :enrolled, :if => :is_enrolled?
     t.add lambda{|user| user.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq}, :as => :received_sample_materials
