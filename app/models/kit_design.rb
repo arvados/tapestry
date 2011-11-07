@@ -8,7 +8,7 @@ class KitDesign < ActiveRecord::Base
   belongs_to :study
   belongs_to :owner, :class_name => 'User'
 
-  has_many :samples, :class_name => 'KitDesignSample', :order => 'sort_order'
+  has_many :samples, :class_name => 'KitDesignSample', :order => 'sort_order', :inverse_of => :kit_design
 
   accepts_nested_attributes_for :samples, :allow_destroy => true
 
@@ -21,17 +21,10 @@ class KitDesign < ActiveRecord::Base
   validates_attachment_presence   :instructions, :message => ': please select a file for upload.'
   validates_attachment_size :instructions, :less_than => 10485760, :message => ': maximum file size is 10 MB'
 
-  before_validation_on_create :initialize_nested_children
-
   DATA_TYPES = { 'PDF' => 'PDF' }.sort
 
   def editable?
     not self.frozen
   end
 
-  protected
-
-  def initialize_nested_children
-    samples.each { |s| s.kit_design = self }
-  end
 end
