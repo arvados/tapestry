@@ -21,10 +21,17 @@ class KitDesign < ActiveRecord::Base
   validates_attachment_presence   :instructions, :message => ': please select a file for upload.'
   validates_attachment_size :instructions, :less_than => 10485760, :message => ': maximum file size is 10 MB'
 
+  before_validation_on_create :initialize_nested_children
+
   DATA_TYPES = { 'PDF' => 'PDF' }.sort
 
   def editable?
     not self.frozen
   end
 
+  protected
+
+  def initialize_nested_children
+    samples.each { |s| s.kit_design = self }
+  end
 end
