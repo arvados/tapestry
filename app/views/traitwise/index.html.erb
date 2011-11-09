@@ -1,4 +1,12 @@
+<% content_for :head do %>
+  <script type="text/javascript">
+        function traitwiseSetIFrameHeight( height ) {
+                var iframe = document.getElementById( 'traitwiseIframe' );
+                iframe.setAttribute( 'height', height );
+        }
+  </script>
+<% end %>
 <h2>Traitwise</h2>
 <div>
-<%= raw(@stream_from_tw) -%>
+<iframe id="traitwiseIframe" src="/traitwise/iframe" width="760px" height="100px" frameborder="0" scrolling="no"></iframe>
 </div>

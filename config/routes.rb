@@ -204,6 +204,7 @@ Tapestry::Application.routes.draw do
   match '/absolute_pitch_surveys/review/:id' => 'absolute_pitch_survey#review', :as => :review_absolute_pitch_surveys
   match '/trait_surveys' => 'trait_survey#index', :as => :trait_surveys
   match '/traitwise' => 'traitwise#index', :as => :trait_surveys
+  match '/traitwise/iframe' => 'traitwise#iframe', :as => :trait_survey_iframe
 
   root :to => 'pages#show', :action => 'home'
 end

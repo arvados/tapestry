@@ -11,6 +11,11 @@ class TraitwiseController < ApplicationController
     @stream_from_tw = Traitwise.stream( current_user.hex, request, cookies, current_user )
   end
 
+  def iframe
+    @stream_from_tw = Traitwise.stream( current_user.hex, request, cookies, current_user )
+    render :layout => "none"
+  end
+
   def proxy
     begin
       render :text=>Traitwise.proxy( params[:q], request, cookies )
