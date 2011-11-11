@@ -5,7 +5,8 @@ class PlatesController < ApplicationController
   # GET /plates
   # GET /plates.xml
   def index
-    @plates = Plate.where(:creator_id => current_user.id)
+    @plates = Plate.scoped
+    @plates = Plate.where(:creator_id => current_user.id) unless current_user.is_admin?
 
     respond_to do |format|
       format.html # index.html.erb
