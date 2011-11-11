@@ -1,0 +1,19 @@
+<html>
+<head>
+  <%= stylesheet_link_tag 'redmond/jquery-ui-1.8.11.custom', 'ui.slider.extras' %>
+  <!--[if lte IE 7]><%= stylesheet_link_tag 'application-ie' %><![endif]-->
+  <%= javascript_include_tag :defaults %>
+  <%= javascript_tag do %>
+    <%= yield :js %>
+  <% end %>
+  <link href="/stylesheets/traitwise.css" rel="stylesheet">
+  <script type="text/javascript">
+    function traitwiseRequestResizeIframe(height) {
+      window.top.$('#traitwiseIframe').css('height', height);
+    }
+  </script>
+</head>
+<body>
+<%= raw(@stream_from_tw) -%>
+</body>
+</html>
