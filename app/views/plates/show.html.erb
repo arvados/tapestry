@@ -21,7 +21,7 @@
       <%= render 'sample_table' %>
     </td>
     <td rowspan="2" style="vertical-align: top">
-
+<% if can? :update, @plate -%>
       <p>How to transfer samples to this plate:</p>
       <ol>
 	<li>Scan this bar code with your mobile device.
@@ -53,6 +53,7 @@
 	  Repeat from step 2 or 3 as applicable.
 	</li>
       </ol>
+<% end -%>
     </td>
   </tr>
 </table>

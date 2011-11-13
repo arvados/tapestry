@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
 
   attr_accessor :controlling_user
 
+  has_many :permissions
+
   has_many :enrollment_step_completions, :dependent => :destroy
   has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step, :dependent => :destroy
   has_many :exam_responses, :dependent => :destroy

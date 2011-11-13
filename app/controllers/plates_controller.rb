@@ -1,54 +1,18 @@
 class PlatesController < ApplicationController
+  load_and_authorize_resource
 
+  skip_before_filter :ensure_enrolled
   before_filter :ensure_researcher
-
-  # GET /plates
-  # GET /plates.xml
-  def index
-    @plates = Plate.scoped
-    @plates = Plate.where(:creator_id => current_user.id) unless current_user.is_admin?
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @plates }
-    end
-  end
 
   # GET /plates/1
   # GET /plates/1.xml
   def show
-    @plate = Plate.find(params[:id])
-
     prepare_layout_grid
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @plate }
-    end
-  end
-
-  # GET /plates/new
-  # GET /plates/new.xml
-  def new
-    @plate = Plate.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @plate }
-    end
-  end
-
-  # GET /plates/1/edit
-  def edit
-    @plate = Plate.find(params[:id])
-    return access_denied unless current_user.is_admin? or current_user.id == @plate.creator_id
   end
 
   # POST /plates
   # POST /plates.xml
   def create
-    @plate = Plate.new(params[:plate])
-
     respond_to do |format|
       if @plate.save
         format.html { redirect_to(@plate, :notice => 'Plate was successfully created.') }
@@ -63,10 +27,6 @@ class PlatesController < ApplicationController
   # PUT /plates/1
   # PUT /plates/1.xml
   def update
-    @plate = Plate.find(params[:id])
-    return access_denied unless current_user.is_admin? or current_user.id == @plate.creator_id
-    return access_denied if params[:plate][:owner_id]
-
     respond_to do |format|
       if @plate.update_attributes(params[:plate])
         format.html { redirect_to(@plate, :notice => 'Plate was successfully updated.') }
@@ -81,8 +41,6 @@ class PlatesController < ApplicationController
   # DELETE /plates/1
   # DELETE /plates/1.xml
   def destroy
-    @plate = Plate.find(params[:id])
-    return access_denied unless current_user.is_admin? or current_user.id == @plate.creator_id
     @plate.destroy
 
     respond_to do |format|
@@ -125,6 +83,7 @@ class PlatesController < ApplicationController
 
   def mobile
     @plate = Plate.find_by_url_code(params[:url_code])
+    authorize! :update, @plate
     if not @plate then
       # They mistyped a url
       redirect_to page_url('researcher_tools')
@@ -184,6 +143,7 @@ class PlatesController < ApplicationController
   def mobile_assign_position
     # Assign a sample to a well
     @plate = Plate.find(params[:plate_id])
+    authorize! :update, @plate
     @sample = Sample.find(params[:sample_id])
     @next_pos = PlateLayoutPosition.find(params[:plate_layout_position_id])
     @ps = PlateSample.new(:plate => @plate, :sample => @sample, :plate_layout_position => @next_pos)
@@ -198,6 +158,7 @@ class PlatesController < ApplicationController
   def mobile_destroy_position
     # Mark an empty well as destroyed/unusable
     @plate = Plate.find(params[:plate_id])
+    authorize! :update, @plate
     @next_pos = PlateLayoutPosition.find(params[:plate_layout_position_id])
     @ps = PlateSample.new(:plate => @plate, :is_unusable => true, :plate_layout_position => @next_pos)
     @ps.save!
@@ -216,6 +177,8 @@ class PlatesController < ApplicationController
   end
 
   def destroy_sample
+    @plate = Plate.find(params[:plate_id])
+    authorize! :update, @plate
     # Mark an already-filled well as destroyed/unusable
     @ps = PlateSample.find_by_plate_id_and_plate_layout_position_id(params[:plate_id], params[:plate_layout_position_id])
     @pos = @ps.plate_layout_position

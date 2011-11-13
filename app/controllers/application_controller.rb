@@ -6,6 +6,11 @@ class ApplicationController < ActionController::Base
   include AuthenticatedSystem
   include Userstamp  
 
+  # cancan
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to unauthorized_user_url, :alert => exception.message
+  end
+
   before_filter :login_required
   before_filter :ensure_tos_agreement
   before_filter :ensure_latest_consent
