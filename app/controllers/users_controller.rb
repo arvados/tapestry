@@ -264,9 +264,9 @@ class UsersController < ApplicationController
   def shipping_address
     # If there is a shipping address for this user, show edit form, otherwise show new form
     if current_user.shipping_address.nil? then
-      redirect_to(new_shipping_address_path)
+      redirect_to new_shipping_address_path(:return_to => params[:return_to])
     else
-      redirect_to(edit_shipping_address_path(current_user.shipping_address.id))
+      redirect_to edit_shipping_address_path(current_user.shipping_address.id, :return_to => params[:return_to])
     end
   end
 

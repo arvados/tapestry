@@ -14,6 +14,20 @@
     <% if not @study_participant.nil? and (@study_participant.is_accepted? or @study_participant.is_not_accepted? or @study_participant.is_removed?) then %>
       Your current status for this study is <strong><%= @study_participant.pretty_status %></strong>.
     <% else %>
+
+    <% if ((@study_participant.nil? or !@study_participant.is_interested) and (!@user.shipping_address || (Time.now - @user.shipping_address.updated_at > 7200))) %>
+    <p>
+    <% if ! @user.shipping_address %>
+    <strong>You have not provided a shipping address.</strong><br />
+    <% verb = 'provide' %>
+    <% elsif Time.now - @user.shipping_address.updated_at > 86400 * 30 %>
+    Your shipping address was last updated <%= @user.shipping_address.updated_at.strftime('%B %-d, %Y') -%>.<br />
+    <% verb = 'confirm or update' %>
+    <% end %>
+    Please take a moment to <%= link_to "#{verb} your shipping address", user_shipping_address_url(:return_to => request.path) -%> before signing up for this study.
+    </p>
+    <% end %>
+
     <%= form_for :study_participant, :url => user_update_study_url, :html => { :method => :post, :class => 'study_participant', :id => 'create' } do |f| -%>
     <%= f.radio_button :status, 'undecided', :checked => (@study_participant.nil? or @study_participant.is_undecided? ? true : false) %> 
     <%= label :status, 'undecided' %>
