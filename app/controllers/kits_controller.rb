@@ -3,37 +3,10 @@ class KitsController < ApplicationController
   skip_before_filter :ensure_latest_consent
   skip_before_filter :ensure_recent_safety_questionnaire
 
-  before_filter :ensure_researcher, :except => ['claim', 'confirm_claim', 'claim_danforth', 'returned', 'show']
-
-  # TMP TO DEAL WITH DUPLICATE KIT NAME
-  def claim_danforth
-    @kit = Kit.where('last_mailed is not ? and name = ?',nil,params[:name]).first
-
-    if request.post? then
-      if params.has_key?('danforth_or_adair') and params[:danforth_or_adair] == '37764001' then
-        flash[:notice] = 'Thank you, you have the real kit named <strong>Danforth</strong>. We now know which kit you have, please proceed with the confirmation process below.'
-        redirect_to(:controller => 'kits', :action => 'claim', :name => 'Danforth', :for_real => '1')
-        return
-      elsif params.has_key?('danforth_or_adair') and params[:danforth_or_adair] == '79615591' then
-        flash[:notice] = 'Thank you, the real name for your kit is <strong>Adair</strong>. To be sure everything is right, please check that the sample IDs below are correct (please contact <a href="mailto:support@personalgenomes.org">support@personalgenomes.org</a> if they are not). If you wish, you may relabel the sample tubes as <strong>Adair</strong>, but you do not need to. We now know which kit you have, so please proceed with the confirmation process below.'
-        redirect_to(:controller => 'kits', :action => 'claim', :name => 'Adair')
-        return
-      else
-        flash[:notice] = 'Please select a kit id number'
-        redirect_to(:controller => 'kits', :action => 'claim_danforth', :name => 'Danforth')
-        return
-      end
-    end
-
-  end
+  before_filter :ensure_researcher, :except => ['claim', 'confirm_claim', 'returned', 'show']
 
   # GET /kit/claim
   def claim
-    # TMP TO DEAL WITH DUPLICATE KIT NAME
-    if (params[:name] =~ /^(D|d)anforth$/ and not params.has_key?('for_real')) then
-        redirect_to(:controller => 'kits', :action => 'claim_danforth', :name => params[:name])
-        return
-    end
     @kit = Kit.where('last_mailed is not ? and participant_id is ? and name = ?',nil,nil,params[:name]).first
     if (@kit.nil?) then
         flash[:error] = 'We do not have a record of a kit with this name. Please double check the spelling. If you are certain the spelling is correct, please contact support@personalgenomes.org.'
