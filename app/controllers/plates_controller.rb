@@ -1,5 +1,5 @@
 class PlatesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :except => [:mobile, :mobile_assign_position, :mobile_destroy_position, :destroy_sample]
 
   skip_before_filter :ensure_enrolled
   before_filter :ensure_researcher
