@@ -3,10 +3,10 @@
 <% if current_user.is_admin? %>
 <p>Because you are an administrator, this page lists all studies by any researcher.</p>
 <% else %>
-<p>This is the list of your studies.</p>
+<p>This is the list of your studies, as well as any studies another researcher has granted you rights to.</p>
 <% end %>
 
 <% if @studies.count > 0 %>
-<%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @studies, :type => 'all', :who => 'researcher' } %>
+<%= render :partial => 'table' %>
 <% end %>
 

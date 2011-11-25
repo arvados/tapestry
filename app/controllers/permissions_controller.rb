@@ -70,6 +70,9 @@ class PermissionsController < ApplicationController
     elsif params[:subject_class] == 'Sample' then
       objects = Sample.where(:owner_id=>current_user.id)
       @o2 = [ ["All", 0] ].concat(objects.collect { |o| [o.name, o.id] })
+    elsif params[:subject_class] == 'Study' then
+      objects = Study.where(:creator_id=>current_user.id)
+      @o2 = [ ["All", 0] ].concat(objects.collect { |o| [o.name, o.id] })
     end 
     respond_to do |format|
       format.js

@@ -72,6 +72,12 @@ This interface allows you to grant other researchers access to these objects: <%
       <% else -%>
         All your samples
       <% end -%>
+    <% elsif p.subject_class == 'Study' then -%>
+      <% if not p.subject_id.nil? then -%>
+        <%= Study.find(p.subject_id).name %>
+      <% else -%>
+        All your studies
+      <% end -%>
     <% else -%>
       <%= p.subject_id %>
     <% end -%>

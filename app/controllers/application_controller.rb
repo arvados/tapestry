@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
 
   # cancan
   rescue_from CanCan::AccessDenied do |exception|
+    Rails.logger.info "Access denied on action #{exception.action} : #{exception.subject.inspect}"
     redirect_to unauthorized_user_url, :alert => exception.message
   end
 

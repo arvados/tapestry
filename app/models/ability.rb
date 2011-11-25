@@ -54,6 +54,12 @@ class Ability
     # The creator of a sample may manipulate it as they see fit
     can :manage, Sample, :creator_id => user.id
 
+    ## Studies
+    # Researchers may create new studies
+    can :create, Study if user.is_researcher?
+    # The creator of a study may manipulate it as they see fit
+    can :manage, Study, :creator_id => user.id
+
     ## Database entries
     # As a last resort, look for specific database permission entries 
     user.permissions_granted_to.each do |permission|

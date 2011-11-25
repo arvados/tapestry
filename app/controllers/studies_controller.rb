@@ -1,4 +1,5 @@
 class StudiesController < ApplicationController
+  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show]
 
   skip_before_filter :ensure_enrolled, :except => [:show, :claim]
   skip_before_filter :ensure_latest_consent, :except => [:show, :claim]
@@ -8,17 +9,10 @@ class StudiesController < ApplicationController
 
   skip_before_filter :ensure_researcher, :only => [:show, :claim]
 
-  def index
-    if current_user.is_admin? then
-      @studies = Study.all
-    else
-      @studies = Study.where('researcher_id = ?',current_user.id)
-    end
-  end
-
   # GET /studies/1/map
   def map
     @study = Study.find(params[:id])
+    authorize! :read, @study
 
     # The call to compact will filter out nil elements
     @json = @study.study_participants.accepted.collect { |p| p.user.shipping_address }.compact.to_gmaps4rails do |shipping_address, marker|
@@ -48,8 +42,44 @@ class StudiesController < ApplicationController
     render :layout => "gmaps"
   end
 
+  # GET /studies/claim
+  def claim
+    # No need to do anything special here for Cancan, because there is no object involved in this action.
+    # This is just a static page. TODO: move to the pages controller.
+  end
+
+  # GET /studies/1/users
+  def users
+    @study = Study.find(params[:id])
+    authorize! :read, @study
+    @all_participants = @study.study_participants.real
+    @participants = @study.study_participants.real.sort { |a,b| a.user.full_name <=> b.user.full_name }
+    respond_to do |format|
+      format.html
+      format.csv { send_data csv_for_study(@study,params[:type]), {
+                     :filename    => 'StudyUsers.csv',
+                     :type        => 'application/csv',
+                     :disposition => 'attachment' } }
+    end
+  end
+
+  def update_user_status
+    @study = Study.find(params[:study_id])
+    @user = User.find(params[:user_id])
+    authorize! :update, @study
+
+    @status = StudyParticipant::STATUSES[params[:status]]
+
+    @sp = @study.study_participants.where('user_id = ?',@user.id).first
+    @sp.status = @status
+    @sp.save
+    redirect_to(study_users_path(@study))
+  end
+
   # GET /studies/1
   # GET /studies/1.xml
+  # This page is referenced from the public profile (only). Cancan is not involved
+  # in guarding access to it.
   def show
     @study = Study.find(params[:id])
 
@@ -65,57 +95,9 @@ class StudiesController < ApplicationController
     end
   end
 
-  # GET /studies/claim
-  def claim
-  end
-
-  # GET /studies/1/users
-  def users
-    @study = Study.find(params[:id])
-    @all_participants = @study.study_participants.real
-    @participants = @study.study_participants.real.sort { |a,b| a.user.full_name <=> b.user.full_name }
-    respond_to do |format|
-      format.html
-      format.csv { send_data csv_for_study(@study,params[:type]), {
-                     :filename    => 'StudyUsers.csv',
-                     :type        => 'application/csv',
-                     :disposition => 'attachment' } }
-    end
-  end
-
-  def update_user_status
-    @study = Study.find(params[:study_id])
-    @user = User.find(params[:user_id])
-
-    @status = StudyParticipant::STATUSES[params[:status]]
-
-    @sp = @study.study_participants.where('user_id = ?',@user.id).first
-    @sp.status = @status
-    @sp.save
-    redirect_to(study_users_path(@study))
-  end
-
-  # GET /studies/new
-  # GET /studies/new.xml
-  def new
-    @study = Study.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @study }
-    end
-  end
-
-  # GET /studies/1/edit
-  def edit
-    @study = Study.find(params[:id])
-  end
-
   # POST /studies
   # POST /studies.xml
   def create
-    @study = Study.new(params[:study])
-
     # Override this field just in case; it comes in as a hidden form field
     @study.researcher = current_user
 
@@ -138,8 +120,6 @@ class StudiesController < ApplicationController
   # PUT /studies/1
   # PUT /studies/1.xml
   def update
-    @study = Study.find(params[:id])
-
     # Override this field just in case; it comes in as a hidden form field
     @study.researcher = current_user
 
@@ -174,7 +154,6 @@ class StudiesController < ApplicationController
   # DELETE /studies/1
   # DELETE /studies/1.xml
   def destroy
-    @study = Study.find(params[:id])
     @study.destroy
 
     respond_to do |format|
