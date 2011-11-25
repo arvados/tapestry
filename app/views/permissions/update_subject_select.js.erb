@@ -1,0 +1,8 @@
+$('select#permission_subject_id').empty();
+<% for object in @o2 %>
+  <% if object[1] == @subject_id %>
+  $('select#permission_subject_id').append($("<option></option>").attr({ value: '<%= object[1] %>', selected: 'selected' } ).text('<%= object[0] %>'));
+  <% else %>
+  $('select#permission_subject_id').append($("<option></option>").attr("value",<%= object[1] %>).text('<%= object[0] %>'));
+  <% end %>
+<% end -%>

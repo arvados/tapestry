@@ -1,0 +1,43 @@
+<%= form_for(@permission) do |f| %>
+  <% if @permission.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@permission.errors.count, "error") %> prohibited this permission from being saved:</h2>
+
+      <ul>
+      <% @permission.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label 'Grant to' %><br />
+    <% if @permission.granted_to %>
+    <%= @permission.granted_to.full_name %>
+    <% else %>
+      <%= f.select :granted_to_id, User.researcher.where("id != #{current_user.id}").collect {|u| [u.full_name, u.id]}, {:prompt => 'Select researcher'} %>
+    <% end %>
+  </div>
+  <div class="field">
+    <%= f.label 'Object class' %><br />
+    <%= f.select :subject_class, PERMISSION_CLASSES.collect {|sc| [sc, sc] }.sort, {:prompt => 'Select class'} %>
+  </div>
+  <div class="field">
+    <%= f.label 'Object' %><br />
+    <div id="objectId">
+      <%= f.select :subject_id, [] %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label 'Action' %><br />
+    <%= f.select :action, PERMISSION_ACTIONS.collect {|a,b| [b, a] }.sort, {:prompt => 'Select permitted action'} %>
+  </div>
+  <div class="field">
+    <%= f.label :description, 'Note (optional)' %><br />
+    <%= f.text_area :description, :rows => 12, :cols => 72 %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

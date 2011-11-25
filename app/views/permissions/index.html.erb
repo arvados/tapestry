@@ -1,0 +1,88 @@
+<h2>Permissions</h2>
+
+<h3>Granted to you</h3>
+
+This is the list of permissions granted to you by other researchers.
+
+<table class="admin_table">
+  <tr>
+    <th>Granted by</th>
+    <th>Object class</th>
+    <th>Allowed actions</th>
+    <th>Object name</th>
+  </tr>
+
+<% @permissions_granted_to.each do |p| %>
+  <tr>
+    <td><%= p.granted_by.full_name %> (<%= p.granted_by.id %>)</td>
+    <td><%= p.subject_class %></td>
+    <td><%= PERMISSION_ACTIONS[p.action] %></td>
+    <td>
+    <% if p.subject_class = 'Plate' then -%>
+      <% if not p.subject_id.nil? then -%>
+        <%= Plate.find(p.subject_id).description %>
+      <% else  -%>
+        All plates owned by this researcher.
+      <% end -%>
+    <% else -%>
+      <%= p.subject_id %>
+    <% end -%>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<h3>Granted by you</h3>
+
+This interface allows you to grant other researchers access to these objects: <%= PERMISSION_CLASSES.collect { |c| c.pluralize }.join(", ") %>.
+
+<table class="admin_table">
+  <tr>
+    <th>Granted to</th>
+    <th>Object class</th>
+    <th>Allowed actions</th>
+    <th>Object name</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @permissions_granted_by.each do |p| %>
+  <tr>
+    <td><%= p.granted_to.full_name %> (<%= p.granted_to.id %>)</td>
+    <td><%= p.subject_class %></td>
+    <td><%= PERMISSION_ACTIONS[p.action] %></td>
+    <td>
+    <% if p.subject_class == 'Plate' then -%>
+      <% if not p.subject_id.nil? then -%>
+        <%= Plate.find(p.subject_id).description %>
+      <% else -%>
+        All your plates
+      <% end -%>
+    <% elsif p.subject_class == 'Kit' then -%>
+      <% if not p.subject_id.nil? then -%>
+        <%= Kit.find(p.subject_id).name %>
+      <% else -%>
+        All your kits
+      <% end -%>
+    <% elsif p.subject_class == 'Sample' then -%>
+      <% if not p.subject_id.nil? then -%>
+        <%= Sample.find(p.subject_id).name %>
+      <% else -%>
+        All your samples
+      <% end -%>
+    <% else -%>
+      <%= p.subject_id %>
+    <% end -%>
+    </td>
+    <td><%= link_to 'Edit', edit_permission_path(p) %></td>
+    <td><%= link_to 'Remove', p, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Grant permission', new_permission_path %>
+

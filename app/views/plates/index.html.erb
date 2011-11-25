@@ -20,8 +20,8 @@
     <td><%= plate.description %></td>
     <td><%= plate.samples.size %> / <%= plate.plate_layout.plate_layout_positions.size %></td>
     <td><%= link_to image_tag('https://chart.googleapis.com/chart?chs=80x80&cht=qr&chld=L&chl='+uriencode(mobile_plate_url(plate.url_code))+'&choe=UTF-8', {:width => 80, :height => 80, :class => 'qr'}), mobile_plate_url(plate.url_code) %></td>
-    <td><%= link_to 'Edit', edit_plate_path(plate) if current_user == plate.creator or current_user.is_admin? %></td>
-    <td><%= link_to 'Destroy', plate, :confirm => 'Are you sure?', :method => :delete if current_user == plate.creator or current_user.is_admin? %></td>
+    <td><%= link_to 'Edit', edit_plate_path(plate) if can? :update, plate %></td>
+    <td><%= link_to 'Destroy', plate, :confirm => 'Are you sure?', :method => :delete if can? :destroy, plate %></td>
   </tr>
 <% end %>
 </table>

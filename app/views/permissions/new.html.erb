@@ -1,0 +1,19 @@
+<script type="text/javascript">
+jQuery(function($) {
+  $("#permission_subject_class").change(function() {
+    // make a POST call and replace the content
+    var subject_class = $('select#permission_subject_class :selected').val();
+    if(subject_class == "") subject_class="0";
+    jQuery.get('/permissions/update_subject_select/' + subject_class);
+/*, function(data){
+        $("div#objectId").html(data);
+    }) */
+    return false;
+  });
+})
+</script>
+
+<h2><%= link_to 'Permissions', permissions_path %> &gt; new</h2>
+
+<%= render 'form' %>
+

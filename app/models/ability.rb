@@ -36,11 +36,32 @@ class Ability
     # The creator of a plate may manipulate it as they see fit
     can :manage, Plate, :creator_id => user.id
 
+    ## Permissions
+    # Researchers may create new permissions 
+    can :create, Permission if user.is_researcher?
+    # The creator of a permission may manipulate it as they see fit
+    can :manage, Permission, :creator_id => user.id
+
+    ## Kits
+    # Researchers may create new kits
+    can :create, Kit if user.is_researcher?
+    # The creator of a kit may manipulate it as they see fit
+    can :manage, Kit, :creator_id => user.id
+
+    ## Samples
+    # Researchers may create new samples
+    can :create, Sample if user.is_researcher?
+    # The creator of a sample may manipulate it as they see fit
+    can :manage, Sample, :creator_id => user.id
+
+    # TODO: FIXME: this does not handle the case yet where subject_id is null
+    # (a researcher gave someone access to all their objects of a certain type)
+
     ## Database entries
     # As a last resort, look for specific database permission entries 
-    user.permissions.each do |permission|
+    user.permissions_granted_to.each do |permission|
       if permission.subject_id.nil?
-        can permission.action.to_sym, permission.subject_class.constantize
+        can permission.action.to_sym, permission.subject_class.constantize, :creator_id => permission.granted_by_id
       else
         can permission.action.to_sym, permission.subject_class.constantize, :id => permission.subject_id
       end

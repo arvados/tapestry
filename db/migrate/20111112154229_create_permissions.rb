@@ -1,7 +1,9 @@
 class CreatePermissions < ActiveRecord::Migration
   def self.up
     create_table :permissions do |t|
-      t.references :user
+      t.integer :granted_by_id
+      t.integer :granted_to_id
+
       t.string :name
       t.string :description
       t.string :action

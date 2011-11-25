@@ -1,0 +1,5 @@
+  <% if not objects.nil? %>
+    <%= select "permission", :subject_id, objects %>
+  <% else %>
+    <%= select "permission", :subject_id, [] %>
+  <% end %>

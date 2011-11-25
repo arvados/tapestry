@@ -13,7 +13,8 @@ class User < ActiveRecord::Base
 
   attr_accessor :controlling_user
 
-  has_many :permissions
+  has_many :permissions_granted_to, :foreign_key => 'granted_to_id', :class_name => 'Permission'
+  has_many :permissions_granted_by, :foreign_key => 'granted_by_id', :class_name => 'Permission'
 
   has_many :enrollment_step_completions, :dependent => :destroy
   has_many :completed_enrollment_steps, :through => :enrollment_step_completions, :source => :enrollment_step, :dependent => :destroy

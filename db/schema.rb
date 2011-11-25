@@ -1195,7 +1195,8 @@ ActiveRecord::Schema.define(:version => 20111112154229) do
   create_table "permission_versions", :force => true do |t|
     t.integer  "permission_id"
     t.integer  "lock_version"
-    t.integer  "user_id"
+    t.integer  "granted_by_id"
+    t.integer  "granted_to_id"
     t.string   "name"
     t.string   "description"
     t.string   "action"
@@ -1211,7 +1212,8 @@ ActiveRecord::Schema.define(:version => 20111112154229) do
   add_index "permission_versions", ["permission_id"], :name => "index_permission_versions_on_permission_id"
 
   create_table "permissions", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "granted_by_id"
+    t.integer  "granted_to_id"
     t.string   "name"
     t.string   "description"
     t.string   "action"
