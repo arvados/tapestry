@@ -1,5 +1,11 @@
 <h2>Plates</h2>
 
+<% if current_user.is_admin? %>
+<p>Because you are an administrator, this page lists all plates by any researcher.</p>
+<% else %>
+<p>This is the list of your plates, as well as any plates another researcher has granted you rights to.</p>
+<% end %>
+
 <table class="admin_table">
   <tr>
     <th>CRC ID</th>
