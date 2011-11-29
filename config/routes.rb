@@ -198,6 +198,7 @@ Tapestry::Application.routes.draw do
   match '/phrccr/authsub' => 'phrccrs#authsub_update', :as => :authsub_phrccr
   match '/phrccr/review' => 'phrccrs#review', :as => :review_phrccr
   match '/phrccr/unlink_googlehealth' => 'phrccrs#unlink_googlehealth', :as => :unlink_googlehealth
+  match '/phrccr/google_health_note' => 'phrccrs#google_health_note', :as => :google_health_note
   match '/profile/:hex' => 'profiles#public', :as => :public_profile
   match '/absolute_pitch_surveys/:id' => 'absolute_pitch_survey#index', :as => :absolute_pitch_surveys_section
   match '/absolute_pitch_surveys/save' => 'absolute_pitch_survey#save', :as => :save_absolute_pitch_surveys
