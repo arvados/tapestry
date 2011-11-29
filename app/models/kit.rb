@@ -21,6 +21,7 @@ class Kit < ActiveRecord::Base
   scope :owned_by, lambda { |user_id| where('owner_id = ?', user_id) }
   scope :participant, lambda { |user_id| where('participant_id = ?', user_id) }
 
+  scope :not_yet_shipped, where('participant_id is ? and shipper_id is ? and owner_id is not ?',nil,nil,nil)
   scope :shipped, where('participant_id is ? and shipper_id is not ? and owner_id is ?',nil,nil,nil)
   scope :claimed, where('participant_id is not ? and owner_id=participant_id',nil)
   scope :returned, where('participant_id is not ? and owner_id is ?',nil,nil)

@@ -11,9 +11,10 @@
 <td>
 <table class="admin_table">
 <tr>
-<th colspan="4" align="center">Kits</th>
+<th colspan="6" align="center">Kits</th>
 </tr>
 <tr>
+<td>Created:</td><td><%= @study.kits.not_yet_shipped.count %></td>
 <td>Shipped:</td><td><%= @study.kits.shipped.count %></td>
 <td>Claimed:</td><td><%= @study.kits.claimed.count %></td>
 </tr>
@@ -43,7 +44,7 @@
 </tr>
 <tr>
 <td>&nbsp;</td><td>&nbsp;</td>
-<td>Total:</td><td><%= @study.study_participants.count %></td>
+<td>Total:</td><td><%= @study.study_participants.real.count %></td>
 <td>&nbsp;</td><td>&nbsp;</td>
 </tr>
 </table>
