@@ -102,14 +102,15 @@ class User < ActiveRecord::Base
     }
   }
 
-  scope :real, { :conditions => "NOT (is_test <=> 1)" }
+  scope :real, where("NOT (is_test <=> 1)")
+  scope :not_suspended, where("suspended_at IS NULL").real
   scope :inactive, where("activated_at IS NULL").real
-  scope :enrolled, where("enrolled IS NOT NULL").real
+  scope :enrolled, where("enrolled IS NOT NULL").not_suspended.real
   scope :pgp_ids, where("pgp_id IS NOT NULL" ).enrolled
   # User.test is a built-in method, so we have to call our scope something else
-  scope :is_test, { :conditions => "is_test = 1" }
-  scope :researcher, { :conditions => "researcher = 1" }
-  scope :publishable, where("enrolled IS NOT NULL AND suspended_at IS NULL").real
+  scope :is_test, where("is_test = 1")
+  scope :researcher, where("researcher = 1")
+  scope :publishable, enrolled
   scope :suspended, where("suspended_at IS NOT NULL").real
   scope :deactivated, where("deactivated_at IS NOT NULL").real
   scope :visible_to, lambda { |current_user|
