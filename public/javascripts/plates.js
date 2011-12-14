@@ -12,7 +12,7 @@ jQuery(function($){
             $(this).html($(this).attr('plate_layout_position'));
           });
       });
-    $('table.plate_layout[m_url] td[plate_layout_position]').bind('click',function(){
+    $('.mobile_plate_layout table.plate_layout[m_url] td[plate_layout_position]').bind('click',function(){
         window.location.assign($(this).parents('table[m_url]').attr('m_url') + '?pos=' + $(this).attr('plate_layout_position'));
         return false;
       });
