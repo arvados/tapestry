@@ -126,7 +126,7 @@ class PlatesController < ApplicationController
     end
     if selected_pos and selected_pos.id != @next_pos.id
       @next_pos = selected_pos
-    else
+    elsif @next_pos
       @grid[@next_pos.ypos][@next_pos.xpos][:class] = 'next_available selected'
       session[:scan_context_path] = mobile_plate_path(@plate.url_code)
     end
@@ -147,22 +147,24 @@ class PlatesController < ApplicationController
 
     # Look up sample in the selected well, if any
     @plate_sample_selected = nil
-    @destroy_confirm_message = "Really mark #{@next_pos.name} as unusable?"
-    @transfer_confirm_message = nil
-    @plate.plate_samples.each { |ps|
-      if ps.plate_layout_position.id == @next_pos.id
-        @plate_sample_selected = ps
-        if ps.sample
-          @destroy_confirm_message = "Really destroy #{@next_pos.name}, already containing sample #{ps.sample.crc_id_s}?"
-          x = ps.is_unusable ? 'and un-destroy' : 'in'
-          @transfer_confirm_message = "Really replace sample #{ps.sample.crc_id_s} with #{@scanned_sample.crc_id_s} #{x} #{@next_pos.name} ?" if @scanned_sample
-        else
-          @destroy_confirm_message = "#{@next_pos.name} is already marked as unusable."
-          @transfer_confirm_message = "Really un-destroy #{@next_pos.name} and record sample #{@scanned_sample.crc_id_s} instead?" if @scanned_sample
+    if @next_pos
+      @destroy_confirm_message = "Really mark #{@next_pos.name} as unusable?"
+      @transfer_confirm_message = nil
+      @plate.plate_samples.each { |ps|
+        if ps.plate_layout_position.id == @next_pos.id
+          @plate_sample_selected = ps
+          if ps.sample
+            @destroy_confirm_message = "Really destroy #{@next_pos.name}, already containing sample #{ps.sample.crc_id_s}?"
+            x = ps.is_unusable ? 'and un-destroy' : 'in'
+            @transfer_confirm_message = "Really replace sample #{ps.sample.crc_id_s} with #{@scanned_sample.crc_id_s} #{x} #{@next_pos.name} ?" if @scanned_sample
+          else
+            @destroy_confirm_message = "#{@next_pos.name} is already marked as unusable."
+            @transfer_confirm_message = "Really un-destroy #{@next_pos.name} and record sample #{@scanned_sample.crc_id_s} instead?" if @scanned_sample
+          end
+          break
         end
-        break
-      end
-    }
+      }
+    end
 
     render :layout => 'mobile'
   end
