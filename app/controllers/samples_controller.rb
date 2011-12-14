@@ -53,6 +53,9 @@ class SamplesController < ApplicationController
 
     if check_for_scan_context
       session[:scan_sample_url_code] = params[:url_code]
+      if @sample.participant and not (@sample.owner and @sample.last_received)
+        sample_received(@sample)
+      end
       if @sample.participant and @sample.owner and @sample.last_received
         return redirect_to session[:scan_context_path]
       else
