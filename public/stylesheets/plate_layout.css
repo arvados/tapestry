@@ -30,13 +30,18 @@ table.plate_layout td.has_sample.masked {
 }
 table.plate_layout td.unusable {
     background: #505050;
+    color: #fff;
 }
 table.plate_layout td.unusable.masked {
     background: #c6c6c6;
 }
+table.plate_layout td.next_available.selected,
 table.plate_layout td.next_available {
     background: #4f4;
     border: 3px solid #080;
+}
+table.plate_layout td.selected {
+    border: 3px solid #800;
 }
 table.plate_layout td.has_sample img {
     width: 100%;

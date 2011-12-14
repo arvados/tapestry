@@ -11,11 +11,11 @@
 	<table style="border-spacing:0">
 	  <tr><td>
 	      <% if @next_pos and @scanned_sample %>
-	      <%= button_to raw("transfer\n#{h(@scanned_sample.crc_id)}&rarr;#{h(@next_pos.name)}"), mobile_assign_plate_position_path(:plate_id => @plate.id, :sample_id => @scanned_sample.id, :plate_layout_position_id => @next_pos.id), :method => :post %>
+	      <%= button_to raw("transfer\n#{h(@scanned_sample.crc_id_s)}&rarr;#{h(@next_pos.name)}"), mobile_assign_plate_position_path(:plate_id => @plate.id, :sample_id => @scanned_sample.id, :plate_layout_position_id => @next_pos.id), :method => :post, :confirm => @transfer_confirm_message %>
 	      <% end %>
 	  </td></tr><tr><td>
 	      <% if @next_pos and @scanned_sample %>
-	      <%= button_to raw("transfer\n#{h(@scanned_sample.crc_id)}&rarr;#{h(@next_pos.name)}\n&amp; open scanner"), mobile_assign_plate_position_path(:plate_id => @plate.id, :sample_id => @scanned_sample.id, :plate_layout_position_id => @next_pos.id, :redirect_to => 'http://zxing.appspot.com/scan'), :method => :post %>
+	      <%= button_to raw("transfer\n#{h(@scanned_sample.crc_id_s)}&rarr;#{h(@next_pos.name)}\n&amp; open scanner"), mobile_assign_plate_position_path(:plate_id => @plate.id, :sample_id => @scanned_sample.id, :plate_layout_position_id => @next_pos.id, :redirect_to => 'http://zxing.appspot.com/scan'), :method => :post, :confirm => @transfer_confirm_message %>
 	      <% end %>
 	  </td></tr>
 	</table>
@@ -28,7 +28,17 @@
 	      <% end %>
 	  </td></tr><tr><td>
 	      <% if @next_pos %>
-	      <%= button_to "Destroy #{@next_pos.name}", mobile_destroy_plate_position_path(:plate_id => @plate.id, :plate_layout_position_id => @next_pos.id), :confirm => "Really mark #{@next_pos.name} as unusable?" %>
+	      <%= button_to "Destroy #{@next_pos.name}", mobile_destroy_plate_position_path(:plate_id => @plate.id, :plate_layout_position_id => @next_pos.id), :confirm => @destroy_confirm_message %>
+	      <% end %>
+	  </td></tr><tr><td>
+	      <% if @plate_sample_selected %>
+	      <%= @plate_sample_selected.plate_layout_position.name %> contents:
+	      <% if @plate_sample_selected.is_unusable %>
+	      <br />unusable
+	      <% end %>
+	      <% if @plate_sample_selected.sample %>
+	      <br />sample <%= @plate_sample_selected.sample.crc_id_s -%>
+	      <% end %>
 	      <% end %>
 	  </td></tr>
 	</table>

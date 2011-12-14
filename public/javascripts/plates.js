@@ -2,15 +2,19 @@
 
 jQuery(function($){
     $('table.plate_layout').each(function(){
-        $this = $(this);
+        var $this = $(this);
         $.each($this.attr('class').split(' '), function(i,c){
             ncolumns = /^has(\d+)columns$/.exec(c);
             if (ncolumns)
               $('td', $this).css('width', ''+(100.0/ncolumns[1])+'%');
           });
-        $('td.next_available[plate_layout_position]', this).each(function(){
+        $('td.selected[plate_layout_position]', this).each(function(){
             $(this).html($(this).attr('plate_layout_position'));
           });
+      });
+    $('table.plate_layout[m_url] td[plate_layout_position]').bind('click',function(){
+        window.location.assign($(this).parents('table[m_url]').attr('m_url') + '?pos=' + $(this).attr('plate_layout_position'));
+        return false;
       });
     // $('div.tabsme').tabs();
     // $('div.buttons input[type=submit],div.buttons button').button();

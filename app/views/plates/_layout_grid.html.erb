@@ -1,4 +1,4 @@
-<table class="plate_layout has<%= @xpositions.size %>columns">
+<table class="plate_layout has<%= @xpositions.size %>columns" m_url="<%= mobile_plate_url(@plate.url_code) -%>">
   <% @ypositions.each {|y| %>
   <tr>
     <% @xpositions.each {|x| g = @grid[y][x] %>
