@@ -5,26 +5,33 @@
 <%= render 'layout_grid' %>
 
 <div class="buttons">
-  <table>
+  <table style="border-spacing:0">
     <tr>
-      <td>
-	<% if @next_pos and @scanned_sample %>
-	<%= button_to raw("#{h(@scanned_sample.crc_id)}&rarr;#{h(@next_pos.name)}"), mobile_assign_plate_position_path(:plate_id => @plate.id, :sample_id => @scanned_sample.id, :plate_layout_position_id => @next_pos.id), :method => :post %>
-	<% end %>
+      <td valign="top">
+	<table style="border-spacing:0">
+	  <tr><td>
+	      <% if @next_pos and @scanned_sample %>
+	      <%= button_to raw("transfer\n#{h(@scanned_sample.crc_id)}&rarr;#{h(@next_pos.name)}"), mobile_assign_plate_position_path(:plate_id => @plate.id, :sample_id => @scanned_sample.id, :plate_layout_position_id => @next_pos.id), :method => :post %>
+	      <% end %>
+	  </td></tr><tr><td>
+	      <% if @next_pos and @scanned_sample %>
+	      <%= button_to raw("transfer\n#{h(@scanned_sample.crc_id)}&rarr;#{h(@next_pos.name)}\n&amp; open scanner"), mobile_assign_plate_position_path(:plate_id => @plate.id, :sample_id => @scanned_sample.id, :plate_layout_position_id => @next_pos.id, :redirect_to => 'http://zxing.appspot.com/scan'), :method => :post %>
+	      <% end %>
+	  </td></tr>
+	</table>
       </td>
-      <td>
-	<% if @next_pos %>
-	<%= button_to 'Scan a sample', 'http://zxing.appspot.com/scan', :method => :get, :class => 'launch_scanner' %>
-	<% end %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-      </td>
-      <td>
-	<% if @next_pos %>
-	<%= button_to "Destroy #{@next_pos.name}", mobile_destroy_plate_position_path(:plate_id => @plate.id, :plate_layout_position_id => @next_pos.id), :confirm => "Really mark #{@next_pos.name} as unusable?" %>
-	<% end %>
+      <td valign="top">
+	<table style="border-spacing:0">
+	  <tr><td>
+	      <% if @next_pos %>
+	      <%= button_to 'Open scanner', 'http://zxing.appspot.com/scan', :method => :get, :class => 'launch_scanner' %>
+	      <% end %>
+	  </td></tr><tr><td>
+	      <% if @next_pos %>
+	      <%= button_to "Destroy #{@next_pos.name}", mobile_destroy_plate_position_path(:plate_id => @plate.id, :plate_layout_position_id => @next_pos.id), :confirm => "Really mark #{@next_pos.name} as unusable?" %>
+	      <% end %>
+	  </td></tr>
+	</table>
       </td>
     </tr>
   </table>

@@ -152,7 +152,11 @@ class PlatesController < ApplicationController
                   :comment => "Sample transferred to plate #{@plate.crc_id} (id=#{@plate.id}) well #{@next_pos.name} (id=#{@next_pos.id})",
                   :sample_id => @sample.id).save
     session[:scan_sample_url_code] = nil
-    redirect_to mobile_plate_path(@plate.url_code)
+    if params[:redirect_to]
+      redirect_to params[:redirect_to]
+    else
+      redirect_to mobile_plate_path(@plate.url_code)
+    end
   end
 
   def mobile_destroy_position
