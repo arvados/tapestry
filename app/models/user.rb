@@ -495,12 +495,23 @@ class User < ActiveRecord::Base
     reasons.push('Enrollment application not submitted') if not self.has_completed?('enrollment_application') 
     # Not a US resident
     reasons.push('Not a US resident') if not self.residency_survey_response.nil? and not self.residency_survey_response.us_resident
-    # They have a twin or are unsure
-    reasons.push('There may be a monozygotic twin') if not self.screening_survey_response.nil? and self.screening_survey_response.monozygotic_twin != 'no'
-    # Not a US citizen or permanent resident
-    reasons.push('Not a US citizen or permanent resident') if not self.screening_survey_response.nil? and not self.screening_survey_response.us_citizen_or_resident and not self.screening_survey_response.us_citizen_or_resident.nil?
-    # Have not taken eligibility survey v2 or higher
-    reasons.push('Not taken eligibility survey v2 or higher') if not self.screening_survey_response.nil? and self.screening_survey_response.us_citizen_or_resident.nil?
+    if not self.screening_survey_response.nil? then
+      if self.screening_survey_response.us_citizen_or_resident.nil?
+        # Have not taken eligibility survey v2 or higher
+        reasons.push('Not taken eligibility survey v2 or higher') 
+      else
+        # Not a US citizen or permanent resident
+        reasons.push('Not a US citizen or permanent resident') if not self.screening_survey_response.us_citizen_or_resident
+      end
+      # They have a twin or are unsure
+      reasons.push('There may be a monozygotic twin') if not ['no','willing'].include?(self.screening_survey_response.monozygotic_twin)
+      # Not comfortable with potentially worrisome information about self
+      reasons.push('Not comfortable learning worrisome information about self') if not ['always','understand'].include?(self.screening_survey_response.worrisome_information_comfort_level)
+      # Not comfortable sharing information with general public
+      reasons.push('Not comfortable sharing information with general public') if not ['comfortable','understand'].include?(self.screening_survey_response.information_disclosure_comfort_level)
+      # May have previous genetic data, not comfortable sharing with general public
+      reasons.push('Not comfortable sharing past genetic data') if not ['no','public','unsure_public'].include?(self.screening_survey_response.past_genetic_test_participation)
+    end
     # Empty array -> eligible
     # Non-empty array -> ineligible
     return reasons
