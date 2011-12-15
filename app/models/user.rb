@@ -123,6 +123,20 @@ class User < ActiveRecord::Base
     end
   }
 
+  scope :failed_eligibility_survey, lambda { 
+    joins = [:enrollment_step_completions, :screening_survey_response]
+    ssr_step_id = EnrollmentStep.find_by_keyword('screening_survey_results').id
+    conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and 
+        (screening_survey_responses.monozygotic_twin != 'no' or 
+         screening_survey_responses.us_citizen_or_resident is null or 
+         screening_survey_responses.us_citizen_or_resident!=1) and
+        enrollment_step_completions.enrollment_step_id=#{ssr_step_id}"
+    { 
+      :conditions => conditions_sql,
+      :order => 'enrollment_step_completions.created_at',
+      :joins => joins,
+    }
+  }
 
   # Beware of NULL: "screening_survey_responses.us_citizen_or_resident!=1"
   # does not match rows that have us_citizen_or_resident set to NULL.

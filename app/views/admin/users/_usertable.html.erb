@@ -5,29 +5,81 @@
 <%= will_paginate @users %>
 <table class="admin_table">
   <tr>
+    <% if @show.has_key?('pgp_id') and @show['pgp_id'] == true -%>
     <th>PGP #</th>
+    <% end -%>
+    <% if @show.has_key?('unique_hash') and @show['unique_hash'] == true -%>
+    <th>Hash</th>
+    <% end -%>
+    <% if @show.has_key?('name') and @show['name'] == true -%>
     <th>Name</th>
+    <% end -%>
+    <% if @show.has_key?('email') and @show['email'] == true -%>
     <th>Email</th>
+    <% end -%>
+    <% if @show.has_key?('active') and @show['active'] == true -%>
     <th>Active?</th>
+    <% end -%>
+    <% if @show.has_key?('administrator') and @show['administrator'] == true -%>
     <th>Administrator?</th>
+    <% end -%>
+    <% if @show.has_key?('researcher') and @show['researcher'] == true -%>
     <th>Researcher?</th>
+    <% end -%>
+    <% if @show.has_key?('researcher_on_irb') and @show['researcher_on_irb'] == true -%>
     <th>Researcher on IRB?</th>
+    <% end -%>
+    <% if @show.has_key?('edit_link') and @show['edit_link'] == true -%>
     <th>Edit</th>
+    <% end -%>
+    <% if @show.has_key?('delete_link') and @show['delete_link'] == true -%>
     <th>Delete</th>
+    <% end -%>
+    <% if @show.has_key?('activate_link') and @show['activate_link'] == true -%>
     <th>Activate</th>
+    <% end -%>
+    <% if @show.has_key?('ineligibility_reasons') and @show['ineligibility_reasons'] == true -%>
+    <th>Ineligibility reason(s)</th>
+    <% end -%>
   </tr>
   <% @users.each do |user| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
+      <% if @show.has_key?('pgp_id') and @show['pgp_id'] == true -%>
       <td><%= user.pgp_id %></td>
+      <% end -%>
+      <% if @show.has_key?('unique_hash') and @show['unique_hash'] == true -%>
+      <td><%= user.unique_hash %></td>
+      <% end -%>
+      <% if @show.has_key?('name') and @show['name'] == true -%>
       <td><%= link_to user.full_name, admin_user_url(user) %></td>
+      <% end -%>
+      <% if @show.has_key?('email') and @show['email'] == true -%>
       <td><%=h user.email %></td>
+      <% end -%>
+      <% if @show.has_key?('active') and @show['active'] == true -%>
       <td><%=  user.active? %></td>
+      <% end -%>
+      <% if @show.has_key?('administrator') and @show['administrator'] == true -%>
       <td><%=  user.is_admin? %></td>
+      <% end -%>
+      <% if @show.has_key?('researcher') and @show['researcher'] == true -%>
       <td><%=  user.is_researcher? %></td>
+      <% end -%>
+      <% if @show.has_key?('researcher_on_irb') and @show['researcher_on_irb'] == true -%>
       <td><%=  user.is_researcher_onirb? %></td>
+      <% end -%>
+      <% if @show.has_key?('edit_link') and @show['edit_link'] == true -%>
       <td><%= link_to 'Edit', edit_admin_user_url(user) %></td>
+      <% end -%>
+      <% if @show.has_key?('delete_link') and @show['delete_link'] == true -%>
       <td><%= button_to "Delete", admin_user_url(user), :confirm => 'Are you sure you want to delete this user?', :method => :delete %></td>
+      <% end -%>
+      <% if @show.has_key?('activate_link') and @show['activate_link'] == true -%>
       <td><%= link_to 'Activate', activate_admin_user_url(user.id), :method => 'PUT' %></td>
+      <% end -%>
+      <% if @show.has_key?('ineligibility_reasons') and @show['ineligibility_reasons'] == true -%>
+      <td><%= user.ineligible_for_enrollment.delete_if{ |x| x == 'Enrollment application not submitted'}.join(', ') %></td>
+      <% end -%>
     </tr>
   <% end -%>
 </table>

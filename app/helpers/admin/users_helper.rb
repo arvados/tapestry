@@ -1,4 +1,21 @@
 module Admin::UsersHelper
+
+  def csv_for_failed_eligibility_survey()
+    users = User.failed_eligibility_survey
+
+    buf = ''
+    header_row = ['Hash','Ineligibility reason(s)']
+
+    CSV.generate_row(header_row, header_row.size, buf)
+    users.each do |user|
+      row = []
+      row.push user.unique_hash
+      row.push user.ineligible_for_enrollment.delete_if{ |x| x == 'Enrollment application not submitted'}.join(', ')
+      CSV.generate_row(row, row.size, buf)
+    end
+    buf
+  end
+
   # TODO: Move to a separate presenter class instead of a helper.
   def csv_for_users(users)
 

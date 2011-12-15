@@ -8,6 +8,7 @@
     <li><%= link_to "Show enrolled users with PGP #", admin_users_path(:pgp_id => true) %></li>
     <li><%= link_to "Show users eligible to be enrolled (who have submitted their enrollment application)", admin_users_path(:eligible_for_enrollment => true) %></li>
     <li><%= link_to "Show users ineligible to be enrolled (who have submitted their enrollment application)", admin_users_path(:ineligible_for_enrollment => true) %></li>
+    <li><%= link_to "Show users ineligible to be enrolled (who failed the eligibility survey)", admin_users_path(:failed_eligibility_survey => true) %></li>
     <li><%= link_to "Show waitlisted users", admin_users_path(:waitlisted => true) %></li>
     <li><%= link_to "Show inactive users", admin_users_path(:inactive => true) %></li>
     <li><%= link_to "Show suspended users", admin_users_path(:suspended => true) %></li>
@@ -77,6 +78,7 @@ Download this list of users as <%= link_to 'CSV',
                             :enrolled                    => params[:enrolled],
                             :eligible_for_enrollment     => params[:eligible_for_enrollment],
                             :ineligible_for_enrollment   => params[:ineligible_for_enrollment],
+                            :failed_eligibility_survey   => params[:failed_eligibility_survey],
                             :waitlisted                  => params[:waitlisted],
                             :inactive                    => params[:inactive],
                             :completed                   => params[:completed]

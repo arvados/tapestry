@@ -7,10 +7,19 @@ class Admin::UsersController < Admin::AdminControllerBase
     user_list_worker()
     respond_to do |format|
       format.html
-      format.csv { send_data csv_for_users(@unpaginated_users), {
+      format.csv { 
+        if not params[:failed_eligibility_survey] then
+          send_data csv_for_users(@unpaginated_users), {
                      :filename    => 'PGP Application Users.csv',
                      :type        => 'application/csv',
-                     :disposition => 'attachment' } }
+                     :disposition => 'attachment' } 
+        else 
+          send_data csv_for_failed_eligibility_survey, {
+                     :filename    => 'hupgp_failed_eligibility_survey.csv',
+                     :type        => 'application/csv',
+                     :disposition => 'attachment' } 
+        end
+      }
     end
   end
 
@@ -317,6 +326,15 @@ class Admin::UsersController < Admin::AdminControllerBase
 
   protected
   def user_list_worker
+    @show = Hash.new()
+    @show['pgp_id'] = true
+    @show['name'] = true
+    @show['email'] = true
+    @show['administrator'] = true
+    @show['researcher'] = true
+    @show['researcher_on_irb'] = true
+    @show['edit_link'] = true
+    @show['delete_link'] = true
     if params[:completed]
       @unpaginated_users = User.has_completed(params[:completed]).real
       @result = "Searching for users that have completed '#{params[:completed]}'"
@@ -331,13 +349,28 @@ class Admin::UsersController < Admin::AdminControllerBase
       @result = "Searching for users eligible for enrollment"
     elsif params[:ineligible_for_enrollment]
       @unpaginated_users = User.ineligible_for_enrollment
-      @result = "Searching for users ineligible for enrollment"
+      @result = "Searching for users ineligible for enrollment (submitted application)"
+    elsif params[:failed_eligibility_survey]
+      @unpaginated_users = User.failed_eligibility_survey
+      @result = "Searching for users ineligible for enrollment (failed eligibility survey)"
+      @show['pgp_id'] = false
+      @show['email'] = false
+      @show['administrator'] = false
+      @show['researcher'] = false
+      @show['researcher_on_irb'] = false
+      @show['edit_link'] = false
+      @show['delete_link'] = false
+      @show['name'] = true
+      @show['unique_hash'] = true
+      @show['ineligibility_reasons'] = true
     elsif params[:waitlisted]
       @unpaginated_users = User.waitlisted
       @result = "Searching for waitlisted users"
     elsif params[:inactive]
       @unpaginated_users = User.inactive
       @result = "Searching for inactive users"
+      @show['active'] = true
+      @show['activate_link'] = true
     elsif params[:suspended]
       @unpaginated_users = User.suspended
       @result = "Searching for suspended users"
@@ -365,33 +398,32 @@ class Admin::UsersController < Admin::AdminControllerBase
       @result = "All users"
     elsif params[:researcher]
       @unpaginated_users = User.researcher
-      @result = "Test users"
+      @result = "Researchers"
     elsif params[:test]
       @unpaginated_users = User.is_test
       @result = "Test users"
+      @show['active'] = true
+      @show['activate_link'] = true
     elsif params[:hex]
       if params[:hex] != '' then
         @unpaginated_users = User.find_all_by_hex(params[:hex])
       else
         @unpaginated_users = []
       end
-       @result = "User with hex #{params[:hex]}"
+      @result = "User with hex #{params[:hex]}"
     elsif params[:unenrolled_identifier]
       if params[:unenrolled_identifier] != '' then
         @unpaginated_users = User.locate_unenrolled_identifier(params[:unenrolled_identifier])
       else
         @unpaginated_users = []
       end
-       @result = "User with unique identifier #{params[:unenrolled_identifier]}"
+      @result = "User with unique identifier #{params[:unenrolled_identifier]}"
     else
       @unpaginated_users = []
       @result = ''
     end
 
-    # The extra to_a call is to work around bug #1349 in rails 2.2
-    # See https://rails.lighthouseapp.com/projects/8994/tickets/1349-named-scope-with-group-by-bug 
-    # TODO: after upgrade to 2.3, check if this is still needed. Ward, 2010-10-14
-    @result += ": #{@unpaginated_users.to_a.size} found" if (@result != '')
+    @result += ": #{@unpaginated_users.size} found" if (@result != '')
     @users = @unpaginated_users.sort.paginate(:page => params[:page] || 1)
   end
 
