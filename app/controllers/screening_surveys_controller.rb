@@ -9,8 +9,8 @@ class ScreeningSurveysController < ApplicationController
       step = EnrollmentStep.find_by_keyword('screening_surveys')
       current_user.log('Completed Eligibility Questionnaire',step)
       flash[:notice] = 'You have completed the eligibility questionnaire.  Please continue to the questionnaire results.'
-
     else
+      # People who submit partial results to the eligibility questionnaire, before completing it even once
       flash[:notice] = 'Your eligibility questionnaire answers have been updated.'
     end
     redirect_to root_path
