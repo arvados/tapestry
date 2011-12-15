@@ -70,13 +70,23 @@ Not eligible for enrollment for the following reason(s):
 <h3>User Log</h3>
 
 <ul>
-<% @user.user_logs.sort { |x,y| y.created_at <=> x.created_at }.each do |entry| -%>
-  <li><%= entry.created_at %>: <%= h entry.comment %>
+<table class="admin_table">
+<tr>
+  <td>Timestamp</td>
+  <td>Entry</td>
+  <td>Performed by administrator</td>
+</tr>
+<% @user.user_logs.sort_by { |x| [x.created_at, -x.id] }.reverse.each do |entry| -%>
+  <tr class="<%= cycle 'even', 'odd' %>">
+  <td width="150"><%= entry.created_at %></td>
+  <td width="550"><%= h entry.comment %></td>
+  <td>
     <% if entry.controlling_user and entry.controlling_user != entry.user %>
-    (action performed by <%= link_to entry.controlling_user.full_name, admin_user_path(entry.controlling_user) -%>)
+    <%= link_to entry.controlling_user.full_name, admin_user_path(entry.controlling_user) -%>
     <% end %>
-  </li>
+  </td>
+  </tr>
 <% end -%>
-</ul>
+</table>
 
 <% end -%>
