@@ -127,7 +127,10 @@ class User < ActiveRecord::Base
     joins = [:enrollment_step_completions, :screening_survey_response]
     ss_step_id = EnrollmentStep.find_by_keyword('screening_surveys').id
     conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and 
-        (screening_survey_responses.monozygotic_twin != 'no' or 
+        ((screening_survey_responses.monozygotic_twin != 'no' and screening_survey_responses.monozygotic_twin != 'willing') or 
+         (screening_survey_responses.worrisome_information_comfort_level != 'always' and screening_survey_responses.worrisome_information_comfort_level != 'understand') or 
+         (screening_survey_responses.information_disclosure_comfort_level != 'comfortable' and screening_survey_responses.information_disclosure_comfort_level != 'understand') or 
+         (screening_survey_responses.past_genetic_test_participation != 'no' and screening_survey_responses.past_genetic_test_participation != 'public' and screening_survey_responses.past_genetic_test_participation != 'unsure_public') or 
          screening_survey_responses.us_citizen_or_resident is null or 
          screening_survey_responses.us_citizen_or_resident!=1) and
         enrollment_step_completions.enrollment_step_id=#{ss_step_id}"
