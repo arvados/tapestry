@@ -43,6 +43,11 @@ class ScreeningSurveyResponse < ActiveRecord::Base
 
       step = EnrollmentStep.find_by_keyword('screening_surveys')
       user.complete_enrollment_step(step)
+      if not user.screening_survey_response.passed? then
+        user.log('Failed Eligibility Questionnaire: ' + user.ineligible_for_enrollment.delete_if{ |x| x == 'Enrollment application not submitted'}.join(', '),step)
+      else
+        user.log('Passed Eligibility Questionnaire',step)
+      end
     end
   end
 
