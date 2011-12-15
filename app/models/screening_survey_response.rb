@@ -7,17 +7,24 @@ class ScreeningSurveyResponse < ActiveRecord::Base
   after_save :complete_enrollment_step
   attr_protected :user_id
 
+  scope :monozygotic_ok, where("monozygotic_twin in ('no','willing')")
+  scope :worrisome_ok, where("worrisome_information_comfort_level in ('always','understand')")
+  scope :information_disclosure_ok, where("information_disclosure_comfort_level in ('comfortable','understand')")
+  scope :past_genetic_test_ok, where("past_genetic_test_participation in ('no','public','unsure_public')")
+  scope :us_citizen_or_resident, where("us_citizen_or_resident is true")
+  scope :age_21, where("age_21 is true")
+
+  scope :passed, monozygotic_ok.worrisome_ok.information_disclosure_ok.past_genetic_test_ok.us_citizen_or_resident.age_21
+
+  scope :failed, where("monozygotic_twin not in ('no','willing') or 
+                        worrisome_information_comfort_level not in ('always','understand') or
+                        information_disclosure_comfort_level not in ('comfortable','understand') or
+                        past_genetic_test_participation not in ('no','public','unsure_public') or
+                        us_citizen_or_resident is not true or
+                        age_21 is not true")
+
   def passed?
-    passed = false
-    if (self.us_citizen_or_resident and 
-        self.age_21 and 
-        ['no','willing'].include?(self.monozygotic_twin) and 
-        ['always','understand'].include?(self.worrisome_information_comfort_level) and 
-        ['comfortable','understand'].include?(self.information_disclosure_comfort_level) and 
-        ['no','public','unsure_public'].include?(self.past_genetic_test_participation)) then
-      passed = true
-    end
-    return passed
+    ScreeningSurveyResponse.passed.where('id = ?',self.id).size > 0
   end
 
   def complete_results_enrollment_step_if_passed

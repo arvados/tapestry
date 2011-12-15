@@ -106,6 +106,7 @@ class User < ActiveRecord::Base
   scope :not_suspended, where("suspended_at IS NULL").real
   scope :inactive, where("activated_at IS NULL").real
   scope :enrolled, where("enrolled IS NOT NULL").not_suspended.real
+  scope :not_enrolled, where("enrolled IS NULL").real
   scope :pgp_ids, where("pgp_id IS NOT NULL" ).enrolled
   # User.test is a built-in method, so we have to call our scope something else
   scope :is_test, where("is_test = 1")
@@ -123,44 +124,13 @@ class User < ActiveRecord::Base
     end
   }
 
-  scope :failed_eligibility_survey, lambda { 
-    joins = [:enrollment_step_completions, :screening_survey_response]
-    ss_step_id = EnrollmentStep.find_by_keyword('screening_surveys').id
-    conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and 
-        ((screening_survey_responses.monozygotic_twin != 'no' and screening_survey_responses.monozygotic_twin != 'willing') or 
-         (screening_survey_responses.worrisome_information_comfort_level != 'always' and screening_survey_responses.worrisome_information_comfort_level != 'understand') or 
-         (screening_survey_responses.information_disclosure_comfort_level != 'comfortable' and screening_survey_responses.information_disclosure_comfort_level != 'understand') or 
-         (screening_survey_responses.past_genetic_test_participation != 'no' and screening_survey_responses.past_genetic_test_participation != 'public' and screening_survey_responses.past_genetic_test_participation != 'unsure_public') or 
-         screening_survey_responses.us_citizen_or_resident is null or 
-         screening_survey_responses.us_citizen_or_resident!=1) and
-        enrollment_step_completions.enrollment_step_id=#{ss_step_id}"
-    { 
-      :conditions => conditions_sql,
-      :order => 'enrollment_step_completions.created_at',
-      :joins => joins,
-    }
-  }
+  scope :failed_eligibility_survey, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('screening_surveys').id) & ScreeningSurveyResponse.failed
 
-  # Beware of NULL: "screening_survey_responses.us_citizen_or_resident!=1"
-  # does not match rows that have us_citizen_or_resident set to NULL.
-  scope :ineligible_for_enrollment, lambda { 
-    joins = [:enrollment_step_completions, :screening_survey_response]
-    enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
-    conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and 
-        (screening_survey_responses.monozygotic_twin != 'no' or 
-         screening_survey_responses.us_citizen_or_resident is null or 
-         screening_survey_responses.us_citizen_or_resident!=1) and
-        enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id}"
-    { 
-      :conditions => conditions_sql,
-      :order => 'enrollment_step_completions.created_at',
-      :joins => joins,
-      # TODO: when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
-      # Cf. http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
-      # Ward, 2010-10-09.
-      :readonly => false
-    }
-  }
+  # These are users who have submitted their enrollment application, but are ineligible. There are a few possible causes for this:
+  # - the rules have changed since they started the enrollment process (v1 of the eligibility questionnaire did not ask about citizenship/residency)
+  # - there was a bug in v1 of the enrollment process that apparently let some people through who should not have been
+  # - they submitted their application before we rolled out v2 of the eligibility questionnaire, and passing v2 is now required to be enrolled
+  scope :ineligible_for_enrollment, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('enrollment_application').id) & ScreeningSurveyResponse.failed
 
   scope :waitlisted, lambda { 
     joins = [ :waitlists ]
