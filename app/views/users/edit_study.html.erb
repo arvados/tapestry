@@ -15,18 +15,31 @@
       Your current status for this study is <strong><%= @study_participant.pretty_status %></strong>.
     <% else %>
 
-    <% if ((@study_participant.nil? or !@study_participant.is_interested?) and (!@user.shipping_address || (Time.now - @user.shipping_address.updated_at > 7200))) %>
     <p>
-    <% if ! @user.shipping_address %>
-    <strong>You have not provided a shipping address.</strong><br />
-    <% verb = 'provide' %>
-    <% elsif Time.now - @user.shipping_address.updated_at > 86400 * 30 %>
-    Your shipping address was last updated <%= @user.shipping_address.updated_at.strftime('%B %-d, %Y') -%>.<br />
-    <% verb = 'confirm or update' %>
+    <% if @study.shipping_address_required %>
+      <% if @user.shipping_address.nil? %>
+        <strong>This study requires a shipping address, which you have not yet provided.</strong><br />
+        <% verb = 'provide' %>
+      <% elsif Time.now - @user.shipping_address.updated_at > 86400 * 30 %>
+        <strong>This study requires a shipping address.</strong><br />
+        Your shipping address was last updated <%= @user.shipping_address.updated_at.strftime('%B %-d, %Y') -%>.<br />
+        <% verb = 'confirm or update' %>
+      <% end %>
+      Please take a moment to <%= link_to "#{verb} your shipping address", user_shipping_address_url(:return_to => request.path) -%> before expressing interest in this study.
     <% end %>
-    Please take a moment to <%= link_to "#{verb} your shipping address", user_shipping_address_url(:return_to => request.path) -%> before signing up for this study.
     </p>
+    <p>
+    <% if @study.phone_number_required %>
+      <% if @user.phone_number.nil? %>
+        <strong>This study requires a phone number, which you have not yet provided.</strong><br />
+        <% verb = 'provide' %>
+      <% else %>
+        <strong>This study requires a phone number.</strong><br />
+        <% verb = 'confirm or update' %>
+      <% end %>
+      Please take a moment to <%= link_to "#{verb} your phone number", edit_user_url(:return_to => request.path) -%> before expressing interest in this study.
     <% end %>
+    </p>
 
     <%= form_for :study_participant, :url => user_update_study_url, :html => { :method => :post, :class => 'study_participant', :id => 'create' } do |f| -%>
     <%= f.radio_button :status, 'undecided', :checked => (@study_participant.nil? or @study_participant.is_undecided? ? true : false) %> 

@@ -40,6 +40,14 @@ researchers and internal use' %><br />
     <%= f.label :irb_associate_id %><br />
     <%= @study.irb_associate ? @study.irb_associate.full_name : 'unassigned' %>
   </div>
+  <div class="field">
+    <%= f.label :shipping_address_required %><br />
+    <%= f.check_box :shipping_address_required %>
+  </div>
+  <div class="field">
+    <%= f.label :phone_number_required %><br />
+    <%= f.check_box :phone_number_required %>
+  </div>
   <% if not @study.approved then %>
     <div class="field">
       <%= f.label :requested, 'Request project approval' %><br />

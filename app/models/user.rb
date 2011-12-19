@@ -67,6 +67,8 @@ class User < ActiveRecord::Base
   validates_presence_of     :first_name
   validates_presence_of     :last_name
 
+  validates :phone_number, :length => {:minimum => 6, :maximum => 25}, :format => { :with => /\A\S[0-9\.\+\/\(\)\s\-]*\z/i }, :allow_blank => true
+
   # We allow nil for security_question and security_answer because we have a lot of legacy records
   # for which those fields are still nil
   validates_length_of       :security_question, :minimum => 5, :allow_nil => true
@@ -124,13 +126,13 @@ class User < ActiveRecord::Base
     end
   }
 
-  scope :failed_eligibility_survey, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('screening_surveys').id) & ScreeningSurveyResponse.failed
+  scope :failed_eligibility_survey, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('screening_surveys').id).merge(ScreeningSurveyResponse.failed)
 
   # These are users who have submitted their enrollment application, but are ineligible. There are a few possible causes for this:
   # - the rules have changed since they started the enrollment process (v1 of the eligibility questionnaire did not ask about citizenship/residency)
   # - there was a bug in v1 of the enrollment process that apparently let some people through who should not have been
   # - they submitted their application before we rolled out v2 of the eligibility questionnaire, and passing v2 is now required to be enrolled
-  scope :ineligible_for_enrollment, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('enrollment_application').id) & ScreeningSurveyResponse.failed
+  scope :ineligible_for_enrollment, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('enrollment_application').id).merge(ScreeningSurveyResponse.failed)
 
   scope :waitlisted, lambda { 
     joins = [ :waitlists ]
@@ -270,7 +272,7 @@ class User < ActiveRecord::Base
   end
 
   before_create :make_activation_code
-  attr_accessible :email, :email_confirmation,
+  attr_accessible :email, :email_confirmation, :phone_number,
                   :password, :password_confirmation,
                   :first_name, :middle_name, :last_name, :pgp_id,
                   :security_question, :security_answer,

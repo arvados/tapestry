@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111112154229) do
+ActiveRecord::Schema.define(:version => 20111219212050) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1745,17 +1745,19 @@ ActiveRecord::Schema.define(:version => 20111112154229) do
     t.text     "researcher_description"
     t.integer  "researcher_id"
     t.integer  "irb_associate_id"
-    t.boolean  "requested",               :default => false
-    t.boolean  "approved",                :default => false
+    t.boolean  "requested",                 :default => false
+    t.boolean  "approved",                  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
-    t.boolean  "open",                    :default => false
+    t.boolean  "open",                      :default => false
     t.datetime "date_approved"
     t.datetime "date_opened"
+    t.boolean  "shipping_address_required", :default => true
+    t.boolean  "phone_number_required",     :default => false
   end
 
   create_table "study_participant_versions", :force => true do |t|
@@ -1802,7 +1804,9 @@ ActiveRecord::Schema.define(:version => 20111112154229) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
-    t.boolean  "open",                    :default => false
+    t.boolean  "open",                      :default => false
+    t.boolean  "shipping_address_required"
+    t.boolean  "phone_number_required"
   end
 
   add_index "study_versions", ["study_id"], :name => "index_study_versions_on_study_id"
@@ -2116,6 +2120,7 @@ ActiveRecord::Schema.define(:version => 20111112154229) do
     t.datetime "deactivated_at"
     t.datetime "suspended_at"
     t.boolean  "can_reactivate_self"
+    t.string   "phone_number"
   end
 
   add_index "user_versions", ["user_id"], :name => "index_user_versions_on_user_id"
@@ -2172,6 +2177,7 @@ ActiveRecord::Schema.define(:version => 20111112154229) do
     t.datetime "deactivated_at"
     t.datetime "suspended_at"
     t.boolean  "can_reactivate_self"
+    t.string   "phone_number",                                    :default => ""
   end
 
   create_table "waitlist_versions", :force => true do |t|

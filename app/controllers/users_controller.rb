@@ -92,9 +92,14 @@ class UsersController < ApplicationController
       @user.log "Changed email address from '#{@user.email}' to '#{params[:user][:email]}'"
     end
 
+    # Avoid empty string phone numbers in the database
+    if params[:user][:phone_number] == '' then
+      params[:user][:phone_number] = nil
+    end
+
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'
-      redirect_to root_url
+      redirect_to(params[:return_to] || root_url)
     else
       @mailing_lists = MailingList.all
       render :action => 'edit'
@@ -293,6 +298,18 @@ class UsersController < ApplicationController
   def update_study
     @user = current_user
     @study = Study.find(params[:study_id])
+
+    if params[:study_participant]['status'] == 'interested' and @study.shipping_address_required and @user.shipping_address.nil? then
+      flash[:error] = 'This study requires that you provide a shipping address.'
+      redirect_to(user_edit_study_url(@user,@study))
+      return
+    end
+
+    if params[:study_participant]['status'] == 'interested' and @study.phone_number_required and @user.phone_number.nil? then
+      flash[:error] = 'This study requires that you provide a phone number.'
+      redirect_to(user_edit_study_url(@user,@study))
+      return
+    end
 
     if @user.study_participants.empty? or @user.study_participants.where('study_id = ?',@study.id).empty? then
       @user.studies << @study
