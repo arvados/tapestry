@@ -1,6 +1,6 @@
 class AddPhoneNumberToUsers < ActiveRecord::Migration
   def self.up
-    add_column :users, :phone_number, :string, :default => ''
+    add_column :users, :phone_number, :string, :default => nil
     add_column :user_versions, :phone_number, :string
   end
 
