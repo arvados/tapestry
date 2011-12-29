@@ -120,8 +120,10 @@ class StudiesController < ApplicationController
   # PUT /studies/1
   # PUT /studies/1.xml
   def update
-    # Override this field just in case; it comes in as a hidden form field
-    @study.researcher = current_user
+    if not current_user.is_admin?
+      # Override this field just in case; it comes in as a hidden form field
+      @study.researcher = current_user
+    end
 
     # These fields are immutable for the researcher
     params[:study].delete(:approved)
