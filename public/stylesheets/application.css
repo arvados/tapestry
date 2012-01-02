@@ -599,6 +599,14 @@ color: #7f97c9;
   margin: 0;
 }
 
+.change_warning {
+  background-color: #fce26d;
+  border: 2px solid #a99;
+  width: 700px;
+  margin: 25px 0 0 105px;
+  padding: 5px 15px;
+}
+
 .full_name_warning {
   background-color: #faa;
   border: 2px solid #a99;
