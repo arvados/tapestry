@@ -3,6 +3,10 @@ class ScreeningSurveysController < ApplicationController
   before_filter :redirect_to_enrollment_steps_if_screening_surveys_complete, :only => :index
   before_filter :fetch_or_create_response
 
+  def model_name
+    "ScreeningSurveyResponse"
+  end
+
   def update
     @screening_survey_response.update_attributes(params[:screening_survey_response])
     if current_user.has_completed?('screening_surveys')
