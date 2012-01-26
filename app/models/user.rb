@@ -214,10 +214,10 @@ class User < ActiveRecord::Base
   def self.locate_unenrolled_identifier(id)
     User.all.each do |u|
       if u.unique_hash == id then
-        return [ u ]
+        return u
       end
     end
-    return []
+    return nil
   end
 
   def is_enrolled?

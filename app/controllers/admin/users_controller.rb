@@ -92,7 +92,22 @@ class Admin::UsersController < Admin::AdminControllerBase
   end
 
   def show
-    @user = User.find params[:id]
+    if (params[:id].length == 40) then
+      # /admin/users/f65ea621688341215688354afc8321893a84cae5
+      @user = User.locate_unenrolled_identifier(params[:id])
+    else
+      # /admin/users/9999
+      begin
+        @user = User.find(params[:id])
+      rescue
+        @user = nil
+      end
+    end
+    if @user.nil? then
+      flash[:error] = 'Invalid user id specified'
+      redirect_to admin_users_url
+      return
+    end
     ccr_list = Dir.glob(get_ccr_path(@user.id) + '*').reverse
     ccr_list.delete_if { |s| true if not File.file?(s) or s.scan(/.+\/ccr(.+)\.xml/).empty? }
     if ccr_list.length > 0
@@ -413,7 +428,12 @@ class Admin::UsersController < Admin::AdminControllerBase
       @result = "User with hex #{params[:hex]}"
     elsif params[:unenrolled_identifier]
       if params[:unenrolled_identifier] != '' then
-        @unpaginated_users = User.locate_unenrolled_identifier(params[:unenrolled_identifier])
+        u = User.locate_unenrolled_identifier(params[:unenrolled_identifier])
+        if not u.nil? then
+          @unpaginated_users = [ u ]
+        else
+          @unpaginated_users = []
+        end
       else
         @unpaginated_users = []
       end
