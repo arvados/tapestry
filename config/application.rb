@@ -42,5 +42,16 @@ module Tapestry
 
     config.autoload_paths << "#{Rails.root}/lib"
 
+    # Do not wrap form labels with the 'field_with_errors' wrapper,
+    # and use a *span* instead of a div for the form input fields.
+    ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
+      include ActionView::Helpers::RawOutputHelper
+      if /<label for=/.match(html_tag) then
+        html_tag.html_safe
+      else
+        raw %(<span class="field_with_errors">#{html_tag}</span>)
+      end
+    end
+
   end
 end
