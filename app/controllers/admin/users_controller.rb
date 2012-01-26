@@ -181,7 +181,8 @@ class Admin::UsersController < Admin::AdminControllerBase
       redirect_to admin_users_url
     else
       @mailing_lists = MailingList.all
-      render :action => 'edit' end
+      render :action => 'edit'
+    end
   end
 
   def destroy
@@ -223,10 +224,10 @@ class Admin::UsersController < Admin::AdminControllerBase
       ccr_list.delete_if { |s| true if not File.file?(s) or s.scan(/.+\/ccr(.+)\.xml/).empty? }
       ccr_history = ccr_list.map { |s| s.scan(/.+\/ccr(.+)\.xml/)[0][0] }      
       for i in 0.. ccr_list.length - 1 do
-      	  if ccr_history[i] == version
-	     feed = File.new(ccr_list[i])
-	     break
-	  end
+        if ccr_history[i] == version
+          feed = File.new(ccr_list[i])
+          break
+        end
       end
       @ccr = Nokogiri::XML(feed)
     else
