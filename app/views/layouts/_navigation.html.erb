@@ -12,6 +12,7 @@
       <% if current_user.is_admin? %>
         <li <%= 'class="current"' if in_admin_section? %> ><%= link_to 'Admin', admin_root_url %></li>
       <% end %>
+      <%= nav_element 'Contact Us', new_message_url %>
       <% if current_user and session[:real_uid] and session[:switch_back_to] %>
         <li><span class="sudo-warning">Logged in as <b><%= current_user.full_name %></b>. <%= link_to "Back to #{User.find(session[:real_uid]).full_name}", switch_to_user_path(session[:real_uid]), :method => :post %></span></li>
       <% end %>

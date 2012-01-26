@@ -1,5 +1,13 @@
 class UserMailer < ActionMailer::Base
 
+  def support_message(message,user)
+    @message = message
+    @user = user
+    mail(:from => message.email,
+         :to => RT_EMAIL,
+         :subject => "#{message.category}: #{message.subject}")
+  end
+
   def signup_notification(user)
     @url  = "http://#{ROOT_URL}/activate/#{user.activation_code}"
     @user = user

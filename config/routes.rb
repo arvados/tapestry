@@ -207,5 +207,7 @@ Tapestry::Application.routes.draw do
   match '/traitwise' => 'traitwise#index', :as => :trait_surveys
   match '/traitwise/iframe' => 'traitwise#iframe', :as => :trait_survey_iframe
 
+  resource :message
+
   root :to => 'pages#show', :action => 'home'
 end

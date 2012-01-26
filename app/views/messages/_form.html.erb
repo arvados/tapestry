@@ -1,0 +1,29 @@
+<%= error_messages_for :message, :header_message => 'Error: your e-mail could not be sent.', :message => nil %>
+
+<%= form_for(@message, :url => message_url ) do |f| %>
+  <div class="field">
+    <%= f.label :category %><br />
+    <%= f.select :category, Message::TOPICS, {:include_blank => 'Choose a topic'} %>
+
+  </div>
+  <div class="field">
+    <%= f.label :email, 'Your e-mail address' %><br />
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label :confirm_email, 'Please confirm that your e-mail address is valid' %><br />
+    <%= f.check_box :confirm_email, {}, "1", "0" %>
+  </div>
+  <div class="field">
+    <%= f.label :subject %><br />
+    <%= f.text_field :subject, { :size => 50 } %>
+  </div>
+  <div class="field">
+    <%= f.label :message %><br />
+    <%= f.text_area :message, { :size => "50x20" } %>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Send e-mail' %>
+  </div>
+  <input type="hidden" name="return_to" value="<%= params[:return_to] %>" />
+<% end %>

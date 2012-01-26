@@ -1,0 +1,40 @@
+<h2>Contact support</h2>
+
+<p>Please fill out the following form to send your question to our support team. Your question will receive a reply as soon as possible.</p>
+
+<p><strong>We recommend that you consult our <a href="http://www.personalgenomes.org/faq.html">FAQ</a> before asking your question, as you may find the information you need there.</strong></p>
+
+<h3>Send an e-mail to our support team</h3>
+
+
+<%= render 'form' %>
+
+<%= form_tag _path, :method => 'post' do %>
+
+  <div class="field">
+    <%= label :nature, 'Nature of your question' %><br />
+    <%= select_tag :nature, options_for_select(['Choose a topic','Genetic Data','My account','Sample collection','Safety Questionnaire','Surveys','Studies','Other' ].map { |r| [r,r]}) %>
+  </div>
+  <div class="field">
+    <%= label :email, 'Your e-mail address' %><br />
+    <%= text_field_tag :email, current_user.email, { :size => 50 } %>
+  </div>
+  <div class="field">
+    <%= label :email_valid, 'Please confirm that your e-mail address is valid' %><br />
+    <%= check_box_tag :email_valid, value = "1", checked = false %>
+  </div>
+  <div class="field">
+    <%= label :subject, 'Subject' %><br />
+    <%= text_field_tag :subject, nil, { :size => 50 } %>
+  </div>
+  <div class="field">
+    <%= label :message, 'Message' %><br />
+    <%= text_area_tag :message, nil, { :size => "50x20" } %>
+  </div>
+  <div class="field">
+    <%= submit_tag("Submit", :name => nil) %>
+  </div>
+  </p>
+<% end %>
+
+
