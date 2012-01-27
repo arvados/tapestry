@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
     return controller_name.titleize if action_name == 'index'
     item_name = action_name.titleize
     if (action_name == 'show' or action_name == 'edit')
-      if params[:id] and model and (ob = model.find(params[:id]))
+      if params[:id] and model and (ob = model.find_by_id(params[:id]))
         item_name = nil
         if defined? ob.hex
           item_name = ob.hex
