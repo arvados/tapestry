@@ -3,6 +3,7 @@ class UserMailer < ActionMailer::Base
   def support_message(message,user)
     @message = message
     @user = user
+    headers['X-PGP-Unique-Hash'] = user.unique_hash
     mail(:from => message.email,
          :to => RT_EMAIL,
          :subject => "#{message.category}: #{message.subject}")
