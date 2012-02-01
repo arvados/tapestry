@@ -29,7 +29,7 @@ module Admin::UsersHelper
           :informed_consent_response,
           :waitlists])
 
-    user_fields = %w(first_name last_name email activated_at phr_profile_name).freeze
+    user_fields = %w(first_name last_name email hex activated_at phr_profile_name).freeze
 
     survey_response_fields = {
       :privacy   => %w(worrisome_information_comfort_level
