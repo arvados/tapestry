@@ -41,6 +41,12 @@ Tapestry::Application.configure do
   
   TRAITWISE_LOGIN = "you@example.com"
   TRAITWISE_PASSWORD = "your_traitwise_password"
+
+  SURVEY_SALT = 'GENERATE_ME_NOW'
+
+  RT_EMAIL = 'support@example.com'
+
+  GET_2012_SECRET = 'xxxxxxxx'
   
 end
 
