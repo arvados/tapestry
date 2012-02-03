@@ -122,7 +122,7 @@ everyone else tickets are $225.  To register for the conference, you will
 need to add a unique Promo Code.
 </p>
 <p>
-Your Personal Promo Code: <strong><%= "PGP_" + Digest::SHA1.hexdigest(GET_2012_SECRET + current_user.email)[0,6].upcase %></strong><br/>
+Your Personal Promo Code: <strong><%= "PGP_" + Digest::SHA1.hexdigest(current_user.id.to_s + GET_2012_SECRET)[0,6].upcase %></strong><br/>
  (please do not share this promo code with others)
 </p>
 <p>

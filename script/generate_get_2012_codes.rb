@@ -10,19 +10,7 @@ require File.dirname(__FILE__) + '/../config/environment'
 
 require 'digest/sha1'
 
-users = User.enrolled
-
-buf = ''
-header_row = ['Invite code','E-mail','First name','Last name']
-
-CSV.generate_row(header_row, header_row.size, buf)
-users.each do |user|
-  row = []
-  row.push "PGP_" + Digest::SHA1.hexdigest(GET_2012_SECRET + user.email)[0,6].upcase
-  row.push user.email
-  row.push user.first_name
-  row.push user.last_name
-  CSV.generate_row(row, row.size, buf)
+(1..3000).each do |i|
+  puts "PGP_" + Digest::SHA1.hexdigest(i.to_s + GET_2012_SECRET)[0,6].upcase
 end 
-puts buf 
 
