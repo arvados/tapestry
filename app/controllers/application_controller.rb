@@ -206,7 +206,7 @@ class ApplicationController < ActionController::Base
   # TODO: Move to a separate presenter class instead of a helper.
   def csv_for_study(study,type)
 
-    user_fields = %w(hex e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip).freeze
+    user_fields = %w(hex e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip phone_number).freeze
 
     FasterCSV.generate(String.new, :force_quotes => true) do |csv|
 
