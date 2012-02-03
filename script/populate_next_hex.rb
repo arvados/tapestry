@@ -3,6 +3,8 @@
 # Default is development
 production = ARGV[0] == "production"
 
+verbose = ARGV[1] == "verbose"
+
 ENV["RAILS_ENV"] = "production" if production
 
 require File.dirname(__FILE__) + '/../config/boot'
@@ -18,6 +20,8 @@ while NextHex.all.count < 1000 do
   count += 1
 end
 
-puts
-puts "Created #{count} new records in the NextHex table."
-puts
+if verbose
+  puts
+  puts "Created #{count} new records in the NextHex table."
+  puts
+end
