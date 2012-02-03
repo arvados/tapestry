@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111219212050) do
+ActiveRecord::Schema.define(:version => 20120203221829) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1159,6 +1159,12 @@ ActiveRecord::Schema.define(:version => 20111219212050) do
   end
 
   add_index "named_proxy_versions", ["named_proxy_id"], :name => "index_named_proxy_versions_on_named_proxy_id"
+
+  create_table "next_hexes", :force => true do |t|
+    t.string   "hex"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "nonces", :force => true do |t|
     t.integer  "owner_id"

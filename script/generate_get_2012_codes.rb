@@ -10,7 +10,13 @@ require File.dirname(__FILE__) + '/../config/environment'
 
 require 'digest/sha1'
 
-(1..3000).each do |i|
-  puts "PGP_" + Digest::SHA1.hexdigest(i.to_s + GET_2012_SECRET)[0,6].upcase
+users = User.enrolled
+
+users.each do |user|
+  puts "PGP_" + Digest::SHA1.hexdigest(user.hex + GET_2012_SECRET)[0,6].upcase
 end 
+
+NextHex.all.each do |nh|
+  puts "PGP_" + Digest::SHA1.hexdigest(nh.hex + GET_2012_SECRET)[0,6].upcase
+end
 
