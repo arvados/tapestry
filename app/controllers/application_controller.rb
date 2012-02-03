@@ -232,6 +232,7 @@ class ApplicationController < ActionController::Base
             row.push ''
           end
         end
+        row.push u.user.phone_number
 
         csv << row
       end
