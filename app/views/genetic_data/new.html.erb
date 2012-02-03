@@ -3,10 +3,8 @@
 You can upload a genetic dataset here. File size is limited to 30 MB. You are
 encouraged to upload compressed files. Please make sure to select your data
 provider from the 'Data Provider' dropdown box. If your data is from a data
-provider that is not listed, please <a
-href="mailto:support@personalgenomes.org">let us know</a> and we will add your
-provider to the list. If your dataset is larger than 30 MB, please <a
-href="mailto:support@personalgenomes.org">contact us</a>.
+provider that is not listed, please <%= link_to('let us know', new_message_path) %> and we will add your
+provider to the list. If your dataset is larger than 30 MB, please <%= link_to('contact us', new_message_path) %>.
 
  <%= error_messages_for :genetic_data, :header_message => 'Error: dataset could not be uploaded', :message => nil %>
 
@@ -35,7 +33,7 @@ href="mailto:support@personalgenomes.org">contact us</a>.
   You must read and agree to the following terms and conditions before uploading any data to your PGP participant profile.
   </p>
   <p>
-  <strong>1. Upload Your Own, Accurate Information.</strong> Pursuant to <a href="http://www.personalgenomes.org/tos.html">PersonalGenomes.org’s Terms of Service</a>, you may only upload to PG.org data, including genetic data, that you own or otherwise have the right to use. You also agree that you will not intentionally upload any false, misleading or inaccurate data. If you find out that you’ve uploaded any data that is not yours or that is inaccurate, please delete the data and <a href="mailto:support@personalgenomes.org">notify us immediately</a>.
+  <strong>1. Upload Your Own, Accurate Information.</strong> Pursuant to <a href="http://www.personalgenomes.org/tos.html">PersonalGenomes.org’s Terms of Service</a>, you may only upload to PG.org data, including genetic data, that you own or otherwise have the right to use. You also agree that you will not intentionally upload any false, misleading or inaccurate data. If you find out that you’ve uploaded any data that is not yours or that is inaccurate, please delete the data and <%= link_to('notify us immediately', new_message_path) %>.
   </p>
   <p>
   <strong>2. Information You Upload Will Be Public.</strong> Remember that all data uploaded to PG.org, including all genetic data, will become part of the PG.org’s public database. All data will be publicly distributed under the CC0 universal waiver and will be available without restriction to any third party visiting the PG.org website or otherwise accessing the database, all as described in more detail in PG.org’s Terms of Service.
