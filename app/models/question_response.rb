@@ -9,6 +9,7 @@ class QuestionResponse < ActiveRecord::Base
   before_validation :normalize_answer, :cache_correct
 
   scope :correct, { :conditions => { :correct => true } }
+  scope :incorrect, { :conditions => { :correct => false } }
 
   def correct?
     cache_correct if read_attribute(:correct).nil?

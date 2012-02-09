@@ -11,6 +11,19 @@ class Admin::ExamQuestionsController < Admin::AdminControllerBase
 
   def show
     @answer_options = @exam_question.answer_options
+
+    @all = QuestionResponse.find_all_by_exam_question_id(@exam_question.id).count
+    @correct = QuestionResponse.correct.find_all_by_exam_question_id(@exam_question.id).count
+    @incorrect = QuestionResponse.incorrect.find_all_by_exam_question_id(@exam_question.id).count
+
+    if @all > 0 then
+      @incorrect_percent = sprintf("%.02f\%",QuestionResponse.incorrect.find_all_by_exam_question_id(@exam_question.id).count.to_f / QuestionResponse.find_all_by_exam_question_id(@exam_question.id).count.to_f * 100)
+      @correct_percent = sprintf("%.02f\%",QuestionResponse.correct.find_all_by_exam_question_id(@exam_question.id).count.to_f / QuestionResponse.find_all_by_exam_question_id(@exam_question.id).count.to_f * 100)
+    else
+      @incorrect_percent = ''
+      @correct_percent = ''
+    end
+
   end
 
   def new

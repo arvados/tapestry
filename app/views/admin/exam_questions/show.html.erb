@@ -15,6 +15,15 @@
   <%=h @exam_question.ordinal %>
 </p>
 
+<p>
+  <strong>Statistics:</strong><br/>
+  <table class="admin_table">
+    <tr class="even"><td>Number of times answered:</td><td align="right"><%= @all %></td><td align="right">100.00%</td></tr>
+    <tr class="odd"><td>Number of times answered correctly:</td><td align="right"><%= @correct %></td><td align="right"><%= @correct_percent %></td></tr>
+    <tr class="even"><td>Number of times answered incorrectly:</td><td align="right"><%= @incorrect %></td><td align="right"><%= @incorrect_percent %></td></tr>
+  </table>
+</p>
+
 <h2>Answer Options</h2>
 
 <table class="admin_table">
