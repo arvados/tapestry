@@ -17,7 +17,7 @@
       <td><%= report.created %></td>
       <td><%= report.status %></td>
       <td><%= report.user.full_name %></td>
-      <td><%= link_to('download',admin_report_download_url(report.id)) %></td>
+      <td><%= report.status == 'Ready' ? link_to('download',admin_report_download_url(report.id)) : '' %></td>
     </tr>
   <% end -%>
 </table>
