@@ -1,6 +1,9 @@
 <h2>Reports</h2>
 
 Download Absolute Pitch Survey results as <%= link_to 'CSV', admin_absolute_pitch_survey_export_path() %> (<%= link_to 'Question Key', admin_absolute_pitch_survey_questions_path() %>)<br />
-<%= link_to 'Exam report question and answer Key', admin_users_url(:format => 'csv', :exam_question_and_answer_key => :true) %><br />
+
+<p><%= link_to 'Exam report question and answer Key', admin_users_url(:format => 'csv', :exam_question_and_answer_key => :true) %></p>
+
+Request new report: <%= link_to 'exam (csv)', admin_reports_queue_url(:report_name => 'exam', :report_type => 'csv') %><br />
 
 <%= render :partial => 'reportstable' %>
