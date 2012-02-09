@@ -5,6 +5,8 @@ class ExamResponse < ActiveRecord::Base
   has_many   :question_responses
 
   scope :for_user, lambda { |user| { :conditions => ['user_id = ?', user.id ] } }
+  # The way in which old exam responses are retained is a bit braindead. This scope returns all exam responses for a given user.
+  scope :all_for_user, lambda { |user| { :conditions => ['user_id = ? or original_user_id = ?', user.id, user.id ] } }
 
   def discard_for_retake!
     # why does update_attributes!({:original_user_id => user_id, :user_id => nil}) not work in test?

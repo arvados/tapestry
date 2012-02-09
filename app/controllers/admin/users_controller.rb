@@ -8,16 +8,27 @@ class Admin::UsersController < Admin::AdminControllerBase
     respond_to do |format|
       format.html
       format.csv { 
-        if not params[:failed_eligibility_survey] then
-          send_data csv_for_users(@unpaginated_users), {
-                     :filename    => 'PGP Application Users.csv',
-                     :type        => 'application/csv',
-                     :disposition => 'attachment' } 
-        else 
+        @timestamp = Time.now().strftime("%Y%m%d-%H%M%S")
+        if params[:failed_eligibility_survey] then
           send_data csv_for_failed_eligibility_survey, {
-                     :filename    => 'hupgp_failed_eligibility_survey.csv',
+                     :filename    => "#{@timestamp}-hupgp_failed_eligibility_survey.csv",
                      :type        => 'application/csv',
                      :disposition => 'attachment' } 
+        elsif params[:exam_results] then
+          send_data csv_for_exam_results, {
+                     :filename    => "#{@timestamp}-hupgp_exam_results.csv",
+                     :type        => 'application/csv',
+                     :disposition => 'attachment' }
+        elsif params[:exam_question_and_answer_key] then
+          send_data csv_for_exam_question_and_answer_key, {
+                     :filename    => "#{@timestamp}-hupgp_exam_question_and_answer_key.csv",
+                     :type        => 'application/csv',
+                     :disposition => 'attachment' }
+        else
+          send_data csv_for_users(@unpaginated_users), {
+                     :filename    => "#{@timestamp}-hupgp_users.csv",
+                     :type        => 'application/csv',
+                     :disposition => 'attachment' }
         end
       }
     end

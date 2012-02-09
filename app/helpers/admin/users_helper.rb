@@ -1,5 +1,60 @@
 module Admin::UsersHelper
 
+  def csv_for_exam_question_and_answer_key()
+    buf = ''
+    # first the questions
+    header_row = ['Question id','Exam version id','Kind','Ordinal','Question']
+    CSV.generate_row(header_row, header_row.size, buf)
+    ExamQuestion.all.each do |eq|
+          row = []
+          row.push eq.id
+          row.push eq.exam_version_id
+          row.push eq.kind
+          row.push eq.ordinal
+          row.push eq.question
+          CSV.generate_row(row, row.size, buf)
+    end
+    # now the answers
+    header_row = ['','','','']
+    CSV.generate_row(header_row, header_row.size, buf)
+    header_row = ['Answer id','Question id','Correct','','Answer']
+    CSV.generate_row(header_row, header_row.size, buf)
+    AnswerOption.all.each do |ao|
+          row = []
+          row.push ao.id
+          row.push ao.exam_question_id
+          row.push ao.correct
+          row.push '' # so as not to mess up layout too much for questions, above
+          row.push ao.answer
+          CSV.generate_row(row, row.size, buf)
+    end
+    buf
+  end
+
+  def csv_for_exam_results()
+    users = User.real
+
+    buf = ''
+    header_row = ['Hash','Exam response id','Question','Answer','Correct','Date/time']
+
+    CSV.generate_row(header_row, header_row.size, buf)
+    users.each do |user|
+      ExamResponse.all_for_user(user).each do |er|
+        er.question_responses.each do |qr|
+          row = []
+          row.push user.unique_hash
+          row.push qr.exam_response_id
+          row.push qr.exam_question_id
+          row.push qr.answer
+          row.push qr.correct
+          row.push qr.created_at
+          CSV.generate_row(row, row.size, buf)
+        end
+      end
+    end
+    buf
+  end
+
   def csv_for_failed_eligibility_survey()
     users = User.failed_eligibility_survey
 
