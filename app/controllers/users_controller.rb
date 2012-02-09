@@ -245,9 +245,11 @@ class UsersController < ApplicationController
   end
 
   def accept_tos
-    if current_user.documents.kind('tos', 'v1').empty?
-      current_user.documents << Document.new(:keyword => 'tos', :version => 'v1', :timestamp => Time.now())
+    tos_version = 'v1'
+    if current_user.documents.kind('tos', tos_version).empty?
+      current_user.documents << Document.new(:keyword => 'tos', :version => tos_version, :timestamp => Time.now())
       current_user.save!
+      current_user.log "Accepted TOS #{tos_version}"
       flash[:notice] = 'Thank you for agreeing with our Terms of Service.'
       redirect_to root_url
     else
