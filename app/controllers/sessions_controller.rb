@@ -31,7 +31,8 @@ class SessionsController < ApplicationController
       handle_remember_cookie! new_cookie_flag
       redirect_back_or_default('/')
       flash[:notice] = "Logged in successfully"
-      update_ccr_if_exists
+      # Google Health is dead, disable this for now.
+      #update_ccr_if_exists
     else
       note_failed_signin
       @email       = params[:email]
