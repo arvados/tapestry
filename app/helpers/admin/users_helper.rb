@@ -31,30 +31,6 @@ module Admin::UsersHelper
     buf
   end
 
-  def csv_for_exam_results()
-    users = User.real
-
-    buf = ''
-    header_row = ['Hash','Exam response id','Question','Answer','Correct','Date/time']
-
-    CSV.generate_row(header_row, header_row.size, buf)
-    users.each do |user|
-      ExamResponse.all_for_user(user).each do |er|
-        er.question_responses.each do |qr|
-          row = []
-          row.push user.unique_hash
-          row.push qr.exam_response_id
-          row.push qr.exam_question_id
-          row.push qr.answer
-          row.push qr.correct
-          row.push qr.created_at
-          CSV.generate_row(row, row.size, buf)
-        end
-      end
-    end
-    buf
-  end
-
   def csv_for_failed_eligibility_survey()
     users = User.failed_eligibility_survey
 
@@ -170,5 +146,20 @@ module Admin::UsersHelper
 
     buf
   end
+
+  # Returns new filename for a csv report
+  def generate_csv_filename(name, create_dir = true)
+    f = "/data/#{ROOT_URL}/admin/reports/"
+
+    if create_dir && !File.directory?(f)
+      Dir.mkdir(f)
+    end
+    f = f + '/'
+
+    timestamp = Time.now.strftime("%Y%m%d-%H%M%S")
+
+    return f + "#{timestamp}-#{name}.csv"
+  end
+
 end
 

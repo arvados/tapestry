@@ -22,6 +22,28 @@ class DrbController < ApplicationController
     db_ccr.save
   end
 
+  def report_ready
+    user_id = params[:user_id]
+    report_id = params[:report_id]
+    filename = params[:filename]
+
+    @r = Report.find(report_id)
+    @r.status = 'Ready'
+    @r.created = Time.now()
+    @r.path = filename
+    @r.save!
+  end
+
+  def report_failed
+    user_id = params[:user_id]
+    report_id = params[:report_id]
+    error_message = params[:error]
+
+    @r = Report.find(report_id)
+    @r.status = 'Failed: ' + error_message
+    @r.save!
+  end
+
   protected
 
   def valid_callback

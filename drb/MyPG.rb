@@ -10,6 +10,7 @@ require 'yaml'
 require File.dirname(__FILE__) + '/../config/boot'
 require File.dirname(__FILE__) + '/../config/environment'
 include PhrccrsHelper
+include Admin::UsersHelper
 
 # Flush STDOUT/STDERR immediately
 STDOUT.sync = true
@@ -18,6 +19,9 @@ STDERR.sync = true
 class WorkObject
 	attr_accessor :action
 	attr_accessor :user_id
+	attr_accessor :report_id
+	attr_accessor :report_name
+	attr_accessor :report_type
 	attr_accessor :authsub_token
 	attr_accessor :etag
 	attr_accessor :ccr_profile_url
@@ -55,6 +59,8 @@ class MyPG
 			      print "#{name}: started work for user #{work.user_id}: #{work.action}\n"
 						if work.action == 'get_ccr' then
 							get_ccr_worker(work)
+						elsif work.action = 'report' then
+							report_worker(work)
 						end
 			      print "#{name}: finished work for user #{work.user_id}: #{work.action}\n"
 			      sleep(rand(0.1))
@@ -95,6 +101,49 @@ class MyPG
 			end
     end 
     return @config
+  end
+
+  def create_exam_report_worker(work)
+    users = User.real
+
+    buf = ''
+    header_row = ['Hash','Exam response id','Question','Answer','Correct','Date/time']
+
+    CSV.generate_row(header_row, header_row.size, buf)
+    users.each do |user|
+      ExamResponse.all_for_user(user).each do |er|
+        er.question_responses.each do |qr|
+          row = []
+          row.push user.unique_hash
+          row.push qr.exam_response_id
+          row.push qr.exam_question_id
+          row.push qr.answer
+          row.push qr.correct
+          row.push qr.created_at
+          CSV.generate_row(row, row.size, buf)
+        end
+      end
+    end
+    csv_filename = generate_csv_filename('exam_results', true)
+    outFile = File.new(csv_filename, 'w')
+    outFile.write(buf)
+    outFile.close
+    return csv_filename
+  end
+
+  def report_worker(work)
+    error_message = ''
+    if work.report_name == 'exam' and work.report_type == 'csv' then
+      filename = create_exam_report_worker(work)
+    else
+      error_message = "Unknown report name #{work.report_name} or type #{work.report_type}"
+    end
+
+    if error_message == '' then
+      callback('report_ready',work.user_id, { "report_id" => work.report_id, "filename" => filename })
+    else
+      callback('report_failed',work.user_id, { "report_id" => work.report_id, "error" => error_message })
+    end
   end
 
   def get_ccr_worker(work)
@@ -141,6 +190,17 @@ class MyPG
 		@queue.enq(work)
 		return 0
 	end
+
+  def create_report(user_id,report_id,report_name,report_type)
+    work = WorkObject.new()
+    work.action = 'report'
+    work.user_id = user_id
+    work.report_id = report_id.to_s
+    work.report_name = report_name
+    work.report_type = report_type
+    @queue.enq(work)
+    return 0
+  end
 
 	def callback(type,user_id,args) 
 	

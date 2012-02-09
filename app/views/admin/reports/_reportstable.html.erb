@@ -1,0 +1,24 @@
+<%= will_paginate @reports %>
+<table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Requested</th>
+    <th>Created</th>
+    <th>Status</th>
+    <th>Requested by</th>
+    <th>Download</th>
+  </tr>
+  <% @reports.each do |report| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%= report.name %></td>
+      <td><%= report.rtype %></td>
+      <td><%= report.requested %></td>
+      <td><%= report.created %></td>
+      <td><%= report.status %></td>
+      <td><%= report.user.full_name %></td>
+      <td><%= link_to('download',admin_report_download_url(report.id)) %></td>
+    </tr>
+  <% end -%>
+</table>
+<%= will_paginate @reports %>

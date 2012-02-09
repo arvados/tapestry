@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120203221829) do
+ActiveRecord::Schema.define(:version => 20120209214728) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1478,6 +1478,43 @@ ActiveRecord::Schema.define(:version => 20120203221829) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "report_versions", :force => true do |t|
+    t.integer  "report_id"
+    t.integer  "lock_version"
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "rtype"
+    t.datetime "requested"
+    t.datetime "created"
+    t.string   "path"
+    t.string   "status"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "report_versions", ["report_id"], :name => "index_report_versions_on_report_id"
+
+  create_table "reports", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "rtype"
+    t.datetime "requested"
+    t.datetime "created"
+    t.string   "path"
+    t.string   "status"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  add_index "reports", ["created"], :name => "index_reports_on_created"
 
   create_table "residency_survey_response_versions", :force => true do |t|
     t.integer  "residency_survey_response_id"

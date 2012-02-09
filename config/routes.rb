@@ -172,6 +172,8 @@ Tapestry::Application.routes.draw do
       resources :studies
       resources :bulk_promotions
       resources :bulk_waitlists
+      match '/reports/queue' => 'reports#queue', :as => :reports_queue
+      match '/reports/download/:id' => 'reports#download', :as => :report_download
       resources :reports
       resources :content_areas do
           resources :exams do

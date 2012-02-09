@@ -1,46 +1,6 @@
-<h2>Exam Reporting</h2>
+<h2>Reports</h2>
 
-<p>
-  <strong>Users who have completed the entrance exam:</strong>
-  <%= sprintf("%.2f", 100.0 * @passed_entrance_exam_count.to_f / User.count) %> %
-  (<%= @passed_entrance_exam_count %> / <%= User.count %>)
-</p>
+Download Absolute Pitch Survey results as <%= link_to 'CSV', admin_absolute_pitch_survey_export_path() %> (<%= link_to 'Question Key', admin_absolute_pitch_survey_questions_path() %>)<br />
+<%= link_to 'Exam report question and answer Key', admin_users_url(:format => 'csv', :exam_question_and_answer_key => :true) %><br />
 
-<h3>Details</h3>
-
-<table class="admin_table">
-  <tr>
-    <th>Content Area</th>
-    <th>Exam</th>
-    <th>Version</th>
-    <th>Total attempts</th>
-    <th>Correct responses</th>
-    <th>Average attempts per user</th>
-  </tr>
-  <% for content_area in @content_areas %>
-    <% for exam in content_area.exams %>
-      <% for version in exam.versions %>
-
-        <% first_exam_in_content_area = (exam    == content_area.exams.first ) %>
-        <% first_version_of_exam      = (version == exam.versions.first) %>
-
-        <tr class="<%= cycle 'even', 'odd' %>">
-          <td>
-            <% if first_exam_in_content_area && first_version_of_exam  %>
-              <%= content_area.title %>
-            <% end %>
-          </td>
-          <td>
-            <% if first_version_of_exam %>
-              <%= exam.title %>
-            <% end %>
-          </td>
-          <td><%= version.version %></td>
-          <td><%= version.exam_responses.count %></td>
-          <td><%= version.exam_responses.select(&:correct?).size %></td>
-          <td><%= sprintf("%.2f",  version.exam_responses.count / version.exam_responses.select(&:correct?).size.to_f) %></td>
-        </tr>
-      <% end %>
-    <% end %>
-  <% end %>
-</table>
+<%= render :partial => 'reportstable' %>
