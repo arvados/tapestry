@@ -133,10 +133,16 @@ class MyPG
 
   def report_worker(work)
     error_message = ''
-    if work.report_name == 'exam' and work.report_type == 'csv' then
-      filename = create_exam_report_worker(work)
-    else
-      error_message = "Unknown report name #{work.report_name} or type #{work.report_type}"
+    begin
+      if work.report_name == 'exam' and work.report_type == 'csv' then
+        filename = create_exam_report_worker(work)
+      else
+        error_message = "Unknown report name #{work.report_name} or type #{work.report_type}"
+      end
+		rescue Exception => e
+      error_message = e.inspect()
+			puts "Trapped exception in report_worker"
+      puts "#{work.action}: job failed: #{error_message}"
     end
 
     if error_message == '' then
