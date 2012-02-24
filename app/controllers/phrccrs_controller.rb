@@ -10,6 +10,28 @@ class PhrccrsController < ApplicationController
     if !current_user.authsub_token.blank?
       redirect_to :action => 'review'
     end
+    @ccr_history = Ccr.find(:all, :conditions => {:user_id => current_user.id},
+                            :order => 'version DESC')
+  end
+
+  def download
+    @ccr = Ccr.find(params[:id])
+
+    if @ccr.user_id != current_user.id then
+      current_user.log("Attempt to download ccr (id #{@ccr.id}) owned by someone else (user id #{@ccr.user_id})")
+      flash[:error] = "This CCR is not yours."
+      redirect_to :action => :show
+      return
+    end
+
+    ccr_path = get_ccr_path(current_user.id)
+    ccr_filename = get_ccr_filename(current_user.id, false, @ccr.version)
+    ccr_filename.gsub!(/^#{ccr_path}/,'')
+
+    send_data(File.open(ccr_path + '/' + ccr_filename, "rb").read,
+              :filename => ccr_filename,
+              :disposition => 'attachment',
+              :type => 'application/xml')
   end
 
   def review

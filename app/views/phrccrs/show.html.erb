@@ -49,3 +49,17 @@ After you have completed your Google Health profile, return to this page. Click 
 <% end %>
 
 </form>
+
+<% if @ccr_history.length > 0 %>
+<h3>All PHRs</h3>
+<table>
+<% @ccr_history.each { |ccr| %>
+<tr>
+  <td><a href="/phrccr/review?version=<%= ccr.version %>"><%= ccr.version %></a></td>
+  <td><a href="/phrccr/download?id=<%= ccr.id %>">download raw CCR</a></td>
+  <td><button name="deleteccr" value="<%= ccr.version %>">Delete</button></td></tr>
+<% } %>
+</table>
+<% end %>
+
+
