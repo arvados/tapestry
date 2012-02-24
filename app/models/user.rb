@@ -183,7 +183,6 @@ class User < ActiveRecord::Base
     t.add :hex, :if => :is_enrolled?
     t.add :full_name, :if => :is_researcher?
     t.add :full_name, :if => :is_admin?
-    t.add :unique_hash, :as => :uuid
     t.add :researcher_affiliation, :if => :is_researcher?
   end
 
@@ -202,6 +201,7 @@ class User < ActiveRecord::Base
   end
 
   api_accessible :privileged, :extend => :public do |t|
+    t.add :unique_hash, :as => :uuid
     t.add :full_name
   end
 
