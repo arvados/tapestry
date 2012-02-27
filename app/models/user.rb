@@ -535,6 +535,18 @@ class User < ActiveRecord::Base
     Digest::SHA1.hexdigest("#{secret}---#{self.id}")
   end
 
+  # A token which should only ever be visible to this user, and to one
+  # particular third-party application after the use has requested
+  # this.  Ideally, "app_identifier" is a URL so we can safely forward
+  # the token to a third party on behalf of the user.  This gives us a
+  # "cheap irrevocable oAuth" mechanism.
+  def app_token(app_identifier)
+    secret = Tapestry::Application.config.secret_token
+    raise "Installation problem: Application.config.secret_token not properly defined" if secret.length < 16
+    OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('SHA1'),
+                            secret, "#{self.id}--#{app_identifier}")
+  end
+
   protected
 
   def make_hex_code
