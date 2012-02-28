@@ -301,16 +301,22 @@ class UsersController < ApplicationController
     @user = current_user
     @study = Study.find(params[:study_id])
 
-    if params[:study_participant]['status'] == 'interested' and @study.shipping_address_required and @user.shipping_address.nil? then
-      flash[:error] = 'This study requires that you provide a shipping address.'
-      redirect_to(user_edit_study_url(@user,@study))
-      return
-    end
+    if params[:study_participant]['status'] == 'interested'
 
-    if params[:study_participant]['status'] == 'interested' and @study.phone_number_required and @user.phone_number.nil? then
-      flash[:error] = 'This study requires that you provide a phone number.'
-      redirect_to(user_edit_study_url(@user,@study))
-      return
+      if @study.shipping_address_required and @user.shipping_address.nil? then
+        flash[:error] = 'This study requires that you provide a shipping address.'
+        redirect_to(user_edit_study_url(@user,@study))
+        return
+      end
+
+      if @study.phone_number_required and
+          @user.shipping_address.nil? and
+          @user.phone_number.nil? then
+        flash[:error] = 'This study requires that you provide a phone number.'
+        redirect_to(user_edit_study_url(@user,@study))
+        return
+      end
+
     end
 
     if @user.study_participants.empty? or @user.study_participants.where('study_id = ?',@study.id).empty? then

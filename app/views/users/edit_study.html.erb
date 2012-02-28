@@ -15,8 +15,8 @@
       Your current status for this study is <strong><%= @study_participant.pretty_status %></strong>.
     <% else %>
 
-    <p>
     <% if @study.shipping_address_required %>
+    <p>
       <% if @user.shipping_address.nil? %>
         <strong>This study requires a shipping address, which you have not yet provided.</strong><br />
         <% verb = 'provide' %>
@@ -28,10 +28,10 @@
         <% verb = 'confirm or update' %>
       <% end %>
       Please take a moment to <%= link_to "#{verb} your shipping address", user_shipping_address_url(:return_to => request.path) -%> before expressing interest in this study.
-    <% end %>
     </p>
+    <% elsif @study.phone_number_required %>
+    <%# shipping address has mandatory phone number; no need to demand both. %>
     <p>
-    <% if @study.phone_number_required %>
       <% if @user.phone_number.nil? %>
         <strong>This study requires a phone number, which you have not yet provided.</strong><br />
         <% verb = 'provide' %>
@@ -40,8 +40,8 @@
         <% verb = 'confirm or update' %>
       <% end %>
       Please take a moment to <%= link_to "#{verb} your phone number", edit_user_url(:return_to => request.path) -%> before expressing interest in this study.
-    <% end %>
     </p>
+    <% end %>
 
     <%= form_for :study_participant, :url => user_update_study_url, :html => { :method => :post, :class => 'study_participant', :id => 'create' } do |f| -%>
     <%= f.radio_button :status, 'undecided', :checked => (@study_participant.nil? or @study_participant.is_undecided? ? true : false) %> 

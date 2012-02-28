@@ -227,12 +227,24 @@ class ApplicationController < ActionController::Base
           row.push u.user.shipping_address.city
           row.push u.user.shipping_address.state
           row.push u.user.shipping_address.zip
+          if not study.shipping_address_required and
+              u.user.phone_number and
+              u.user.updated_at and u.user.shipping_address.updated_at and
+              u.user.updated_at > u.user.shipping_address.updated_at then
+            # user has phone number listed with shipping address, but
+            # was reminded to update the "account" phone number when
+            # signing up, and the latter has (probably) been updated
+            # more recently than the former.
+            row.push u.user.phone_number
+          else
+            row.push u.user.shipping_address.phone
+          end
         else
           6.times do
             row.push ''
           end
+          row.push u.user.phone_number
         end
-        row.push u.user.phone_number
 
         csv << row
       end
