@@ -7,9 +7,6 @@ class PhrccrsController < ApplicationController
   attr_accessor :download_time
 
   def show
-    if !current_user.authsub_token.blank?
-      redirect_to :action => 'review'
-    end
     @ccr_history = Ccr.find(:all, :conditions => {:user_id => current_user.id},
                             :order => 'version DESC')
   end

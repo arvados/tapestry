@@ -4,62 +4,39 @@
 
 <h2>Personal Health Record</h2>
 
-<div width="90%" align="center">
-<div class="flash warning" align="center">
-<a href="/phrccrs/google_health_note">Important note about Google Health</a>
-</div>
-</div>
+<h3>(1) Google Health</h3>
 
-<p>We believe that PGP participants will benefit over the long-term if select personal health information is managed through a standardized Personal Health Record (PHR).  The Personal Genome Project has selected Google Health as our preferred PHR provider.</p>
+<p>Google discontinued the Google Health service on January 1st, 2012.</p>
 
-<h3>(1) Create a Google Health account:</h3>
-
-<p>To create a Google Health account, please visit <a href="<%= GOOGLE_HEALTH_URL %>" target="_blank">Google Health</a>. For detailed instructions on how to create a Google Health account, please see: "<a href="http://www.google.com/support/health/bin/answer.py?hl=en&answer=93491">Getting Started Guide</a>."</p>
-
-<div class="tip"><strong>TIP:</strong> It is simplest if you keep this window open and create your Google Health account in a new browser window.</div>
-
-<h3>(2) Populate your Google Health Profile</h3>
-
-Complete as many sections of your Google Health profile as you wish to
-include in your PGP public profile. Please be as specific and detailed as
-possible. These sections are particularly relevant to the PGP:
-
-<ol>
-<li>Personal Information (age, sex, race/ethnicity, blood type)</li>
-<li>Wellness</li>
-<li>Problems</li>
-<li>Medications</li>
-<li>Allergies</li>
-<li>Test results</li>
-<li>Procedures</li>
-<li>Immunizations</li>
-</ol>
-
-<%= form_tag(phrccr_path) %>
-
-<h3>(3) Link your Google Health account to your PGP Public profile</h3>
-<p>
-After you have completed your Google Health profile, return to this page. Click on the "Link Profile" button and your Google Health data will be imported into your PGP public profile. Please review the accuracy of your imported data. Use Google Health to modify or add data. Changes will be automatically imported into your PGP public profile.
-</p>
-
-<% if !current_user.authsub_token.blank? %>
-<p> <%= submit_tag 'Review PHR' %></p>
-<% else %>
-<p> <%= submit_tag 'Link Profile'  %></p>
-<% end %>
-
-</form>
+<p>If you linked your Google Health account to your PGP public profile prior to January 1st 2012, then we may have CCR-formatted medical data about you.</p>
 
 <% if @ccr_history.length > 0 %>
-<h3>All PHRs</h3>
-<table>
+<h3>Your Google Health Records:</h3>
+<table class="admin_table">
+<tr>
+  <th>Review</th>
+  <th>Date Updated</th>
+  <th>Download</th>
+  <th>Delete</th>
+</tr>
 <% @ccr_history.each { |ccr| %>
 <tr>
-  <td><a href="/phrccr/review?version=<%= ccr.version %>"><%= ccr.version %></a></td>
+  <td><a href="/phrccr/review?version=<%= ccr.version %>">Review</a></td>
+  <td><%= ccr.version.gsub(/T.*$/,'') %></td>
   <td><a href="/phrccr/download?id=<%= ccr.id %>">download raw CCR</a></td>
   <td><button name="deleteccr" value="<%= ccr.version %>">Delete</button></td></tr>
 <% } %>
 </table>
 <% end %>
+
+<p>You will no longer be able to update this information using Google Health. However, any Google Health data you already added to your PGP profile will remain in your PGP profile unless you choose to remove it.</p>
+
+<p>If you want to download your health data above and move it to another service that will allow you store and update the data, Google has provided detailed instructions:</p>
+
+<a href="http://support.google.com/health/bin/answer.py?hl=en&answer=1375585">http://support.google.com/health/bin/answer.py?hl=en&answer=1375585</a>
+
+<h3>(2) Other Personal Health Record Platforms</h3>
+
+<p>We are looking into integrating with other Personal Health Record platforms.</p>
 
 

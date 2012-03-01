@@ -2,21 +2,10 @@
 <% if @ccr %>
 <h2>Imported Personal Health Record</h2> 
 
-<div width="90%" align="center">
-<div class="flash warning" align="center">
-<a href="/phrccrs/google_health_note">Important note about Google Health</a>
-</div>
-</div>
-
-<p>This is your PHR imported from Google Health. This information has been
-added to your PGP public profile. Please make sure all the information is
-accurate. If there are any errors, you can correct them in your 
-<a href="<%= GOOGLE_HEALTH_URL %>" target="_blank">Google Health profile</a> and click the
-"Refresh PHR" button below to import the corrected version. If you wish to
-remove data imported from Google Health from 
+<p>This is a PHR imported from Google Health. This information is part of your PGP public profile. If you wish to remove this PHR from 
 <%= link_to "your PGP public profile", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %>, you may
-delete imported records by clicking the "delete" button at the bottom of this
-page.</p>
+do so on the <%= link_to "PHR overview page", url_for(:controller => 'phrccr') %>.
+</p>
  
 <%= render :partial => "ccr" %>
 <% else %>
@@ -24,30 +13,4 @@ page.</p>
 <p>
 Your Google Health account has been linked, but you have not imported any PHRs into PGP public profile. Click "Refresh PHR" to download the latest version of your PHR from Google Health.</p>
 <% end %>
-
-<%= form_tag(phrccr_path) %>
-
-<p>
-<%= submit_tag 'Unlink from Google Health' %>
-&nbsp;
-<%= submit_tag 'Refresh PHR' %>
-</p>
-
-<% if @ccr && @ccr_history.length > 0 %>
-<h3>All PHRs</h3>
-<table>
-<% @ccr_history.each { |ccr| %>
-<tr>
-  <td><a href="review?version=<%= ccr.version %>"><%= ccr.version %></a>
-    <% if ccr.version == @current_version %>
-    (currently viewing)
-    <% end %>
-  </td>
-  <td><a href="download?id=<%= ccr.id %>">download raw CCR</a></td>
-  <td><button name="deleteccr" value="<%= ccr.version %>">Delete</button></td></tr>
-<% } %>
-</table>
-<% end %>
-
-</form>
 
