@@ -1,26 +1,5 @@
 <h2>Edit dataset</h2>
 
- <%= error_messages_for :genetic_data, :header_message => 'Error: dataset could not be updated', :message => nil %>
+<%= render 'form' %>
 
-<%= form_for(@genetic_data, :url => {:action => 'update'}) do |f| %>
 
-  <div>
-    <%= f.label :name %><span style="color: red"> * </span><br />
-    <%= f.text_field :name %>
-  </div>
-  <p>
-    <%= f.label :data_type %><span style="color: red"> * </span><br />
-    <%= f.select :data_type, GeneticData::DATA_TYPES, :include_blank => true  %>
-  </p>
-  <p>
-    <%= f.label :date %><br />
-    <%= f.date_select :date, { :include_blank => true, :start_year => 2000, :end_year => Time.now.year } %>
-  </p>
-  <p>
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
-  </p>
-  <p>
-    <%= f.submit "Update" %>
-  </p>
-<% end %>

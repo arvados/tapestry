@@ -28,20 +28,39 @@ class GeneticDataController < ApplicationController
   # GET /genetic_data/1/edit
   def edit
     @genetic_data = GeneticData.find(params[:id])
+
+    @found = false
+    GeneticData::DATA_TYPES.each do |dt|
+      if dt[0] == @genetic_data[:data_type] then
+        @found = true
+        break
+      end
+    end
+    if not @found then
+      @genetic_data[:other_data_type] = @genetic_data[:data_type]
+      @genetic_data[:data_type] = 'other'
+    end
+
   end
 
   # POST /genetic_data
   # POST /genetic_data.xml
   def create
     params[:genetic_data][:user_id] = current_user.id
-    @genetic_data = GeneticData.new(params[:genetic_data])
-    if not params[:read_and_agreed] then
-      flash[:error] = 'You must agree to the terms and conditions for uploading data to your PGP participant profile.'
-      respond_to do |format|
-        format.html { render :action => "new" }
-      end
-      return
+
+    if params[:genetic_data][:data_type] == 'other' then
+      params[:genetic_data][:data_type] = params[:genetic_data][:other_data_type]
     end
+
+    @genetic_data = GeneticData.new(params[:genetic_data])
+
+#    if not params[:read_and_agreed] then
+#      flash[:error] = 'You must agree to the terms and conditions for uploading data to your PGP participant profile.'
+#      respond_to do |format|
+#        format.html { render :action => "new" }
+#      end
+#      return
+#    end
 
     respond_to do |format|
       if @genetic_data.save
@@ -60,6 +79,10 @@ class GeneticDataController < ApplicationController
   # PUT /genetic_data/1.xml
   def update
     @genetic_data = GeneticData.find(params[:id])
+
+    if params[:genetic_data][:data_type] == 'other' then
+      params[:genetic_data][:data_type] = params[:genetic_data][:other_data_type]
+    end
 
     respond_to do |format|
       if @genetic_data.update_attributes(params[:genetic_data])
