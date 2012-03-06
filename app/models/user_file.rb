@@ -25,6 +25,7 @@ class UserFile < ActiveRecord::Base
   validates_presence_of :other_data_type, :if => 'data_type == "other"'
 
   DATA_TYPES = { 'genetic data - 23andMe' => '23andMe', 
+                 'genetic data - Complete Genomics' => 'Complete Genomics', 
                  'genetic data - Pathway Genomics' => 'Pathway genomics', 
                  'genetic data - Counsyl' => 'Counsyl', 
                  'genetic data - DeCode' => 'DeCode', 
