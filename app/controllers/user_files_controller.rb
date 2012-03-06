@@ -31,14 +31,14 @@ class UserFilesController < ApplicationController
 
     @found = false
     UserFile::DATA_TYPES.each do |dt|
-      if dt[0] == @user_file[:data_type] then
+      if dt[1] == @user_file.data_type then
         @found = true
         break
       end
     end
     if not @found then
-      @user_file[:other_data_type] = @user_file[:data_type]
-      @user_file[:data_type] = 'other'
+      @user_file.other_data_type = @user_file.data_type
+      @user_file.data_type = 'other'
     end
 
   end

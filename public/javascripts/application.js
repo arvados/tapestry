@@ -5,14 +5,14 @@
 (function() {
 
   jQuery(function() {
-    if ($('#genetic_data_data_type').val() === 'other') {
+    if ($('#user_file_data_type').val() === 'other') {
       $("#other_data_type_div").show();
     } else {
       $("#other_data_type_div").hide();
     }
 
-    $("#genetic_data_data_type").change(function() {
-      if ($("#genetic_data_data_type").val() === 'other') {
+    $("#user_file_data_type").change(function() {
+      if ($("#user_file_data_type").val() === 'other') {
         return $("#other_data_type_div").show();
       } else {
         return $("#other_data_type_div").hide();
