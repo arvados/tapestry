@@ -127,8 +127,8 @@ Tapestry::Application.routes.draw do
   match '/identity_verification_notifications/done' => 'identity_verification_notifications#done', :as => :done_identity_verification_notification
   match '/named_proxies/done' => 'named_proxies#done', :as => :done_named_proxy
   resources :named_proxies
-  resources :genetic_data
-  match '/genetic_data/download/:id' => 'genetic_data#download', :as => :genetic_data_download
+  resources :user_files
+  match '/user_file/download/:id' => 'user_files#download', :as => :user_file_download
   resource :trait_collection
   resource :distinctive_traits_survey
   resource :pledge
@@ -156,7 +156,7 @@ Tapestry::Application.routes.draw do
   match '/admin/users/trios' => 'admin/users#trios', :as => :admin_trios
   match '/admin/users/absolute_pitch_survey_export' => 'admin/users#absolute_pitch_survey_export', :as => :admin_absolute_pitch_survey_export
   match '/admin/users/absolute_pitch_survey_questions' => 'admin/users#absolute_pitch_survey_questions', :as => :admin_absolute_pitch_survey_questions
-  match '/admin/users/genetic_data_report' => 'admin/users#genetic_data_report', :as => :admin_genetic_data_report
+  match '/admin/users/user_files_report' => 'admin/users#user_files_report', :as => :admin_user_files_report
   match '/admin/users/google_phr_report' => 'admin/users#google_phr_report', :as => :admin_google_phr_report
   match '/admin/users/activate/:id' => 'admin/users#activate', :as => :activate_admin_user
   match '/admin/users/promote/:id' => 'admin/users#promote', :as => :promote_admin_user

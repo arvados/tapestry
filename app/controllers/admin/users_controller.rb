@@ -274,9 +274,9 @@ class Admin::UsersController < Admin::AdminControllerBase
        :order => "user_id, created_at")
   end
 
-  def genetic_data_report
-    @genetic_data = GeneticData.find(:all,
-       :joins => "INNER JOIN users ON users.id = genetic_data.user_id",
+  def user_files_report
+    @user_files = UserFile.find(:all,
+       :joins => "INNER JOIN users ON users.id = user_files.user_id",
        :conditions => "users.is_test = false",
        :order => "data_type, user_id")
   end

@@ -78,9 +78,9 @@ None added.
 None available.
 <% end -%>
 
-<h3>Genetic data <% if logged_in? and @user == current_user -%><%= link_to "[edit]", genetic_data_index_path() %><% end -%></h3>
+<h3>Uploaded data <% if logged_in? and @user == current_user -%><%= link_to "[edit]", user_files_path() %><% end -%></h3>
 
-<% if (@genetic_data_and_datasets.size > 0) -%>
+<% if (@user_files_and_datasets.size > 0) -%>
 
 <table class="admin_table">
   <tr>
@@ -90,13 +90,13 @@ None available.
     <th>&nbsp;</th>
     <th>&nbsp;</th>
   </tr>
-  <% @genetic_data_and_datasets.each do |g| -%>
+  <% @user_files_and_datasets.each do |g| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=h g.date %></td>
       <td><%=h g.data_type %></td>
       <td><%=h g.name %></td>
       <td><%=h link_to 'View Report', g.location if g.location %></td>
-      <td><%=h link_to 'Download', g.class == GeneticData ? genetic_data_download_path(g.id) : g.download_url %></td>
+      <td><%=h link_to 'Download', g.class == UserFile ? user_file_download_path(g.id) : g.download_url %></td>
     </tr>
   <% end %>
 </table>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120306162456) do
+ActiveRecord::Schema.define(:version => 20120306162459) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -607,46 +607,6 @@ ActiveRecord::Schema.define(:version => 20120306162456) do
   end
 
   add_index "family_survey_responses", ["user_id"], :name => "index_family_survey_responses_on_user_id"
-
-  create_table "genetic_data", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "name",                 :null => false
-    t.string   "data_type",            :null => false
-    t.date     "date"
-    t.text     "description",          :null => false
-    t.string   "dataset_file_name"
-    t.string   "dataset_content_type"
-    t.integer  "dataset_file_size"
-    t.datetime "dataset_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "lock_version"
-    t.integer  "creator_id"
-    t.integer  "updater_id"
-    t.datetime "deleted_at"
-    t.boolean  "upload_tos_consent"
-  end
-
-  create_table "genetic_data_versions", :force => true do |t|
-    t.integer  "genetic_data_id"
-    t.integer  "lock_version"
-    t.integer  "user_id"
-    t.string   "name"
-    t.string   "data_type"
-    t.date     "date"
-    t.text     "description"
-    t.string   "dataset_file_name"
-    t.string   "dataset_content_type"
-    t.integer  "dataset_file_size"
-    t.datetime "dataset_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "creator_id"
-    t.integer  "updater_id"
-    t.datetime "deleted_at"
-  end
-
-  add_index "genetic_data_versions", ["genetic_data_id"], :name => "index_genetic_data_versions_on_genetic_data_id"
 
   create_table "google_survey_answers", :force => true do |t|
     t.integer  "google_survey_id"
@@ -2077,6 +2037,46 @@ ActiveRecord::Schema.define(:version => 20120306162456) do
   end
 
   add_index "unused_kit_names", ["name"], :name => "index_unused_kit_names_on_name", :unique => true
+
+  create_table "user_file_versions", :force => true do |t|
+    t.integer  "user_file_id"
+    t.integer  "lock_version"
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "data_type"
+    t.date     "date"
+    t.text     "description"
+    t.string   "dataset_file_name"
+    t.string   "dataset_content_type"
+    t.integer  "dataset_file_size"
+    t.datetime "dataset_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+  end
+
+  add_index "user_file_versions", ["user_file_id"], :name => "index_genetic_data_versions_on_genetic_data_id"
+
+  create_table "user_files", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "name",                 :null => false
+    t.string   "data_type",            :null => false
+    t.date     "date"
+    t.text     "description",          :null => false
+    t.string   "dataset_file_name"
+    t.string   "dataset_content_type"
+    t.integer  "dataset_file_size"
+    t.datetime "dataset_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.boolean  "upload_tos_consent"
+  end
 
   create_table "user_log_versions", :force => true do |t|
     t.integer  "user_log_id"

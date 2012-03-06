@@ -1,8 +1,8 @@
-<h2>Genetic and Health data</h2>
+<h2>Uploaded data</h2>
 
 <p>This information will appear in your public profile.</p>
 
-<% if @genetic_data != [] %>
+<% if @user_files != [] %>
 
 <h3>Uploaded datasets</h3>
 <table class="admin_table">
@@ -14,18 +14,18 @@
     <th>&nbsp;</th>
     <th>&nbsp;</th>
   </tr>
-  <% @genetic_data.each do |g| -%>
+  <% @user_files.each do |g| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=h g.date %></td>
       <td><%=h g.data_type %></td>
       <td><%=h g.name %></td>
-      <td><%= link_to 'Download', genetic_data_download_path(g.id) %></td>
-      <td><%= link_to 'Edit', edit_genetic_data_path(g) %></td>
-      <td><%= link_to 'Delete', genetic_data_path(g.id), :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to 'Download', user_file_download_path(g.id) %></td>
+      <td><%= link_to 'Edit', edit_user_file_path(g) %></td>
+      <td><%= link_to 'Delete', user_file_path(g.id), :confirm => 'Are you sure?', :method => :delete %></td>
     </tr>
   <% end %>
 </table>
-<%= will_paginate @genetic_data %>
+<%= will_paginate @user_files %>
 
 <% else %>
 
@@ -35,4 +35,4 @@
 
 <p />
 
-<%= link_to 'Upload a new dataset', new_genetic_data_path %>
+<%= link_to 'Upload a new dataset', new_user_file_path %>

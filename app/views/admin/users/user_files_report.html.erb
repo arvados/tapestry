@@ -1,4 +1,4 @@
-<h2>Users with Genetic Data</h2>
+<h2>Users with Uploaded Files</h2>
 
 <table class="admin_table">
 <tr>
@@ -8,13 +8,13 @@
   <th>Name</th>
   <th>Download</th>
 </tr>
-<% @genetic_data.each do |g|%>
+<% @user_files.each do |g|%>
 <tr>
   <td><%= link_to g.user.hex, public_profile_path(:hex => g.user.hex) %></td>
   <td><%= g.data_type %></td>
   <td><%= g.date %></td>
   <td><%= g.user.first_name%> <%= g.user.last_name %></td>
-  <td><%= link_to 'Download', genetic_data_download_path(g.id) %></td>
+  <td><%= link_to 'Download', user_file_download_path(g.id) %></td>
 </tr>
 <% end %>
 

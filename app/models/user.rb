@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   has_many :family_relations, :dependent => :destroy
   has_many :confirmed_family_relations, :class_name => "FamilyRelation", :conditions => {:is_confirmed => true}
   has_many :relatives, :class_name => 'User', :through => :family_relations
-  has_many :genetic_data, :dependent => :destroy
+  has_many :user_files, :dependent => :destroy
   has_many :removal_requests, :dependent => :destroy
   has_many :samples, :foreign_key => 'participant_id'
   has_many :datasets, :foreign_key => 'participant_id'
@@ -194,7 +194,7 @@ class User < ActiveRecord::Base
     t.add 'ccrs.size', :as => :has_ccrs
     t.add 'confirmed_family_relations.size', :as => :has_relatives_enrolled
     t.add 'datasets.size', :as => :has_whole_genome_data
-    t.add 'genetic_data.size', :as => :has_other_genetic_data
+    t.add 'user_files.size', :as => :has_other_user_files
   end
 
   api_accessible :researcher, :extend => :public do |t|
@@ -580,8 +580,8 @@ class User < ActiveRecord::Base
       ['count(distinct family_relations.id)', { :confirmed_family_relations => {} }]
     when :has_whole_genome_data
       ['count(distinct datasets.id)', { :datasets => {} }]
-    when :has_other_genetic_data
-      ['count(distinct genetic_data.id)', { :genetic_data => {} }]
+    when :has_other_user_files
+      ['count(distinct user_files.id)', { :user_files => {} }]
     else
       :hex
     end
@@ -598,7 +598,7 @@ class User < ActiveRecord::Base
   end
 
   def self.include_for_api(api_template)
-    [:ccrs, :genetic_data, :datasets, :samples, :confirmed_family_relations]
+    [:ccrs, :user_files, :datasets, :samples, :confirmed_family_relations]
   end
 
 end
