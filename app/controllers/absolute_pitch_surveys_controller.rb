@@ -41,10 +41,12 @@ class AbsolutePitchSurveysController < ApplicationController
       end_answers.each {|a| a.destroy()}
       current_user.save
       redirect_to :action => 'index'
+      return
     end
 
     if !current_user.absolute_pitch_survey_completion.nil?
       redirect_to :action => 'review', :id => current_user.hex
+      return
     end
 
     survey = Survey.find(:first, :conditions => { :name => 'Absolute Pitch Survey' })
