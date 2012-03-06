@@ -18,7 +18,7 @@ class FamilyRelation < ActiveRecord::Base
     'cousin or more distant' => 'cousin or more distant',
     'not genetically related (e.g. husband/wife)' => 'not genetically related (e.g. husband/wife)'
   }
-  
+
   def self.relations
     @@relations
   end

@@ -24,7 +24,8 @@ class User < ActiveRecord::Base
   has_many :distinctive_traits, :dependent => :destroy
   has_one  :screening_survey_response, :dependent => :destroy
   has_many :family_relations, :dependent => :destroy
-  has_many :confirmed_family_relations, :class_name => "FamilyRelation", :conditions => {:is_confirmed => true}
+  has_many :confirmed_family_relations, :class_name => 'FamilyRelation', :include => :relative, :conditions => 'is_confirmed and users.enrolled is not null and users.suspended_at is null'
+  has_many :confirmed_relatives, :through => :family_relations, :source => :relative, :conditions => 'is_confirmed and users.enrolled is not null and users.suspended_at is null'
   has_many :relatives, :class_name => 'User', :through => :family_relations
   has_many :user_files, :dependent => :destroy
   has_many :removal_requests, :dependent => :destroy
@@ -134,7 +135,7 @@ class User < ActiveRecord::Base
   # - they submitted their application before we rolled out v2 of the eligibility questionnaire, and passing v2 is now required to be enrolled
   scope :ineligible_for_enrollment, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('enrollment_application').id).merge(ScreeningSurveyResponse.failed)
 
-  scope :waitlisted, lambda { 
+  scope :waitlisted, lambda {
     joins = [ :waitlists ]
     conditions_sql = "users.is_test = 'f' and users.id = waitlists.user_id"
     {
@@ -142,25 +143,25 @@ class User < ActiveRecord::Base
       :order => 'users.created_at',
       :group => 'users.id',
       :joins => joins,
-      # TODO: when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
+      # TODO: when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed.
       # Cf. http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
       # Ward, 2010-10-09.
       :readonly => false
     }
   }
 
-  scope :eligible_for_enrollment, lambda { 
+  scope :eligible_for_enrollment, lambda {
     joins = [:enrollment_step_completions, :screening_survey_response]
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
-    conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and 
+    conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and
         screening_survey_responses.monozygotic_twin = 'no' and
         screening_survey_responses.us_citizen_or_resident = 1 and
         enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id} and users.id not in (select user_id from waitlists group by user_id)"
-    { 
+    {
       :conditions => conditions_sql,
       :order => 'enrollment_step_completions.created_at',
       :joins => joins,
-      # TODO: when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed. 
+      # TODO: when we upgrade rails to 2.3 and 3.0, the next line may no longer be needed.
       # Cf. http://stackoverflow.com/questions/639171/what-is-causing-this-activerecordreadonlyrecord-error
       # Ward, 2010-10-09.
       :readonly => false

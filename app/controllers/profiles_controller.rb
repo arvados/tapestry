@@ -1,6 +1,6 @@
 class ProfilesController < ApplicationController
   layout 'profile'
-  
+
   skip_before_filter :login_required, :only => [:public]
   skip_before_filter :ensure_enrolled, :only => [:public]
 
@@ -14,7 +14,7 @@ class ProfilesController < ApplicationController
 
     @page_title = @user.hex
 
-    @family_members = @user.family_relations
+    @confirmed_family_relations = @user.confirmed_family_relations
 
     @ccr = Ccr.find(:first, :conditions => {:user_id => @user.id}, :order => 'version DESC')
 

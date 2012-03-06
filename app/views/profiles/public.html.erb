@@ -122,14 +122,14 @@ Not added.
 <% end -%>
 
 <h3>Family Members Enrolled <% if logged_in? and @user == current_user -%><%= link_to "[edit]", family_relations_path %><% end -%></h3>
-<% if @family_members && @family_members != []%>
+<% if @confirmed_family_relations && @confirmed_family_relations != []%>
 <table class="admin_table">
-  <% @family_members.find_all{|f| f.is_confirmed}.each do |fm| -%>
+  <% @confirmed_family_relations.each do |fr| -%>
     <tr>
       <td>
-        <%= link_to fm.relation, public_profile_path(fm.relative.hex) %>
+        <%= link_to fr.relation, public_profile_path(fr.relative.hex) %>
       </td>
-      <td>linked <%= h fm.updated_at %></td>
+      <td>linked <%= h fr.updated_at %></td>
     </tr>
   <% end %>
 </table>
