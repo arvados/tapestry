@@ -34,12 +34,12 @@ None added.
       <% sample_group.each do |s| %>
       <tr>
 	<% if show_group_heading %>
-	<th rowspan="<%= sample_group.size %>" style="width: 25%">
+	<th rowspan="<%= sample_group.size %>" style="width: 15%">
 	  <%= link_to s.study.name, study_path(s.study) %>
 	</th>
 	<% show_group_heading = false %>
 	<% end %>
-	<td style="width: 75%">
+	<td style="width: 85%">
 	  Sample
 	  <%= link_to_if(current_user && current_user.is_researcher?, s.crc_id.to_s, sample_path(s)) %>
 	  (<%= s.material.downcase -%>)
@@ -51,7 +51,7 @@ None added.
 	  <% else %>
 	  received
 	  <%= s.last_received %>
-	  <%= " by #{s.owner.is_researcher? ? s.owner.full_name : s.owner.hex}" if s.owner -%>.
+	  <%= " by #{s.owner.is_researcher? ? s.owner.researcher_affiliation : s.owner.hex}" if s.owner -%>.
 	  <% end %>
 	  &nbsp; <a href="#" onclick="jQuery('.sample_log_<%= s.id %>').toggle(); jQuery(this).html(jQuery('.sample_log_<%= s.id %>').is(':visible') ? 'Hide log' : 'Show log'); return false;">Show log</a>
 	  <div class="sample_log_<%= s.id %> ui-helper-hidden">
@@ -60,7 +60,7 @@ None added.
 		<% s.sample_logs.sort { |a,b| b.id <=> a.id }.each do |sl| %>
 		<tr>
 		  <td style="width: 30%"><%= sl.created_at -%></td>
-		  <td style="width: 20%"><%= sl.actor.is_researcher? ? sl.actor.full_name : sl.actor.hex -%></td>
+		  <td style="width: 20%"><%= sl.actor.is_researcher? ? sl.actor.researcher_affiliation : sl.actor.hex -%></td>
 		  <td style="width: 50%"><%= sl.comment -%></td>
 		</tr>
 		<% end %>
