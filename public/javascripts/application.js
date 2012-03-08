@@ -5,19 +5,13 @@
 (function() {
 
   jQuery(function() {
-    if ($('#user_file_data_type').val() === 'other') {
-      $("#other_data_type_div").show();
-    } else {
-      $("#other_data_type_div").hide();
-    }
-
     $("#user_file_data_type").change(function() {
-      if ($("#user_file_data_type").val() === 'other') {
+      if ($(this).val() === 'other') {
         return $("#other_data_type_div").show();
       } else {
         return $("#other_data_type_div").hide();
       }
-    });
+    }).trigger('change');
   });
 
 }).call(this);
