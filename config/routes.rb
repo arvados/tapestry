@@ -59,7 +59,7 @@ Tapestry::Application.routes.draw do
 
   resources :pages
   match '/' => 'pages#show', :id => 'home'
-  match '/enrolled' => 'pages#show', :as => :enrolled, :id => 'enrolled'
+  match '/enrolled', :to => redirect('/users')
   match '/users/initial' => 'users#initial', :as => :initial_user
   match '/users/create_initial' => 'users#create_initial', :as => :create_initial_user
   match '/users/new2' => 'users#new2', :as => :new2_user
