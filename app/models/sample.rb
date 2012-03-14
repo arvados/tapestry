@@ -3,6 +3,8 @@ class Sample < ActiveRecord::Base
   acts_as_paranoid_versioned :version_column => :lock_version
   acts_as_api
 
+  serialize :qc_result
+
   belongs_to :study
   belongs_to :kit
   belongs_to :original_kit_design_sample, :class_name => "KitDesignSample"

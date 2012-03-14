@@ -1,0 +1,2 @@
+module GoogleSpreadsheetsHelper
+end

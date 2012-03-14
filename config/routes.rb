@@ -1,4 +1,6 @@
 Tapestry::Application.routes.draw do
+  resources :google_spreadsheets
+
   resources :withdrawal_comments
   resources :permissions
   match '/permissions/update_subject_select/:subject_class', :controller=>'permissions', :action => 'update_subject_select'
@@ -38,6 +40,10 @@ Tapestry::Application.routes.draw do
     post 'participate', :on => :member
     post 'synchronize', :on => :member
     post 'download', :on => :member
+  end
+
+  resources :google_spreadsheets do
+    post 'synchronize', :on => :member
   end
 
   get "oauth_tokens/authorize"

@@ -47,6 +47,15 @@
   <%= link_to 'Create new', url_for(:controller => 'google_surveys', :action => 'new') %>
   </small></li>
 
+  <li><strong>Your Google spreadsheets</strong><br/>
+  <% @google_spreadsheets.sort { |a,b| a.name <=> b.name }.each do |spreadsheet| %>
+  &nbsp;&nbsp;<%= link_to spreadsheet.name, edit_google_spreadsheet_path(spreadsheet.id) %><br/>
+  <% end %>
+  &nbsp;&nbsp;<small><%= link_to 'View all', url_for(:controller => 'google_spreadsheets', :action => 'index') %>
+  /
+  <%= link_to 'Create new', url_for(:controller => 'google_spreadsheets', :action => 'new') %>
+  </small></li>
+
   <li><strong>External data sources</strong><br/>
   &nbsp;&nbsp;<%= link_to raw("Authorizations"), url_for(:controller => 'oauth_tokens', :action => 'index') %></li>
 

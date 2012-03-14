@@ -34,6 +34,7 @@ class PagesController < ApplicationController
 
     if logged_in? and params[:id] == 'researcher_tools' then
       @google_surveys = GoogleSurvey.find_all_by_user_id(current_user.id)
+      @google_spreadsheets = GoogleSpreadsheet.find_all_by_user_id(current_user.id)
       @studies = Study.where('researcher_id = ?',current_user.id)
 
       @requested_studies = Study.requested.where('researcher_id = ?',current_user.id)

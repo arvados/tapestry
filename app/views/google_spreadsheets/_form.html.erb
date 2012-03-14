@@ -1,0 +1,49 @@
+<%= form_for(@google_spreadsheet) do |f| %>
+  <div class="field">
+    <%= f.label :user %><br />
+    <%= f.object.user.full_name %>
+  </div>
+  <div class="field">
+    <%= f.label :name %> (if you leave this blank, I'll grab the title from the google doc)<br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description, :cols => 80, :rows => 10 %>
+  </div>
+  <div class="field">
+    <%= f.label(:oauth_service, 'OAuth service') %><br />
+    <%= collection_select(:google_spreadsheet, :oauth_service_id, OauthService.all, :id, :name) %>
+  </div>
+  <div class="field">
+    <%= f.label :gdocs_url, 'Source spreadsheet URL' %> (copy this from the location bar when the desired worksheet is showing.  It should end with &amp;gid=0 or #gid=1 etc.)<br />
+    <%= f.text_field :gdocs_url, :size => 80 %>
+  </div>
+  <div class="field">
+    <%= f.label :rowtarget_class %> (like "Sample")<br />
+    <%= f.text_field :rowtarget_class %>
+  </div>
+  <div class="field">
+    <%= f.label :rowtarget_id_attribute %> (like "crc_id")<br />
+    <%= f.text_field :rowtarget_id_attribute %>
+  </div>
+  <div class="field">
+    <%= f.label :rowtarget_data_attribute %> (like "qc_result")<br />
+    <%= f.text_field :rowtarget_data_attribute %>
+  </div>
+  <div class="field">
+    <%= f.label :row_id_column %> (if you leave this blank, I'll try to figure it out from the spreadsheet data)<br />
+    <%= f.text_field :row_id_column %>
+  </div>
+  <div class="field">
+    <%= f.label :auto_update_interval %><br />
+    <%= f.text_field :auto_update_interval %>
+  </div>
+  <div class="field">
+    <%= f.label :is_auto_update_enabled %><br />
+    <%= f.check_box :is_auto_update_enabled, :checked_value => true, :unchecked_value => false %>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Save' %>
+  </div>
+<% end %>

@@ -1,0 +1,74 @@
+<h2><%= link_to 'Google spreadsheets', google_spreadsheets_path %> &rarr; <%= @google_spreadsheet.name %> (<%= link_to 'edit', edit_google_spreadsheet_path(@google_spreadsheet) %>)</h2>
+
+<p>
+  <b>User:</b>
+  <%= @google_spreadsheet.user.full_name %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @google_spreadsheet.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <br /><%= raw(h(@google_spreadsheet.description).gsub("\n","<br />")) %>
+</p>
+
+<p>
+  <b>Source spreadsheet URL:</b>
+  <%= @google_spreadsheet.gdocs_url %>
+</p>
+
+<p>
+  <b>Rowtarget class:</b>
+  <%= @google_spreadsheet.rowtarget_class %>
+</p>
+
+<p>
+  <b>Rowtarget id attribute:</b>
+  <%= @google_spreadsheet.rowtarget_id_attribute %>
+</p>
+
+<p>
+  <b>Row id column:</b>
+  <%= @google_spreadsheet.row_id_column %>
+</p>
+
+<p>
+  <b>Last downloaded:</b>
+  <%= @google_spreadsheet.last_downloaded_at %>
+</p>
+
+<p>
+  <%= button_to 'Download / synchronize now', synchronize_google_spreadsheet_path(@google_spreadsheet), :method => :post %>
+</p>
+
+<p>
+  <a href="#" onclick="jQuery('.spreadsheetdata').toggle(); jQuery(this).html(jQuery('.spreadsheetdata').is(':visible') ? 'Hide data' : 'Show data'); return false;">Show data</a>
+</p>
+
+<% if @google_spreadsheet.header_row and @google_spreadsheet.row_id_column %>
+
+<table class="admin_table spreadsheetdata ui-helper-hidden" style="background: #fff">
+  <tr>
+    <th>#</th>
+    <th><%= @google_spreadsheet.rowtarget_class %></th>
+    <% @google_spreadsheet.header_row.each do |col| %>
+    <th><%= col %></th>
+    <% end %>
+  </tr>
+
+  <% @google_spreadsheet.google_spreadsheet_rows.each do |row| %>
+  <tr>
+    <% target_id = row.row_data[@google_spreadsheet.row_id_column] rescue nil %>
+    <% target = @google_spreadsheet.find_target_by_id(target_id) rescue nil %>
+    <td><%= row.row_number %></td>
+    <td><%= link_to target_id.to_s, target if target %></td>
+    <% row.row_data.each do |v| %>
+    <td><%= v %></td>
+    <% end %>
+  </tr>
+  <% end %>
+</table>
+<% end %>

@@ -1,0 +1,33 @@
+<h2>Google Spreadsheets</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>User</th>
+    <th>Name</th>
+    <th>col#&rarr;Class.id&rarr;data</th>
+    <th>When last downloaded</th>
+    <th>Rows downloaded</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @google_spreadsheets.each do |google_spreadsheet| %>
+  <tr>
+    <td><%= google_spreadsheet.user.full_name %></td>
+    <td><%= google_spreadsheet.name %></td>
+    <td><%= google_spreadsheet.row_id_column %>&rarr;<%= google_spreadsheet.rowtarget_class %>.<%= google_spreadsheet.rowtarget_id_attribute %>&rarr;<%= google_spreadsheet.rowtarget_data_attribute %></td>
+    <td><%= google_spreadsheet.last_downloaded_at %></td>
+    <td><%= google_spreadsheet.google_spreadsheet_rows.size %></td>
+    <td><%= link_to 'Sync', synchronize_google_spreadsheet_path(google_spreadsheet), :method => :post %></td>
+    <td><%= link_to 'Show', google_spreadsheet %></td>
+    <td><%= link_to 'Edit', edit_google_spreadsheet_path(google_spreadsheet) %></td>
+    <td><%= link_to 'Destroy', google_spreadsheet, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Google spreadsheet', new_google_spreadsheet_path %>
