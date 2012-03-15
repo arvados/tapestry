@@ -44,7 +44,7 @@ class GoogleSpreadsheet < ActiveRecord::Base
 
   def parse_sheet_url
     @skey = Regexp.
-      new('^(.*key=)?([-_a-zA-Z0-9]+)(\&.*)?$').
+      new('^(.*key=)?([-_a-zA-Z0-9]+)([\&\#].*)?$').
       match(gdocs_url)[2]
     @gid = Regexp.
       new('[\&\#]gid=([0-9]+)(\&.*)?$').
@@ -124,7 +124,11 @@ class GoogleSpreadsheet < ActiveRecord::Base
     guess_id_column unless row_id_column
 
     datarows = get_datarows
-    return nil unless datarows and datarows.length > 0
+    return nil unless
+      datarows and
+      datarows.length > 0 and
+      datarows[0] and
+      datarows[0].length > 0
 
     update_attributes :header_row => datarows[0]
     success_count = 0
