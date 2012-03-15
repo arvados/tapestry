@@ -141,9 +141,10 @@ class GoogleSpreadsheet < ActiveRecord::Base
       end
 
       # save the row as a generic GoogleSpreadsheetRow object
-      unless (GoogleSpreadsheetRow.new(:google_spreadsheet_id => self.id,
-                                       :row_number => attempt_count,
-                                       :row_data => hash).save rescue nil)
+      unless (GoogleSpreadsheetRow.
+              new(:google_spreadsheet_id => self.id,
+                  :row_number => attempt_count,
+                  :row_data => datarows[r]).save rescue nil)
         g_s_r = GoogleSpreadsheetRow.
           find_by_google_spreadsheet_id_and_row_number(self.id, attempt_count)
         g_s_r.update_attributes :row_data => datarows[r]

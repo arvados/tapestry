@@ -44,11 +44,11 @@
   <%= button_to 'Download / synchronize now', synchronize_google_spreadsheet_path(@google_spreadsheet), :method => :post %>
 </p>
 
+<% if @google_spreadsheet.header_row and @google_spreadsheet.row_id_column %>
+
 <p>
   <a href="#" onclick="jQuery('.spreadsheetdata').toggle(); jQuery(this).html(jQuery('.spreadsheetdata').is(':visible') ? 'Hide data' : 'Show data'); return false;">Show data</a>
 </p>
-
-<% if @google_spreadsheet.header_row and @google_spreadsheet.row_id_column %>
 
 <table class="admin_table spreadsheetdata ui-helper-hidden" style="background: #fff">
   <tr>
