@@ -4,6 +4,7 @@ class UserMailer < ActionMailer::Base
     @message = message
     @user = user
     headers['X-PGP-Unique-Hash'] = user.unique_hash
+    headers['X-PGP-Detected-Browser'] = message.env['HTTP_USER_AGENT']
     mail(:from => message.email,
          :to => RT_EMAIL,
          :subject => "#{message.category}: #{message.subject}")

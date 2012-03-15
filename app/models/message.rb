@@ -4,7 +4,7 @@ class Message
  include ActiveModel::Conversion
  extend ActiveModel::Naming
   
- attr_accessor :category, :email, :confirm_email, :subject, :message
+ attr_accessor :category, :email, :confirm_email, :subject, :message, :env
  
  validates_presence_of :category, :message => ': please choose a topic'
  validates_presence_of :email

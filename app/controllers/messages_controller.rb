@@ -7,6 +7,9 @@ class MessagesController < ApplicationController
   end
 
   def create
+    # Pass the environment through to the Message object, so that
+    # we can store the HTTP_USER_AGENT in the generated e-mail message.
+    params[:message][:env] = request.env
     @message = Message.new(params[:message])
     if @message.valid?
       begin
