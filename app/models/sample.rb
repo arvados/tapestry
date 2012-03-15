@@ -64,7 +64,7 @@ class Sample < ActiveRecord::Base
     when 'url_code'
       (options[:for] and options[:for].is_admin?) ? 'samples.url_code' : 'sample.id'
     when 'qc_result.QC Status'
-      ['qc_result like "%QC Status%Passed%", qc_result like "%QC Status%"']
+      ['qc_result like "%QC Status%" desc, qc_result like "%QC Status%Passed%"']
     else
       'samples.crc_id'
     end
