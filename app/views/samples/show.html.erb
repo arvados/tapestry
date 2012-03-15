@@ -102,3 +102,28 @@
   <%= @sample.material %>
 </p>
 
+<% if current_user and current_user.is_researcher? %>
+<p>
+  <b>QC result:</b>
+  <% unless @sample.qc_result and @sample.qc_result.size > 0 %>
+  N/A
+  <% else %>
+  <div class="profile-data">
+    <table>
+      <tbody>
+	<% @sample.qc_result.each do |k,v| %>
+	<tr>
+	  <th>
+	    <%= k %>
+	  </th>
+	  <td>
+	    <%= v %>
+	  </td>
+	</tr>
+	<% end %>
+      </tbody>
+    </table>
+  </div>
+  <% end %>
+</p>
+<% end %>

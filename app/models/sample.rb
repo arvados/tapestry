@@ -43,6 +43,7 @@ class Sample < ActiveRecord::Base
     t.add :owner, :template => :id
     t.add :kit, :template => :id
     t.add :crc_id_s, :as => :crc_id
+    t.add :qc_result
   end
 
   api_accessible :privileged, :extend => :researcher do |t|
@@ -62,6 +63,8 @@ class Sample < ActiveRecord::Base
       ['kits.name', { :kit => {} }]
     when 'url_code'
       (options[:for] and options[:for].is_admin?) ? 'samples.url_code' : 'sample.id'
+    when 'qc_result.QC Status'
+      ['qc_result like "%QC Status%Passed%", qc_result like "%QC Status%"']
     else
       'samples.crc_id'
     end
@@ -74,6 +77,7 @@ class Sample < ActiveRecord::Base
     end
     s << " or users.hex like :search"
     s << " or kits.name like :search"
+    s << " or ((:search like '_passed_' or :search like '_failed_') and qc_result like concat('%QC Status',:search))"
     [s, { :kit => {}, :participant => {} }]
   end
 end
