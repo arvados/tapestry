@@ -1,6 +1,7 @@
 class GoogleSpreadsheetsController < ApplicationController
 
   before_filter :ensure_researcher
+  skip_before_filter :ensure_enrolled
 
   def index
     if current_user.is_admin?
