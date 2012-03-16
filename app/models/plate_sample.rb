@@ -2,7 +2,7 @@ class PlateSample < ActiveRecord::Base
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
 
-  belongs_to :plate
+  belongs_to :plate, :inverse_of => :plate_samples
   belongs_to :plate_layout_position
   belongs_to :sample
 

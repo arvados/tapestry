@@ -9,7 +9,7 @@
   </div>
   <div class="field">
     <%= f.label :kit_id %><br />
-    <%= @sample.kit.name %>
+    <%= @sample.kit.name if @sample.kit %>&nbsp;
   </div>
   <div class="field">
     <%= f.label :participant_note %><br />

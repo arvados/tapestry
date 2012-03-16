@@ -1,3 +1,3 @@
-<h2><%= link_to 'Plates', plates_path %> &gt; <%= @plate.crc_id %></h2>
+<h2><%= link_to 'Plates', plates_path %> &rarr; <%= link_to @plate.crc_id, plate_path(@plate) %> &rarr; edit</h2>
 
 <%= render 'form' %>

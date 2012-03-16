@@ -111,7 +111,7 @@ jQuery(function() {
       <tr>
 	<td><%= link_to sample.crc_id_s, sample %></td>
 	<td><%= sample.study.name %></td>
-	<td><%= sample.kit.name %></td>
+	<td><%= sample.kit.name if sample.kit %></td>
 	<td><%= sample.participant.nil? ? '' : link_to(sample.participant.hex, public_profile_path(sample.participant.hex)) %></td>
 	<td>
 	  <% if sample.owner.nil? %>
@@ -122,7 +122,7 @@ jQuery(function() {
 	  <% end %>
 	</td>
         <td><%= sample.qc_result ? 'Y' : '' %></td>
-	<td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (kit #{sample.kit.name})" %></td>
+	<td><%= link_to 'Log', show_sample_log_path(sample), :class => "iframe", :title => "Sample log for #{sample.name} (#{sample.kit ? sample.kit.name :: 'no'} kit)" %></td>
 	<td><%= link_to 'Edit', edit_sample_path(sample) %></td>
 	<td><%= sample.last_mailed.nil? ? link_to('Delete', sample, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
       </tr>

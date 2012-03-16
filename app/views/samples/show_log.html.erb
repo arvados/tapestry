@@ -11,7 +11,7 @@
   <% @sample_log.each do |log| %>
     <tr>
       <td><%= log.created_at %></td>
-      <td><%= log.actor.is_researcher? ? log.actor.full_name : log.actor.hex -%></td>
+      <td><%= log.actor.is_researcher? ? log.actor.full_name : log.actor.hex if log.actor -%></td>
       <td>
 	<%= log.comment %>
       	<% if log.controlling_user and log.controlling_user != log.actor %>

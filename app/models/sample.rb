@@ -14,11 +14,22 @@ class Sample < ActiveRecord::Base
   belongs_to :owner, :class_name => "User"
 
   has_many :sample_logs
+  has_many :parent_sample_origins, :foreign_key => :child_sample_id, :class_name => 'SampleOrigin'
+  has_many :parent_samples, {
+    :class_name => 'Sample',
+    :through => :parent_sample_origins,
+    :source => :parent_sample
+  }
+  has_many :child_sample_origins, :foreign_key => :parent_sample_id, :class_name => 'SampleOrigin'
+  has_many :child_samples, {
+    :class_name => 'Sample',
+    :through => :child_sample_origins,
+    :source => :child_sample
+  }
 
   validates_uniqueness_of :crc_id
   validates_uniqueness_of :url_code
   validates_presence_of :study_id
-  validates_presence_of :kit_id
 
   scope :real, where('samples.is_destroyed is ?',nil)
   scope :destroyed, where('samples.is_destroyed is not ?',nil)
@@ -34,6 +45,37 @@ class Sample < ActiveRecord::Base
 
   def crc_id_s
     "%08d" % crc_id
+  end
+
+  def dup(options)
+    s = Sample.new
+    s.update_attributes({
+                          :participant_id => self.participant_id,
+                          :study_id => self.study_id,
+                          :owner_id => self.owner_id,
+                          :crc_id => Kit.generate_verhoeff_number(s),
+                          :url_code => Kit.generate_url_code(s),
+                          :when_originated => Time.now,
+                          :material => self.material,
+                          :kit_design_sample_id => self.kit_design_sample_id,
+                          :original_kit_design_sample_id => self.original_kit_design_sample_id,
+                          :name => (options[:name] or 'derived'),
+                          :creator => options[:actor]
+                        })
+    s.save!
+    SampleOrigin.new({
+                       :parent_sample => self,
+                       :child_sample => s,
+                       :derivation_method => options[:derivation_method],
+                       :creator => options[:actor]
+                     }).save!
+    # make sure self.child_samples gets updated
+    reload
+    sample_logs << SampleLog.new(:actor => options[:actor],
+                                 :comment => "A new sample #{s.crc_id_s} was derived from this sample")
+    s.sample_logs << SampleLog.new(:actor => options[:actor],
+                                   :comment => "Sample created; derived from sample #{self.crc_id_s}")
+    s
   end
 
   api_accessible :researcher do |t|

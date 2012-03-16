@@ -2,58 +2,84 @@
 <%= javascript_include_tag %w(plates) %>
 <%- end -%>
 
-<h2><%= link_to 'Plates', plates_path %> &gt; CRC <%= @plate.crc_id %></h2>
+<h2><%= link_to 'Plates', plates_path %> &rarr; <%= @plate.crc_id_s %>
+  <% if can? :update, @plate -%>
+  &rarr; <%= link_to 'edit', edit_plate_path(@plate) %>
+  <% end %>
+</h2>
 
 <table>
   <tr>
-    <td style="vertical-align: top">
-  <tr>
     <td>
-      <p>
-	<%= @plate.description %>
-      </p>
-
-      <p>
-	(created by <%= @plate.creator.full_name %><%=raw(' - '.concat(link_to 'edit', edit_plate_path(@plate))) if @plate.creator == current_user %>)
-      </p>
-
       <%= render 'layout_grid' %>
       <%= render 'sample_table' %>
     </td>
     <td rowspan="2" style="vertical-align: top">
-<% if can? :update, @plate -%>
-      <p>How to transfer samples to this plate:</p>
-      <ol>
-	<li>Scan this bar code with your mobile device.
-	  <blockquote>
-	    <%= link_to image_tag('https://chart.googleapis.com/chart?chs=120x120&cht=qr&chld=L&chl='+uriencode(mobile_plate_url(@plate.url_code))+'&choe=UTF-8', {:width => 120, :height => 120, :class => 'qr'}), mobile_plate_url(@plate.url_code) %><br />
-	    <%= link_to mobile_plate_url(@plate.url_code), mobile_plate_url(@plate.url_code) %>
-	  </blockquote>
-	  You will see the plate layout, and "scan sample" and "destroy well" buttons.
+      <%= @plate.creator.full_name if @plate.creator %>, <%= @plate.created_at %>
+      <p>
+	<b><%= @plate.description %></b>
+      </p>
+      <% if @plate.derived_from_plate %>
+      <p>
+	This plate was derived from plate <%= link_to @plate.derived_from_plate.crc_id_s, plate_path(@plate.derived_from_plate) %>.
+      </p>
+      <% end %>
+      <% if !@plate.derived_plates.empty? %>
+      <p>Plates derived from this one:</p>
+      <ul>
+	<% !@plate.derived_plates.each do |p| %>
+	<li><%= link_to p.crc_id_s, plate_path(p) %> at <%= p.created_at %> by <%= p.creator.full_name if p.creator %></li>
+	<% end %>
+      </ul>
+      <% end %>
+      <% if can? :update, @plate %>
+      <p>Actions:</p>
+      <ul>
+	<li><%= link_to 'Edit description', edit_plate_path(@plate) %></li>
+	<% n_usable_samples = @plate.plate_samples.select {|x| x.sample and !x.is_unusable }.size %>
+	<li><%= link_to 'Generate a new plate of derived samples', dup_plate_path(@plate), :method => :post, :confirm => 'This will create '+n_usable_samples.to_s+' new derived samples and assign them to a new plate.  Are you sure?' %>.  This will create <%= n_usable_samples %> new derived samples and assign them to a new plate.
+	  <% if @plate.derived_from_plate %>
+	  <span style="background: #fbb">(You probably don&rsquo;t want to do this with a plate that is itself derived from another plate!)</span>
+	  <% end %>
 	</li>
-	<li>
-	  Choose a layout mask (top left, top right, etc.) to set up the appropriate fill order.
-	</li>
-	<li>
-	  Click "scan sample" to open your bar code scanner (Android), or open it manually (iPhone).
-	</li>
-	<li>
-	  Scan the bar code on the next sample tube.  You will see the plate layout again, with a new "sample&rarr;well" button (e.g., "12345678&rarr;A01").
-	</li>
-	<li>
-	  Transfer the indicated sample (the one you just scanned) to the indicated well.
-	</li>
-	<li>
-	  Click the "sample&rarr;well" button to record that you have transferred sample to the well.<br/><b>...or...</b><br />Click the "destroy well" button to record that the indicated well has become unusable for some reason.
-	</li>
-	<li>
-	  Either way, after saving, you will see an updated layout with the next available well indicated.
-	</li>
-	<li>
-	  Repeat from step 2 or 3 as applicable.
-	</li>
-      </ol>
-<% end -%>
+	<% if @plate.is_accepting_samples? %>
+	<li>Transfer samples to this plate.  <a href="javascript:jQuery('#howto-transfer-samples').toggle();return false;">(more info)</a></li>
+	<% end %>
+      </ul>
+      <div id="howto-transfer-samples" class="ui-helper-hidden">
+	<p>How to transfer samples to this plate:</p>
+	<ol>
+	  <li>Scan this bar code with your mobile device.
+	    <blockquote>
+	      <%= link_to image_tag('https://chart.googleapis.com/chart?chs=120x120&cht=qr&chld=L&chl='+uriencode(mobile_plate_url(@plate.url_code))+'&choe=UTF-8', {:width => 120, :height => 120, :class => 'qr'}), mobile_plate_url(@plate.url_code) %><br />
+	      <%= link_to mobile_plate_url(@plate.url_code), mobile_plate_url(@plate.url_code) %>
+	    </blockquote>
+	    You will see the plate layout, and "scan sample" and "destroy well" buttons.
+	  </li>
+	  <li>
+	    Choose a layout mask (top left, top right, etc.) to set up the appropriate fill order.
+	  </li>
+	  <li>
+	    Click "scan sample" to open your bar code scanner (Android), or open it manually (iPhone).
+	  </li>
+	  <li>
+	    Scan the bar code on the next sample tube.  You will see the plate layout again, with a new "sample&rarr;well" button (e.g., "12345678&rarr;A01").
+	  </li>
+	  <li>
+	    Transfer the indicated sample (the one you just scanned) to the indicated well.
+	  </li>
+	  <li>
+	    Click the "sample&rarr;well" button to record that you have transferred sample to the well.<br/><b>...or...</b><br />Click the "destroy well" button to record that the indicated well has become unusable for some reason.
+	  </li>
+	  <li>
+	    Either way, after saving, you will see an updated layout with the next available well indicated.
+	  </li>
+	  <li>
+	    Repeat from step 2 or 3 as applicable.
+	  </li>
+	</ol>
+      </div>
+      <% end %>
     </td>
   </tr>
 </table>

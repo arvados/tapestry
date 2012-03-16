@@ -6,6 +6,8 @@ class Plate < ActiveRecord::Base
   belongs_to :plate_layout
   has_many :plate_samples
   has_many :samples, :through => :plate_samples
+  belongs_to :derived_from_plate, :class_name => "Plate", :inverse_of => :derived_plates
+  has_many :derived_plates, :class_name => "Plate", :foreign_key => :derived_from_plate_id
 
   validates_uniqueness_of :crc_id
   validates_uniqueness_of :url_code
@@ -19,7 +21,51 @@ class Plate < ActiveRecord::Base
     self.url_code = Kit.generate_url_code(self)
   end
 
-  def next_position
-    return PlateLayoutPosition.find_by_xpos_and_ypos(3, 3)
+  def crc_id_s
+    "%08d" % crc_id
+  end
+
+  def dup(options)
+    actor = options[:actor]
+    ActiveRecord::Base.transaction do
+      newplate = Plate.create(:creator => actor,
+                              :plate_layout => self.plate_layout,
+                              :description => self.description,
+                              :derived_from_plate => self)
+      self.plate_samples.each do |ps|
+        if ps.sample and not ps.is_unusable
+          derived_sample = ps.sample.dup(options) or
+            raise "Failed to create derived sample from #{ps.sample.crc_id_s}"
+        else
+          derived_sample = nil
+        end
+        newps = PlateSample.create(ps.attributes)
+        newps.sample = derived_sample
+        newps.creator = actor
+        newplate.plate_samples << newps
+      end
+      newplate.save!
+      self.derived_plates << newplate
+      newplate
+    end
+  end
+
+  def original_plate
+    x = self
+    while x.derived_from_plate
+      x = x.derived_from_plate
+    end
+    x
+  end
+
+  def <=>(other)
+    x = self.original_plate.id <=> other.original_plate.id
+    x = (self.derived_from_plate_id or 0) <=> (other.derived_from_plate_id or 0) if x == 0
+    x = self.id <=> other.id if x == 0
+    x
+  end
+
+  def is_accepting_samples?
+    !derived_from_plate and derived_plates.empty?
   end
 end

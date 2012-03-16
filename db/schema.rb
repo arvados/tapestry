@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120316145203) do
+ActiveRecord::Schema.define(:version => 20120316214624) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1415,6 +1415,7 @@ ActiveRecord::Schema.define(:version => 20120316145203) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "derived_from_plate_id"
   end
 
   add_index "plate_versions", ["plate_id"], :name => "index_plate_versions_on_plate_id"
@@ -1429,9 +1430,11 @@ ActiveRecord::Schema.define(:version => 20120316145203) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "lock_version"
+    t.integer  "derived_from_plate_id"
   end
 
   add_index "plates", ["crc_id"], :name => "index_plates_on_crc_id", :unique => true
+  add_index "plates", ["derived_from_plate_id"], :name => "index_plates_on_derived_from_plate_id"
   add_index "plates", ["url_code"], :name => "index_plates_on_url_code", :unique => true
 
   create_table "privacy_survey_response_versions", :force => true do |t|
@@ -1687,6 +1690,36 @@ ActiveRecord::Schema.define(:version => 20120316145203) do
     t.integer  "lock_version"
     t.integer  "controlling_user_id"
   end
+
+  create_table "sample_origin_versions", :force => true do |t|
+    t.integer  "sample_origin_id"
+    t.integer  "lock_version"
+    t.integer  "parent_sample_id"
+    t.integer  "child_sample_id"
+    t.string   "derivation_method"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sample_origin_versions", ["sample_origin_id"], :name => "index_sample_origin_versions_on_sample_origin_id"
+
+  create_table "sample_origins", :force => true do |t|
+    t.integer  "parent_sample_id"
+    t.integer  "child_sample_id"
+    t.string   "derivation_method"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  add_index "sample_origins", ["child_sample_id"], :name => "index_sample_origins_on_child_sample_id"
+  add_index "sample_origins", ["parent_sample_id"], :name => "index_sample_origins_on_parent_sample_id"
 
   create_table "sample_type_versions", :force => true do |t|
     t.integer  "sample_type_id"

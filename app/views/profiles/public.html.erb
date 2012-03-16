@@ -31,7 +31,7 @@ None added.
       <% last_study = nil -%>
       <% @sample_groups.each do |sample_group| %>
       <% show_group_heading = true %>
-      <% sample_group.each do |s| %>
+      <% sample_group.select { |s| s.parent_samples.empty? }.each do |s| %>
       <tr>
 	<% if show_group_heading %>
 	<th rowspan="<%= sample_group.size %>" style="width: 15%">
@@ -60,7 +60,7 @@ None added.
 		<% s.sample_logs.sort { |a,b| b.id <=> a.id }.each do |sl| %>
 		<tr>
 		  <td style="width: 30%"><%= sl.created_at -%></td>
-		  <td style="width: 20%"><%= sl.actor.is_researcher? ? sl.actor.researcher_affiliation : sl.actor.hex -%></td>
+		  <td style="width: 20%"><%= sl.actor.is_researcher? ? sl.actor.researcher_affiliation : sl.actor.hex if sl.actor -%></td>
 		  <td style="width: 50%"><%= sl.comment -%></td>
 		</tr>
 		<% end %>

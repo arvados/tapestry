@@ -3,6 +3,24 @@
 
 <p id="notice"><%= notice %></p>
 
+<% if !@sample.parent_samples.empty? %>
+<p>
+  <b>Derived from:</b>
+  <% @sample.parent_samples.each do |s| %>
+  <%= link_to s.crc_id, s %>
+  <% end %>
+</p>
+<% end %>
+
+<% if !@sample.child_samples.empty? %>
+<p>
+  <b>Derived samples:</b>
+  <% @sample.child_samples.each do |s| %>
+  <%= link_to s.crc_id, s %>
+  <% end %>
+</p>
+<% end %>
+
 <p>
   <b>Study:</b>
   <%= @sample.study.name %>
@@ -10,7 +28,7 @@
 
 <p>
   <b>Kit:</b>
-  <%= link_to(@sample.kit.name, kit_path(@sample.kit)) %>
+  <%= link_to(@sample.kit.name, kit_path(@sample.kit)) if @sample.kit %>
 </p>
 
 <p>
@@ -35,12 +53,12 @@
 
 <p>
   <b>Original kit design sample:</b>
-  <%= @sample.original_kit_design_sample.name %>
+  <%= @sample.original_kit_design_sample.name if @sample.original_kit_design_sample %>
 </p>
 
 <p>
   <b>Kit design sample:</b>
-  <%= @sample.kit_design_sample.name %>
+  <%= @sample.kit_design_sample.name if @sample.kit_design_sample %>
 </p>
 
 <p>

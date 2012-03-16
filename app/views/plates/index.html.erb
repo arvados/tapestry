@@ -8,26 +8,52 @@
 
 <table class="admin_table">
   <tr>
-    <th>CRC ID</th>
-    <th>URL code</th>
-    <th>Creator</th>
     <th>Description</th>
-    <th>Wells used</th>
-    <th>Scan-&rsquo;n&rsquo;-fill</th>
-    <th></th>
-    <th></th>
+    <th>Bar codes and IDs</th>
   </tr>
 
-<% @plates.each do |plate| %>
-  <tr>
-    <td><%= link_to plate.crc_id, plate_path(plate) %></td>
-    <td><%= plate.url_code %></td>
-    <td><%= plate.creator.full_name %></td>
-    <td><%= plate.description %></td>
-    <td><%= plate.samples.size %> / <%= plate.plate_layout.plate_layout_positions.size %></td>
-    <td><%= link_to image_tag('https://chart.googleapis.com/chart?chs=80x80&cht=qr&chld=L&chl='+uriencode(mobile_plate_url(plate.url_code))+'&choe=UTF-8', {:width => 80, :height => 80, :class => 'qr'}), mobile_plate_url(plate.url_code) %></td>
-    <td><%= link_to 'Edit', edit_plate_path(plate) if can? :update, plate %></td>
-    <td><%= link_to 'Destroy', plate, :confirm => 'Are you sure?', :method => :delete if can? :destroy, plate %></td>
+<% did = {}
+   @plates.sort.each do |plate|
+   next if did[plate.id] %>
+  <tr style="<%= "background: #ddf" if plate.derived_from_plate %>">
+    <td style="vertical-align: top">
+      <% if plate.derived_from_plate %>
+      <b>Derived from plate <%= link_to plate.crc_id_s, plate.derived_from_plate %></b>
+      <br />
+      <% end %>
+      <%= plate.creator.full_name if plate.creator %>, <%= plate.created_at %>
+      <br />
+      <b><%= plate.description %></b>
+      <br />
+      <%= plate.plate_layout.plate_layout_positions.size %> wells,
+      <b><%= plate.plate_samples.size %></b> filled
+      <% if plate.derived_plates.empty? and can? :destroy, plate %>
+      <br /><%= link_to 'Destroy', plate, :confirm => 'Are you sure?', :method => :delete  %>
+      <% end %>
+    </td>
+    <td style="vertical-align: top">
+      <div style="display: table">
+	<div style="display: table-row">
+	  <% [plate, plate.derived_plates].flatten.each do |p| %>
+	  <% bgcolor = p.derived_from_plate ? 'ddddff' : 'ffffff' %>
+	  <div style="display: table-cell; text-align: center; background: #<%= bgcolor %>">
+	    <% did[p.id] = true %>
+	    <%= link_to_if p.is_accepting_samples?, image_tag('https://chart.googleapis.com/chart?chs=80x80&cht=qr&chld=L&chl='+uriencode(mobile_plate_url(p.url_code))+'&choe=UTF-8&chco=000000,'+bgcolor+'&chf=bg,s,abcdef00', {:width => 80, :height => 80, :class => 'qr'}), mobile_plate_url(p.url_code) %>
+	    <br />
+	    <%= link_to p.crc_id_s, plate_path(p) %>
+	    <br />
+	    <%= p.url_code %>
+	    <br />
+	    <%= link_to 'view', plate_path(p) %>
+	    <% if can? :update, p %>
+	    / <%= link_to 'edit', edit_plate_path(p)  %>
+	    <% end %>
+	  </div>
+	  <% end %>
+	</div>
+      </div>
+    </td>
+    <td style="vertical-align: top"></td>
   </tr>
 <% end %>
 </table>

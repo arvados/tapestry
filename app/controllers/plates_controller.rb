@@ -49,6 +49,13 @@ class PlatesController < ApplicationController
     end
   end
 
+  def dup
+    authorize! :update, @plate
+    p = @plate.dup(:actor => current_user)
+    flash[:notice] = "New plate #{p.crc_id} created."
+    redirect_to p
+  end
+
   def prepare_layout_grid
     @current_mask = nil if !defined? @current_mask
 

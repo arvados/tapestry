@@ -138,7 +138,7 @@ class SamplesController < ApplicationController
 
     flash[:notice]  = "Sample #{@sample.crc_id_s} marked as destroyed"
 
-    redirect_to(kit_path(@sample.kit.id))
+    redirect_to(@sample.kit || @sample)
   end
 
   # GET /samples/1/log
@@ -174,7 +174,7 @@ class SamplesController < ApplicationController
     # Log this
     SampleLog.new(:actor => current_user, :comment => "Sample received by researcher", :sample_id => @sample.id).save
 
-    redirect_to(kit_path(@sample.kit.id))
+    redirect_to(@sample.kit || @sample)
   end
 
   def receive_by_crc_id
@@ -232,7 +232,7 @@ class SamplesController < ApplicationController
 
     respond_to do |format|
       if @sample.update_attributes(params[:sample])
-        format.html { redirect_to(@sample.kit, :controller => :kits, :notice => 'Participant note was successfully updated.') }
+        format.html { redirect_to((@sample.kit || @sample), :controller => :kits, :notice => 'Participant note was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "participant_note" }
@@ -298,7 +298,7 @@ class SamplesController < ApplicationController
     sample.save!
     # If the researcher has the sample, they have the kit
     kit = sample.kit
-    if kit.owner != current_user
+    if kit and kit.owner != current_user
       KitLog.new(:actor => current_user, :comment => "Kit received", :kit_id => kit.id).save
       kit.last_received = Time.now
       kit.owner = current_user
