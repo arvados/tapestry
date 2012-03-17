@@ -10,6 +10,13 @@ class UserMailer < ActionMailer::Base
          :subject => "#{message.category}: #{message.subject}")
   end
 
+  def bulk_message(bulk_message,recipient)
+    @message = bulk_message.body
+    mail(:from => RT_EMAIL,
+         :to => recipient.email,
+         :subject => "#{bulk_message.subject}")
+  end
+
   def signup_notification(user)
     @url  = "http://#{ROOT_URL}/activate/#{user.activation_code}"
     @user = user

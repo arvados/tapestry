@@ -1,0 +1,39 @@
+
+
+<%= error_messages_for :bulk_message, :header_message => 'Error: ', :message => nil %>
+
+<table>
+<%= form_for([:admin, @bulk_message], :html => {:multipart => true}) do |f| -%>
+   <tr>
+     <td colspan="2">
+    <span style="color: red"> * </span><%= f.label :subject %><br />
+    <%= f.text_field :subject, :size => 70 %>
+     </td>
+   </tr>
+   <tr>
+     <td colspan="2">
+    <span style="color: red"> * </span><%= f.label :body %><br />
+    <%= f.text_area :body, :cols => 70, :rows => 20 %>
+     </td>
+   </tr>
+
+  <tr>
+    <td>Recipients:</td><td><%= @bulk_message.recipients.size %></td></tr>
+  </tr>
+
+   <tr>
+     <td colspan="2">
+    <label for="recipients_file">Replace recipients: Select File</label><br />
+    <%= f.file_field :recipients_file %>
+     </td>
+   </tr>
+   <tr>
+     <td colspan="2">
+      <p>
+        <%= f.submit "Proceed" %>
+      </p>
+    </td>
+  </tr>
+<% end -%>
+</table>
+

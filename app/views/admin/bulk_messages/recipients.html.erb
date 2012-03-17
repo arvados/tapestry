@@ -1,0 +1,30 @@
+<h2>Bulk message recipients</h2>
+
+<table>
+<tr><td>Message subject</td><td><%= @bulk_message.subject %></td></tr>
+<tr><td>Message sent</td><td><%= @bulk_message.sent ? @bulk_message.sent_at : 'No' %></td></tr>
+</table>
+
+
+<table class="admin_table">
+  <thead>
+    <tr>
+      <th colspan="6">Hex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @count = 0 -%>
+    <% @bulk_message.recipients.sort { |a,b| a.hex <=> b.hex }.each do |user| -%>
+      <% if @count % 6 == 0 then -%>
+    <tr>
+      <% end -%>
+      <% @count += 1 -%>
+      <td><%= link_to user.hex, admin_user_path(user) %></td>
+      <% if @count % 6 == 0 then -%>
+      <% @count = 0 if @count > 0 -%>
+    </tr>
+      <% end -%>
+    <% end -%>
+  </tbody>
+</table>
+

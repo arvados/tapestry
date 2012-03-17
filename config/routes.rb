@@ -178,6 +178,9 @@ Tapestry::Application.routes.draw do
       resources :studies
       resources :bulk_promotions
       resources :bulk_waitlists
+      match '/bulk_messages/send/:id' => 'bulk_messages#send_message', :as => :send_bulk_message
+      match '/bulk_messages/recipients/:id' => 'bulk_messages#recipients', :as => :bulk_message_recipients
+      resources :bulk_messages
       match '/reports/queue' => 'reports#queue', :as => :reports_queue
       match '/reports/download/:id' => 'reports#download', :as => :report_download
       match '/reports/exam' => 'reports#exam', :as => :reports_exam
