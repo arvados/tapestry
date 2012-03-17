@@ -1,4 +1,4 @@
-class Admin::BulkMessagesController < Admin::ApplicationController
+class Admin::BulkMessagesController < Admin::AdminControllerBase
 
   def new
     @bulk_message = BulkMessage.new()
