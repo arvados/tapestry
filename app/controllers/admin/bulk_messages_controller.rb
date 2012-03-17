@@ -21,7 +21,7 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
           <tr><td>Uploaded file:</td><td>#{@file.original_filename}</td></tr>
           <tr><td>Rows found (including header):</td><td>#{@rows}</td></tr>
           <tr><td>Rows without hex id:</td><td>#{@invalid_rows}</td></tr>
-          <tr><td>Users found:</td><td>#{@bulk_message.recipients.size}</td></tr>
+          <tr><td>Unique users found:</td><td>#{@bulk_message.bulk_message_recipients.size}</td></tr>
           <tr><td>Unknown users:</td><td>#{@unknown.size}</td></tr>
         </table>"
       end
@@ -64,7 +64,7 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
           <tr><td>Uploaded file:</td><td>#{@file.original_filename}</td></tr>
           <tr><td>Rows found (including header):</td><td>#{@rows}</td></tr>
           <tr><td>Rows without hex id:</td><td>#{@invalid_rows}</td></tr>
-          <tr><td>Users found:</td><td>#{@bulk_message.recipients.size}</td></tr>
+          <tr><td>Unique users found:</td><td>#{@bulk_message.bulk_message_recipients.size}</td></tr>
           <tr><td>Unknown users:</td><td>#{@unknown.size}</td></tr>
         </table>"
         end
@@ -136,8 +136,11 @@ private
     @parsed_file.each  do |row|
       break if @invalid_rows == 10
       if not @hex_id_column.nil? then
-        if not User.find_by_hex(row[@hex_id_column]).nil? then
-          @bulk_message.bulk_message_recipients << BulkMessageRecipient.new(:user_id => User.find_by_hex(row[@hex_id_column]).id)
+        user = User.find_by_hex(row[@hex_id_column])
+        if not user.nil? then
+          if @bulk_message.bulk_message_recipients.where('user_id = ?',user.id).empty? then
+            @bulk_message.bulk_message_recipients << BulkMessageRecipient.new(:user_id => user.id)
+          end
         else
           # Hmm, user not found
           @unknown.push(row)
