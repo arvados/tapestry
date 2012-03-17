@@ -70,7 +70,7 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
         end
       end
 
-      @bulk_message.save()
+      @bulk_message.update_attributes(params[:bulk_message])
 
       flash[:notice] = "Message prepared"
       #redirect_to admin_bulk_messages_send_url
@@ -151,7 +151,10 @@ private
           if item =~ /^..[0-9a-f]{6}$/i then
             @hex_id_column = @item_position
             @bulk_message.bulk_message_recipients = []
-            @bulk_message.bulk_message_recipients << BulkMessageRecipient.new(:user_id => User.find_by_hex(row[@hex_id_column]).id)
+            user = User.find_by_hex(row[@hex_id_column])
+            if not user.nil? then
+              @bulk_message.bulk_message_recipients << BulkMessageRecipient.new(:user_id => user.id)
+            end
           end
           @item_position += 1
         end
