@@ -16,15 +16,17 @@ Your kit has been located in our records. Please double check that the following
 <strong>Kit contents:</strong><br/>
 <table class="admin_table">
   <tr>
-    <th>Sample ID</th>
     <th>Kit name</th>
+    <th>Public sample ID</th>
     <th>Sample name</th>
+    <th>Label code</th>
   </tr>
   <% @kit.samples.sort { |a,b| a.original_kit_design_sample.sort_order <=> b.original_kit_design_sample.sort_order }.each do |s| %>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= s.crc_id %></td>
       <td><%= @kit.name %></td>
+      <td><%= s.crc_id_s %></td>
       <td><%= s.name %></td>
+      <td><b><%= s.url_code %></b></td>
     </tr>
   <% end %>
 </table>
