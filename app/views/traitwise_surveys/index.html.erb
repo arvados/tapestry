@@ -1,0 +1,29 @@
+<h2>Traitwise surveys</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>Survey name</th>
+    <th>Researcher</th>
+    <th>Tag</th>
+    <th>Results downloaded</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @traitwise_surveys.each do |traitwise_survey| %>
+  <tr>
+    <td><%= traitwise_survey.name %></td>
+    <td><%= traitwise_survey.user.full_name %></td>
+    <td><%= traitwise_survey.tags %></td>
+    <td><%= traitwise_survey.last_downloaded_at %></td>
+    <td><%= link_to 'Show', traitwise_survey %></td>
+    <td><%= link_to 'Edit', edit_traitwise_survey_path(traitwise_survey) if current_user.is_admin? or current_user.id == traitwise_survey.user.id %></td>
+    <td><%= button_to 'Destroy', traitwise_survey, :confirm => 'Are you sure?', :method => :delete if current_user.is_admin? or current_user.id == traitwise_survey.user.id %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Traitwise survey', new_traitwise_survey_path unless @min_view %>

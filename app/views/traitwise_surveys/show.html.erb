@@ -1,0 +1,90 @@
+<h2><% unless @min_view %><%= link_to 'Traitwise surveys', traitwise_surveys_path %> &gt; <% end %><%=h @traitwise_survey.name %></h2>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Researcher:</b>
+  <%=h @traitwise_survey.user.full_name %>,
+  <%=h @traitwise_survey.user.researcher_affiliation %>
+</p>
+
+<p><%=raw CGI.escapeHTML(@traitwise_survey.description).gsub("\r","").gsub("\n\n","</p><p>") %></p>
+
+<% if @can_edit or (current_user.enrolled and @traitwise_survey.open) %>
+<p>
+  <%= button_to 'Participate in this survey', participate_traitwise_survey_path(@traitwise_survey) %>
+</p>
+<% end %>
+<% if !@traitwise_survey.open %>
+<p>
+  This survey is currently <%=raw '<b>not</b>' unless @traitwise_survey.open %> open to participants.
+</p>
+<% end %>
+
+<% if @can_download %>
+<p>
+  <%= button_to 'Download results', download_traitwise_survey_path(@traitwise_survey) %>
+</p>
+<% end %>
+
+<% if !@traitwise_survey.is_result_public %>
+<p>
+  Currently, responses to this survey are <b>not</b> publicly available.
+</p>
+<% end %>
+
+
+<h3>Your participation in this survey</h3>
+<% if !@nonces.empty? %>
+<table class="admin_table">
+  <thead>
+    <th>Started taking survey</th>
+    <th>Completed survey</th>
+    <th>Results retrieved</th>
+  </thead>
+  <tbody>
+    <% @nonces.each do |nonce| %>
+    <tr>
+      <td><%= nonce.created_at.localtime.ctime %></td>
+      <td><%= a=TraitwiseSurveyAnswer.where(:traitwise_survey_id => @traitwise_survey.id, :nonce_id => nonce.id, :column => 1); (t=Time.parse(a[0].answer)) and t.ctime if a and a.size==1 and a[0].answer %></td>
+      <td><%= nonce.used_at.localtime.ctime if nonce.used_at %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<p>You have not participated in this survey.</p>
+<% end %>
+
+
+<% if !@min_view %>
+<h3>Technical details (this section is only displayed to researchers and admins)</h3>
+
+<p>
+  <b>Listed in "available surveys"?</b>
+  <%= @traitwise_survey.is_listed ? "Yes" : "No" %>
+</p>
+
+<p>
+  <b>Responses available to public?</b>
+  <%= @traitwise_survey.is_result_public ? "Yes" : "No" %>
+</p>
+
+<p>
+  <b>Results last synchronized:</b>
+  <%=h @sit.spreadsheet.last_downloaded_at %>
+</p>
+
+<p>
+  <b>Tag:</b>
+  <%=h @traitwise_survey.tags %>
+</p>
+
+<% if @can_edit %>
+<p>
+  <%= button_to 'Synchronize results from Traitwise now', synchronize_traitwise_survey_path(@traitwise_survey) %>
+</p>
+
+<%= link_to 'Edit', edit_traitwise_survey_path(@traitwise_survey) %>
+<% end %>
+<% end %>

@@ -37,6 +37,15 @@ Tapestry::Application.routes.draw do
   match '/kits/:id/sent' => 'kits#sent', :as => :sent_kit, :via => :post
   match '/kits/:id/returned' => 'kits#returned', :as => :returned_kit, :via => :post
 
+  resources :traitwise_surveys do
+    post 'participate', :on => :member
+    post 'synchronize', :on => :member
+    post 'download', :on => :member
+  end
+  match '/traitwise/proxy' => 'traitwise#proxy'
+  match '/traitwise/:id' => 'traitwise#index', :as => :take_traitwise_survey
+  match '/traitwise/:id/iframe' => 'traitwise#iframe', :as => :traitwise_iframe
+
   resources :google_surveys do
     post 'participate', :on => :member
     post 'synchronize', :on => :member
@@ -218,8 +227,6 @@ Tapestry::Application.routes.draw do
   match '/absolute_pitch_surveys/save' => 'absolute_pitch_survey#save', :as => :save_absolute_pitch_surveys
   match '/absolute_pitch_surveys/review/:id' => 'absolute_pitch_survey#review', :as => :review_absolute_pitch_surveys
   match '/trait_surveys' => 'trait_survey#index', :as => :trait_surveys
-  match '/traitwise' => 'traitwise#index', :as => :trait_surveys
-  match '/traitwise/iframe' => 'traitwise#iframe', :as => :trait_survey_iframe
 
   resource :message
 

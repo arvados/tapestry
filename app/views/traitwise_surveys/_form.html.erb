@@ -1,0 +1,29 @@
+<%= form_for(@traitwise_survey) do |f| %>
+  <div class="field">
+    <%= f.label :name, 'Survey Name' %><br />
+    <%= f.text_field(:name, :size => 40) %>
+  </div>
+  <div class="field">
+    <%= f.label :open, 'Open?' %> (i.e., participants can respond click the "participate in this survey" button)<br />
+    <%= f.check_box :open, :checked_value => true, :unchecked_value => false %>
+  </div>
+  <div class="field">
+    <%= f.label :is_listed, 'Listed?' %> (in "available surveys" lists shown to participants)<br />
+    <%= f.check_box :is_listed, :checked_value => true, :unchecked_value => false %>
+  </div>
+  <div class="field">
+    <%= f.label :is_result_public, 'Results public?' %> (i.e., displayed on participants' public profiles, and downloadable as CSV by participants)<br />
+    <%= f.check_box :is_result_public, :checked_value => true, :unchecked_value => false %>
+  </div>
+  <div class="field">
+    <%= f.label :description, 'Description' %><br />
+    <%= f.text_area :description, :cols => 80, :rows => 10 %>
+  </div>
+  <div class="field">
+    <%= f.label(:tags, 'Traitwise tag') %><br />
+    <%= f.text_field(:tags, :size => 80) %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

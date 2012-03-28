@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120316214624) do
+ActiveRecord::Schema.define(:version => 20120327201821) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1892,6 +1892,107 @@ ActiveRecord::Schema.define(:version => 20120316214624) do
     t.boolean  "gmaps"
   end
 
+  create_table "spreadsheet_importer_versions", :force => true do |t|
+    t.integer  "spreadsheet_importer_id"
+    t.integer  "lock_version"
+    t.integer  "spreadsheet_id"
+    t.integer  "oauth_service_id"
+    t.string   "gdocs_url"
+    t.integer  "traitwise_survey_id"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "versioned_type"
+  end
+
+  add_index "spreadsheet_importer_versions", ["spreadsheet_importer_id"], :name => "index_spreadsheet_importer_versions_on_spreadsheet_importer_id"
+
+  create_table "spreadsheet_importers", :force => true do |t|
+    t.integer  "spreadsheet_id"
+    t.string   "type"
+    t.integer  "oauth_service_id"
+    t.string   "gdocs_url"
+    t.integer  "traitwise_survey_id"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "spreadsheet_row_versions", :force => true do |t|
+    t.integer  "spreadsheet_row_id"
+    t.integer  "lock_version"
+    t.integer  "spreadsheet_id"
+    t.integer  "row_number"
+    t.text     "row_data"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "spreadsheet_row_versions", ["spreadsheet_row_id"], :name => "index_spreadsheet_row_versions_on_spreadsheet_row_id"
+
+  create_table "spreadsheet_rows", :force => true do |t|
+    t.integer  "spreadsheet_id"
+    t.integer  "row_number"
+    t.text     "row_data"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "spreadsheet_versions", :force => true do |t|
+    t.integer  "spreadsheet_id"
+    t.integer  "lock_version"
+    t.integer  "user_id"
+    t.string   "name"
+    t.text     "description"
+    t.string   "rowtarget_class"
+    t.string   "rowtarget_id_attribute"
+    t.string   "rowtarget_data_attribute"
+    t.integer  "row_id_column"
+    t.text     "header_row"
+    t.integer  "auto_update_interval"
+    t.boolean  "is_auto_update_enabled"
+    t.datetime "last_downloaded_at"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "spreadsheet_versions", ["spreadsheet_id"], :name => "index_spreadsheet_versions_on_spreadsheet_id"
+
+  create_table "spreadsheets", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.text     "description"
+    t.string   "rowtarget_class"
+    t.string   "rowtarget_id_attribute"
+    t.string   "rowtarget_data_attribute"
+    t.integer  "row_id_column"
+    t.text     "header_row"
+    t.integer  "auto_update_interval"
+    t.boolean  "is_auto_update_enabled"
+    t.datetime "last_downloaded_at"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
   create_table "studies", :force => true do |t|
     t.string   "name"
     t.text     "participant_description"
@@ -2131,6 +2232,41 @@ ActiveRecord::Schema.define(:version => 20120316214624) do
 
   create_table "tissue_types", :force => true do |t|
     t.string   "name"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "traitwise_survey_versions", :force => true do |t|
+    t.integer  "traitwise_survey_id"
+    t.integer  "lock_version"
+    t.integer  "user_id"
+    t.string   "tags"
+    t.string   "name"
+    t.boolean  "open"
+    t.text     "description"
+    t.boolean  "is_result_public"
+    t.boolean  "is_listed"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "traitwise_survey_versions", ["traitwise_survey_id"], :name => "index_traitwise_survey_versions_on_traitwise_survey_id"
+
+  create_table "traitwise_surveys", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "tags"
+    t.string   "name"
+    t.boolean  "open"
+    t.text     "description"
+    t.boolean  "is_result_public"
+    t.boolean  "is_listed"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"

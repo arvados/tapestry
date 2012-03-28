@@ -1,18 +1,19 @@
 
 # Parts COPYRIGHT TRAITWISE
 # LICENSE ???
-# Parts copyright Ward Vandewege, 2011
+# Parts copyright Ward Vandewege, 2011 - 2012
 # Same license as entire project
 
 class TraitwiseController < ApplicationController
   protect_from_forgery :only => [:index]
 
   def index
-    @stream_from_tw = Traitwise.stream( current_user.hex, request, cookies, current_user )
+    @traitwise_survey = TraitwiseSurvey.find(params[:id])
   end
 
   def iframe
-    @stream_from_tw = Traitwise.stream( current_user.hex, request, cookies, current_user )
+    @traitwise_survey = TraitwiseSurvey.find(params[:id])
+    @stream_from_tw = Traitwise.stream( current_user.hex, "survey_#{@traitwise_survey.id}", request, cookies, @traitwise_survey.tags, current_user )
     render :layout => "none"
   end
 
