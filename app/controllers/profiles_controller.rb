@@ -47,7 +47,7 @@ class ProfilesController < ApplicationController
       @google_survey_results.push response
     }
 
-    TraitwiseSurvey.all.each do |tws|
+    TraitwiseSurvey.where(:is_result_public => true).each do |tws|
       sheet = tws.spreadsheet
       response = {
         :survey => tws,
