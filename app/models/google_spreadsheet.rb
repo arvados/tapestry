@@ -86,9 +86,9 @@ class GoogleSpreadsheet < ActiveRecord::Base
     return true if row_id_column
 
     rows = get_datarows
-    return nil unless rows.length > 1 and rowtarget_class
+    return nil unless rows.length > 1 and rowtarget_type
 
-    target_class = rowtarget_class.constantize or return nil
+    target_class = rowtarget_type.constantize or return nil
 
     possible = Hash.new
     (0..rows[1].length-1).each { |c| possible[c] = 0 }
@@ -151,7 +151,7 @@ class GoogleSpreadsheet < ActiveRecord::Base
       end
 
       # save the row in the appropriate rowtarget object, if possible
-      next unless (rowtarget_class and
+      next unless (rowtarget_type and
                    rowtarget_id_attribute and
                    rowtarget_data_attribute and
                    row_id_column)
@@ -172,7 +172,7 @@ class GoogleSpreadsheet < ActiveRecord::Base
   end
 
   def find_target_by_id(id_from_row)
-    rowtarget_class.
+    rowtarget_type.
       constantize.
       send("find_by_#{rowtarget_id_attribute}".to_sym, id_from_row)
   rescue

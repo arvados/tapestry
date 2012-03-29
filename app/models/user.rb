@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
   has_many :removal_requests, :dependent => :destroy
   has_many :samples, :foreign_key => 'participant_id'
   has_many :datasets, :foreign_key => 'participant_id'
+  has_many :spreadsheet_rows, :as => :row_target
 
   has_one  :shipping_address, :dependent => :destroy
 

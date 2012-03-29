@@ -5,7 +5,8 @@ class TraitwiseSurvey < ActiveRecord::Base
   require 'uri'
 
   belongs_to :user
-  belongs_to :spreadsheet
+  has_one :spreadsheet_importer
+  has_one :spreadsheet, :through => :spreadsheet_importer
 
   attr_protected :user_id
   attr_protected :spreadsheet_id

@@ -48,23 +48,17 @@ class ProfilesController < ApplicationController
     }
 
     TraitwiseSurvey.all.each do |tws|
-      sheet = SpreadsheetImporterTraitwise.
-        where('traitwise_survey_id = ?', tws.id).
-        first.
-        spreadsheet
+      sheet = tws.spreadsheet
       response = {
         :survey => tws,
         :collected_at => [],
         :nonce => "tws_sheet_#{sheet.id}",
         :qa => []
       }
-      sheet.spreadsheet_rows.each do |sr|
-        mine = false
+      @user.spreadsheet_rows.where('spreadsheet_id = ?', sheet.id).each do |sr|
         qa = []
         (0..sheet.header_row.length-1).to_a.each do |i|
           case sheet.header_row[i]
-          when 'Foreign Id'
-            mine = (sr.row_data and sr.row_data[i] == @user.hex)
           when 'Question Body'
             qa[0] = sr.row_data[i]
           when 'Responses'
@@ -75,10 +69,8 @@ class ProfilesController < ApplicationController
             qa[1] = sr.row_data[i] unless sr.row_data[i].empty?
           end
         end
-        if mine
-          response[:qa].push qa
-          response[:collected_at].push sr.updated_at
-        end
+        response[:qa].push qa
+        response[:collected_at].push sr.updated_at
       end
       unless response[:qa].empty?
         response[:collected_at] = response[:collected_at].max

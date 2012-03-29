@@ -4,6 +4,7 @@ class SpreadsheetRow < ActiveRecord::Base
 
   attr_protected :spreadsheet_id
 
+  belongs_to :row_target, :polymorphic => true
   belongs_to :spreadsheet
   serialize :row_data
 

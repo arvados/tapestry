@@ -21,8 +21,8 @@
 </p>
 
 <p>
-  <b>Rowtarget class:</b>
-  <%= @google_spreadsheet.rowtarget_class %>
+  <b>Rowtarget type:</b>
+  <%= @google_spreadsheet.rowtarget_type %>
 </p>
 
 <p>
@@ -53,7 +53,7 @@
 <table class="admin_table spreadsheetdata ui-helper-hidden" style="background: #fff">
   <tr>
     <th>#</th>
-    <th><%= @google_spreadsheet.rowtarget_class %></th>
+    <th><%= @google_spreadsheet.rowtarget_type %></th>
     <% @google_spreadsheet.header_row.each do |col| %>
     <th><%= col %></th>
     <% end %>

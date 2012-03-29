@@ -20,6 +20,7 @@ class SpreadsheetImporterTraitwise < SpreadsheetImporter
     spreadsheet.save
     success_count = 0
     attempt_count = 0
+    hex_id_col = spreadsheet.header_row.index('Foreign Id')
     datarows.each do |r|
       # skip blank rows
       next if r == [nil]
@@ -30,6 +31,12 @@ class SpreadsheetImporterTraitwise < SpreadsheetImporter
       if sr.nil? then
         sr = SpreadsheetRow.new(:row_number => r[0], :row_data => r)
         sr.spreadsheet = spreadsheet
+
+        # link the row to the appropriate user
+        if hex_id_col and
+            (u = User.where('hex = ?', r[hex_id_col]).first)
+          sr.row_target = u
+        end
       end
       begin
         sr.save
@@ -38,7 +45,7 @@ class SpreadsheetImporterTraitwise < SpreadsheetImporter
       end
 
       # save the row in the appropriate rowtarget object, if possible
-      next unless (spreadsheet.rowtarget_class and
+      next unless (spreadsheet.rowtarget_type and
                    spreadsheet.rowtarget_id_attribute and
                    spreadsheet.rowtarget_data_attribute and
                    spreadsheet.row_id_column)

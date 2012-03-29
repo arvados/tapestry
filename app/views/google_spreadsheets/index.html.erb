@@ -17,7 +17,7 @@
   <tr>
     <td><%= google_spreadsheet.user.full_name %></td>
     <td><%= google_spreadsheet.name %></td>
-    <td><%= google_spreadsheet.row_id_column %>&rarr;<%= google_spreadsheet.rowtarget_class %>.<%= google_spreadsheet.rowtarget_id_attribute %>&rarr;<%= google_spreadsheet.rowtarget_data_attribute %></td>
+    <td><%= google_spreadsheet.row_id_column %>&rarr;<%= google_spreadsheet.rowtarget_type %>.<%= google_spreadsheet.rowtarget_id_attribute %>&rarr;<%= google_spreadsheet.rowtarget_data_attribute %></td>
     <td><%= google_spreadsheet.last_downloaded_at %></td>
     <td><%= google_spreadsheet.google_spreadsheet_rows.size %></td>
     <td><%= link_to 'Sync', synchronize_google_spreadsheet_path(google_spreadsheet), :method => :post %></td>
