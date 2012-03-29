@@ -145,20 +145,18 @@ None added.
     <% @google_survey_results.each {|survey_result| %>
     <tr>
       <th>
-	<%= link_to_if((logged_in? and survey_result[:survey].is_listed), survey_result[:survey].name, google_survey_path(survey_result[:survey])) %>
+	<%= link_to_if((logged_in? and survey_result[:survey].is_listed), survey_result[:survey].name, survey_result[:survey]) %>
       </th>
       <td>
-	Responses collected <%= survey_result[:nonce].used_at %>.
-	<a href="#" onclick="jQuery('.survey_result_<%= survey_result[:nonce].id %>').toggle(); jQuery(this).html(jQuery('.survey_result_<%= survey_result[:nonce].id %>').is(':visible') ? 'Hide responses' : 'Show responses'); return false;">Show responses</a>
+	Responses collected <%= survey_result[:collected_at] %>.
+	<a href="#" onclick="jQuery('.survey_result_<%= survey_result[:nonce] %>').toggle(); jQuery(this).html(jQuery('.survey_result_<%= survey_result[:nonce] %>').is(':visible') ? 'Hide responses' : 'Show responses'); return false;">Show responses</a>
       </td>
     </tr>
-    <% survey_result[:answers].each {|answer| %>
-    <% if answer.answer and answer.column != survey_result[:survey].userid_response_column %>
-    <tr class="survey_result_<%= survey_result[:nonce].id %> ui-helper-hidden">
-      <td><%= answer.google_survey_question.question %></td>
-      <td class="hoverable"><%= answer.answer %></td>
+    <% survey_result[:qa].each {|qa| %>
+    <tr class="survey_result_<%= survey_result[:nonce] %> ui-helper-hidden">
+      <td><%= qa[0] %></td>
+      <td class="hoverable"><%= qa[1] %></td>
     </tr>
-    <% end %>
     <% } %>
     <% } %>
   </tbody>

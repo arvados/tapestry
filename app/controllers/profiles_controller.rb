@@ -32,13 +32,59 @@ class ProfilesController < ApplicationController
     @google_survey_results = []
     nonces.each {|n|
       response = {}
-      response[:nonce] = n
+      response[:nonce] = n.id
+      response[:collected_at] = n.used_at
       response[:survey] = GoogleSurvey.find(n.target_id)
       next if !response[:survey].is_result_public?
       response[:answers] = GoogleSurveyAnswer.find_all_by_nonce_id(n.id).select { |x| !x.google_survey_question.is_hidden }
       next if response[:answers].empty?
+      response[:qa] = []
+      response[:answers].each do |answer|
+        if answer.answer and answer.column != response[:survey].userid_response_column
+          response[:qa].push [answer.google_survey_question.question, answer.answer]
+        end
+      end
       @google_survey_results.push response
     }
+
+    TraitwiseSurvey.all.each do |tws|
+      sheet = SpreadsheetImporterTraitwise.
+        where('traitwise_survey_id = ?', tws.id).
+        first.
+        spreadsheet
+      response = {
+        :survey => tws,
+        :collected_at => [],
+        :nonce => "tws_sheet_#{sheet.id}",
+        :qa => []
+      }
+      sheet.spreadsheet_rows.each do |sr|
+        mine = false
+        qa = []
+        (0..sheet.header_row.length-1).to_a.each do |i|
+          case sheet.header_row[i]
+          when 'Foreign Id'
+            mine = (sr.row_data and sr.row_data[i] == @user.hex)
+          when 'Question Body'
+            qa[0] = sr.row_data[i]
+          when 'Responses'
+            qa[2] = sr.row_data[i]
+          when 'Numeric Answer'
+            qa[1] = qa[2].split('||')[sr.row_data[i].to_i] if qa[2]
+          when 'Text Answer'
+            qa[1] = sr.row_data[i] unless sr.row_data[i].empty?
+          end
+        end
+        if mine
+          response[:qa].push qa
+          response[:collected_at].push sr.updated_at
+        end
+      end
+      unless response[:qa].empty?
+        response[:collected_at] = response[:collected_at].max
+        @google_survey_results.push response
+      end
+    end
 
     # make a 2D array of samples: @sample_groups[N] will be an array containing all samples from one study
     @sample_groups = []
