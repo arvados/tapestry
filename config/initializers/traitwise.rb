@@ -66,23 +66,34 @@ class Traitwise
 		http = Net::HTTP.new( @@server, @@port )
 		http.use_ssl = @@use_ssl
     begin
+      if not request.nil? then
+        user_agent = request.env['HTTP_USER_AGENT']
+      else
+        user_agent = ''
+      end
   		resp_from_tw, stream_from_tw = http.post(
   			url,
   			params,
-  			{'User-Agent'=>request.env['HTTP_USER_AGENT']}
+  			{'User-Agent'=> user_agent}
   		)
-  		# This returns some cookies as Set-Cookie which have to be passed along
-  		set_cookies = resp_from_tw.get_fields("Set-Cookie")
-  		if set_cookies
-  			set_cookies.each do |c|
-  				c = CGI.unescape( c )
-  				parts = c.match( /([^=]*)=([^;]*)/ )
-  				cookies[parts[1]] = parts[2]
-  			end
-  		end
+      if not cookies.nil? then
+    		# This returns some cookies as Set-Cookie which have to be passed along
+    		set_cookies = resp_from_tw.get_fields("Set-Cookie")
+    		if set_cookies
+    			set_cookies.each do |c|
+    				c = CGI.unescape( c )
+    				parts = c.match( /([^=]*)=([^;]*)/ )
+    				cookies[parts[1]] = parts[2]
+    			end
+    		end
+      end
 	  rescue Exception => e
       stream_from_tw = "We're sorry, the Traitwise service is currently unavailable. Please try again later."
-      current_user.log("Error connecting to Traitwise service: #{ e } (#{ e.class })")
+      if not current_user.nil? then
+        current_user.log("Error connecting to Traitwise service: #{ e } (#{ e.class })")
+      else
+        STDERR.puts "Error connecting to Traitwise service: #{ e } (#{ e.class })"
+      end
     end
 	
 		return stream_from_tw
