@@ -32,6 +32,16 @@ Your kit has been located in our records. Please double check that the following
 </table>
 </p>
 
+<% unless @kit.kit_design.errata.nil? or @kit.kit_design.errata.empty? %>
+
+<p><strong>Errata</strong><br/>
+<div class="ui-widget ui-state-highlight ui-corner-all" style="padding-left: 2em; padding-right: 2em;">
+<%= raw(RedCloth.new(@kit.kit_design.errata).to_html) %>
+</div>
+</p>
+
+<% end %>
+
 <p><strong>Legal</strong><br/>
 
 You acknowledge and agree that you will use this kit to collect and
