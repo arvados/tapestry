@@ -10,6 +10,7 @@ class Kit < ActiveRecord::Base
   belongs_to :originator, :class_name => "User"
   belongs_to :shipper, :class_name => "User"
 
+  has_many :kit_logs, :dependent => :destroy
   has_many :samples, :dependent => :destroy
 
   validates_uniqueness_of :name, :case_sensitive => false
