@@ -13,7 +13,7 @@ class Sample < ActiveRecord::Base
   belongs_to :participant, :class_name => "User"
   belongs_to :owner, :class_name => "User"
 
-  has_many :sample_logs
+  has_many :sample_logs, :dependent => :destroy
   has_many :parent_sample_origins, :foreign_key => :child_sample_id, :class_name => 'SampleOrigin'
   has_many :parent_samples, {
     :class_name => 'Sample',
@@ -42,6 +42,20 @@ class Sample < ActiveRecord::Base
                                   user.id, user.id])
     end
   }
+
+  def receive!(current_user)
+    SampleLog.new(:actor => current_user, :comment => "Sample received by researcher", :sample_id => self.id).save!
+    self.last_received = Time.now
+    self.owner = current_user
+    save
+    # If the researcher has the sample, they have the kit
+    if self.kit and self.kit.owner != current_user
+      KitLog.new(:actor => current_user, :comment => "Kit received", :kit_id => self.kit.id).save!
+      self.kit.last_received = Time.now
+      self.kit.owner = current_user
+      self.kit.save!
+    end
+  end
 
   def crc_id_s
     "%08d" % crc_id

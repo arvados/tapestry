@@ -184,7 +184,6 @@ class SamplesController < ApplicationController
       response[:message] = 'No sample has been issued with that ID number.'
     elsif @sample.owner.nil? or @sample.owner == @sample.participant or (@sample.last_mailed and !@sample.last_received)
       sample_received(@sample)
-      SampleLog.new(:actor => current_user, :comment => "Sample received by researcher", :sample_id => @sample.id).save
       response[:ok] = true
       response[:message] = 'Sample marked as received.'
     elsif @sample.owner == current_user
@@ -293,17 +292,7 @@ class SamplesController < ApplicationController
   private
 
   def sample_received(sample)
-    sample.last_received = Time.now()
-    sample.owner = current_user
-    sample.save!
-    # If the researcher has the sample, they have the kit
-    kit = sample.kit
-    if kit and kit.owner != current_user
-      KitLog.new(:actor => current_user, :comment => "Kit received", :kit_id => kit.id).save
-      kit.last_received = Time.now
-      kit.owner = current_user
-      kit.save!
-    end
+    sample.receive! current_user
   end
 
   def check_for_scan_context
