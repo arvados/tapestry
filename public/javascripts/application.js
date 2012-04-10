@@ -14,4 +14,12 @@
     }).trigger('change');
   });
 
+  // Kick dataTables so it refilters after the user cuts or pastes in
+  // the search box (i.e., changes val without using the keyboard).
+  (function($) {
+    $(document).delegate('.dataTables_filter input', 'paste cut', function(e, ui) {
+      $(this).trigger('keyup', [ui]);
+    });
+  })(jQuery);
+
 }).call(this);
