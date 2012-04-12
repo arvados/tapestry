@@ -128,13 +128,13 @@ class User < ActiveRecord::Base
     end
   }
 
-  scope :failed_eligibility_survey, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('screening_surveys').id).merge(ScreeningSurveyResponse.failed)
+  scope :failed_eligibility_survey, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('screening_surveys').id).merge(ScreeningSurveyResponse.failed) rescue nil
 
   # These are users who have submitted their enrollment application, but are ineligible. There are a few possible causes for this:
   # - the rules have changed since they started the enrollment process (v1 of the eligibility questionnaire did not ask about citizenship/residency)
   # - there was a bug in v1 of the enrollment process that apparently let some people through who should not have been
   # - they submitted their application before we rolled out v2 of the eligibility questionnaire, and passing v2 is now required to be enrolled
-  scope :ineligible_for_enrollment, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('enrollment_application').id).merge(ScreeningSurveyResponse.failed)
+  scope :ineligible_for_enrollment, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('enrollment_application').id).merge(ScreeningSurveyResponse.failed) rescue nil
 
   scope :waitlisted, lambda {
     joins = [ :waitlists ]
