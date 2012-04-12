@@ -1,5 +1,7 @@
 <%- content_for :head do -%>
 <%= javascript_include_tag %w(plates) %>
+<%= javascript_include_tag %w(code128) %>
+<%= stylesheet_link_tag %w(code128) %>
 <%- end -%>
 
 <h2><%= link_to 'Plates', plates_path %> &rarr; <%= @plate.crc_id_s %>
@@ -80,6 +82,10 @@
 	</ol>
       </div>
       <% end %>
+      <p>Code 128:</p>
+      <div>
+	<%= content_tag(:div, "hu:p:#{@plate.url_code}", :class => [:"render-code128", :barcode128h], :style => 'display: table-cell') %>
+      </div>
     </td>
   </tr>
 </table>

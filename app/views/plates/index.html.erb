@@ -1,3 +1,8 @@
+<%- content_for :head do -%>
+<%= javascript_include_tag %w(code128) %>
+<%= stylesheet_link_tag %w(code128) %>
+<%- end -%>
+
 <h2>Plates</h2>
 
 <% if current_user.is_admin? %>
@@ -8,7 +13,7 @@
 
 <table class="admin_table">
   <tr>
-    <th>Description</th>
+    <th width="30%">Description</th>
     <th>Bar codes and IDs</th>
   </tr>
 
@@ -34,15 +39,16 @@
     <td style="vertical-align: top">
       <div style="display: table">
 	<div style="display: table-row">
+	  <% col=0 %>
 	  <% [plate, plate.derived_plates].flatten.each do |p| %>
 	  <% bgcolor = p.derived_from_plate ? 'ddddff' : 'ffffff' %>
+	  <% if col>0 and col%3==0 %>
+	</div><div style="display: table-row">
+	  <% end; col+=1 %>
 	  <div style="display: table-cell; text-align: center; background: #<%= bgcolor %>">
 	    <% did[p.id] = true %>
-	    <%= link_to_if p.is_accepting_samples?, image_tag('https://chart.googleapis.com/chart?chs=80x80&cht=qr&chld=L&chl='+uriencode(mobile_plate_url(p.url_code))+'&choe=UTF-8&chco=000000,'+bgcolor+'&chf=bg,s,abcdef00', {:width => 80, :height => 80, :class => 'qr'}), mobile_plate_url(p.url_code) %>
-	    <br />
+	    <%= link_to_if p.is_accepting_samples?, content_tag(:div, "hu:p:#{p.url_code}", :class => [:"render-code128", :barcode128h]), mobile_plate_url(p.url_code) %>
 	    <%= link_to p.crc_id_s, plate_path(p) %>
-	    <br />
-	    <%= p.url_code %>
 	    <br />
 	    <%= link_to 'view', plate_path(p) %>
 	    <% if can? :update, p %>
