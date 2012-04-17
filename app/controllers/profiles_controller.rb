@@ -72,6 +72,19 @@ class ProfilesController < ApplicationController
         response[:qa].push qa
         response[:collected_at].push sr.updated_at
       end
+
+      # hide all but the latest answer to each question
+      have_later_answer = {}
+      response[:qa] = response[:qa].reverse.select { |qa|
+        have_later_answer[qa[0]] ||= 0
+        (have_later_answer[qa[0]] += 1) == 1
+      }.reverse
+
+      # hide questions with empty answers ("skip this question")
+      response[:qa].reject! do |qa|
+        qa[1].nil? or qa[1] == ''
+      end
+
       unless response[:qa].empty?
         response[:collected_at] = response[:collected_at].max
         @google_survey_results.push response
