@@ -94,6 +94,7 @@ class ProfilesController < ApplicationController
     # make a 2D array of samples: @sample_groups[N] will be an array containing all samples from one study
     @sample_groups = []
     @user.samples.sort { |a,b| a.study_id <=> b.study_id or a.id <=> b.id }.each do |s|
+      next unless s.parent_samples.empty? # skip derived samples
       if @sample_groups.empty? or @sample_groups[-1][0].study != s.study
         @sample_groups.push []
       end

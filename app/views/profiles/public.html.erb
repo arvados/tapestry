@@ -31,7 +31,7 @@ None added.
       <% last_study = nil -%>
       <% @sample_groups.each do |sample_group| %>
       <% show_group_heading = true %>
-      <% sample_group.select { |s| s.parent_samples.empty? }.each do |s| %>
+      <% sample_group.each do |s| %>
       <tr>
 	<% if show_group_heading %>
 	<th rowspan="<%= sample_group.size %>" style="width: 15%">
