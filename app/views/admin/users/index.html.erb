@@ -86,7 +86,11 @@ Download this list of users as <%= link_to 'CSV',
                             :failed_eligibility_survey   => params[:failed_eligibility_survey],
                             :waitlisted                  => params[:waitlisted],
                             :inactive                    => params[:inactive],
-                            :completed                   => params[:completed]
+                            :completed                   => params[:completed],
+                            :unenrolled_identifier       => params[:unenrolled_identifier],
+                            :hex                         => params[:hex],
+                            :name                        => params[:name],
+                            :email                       => params[:email]
                            ) %>
   
 <%= render :partial => 'usertable' %>
