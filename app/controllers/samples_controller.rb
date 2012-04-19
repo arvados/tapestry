@@ -181,6 +181,10 @@ class SamplesController < ApplicationController
     response = { :ok => false }
     @sample = Sample.find_by_crc_id(params[:crc_id])
     if @sample.nil?
+      # Researchers can also use url code to claim a sample
+      @sample = Sample.where('url_code = ?',params[:crc_id]).first
+    end
+    if @sample.nil?
       response[:message] = 'No sample has been issued with that ID number.'
     elsif @sample.owner.nil? or @sample.owner == @sample.participant or (@sample.last_mailed and !@sample.last_received)
       sample_received(@sample)
