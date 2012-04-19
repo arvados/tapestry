@@ -16,7 +16,7 @@ class ProfilesController < ApplicationController
 
     @confirmed_family_relations = @user.confirmed_family_relations
 
-    @ccr = Ccr.find(:first, :conditions => {:user_id => @user.id}, :order => 'version DESC')
+    @ccr = @user.ccrs.latest
 
     survey = Survey.find(:first, :conditions => { :name => 'Absolute Pitch Survey' });
     @absolute_pitch_questions = []

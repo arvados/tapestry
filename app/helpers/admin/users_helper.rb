@@ -81,6 +81,9 @@ module Admin::UsersHelper
     buf = ''
 
     header_row = user_fields.map(&:humanize)
+
+    header_row.push "DOB"
+
     survey_response_fields.each do |survey, fields|
       header_row |= fields.map { |field| "#{survey.to_s.humanize} #{field.to_s.humanize}" }
     end
@@ -109,6 +112,12 @@ module Admin::UsersHelper
       row = []
       user_fields.each do |field|
         row.push user.send(field)
+      end
+
+      if user.ccrs.latest and user.ccrs.latest.demographic and user.ccrs.latest.demographic.dob
+        row.push user.ccrs.latest.demographic.dob.to_s
+      else
+        row.push nil
       end
 
       survey_response_fields.each do |survey, fields|
