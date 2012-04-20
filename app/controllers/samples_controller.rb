@@ -22,7 +22,12 @@ class SamplesController < ApplicationController
           csv << %w(sample_id sample_url_code kit_sample_name kit_id kit_name participant_hex)
           @samples = @samples.includes(:kit_design_sample)
           @samples.each { |s|
-            csv << [s.crc_id_s, s.url_code, s.kit_design_sample.name, s.kit.crc_id_s, s.kit.name, s.participant ? s.participant.hex : nil]
+            csv << [s.crc_id_s,
+                    s.url_code,
+                    s.kit_design_sample ? s.kit_design_sample.name : nil,
+                    s.kit ? s.kit.crc_id_s : nil,
+                    s.kit ? s.kit.name : nil,
+                    s.participant ? s.participant.hex : nil]
           }
         end
         forwhat = params[:study_id] ? "ForStudy#{params[:study_id]}" : ""
