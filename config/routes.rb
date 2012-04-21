@@ -16,6 +16,8 @@ Tapestry::Application.routes.draw do
   match '/plates/:id/dup' => 'plates#dup', :as => :dup_plate, :via => :post
 
   match '/samples/receive' => 'samples#receive', :as => :receive_sample
+  match '/samples/receive_multiple/:url_codes' => 'samples#receive_multiple', :as => :receive_multiple_samples
+  match '/samples/receive_multiple_confirm' => 'samples#receive_multiple_confirm', :as => :receive_multiple_samples_confirm, :via => :post
   match '/samples/:id/log' => 'samples#show_log', :as => :show_sample_log, :via => :get
   match '/samples/:id/participant_note' => 'samples#participant_note', :as => :sample_participant_note, :via => :get
   match '/samples/:id/participant_note' => 'samples#update_participant_note', :as => :sample_update_participant_note, :via => :put

@@ -1,0 +1,89 @@
+<h2><%= link_to 'Samples', samples_path %> &rarr; <%= link_to 'receive', receive_sample_path %> &rarr; multiple samples</h2>
+
+<% content_for :head do %>
+    <style type="text/css">
+    table#which-samples tbody tr td {
+        vertical-align: middle;
+    }
+    table#which-samples tbody tr.checkable:hover {
+	background: #c7d1e7;
+    }
+    </style>
+<% end %>
+<% content_for :js do %>
+jQuery(function(){
+    var $ = jQuery.noConflict();
+    $(document).
+	delegate('table#which-samples tbody tr.checkable', 'click', {},
+		 function(event, ui) {
+                     if ($(event.srcElement).is('input,button,a'))
+                         return true;
+		     var i = $(this).find('input[type=checkbox]');
+		     i.attr('checked', !i[0].checked);
+		 });
+    });
+<% end %>
+
+<%= form_for(:sample, :url => receive_multiple_samples_confirm_path, :method => :post) do |f| %>
+<div class="profile-data">
+
+  <p>
+    <b>Please indicate which samples you received.</b>  Compare the
+    following sample codes with the labels on the samples themselves.
+    Tick the checkboxes for the samples you have in front of you.
+    Then click the "Receive" button below.
+  </p>
+
+  <table id="which-samples">
+    <thead>
+      <tr>
+	<th style="text-align:center">Received?</th>
+	<th>Kit name / sample code</th>
+	<th>Sample name / device</th>
+	<th>Participant</th>
+	<th>Current / previous researcher</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @samples.each do |sample| %>
+      <tr class="<%= "checkable" if sample.owner != current_user %>">
+	<td style="text-align:center"><%= check_box 'confirm_url_codes', sample.url_code, :checked => !!@default_checked_hack[sample.url_code] if sample.owner != current_user %></td>
+	<td>
+	  <% if sample.kit %>
+	  <%= sample.kit.name %> &mdash;
+	  <% end %>
+	  <code><b><%= sample.url_code %></b></code>
+	</td>
+	<td>
+	  <%= sample.name %>
+	  <% if sample.original_kit_design_sample %>
+	  <br />
+	  <%= sample.original_kit_design_sample.device %>
+	  <% end %>
+	</td>
+	<td>
+	  <% if sample.participant %>
+	  <%= @reveal_participant ? link_to(sample.participant.hex, public_profile_path(sample.participant.hex)) : "Yes" %>
+	  <% else %>
+	  <b>Unknown!</b>
+	  <% end %>
+	</td>
+	<td>
+	  <% if sample.owner == current_user %>
+	  You
+	  <% elsif sample.owner and sample.owner.researcher %>
+	  <%= sample.owner.full_name %>,
+	  <%= sample.owner.researcher_affiliation %>
+	  <% end %>
+	</td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br clear="all" />
+  <span style="margin: 1em auto; padding: 1em; background: #c7d1e7">
+    <%= f.submit "Receive" %>
+  </span>
+</div>
+
+<% end %>

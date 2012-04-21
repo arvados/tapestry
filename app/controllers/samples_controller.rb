@@ -182,26 +182,101 @@ class SamplesController < ApplicationController
     redirect_to(@sample.kit || @sample)
   end
 
+  def receive_multiple_confirm
+    if params[:confirm_url_codes]
+      @selected = params[:confirm_url_codes].
+        reject { |url_code,checked| checked.to_s != '1' }
+    else
+      @selected = {}
+    end
+    @samples = Sample.
+      where('url_code in (?)', @selected.keys).
+      select { |sample|
+      # just make sure the database is being case-sensitive
+      @selected[sample.url_code].to_s == '1'
+    }
+    @done = @samples.select { |sample|
+      sample.owner != current_user
+    }.each { |sample|
+      sample_received(sample)
+      SampleLog.new(:actor => current_user, :comment => "Sample received by researcher", :sample_id => sample.id).save
+    }
+    if @done.empty?
+      flash[:warning] = "No samples were received.  Nothing happened at all."
+    else
+      flash[:notice] = "Received #{@samples.size} sample#{'s' if @samples.size > 1}: #{@samples.collect(&:url_code).join(', ')}"
+    end
+    redirect_to(receive_sample_path)
+  end
+
+  def receive_multiple
+    @hack_is_coriell = current_user &&
+      current_user.researcher_affiliation &&
+      current_user.researcher_affiliation.match(/Coriell/i)
+
+    @samples = Sample.
+      where('url_code in (?)', params[:url_codes].split(',')).
+      includes(:kit).
+      includes(:participant)
+
+    @reveal_participant = current_user && current_user.researcher &&
+      (@hack_is_coriell || current_user.researcher_onirb)
+
+    @samples.sort! { |a,b|
+      if a.kit and b.kit and a.kit != b.kit
+        a.kit.name <=> b.kit.name
+      else
+        a.id - b.id
+      end
+    }
+
+    @default_checked_hack = {}
+    if @hack_is_coriell
+      @samples.each do |sample|
+        @default_checked_hack[sample.url_code] =
+        (sample.name and sample.name.match(/ACD/)) ||
+        (sample.original_kit_design_sample and
+         sample.original_kit_design_sample.device.match(/ACD/))
+      end
+    end
+  end
+
   def receive_by_crc_id
     response = { :ok => false }
-    @sample = Sample.find_by_crc_id(params[:crc_id])
-    if @sample.nil?
-      # Researchers can also use url code to claim a sample
-      @sample = Sample.where('url_code = ?',params[:crc_id]).first
-    end
-    if @sample.nil?
-      response[:message] = 'No sample has been issued with that ID number.'
-    elsif @sample.owner.nil? or @sample.owner == @sample.participant or (@sample.last_mailed and !@sample.last_received)
-      sample_received(@sample)
+    @search_codes = params[:crc_id].strip.split(/[ ,;\n]+/)
+
+    @samples = []
+    @samples.push Sample.
+      where('url_code in (?) or crc_id in (?)', @search_codes, @search_codes)
+    @samples.push Kit.
+      includes(:samples).
+      where('name in (?) or url_code in (?) or crc_id in (?)', @search_codes, @search_codes, @search_codes).
+      collect { |k| k.samples }
+    @samples.flatten!
+
+    if @samples.size == 0
+      response[:message] = 'No sample or kit has been issued with that ID.'
+    elsif @samples.size > 1 or
+        @samples[0].class == Kit or
+        @search_codes.size > 1
+      # If there's any possibility that this could refer to multiple samples...
+      response[:redirect_to] = receive_multiple_samples_path(@samples.collect{ |x| x.url_code }.join(','))
+      response[:message] = 'Found more than one sample.  Proceeding to the sample selection page...'
       response[:ok] = true
-      response[:message] = 'Sample marked as received.'
-    elsif @sample.owner == current_user
-      response[:ok] = true
-      response[:message] = "You already received this sample at #{@sample.last_received}."
-    elsif @sample.owner.is_researcher?
-      response[:message] = "Sample owner (#{@sample.owner.full_name}) has not shipped this sample."
     else
-      response[:message] = 'Sample owner (##{@sample.owner.id) has not shipped this sample.'
+      @sample = @samples.first
+      if @sample.owner.nil? or @sample.owner == @sample.participant or (@sample.last_mailed and !@sample.last_received)
+        sample_received(@sample)
+        response[:ok] = true
+        response[:message] = 'Sample marked as received.'
+      elsif @sample.owner == current_user
+        response[:ok] = true
+        response[:message] = "You already received this sample at #{@sample.last_received}."
+      elsif @sample.owner.is_researcher?
+        response[:message] = "Sample owner (#{@sample.owner.full_name}) has not shipped this sample."
+      else
+        response[:message] = 'Sample owner (##{@sample.owner.id) has not shipped this sample.'
+      end
     end
     respond_to do |format|
       format.json { render :json => response.to_json }

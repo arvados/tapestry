@@ -13,7 +13,11 @@ jQuery(function(){
                             'url': '/samples/'+crc_id+'/receive_by_crc_id',
                             'success': function(d,t,r) {
                             $('.response', thisform).html(crc_id + (d.ok ? ': ' : ': Error: ') + d.message);
-			    if (d.ok)
+                            if (d.redirect_to) {
+                                $('.response', thisform).html(d.message);
+                                window.location.href = d.redirect_to;
+                            }
+			    else if (d.ok)
 				$crc_input.attr('value', '');
 			    $crc_input.focus();
                         }
@@ -23,6 +27,19 @@ jQuery(function(){
     });
 <% end %>
 
-<p>When you receive a sample from a participant or another researcher, enter the sample ID number or url code here.</p>
-<form action="#" class="receive-sample"><input type="text" name="crc_id" isindex /> <input type="submit" value="I have received this sample" /><br /><span class="response">&nbsp;</span></form>
+<p>When you receive a sample from a participant or another researcher, enter the sample ID number or alphanumeric code here.</p>
 
+<form action="#" class="receive-sample">
+<input type="text" name="crc_id" isindex />
+<input type="submit" value="I have received this sample / kit" />
+<br />
+<br />
+<span class="response">&nbsp;</span>
+</form>
+
+<p>If you are receiving many samples at once, note:</p>
+<ul>
+  <li>You can enter multiple IDs.  Separate them with commas or spaces.</li>
+  <li>You can enter kit IDs and kit names.</li>
+  <li>If you enter a kit ID, or multiple sample IDs, you will confirm the individual sample IDs on the next page.  (If you enter just one sample ID, we will just process right away.)</li>
+</ul>
