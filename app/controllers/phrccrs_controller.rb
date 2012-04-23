@@ -11,6 +11,39 @@ class PhrccrsController < ApplicationController
                             :order => 'version DESC')
   end
 
+  def upload
+    if not params.has_key?('ccr') then
+      flash[:error] = "Please choose a file to upload"
+      redirect_to :action => :show
+      return
+    end
+
+    server = DRbObject.new nil, "druby://#{DRB_SERVER}:#{DRB_PORT}"
+    begin
+      out = server.process_ccr(current_user.id,params[:ccr].read)
+    rescue Exception => e
+      error_message = "DRB server error when trying to process a CCR: #{e.exception}"
+      flash[:error] = "Unable to queue your CCR for processing: " + error_message
+      current_user.log(error_message,nil,request.remote_ip)
+      redirect_to :action => :show
+      return
+    end
+
+    flash[:notice] = "Your file has been queued for processing"
+
+    redirect_to :action => :show
+  end
+
+  def delete
+    @ccr = Ccr.find(params[:id])
+
+    @ccr.destroy!
+
+    flash[:notice] = "The CCR file has been deleted"
+
+    redirect_to :action => :show
+  end
+
   def download
     @ccr = Ccr.find(params[:id])
 

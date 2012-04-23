@@ -222,6 +222,8 @@ Tapestry::Application.routes.draw do
   match '/phrccr/authsub' => 'phrccrs#authsub_update', :as => :authsub_phrccr
   match '/phrccr/review' => 'phrccrs#review', :as => :review_phrccr
   match '/phrccr/download' => 'phrccrs#download', :as => :download_phrccr
+  match '/phrccr/delete' => 'phrccrs#delete', :as => :delete_phrccr
+  match '/phrccr/upload' => 'phrccrs#upload', :as => :upload_phrccr
   match '/phrccr/unlink_googlehealth' => 'phrccrs#unlink_googlehealth', :as => :unlink_googlehealth
   match '/phrccr/google_health_note' => 'phrccrs#google_health_note', :as => :google_health_note
   match '/profile/:hex' => 'profiles#public', :as => :public_profile

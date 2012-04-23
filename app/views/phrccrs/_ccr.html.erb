@@ -50,18 +50,18 @@
 <table>
 <tr>
   <th>Name</th>
-  <th class="date">Start Date</th>
-  <th class="date">End Date</th>
   <th class="dosage">Dosage</th>
   <th class="frequency">Frequency</th>
+  <th class="date">Start Date</th>
+  <th class="date">End Date</th>
 </tr>
 <% meds.each { |medication| %>
 <tr <%=raw 'class="medication-refill ui-helper-hidden"' if medication.is_refill -%>>
   <td><%= medication.name %></td>
-  <td><%= medication.start_date %><%= ' (refill)' if medication.is_refill -%></td>
-  <td><%= medication.end_date %></td>
   <td><%= medication.strength %></td>
   <td><%= dose_frequency(medication.dose, medication.frequency) %></td>
+  <td><%= medication.start_date %><%= ' (refill)' if medication.is_refill -%></td>
+  <td><%= medication.end_date %></td>
 </tr>
 <% } %>
 </table>
@@ -70,7 +70,7 @@
 <table>
 <tr>
   <th>Name</th>
-  <th class="severity">Severity</th>
+  <th class="severity">Reaction/Severity</th>
   <th class="date">Start Date</th>
   <th class="date">End Date</th>
 </tr>

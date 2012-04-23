@@ -17,4 +17,14 @@ class Ccr < ActiveRecord::Base
     order('version DESC').first
   end
 
+  def pretty_origin
+    if origin == 'mh' then
+      return 'Microsoft Healthvault'
+    elsif origin == 'gh' then
+      return 'Google Health'
+    else
+      return ''
+    end
+  end
+
 end

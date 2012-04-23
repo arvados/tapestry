@@ -4,18 +4,13 @@
 
 <h2>Personal Health Record</h2>
 
-<h3>(1) Google Health</h3>
-
-<p>Google discontinued the Google Health service on January 1st, 2012.</p>
-
-<p>If you linked your Google Health account to your PGP public profile prior to January 1st 2012, then we may have CCR-formatted medical data about you.</p>
-
 <% if @ccr_history.length > 0 %>
-<h3>Your Google Health Records:</h3>
+<h3>Your Personal Health Record (CCR) files:</h3>
 <table class="admin_table">
 <tr>
   <th>Review</th>
   <th>Date Updated</th>
+  <th>Origin</th>
   <th>Download</th>
   <th>Delete</th>
 </tr>
@@ -23,20 +18,49 @@
 <tr>
   <td><a href="/phrccr/review?version=<%= ccr.version %>">Review</a></td>
   <td><%= ccr.version.gsub(/T.*$/,'') %></td>
+  <td><%= ccr.pretty_origin %></td>
   <td><a href="/phrccr/download?id=<%= ccr.id %>">download raw CCR</a></td>
-  <td><button name="deleteccr" value="<%= ccr.version %>">Delete</button></td></tr>
+  <td><a href="/phrccr/delete?id=<%= ccr.id %>" onClick="confirm('Are you sure?');">delete</a></td>
 <% } %>
 </table>
 <% end %>
+
+<h3>Upload a new CCR (Continuity of Care Record) file:</h3>
+<%= form_tag upload_phrccr_path, { :multipart => true } do  %>
+  <p><%= file_field_tag :ccr %></p>
+  <%= submit_tag 'Upload' %>
+<% end %>
+
+<h3>Integration with Personal Health Record Platforms</h3>
+
+<p>
+We are working on automatic integration with Personal Health Record platforms. 
+</p>
+<p>
+In the mean time, you can use platforms such as <a href="http://www.healthvault.com">Microsoft Healthvault</a> to
+collect your Personal Health Record data, and use the form above to upload CCR
+files you export from there.
+</p>
+
+<h4>CCR export instructions for Microsoft Healthvault:</h4>
+
+<ul>
+<li>Log in to <a href="http://www.healthvault.com">Microsoft Healthvault</a>
+<li>Click on 'More actions' at the right of the screen
+<li>Select 'Export information'
+<li>Choose 'Export as a CCR (Continuity of Care Record)'
+<li>Click 'Export'
+</ul>
+
+<h3>Google Health</h3>
+
+<p>Google discontinued the Google Health service on January 1st, 2012.</p>
+
+<p>If you linked your Google Health account to your PGP public profile prior to January 1st 2012, then we may have CCR-formatted medical data about you.</p>
 
 <p>You will no longer be able to update this information using Google Health. However, any Google Health data you already added to your PGP profile will remain in your PGP profile unless you choose to remove it.</p>
 
 <p>If you want to download your health data above and move it to another service that will allow you store and update the data, Google has provided detailed instructions:</p>
 
 <a href="http://support.google.com/health/bin/answer.py?hl=en&answer=1375585">http://support.google.com/health/bin/answer.py?hl=en&answer=1375585</a>
-
-<h3>(2) Other Personal Health Record Platforms</h3>
-
-<p>We are looking into integrating with other Personal Health Record platforms.</p>
-
 

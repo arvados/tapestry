@@ -119,7 +119,7 @@ module PhrccrsHelper
   def oz_to_lbs_kg(oz)
     if (oz && oz !=  '' && oz != 0)
       oz = oz.to_f
-      return (oz / 16).to_i.to_s + 'lbs (' + (oz / 35.2739619).to_i.to_s + 'kg)'
+      return (oz / 16).round.to_s + 'lbs (' + (oz / 35.2739619).round.to_s + 'kg)'
     end
     return ''
   end
@@ -222,7 +222,7 @@ module PhrccrsHelper
   rescue GData::Client::Error => ex
     #Ignore AuthorizationError because it most likely means the token was invalidated by the user through Google
   ensure
-    current_user.update_attributes(:authsub_token => '')   
+    current_user.update_attributes(:authsub_token => '')
   end
 
   def get_ccr(current_user, etag = nil)
@@ -236,34 +236,49 @@ module PhrccrsHelper
     return feed
   end
 
-  # This is ugly, but it is about 50 times faster than
+  # This is ugly, but the google health version is about 50 times faster than
   # @ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="LABTEST"]]//ccr:Results/ccr:Result').each { |result| 
   # This matters a lot when you have a large PHR.
   # Ward, 2010-09-21
-  def get_results(ccr,cat,field)
+  def get_results(ccr,cat,field,origin=nil)
     r = Array.new()
 
     sortstr = 'ccr:Test/ccr:DateTime[ccr:Type/ccr:Text="Collection start date"]/ccr:ExactDateTime'
     sortstr = 'ccr:DateTime[ccr:Type/ccr:Text="Start date"]/ccr:ExactDateTime' if cat == 'PROCEDURE'
 
-    ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="' + cat + '"]]').each do |entry| 
-      entry.children.each do |child|
-        if child.name == 'ContinuityOfCareRecord' then
-          child.children.each do |c2|
-            if c2.name == 'Body' then
-              c2.children.each do |c3|
-                if c3.name == field + 's' then
-                  c3.children.each do |result|
-                    next if result.name != field
-                    r.push(result)
-                  end 
-                end 
-              end 
-            end 
-          end 
-        end 
-      end 
-    end 
+    if origin == 'mh' then
+      # Microsoft Healthvault
+      ccr.xpath("/xmlns:ContinuityOfCareRecord/xmlns:Body/xmlns:#{field}s").each do |entry|
+        entry.children.each do |child|
+          if child.name == field then
+            r.push(child)
+          end
+        end
+      end
+    elsif origin == 'gh' then
+      # Google Health
+      ccr.xpath('/xmlns:feed/xmlns:entry[xmlns:category[@term="' + cat + '"]]').each do |entry| 
+        entry.children.each do |child|
+          if child.name == 'ContinuityOfCareRecord' then
+            child.children.each do |c2|
+              if c2.name == 'Body' then
+                c2.children.each do |c3|
+                  if c3.name == field + 's' then
+                    c3.children.each do |result|
+                      next if result.name != field
+                      r.push(result)
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    else
+      # Hmm, we don't know this origin...
+    end
+
     r.sort! {|x,y| show_date(x.xpath(sortstr)) <=> show_date(y.xpath(sortstr)) }
 
     return r
@@ -345,10 +360,43 @@ module PhrccrsHelper
     return n
   end
 
+  def get_version_and_origin(ccr_xml)
+    @version = nil
+    @origin = nil
+    begin
+      # Microsoft Healthvault
+      @version = get_inner_text(ccr_xml.xpath('/xmlns:ContinuityOfCareRecord/xmlns:DateTime/xmlns:ExactDateTime'))
+      @origin = 'mh'
+    rescue Exception => e
+      @origin = false
+    end
+
+    if @version == '' or @origin.nil? then
+      begin
+        # Google Health
+        @version = get_inner_text(ccr_xml.xpath('/xmlns:feed/xmlns:updated'))
+        @origin = 'gh'
+      rescue Exception => e
+        @origin = false
+      end
+    end
+
+    return @version, @origin
+  end
+
   def parse_xml_to_ccr_object(ccr_file)
     feed = File.open(ccr_file, 'r')
-    ccr_xml = Nokogiri::XML(feed)
+    @ccr_xml = Nokogiri::XML(feed)
+
+    @version, @origin = get_version_and_origin(@ccr_xml)
+
+    parse_xml_to_ccr_object_worker(@version,@origin,@ccr_xml)
+  end
+
+  def parse_xml_to_ccr_object_worker(version,origin,ccr_xml)
     ccr = Ccr.new
+    ccr.version = version
+    ccr.origin = origin
     conditions = []
     medications = []
     immunizations = []
@@ -356,15 +404,13 @@ module PhrccrsHelper
     allergies = []
     procedures = []
 
-    ccr.version = get_inner_text(ccr_xml.xpath('/xmlns:feed/xmlns:updated'))
-    
     dem = Demographic.new
     dob = get_first(ccr_xml.xpath('//ccr:Actors/ccr:Actor/ccr:Person/ccr:DateOfBirth/ccr:ExactDateTime'))
     begin
       if dob.nil?
         dem.dob = nil
       else
-        dob_s = get_inner_text(dob) 
+        dob_s = get_inner_text(dob)
         dem.dob = dob_s == '--T00:00:00Z' ? nil : DateTime.parse(dob_s)
       end
     rescue
@@ -390,7 +436,7 @@ module PhrccrsHelper
     }
     dem.race = race
 
-    get_results(ccr_xml,'MEDICATION','Medication').each { |medication|
+    get_results(ccr_xml,'MEDICATION','Medication',ccr.origin).each { |medication|
       o = Medication.new
       o.dose = ''
       o.strength = ''
@@ -403,7 +449,11 @@ module PhrccrsHelper
       o.start_date = get_date_element(medication, 'Start date')
       o.start_date = get_date_element(medication.xpath('.//ccr:Fulfillment')[0], 'Dispense Date') if o.start_date.nil? and o.is_refill
       o.start_date = get_date_element(medication, 'Prescription Date') if o.start_date.nil?
-      o.end_date = get_date_element(medication, 'End date')
+      if ccr.origin == 'gh' then
+        o.end_date = get_date_element(medication, 'End date')
+      else
+        o.end_date = get_date_element(medication, 'Stop date')
+      end
       d = get_element(product, 'ProductName')
 
       name = get_element_text(d, 'Text') unless d.nil?
@@ -465,7 +515,7 @@ module PhrccrsHelper
       medications << o
     }
 
-    get_results(ccr_xml,'ALLERGY','Alert').each { |allergy|
+    get_results(ccr_xml,'ALLERGY','Alert',ccr.origin).each { |allergy|
       o = Allergy.new
       o.start_date = get_date_element(allergy, 'Start date')
       o.end_date = get_date_element(allergy, 'Stop date')
@@ -476,7 +526,7 @@ module PhrccrsHelper
       allergy_description = AllergyDescription.new
       allergy_description.description = description
 
-      # if unsuccessful save, allergy is already in db due to uniqueness constraint       
+      # if unsuccessful save, allergy is already in db due to uniqueness constraint
       begin
         allergy_description.save
       rescue
@@ -487,15 +537,27 @@ module PhrccrsHelper
       o.codes = get_codes(d)
       o.status = get_status(allergy)
       r = get_element(allergy, 'Reaction')
-      s = get_element(r, 'Severity') unless r.nil?
+      if ccr.origin == 'mh' then
+        s = get_element(r, 'Description') unless r.nil?
+      else
+        s = get_element(r, 'Severity') unless r.nil?
+      end
       o.severity = get_element_text(s, 'Text') unless s.nil?
       allergies << o
     }
 
-    get_results(ccr_xml,'CONDITION','Problem').each { |problem|
+    get_results(ccr_xml,'CONDITION','Problem',ccr.origin).each { |problem|
       o = Condition.new
-      o.start_date = get_date_element(problem, 'Start date')
-      o.end_date = get_date_element(problem, 'Stop date')
+      if ccr.origin == 'mh' then
+        o.start_date = get_date_element(problem, 'Onset date')
+      else
+        o.start_date = get_date_element(problem, 'Start date')
+      end
+      if ccr.origin == 'mh' then
+        o.end_date = get_date_element(problem, 'End date')
+      else
+        o.end_date = get_date_element(problem, 'Stop date')
+      end
       d = get_element(problem, 'Description')
       o.status = get_status(problem)
       description = get_element_text(d, 'Text') unless d.nil?
@@ -504,7 +566,7 @@ module PhrccrsHelper
       condition_description = ConditionDescription.new
       condition_description.description = description
 
-      # if unsuccessful save, condition is already in db due to uniqueness constraint       
+      # if unsuccessful save, condition is already in db due to uniqueness constraint
       begin
         condition_description.save
       rescue
@@ -516,9 +578,13 @@ module PhrccrsHelper
       conditions << o
     }
 
-    get_results(ccr_xml,'IMMUNIZATION','Immunization').each { |immunization|
+    get_results(ccr_xml,'IMMUNIZATION','Immunization',ccr.origin).each { |immunization|
       o = Immunization.new
-      o.start_date = get_date_element(immunization, 'Start date')
+      if ccr.origin == 'gh' then
+        o.start_date = get_date_element(immunization, 'Start date')
+      else
+        o.start_date = get_date_element(immunization, 'Immunization date')
+      end
       p = get_element(immunization, 'Product')
       d = get_element(p, 'ProductName')
 
@@ -528,7 +594,7 @@ module PhrccrsHelper
       immunization_name = ImmunizationName.new
       immunization_name.name = name
 
-      # if unsuccessful save, immunization is already in db due to uniqueness constraint       
+      # if unsuccessful save, immunization is already in db due to uniqueness constraint
       begin
         immunization_name.save
       rescue
@@ -540,7 +606,7 @@ module PhrccrsHelper
       immunizations << o
     }
      
-    get_results(ccr_xml,'LABTEST','Result').each { |result|
+    get_results(ccr_xml,'LABTEST','Result',ccr.origin).each { |result|
       o = LabTestResult.new
       t = get_element(result, 'Test')
       d = get_element(t, 'Description')
@@ -563,12 +629,17 @@ module PhrccrsHelper
       u = tr.nil? ? nil : get_element(tr, 'Units')
       o.value = get_element_text(tr, 'Value') unless tr.nil?
       o.units = get_element_text(u, 'Unit') unless u.nil?
-      o.start_date = get_date_element(t, 'Collection start date')
+
+      if ccr.origin == 'gh' then
+        o.start_date = get_date_element(t, 'Collection start date')
+      else
+        o.start_date = DateTime.parse(get_element(get_element(t, 'DateTime'),'ExactDateTime').inner_text)
+      end
       o.codes = get_codes(d)
       lab_test_results << o
     }
     
-    get_results(ccr_xml,'PROCEDURE','Procedure').each { |procedure|
+    get_results(ccr_xml,'PROCEDURE','Procedure',ccr.origin).each { |procedure|
       o = Procedure.new
       d = get_element(procedure, 'Description')
       description = get_element_text(d, 'Text') unless d.nil?
@@ -577,7 +648,7 @@ module PhrccrsHelper
       procedure_description = ProcedureDescription.new
       procedure_description.description = description
 
-      # if unsuccessful save, procedure is already in db due to uniqueness constraint       
+      # if unsuccessful save, procedure is already in db due to uniqueness constraint
       begin
         procedure_description.save
       rescue
@@ -585,7 +656,11 @@ module PhrccrsHelper
       end
 
       o.procedure_description_id = procedure_description.id
-      o.start_date = get_date_element(procedure, 'Start date')
+      if ccr.origin == 'gh' then
+        o.start_date = get_date_element(procedure, 'Start date')
+      else
+        o.start_date = get_date_element(procedure, 'Performed')
+      end
       o.codes = get_codes(d)
       procedures << o
     }
@@ -644,12 +719,12 @@ module PhrccrsHelper
           latest_weight_oz = normalize_to_oz(tvalue, tunits)
           latest_weight_date = r.start_date unless r.start_date.nil?
         end
-      end      
+      end
     }
     dem.height_in = latest_height_in if latest_height_in > 0
     dem.weight_oz = latest_weight_oz if latest_weight_oz > 0
   end
-  
+
   class SimpleTextNode
     attr_accessor :text
   end

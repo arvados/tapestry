@@ -25,6 +25,7 @@ class WorkObject
 	attr_accessor :authsub_token
 	attr_accessor :etag
 	attr_accessor :ccr_profile_url
+	attr_accessor :ccr_contents
 end
 
 class MyPG
@@ -59,6 +60,8 @@ class MyPG
 			      print "#{name}: started work for user #{work.user_id}: #{work.action}\n"
 						if work.action == 'get_ccr' then
 							get_ccr_worker(work)
+						elsif work.action == 'process_ccr' then
+							process_ccr_worker(work)
 						elsif work.action = 'report' then
 							report_worker(work)
 						end
@@ -152,6 +155,48 @@ class MyPG
     end
   end
 
+  def process_ccr_worker(work)
+
+    @ccr_xml = Nokogiri::XML(work.ccr_contents)
+    error_message = ''
+    begin
+      @version, @origin = get_version_and_origin(@ccr_xml)
+
+      @ccr_filename = get_ccr_filename(work.user_id, true, @version)
+  
+      outFile = File.new(@ccr_filename, 'w')
+      outFile.write(work.ccr_contents)
+      outFile.close
+  
+      # We don't want duplicates
+      Ccr.find_by_user_id_and_version(work.user_id,@version).destroy unless Ccr.find_by_user_id_and_version(work.user_id,@version).nil?
+  
+      db_ccr = parse_xml_to_ccr_object_worker(@version,@origin,@ccr_xml)
+      db_ccr.user_id = work.user_id
+      db_ccr.save
+ 
+      if !File.exist?(@ccr_filename)
+        callback('userlog',work.user_id,
+          { "message" => "process_ccr: Uploaded PHR (#{@ccr_filename})",
+            "user_message" => "Uploaded PHR (#{@version})." } )
+      else
+        callback('userlog',work.user_id,
+          { "message" => "process_ccr: Updated PHR (#{@ccr_filename})",
+            "user_message" => "Updated PHR (#{@version})." } )
+      end
+
+    rescue Exception => e
+      error_message = e.inspect()
+      puts "Trapped exception in process_ccr_worker"
+      puts "#{work.action}: job failed: #{error_message}"
+
+      callback('userlog',work.user_id,
+        { "message" => "process_ccr: failed to process PHR (#{@ccr_filename})",
+          "user_message" => "Failed to process PHR (#{@version})." } )
+    end
+
+   end
+
   def get_ccr_worker(work)
     client = GData::Client::Base.new
     client.authsub_token = work.authsub_token
@@ -197,7 +242,16 @@ class MyPG
 		return 0
 	end
 
-  def create_report(user_id,report_id,report_name,report_type)
+	def process_ccr(user_id, ccr_contents)
+		work = WorkObject.new()
+		work.action = 'process_ccr'
+		work.user_id = user_id
+		work.ccr_contents = ccr_contents
+		@queue.enq(work)
+		return 0
+	end
+
+ def create_report(user_id,report_id,report_name,report_type)
     work = WorkObject.new()
     work.action = 'report'
     work.user_id = user_id

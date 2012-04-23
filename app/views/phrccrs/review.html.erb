@@ -2,7 +2,7 @@
 <% if @ccr %>
 <h2>Imported Personal Health Record</h2> 
 
-<p>This is a PHR imported from Google Health. This information is part of your PGP public profile. If you wish to remove this PHR from 
+<p>This is the information we parsed from a PHR file. This information is part of your PGP public profile. If you wish to remove this PHR from 
 <%= link_to "your PGP public profile", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %>, you may
 do so on the <%= link_to "PHR overview page", url_for(:controller => 'phrccr') %>.
 </p>
