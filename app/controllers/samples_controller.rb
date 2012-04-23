@@ -245,23 +245,24 @@ class SamplesController < ApplicationController
     response = { :ok => false }
     @search_codes = params[:crc_id].strip.split(/[ ,;\n]+/)
 
-    @samples = []
-    @samples.push Sample.
+    matched_samples = Sample.
       where('url_code in (?) or crc_id in (?)', @search_codes, @search_codes)
-    @samples.push Kit.
+    matched_kits = Kit.
       includes(:samples).
-      where('name in (?) or url_code in (?) or crc_id in (?)', @search_codes, @search_codes, @search_codes).
-      collect { |k| k.samples }
-    @samples.flatten!
+      where('name in (?) or url_code in (?) or crc_id in (?)', @search_codes, @search_codes, @search_codes)
+    @samples = [matched_samples,
+                matched_kits.collect(&:samples)
+               ].flatten
 
     if @samples.size == 0
       response[:message] = 'No sample or kit has been issued with that ID.'
     elsif @samples.size > 1 or
-        @samples[0].class == Kit or
+        !matched_kits.empty? or
         @search_codes.size > 1
-      # If there's any possibility that this could refer to multiple samples...
-      response[:redirect_to] = receive_multiple_samples_path(@samples.collect{ |x| x.url_code }.join(','))
-      response[:message] = 'Found more than one sample.  Proceeding to the sample selection page...'
+      # If there's any possibility that the user is about to -- or is
+      # expecting to -- receive multiple samples...
+      response[:redirect_to] = receive_multiple_samples_path(@samples.collect(&:url_code).join(','))
+      response[:message] = 'Proceeding to the sample selection page...'
       response[:ok] = true
     else
       @sample = @samples.first
