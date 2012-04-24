@@ -246,6 +246,7 @@ form .submit input.long {
 
 #body .menu ul.links {
   margin: 0px;
+  float: left;
   padding: 0;
   height: 100%;
   line-height: 40px;
@@ -254,6 +255,24 @@ form .submit input.long {
 #body .menu ul.links li {
   display: inline;
   font: 14px/20px Arial, Helvetica, sans-serif;
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+}
+
+#body .menu ul.pgpid {
+  margin: 0px;
+  float: right;
+  padding: 0;
+  height: 100%;
+  line-height: 40px;
+}
+
+#body .menu ul.pgpid li {
+  display: inline;
+  font: 14px/20px Arial, Helvetica, sans-serif;
+  color: black;
+  font-weight: bold;
   list-style: none;
   margin: 0;
   padding: 10px;

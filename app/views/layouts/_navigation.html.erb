@@ -18,6 +18,11 @@
       <% end %>
     <% end -%>
   </ul>
+  <ul class="pgpid">
+    <% if current_user and current_user.enrolled -%>
+    <li>Your PGP id: <%= current_user.hex %></li>
+    <% end -%>
+  </ul>
 </div>
 <% if in_admin_section? %>
   <div class="menu" style="margin-top: 0px;">
