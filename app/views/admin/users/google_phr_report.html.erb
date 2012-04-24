@@ -3,12 +3,14 @@
 <table class="admin_table">
 <tr>
   <th>User Id</th>
+  <th>Origin</th>
   <th>Date</th>
   <th>Name</th>
 </tr>
 <% @google_phrs.each do |g|%>
 <tr>
   <td><%= link_to g.user.hex, public_profile_path(:hex => g.user.hex) %></td>
+  <td><%= g.pretty_origin %></td>
   <td><%= g.created_at %></td>
   <td><%= g.user.first_name%> <%= g.user.last_name %></td>
 </tr>
