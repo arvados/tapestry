@@ -51,7 +51,24 @@ class Kit < ActiveRecord::Base
       'Kit has been received by researcher'
     end
   end
- 
+
+  def send_to_participant!(current_user)
+    self.last_mailed = Time.now()
+    self.shipper_id = current_user.id
+    # Nobody 'owns' the kit at the moment
+    self.owner = nil
+    self.save
+
+    self.samples.each do |s|
+      s.last_mailed = Time.now()
+      s.owner = nil
+      s.save
+      SampleLog.new(:actor => current_user, :comment => 'Sample sent', :sample_id => s.id).save
+    end
+
+    # Log this
+    KitLog.new(:actor => current_user, :comment => 'Kit sent', :kit_id => self.id).save
+  end
 
   # Class methods, used both from controllers and observers. I had them in the
   # application controller, but then the observers can't use them...

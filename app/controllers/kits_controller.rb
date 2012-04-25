@@ -78,23 +78,7 @@ class KitsController < ApplicationController
    # POST /kits/1/sent
   def sent
     @kit = Kit.find(params[:id])
-
-    @kit.last_mailed = Time.now()
-    @kit.shipper_id = current_user.id
-    # Nobody 'owns' the kit at the moment
-    @kit.owner = nil
-    @kit.save
-
-    @kit.samples.each do |s|
-      s.last_mailed = Time.now()
-      s.owner = nil
-      s.save
-      SampleLog.new(:actor => current_user, :comment => 'Sample sent', :sample_id => s.id).save
-    end
-
-    # Log this
-    KitLog.new(:actor => current_user, :comment => 'Kit sent', :kit_id => @kit.id).save
-
+    @kit.send_to_participant!(current_user)
     redirect_to(:controller => 'kits', :action => 'index')
   end
   
