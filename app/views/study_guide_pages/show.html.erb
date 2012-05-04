@@ -1,0 +1,22 @@
+
+<div align="right">
+<strong><%= @ev.exam.title %></strong> study guide, page <%= params[:ordinal] %> of <%= @study_guide_page_count %>
+</div>
+
+<%= @sgp.contents.html_safe %>
+
+<div align="center">
+<% if not @sgp_previous.nil? -%>
+  <%= link_to 'Previous page', show_study_guide_page_path( { :exam_id => params[:exam_id], :ordinal => params[:ordinal].to_i - 1 }) %> |
+<% end -%>
+
+<% if not @sgp_next.nil? -%>
+  <%= link_to 'Next page', show_study_guide_page_path( { :exam_id => params[:exam_id], :ordinal => params[:ordinal].to_i + 1 }) %>
+<% else -%>
+  <% if @ev.exam_responses.for_user(current_user).nil? then -%>
+    <%= link_to 'Take exam', content_area_start_exam_path(@content_area, @ev.exam), :method => 'post' %>
+  <% else -%>
+    <%= link_to 'Retake exam', content_area_retake_exam_path(@content_area, @ev.exam), :method => 'post' %>
+  <% end -%>
+<% end -%>
+</div>

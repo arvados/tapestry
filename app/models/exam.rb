@@ -14,8 +14,12 @@ class Exam < ActiveRecord::Base
     Exam.all.sort_by(&:ordinal)
   end
 
+  def current()
+    version_for(nil)
+  end
+
   def version_for(user)
-    versions.where('created_at < ? and published = ?', user.created_at, true).order('version DESC').limit(1)[0]
+    versions.where('published = ?', true).order('version DESC').first
   end
 
   def version_for!(user)
@@ -32,7 +36,7 @@ class Exam < ActiveRecord::Base
   end
 
   def any_version_completed_by?(user)
-    versions.find(:all, :conditions => [ 'created_at < ? and published = ?', user.created_at, true ],:order => 'version DESC').each do |version|
+    versions.find(:all, :conditions => [ 'published = ?', true ],:order => 'version DESC').each do |version|
       return true if version.completed_by?(user)
     end
     return false

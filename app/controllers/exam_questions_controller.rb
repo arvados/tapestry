@@ -4,7 +4,7 @@ class ExamQuestionsController < ApplicationController
   skip_before_filter :ensure_enrolled
 
   def show
-    @answer_options = @exam_question.answer_options
+    @answer_options = @exam_question.answer_options.sort{ |a,b| a.answer <=> b.answer }
   end
 
   def answer

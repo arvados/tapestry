@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120422181241) do
+ActiveRecord::Schema.define(:version => 20120503193554) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -345,10 +345,10 @@ ActiveRecord::Schema.define(:version => 20120422181241) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "ordinal"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "dataset_versions", :force => true do |t|
@@ -2017,6 +2017,33 @@ ActiveRecord::Schema.define(:version => 20120422181241) do
     t.datetime "date_opened"
     t.boolean  "shipping_address_required", :default => true
     t.boolean  "phone_number_required",     :default => false
+  end
+
+  create_table "study_guide_page_versions", :force => true do |t|
+    t.integer  "study_guide_page_id"
+    t.integer  "lock_version"
+    t.integer  "exam_version_id"
+    t.integer  "ordinal"
+    t.text     "contents"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "study_guide_page_versions", ["study_guide_page_id"], :name => "index_study_guide_page_versions_on_study_guide_page_id"
+
+  create_table "study_guide_pages", :force => true do |t|
+    t.integer  "exam_version_id"
+    t.integer  "ordinal"
+    t.text     "contents"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
   end
 
   create_table "study_participant_versions", :force => true do |t|

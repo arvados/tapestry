@@ -62,6 +62,7 @@ Tapestry::Application.configure do
   
   GOOGLE_HEALTH_URL = "https://www.google.com/health"
   
+  LATEST_EXAM_VERSION = 'v20120430'
   LATEST_CONSENT_VERSION = 'v20110912'
   
   DRB_SERVER = '127.0.0.1'

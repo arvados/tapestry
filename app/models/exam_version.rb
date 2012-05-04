@@ -2,6 +2,7 @@ class ExamVersion < ActiveRecord::Base
   belongs_to :exam
   has_many   :exam_questions, :order => 'ordinal'
   has_many   :exam_responses
+  has_many   :study_guide_pages
 
   validates_presence_of :title, :description, :ordinal
 

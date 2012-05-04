@@ -923,7 +923,7 @@ div.formError {
 /******* List of exams seen at /content_areas ********/
 
 #exam_listing {
-  width: 400px;
+  width: 600px;
   margin: 0;
   padding: 0;
 }
@@ -947,6 +947,7 @@ div.formError {
 
 #exam_listing li.available span {
   /* content area */
+  width: 100%;
   color: #000;
   background: #FFF url('/images/down.png') no-repeat right top;
   border-right: 2px solid #999;
@@ -956,6 +957,7 @@ div.formError {
 }
 
 #exam_listing li.available a {
+  width: 100%;
   background-color: #5D7CBB;
   color: #fff;
   border-right: 2px solid #999;
@@ -976,6 +978,7 @@ div.formError {
 
 #exam_listing li.completed span {
   /* content area */
+  width: 100%;
   color: #000;
   background: #FFF url('/images/go.png') no-repeat right top;
   border-right: 2px solid #999;

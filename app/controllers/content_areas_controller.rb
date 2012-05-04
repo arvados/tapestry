@@ -14,7 +14,7 @@ class ContentAreasController < ApplicationController
   end
 
   def show
-    @content_area = ContentArea.find params[:id]
+    @content_area = ContentArea.find(params[:id])
     @exams = @content_area.exams
   end
 end

@@ -338,8 +338,7 @@ class User < ActiveRecord::Base
       save
     end
     if (step == exam_enrollment_step) then
-      # We're at v2 of the exam currently. Ward, 2010-08-03
-      self.exam_version = 'v2'
+      self.exam_version = LATEST_EXAM_VERSION
       save
     end
     if (step == consent_enrollment_step) then

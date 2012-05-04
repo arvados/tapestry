@@ -1,4 +1,6 @@
 Tapestry::Application.routes.draw do
+  match '/study_guide_pages/:exam_id/:ordinal' => 'study_guide_pages#show', :as => :show_study_guide_page
+
   resources :google_spreadsheets
 
   resources :withdrawal_comments
