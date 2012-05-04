@@ -31,12 +31,6 @@ ev2.title = 'Human Subjects Research and Informed Consent'
 ev2.published = true
 ev2.save
 
-# TMP REMOVE ME
-# Clear out all study guide pages
-StudyGuidePage.all.each do |sgp|
-  sgp.destroy
-end
-
 # Create study guide pages
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
