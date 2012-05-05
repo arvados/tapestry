@@ -1,6 +1,18 @@
 class StudyGuidePagesController < ApplicationController
   skip_before_filter :ensure_enrolled
 
+  def index
+    @ev = Exam.find(params[:exam_id]).current
+   
+    @sgp = @ev.study_guide_pages.where('ordinal = ?',1).first
+
+    if @sgp.nil? then
+      raise ActionController::RoutingError,
+            "No such study guide page"
+      return
+    end 
+  end
+
   def show
     @ev = Exam.find(params[:exam_id]).current
     if @ev.nil? then

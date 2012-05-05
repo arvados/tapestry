@@ -25,7 +25,7 @@ class ExamQuestionsController < ApplicationController
     if @question_reponse.save
       if @exam_question.last_in_exam?
         if @exam_response.correct?
-          flash[:notice] = 'You correctly completed the exam.'
+          flash[:notice] = 'You correctly completed this module.'
         else
           flash[:warning] = %[#{@exam_response.correct_response_count}
                               of #{@exam_response.response_count}

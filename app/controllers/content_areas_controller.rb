@@ -8,7 +8,7 @@ class ContentAreasController < ApplicationController
     if @current_content_area = ContentArea.current_for(current_user)
       @current_exam = @current_content_area.exams.current_for(current_user)
     else
-      flash[:notice] = 'You correctly completed all entrance exams.'
+      flash[:notice] = 'You correctly completed the entrance exam.'
       redirect_to root_url
     end
   end

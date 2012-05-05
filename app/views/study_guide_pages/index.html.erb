@@ -1,0 +1,16 @@
+<div align="right">
+<strong><%= @ev.exam.title %></strong> study guide
+</div>
+
+<h3>Table of contents</h3>
+
+<ul>
+<% @ev.study_guide_pages.each do |sgp| -%>
+  <li><%= link_to(sgp.title, show_study_guide_page_path({ :exam_id => @ev.exam.id, :ordinal => sgp.ordinal })) %></li>
+<% end -%>
+</ul>
+
+<p>
+  <%= link_to "Questions",
+               show_study_guide_page_path({ :exam_id => @ev.exam.id, :ordinal => 1 }), :method => 'post' %>
+</p>

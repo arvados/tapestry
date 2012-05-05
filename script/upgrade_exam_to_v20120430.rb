@@ -35,6 +35,7 @@ ev2.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 1
+sgp.title = 'Introduction'
 sgp.contents = <<eos
 <h2>Module 1: Human Subjects Research and Informed Consent</h2>
 
@@ -47,6 +48,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 2
+sgp.title = 'Human subjects research and the Belmont Report'
 sgp.contents = <<eos
 <h3>Human subjects research and the Belmont Report</h3>
 
@@ -57,16 +59,16 @@ sgp.contents = <<eos
 <p>In 1974 the United States Congress responded to these issues by establishing the National Commission for the Protection of Human Subjects of Biomedical and Behavioral Research. In 1978 this commission published the <a href="http://en.wikipedia.org/wiki/Tuskegee_Syphilis_Study">Belmont Report</a>, which guides much of current human subjects research. The Belmont Report outlines three fundamental ethical principles which should guide all human subjects research: respect for persons, beneficence, and justice.</p>
 
 <ul>
-<li><strong>Respect for persons</strong>: Individuals should be treated as autonomous agents, and persons with diminished autonomy are entitled to special protection. For individuals capable of deliberation and self-determination, this means they must be given adequate information regarding the study and that their considered opinions and choices should be respected. Some individuals are not capable of making autonomous decisions (due to youth, mental impairment, or vulnerability to exploitation) -- research studies must treat such individuals with additional protection, possibly excluding them from activities which may harm them.
+<li><strong>Respect for persons</strong>: Individuals should be treated as autonomous agents, and persons with diminished autonomy are entitled to special protection. For individuals capable of deliberation and self-determination, this means they must be given adequate information regarding the study and that their considered opinions and choices should be respected. Some individuals are not capable of making autonomous decisions (due to youth, mental impairment, or vulnerability to exploitation) -- research studies must treat such individuals with additional protection, possibly excluding them from activities which may harm them.<br/>
 
 The Personal Genome Project places a high importance on the autonomy of individuals and their right to take risks. Because of this, we require participants to be capable of making such a decision, and to demonstrate that they understand the risks related to participation by responding to exam questions. Individuals not capable of self-determination (due to youth or mental impairment) cannot participate in the Personal Genome Project; a caretaker or guardian cannot give consent on their behalf to participate in this study.
 </li>
 
-<li><strong>Beneficence</strong>: A study should maximize potential benefits and minimize potential harm for its participants. It is sometimes the case, however, that the subjects themselves are unlikely to benefit from a study -- for example, they may have an incurable condition the researchers seek to prevent. Thus, beneficence can also represent a benefit to a group of individuals that those subjects represent, rather than the subjects themselves. Sometimes this leads to ambiguous situations where subjects are exposed to risks with little chance of benefit, in the hopes of benefiting others -- the appropriateness of such studies depends on the risks and benefits involved, and on the autonomy of the subjects who decide to participate. Ethics commissions (notably Institutional Review Boards) must weigh the risks and benefits when giving approval to studies. During the course of a study, Data Safety Monitoring Boards watch over the safety and well-being of the participants.
+<li><strong>Beneficence</strong>: A study should maximize potential benefits and minimize potential harm for its participants. It is sometimes the case, however, that the subjects themselves are unlikely to benefit from a study -- for example, they may have an incurable condition the researchers seek to prevent. Thus, beneficence can also represent a benefit to a group of individuals that those subjects represent, rather than the subjects themselves. Sometimes this leads to ambiguous situations where subjects are exposed to risks with little chance of benefit, in the hopes of benefiting others -- the appropriateness of such studies depends on the risks and benefits involved, and on the autonomy of the subjects who decide to participate. Ethics commissions (notably Institutional Review Boards) must weigh the risks and benefits when giving approval to studies. During the course of a study, Data Safety Monitoring Boards watch over the safety and well-being of the participants.<br/>
 
 Although there are some instances where whole genome data has benefited individuals, the Personal Genome Project believes these will be (at least at first) exceptional cases. In particular, the public release of genome data involves numerous risks and is unlikely to provide any immediate benefit to participants. However, creating such a public data set is vital for researchers and clinicians to learn how to use human genome data and use it to improve human health. As such, participation in the Personal Genome Project is best seen as a benefit to humanity as a whole, rather than to the participant themselves.</li>
 
-<li><strong>Justice</strong>: Who should benefit from a study, and who should bear the burden of risk? Fairness in distribution of benefits and risks means that research studies should not be exploitative. Particular groups should not suffer an undue burden of risks simply because they are more readily available or vulnerable to pressure, and groups which take risks should also represent groups which are likely to benefit from the research.
+<li><strong>Justice</strong>: Who should benefit from a study, and who should bear the burden of risk? Fairness in distribution of benefits and risks means that research studies should not be exploitative. Particular groups should not suffer an undue burden of risks simply because they are more readily available or vulnerable to pressure, and groups which take risks should also represent groups which are likely to benefit from the research.<br/>
 
 Participants in the Personal Genome Project have so far been a self-selecting group who have learned about our project through word-of-mouth or articles which mention the project. While we plan to extend our recruitment to individuals with specific diseases, we do so in the hope that better understanding and treatments for those diseases may arise from such study. We also hope to extend our recruitment to older individuals, who are able to share a lifetime of health information -- many older people are highly motivated to contribute to a better understanding of health and aging.</li>
 
@@ -77,6 +79,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 3
+sgp.title = 'What is informed consent? What is open consent?'
 sgp.contents = <<eos
 <h3>What is informed consent?</h3>
 
@@ -126,13 +129,13 @@ eq.save
 
 ao = AnswerOption.new()
 ao.exam_question = eq
-ao.answer = 'True'
+ao.answer = '(a) True'
 ao.correct = 0
 ao.save
 
 ao = AnswerOption.new()
 ao.exam_question = eq
-ao.answer = 'False'
+ao.answer = '(b) False'
 ao.correct = 1
 ao.save
 
@@ -184,8 +187,11 @@ ev2.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 1
+sgp.title = 'Introduction'
 sgp.contents = <<eos
 <h2>Module 2: Genetic Concepts</h2>
+
+<h3>Introduction</h3>
 
 <p>We don’t require expert knowledge in genetics to join the Personal Genome Project, but knowing a bit about the subject is important because it provides a context for understanding the type of data you will be receiving and making public. Genomes and DNA in particular are often regarded by many as powerful and mysterious -- after all, they are core parts of what make us who we are.</p>
 
@@ -197,6 +203,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 2
+sgp.title = 'DNA is the molecule of information'
 sgp.contents = <<eos
 <h3>DNA is the molecule of information</h3>
 
@@ -210,6 +217,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 3
+sgp.title = 'How do DNA instructions create a person?'
 sgp.contents = <<eos
 <h3>How do DNA instructions create a person?</h3>
 
@@ -233,6 +241,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 4
+sgp.title = 'Nature versus Nuture'
 sgp.contents = <<eos
 <h3>Nature versus Nuture</h3>
 
@@ -248,6 +257,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 5
+sgp.title = 'One copy from each parent'
 sgp.contents = <<eos
 <h3>One copy from each parent</h3>
 
@@ -509,6 +519,7 @@ ev2.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 1
+sgp.title = 'Introduction'
 sgp.contents = <<eos
 <h2>Module 3: PGP Enrollment Procedures</h2>
 
@@ -524,6 +535,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 2
+sgp.title = 'PGP enrollment steps'
 sgp.contents = <<eos
 <h3>PGP enrollment steps</h3>
 <p>The steps of PGP enrollment are as follows:</p>
@@ -615,13 +627,13 @@ eq.save
 
 ao = AnswerOption.new()
 ao.exam_question = eq
-ao.answer = 'True'
+ao.answer = '(a) True'
 ao.correct = 0
 ao.save
 
 ao = AnswerOption.new()
 ao.exam_question = eq
-ao.answer = 'False'
+ao.answer = '(b) False'
 ao.correct = 1
 ao.save
 
@@ -739,6 +751,7 @@ ev2.save!
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 1
+sgp.title = 'Introduction'
 sgp.contents = <<eos
 <h2>Module 4: PGP Participation, Specimen Collection & Data Release Procedures</h2>
 
@@ -752,6 +765,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 2
+sgp.title = 'Participation is an ongoing relationship'
 sgp.contents = <<eos
 <h3>Participation is an ongoing relationship</h3>
 
@@ -770,6 +784,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 3
+sgp.title = 'Specimen collection'
 sgp.contents = <<eos
 <h3>Specimen collection</h3>
 
@@ -783,6 +798,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 4
+sgp.title = 'Release of genome data and other sample-derived data'
 sgp.contents = <<eos
 <h3>Release of genome data and other sample-derived data</h3>
 
@@ -800,6 +816,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 5
+sgp.title = 'Creation of cell lines'
 sgp.contents = <<eos
 <h3>Creation of cell lines</h3>
 
@@ -810,6 +827,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 6
+sgp.title = 'Health records and other user-provided data may be immediately public'
 sgp.contents = <<eos
 <h3>Health records and other user-provided data may be immediately public</h3>
 
@@ -950,6 +968,7 @@ ev2.save!
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 1
+sgp.title = 'Introduction'
 sgp.contents = <<eos
 <h2>Module 5: Potential consequences of receiving personal genome data</h2>
 
@@ -964,6 +983,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 2
+sgp.title = 'Errors in data'
 sgp.contents = <<eos
 <h3>Errors in data</h3>
 
@@ -981,6 +1001,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 3
+sgp.title = 'Unanticipated ancestry discoveries (e.g. non-paternity)'
 sgp.contents = <<eos
 <h3>Unanticipated ancestry discoveries (e.g. non-paternity)</h3>
 
@@ -996,6 +1017,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 4
+sgp.title = 'Unanticipated findings predicting serious clinical effects'
 sgp.contents = <<eos
 <h3>Unanticipated findings predicting serious clinical effects</h3>
 
@@ -1011,6 +1033,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 5
+sgp.title = 'Ambiguous findings, Failure to report serious findings, Flaws in interpretation'
 sgp.contents = <<eos
 <h3>Ambiguous findings</h3>
 
@@ -1034,6 +1057,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 6
+sgp.title = 'Potential financial costs'
 sgp.contents = <<eos
 <h3>Potential financial costs</h3>
 
@@ -1097,13 +1121,13 @@ eq.save
 
 ao = AnswerOption.new()
 ao.exam_question = eq
-ao.answer = 'True'
+ao.answer = '(a) True'
 ao.correct = 1
 ao.save
 
 ao = AnswerOption.new()
 ao.exam_question = eq
-ao.answer = 'False'
+ao.answer = '(b) False'
 ao.correct = 0
 ao.save
 
@@ -1189,6 +1213,7 @@ ev2.save!
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 1
+sgp.title = 'Introduction'
 sgp.contents = <<eos
 <h2>Module 6: Risks associated with making your data public</h2>
 
@@ -1203,6 +1228,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 2
+sgp.title = 'Loss of privacy'
 sgp.contents = <<eos
 <h3>Loss of privacy</h3>
 
@@ -1217,6 +1243,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 3
+sgp.title = 'Discrimination on the basis of genetic or health data'
 sgp.contents = <<eos
 <h3>Discrimination on the basis of genetic or health data</h3>
 
@@ -1231,6 +1258,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 4
+sgp.title = 'Once public, it may be impossible to completely remove your data'
 sgp.contents = <<eos
 <h3>Once public, it may be impossible to completely remove your data</h3>
 
@@ -1245,6 +1273,7 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 5
+sgp.title = 'Unanticipated uses of your data and cell lines'
 sgp.contents = <<eos
 <h3>Unanticipated uses of your data and cell lines</h3>
 
