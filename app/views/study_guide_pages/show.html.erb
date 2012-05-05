@@ -13,10 +13,10 @@
 <% if not @sgp_next.nil? -%>
   <%= link_to 'Next page', show_study_guide_page_path( { :exam_id => params[:exam_id], :ordinal => params[:ordinal].to_i + 1 }) %>
 <% else -%>
-  <% if @ev.exam_responses.for_user(current_user).nil? then -%>
-    <%= link_to 'Take module', content_area_start_exam_path(@content_area, @ev.exam), :method => 'post' %>
+  <% if @ev.exam_responses.for_user(current_user).empty? then -%>
+    <%= link_to 'Continue to questions', content_area_start_exam_path(@content_area, @ev.exam), :method => 'post' %>
   <% else -%>
-    <%= link_to 'Retake module', content_area_retake_exam_path(@content_area, @ev.exam), :method => 'post' %>
+    <%= link_to 'Continue to questions', content_area_retake_exam_path(@content_area, @ev.exam), :method => 'post' %>
   <% end -%>
 <% end -%>
 </div>
