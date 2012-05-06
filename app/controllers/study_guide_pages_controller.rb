@@ -6,6 +6,8 @@ class StudyGuidePagesController < ApplicationController
    
     @sgp = @ev.study_guide_pages.where('ordinal = ?',1).first
 
+    @content_area = ContentArea.find(@ev.exam.content_area.id)
+
     if @sgp.nil? then
       raise ActionController::RoutingError,
             "No such study guide page"

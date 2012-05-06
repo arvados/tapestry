@@ -11,6 +11,5 @@
 </ul>
 
 <p>
-  <%= link_to "Questions",
-               show_study_guide_page_path({ :exam_id => @ev.exam.id, :ordinal => 1 }), :method => 'post' %>
+  <%= link_to 'Questions', content_area_retake_exam_path(@content_area, @ev.exam), :method => 'post' %>
 </p>
