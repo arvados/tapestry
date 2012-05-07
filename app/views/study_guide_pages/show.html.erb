@@ -20,3 +20,7 @@
   <% end -%>
 <% end -%>
 </div>
+
+<% if not @ev.exam_responses.for_user(current_user).empty? then -%>
+  <%= render :partial => 'toc' %>
+<% end -%>
