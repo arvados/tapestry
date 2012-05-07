@@ -66,18 +66,19 @@
 <ul>
   <li><strong>Your profile</strong><br>
   &nbsp;&nbsp;<%= link_to "Edit", url_for(:controller => 'profiles', :action => 'public', :hex => current_user.hex) %></li>
-  <li><strong>Safety Questionnaires</strong><br>
+  <li><strong>Safety questionnaires</strong><br>
   &nbsp;&nbsp;<%= link_to "Submit new", url_for(:controller => 'safety_questionnaires', :action => 'new') %><br>
   &nbsp;&nbsp;<%= link_to "Review previous", url_for(:controller => 'safety_questionnaires', :action => 'index') %></li>
   <li><strong>Surveys</strong><br>
   &nbsp;&nbsp;<%= link_to "Participant survey", "/users/participant_survey" %><br>
-  &nbsp;&nbsp;<%= link_to "Learn more", "/trait_surveys" %></li>
-  <li><strong>Studies</strong><br>
+  &nbsp;&nbsp;<%= link_to "More surveys", "/trait_surveys" %></li>
+  <li><strong>Studies &amp; collections</strong><br>
   &nbsp;&nbsp;<%= link_to "Learn more", "/pages/studies" %><br/>
   &nbsp;&nbsp;<%= link_to "Claim a kit", "/studies/claim" %></li>
-  <li><strong>Uploaded data</strong><br>
-  &nbsp;&nbsp;<%= link_to "Manage your data",'/user_files' %></li>
-  <li><strong>Enrollment Application</strong><br>
+  <li><strong>Upload &amp; manage data</strong><br>
+  &nbsp;&nbsp;<%= link_to 'Personal health records', phrccr_path %><br />
+  &nbsp;&nbsp;<%= link_to 'Other files', user_files_path %></li>
+  <li><strong>Enrollment application</strong><br>
   &nbsp;&nbsp;<%= link_to "Review results", enrollment_application_results_path %></li>
   <li><strong>User log</strong><br>
   &nbsp;&nbsp;<%= link_to "Show", url_for(:controller => 'users', :action => 'show_log') %></li>
@@ -90,21 +91,22 @@
 <h2>Public Profile Management</h2>
 
 <p>
-The profile management tool will enable you to voluntarily add genetic,
-health, and trait data to your PGP public profile. 
+The profile management tool will enable you to voluntarily add
+genetic, health, and trait data to <%= link_to_if current_user.hex,
+'your PGP public profile', public_profile_path(current_user.hex) %>.
 </p>
 <p>
 Here are some things you can do
 </p>
 <p>
 <ul>
-<li>Specimen collection: Sign-up to donate specimens such as saliva or blood.</li>
+<li><%= link_to 'Specimen collection', page_path('studies') %>: Sign up to donate specimens such as saliva or blood.</li>
 <li>Access research data generated about you: Review and download specimen analysis data generated in the research study.</li>
-<li>Share your data with the public: Upload genetic datasets, your health and medical records, and other files to your public profile.</li>
-<li>Trait surveys: Respond to questionnaires and surveys about your traits.</li>
-<li>Link accounts with family members enrolled in the PGP.</li>
-<li>Join research activities: We will periodically announce new studies and research activities that you can join.</li>
-<li>Quarterly safety reports: Respond to new safety questionnaires and review previous ones.</li>
+<li>Share your data with the public: Upload your <%= link_to 'health and medical records', phrccr_path %> as well as <%= link_to 'genetic data and other files', user_files_path %> to your public profile.</li>
+<li><%= link_to 'Trait surveys', trait_surveys_path %>: Respond to questionnaires and surveys about yourself.</li>
+<li><%= link_to 'Link accounts with family members', family_relations_path %> enrolled in the PGP.</li>
+<li>Join research activities: We will periodically announce new <%= link_to 'studies', page_path('studies') %> and research activities that you can join.</li>
+<li>Quarterly safety reports: Respond to <%= link_to 'a new safety questionnaire', new_safety_questionnaire_path %> and <%= link_to 'review previous responses', safety_questionnaires_path %>.</li>
 <li>Consenting tools: Stay informed and keep your consent up-to-date.</li>
 </ul>
 </p>
