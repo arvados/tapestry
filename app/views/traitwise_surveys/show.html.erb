@@ -2,11 +2,13 @@
 
 <p id="notice"><%= notice %></p>
 
+<% if @traitwise_survey.user %>
 <p>
   <b>Researcher:</b>
   <%=h @traitwise_survey.user.full_name %>,
   <%=h @traitwise_survey.user.researcher_affiliation %>
 </p>
+<% end %>
 
 <p><%=raw CGI.escapeHTML(@traitwise_survey.description).gsub("\r","").gsub("\n\n","</p><p>") %></p>
 

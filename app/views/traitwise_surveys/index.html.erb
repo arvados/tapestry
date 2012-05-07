@@ -14,12 +14,12 @@
 <% @traitwise_surveys.each do |traitwise_survey| %>
   <tr>
     <td><%= traitwise_survey.name %></td>
-    <td><%= traitwise_survey.user.full_name %></td>
+    <td><%= traitwise_survey.user.full_name if traitwise_survey.user %></td>
     <td><%= traitwise_survey.tags %></td>
     <td><%= SpreadsheetImporterTraitwise.where('traitwise_survey_id = ?', traitwise_survey.id).first.spreadsheet.last_downloaded_at %></td>
     <td><%= link_to 'Show', traitwise_survey %></td>
-    <td><%= link_to 'Edit', edit_traitwise_survey_path(traitwise_survey) if current_user.is_admin? or current_user.id == traitwise_survey.user.id %></td>
-    <td><%= button_to 'Destroy', traitwise_survey, :confirm => 'Are you sure?', :method => :delete if current_user.is_admin? or current_user.id == traitwise_survey.user.id %></td>
+    <td><%= link_to 'Edit', edit_traitwise_survey_path(traitwise_survey) if current_user.is_admin? or current_user.id == traitwise_survey.user_id %></td>
+    <td><%= button_to 'Destroy', traitwise_survey, :confirm => 'Are you sure?', :method => :delete if current_user.is_admin? or current_user.id == traitwise_survey.user_id %></td>
   </tr>
 <% end %>
 </table>
