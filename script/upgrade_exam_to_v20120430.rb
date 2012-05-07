@@ -241,9 +241,9 @@ sgp.save
 sgp = StudyGuidePage.new()
 sgp.exam_version = ev2
 sgp.ordinal = 4
-sgp.title = 'Nature versus Nuture'
+sgp.title = 'Nature versus Nurture'
 sgp.contents = <<eos
-<h3>Nature versus Nuture</h3>
+<h3>Nature versus Nurture</h3>
 
 <p>Genes are not destiny -- while all these proteins are working hard to create a person, a lot of what you are is influenced by the environment. This dichotomy is often expressed as “nature versus nurture”: the DNA is the “nature” (your apparent destiny) while the environment surrounding you is the “nurture” (the things outside the DNA that influence how you grow and change). The truth is that it is all an interaction: your genes are working together with their environment to produce a person.</p>
 
@@ -790,7 +790,7 @@ sgp.contents = <<eos
 
 <p>We are pursuing a variety of methods for specimen collection, including saliva and blood collection. We may ask for you to provide your contact information (e.g. address and/or phone number), which will be kept private. Because of the resources necessary for specimen collection and processing, we may not be able to collect a specimen from you right away. Specimen collection methods should pose minimal risk to you, but will not necessarily succeed -- you may be asked to contribute a second specimen, or we might later conclude that a given collection method has yielded unusable specimens.</p>
 
-<p>Specimen collections are always voluntary, you are not required to participate in any specimen collection events. As part of providing us with a specimen, you are consenting to an open-ended set of things which may be derived from it. Data generated from those specimens will be shared both with you and publicly. Such data could include: genome sequencing data, epigenetic data, protein and chemistry assays, and profiles of bacteria and viruses in your samples.</p>
+<p>Specimen collections are always voluntary; you are not required to participate in any specimen collection events. As part of providing us with a specimen, you are consenting to an open-ended set of things which may be derived from it. Data generated from those specimens will be shared both with you and publicly. Such data could include: genome sequencing data, epigenetic data, protein and chemistry assays, and profiles of bacteria and viruses in your samples.</p>
 
 eos
 sgp.save
