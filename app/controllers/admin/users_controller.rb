@@ -377,6 +377,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     elsif params[:ineligible_for_enrollment]
       @unpaginated_users = User.ineligible_for_enrollment
       @result = "Searching for users ineligible for enrollment (submitted application)"
+    elsif params[:at_or_in_exam]
+      @unpaginated_users = User.not_enrolled.has_completed('screening_survey_results').has_not_completed('content_areas')
+      @result = "Searching for users who are at the exam step in the enrollment process"
     elsif params[:failed_eligibility_survey]
       @unpaginated_users = User.failed_eligibility_survey
       @result = "Searching for users ineligible for enrollment (failed eligibility survey)"

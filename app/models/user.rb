@@ -102,10 +102,11 @@ class User < ActiveRecord::Base
   # validate_on_create :email_confirmed
 
   scope :has_completed, lambda { |keyword|
-    {
-      :conditions => ["enrollment_steps.keyword = ?", keyword],
-      :joins => :completed_enrollment_steps
-    }
+    joins(:completed_enrollment_steps).where("enrollment_steps.keyword = ?", keyword)
+  }
+
+  scope :has_not_completed, lambda { |keyword|
+    where('users.id not in (' + EnrollmentStepCompletion.joins(:enrollment_step).where('enrollment_steps.keyword = ?',keyword).group(:user_id).select(:user_id).to_sql + ')')
   }
 
   scope :real, where("NOT (is_test <=> 1)")
