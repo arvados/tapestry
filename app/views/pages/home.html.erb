@@ -1,5 +1,7 @@
 <% if ! current_user -%>
 
+  <%= render :partial => 'pages/blog_feed' %>
+
   <h2>Log In</h2>
 
   <%= form_tag session_path do -%>

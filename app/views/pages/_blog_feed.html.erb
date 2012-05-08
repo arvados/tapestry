@@ -1,0 +1,15 @@
+<% recent = ExternalBlogPost.find(:all, :order => 'posted_at desc', :limit => 3) %>
+<% if recent.size > 0 %>
+<div style="float: right; width: 50%">
+  <h2>Latest blog posts</h2>
+  <% recent.each do |bp| %>
+  <p>
+    <b><%= link_to bp.title, bp.post_url %></b>
+    <br />
+    <%=raw bp.description %>
+    <br />
+    <span style="color: #444"><%= bp.posted_at.strftime('%B %-d') %> &mdash; <%= bp.feed_url.split('//')[1].split('/')[0] %></span>
+  </p>
+  <% end %>
+</div>
+<% end %>

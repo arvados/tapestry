@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120505001439) do
+ActiveRecord::Schema.define(:version => 20120508193425) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -21,10 +21,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "comments"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "absolute_pitch_survey_family_history_versions", :force => true do |t|
@@ -53,10 +53,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "codes"
     t.string   "status"
     t.integer  "allergy_description_id"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "allergies", ["allergy_description_id"], :name => "index_allergies_on_allergy_description_id"
@@ -75,10 +75,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
 
   create_table "allergy_descriptions", :force => true do |t|
     t.string   "description",  :null => false
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "allergy_descriptions", ["description"], :name => "index_allergy_descriptions_on_description", :unique => true
@@ -182,10 +182,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "maternal_grandmother_born_in"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "bulk_message_recipient_versions", :force => true do |t|
@@ -264,10 +264,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "version"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
     t.string   "origin"
   end
 
@@ -284,10 +284,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
 
   create_table "condition_descriptions", :force => true do |t|
     t.string   "description",  :null => false
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "condition_descriptions", ["description"], :name => "index_condition_descriptions_on_description", :unique => true
@@ -315,10 +315,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "codes"
     t.string   "status"
     t.integer  "condition_description_id"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "conditions", ["ccr_id"], :name => "index_conditions_on_ccr_id"
@@ -410,10 +410,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.decimal  "height_in",    :precision => 10, :scale => 0
     t.string   "blood_type"
     t.string   "race"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "device_type_versions", :force => true do |t|
@@ -462,10 +462,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "document_versions", :force => true do |t|
@@ -491,10 +491,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.datetime "timestamp"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "enrollment_step_completion_versions", :force => true do |t|
@@ -516,10 +516,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.integer  "enrollment_step_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "enrollment_step_completions", ["enrollment_step_id"], :name => "index_enrollment_step_completions_on_enrollment_step_id"
@@ -602,6 +602,17 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
 
   add_index "exams", ["content_area_id"], :name => "index_exams_on_content_area_id"
 
+  create_table "external_blog_posts", :force => true do |t|
+    t.string   "feed_url"
+    t.datetime "retrieved_at"
+    t.datetime "posted_at"
+    t.string   "post_url"
+    t.text     "title"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "family_relation_versions", :force => true do |t|
     t.integer  "family_relation_id"
     t.integer  "lock_version"
@@ -625,10 +636,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.boolean  "is_confirmed"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "family_survey_response_versions", :force => true do |t|
@@ -658,10 +669,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.integer  "youngest_child_birth_year"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "family_survey_responses", ["user_id"], :name => "index_family_survey_responses_on_user_id"
@@ -772,10 +783,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
 
   create_table "immunization_names", :force => true do |t|
     t.string   "name",         :null => false
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "immunization_names", ["name"], :name => "index_immunization_names_on_name", :unique => true
@@ -799,10 +810,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.date     "start_date"
     t.string   "codes"
     t.integer  "immunization_name_id"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "immunizations", ["ccr_id"], :name => "index_immunizations_on_ccr_id"
@@ -831,10 +842,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "international_participant_versions", :force => true do |t|
@@ -856,10 +867,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "country"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "invited_email_versions", :force => true do |t|
@@ -881,10 +892,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.datetime "accepted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "kit_design_sample_versions", :force => true do |t|
@@ -961,10 +972,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.integer  "instructions_file_size"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "kit_log_versions", :force => true do |t|
@@ -1056,10 +1067,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
 
   create_table "lab_test_result_descriptions", :force => true do |t|
     t.string   "description",  :null => false
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "lab_test_result_descriptions", ["description"], :name => "index_lab_test_result_descriptions_on_description", :unique => true
@@ -1087,10 +1098,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "value"
     t.string   "units"
     t.integer  "lab_test_result_description_id"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "lab_test_results", ["ccr_id"], :name => "index_lab_test_results_on_ccr_id"
@@ -1111,10 +1122,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
   create_table "mailing_list_subscriptions", :id => false, :force => true do |t|
     t.integer  "user_id"
     t.integer  "mailing_list_id"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "mailing_list_subscriptions", ["user_id", "mailing_list_id"], :name => "index_mailing_list_subscriptions_on_user_id_and_mailing_list_id", :unique => true
@@ -1136,10 +1147,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "medication_name_versions", :force => true do |t|
@@ -1155,10 +1166,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
 
   create_table "medication_names", :force => true do |t|
     t.string   "name",         :null => false
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "medication_names", ["name"], :name => "index_medication_names_on_name", :unique => true
@@ -1198,10 +1209,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "route_codes"
     t.string   "status"
     t.integer  "medication_name_id"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
     t.boolean  "is_refill"
     t.string   "author_name"
   end
@@ -1215,10 +1226,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "named_proxy_versions", :force => true do |t|
@@ -1461,10 +1472,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "past_genetic_test_participation"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "privacy_survey_responses", ["user_id"], :name => "index_privacy_survey_responses_on_user_id"
@@ -1482,10 +1493,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
 
   create_table "procedure_descriptions", :force => true do |t|
     t.string   "description",  :null => false
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "procedure_descriptions", ["description"], :name => "index_procedure_descriptions_on_description", :unique => true
@@ -1509,10 +1520,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.date     "start_date"
     t.string   "codes"
     t.integer  "procedure_description_id"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "procedures", ["ccr_id"], :name => "index_procedures_on_ccr_id"
@@ -1541,10 +1552,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.datetime "updated_at"
     t.integer  "exam_question_id"
     t.boolean  "correct",          :default => false, :null => false
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "question_responses", ["correct"], :name => "index_question_responses_on_correct"
@@ -1620,10 +1631,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.boolean  "can_travel_to_boston"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "residency_survey_responses", ["user_id"], :name => "index_residency_survey_responses_on_user_id"
@@ -1657,10 +1668,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.text     "healthcare"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "sample_log_versions", :force => true do |t|
@@ -1847,10 +1858,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "past_genetic_test_participation"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "shipping_address_versions", :force => true do |t|
@@ -2008,10 +2019,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.boolean  "approved",                  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
     t.boolean  "open",                      :default => false
     t.datetime "date_approved"
     t.datetime "date_opened"
@@ -2121,10 +2132,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.integer  "order"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "survey_answer_choices", ["survey_question_id"], :name => "index_survey_answer_choices_on_survey_question_id"
@@ -2150,10 +2161,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "survey_answers", ["survey_question_id"], :name => "index_survey_answers_on_survey_question_id"
@@ -2184,10 +2195,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_required"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "survey_questions", ["survey_section_id"], :name => "index_survey_questions_on_survey_section_id"
@@ -2217,10 +2228,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.integer  "next_section_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   add_index "survey_sections", ["survey_id"], :name => "index_survey_sections_on_survey_id"
@@ -2244,10 +2255,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.string   "version"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "tissue_type_versions", :force => true do |t|
@@ -2389,10 +2400,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.datetime "dataset_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
     t.boolean  "upload_tos_consent"
   end
 
@@ -2422,10 +2433,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.datetime "updated_at"
     t.string   "origin"
     t.string   "user_comment"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
     t.integer  "controlling_user_id"
   end
 
@@ -2460,17 +2471,17 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.boolean  "has_sequence",                                    :default => false
     t.string   "has_sequence_explanation"
     t.text     "family_members_passed_exam"
-    t.string   "authsub_token"
     t.string   "security_question"
     t.string   "security_answer"
     t.string   "eligibility_survey_version"
     t.datetime "enrolled"
+    t.string   "authsub_token"
     t.string   "hex",                                             :default => ""
     t.string   "exam_version"
     t.datetime "enrollment_accepted"
     t.string   "consent_version"
-    t.string   "has_family_members_enrolled"
     t.boolean  "is_test",                                         :default => false
+    t.string   "has_family_members_enrolled"
     t.string   "pgp_id"
     t.datetime "absolute_pitch_survey_completion"
     t.boolean  "researcher",                                      :default => false
@@ -2516,30 +2527,30 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.boolean  "has_sequence",                                    :default => false, :null => false
     t.string   "has_sequence_explanation"
     t.text     "family_members_passed_exam"
-    t.string   "authsub_token"
     t.string   "security_question"
     t.string   "security_answer"
     t.string   "eligibility_survey_version"
     t.datetime "enrolled"
+    t.string   "authsub_token"
     t.string   "hex",                                             :default => ""
     t.string   "exam_version"
     t.datetime "enrollment_accepted"
     t.string   "consent_version"
-    t.string   "has_family_members_enrolled"
     t.boolean  "is_test",                                         :default => false
+    t.string   "has_family_members_enrolled"
     t.string   "pgp_id"
     t.datetime "absolute_pitch_survey_completion"
     t.boolean  "researcher",                                      :default => false
     t.string   "researcher_affiliation",                          :default => ""
     t.boolean  "researcher_onirb",                                :default => false
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
     t.datetime "deactivated_at"
     t.datetime "suspended_at"
     t.boolean  "can_reactivate_self"
-    t.string   "phone_number",                                    :default => ""
+    t.string   "phone_number"
   end
 
   create_table "waitlist_versions", :force => true do |t|
@@ -2565,10 +2576,10 @@ ActiveRecord::Schema.define(:version => 20120505001439) do
     t.datetime "updated_at"
     t.datetime "resubmitted_at"
     t.string   "phase",          :default => "preenroll", :null => false
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "withdrawal_comments", :force => true do |t|
