@@ -25,16 +25,26 @@ ARGV.each do |source|
   end
 
   rss.items.each do |i|
-    ok = ExternalBlogPost.new(:feed_url => source,
-                              :posted_at => Time.parse(i.pubDate.to_s),
-                              :retrieved_at => sync_time,
-                              :post_url => i.link,
-                              :title => i.title,
-                              :description => i.description).save && ok
+    newpost = ExternalBlogPost.new(:feed_url => source,
+                                   :posted_at => Time.parse(i.pubDate.to_s),
+                                   :retrieved_at => sync_time,
+                                   :post_url => i.link,
+                                   :title => i.title,
+                                   :description => i.description)
+    if newpost.save or
+        ExternalBlogPost.where('feed_url = ? and post_url = ?',
+                               source, i.link).
+        first.
+        update_attributes(:posted_at => Time.parse(i.pubDate.to_s),
+                          :retrieved_at => sync_time,
+                          :title => i.title,
+                          :description => i.description)
+      ok = true
+    end
   end
 
   if ok
-    ExternalBlogPost.where('feed_url = ? and not (retrieved_at = ?)',
-                           feed_url, sync_time).destroy_all
+    ExternalBlogPost.where('feed_url = ? and retrieved_at < ?',
+                           source, sync_time - 30).destroy_all
   end
 end

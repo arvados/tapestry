@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120508193425) do
+ActiveRecord::Schema.define(:version => 20120508230241) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -612,6 +612,8 @@ ActiveRecord::Schema.define(:version => 20120508193425) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "external_blog_posts", ["feed_url", "post_url"], :name => "index_external_blog_posts_on_feed_url_and_post_url", :unique => true
 
   create_table "family_relation_versions", :force => true do |t|
     t.integer  "family_relation_id"
