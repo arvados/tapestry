@@ -1,0 +1,20 @@
+<p>
+  <% if @user.pending_family_relations.size > 0 %>
+
+  <span class="highlight-nextstep">You have
+
+  <%= link_to n_things(@user.pending_family_relations.size, 'pending request'), family_relations_path %>
+
+  to confirm family relationships with other PGP participants.</span>&nbsp;
+
+  <% end %>
+  You have
+  <%= n_things(@user.confirmed_family_relations.size, 'confirmed family relation') -%> enrolled in the project.
+  <% if @user.family_relations.size > @user.confirmed_family_relations.size %>
+  We are awaiting confirmation for
+  <%= n_things(@user.family_relations.size - @user.confirmed_family_relations.size, 'pending request') -%>.
+  <% end %>
+</p>
+<ul>
+<li><%= link_to 'Manage family relations', family_relations_path %></li>
+</ul>

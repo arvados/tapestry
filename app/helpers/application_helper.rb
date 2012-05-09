@@ -118,4 +118,31 @@ EOS
   def uridecode(s)
     URI.unescape(s)
   end
+
+  def n_things(n, thing)
+    if n==1
+      "1 #{thing}"
+    else
+      "#{n} #{thing.pluralize}"
+    end
+  end
+
+  def are_n_things(n, thing)
+    if n==1
+      "is 1 #{thing}"
+    else
+      "are #{n} #{thing.pluralize}"
+    end
+  end
+
+  def humanize_date(t)
+    if t < 6.months.ago ||
+        (t < 2.months.ago && t.year < Time.now.year) ||
+        t > 3.months.from_now ||
+        (t > 1.months.from_now && t.year > Time.now.year)
+      t.strftime '%B %-d, %Y'
+    else
+      t.strftime '%B %-d'
+    end
+  end
 end

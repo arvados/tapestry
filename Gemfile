@@ -38,3 +38,5 @@ end
 
 gem "gmaps4rails", "~> 1.3.0"
 gem 'RedCloth'
+gem 'cells'
+

@@ -1,0 +1,16 @@
+<h2>News feed</h2>
+
+<% @news_items.each do |i| %>
+
+<div style="overflow:auto; margin: 0 0 1em 0">
+  <div style="float:right; margin-left: 2em; color:#444">
+    <%= i.created_at.strftime('%b %-d') %>
+  </div>
+  <b><%= link_to_if(i.respond_to?(:news_feed_link_to) && i.news_feed_link_to,
+	 i.news_feed_title,
+	 (i.respond_to?(:news_feed_link_to) ? i.news_feed_link_to() : nil)) %></b>
+  <br />
+  <p style="margin: 0"><%=raw i.respond_to?(:news_feed_raw_summary) ? i.news_feed_raw_summary : h(i.news_feed_summary) %></p>
+</div>
+
+<% end %>

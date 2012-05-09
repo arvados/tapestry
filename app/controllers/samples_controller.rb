@@ -1,6 +1,6 @@
 class SamplesController < ApplicationController
 
-  before_filter :ensure_researcher, :except => [ 'show_log', 'participant_note', 'update_participant_note', 'mark_as_destroyed' ]
+  before_filter :ensure_researcher, :except => [ 'show', 'show_log', 'participant_note', 'update_participant_note', 'mark_as_destroyed' ]
   skip_before_filter :ensure_enrolled, :except => [ 'participant_note', 'update_participant_note' ]
   skip_before_filter :ensure_latest_consent, :except => [ 'participant_note', 'update_participant_note' ]
   skip_before_filter :ensure_recent_safety_questionnaire, :except => [ 'participant_note', 'update_participant_note' ]
@@ -167,6 +167,12 @@ class SamplesController < ApplicationController
   # GET /samples/1.xml
   def show
     @sample = Sample.find(params[:id])
+
+    if current_user.is_unprivileged? and @sample.participant != current_user
+      redirect_to unauthorized_user_url
+      return
+    end
+
     respond_with @sample
   end
 

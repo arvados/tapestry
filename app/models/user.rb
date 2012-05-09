@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   has_many :datasets, :foreign_key => 'participant_id'
   has_many :spreadsheet_rows, :as => :row_target
 
-  has_many :ccrs
+  has_many :ccrs, :order => 'id ASC'
 
   has_one  :shipping_address, :dependent => :destroy
 
@@ -551,6 +551,10 @@ class User < ActiveRecord::Base
                             secret, "#{self.id}--#{app_identifier}")
   end
 
+  def pending_family_relations
+    return FamilyRelation.find(:all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id])
+  end
+
   protected
 
   def make_hex_code
@@ -563,10 +567,6 @@ class User < ActiveRecord::Base
 
   def make_activation_code
     self.activation_code = self.class.make_token
-  end
-
-  def self.pending_family_relations
-    return FamilyRelations.find(:all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id])
   end
 
   def self.help_datatables_sort_by(sortkey, options={})

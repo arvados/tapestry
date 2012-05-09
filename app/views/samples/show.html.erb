@@ -41,10 +41,12 @@
   <%= @sample.crc_id_s %>
 </p>
 
+<% if current_user.researcher_onirb or current_user.id == @sample.participant_id %>
 <p>
   <b>URL code:</b>
   <%= @sample.url_code %>
 </p>
+<% end %>
 
 <p>
   <b>Participant:</b>

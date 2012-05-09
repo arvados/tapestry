@@ -8,6 +8,24 @@ class SampleLog < ActiveRecord::Base
 
   before_create :set_controlling_user
 
+  def news_feed_title
+    "#{self.sample.material} sample #{self.sample.crc_id_s}"
+  end
+
+  def news_feed_summary
+    s = self.comment
+    if self.actor.researcher
+      s << " (#{self.actor.researcher_affiliation})"
+    elsif self.actor.hex
+      s << " (#{self.actor.hex})"
+    end
+    s
+  end
+
+  def news_feed_link_to
+    self.sample
+  end
+
   private
 
   def set_controlling_user

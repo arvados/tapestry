@@ -1166,3 +1166,23 @@ table.plate-samples {
     border: 0;
     border-collapse: collapse;
 }
+
+#participant-dashboard a {
+    font-weight: normal;
+}
+
+#participant-dashboard p {
+    margin: 1em 0 0 0;
+}
+
+#participant-dashboard ul {
+    margin: 0;
+}
+
+#participant-dashboard ul > li {
+    margin: 0;
+}
+
+#participant-dashboard .highlight-nextstep {
+    background: #ff8;
+}

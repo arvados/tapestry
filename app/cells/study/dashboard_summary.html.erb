@@ -1,0 +1,15 @@
+<p>
+  There <%= are_n_things(Study.approved.where('open = true').size, 'study') %> currently seeking participants.
+
+  <% if @studies_pending.size > 0 %>
+  <span class="highlight-nextstep">There
+    <%= are_n_things(@studies_pending.size, 'study') %>
+    waiting for you to indicate whether you are interested in participating.</span>&nbsp;
+  <% end %>
+</p>
+<ul>
+<% @studies_pending.each do |study| %>
+<li><%= link_to study.name, user_edit_study_url(:id => @user.id, :study_id => study.id) %></li>
+<% end %>
+<li>Learn more about <%= link_to 'other current and past studies', '/pages/studies' %></li>
+</ul>
