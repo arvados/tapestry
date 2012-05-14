@@ -51,7 +51,7 @@ li {
 	margin-bottom: 6px;
 }
 
-ul li {
+ul > li {
 	list-style: square;
 }
 
