@@ -1,12 +1,13 @@
 <div style="display:table" id="participant-dashboard">
   <div style="display:table-row">
     <div style="display:table-cell; width: 25%">
-      <%= render_cell :news_item, :feed, :user => current_user %>
+      <h2>News</h2>
+      <%= render_cell :news_item, :feed, :user => current_user, :show => [:blogs], :limit => 5 %>
     </div>
     <div style="display:table-cell; width: 5%">
     </div>
     <div style="display:table-cell; width: 40%">
-      <h2>Your public profile / participation overview</h2>
+      <h2>Your public profile / participation</h2>
       <%= render_cell :study, :dashboard_summary, :user => current_user %>
       <%= render_cell :ccr, :dashboard_summary, :user => current_user %>
       <%= render_cell :family_relation, :dashboard_summary, :user => current_user %>
@@ -16,6 +17,11 @@
     </div>
     <div style="display:table-cell; width: 25%">
       <h2>Your account</h2>
+      <%= render_cell :user, :dashboard_summary, :user => current_user %>
+      <% if current_user.is_enrolled? and !current_user.deactivated_at %>
+      <h2>Your specimens</h2>
+      <%= render_cell :news_item, :feed, :user => current_user, :show => [:specimens], :limit => 10 %>
+      <% end %>
     </div>
   </div>
 </div>

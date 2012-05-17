@@ -23,3 +23,22 @@
   })(jQuery);
 
 }).call(this);
+
+
+jQuery(function(){
+    var $ = jQuery.noConflict();
+    var hidsome = false;
+    $('div.user-dashboard-summary>*').each(function() {
+	if ($(this).find('.highlight-nextstep').length == 0) {
+	    $(this).hide();
+	    if (!hidsome) {
+		hidsome = true;
+		var $showall = $('<a href="#">more info / options</a>').click(function(){
+		    $(this).parents('div.user-dashboard-summary').first().children().show();
+		    $(this).parent().hide();
+		});
+		$(this).parent().append($showall.wrap('<div class="show-more-container" />').parent());
+	    }
+	}
+    });
+});

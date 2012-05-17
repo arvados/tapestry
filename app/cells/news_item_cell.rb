@@ -1,9 +1,13 @@
 class NewsItemCell < Cell::Rails
 
   def feed(options)
-    @news_items =
-      ExternalBlogPost.find(:all, :order => 'posted_at desc', :limit => 6)
-    if options and options[:user]
+    show = (options && options[:show]) || [:blogs, :specimens]
+    @news_items = []
+    if show.index(:blogs)
+      @news_items <<
+        ExternalBlogPost.find(:all, :order => 'posted_at desc', :limit => (options[:limit] || 6))
+    end
+    if show.index(:specimens)
       @news_items << SampleLog.
         includes(:sample).
         where('samples.participant_id = ?', options[:user].id).
@@ -24,6 +28,7 @@ class NewsItemCell < Cell::Rails
     }
     @news_items.sort! { |a,b| a.created_at <=> b.created_at }
     @news_items.reverse!
+    @news_items = @news_items[0, options[:limit]] if options[:limit]
     render
   end
 

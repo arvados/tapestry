@@ -1,5 +1,3 @@
-<h2>News feed</h2>
-
 <% @news_items.each do |i| %>
 
 <div style="overflow:auto; margin: 0 0 1em 0">
@@ -13,4 +11,7 @@
   <p style="margin: 0"><%=raw i.respond_to?(:news_feed_raw_summary) ? i.news_feed_raw_summary : h(i.news_feed_summary) %></p>
 </div>
 
+<% end %>
+<% if @news_items.size == 0 %>
+<p>No news.</p>
 <% end %>

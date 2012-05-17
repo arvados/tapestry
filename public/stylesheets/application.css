@@ -1186,3 +1186,9 @@ table.plate-samples {
 #participant-dashboard .highlight-nextstep {
     background: #ff8;
 }
+
+.show-more-container {
+    margin-top: 1em;
+    text-align: center;
+    background: #ff8;
+}
