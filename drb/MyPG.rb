@@ -70,6 +70,7 @@ class MyPG
 					rescue Exception => e
 						puts "Trapped exception in worker"
             puts "#{work.action}: job failed: #{e.inspect()}"
+            puts "#{e.backtrace()}"
     				callback('userlog',work.user_id,
               { "message" => "#{work.action}: job failed: #{e.inspect()}", 
                 "user_message" => "Error: job failed." } )
@@ -189,10 +190,16 @@ class MyPG
       error_message = e.inspect()
       puts "Trapped exception in process_ccr_worker"
       puts "#{work.action}: job failed: #{error_message}"
+      puts "#{e.backtrace()}"
+
+      @user_error_message = "Failed to process PHR (#{@version})."
+      if e.class == Nokogiri::XML::XPath::SyntaxError then
+        @user_error_message = "Failed to process PHR: this file is not a valid CCR xml file."
+      end
 
       callback('userlog',work.user_id,
         { "message" => "process_ccr: failed to process PHR (#{@ccr_filename})",
-          "user_message" => "Failed to process PHR (#{@version})." } )
+          "user_message" => @user_error_message } )
     end
 
    end

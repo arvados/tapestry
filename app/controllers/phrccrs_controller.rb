@@ -29,7 +29,7 @@ class PhrccrsController < ApplicationController
       return
     end
 
-    flash[:notice] = "Your file has been queued for processing"
+    flash[:notice] = "Your file has been queued for processing. If your file does not appear on this page in a few minutes, please check your user log."
 
     redirect_to :action => :show
   end

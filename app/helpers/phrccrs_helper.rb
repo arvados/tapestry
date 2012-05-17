@@ -67,7 +67,7 @@ module PhrccrsHelper
   def dob_to_dob_age(dob_s)
     if (dob_s && dob_s != '')
       begin
-        dob = Date.parse(dob_s.text)
+        dob = parse_date(dob_s.text)
       rescue
         return ''
       end
@@ -199,7 +199,9 @@ module PhrccrsHelper
     unless n && n.length > 0
       return ''
     end
-    return n[0].inner_text[0,10]
+    @it = get_inner_text(n[0])
+    @it = @it[0,10] if not @it.nil?
+    return @it
   end
 
   # Returns location of private key used to sign Google Health requests
@@ -316,18 +318,18 @@ module PhrccrsHelper
         t = get_element(c, 'Type')
         next if t.nil?
         tx = get_element(t, 'Text')
-        tx_s = tx.inner_text
+        tx_s = get_inner_text(tx)
         next if tx.nil? || tx_s.downcase != name.downcase
         edt = get_element(c, 'ExactDateTime')
         return nil if edt.nil?
-        edt_text = edt.inner_text
-        return nil if edt_text == '--T00:00:00Z'
+        edt_text = get_inner_text(edt)
+        return nil if edt.nil? || edt_text == '--T00:00:00Z'
         if edt_text.length == 4
           edt_text += '-01-01' #Append dummy date for entries with just the year
         elsif edt_text.length == 7
           edt_text += '-01' #Some ccrs have month, but not day
         end
-        return DateTime.parse(edt_text)
+        return parse_date(edt_text)
       end
     }
     return nil
@@ -411,7 +413,7 @@ module PhrccrsHelper
         dem.dob = nil
       else
         dob_s = get_inner_text(dob)
-        dem.dob = dob_s == '--T00:00:00Z' ? nil : DateTime.parse(dob_s)
+        dem.dob = dob_s == '--T00:00:00Z' ? nil : parse_date(dob_s)
       end
     rescue
       dem.dob = nil
@@ -633,7 +635,8 @@ module PhrccrsHelper
       if ccr.origin == 'gh' then
         o.start_date = get_date_element(t, 'Collection start date')
       else
-        o.start_date = DateTime.parse(get_element(get_element(t, 'DateTime'),'ExactDateTime').inner_text)
+        @start = get_inner_text(get_element(get_element(t, 'DateTime'),'ExactDateTime'))
+        o.start_date = parse_date(@start) if not @start.nil?
       end
       o.codes = get_codes(d)
       lab_test_results << o
@@ -683,6 +686,21 @@ module PhrccrsHelper
     return ccr
   end
 
+  def parse_date(string)
+    # Date.strptime needs a bit of help for certain (incomplete) date formats.
+    @format_string = nil
+    if string =~ /^\d{4}-\d{2}$/ then
+      @format_string = '%Y-%m'
+    elsif string =~ /^\d{4}$/ then
+      @format_string = '%Y'
+    end
+    if @format_string then
+      return Date.strptime(string,@format_string)
+    else
+      return Date.strptime(string)
+    end
+  end
+
   # Fix Google Health problem where if vital signs cannot be updated through Google Health if it
   # was previously added by another CCR provider
   def fix_height_weight_issue(dem, results)
@@ -696,8 +714,8 @@ module PhrccrsHelper
     if (latest_weight_oz.nil? || latest_height_in == '')
       latest_weight_oz = 0
     end
-    latest_height_date = DateTime.parse('0000-01-01')
-    latest_weight_date = DateTime.parse('0000-01-01')
+    latest_height_date = parse_date('0000-01-01')
+    latest_weight_date = parse_date('0000-01-01')
     results.each{|r|
       if (r.description == 'Height')
         if r.start_date.nil? && latest_height_in == 0 ||
