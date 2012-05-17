@@ -20,7 +20,7 @@ gem 'alexdunae-validates_email_format_of', :require => 'validates_email_format_o
 gem 'ruby-prof'
 gem 'newrelic_rpm'
 
-gem 'rails3_acts_as_paranoid'
+gem 'rails3_acts_as_paranoid', "~> 0.0.9"
 gem 'cure_acts_as_versioned', :require => 'acts_as_versioned'
 gem 'userstamp'
 
