@@ -1,0 +1,94 @@
+<div style="display:table" class="sitemap">
+  <div style="display:table-row">
+    <div style="display:table-cell; width: 30%">
+      <h2>Account</h2>
+      <p>
+	<%= link_to 'Email and password', edit_user_path(current_user) %>
+	<br />
+	<%= link_to 'Shipping address', user_shipping_address_path %>
+	<br />
+	<%= link_to 'Mailing lists', edit_user_path(current_user, :anchor => 'mailinglists') %>
+	<br />
+	<%= link_to 'Withdraw', edit_user_path(current_user, :anchor => 'withdraw') %>
+	<br />
+	<%= content_tag :span, 'Identity verification', :class => 'nolink' %>
+      </p>
+      <h2>Consent</h2>
+      <p>
+	<%= link_to 'Consent documents', participation_consent_path %>
+	<br />
+	&bull;&nbsp;&nbsp;<%= link_to 'submit new', participation_consent_path %>
+	<br />
+	<%= content_tag :span, raw('&bull;&nbsp;&nbsp;history'), :class => 'nolink' %>
+	<br />
+	<%= link_to 'Safety questionnaires', safety_questionnaires_path %>
+	<br />
+	&bull;&nbsp;&nbsp;<%= link_to 'submit new', new_safety_questionnaire_path %>
+	<br />
+	&bull;&nbsp;&nbsp;<%= link_to 'history', safety_questionnaires_path %>
+	<br />
+	<%= link_to 'Designated proxies', named_proxies_path %>
+	<br />
+	<%= link_to 'Enrollment letter', enrollment_application_results_path %>
+      </p>
+    </div>
+    <div style="display:table-cell; width: 5%">
+    </div>
+    <div style="display:table-cell; width: 30%">
+      <h2>Public profile</h2>
+      <p>
+	<%= link_to 'View and edit', public_profile_path(current_user.hex) %>
+	<br />
+	<%= link_to 'Upload and manage files', user_files_path %>
+	<br />
+	<%= link_to 'Personal health records', phrccr_path %>
+	<br />
+	<%= link_to 'Specimen tracking', public_profile_path(current_user.hex, :anchor => 'samples') %>
+	<br />
+	<%= content_tag :span, 'Specimen analysis results', :class => 'nolink' %>
+      </p>
+      <h2>Specimens</h2>
+      <p>
+	<%= link_to 'Donate specimens', page_path('studies') %>
+	<br />
+	<%= link_to 'Claim a kit', study_claim_kit_path %>
+	<br />
+	<%= link_to 'Specimen log', public_profile_path(current_user.hex, :anchor => 'samples') %>
+	<br />
+	<%= content_tag :span, 'Review and publish specimen analysis results', :class => 'nolink' %>
+      </p>
+      <h2>Contributing trait data</h2>
+      <p>
+	<%= link_to 'Personal health records', phrccr_path %>
+	<br />
+	<%= link_to 'Trait surveys', trait_surveys_path %>
+	<br />
+	<%= link_to 'Upload and manage files', user_files_path %>
+      </p>
+    </div>
+    <div style="display:table-cell; width: 5%">
+    </div>
+    <div style="display:table-cell; width: 30%">
+      <h2>Help</h2>
+      <p>
+	<%= content_tag :span, 'FAQ', :class => 'nolink' %>
+	<br />
+	<%= link_to 'Site map', page_path('sitemap') %>
+	<br />
+	<%= link_to 'Contact us', new_message_path %>
+	<br />
+	<%= link_to 'Report a bug', new_message_path %>
+      </p>
+      <h2>Community</h2>
+      <p>
+	<%= link_to 'Learn more about the PGP', 'http://www.personalgenomes.org/', :title => 'www.personalgenomes.org' %>
+	<br />
+	<%= link_to 'PGP blog', 'http://blog.personalgenomes.org/', :title => 'blog.personalgenomes.org' %>
+	<br />
+	<%= link_to 'Participant directory', users_path %>
+	<br />
+	<%= content_tag :span, 'Discussion forum', :class => 'nolink' %>
+      </p>
+    </div>
+  </div>
+</div>

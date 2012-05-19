@@ -53,6 +53,8 @@ This information is private and not part of your public profile.
 <h2>Shipping address</h2>
 <%= link_to 'Update shipping address', user_shipping_address_url %>
 
+<a name="mailinglists" />
+
 <h2>Manage mailing list subscriptions</h2>
 <table class="admin_table">
   <tr>
@@ -80,6 +82,8 @@ This information is private and not part of your public profile.
               :controller => 'phrccr',
               :action => 'unlink_googlehealth' %>
 <% end %>
+
+<a name="withdraw" />
 
 <% if defined? ENABLE_SELF_SERVICE_WITHDRAWAL then %>
 <h2>Withdraw from the PGP</h2>

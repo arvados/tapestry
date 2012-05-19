@@ -1192,3 +1192,16 @@ table.plate-samples {
     text-align: center;
     background: #ff8;
 }
+
+#body div.sitemap h2 {
+    color: #000;
+}
+div.sitemap a {
+    color: #458;
+    font-weight: normal;
+    text-decoration: none;
+}
+div.sitemap .nolink {
+    color: #bbb;
+    cursor: default;
+}
