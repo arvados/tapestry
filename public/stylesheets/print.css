@@ -1,0 +1,5 @@
+#body { padding: 0; margin: 0; background: #fff; border: none; }
+
+div.menu, h1.verbose, div#foot, #body > div.clear { display: none; }
+
+#body a, #body h1, #body h2, #body h3 { color: #000; }
