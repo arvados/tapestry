@@ -8,6 +8,7 @@
     </div>
     <div style="display:table-cell; width: 40%">
       <h2>Your public profile / participation</h2>
+      <%= render_cell :profile, :dashboard_summary, :user => current_user %>
       <%= render_cell :study, :dashboard_summary, :user => current_user %>
       <%= render_cell :ccr, :dashboard_summary, :user => current_user %>
       <%= render_cell :family_relation, :dashboard_summary, :user => current_user %>
@@ -25,4 +26,3 @@
     </div>
   </div>
 </div>
-
