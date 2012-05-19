@@ -253,7 +253,7 @@ form .submit input.long {
 }
 
 #body .menu ul.links li {
-  display: inline;
+  display: inline-block;
   font: 14px/20px Arial, Helvetica, sans-serif;
   list-style: none;
   margin: 0;

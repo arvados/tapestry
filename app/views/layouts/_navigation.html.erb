@@ -1,22 +1,20 @@
 <div class="menu">
   <ul class="links">
-    <% unless current_user -%>
-      <%= nav_element 'Log in', login_url %>
-    <% else -%>
-      <%= nav_element 'Home', root_url %>
-      <%= nav_element 'Account', edit_user_url(current_user) if !current_user.deactivated_at %>
-      <%= nav_element 'Log out', logout_url %>
-      <% if current_user.is_researcher? or current_user.is_admin? %>
-        <li><%= link_to 'Researcher Tools', '/pages/researcher_tools' %></li>
-      <% end %>
-      <% if current_user.is_admin? %>
-        <li <%= 'class="current"' if in_admin_section? %> ><%= link_to 'Admin', admin_root_url %></li>
-      <% end %>
-      <%= nav_element 'Contact Us', new_message_url %>
+    <% unless current_user %>
+      <%= nav_element 'Log in', login_url -%>
+    <% else %>
+      <%= nav_element 'Home', root_url -%>
+      <%= nav_element 'Account', edit_user_url(current_user) if !current_user.deactivated_at -%>
+      <%= nav_element 'Log out', logout_url -%>
+      <%= nav_element 'Researcher Tools', '/pages/researcher_tools' if current_user.is_researcher? or current_user.is_admin? -%>
+      <%= nav_element 'Admin', admin_root_path if current_user.is_admin? -%>
+      <%= nav_element 'Contact Us', new_message_url -%>
+
       <% if current_user and session[:real_uid] and session[:switch_back_to] and User.find(session[:real_uid].to_i).verify_userswitch_cookie(session[:switch_back_to]) %>
-        <li><span class="sudo-warning">Logged in as <b><%= current_user.full_name %></b>. <%= link_to "Back to #{User.find(session[:real_uid]).full_name}", switch_to_user_path(session[:real_uid]), :method => :post %></span></li>
-      <% end %>
-    <% end -%>
+    <li><span class="sudo-warning">Logged in as <b><%= current_user.full_name %></b>. <%= link_to "Back to #{User.find(session[:real_uid]).full_name}", switch_to_user_path(session[:real_uid]), :method => :post %></span></li>
+    <% end %>
+
+    <% end %>
   </ul>
   <ul class="pgpid">
     <% if current_user and current_user.enrolled -%>
