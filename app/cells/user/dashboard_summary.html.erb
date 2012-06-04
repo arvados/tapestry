@@ -1,6 +1,6 @@
 <div class="user-dashboard-summary">
 
-<% if @user.researcher %>
+<% if @user and @user.researcher %>
 
 <div>
 <p><span class="highlight-nextstep">Researcher account:</span>
@@ -8,22 +8,22 @@
   <br /><%= @user.researcher_affiliation %></b>
 </p>
 
-<% if @user.researcher_onirb %>
+<% if @user and @user.researcher_onirb %>
 <p>You are listed on the IRB roster.</p>
 <% end %>
 </div>
 
-<% elsif !@user.is_enrolled? %>
+<% elsif @user and !@user.is_enrolled? %>
 
 <p>You are not enrolled.</p>
 
-<% else %>
+<% elsif @user %>
 
 <p>You have been enrolled in the PGP since <%= humanize_date(@user.enrolled) %>.</p>
 
 <% end %>
 
-<% if @user.deactivated_at %>
+<% if @user and @user.deactivated_at %>
 <div>
 <p>
   <span class="highlight-nextstep">Your account was deactivated</span> on <%= humanize_date(@user.deactivated_at) %>.
@@ -31,7 +31,7 @@
 </div>
 <% end %>
 
-<% if @user.is_enrolled? %>
+<% if @user and @user.is_enrolled? %>
 <div>
 <p>Your most recent safety questionnaire was submitted on <%= humanize_date(@user.safety_questionnaires.last.datetime) %>.</p>
 <ul>
@@ -41,7 +41,7 @@
 </div>
 <% end %>
 
-<% if @user.is_enrolled? and !@user.deactivated_at %>
+<% if @user and @user.is_enrolled? and !@user.deactivated_at %>
 
 <div>
 <% if @user.named_proxies.size > 0 %>

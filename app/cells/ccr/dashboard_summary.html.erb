@@ -1,4 +1,4 @@
-<% if @user.ccrs.size > 0 %>
+<% if @user and @user.ccrs.size > 0 %>
 <p>Your most recent PHR (personal health record) data file was received on <%= humanize_date(@user.ccrs.last.updated_at) -%>.</p>
 <% else %>
 <p>You have not provided any PHR (personal health record) data files.</p>
@@ -6,7 +6,7 @@
 
 <ul>
 <li><%= link_to 'Upload a new data file', phrccr_path %></li>
-<% if @user.ccrs.size > 0 %>
+<% if @user and @user.ccrs.size > 0 %>
 <li><%= link_to 'Show previous uploads', phrccr_path %></li>
 <% else %>
 <li><%= link_to 'Learn more', phrccr_path %></li>

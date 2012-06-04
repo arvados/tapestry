@@ -1,3 +1,4 @@
+<% if @user %>
 <p>
   <% if @user.pending_family_relations.size > 0 %>
 
@@ -18,3 +19,4 @@
 <ul>
 <li><%= link_to 'Manage family relations', family_relations_path %></li>
 </ul>
+<% end %>

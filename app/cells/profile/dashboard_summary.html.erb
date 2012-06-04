@@ -1,4 +1,4 @@
-<% if @user.is_enrolled? %>
+<% if @user and @user.is_enrolled? %>
 <p>Your PGP ID is <b><%= @user.hex -%></b>.
 </p>
 <ul>
