@@ -1,5 +1,13 @@
 class UserMailer < ActionMailer::Base
 
+  def dataset_notification_message(url,user)
+    @url = url
+    @user = user
+    mail(:from => ADMIN_EMAIL,
+         :to => @user.email,
+         :subject => "You have a new dataset waiting for review")
+  end
+
   def support_message(message,user)
     @message = message
     @user = user

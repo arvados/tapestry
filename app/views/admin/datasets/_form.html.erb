@@ -1,0 +1,37 @@
+
+<%= error_messages_for :dataset, :header_message => 'Error: data could not be saved.', :message => nil %>
+
+<%= form_for [:admin, @dataset] do |f| -%>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, :size => 50 %>
+  </div>
+  <div class="field">
+    <%= f.label :human_id, "Participant hex id" %><br />
+    <% if @dataset.released_to_participant then -%> 
+      <%= @dataset.human_id %>
+    <% else -%>
+      <%= f.text_field :human_id %>
+    <% end -%>
+  </div>
+  <div class="field">
+    <%= f.label :locator, 'Warehouse locator' %><br />
+    <% if @dataset.released_to_participant then -%> 
+      <%= @dataset.locator %>
+    <% else -%>
+      <%= f.text_field :locator, :size => 80 %>
+    <% end -%>
+  </div>
+  <div class="field">
+    <%= f.label :researcher_notes, 'Researcher notes (not visible to participant):' %><br />
+    <%= f.text_area :researcher_notes, :cols => 80 %>
+  </div>
+  <div class="field">
+    <%= f.label :submit_to_get_e, 'Submit to GET-Evidence:' %><br />
+    <%= f.check_box :submit_to_get_e, { :checked => (@dataset.released_to_participant ? false : true) } %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

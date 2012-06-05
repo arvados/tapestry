@@ -16,6 +16,9 @@ Public profile url: <%= link_to public_profile_url_string(@user), public_profile
 <%= form_for [:admin, @user], :html => { :method => :put } do |f| -%>
 <%= error_messages_for :user %>
 
+<h3>Datasets:</h3>
+<%= @user.completed_content_area_count %> / <%= ContentArea.count %> (<%= link_to 'Details', admin_user_exam_responses_path(@user) %>)</p>
+
 <h3>Completed Content Areas:</h3>
 <%= @user.completed_content_area_count %> / <%= ContentArea.count %> (<%= link_to 'Details', admin_user_exam_responses_path(@user) %>)</p>
 

@@ -200,6 +200,8 @@ Tapestry::Application.routes.draw do
       match '/reports/download/:id' => 'reports#download', :as => :report_download
       match '/reports/exam' => 'reports#exam', :as => :reports_exam
       resources :reports
+      resources :datasets
+      match '/datasets/:id/notify' => 'datasets#notify', :as => :dataset_notify_participant
       resources :content_areas do
           resources :exams do
               resources :exam_versions do
