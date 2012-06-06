@@ -34,6 +34,7 @@ class Admin::DatasetsController < Admin::AdminControllerBase
 
     if @dataset.save
       flash[:notice] = 'Dataset was successfully created.'
+      maybe_submit_to_get_evidence
       redirect_to admin_datasets_path
     else
       render :action => 'new'
@@ -43,19 +44,7 @@ class Admin::DatasetsController < Admin::AdminControllerBase
   def update
     if @dataset.update_attributes(params[:dataset])
       flash[:notice] = 'Dataset was successfully updated.'
-
-      if params[:dataset][:submit_to_get_e] then
-        # do GET-Evidence callback
-        begin
-          json_object = JSON.parse(open(URI.encode("#{GET_EVIDENCE_BASE_URL}/submit?api_key=#{GET_EVIDENCE_API_KEY}&api_secret=#{GET_EVIDENCE_API_SECRET}&dataset_locator=#{@dataset.locator}&dataset_name=#{@dataset.name}&dataset_is_public=false")).read)
-          @dataset.location = json_object['result_url']
-          @dataset.save!
-        rescue Exception => e
-          # Callout error
-          STDERR.puts e.pretty_inspect()
-          flash[:error] = "There was an error contacting GET-Evidence. Please try again later."
-        end
-      end
+      maybe_submit_to_get_evidence
       redirect_to admin_datasets_path
     else
       render :action => "edit"
@@ -73,4 +62,27 @@ class Admin::DatasetsController < Admin::AdminControllerBase
   def set_dataset
     @dataset = Dataset.find(params[:id])
   end
+
+  def maybe_submit_to_get_evidence
+    return unless params[:dataset][:submit_to_get_e]
+    begin
+      submit_params = {
+        'api_key' => GET_EVIDENCE_API_KEY,
+        'api_secret' => GET_EVIDENCE_API_SECRET,
+        'dataset_locator' => @dataset.locator,
+        'dataset_name' => @dataset.name,
+        'dataset_is_public' => 0
+      }.collect {
+        |k,v| URI.encode(k, /\W/) + '=' + URI.encode(v.to_s, /\W/)
+      }.join('&')
+      json_object = JSON.parse(open("#{GET_EVIDENCE_BASE_URL}/submit?#{submit_params}").read)
+      @dataset.location = json_object['result_url']
+      @dataset.save!
+    rescue Exception => e
+      # Callout error
+      STDERR.puts "Error contacting GET-Evidence: #{e.inspect}"
+      flash[:error] = "There was an error contacting GET-Evidence. Please try again later."
+    end
+  end
+
 end
