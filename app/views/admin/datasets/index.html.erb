@@ -30,7 +30,7 @@
       <td><%= link_to 'Edit', edit_admin_dataset_path(dataset) %></td>
       <% if not dataset.released_to_participant then -%>
       <td><%= link_to 'Destroy', [:admin, dataset], :confirm => 'Are you sure you want to delete this dataset?', :method => :delete %></td>
-      <td><%= link_to 'Notify participant', admin_dataset_notify_participant_url(dataset), :confirm => 'Are you sure you want to release this dataset to the participant and notify them of its existence?' %></td>
+      <td><%= link_to('Notify participant', admin_dataset_notify_participant_url(dataset), :confirm => 'Are you sure you want to release this dataset to the participant and notify them of its existence?') if dataset.participant && (!dataset.participant.deactivated_at || dataset.participant.can_reactivate_self) && !dataset.participant.suspended_at %></td>
       <% end -%>
     </tr>
   <% end %>
