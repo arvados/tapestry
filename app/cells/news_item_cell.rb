@@ -26,7 +26,11 @@ class NewsItemCell < Cell::Rails
       !x.respond_to?(:news_feed_title) ||
       !x.respond_to?(:created_at)
     }
-    @news_items.sort! { |a,b| a.created_at <=> b.created_at }
+    @news_items.sort! { |a,b|
+      ka = a.respond_to?(:news_feed_date) ? a.news_feed_date : a.created_at
+      kb = b.respond_to?(:news_feed_date) ? b.news_feed_date : b.created_at
+      ka <=> kb
+    }
     @news_items.reverse!
     @news_items = @news_items[0, options[:limit]] if options[:limit]
     render
