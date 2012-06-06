@@ -32,6 +32,22 @@ class Dataset < ActiveRecord::Base
     "http://evidence.personalgenomes.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}"
   end
 
+  def submit_to_get_evidence!
+    submit_params = {
+      'api_key' => GET_EVIDENCE_API_KEY,
+      'api_secret' => GET_EVIDENCE_API_SECRET,
+      'dataset_locator' => self.locator,
+      'dataset_name' => self.name,
+      'dataset_is_public' => 0,
+      'human_id' => self.human_id
+    }.collect {
+      |k,v| URI.encode(k, /\W/) + '=' + URI.encode(v.to_s, /\W/)
+    }.join('&')
+    json_object = JSON.parse(open("#{GET_EVIDENCE_BASE_URL}/submit?#{submit_params}").read)
+    self.location = json_object['result_url']
+    self.save!
+  end
+
 protected
   def set_participant_id
     @p = User.where('hex = ?',self.human_id).first

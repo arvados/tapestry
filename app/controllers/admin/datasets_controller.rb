@@ -66,19 +66,7 @@ class Admin::DatasetsController < Admin::AdminControllerBase
   def maybe_submit_to_get_evidence
     return unless params[:dataset][:submit_to_get_e]
     begin
-      submit_params = {
-        'api_key' => GET_EVIDENCE_API_KEY,
-        'api_secret' => GET_EVIDENCE_API_SECRET,
-        'dataset_locator' => @dataset.locator,
-        'dataset_name' => @dataset.name,
-        'dataset_is_public' => 0,
-        'human_id' => @dataset.human_id
-      }.collect {
-        |k,v| URI.encode(k, /\W/) + '=' + URI.encode(v.to_s, /\W/)
-      }.join('&')
-      json_object = JSON.parse(open("#{GET_EVIDENCE_BASE_URL}/submit?#{submit_params}").read)
-      @dataset.location = json_object['result_url']
-      @dataset.save!
+      @dataset.submit_to_get_evidence!
     rescue Exception => e
       # Callout error
       STDERR.puts "Error contacting GET-Evidence: #{e.inspect}"
