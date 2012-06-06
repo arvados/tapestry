@@ -21,7 +21,7 @@
   <% @datasets.each do |dataset| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=  dataset.id %></td>
-      <td><%= dataset.name %></td>
+      <td><%= link_to_if dataset.location, dataset.name, dataset.location %></td>
       <td><%= link_to dataset.human_id, admin_user_url(dataset.participant_id) %></td>
       <td><%= dataset.released_to_participant ? 'Yes' : 'No' %></td>
       <td><%= dataset.sent_notification_at.to_s %></td>
