@@ -71,7 +71,8 @@ class Admin::DatasetsController < Admin::AdminControllerBase
         'api_secret' => GET_EVIDENCE_API_SECRET,
         'dataset_locator' => @dataset.locator,
         'dataset_name' => @dataset.name,
-        'dataset_is_public' => 0
+        'dataset_is_public' => 0,
+        'human_id' => @dataset.human_id
       }.collect {
         |k,v| URI.encode(k, /\W/) + '=' + URI.encode(v.to_s, /\W/)
       }.join('&')
