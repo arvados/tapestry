@@ -26,13 +26,13 @@ class Dataset < ActiveRecord::Base
 
   # implement "genetic data" interface
   def date
-    "N/A"
+    published_at
   end
   def data_type
     "Whole Genome or Exome"
   end
   def download_url
-    "http://evidence.personalgenomes.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}"
+    "http://evidence.personalgenomes.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}" if self.location.match(/evidence\.personalgenomes\.org\/hu[0-9A-F]+$/)
   end
 
   def submit_to_get_evidence!(make_public = 0)
