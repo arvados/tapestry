@@ -1,6 +1,7 @@
 class SpecimenAnalysisDataController < ApplicationController
   
   before_filter :set_dataset, :only => [:publish]
+  before_filter :only_participant_can_operate, :only => [:publish]
 
   def index
     @datasets = current_user.datasets.all
@@ -29,6 +30,10 @@ class SpecimenAnalysisDataController < ApplicationController
 private
   def set_dataset
     @dataset = Dataset.find(params[:id])
+  end
+
+  def only_participant_can_operate
+    return access_denied unless @dataset.participant_id == current_user.id or current_user.is_admin?
   end
 
   def make_public_on_get_evidence
