@@ -31,6 +31,7 @@ class User < ActiveRecord::Base
   has_many :removal_requests, :dependent => :destroy
   has_many :samples, :foreign_key => 'participant_id'
   has_many :datasets, :foreign_key => 'participant_id'
+  has_many :published_datasets, :class_name => 'Dataset', :foreign_key => 'participant_id', :conditions => 'published_at IS NOT NULL'
   has_many :spreadsheet_rows, :as => :row_target
 
   has_many :ccrs, :order => 'id ASC'
@@ -198,7 +199,7 @@ class User < ActiveRecord::Base
     t.add lambda{|user| user.samples.find_all { |s| s.last_received }.collect { |s| s.material }.uniq}, :as => :received_sample_materials
     t.add 'ccrs.size', :as => :has_ccrs
     t.add 'confirmed_family_relations.size', :as => :has_relatives_enrolled
-    t.add 'datasets.size', :as => :has_whole_genome_data
+    t.add 'published_datasets.size', :as => :has_whole_genome_data
     t.add 'user_files.size', :as => :has_other_user_files
   end
 
@@ -583,7 +584,7 @@ class User < ActiveRecord::Base
     when :has_relatives_enrolled
       ['count(distinct family_relations.id)', { :confirmed_family_relations => {} }]
     when :has_whole_genome_data
-      ['count(distinct datasets.id)', { :datasets => {} }]
+      ['count(distinct datasets.id)', { :published_datasets => {} }]
     when :has_other_user_files
       ['count(distinct user_files.id)', { :user_files => {} }]
     else
@@ -602,7 +603,7 @@ class User < ActiveRecord::Base
   end
 
   def self.include_for_api(api_template)
-    [:ccrs, :user_files, :datasets, :samples, :confirmed_family_relations]
+    [:ccrs, :user_files, :published_datasets, :samples, :confirmed_family_relations]
   end
 
 end

@@ -101,6 +101,6 @@ class ProfilesController < ApplicationController
       @sample_groups[-1].push s
     end
 
-    @user_files_and_datasets = @user.datasets.where('published_at') | @user.user_files
+    @user_files_and_datasets = @user.published_datasets | @user.user_files
   end
 end
