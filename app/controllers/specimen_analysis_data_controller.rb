@@ -8,7 +8,7 @@ class SpecimenAnalysisDataController < ApplicationController
       if ds.seen_by_participant_at.nil?
         ds.seen_by_participant_at = Time.now() 
         ds.save
-        current_user.log("Participant saw dataset #{@dataset.name} (#{@dataset.id})")
+        current_user.log("Participant saw dataset #{ds.name} (#{ds.id})")
       end
     end
   end
