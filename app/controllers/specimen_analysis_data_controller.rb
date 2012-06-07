@@ -4,7 +4,7 @@ class SpecimenAnalysisDataController < ApplicationController
   before_filter :only_participant_can_operate, :only => [:publish]
 
   def index
-    @datasets = current_user.datasets.all
+    @datasets = current_user.datasets.where('released_to_participant')
     @datasets.each do |ds|
       if ds.seen_by_participant_at.nil?
         ds.seen_by_participant_at = Time.now() 
