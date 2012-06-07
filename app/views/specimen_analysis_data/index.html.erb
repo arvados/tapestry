@@ -21,7 +21,7 @@ first confirmed by a licensed healthcare professional. </p>
     <th>Report</th>
     <th>Publication date</th>
   </tr>
-  <% @datasets.each do |dataset| -%>
+  <% @datasets.select(&:released_to_participant).each do |dataset| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%= dataset.seen_by_participant_at.strftime("%b %e, %Y").to_s %></td>
       <td><%= dataset.name %></td>
