@@ -25,7 +25,7 @@ first confirmed by a licensed healthcare professional. </p>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%= dataset.seen_by_participant_at.strftime("%b %e, %Y").to_s %></td>
       <td><%= dataset.name %></td>
-      <td><%= link_to('specimen',public_profile_path(current_user.hex, :anchor => 'samples')) %></td>
+      <td><%= dataset.sample ? link_to(dataset.sample.crc_id_s, public_profile_path(current_user.hex, :anchor => 'samples')) : '-' %></td>
       <td><%= link_to_if dataset.location, 'view', dataset.location %></td>
       <td><%= dataset.published_at.nil? ? raw("<strong>" + (dataset.seen_by_participant_at + 30.days).strftime("%b %e, %Y").to_s + "</strong> or " + link_to('Publish now', publish_specimen_analysis_data_path(dataset))) : dataset.published_at.strftime("%b %e, %Y").to_s %></td>
     </tr>

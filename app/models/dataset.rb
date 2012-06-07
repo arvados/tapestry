@@ -3,6 +3,7 @@ class Dataset < ActiveRecord::Base
   stampable
 
   belongs_to :participant, :class_name => 'User'
+  belongs_to :sample
 
   validates :name, :uniqueness => { :scope => 'participant_id' }
   validates :participant, :presence => true
