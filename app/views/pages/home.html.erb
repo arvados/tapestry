@@ -79,6 +79,9 @@
   &nbsp;&nbsp;<%= link_to "Claim a kit", "/studies/claim" %></li>
   <li><strong>Upload &amp; manage data</strong><br>
   &nbsp;&nbsp;<%= link_to 'Personal health records', phrccr_path %><br />
+  <% if current_user.datasets.released_to_participant.size > 0 -%>
+  &nbsp;&nbsp;<%= link_to 'Specimen analysis data', specimen_analysis_data_index_path %><br />
+  <% end -%>
   &nbsp;&nbsp;<%= link_to 'Other files', user_files_path %></li>
   <li><strong>Enrollment application</strong><br>
   &nbsp;&nbsp;<%= link_to "Review results", enrollment_application_results_path %></li>

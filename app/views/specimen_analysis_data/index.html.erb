@@ -1,0 +1,33 @@
+<h2>Specimen analysis data</h2>
+
+<p>Once the PGP has completed the analysis of your specimen(s), the PGP will make
+the data available to you here.  After 30 days, or at your option immediately,
+these data will be made available on the PGP’s public website and database and
+these data will be associated with your PGP public profile.  During this 30 day
+period you may choose to 
+<%= link_to('withdraw from the study',edit_user_url(current_user, :anchor => "withdraw")) %> 
+and your unpublished specimen analysis data will not be made public.</p>
+
+<p>Please remember that specimen analysis data is for research purposes only.  You
+may not use this data for any medical or clinical purpose unless the data are
+first confirmed by a licensed healthcare professional. </p>
+
+<h3>Specimen analysis history</h3>
+<table class="admin_table">
+  <tr>
+    <th>Date returned</th>
+    <th>Description</th>
+    <th>Specimen</th>
+    <th>Report</th>
+    <th>Publication date</th>
+  </tr>
+  <% @datasets.each do |dataset| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%= dataset.seen_by_participant_at.strftime("%b %e, %Y").to_s %></td>
+      <td><%= dataset.name %></td>
+      <td><%= link_to('specimen',public_profile_path(current_user.hex, :anchor => 'samples')) %></td>
+      <td><%= link_to_if dataset.location, 'view', dataset.location %></td>
+      <td><%= dataset.published_at.nil? ? raw("<strong>" + (dataset.seen_by_participant_at + 30.days).strftime("%b %e, %Y").to_s + "</strong> or " + link_to('Publish now', publish_dataset_url(dataset))) : dataset.published_at.strftime("%b %e, %Y").to_s %></td>
+    </tr>
+  <% end %>
+</table>

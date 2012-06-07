@@ -150,6 +150,9 @@ Tapestry::Application.routes.draw do
   resources :named_proxies
   resources :user_files
   match '/user_file/download/:id' => 'user_files#download', :as => :user_file_download
+
+  resources :specimen_analysis_data
+  match '/specimen_analysis_data/:id/publish' => 'datasets#publish', :as => :publish_dataset
   resource :trait_collection
   resource :distinctive_traits_survey
   resource :pledge
