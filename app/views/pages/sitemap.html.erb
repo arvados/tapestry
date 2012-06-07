@@ -1,5 +1,6 @@
 <div style="display:table" class="sitemap">
   <div style="display:table-row">
+    <% if current_user %>
     <div style="display:table-cell; width: 30%">
       <h2>Account</h2>
       <p>
@@ -37,38 +38,40 @@
     <div style="display:table-cell; width: 30%">
       <h2>Public profile</h2>
       <p>
-	<%= link_to 'View and edit', public_profile_path(current_user.hex) %>
+	<%= link_to_if current_user.hex, 'View and edit', public_profile_path(current_user.hex) %>
 	<br />
-	<%= link_to 'Upload and manage files', user_files_path %>
+	<%= link_to_if current_user.hex, 'Upload and manage files', user_files_path %>
 	<br />
-	<%= link_to 'Personal health records', phrccr_path %>
+	<%= link_to_if current_user.hex, 'Personal health records', phrccr_path %>
 	<br />
-	<%= link_to 'Specimen tracking', public_profile_path(current_user.hex, :anchor => 'samples') %>
+	<%= link_to_if current_user.hex, 'Specimen tracking', public_profile_path(current_user.hex, :anchor => 'samples') %>
 	<br />
 	<%= content_tag :span, 'Specimen analysis results', :class => 'nolink' %>
       </p>
       <h2>Specimens</h2>
       <p>
-	<%= link_to 'Donate specimens', page_path('studies') %>
+	<%= link_to_if current_user.hex, 'Donate specimens', page_path('studies') %>
 	<br />
-	<%= link_to 'Claim a kit', study_claim_kit_path %>
+	<%= link_to_if current_user.hex, 'Claim a kit', study_claim_kit_path %>
 	<br />
-	<%= link_to 'Specimen log', public_profile_path(current_user.hex, :anchor => 'samples') %>
+	<%= link_to_if current_user.hex, 'Specimen log', public_profile_path(current_user.hex, :anchor => 'samples') %>
 	<br />
 	<%= content_tag :span, 'Review and publish specimen analysis results', :class => 'nolink' %>
       </p>
       <h2>Contributing trait data</h2>
       <p>
-	<%= link_to 'Personal health records', phrccr_path %>
+	<%= link_to_if current_user.hex, 'Personal health records', phrccr_path %>
 	<br />
-	<%= link_to 'Trait surveys', trait_surveys_path %>
+	<%= link_to_if current_user.hex, 'Trait surveys', trait_surveys_path %>
 	<br />
-	<%= link_to 'Upload and manage files', user_files_path %>
+	<%= link_to_if current_user.hex, 'Upload and manage files', user_files_path %>
       </p>
     </div>
+    <% end %>
     <div style="display:table-cell; width: 5%">
     </div>
     <div style="display:table-cell; width: 30%">
+      <% if current_user %>
       <h2>Help</h2>
       <p>
 	<%= content_tag :span, 'FAQ', :class => 'nolink' %>
@@ -79,6 +82,14 @@
 	<br />
 	<%= link_to 'Report a bug', new_message_path %>
       </p>
+      <% else %>
+      <h2>Account</h2>
+      <p>
+	<%= link_to 'Log in', new_session_path %>
+	<br />
+	<%= link_to 'Sign up', 'http://www.personalgenomes.org/signup.html' %>
+      </p>
+      <% end %>
       <h2>Community</h2>
       <p>
 	<%= link_to 'Learn more about the PGP', 'http://www.personalgenomes.org/', :title => 'www.personalgenomes.org' %>
