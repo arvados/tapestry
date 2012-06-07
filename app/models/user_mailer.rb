@@ -1,11 +1,9 @@
 class UserMailer < ActionMailer::Base
 
   def dataset_notification_message(url,user)
-    @url = url
-    @user = user
-    mail(:from => ADMIN_EMAIL,
-         :to => @user.email,
-         :subject => "You have a new dataset waiting for review")
+    setup_email(user)
+    @subject += 'Please review your new specimen analysis data'
+    @body[:url] = url
   end
 
   def support_message(message,user)

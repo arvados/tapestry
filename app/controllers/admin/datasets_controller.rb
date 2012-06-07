@@ -19,7 +19,7 @@ class Admin::DatasetsController < Admin::AdminControllerBase
 
     @dataset.participant.log("Dataset '#{@dataset.name}' with id #{@dataset.id} was released to this participant")
 
-    UserMailer.dataset_notification_message(root_url,@dataset.participant).deliver
+    UserMailer.dataset_notification_message(specimen_analysis_data_index_url, @dataset.participant).deliver
 
     @dataset.sent_notification_at = Time.now()
     @dataset.save!
