@@ -11,8 +11,10 @@
 	<%= link_to 'Mailing lists', edit_user_path(current_user, :anchor => 'mailinglists') %>
 	<br />
 	<%= link_to 'Withdraw', edit_user_path(current_user, :anchor => 'withdraw') %>
+<!--
 	<br />
 	<%= content_tag :span, 'Identity verification', :class => 'nolink' %>
+-->
       </p>
       <h2>Consent</h2>
       <p>
@@ -20,8 +22,10 @@
 	<br />
 	&rarr;&nbsp;<%= link_to 'submit new', participation_consent_path %>
 	<br />
+<!--
 	<%= content_tag :span, raw('&rarr;&nbsp;history'), :class => 'nolink' %>
 	<br />
+-->
 	<%= link_to 'Safety questionnaires', safety_questionnaires_path %>
 	<br />
 	&rarr;&nbsp;<%= link_to 'submit new', new_safety_questionnaire_path %>
@@ -74,8 +78,10 @@
       <% if current_user %>
       <h2>Help</h2>
       <p>
+<!--
 	<%= content_tag :span, 'FAQ', :class => 'nolink' %>
 	<br />
+-->
 	<%= link_to 'Site map', page_path('sitemap') %>
 	<br />
 	<%= link_to 'Contact us', new_message_path %>
@@ -97,8 +103,10 @@
 	<%= link_to 'PGP blog', 'http://blog.personalgenomes.org/', :title => 'blog.personalgenomes.org' %>
 	<br />
 	<%= link_to 'Participant directory', users_path %>
+<!--
 	<br />
 	<%= content_tag :span, 'Discussion forum', :class => 'nolink' %>
+-->
       </p>
     </div>
   </div>
