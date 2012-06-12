@@ -46,7 +46,7 @@
 	<br />
 	<%= link_to_if current_user.hex, 'Specimen tracking', public_profile_path(current_user.hex, :anchor => 'samples') %>
 	<br />
-	<%= content_tag :span, 'Specimen analysis results', :class => 'nolink' %>
+	<%= link_to_if current_user.hex, 'Specimen analysis results', specimen_analysis_data_index_path %>
       </p>
       <h2>Specimens</h2>
       <p>
@@ -56,7 +56,7 @@
 	<br />
 	<%= link_to_if current_user.hex, 'Specimen log', public_profile_path(current_user.hex, :anchor => 'samples') %>
 	<br />
-	<%= content_tag :span, 'Review and publish specimen analysis results', :class => 'nolink' %>
+	<%= link_to_if current_user.hex, 'Review and publish specimen analysis results', specimen_analysis_data_index_path %>
       </p>
       <h2>Contributing trait data</h2>
       <p>
