@@ -9,6 +9,7 @@
       <%= nav_element 'Researcher Tools', '/pages/researcher_tools' if current_user.is_researcher? or current_user.is_admin? -%>
       <%= nav_element 'Admin', admin_root_path if current_user.is_admin? -%>
       <%= nav_element 'Contact Us', new_message_url -%>
+      <%= nav_element 'Site map', '/pages/sitemap' -%>
     <% end %>
   </ul>
   <ul class="pgpid">
