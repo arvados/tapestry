@@ -34,7 +34,7 @@ class StudiesController < ApplicationController
                         :height => 34,
                      })
       # There is a marker.title option but it does strange things as of gmaps4rails v1.3.0
-      marker.json    "\"title\": \"#{shipping_address.user.hex}\""
+      marker.json("\"title\": \"#{shipping_address.user.hex}\"")
     end
 
     flash[:notice] = "No approved participants with valid shipping addresses were found" if @json == '[]'
