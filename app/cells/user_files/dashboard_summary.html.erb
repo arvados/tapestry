@@ -1,0 +1,15 @@
+<% if @user %>
+<p>
+  <% if @user.user_files.size == 0 %>
+  You have not uploaded any data files to your public profile.
+  <% else %>
+  You have uploaded <%= n_things(@user.user_files.size, 'data file') %> to your public profile.
+  <% end %>
+</p>
+<ul>
+<% if @user.user_files.size > 0 %>
+<li><%= link_to 'Manage uploaded files', user_files_path %></li>
+<% end %>
+<li><%= link_to 'Upload a file / learn more', new_user_file_path %></li>
+</ul>
+<% end %>
