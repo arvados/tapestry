@@ -17,6 +17,8 @@ include PhrccrsHelper
 
 server = DRbObject.new nil, "druby://#{DRB_SERVER}:#{DRB_PORT}"
 
+@reprocessing = Hash.new()
+
 UserLog.where('comment like ?','%failed to process PHR%').each do |ul|
   @version = nil
 	@matches = /\/ccr([^\/]*?)\.xml\)$/.match(ul.comment)
@@ -40,8 +42,9 @@ UserLog.where('comment like ?','%failed to process PHR%').each do |ul|
 
 	@ccr = Ccr.where('user_id = ? and version = ?',ul.user_id,@version).first
 
-	if (@ccr.nil?) then
+	if (@ccr.nil? and (not @reprocessing.has_key?(@version) or @reprocessing[@version] != ul.user_id)) then
 		STDERR.puts "Reprocessing #{@version} for user #{ul.user_id}"
+
 
     begin
       out = server.process_ccr(ul.user_id,IO.read(@path))
@@ -49,6 +52,7 @@ UserLog.where('comment like ?','%failed to process PHR%').each do |ul|
       STDERR.puts "DRB server error when trying to process a CCR: #{e.exception}"
 			exit(1)
     end 
+    @reprocessing[@version] = ul.user_id
 
 	else
 		STDERR.puts "Already have a CCR object of #{@version} for user #{ul.user_id}, skipping"
