@@ -13,7 +13,12 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
+
+  <%= render :partial => 'layouts/sudo' %>
+
   <div id="body">
+
+
     <h1 class="verbose"><%= link_to raw('<span>Personal Genome Project</span>'), root_url %></h1>
 
     <%= render :partial => 'layouts/navigation' %>

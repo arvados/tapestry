@@ -1,0 +1,3 @@
+<% if current_user and session[:real_uid] and session[:switch_back_to] and User.find(session[:real_uid].to_i).verify_userswitch_cookie(session[:switch_back_to]) %>
+<div class="sudo-warning">Logged in as <b><%= current_user.full_name %></b>. &nbsp; <%= link_to "Back to #{User.find(session[:real_uid]).full_name}", switch_to_user_path(session[:real_uid]), :method => :post %></div>
+<% end %>

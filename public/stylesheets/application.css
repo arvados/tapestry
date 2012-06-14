@@ -1148,7 +1148,13 @@ table.plate-samples {
     width: 385px;
 }
 
+.sudo-warning a {
+    color: #ccf;
+}
 .sudo-warning {
+    text-align: center;
+    margin: auto;
+    width: 40em;
     padding: 4px 10px;
     background: #944;
     -webkit-border-radius: 3px;
