@@ -1,0 +1,25 @@
+<% content_for :js do %>
+jQuery(document).ready(function () {
+jQuery('input#email').focus();
+});
+<% end %>
+
+<%= render :partial => 'pages/blog_feed' %>
+
+<h2>Log In</h2>
+
+<%= form_tag session_path do -%>
+<p><label for="email">Email</label><br/>
+<%= text_field_tag 'email', @email %></p>
+
+<p><label for="password">Password</label><br/>
+<%= password_field_tag 'password', nil %></p>
+
+<p><%= link_to 'Forgot your password?', new_password_path %></p>
+
+<p><%= submit_tag 'Log in' %></p>
+
+<h2>Sign up for the PGP</h2>
+ 
+<p>Interested in enrolling in the PGP? <a href="http://www.personalgenomes.org/signup.html">Sign-up here</a>.</p>
+ <% end -%>
