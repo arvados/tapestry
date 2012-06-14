@@ -2,6 +2,16 @@
 
 <table class="admin_table">
 <tr>
+  <th>Origin</th>
+  <th>Number of PHRs</th>
+</tr>
+<% @google_phrs.group_by { |p| p.pretty_origin }.sort.each do |pretty_origin,phrs| %>
+  <tr><td><%= pretty_origin %></td><td align="right"><%= phrs.size %></td></tr>
+<% end %>
+</table>
+
+<table class="admin_table">
+<tr>
   <th>User Id</th>
   <th>Origin</th>
   <th>Date</th>
