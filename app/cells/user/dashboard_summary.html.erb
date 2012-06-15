@@ -33,11 +33,18 @@
 
 <% if @user and @user.is_enrolled? %>
 <div>
+<% if @user.safety_questionnaires.last %>
 <p>Your most recent safety questionnaire was submitted on <%= humanize_date(@user.safety_questionnaires.last.datetime) %>.</p>
 <ul>
   <li><%= link_to 'Submit one now', new_safety_questionnaire_path %></li>
   <li><%= link_to 'Show previous questionnaires', safety_questionnaires_path %></li>
 </ul>
+<% else %>
+<p>You have not yet submitted any safety questionnaires.</p>
+<ul>
+  <li><%= link_to 'Submit one now', new_safety_questionnaire_path %></li>
+</ul>
+<% end %>
 </div>
 <% end %>
 
