@@ -5,14 +5,20 @@ once per quarter so the research study can monitor whether any adverse events
 are occurring. Thanks for your cooperation.
 
 <%= content_for :js do %>
-function toggleQuestions() {
-  reportingChanges = $('#safety_questionnaire_has_changes_true')[0].checked;
-  if (reportingChanges) {
-    $('#questions').show('fast');
-  } else {
-    $('#questions').hide('fast');
-  }
-};
+jQuery(function(){
+  var $ = jQuery.noConflict();
+  $('#safety_questionnaire_has_changes_true').change(function(){
+    reportingChanges = $('#safety_questionnaire_has_changes_true')[0].checked;
+    if (reportingChanges) {
+      $('#questions').show('fast');
+    } else {
+      $('#questions').hide('fast');
+    }
+  });
+  $('#safety_questionnaire_has_changes_false').change(function(){
+    $('#safety_questionnaire_has_changes_true').change();
+  });
+});
 <% end -%>
 
 
@@ -22,8 +28,8 @@ function toggleQuestions() {
 
   <p>
     <strong>1. Would you like to report changes in your safety, well-being, or interactions with others due to your participation in the PGP?</strong><br/>
-    <%= f.radio_button(:has_changes, "true", :onChange => 'javascript:toggleQuestions()') %> Yes, I would like to report changes to the PGP.<br/>
-    <%= f.radio_button(:has_changes, "false", :onChange => 'javascript:toggleQuestions()') %> No, I would like to report no changes to the PGP. 
+    <%= f.radio_button(:has_changes, "true") %> Yes, I would like to report changes to the PGP.<br/>
+    <%= f.radio_button(:has_changes, "false") %> No, I would like to report no changes to the PGP. 
   </p>
   <div id="questions" style="display:none">
   <p>
