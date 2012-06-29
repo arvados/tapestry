@@ -7,10 +7,11 @@
 
 <p>
   <b>Comment:</b>
+  <br />
   <%=raw h(@withdrawal_comment.comment).gsub("\n","<br />") %>
 </p>
 
 <p>
-  <b>Created at:</b>
+  <b>Submitted at:</b>
   <%= @withdrawal_comment.created_at %>
 </p>

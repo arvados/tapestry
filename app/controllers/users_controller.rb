@@ -339,6 +339,10 @@ class UsersController < ApplicationController
   end
 
   def withdraw_confirm
+    if params[:commit] == 'Cancel'
+      flash[:notice] = 'Withdrawal canceled.'
+      return redirect_to root_url
+    end
     if params[:removal_request]
       rr = RemovalRequest.new(params[:removal_request])
       rr.update_attributes(:user => @user)
