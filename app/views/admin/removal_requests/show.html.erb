@@ -1,20 +1,42 @@
-<p id="notice"><%= notice %></p>
+<h2><%= link_to 'Requests to remove data and destroy samples', admin_removal_requests_path %> &rarr; #<%= @admin_removal_request.id %></h2>
 
 <p>
   <b>User:</b>
-  <%= @removal_request.user %>
+  <%= @admin_removal_request.user.full_name %>
 </p>
 
 <p>
-  <b>Items to remove:</b>
-  <%=raw h(@removal_request.items_to_remove).gsub("\n","<br />") %>
+  <b>Requested data removal?</b>
+  <%= @admin_removal_request.remove_data %>
+</p>
+
+<p>
+  <b>Requested sample destruction?</b>
+  <%= @admin_removal_request.destroy_samples %>
 </p>
 
 <p>
   <b>Created at:</b>
-  <%= @removal_request.created_at %>
+  <%= @admin_removal_request.created_at %>
 </p>
 
+<p>
+  <b>Fulfilled at:</b>
+  <%= @admin_removal_request.fulfilled_at %>
+</p>
 
-<%= link_to 'Edit', edit_removal_request_path(@removal_request) %> |
-<%= link_to 'Back', removal_requests_path %>
+<%= form_for @admin_removal_request, :url => admin_removal_request_path(@admin_removal_request), :method => :post do |f| %>
+
+<% unless @admin_removal_request.fulfilled_at %>
+<%= f.submit 'Close', :confirm => 'Mark this request as fulfilled?' %>
+<% end %>
+
+<p>
+  <b>Admin notes:</b>
+  <br />
+  <%= f.text_area :admin_notes, :cols => 80, :rows => 16 %>
+</p>
+
+<%= f.submit 'Save' %>
+
+<% end %>

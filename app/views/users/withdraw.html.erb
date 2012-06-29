@@ -5,23 +5,29 @@ deactivate your account.  After doing so, you will no longer be able
 to access or update your account and the PGP will no longer contact
 you.</p>
 
-<%= form_for(@user, { :url => withdraw_confirm_user_path(@user.id) }) do |f| %>
+<%= form_for(@removal_request, { :url => withdraw_confirm_user_path(current_user) }) do |f| %>
 
-<% if @request_removal %>
+<%= f.hidden_field :remove_data %>
+<%= f.hidden_field :destroy_samples %>
 
-<p>Please specify the items you want removed from the PGP research study.</p>
+<% if @removal_request.remove_data or @removal_request.destroy_samples %>
+<p>As you requested:
 
-<%= f.fields_for :removal_requests do |x| %>
-<div class="field">
-  <%= x.text_area :items_to_remove, :cols => 72, :rows => 8 %>
-</div>
+<ul>
+
+<% if @removal_request.remove_data %>
+<li>Your DNA sequence and trait data will be removed from the PGP public database.
+</li>
 <% end %>
 
-<div class="actions">
-  <%= f.submit 'Confirm and send request' %>
-</div>
+<% if @removal_request.destroy_samples %>
+<li>Tissue samples and cell lines controlled by the PGP will be destroyed.
+</li>
+<% end %>
 
-<% else %>
+</ul>
+</p>
+<% end %>
 
 <div class="actions">
   <%= f.submit 'Confirm' %>
@@ -29,4 +35,3 @@ you.</p>
 
 <% end %>
 
-<% end %>

@@ -91,8 +91,8 @@ Tapestry::Application.routes.draw do
   match '/users/unauthorized' => 'users#unauthorized', :as => :unauthorized_user
   match '/users/created/:id' => 'users#created', :as => :created_user
   match '/users/show_log' => 'users#show_log', :as => :show_log_user
-  match '/users/:id/withdraw' => 'users#withdraw', :as => :withdraw_user
-  match '/users/:id/withdraw_confirm' => 'users#withdraw_confirm', :as => :withdraw_confirm_user
+  match '/users/:id/withdraw' => 'users#withdraw', :as => :withdraw_user, :via => :post
+  match '/users/:id/withdraw_confirm' => 'users#withdraw_confirm', :as => :withdraw_confirm_user, :via => :post
   match '/users/:switch_to_id/switch_to' => 'users#switch_to', :via => [:post], :as => :switch_to_user
   match '/drb/userlog/:user_id' => 'drb#userlog', :as => :userlog_drb
   match '/user/:id/study/:study_id' => 'users#edit_study', :as => :user_edit_study, :via => :get

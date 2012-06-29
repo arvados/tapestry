@@ -1,12 +1,19 @@
-<h2>Listing removal requests</h2>
+<h2>Requests to remove data and destroy samples</h2>
+
+<p>Showing most recent requests first.  (Also showing withdrawal events where no deletion/destruction was requested.)</p>
+
+<%= will_paginate @admin_removal_requests %>
 
 <table class="admin_table">
   <thead>
     <tr>
       <th>Hex ID</th>
       <th>Name</th>
-      <th>Items to remove</th>
-      <th>Created at</th>
+      <th>Data?</th>
+      <th>Samples?</th>
+      <th>Created</th>
+      <th>Fulfilled?</th>
+      <th>Admin notes?</th>
       <th></th>
     </tr>
   </thead>
@@ -15,8 +22,17 @@
     <tr>
       <td><%= admin_removal_request.user.hex %></td>
       <td><%= admin_removal_request.user.full_name %></td>
-      <td><%=raw h(admin_removal_request.items_to_remove).gsub("\n","<br />") %></td>
+      <td><%= 'Remove data' if admin_removal_request.remove_data %></td>
+      <td><%= 'Destroy samples' if admin_removal_request.destroy_samples %></td>
       <td><%= admin_removal_request.created_at %></td>
+      <td>
+	<% if admin_removal_request.fulfilled_at %>
+	<%= admin_removal_request.fulfilled_at %> by <%= admin_removal_request.fulfilled_by.full_name %>
+	<% elsif admin_removal_request.destroy_samples %>
+	<b>Not fulfilled</b>
+	<% end %>
+      </td>
+      <td><%= 'Yes' if admin_removal_request.admin_notes and !admin_removal_request.admin_notes.empty? %></td>
       <td><%= link_to 'Show', [:admin, admin_removal_request] %></td>
     </tr>
     <% end %>

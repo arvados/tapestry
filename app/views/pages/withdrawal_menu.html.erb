@@ -8,7 +8,7 @@ other participant data</b> and information associated with your
 account, but the PGP will no longer contact you and you will not be
 able to access or update your account.</p>
 
-<%= button_to 'Withdraw and deactivate my account now', withdraw_user_path(current_user.id), :method => :post %>
+<%= button_to 'Withdraw from the study', withdraw_user_path(current_user), :method => :post %>
 
 <p>You are free to decide at any time that <b>you no longer want your
 tissue samples, DNA sequence or other specimen analysis data, cell
@@ -17,4 +17,41 @@ described in the consent form, it may not be possible to prevent the
 future use of your data, cell lines and/or other information in
 certain circumstances.</p>
 
-<%= button_to 'Withdraw and request removal', {:controller => 'users', :id => current_user.id, :action => 'withdraw', :request_removal => 1 }, { :method => :post } %>
+<%= form_for RemovalRequest.new, :url => withdraw_user_path(current_user), :method => :post do |f| %>
+<p>
+
+<%= f.check_box :remove_data %>
+<%= f.label :remove_data, 'Please remove my DNA sequence and trait data from the PGP public database.' %>
+
+<br />
+
+<%= f.check_box :destroy_samples %>
+<%= f.label :destroy_samples, 'Please destroy tissue samples and cell lines controlled by the PGP.' %>
+
+<br />
+
+<%= f.submit 'Withdraw from the study', :class => 'the-action-button' %>
+
+</p>
+<% end -%>
+
+
+<% content_for :js do %>
+jQuery(document).ready(function($) {
+  var update_button = function() {
+    var remove = $('input[type=checkbox][name="removal_request[remove_data]"]').is(':checked');
+    var destroy = $('input[type=checkbox][name="removal_request[destroy_samples]"]').is(':checked');
+    var andwhat = '';
+    if (remove && destroy)
+      andwhat = ', remove data, and destroy samples';
+    else if (remove)
+      andwhat = ' and remove data';
+    else if (destroy)
+      andwhat = ' and destroy samples';
+    $('input.the-action-button').attr('value','Withdraw from the study' + andwhat);
+    return true;
+  };
+  $('input').bind('change', update_button);
+  update_button();
+});
+<% end %>

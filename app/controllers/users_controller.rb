@@ -335,16 +335,23 @@ class UsersController < ApplicationController
   end
 
   def withdraw
-    @user = User.find(params[:id])
-    @request_removal = params[:request_removal]
+    @removal_request = RemovalRequest.new(params[:removal_request] || {})
   end
 
   def withdraw_confirm
-    @user = User.find(params[:id])
-    if params[:user] and params[:user][:removal_requests]
-      rr = RemovalRequest.new(:user => @user)
-      rr.update_attributes(params[:user][:removal_requests])
+    if params[:removal_request]
+      rr = RemovalRequest.new(params[:removal_request])
+      rr.update_attributes(:user => @user)
       rr.save!
+      if rr.remove_data
+        @user.log('Requested destruction of tissue samples and cell lines.')
+      end
+      if rr.remove_data
+        @user.log('Requested removal of data from public database.')
+        unless @user.suspended_at
+          @user.update_attributes(:suspended_at => Time.now)
+        end
+      end
     end
     if @user.deactivated_at.nil?
       @user.log('Withdrew from the study.')
@@ -378,7 +385,8 @@ class UsersController < ApplicationController
   private
 
   def ensure_current_user_may_edit_this_user
-    redirect_to root_url unless current_user && ( current_user.id == params[:id].to_i ) && !current_user.deactivated_at # || current_user.admin?
+    return redirect_to root_url unless current_user && ( current_user.id == params[:id].to_i ) && !current_user.deactivated_at # || current_user.admin?
+    @user = User.find(params[:id])
   end
 
   def ensure_invited

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120607163403) do
+ActiveRecord::Schema.define(:version => 20120628172822) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1580,11 +1580,35 @@ ActiveRecord::Schema.define(:version => 20120607163403) do
   add_index "question_responses", ["exam_question_id"], :name => "index_question_responses_on_exam_question_id"
   add_index "question_responses", ["exam_response_id"], :name => "index_question_responses_on_exam_response_id"
 
+  create_table "removal_request_versions", :force => true do |t|
+    t.integer  "removal_request_id"
+    t.integer  "lock_version"
+    t.integer  "user_id"
+    t.text     "items_to_remove"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "remove_data",        :default => false
+    t.boolean  "destroy_samples",    :default => false
+    t.integer  "fulfilled_by_id"
+    t.datetime "fulfilled_at"
+    t.text     "admin_notes"
+    t.datetime "deleted_at"
+  end
+
+  add_index "removal_request_versions", ["removal_request_id"], :name => "index_removal_request_versions_on_removal_request_id"
+
   create_table "removal_requests", :force => true do |t|
     t.integer  "user_id"
     t.text     "items_to_remove"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "lock_version"
+    t.boolean  "remove_data",     :default => false
+    t.boolean  "destroy_samples", :default => false
+    t.integer  "fulfilled_by_id"
+    t.datetime "fulfilled_at"
+    t.text     "admin_notes"
+    t.datetime "deleted_at"
   end
 
   create_table "report_versions", :force => true do |t|
