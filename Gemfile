@@ -25,7 +25,7 @@ gem 'cure_acts_as_versioned', :require => 'acts_as_versioned'
 gem 'userstamp'
 
 gem 'factory_girl_rails', "~> 1.3.0"
-gem 'mocha'
+gem 'mocha', :require => false
 gem 'recaptcha'
 gem 'limerick_rake'
 gem 'verhoeff'
