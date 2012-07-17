@@ -81,11 +81,47 @@ class KitsController < ApplicationController
     @kit.send_to_participant!(current_user)
     redirect_to(:controller => 'kits', :action => 'index')
   end
+
+  def select_name_range
+    @selected_kits = []
+    range = params[:name_range]
+    return if !range or !range.respond_to? :[]
+    if range[:a] == '' and range[:b] == ''
+      @selected_kits = @all_kits
+      return
+    end
+    a = Kit.where('? in (name,url_code,crc_id)', range[:a]).first
+    b = Kit.where('? in (name,url_code,crc_id)', range[:b]).first
+    if b and !a and range[:a] == ''
+      a = Kit.where('study_id=?', b.study_id).order(:id).first
+    elsif !a or (a.originator_id != current_user.id and !current_user.is_admin?)
+      flash[:error] = "Invalid range: Kit '#{range[:a]}' not found."
+      return
+    end
+    if a and !b and range[:b] == ''
+      b = Kit.where('study_id=?', a.study_id).order(:id).last
+    elsif !b or (b.originator_id != current_user.id and !current_user.is_admin?)
+      flash[:error] = "Invalid range: Kit '#{range[:b]}' not found."
+      return
+    end
+    if a.study_id != b.study_id
+      flash[:error] = "Invalid range: Kits '#{a.name}' (#{a.crc_id_s}) and '#{b.name}' (#{b.crc_id_s}) do not belong to the same study."
+      return
+    end
+    if a.id > b.id
+      a,b = b,a
+    end
+    @selected_kits = Kit.where('id >= ? and id <= ? and study_id=?', a.id, b.id, a.study_id)
+    @selected_kits_description = "between '#{a.name}' (#{a.crc_id_s}) and '#{b.name}' (#{b.crc_id_s}) from '#{a.study.name}'"
+  end
   
   # GET /kits
   # GET /kits.xml
   def index
-    if current_user.is_admin? then
+    if params[:name_range]
+      select_name_range
+      @kits = @selected_kits
+    elsif current_user.is_admin?
       @kits = Kit.all
     else
       @kits = Kit.where('originator_id = ?',current_user.id)

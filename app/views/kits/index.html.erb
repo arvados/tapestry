@@ -1,10 +1,35 @@
+<div style="float:right">
+  <table><tr><td valign="bottom">
+	<div>
+	  Select a range of kits:
+	</div>
+	<div style="text-align:right">
+<%= form_for :name_range, :url => kits_path, :html => { :method => "GET" } do |f| %>
+between <%= f.text_field :a, :size => 10, :value => (params[:name_range].respond_to?(:[]) ? params[:name_range][:a] : '') %><br />
+and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?(:[]) ? params[:name_range][:b] : '') %><br />
+<%= f.submit 'Select range' %>
+<% end %>
+	</div>
+  </td><td valign="bottom">
+	<div style="text-align:right">
+	  <%= button_to 'Select all', kits_path, :method => :get %>
+	</div>
+      </td></tr></table>
+</div>
+
 <h2>Kits</h2>
 
-<% if current_user.is_admin? %>
-<p>Because you are an administrator, this page lists all kits by any researcher.</p>
+<% if @kits.empty? %>
+<p>No kits selected.</p>
+<% elsif @selected_kits_description %>
+<p>Selected <%= @selected_kits.size %> kits <%= @selected_kits_description -%>.</p>
+<% elsif current_user.is_admin? %>
+<p>Because you are an administrator, this page lists all <%= @all_kits.size -%> kits created by all researchers.</p>
 <% else %>
-<p>This is the list of your kits.</p>
+<p>Showing all <%= @all_kits.size %> of your kits.</p>
 <% end %>
+
+<br clear="all" />
 
 <% if @kits.count > 0 %>
 <%= will_paginate @kits %>
