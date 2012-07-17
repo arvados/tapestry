@@ -26,6 +26,14 @@ class Study < ActiveRecord::Base
   scope :approved, where('approved = ?',true)
   scope :draft, where('requested = ? and approved = ?',false,false)
 
+  scope :accessible, lambda { |user|
+    if user.is_admin? then
+      all
+    elsif user.is_researcher? then
+      where("researcher_id = ?",user.id)
+    end
+  }
+
   def is_approved?
     self.approved
   end

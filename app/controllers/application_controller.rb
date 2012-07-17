@@ -205,6 +205,11 @@ class ApplicationController < ActionController::Base
 
   # TODO: Move to a separate presenter class instead of a helper.
   def csv_for_study(study,type)
+    @participants = study.study_participants.real.send(type)
+    csv_for_study_worker(study,@participants)
+  end
+
+  def csv_for_study_worker(study,participants)
 
     user_fields = %w(hex e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip phone_number).freeze
 
@@ -212,7 +217,7 @@ class ApplicationController < ActionController::Base
 
       csv << user_fields.map(&:humanize)
 
-      study.study_participants.real.send(type).each do |u|
+      participants.each do |u|
         row = []
 
         row.push u.user.hex

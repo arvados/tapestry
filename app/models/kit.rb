@@ -20,6 +20,7 @@ class Kit < ActiveRecord::Base
   validates_presence_of :kit_design_id
 
   scope :owned_by, lambda { |user_id| where('owner_id = ?', user_id) }
+  scope :study, lambda { |study_id| where('study_id = ?', study_id) }
   scope :participant, lambda { |user_id| where('participant_id = ?', user_id) }
 
   scope :not_yet_shipped, where('participant_id is ? and shipper_id is ? and owner_id is not ?',nil,nil,nil)
@@ -27,6 +28,8 @@ class Kit < ActiveRecord::Base
   scope :claimed, where('participant_id is not ? and owner_id=participant_id',nil)
   scope :returned, where('participant_id is not ? and owner_id is ?',nil,nil)
   scope :received, where('participant_id is not ? and owner_id is not ? and owner_id != participant_id',nil,nil)
+
+  scope :assigned_to_participant, where('participant_id is not ?',nil)
 
   api_accessible :id do |t|
     t.add :id

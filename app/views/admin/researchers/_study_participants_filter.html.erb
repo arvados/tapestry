@@ -1,0 +1,22 @@
+<%= form_tag study_filter_results_csv_path, { :method => 'get' } do  %>
+
+  <%= hidden_field_tag "object", "User" %>
+  
+  <%= hidden_field_tag "f[]", "study" %>
+  <%= hidden_field_tag "op[study]", "=" %>
+
+  Study: <%= select_tag "v[study]", options_from_collection_for_select(Study.accessible(current_user), "id", "name"), :include_blank => true %> <br/>
+
+  <%= hidden_field_tag "f[]", "study_status" %>
+  <%= hidden_field_tag "op[study_status]", "=" %>
+
+  Status: <%= select_tag "v[study_status][]", "<option value=\"interested\">Interested</option><option value=\"accepted\">Accepted</option>".html_safe, :include_blank => true %> OR
+  <%= select_tag "v[study_status][]", "<option value=\"interested\">Interested</option><option value=\"accepted\">Accepted</option>".html_safe, :include_blank => true %> <br/>
+
+  <%= hidden_field_tag "f[]", "kits_sent" %>
+
+  Kits sent: <%= select_tag "op[kits_sent]", "<option value=\"&lt;=\">&lt;=</option><option value=\"&gt;=\">&gt;=</option><option value=\"=\">is</option><option value=\"!\">is not</option>".html_safe %> <%= text_field_tag "v[kits_sent]", "0", :size => 3 %>
+
+  <%= submit_tag "Download" %>
+
+<% end %>

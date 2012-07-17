@@ -57,6 +57,8 @@ class User < ActiveRecord::Base
   has_many :ccrs, :dependent => :destroy
   has_many :survey_answers, :dependent => :destroy
 
+  has_many :kits, :foreign_key => "participant_id"
+
   # Researchers only
   has_many :kit_designs, :foreign_key => "owner_id"
   has_many :study_participants, :dependent => :destroy
