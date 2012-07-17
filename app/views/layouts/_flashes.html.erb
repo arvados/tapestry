@@ -1,5 +1,5 @@
 <div id="flash">
   <% flash.each do |key, value| -%>
-    <div class="flash <%= raw(key) %>"><%= raw(value) %></div>
+    <div class="flash <%= raw(key) %>"><%= raw(flash.delete key) %></div>
   <% end -%>
 </div>
