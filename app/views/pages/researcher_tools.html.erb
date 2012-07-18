@@ -102,11 +102,15 @@ Your IRB status: <strong><%= current_user.researcher_onirb? ? 'on the IRB roster
 <% if @requested_studies.count > 0 or @approved_studies.count > 0 or @draft_studies.count > 0 then %>
 Legend: U: Undecided | I: Interested | NI: Not interested | A: Accepted | NA: Not accepted | R: Removed
 
+<% else %>
+You do not have any studies yet.
+<% end %>
+
+<% if Study.accessible(current_user).size > 0 %>
+
 <h4>Download participant lists</h4>
 <%= render :partial => 'admin/researchers/study_participants_filter' %>
 
-<% else %>
-You do not have any studies yet.
 <% end %>
 
 </div>
