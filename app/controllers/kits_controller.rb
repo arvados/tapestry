@@ -82,6 +82,23 @@ class KitsController < ApplicationController
     redirect_to(:controller => 'kits', :action => 'index')
   end
 
+  # POST /kits/sent_selected
+  before_filter :select_kit_ids, :only => :sent_selected
+  def sent_selected
+    Kit.transaction do
+      already_shipped = @selected_kits.select { |x| x.shipper or x.participant }
+      if already_shipped.empty?
+        @selected_kits.each do |k|
+          k.send_to_participant!(current_user)
+        end
+        flash[:notice] = "Marked #{@selected_kits.size} kits as sent."
+      else
+        flash[:error] = "Action cancelled because #{already_shipped.size} of the selected kits have already been sent to participants."
+      end
+    end
+    redirect_to (params[:return_to] or kits_path)
+  end
+
   def select_name_range
     @selected_kits = []
     range = params[:name_range]
@@ -118,13 +135,16 @@ class KitsController < ApplicationController
   # GET /kits
   # GET /kits.xml
   def index
+    if current_user.is_admin?
+      @all_kits = Kit.all
+    else
+      @all_kits = Kit.where('originator_id = ?',current_user.id)
+    end
     if params[:name_range]
       select_name_range
       @kits = @selected_kits
-    elsif current_user.is_admin?
-      @kits = Kit.all
     else
-      @kits = Kit.where('originator_id = ?',current_user.id)
+      @kits = @all_kits
     end
     @kits = @kits.paginate(:page => params[:page] || 1, :per_page => 30)
 
@@ -274,6 +294,16 @@ class KitsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(kits_url) }
       format.xml  { head :ok }
+    end
+  end
+
+  private
+
+  def select_kit_ids
+    @selected_kits = Kit.
+      where('id in (?)', params[:selected_kit_ids].split(',').collect(&:to_i))
+    unless current_user.is_admin?
+      @selected_kits = @selected_kits.where('originator_id = ?', current_user.id)
     end
   end
 

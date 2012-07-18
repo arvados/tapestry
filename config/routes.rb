@@ -43,6 +43,7 @@ Tapestry::Application.routes.draw do
   resources :kits
   match '/kits/:id/sent' => 'kits#sent', :as => :sent_kit, :via => :post
   match '/kits/:id/returned' => 'kits#returned', :as => :returned_kit, :via => :post
+  match '/kits/sent_selected' => 'kits#sent_selected', :as => :sent_selected_kits, :via => :post
 
   resources :traitwise_surveys do
     post 'participate', :on => :member

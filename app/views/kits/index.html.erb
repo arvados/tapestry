@@ -1,3 +1,7 @@
+<%- content_for :head do -%>
+<%= javascript_include_tag 'kits' %>
+<%- end -%>
+
 <div style="float:right">
   <table><tr><td valign="bottom">
 	<div>
@@ -14,7 +18,19 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
 	<div style="text-align:right">
 	  <%= button_to 'Select all', kits_path, :method => :get %>
 	</div>
-      </td></tr></table>
+      </td></tr>
+    <% if @selected_kits and !@selected_kits.empty? %>
+    <tr><td colspan="2">
+	Apply to selected items:
+	<%= form_tag '', :method => :post do %>
+	<%= hidden_field_tag :return_to, request.fullpath %>
+	<%= hidden_field_tag :selected_kit_ids, @selected_kits.collect { |x| x.id.to_s }.join(',') %>
+	<%= select_tag :apply_action, options_for_select([['(Choose action)',nil], ['Mark as sent',sent_selected_kits_path]]) %>
+	<%= submit_tag 'Apply', :confirm => "Confirm:  Do you really want to apply this action to all #{@selected_kits.size} selected kits?" %>
+	<% end %>
+    </td></tr>
+    <% end %>
+  </table>
 </div>
 
 <h2>Kits</h2>
