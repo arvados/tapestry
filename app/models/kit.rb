@@ -80,7 +80,7 @@ class Kit < ActiveRecord::Base
     number = ''
     while not done
       number = ("%x%x%x%x%x%x%x%x" % [ rand(10), rand(10), rand(10), rand(10), rand(10), rand(10), rand(10), rand(10) ]).to_i
-      done = true if Verhoeff.checks_out? number and o.class.where('crc_id = ?',number).empty?
+      done = true if Verhoeff.valid? number and o.class.where('crc_id = ?',number).empty?
     end
     number
   end

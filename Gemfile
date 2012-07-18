@@ -28,7 +28,7 @@ gem 'factory_girl_rails', "~> 1.3.0"
 gem 'mocha', :require => false
 gem 'recaptcha'
 gem 'limerick_rake'
-gem 'verhoeff'
+gem 'verhoeff', "~> 2.0.0"
 gem 'fastercsv'
 gem 'acts_as_api'
 group :test do
