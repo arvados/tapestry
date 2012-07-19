@@ -1,4 +1,4 @@
-<h2>Studies &amp; Specimen Collection</h2>
+<h2>Collection events</h2>
 
 <p>To organize specimen collection for scientific studies, researchers
 can list studies and specimen collection events here and participants
@@ -25,7 +25,7 @@ phone number may be needed.</p>
 
 <% if Study.where('open = ?',true).size > 0 %>
 
-<h3>The following stud<%= Study.where('open = ?',true).size > 1 ? 'ies are' : 'y is' %> currently seeking interested participants:</h3>
+<h3>The following collection event<%= Study.where('open = ?',true).size > 1 ? 's are' : ' is' %> currently seeking interested participants:</h3>
 
  <table class="admin_table">
   <tr>
@@ -84,7 +84,7 @@ phone number may be needed.</p>
 <table class="admin_table">
   <tr>
     <th>Name</th>
-    <th>Study</th>
+    <th>Collection event</th>
     <th>Status</th>
     <th>Last change</th>
     <th></th>

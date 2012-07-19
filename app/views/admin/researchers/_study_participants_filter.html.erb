@@ -5,7 +5,7 @@
   <%= hidden_field_tag "f[]", "study" %>
   <%= hidden_field_tag "op[study]", "=" %>
 
-  Study: <%= select_tag "v[study]", options_from_collection_for_select(Study.accessible(current_user), "id", "name"), :include_blank => true %> <br/>
+  Collection event: <%= select_tag "v[study]", options_from_collection_for_select(Study.accessible(current_user), "id", "name"), :include_blank => true %> <br/>
 
   <%= hidden_field_tag "f[]", "study_status" %>
   <%= hidden_field_tag "op[study_status]", "=" %>

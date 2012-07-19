@@ -1,9 +1,9 @@
-<h2>Studies</h2>
+<h2>Collection events</h2>
 
 <% if current_user.is_admin? %>
-<p>Because you are an administrator, this page lists all studies by any researcher.</p>
+<p>Because you are an administrator, this page lists all collection events by any researcher.</p>
 <% else %>
-<p>This is the list of your studies, as well as any studies another researcher has granted you rights to.</p>
+<p>This is the list of your collection events, as well as any collection events another researcher has granted you rights to.</p>
 <% end %>
 
 <% if @studies.count > 0 %>

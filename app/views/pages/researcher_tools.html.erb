@@ -3,13 +3,13 @@
 <div class="clear"><!-- --></div>
 <div class="submenu">
 <ul>
-  <li><strong>Your studies</strong><br/>
+  <li><strong>Your collection events</strong><br/>
   <% @studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
-  &nbsp;&nbsp;<%= link_to study.name + (study.is_open? ? ' (OPEN)' : ''), edit_study_path(study.id) %><br/>
+  &nbsp;&nbsp;<%= link_to study.name + (study.is_open? ? ' (OPEN)' : ''), edit_collection_event_path(study.id) %><br/>
   <% end %>
-  &nbsp;&nbsp;<small><%= link_to 'View all', url_for(:controller => 'studies', :action => 'index') %>
+  &nbsp;&nbsp;<small><%= link_to 'View all', collection_events_path %>
   /
-  <%= link_to 'Create new', url_for(:controller => 'studies', :action => 'new') %>
+  <%= link_to 'Create new', new_collection_event_path %>
   </small>
   </li>
   <li><strong>Your kit designs</strong><br/>
@@ -75,27 +75,27 @@
 <h2>Researcher Tools</h2>
 
 <p>
-You can manage your studies here.
+You can manage your collection events here.
 </p>
 
 <p>
 Your IRB status: <strong><%= current_user.researcher_onirb? ? 'on the IRB roster' : 'not on the IRB roster' %></strong>
 </p>
 
-<h3>Your studies</h3>
+<h3>Your collection events</h3>
 
 <% if @requested_studies.count > 0 %>
-<h4>Requested studies</h4>
+<h4>Requested collection events</h4>
 <%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @requested_studies, :type => 'requested', :who => 'researcher' } %>
 <% end %>
 
 <% if @approved_studies.count > 0 %>
-<h4>Approved studies</h4>
+<h4>Approved collection events</h4>
 <%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @approved_studies, :type => 'approved', :who => 'researcher' } %>
 <% end %>
 
 <% if @draft_studies.count > 0 %>
-<h4>Draft studies</h4>
+<h4>Draft collection events</h4>
 <%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @draft_studies, :type => 'draft', :who => 'researcher' } %>
 <% end %>
 
@@ -103,7 +103,7 @@ Your IRB status: <strong><%= current_user.researcher_onirb? ? 'on the IRB roster
 Legend: U: Undecided | I: Interested | NI: Not interested | A: Accepted | NA: Not accepted | R: Removed
 
 <% else %>
-You do not have any studies yet.
+You do not have any collection events yet.
 <% end %>
 
 <% if Study.accessible(current_user).size > 0 %>

@@ -75,14 +75,14 @@ Tapestry::Application.routes.draw do
   resources :device_types
   resources :tissue_types
   resources :kit_designs
-  match '/studies/claim' => 'studies#claim', :as => :study_claim_kit
-  match '/studies/:id/users' => 'studies#users', :as => :study_users
-  match '/studies/:id/sent_kits_to_selected' => 'studies#sent_kits_to_selected', :as => :sent_kits_to_selected_study_users
-  match '/studies/:id/map' => 'studies#map', :as => :study_map
-  match '/studies/:study_id/users/:user_id/:status' => 'studies#update_user_status', :as => :study_update_user_status
-  match '/studies/:id/sent_kits_to_selected' => 'studies#sent_kits_to_selected', :as => :sent_kits_to_selected_study_users, :via => :post
-  match '/studies/:id/accept_interested_selected' => 'studies#accept_interested_selected', :as => :accept_interested_selected_study_users, :via => :post
-  resources :studies
+  match '/collection_events/claim' => 'studies#claim', :as => :study_claim_kit
+  match '/collection_events/:id/users' => 'studies#users', :as => :study_users
+  match '/collection_events/:id/sent_kits_to_selected' => 'studies#sent_kits_to_selected', :as => :sent_kits_to_selected_study_users
+  match '/collection_events/:id/map' => 'studies#map', :as => :study_map
+  match '/collection_events/:study_id/users/:user_id/:status' => 'studies#update_user_status', :as => :study_update_user_status
+  match '/collection_events/:id/sent_kits_to_selected' => 'studies#sent_kits_to_selected', :as => :sent_kits_to_selected_study_users, :via => :post
+  match '/collection_events/:id/accept_interested_selected' => 'studies#accept_interested_selected', :as => :accept_interested_selected_study_users, :via => :post
+  resources :collection_events, :controller => "studies"
 
   match '/filters/upload' => 'filters#upload', :as => :upload_filter, :via => :post
 

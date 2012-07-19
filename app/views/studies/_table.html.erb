@@ -15,11 +15,11 @@
   </tr>
   <% @studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= (can?(:update, study) ? ( link_to study.name, edit_study_url(study) ) : study.name ) %></td>
+      <td><%= (can?(:update, study) ? ( link_to study.name, edit_collection_event_url(study) ) : study.name ) %></td>
       <td><%= study.researcher.full_name %></td>
       <td>
           <% if study.irb_associate.nil? then %>
-            <%= (can?(:update, study) ? ( link_to 'unassigned', edit_study_url(study) ) : study.name ) %>
+            <%= (can?(:update, study) ? ( link_to 'unassigned', edit_collection_event_url(study) ) : study.name ) %>
           <% else %>
             <%= study.irb_associate.full_name %>
           <% end %>

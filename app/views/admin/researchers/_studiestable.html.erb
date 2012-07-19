@@ -27,13 +27,13 @@
   </tr>
   <% studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= link_to study.name, (who == 'admin' ? edit_admin_study_url(study) : edit_study_url(study) ) %></td>
+      <td><%= link_to study.name, (who == 'admin' ? edit_admin_study_url(study) : edit_collection_event_url(study) ) %></td>
       <% if who != 'researcher' or (current_user.is_admin? and type == 'all') %>
       <td><%= link_to study.researcher.full_name, admin_user_url(study.researcher) %></td>
       <% end %>
       <td>
           <% if study.irb_associate.nil? then %>
-            <%= link_to 'unassigned', (who == 'admin' ? edit_admin_study_url(study) : edit_study_url(study) ) %>
+            <%= link_to 'unassigned', (who == 'admin' ? edit_admin_study_url(study) : edit_collection_event_url(study) ) %>
           <% else %>
             <%= ( who == 'admin' ? link_to(study.irb_associate.full_name, admin_user_url(study.irb_associate)) : study.irb_associate.full_name ) %>
           <% end %>
