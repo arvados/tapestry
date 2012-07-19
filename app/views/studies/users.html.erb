@@ -6,13 +6,23 @@
 
 <div style="float:right">
   <table><tr><td valign="bottom" style="background:#ffffdd;padding:0 .5em">
-	Select users by uploading a CSV file with participant hex IDs:<br />
+	Upload a CSV file with participant hex IDs:<br />
 <%= form_for :upload, :url => upload_filter_path, :html => { :multipart => true } do |f| %>
 <%= hidden_field_tag :target_class, 'User' %>
 <%= hidden_field_tag :target_id_attribute, 'hex' %>
 <%= hidden_field_tag :return_to, request.path %>
 <%= file_field_tag 'file' %><br />
-<%= f.submit 'Upload CSV and select users' %>
+<%= f.submit 'Upload CSV and select users by hex' %>
+<% end %>
+<br />
+	Upload a CSV file with user ID tokens:<br />
+<%= form_for :upload, :url => upload_filter_path, :html => { :multipart => true } do |f| %>
+<%= hidden_field_tag :target_class, 'User' %>
+<%= hidden_field_tag :target_id_attribute, 'app_token' %>
+<%= hidden_field_tag :"target_id_attribute_args[]", "Study##{@study.id}" %>
+<%= hidden_field_tag :return_to, request.path %>
+<%= file_field_tag 'file' %><br />
+<%= f.submit 'Upload CSV and select users by token' %>
 <% end %>
   </td><td valign="bottom">
 	or

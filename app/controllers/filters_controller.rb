@@ -12,6 +12,14 @@ class FiltersController < ApplicationController
     uploaded_io = params[:file]
     target_class = params[:target_class].constantize or raise Exception.new
     target_id_attribute = params[:target_id_attribute]
+    target_id_attribute_args = []
+    target_id_attribute_args = params[:target_id_attribute_args] if params[:target_id_attribute_args]
+
+    if target_class.respond_to? "find_all_by_#{target_id_attribute}".to_sym
+      all_obs = nil
+    else
+      all_obs = target_class.visible_to(current_user)
+    end
 
     rows = CSV.parse(uploaded_io.read)
     possible = Hash.new
@@ -20,9 +28,13 @@ class FiltersController < ApplicationController
       possible.keys.each do |c|
         v = rows[r][c]
         if v and !v.empty?
-          ob = target_class.
-            visible_to(current_user).
-            send("find_all_by_#{target_id_attribute}".to_sym, v)
+          if all_obs
+            ob = all_obs.select { |x| x.send(target_id_attribute.to_sym, *target_id_attribute_args) == v }
+          else
+            ob = target_class.
+              visible_to(current_user).
+              send("find_all_by_#{target_id_attribute}".to_sym, v)
+          end
           if ob.length == 1
             possible[c] += 1
           end
@@ -35,9 +47,13 @@ class FiltersController < ApplicationController
     if possible.length == 1
       attr_column = possible.keys[0]
       attr_values = rows.collect { |r| r[attr_column] }
-      target_objects = target_class.
-        visible_to(current_user).
-        where("#{target_id_attribute} in (?)", attr_values)
+      if all_obs
+        target_objects = all_obs.select { |x| attr_values.index(x.send(target_id_attribute.to_sym, *target_id_attribute_args)) }
+      else
+        target_objects = target_class.
+          visible_to(current_user).
+          where("#{target_id_attribute} in (?)", attr_values)
+      end
       target_ids = target_objects.collect &:id
 
       # summarize what we found, so the user can sanity-check
@@ -45,7 +61,12 @@ class FiltersController < ApplicationController
       target_class_s = target_class_s.pluralize if target_ids.count != 1
       found = ["#{target_ids.count} #{target_class_s}"]
       n_notfound = rows.count - target_ids.count
-      if target_class.visible_to(current_user).where("#{target_id_attribute} in (?)", attr_values[0]).count == 0
+      if all_obs
+        if all_obs.select { |x| attr_values[0] == x.send(target_id_attribute.to_sym, *target_id_attribute_args) }.count == 0
+          found << "1 header row"
+          n_notfound -= 1
+        end
+      elsif target_class.visible_to(current_user).where("#{target_id_attribute} in (?)", attr_values[0]).count == 0
         found << "1 header row"
         n_notfound -= 1
       end

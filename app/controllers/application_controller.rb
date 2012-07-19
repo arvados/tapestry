@@ -211,7 +211,7 @@ class ApplicationController < ActionController::Base
 
   def csv_for_study_worker(study,participants)
 
-    user_fields = %w(hex e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip phone_number).freeze
+    user_fields = %w(hex token e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip phone_number).freeze
 
     FasterCSV.generate(String.new, :force_quotes => true) do |csv|
 
@@ -221,6 +221,7 @@ class ApplicationController < ActionController::Base
         row = []
 
         row.push u.user.hex
+        row.push u.user.app_token("Study##{study.id}")
         row.push u.user.email
         row.push u.user.full_name
         row.push u.user.ccrs.count > 0 ? 'y' : 'n'

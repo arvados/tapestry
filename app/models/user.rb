@@ -548,10 +548,13 @@ class User < ActiveRecord::Base
   # the token to a third party on behalf of the user.  This gives us a
   # "cheap irrevocable oAuth" mechanism.
   def app_token(app_identifier)
+    return @cached_app_token if @cached_app_identifier == app_identifier
     secret = Tapestry::Application.config.secret_token
     raise "Installation problem: Application.config.secret_token not properly defined" if secret.length < 16
-    OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('SHA1'),
-                            secret, "#{self.id}--#{app_identifier}")
+    @cached_app_identifier = app_identifier
+    @cached_app_token =
+      OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('SHA1'),
+                              secret, "#{self.id}--#{app_identifier}")
   end
 
   def pending_family_relations
