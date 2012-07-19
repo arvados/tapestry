@@ -77,9 +77,14 @@ Tapestry::Application.routes.draw do
   resources :kit_designs
   match '/studies/claim' => 'studies#claim', :as => :study_claim_kit
   match '/studies/:id/users' => 'studies#users', :as => :study_users
+  match '/studies/:id/sent_kits_to_selected' => 'studies#sent_kits_to_selected', :as => :sent_kits_to_selected_study_users
   match '/studies/:id/map' => 'studies#map', :as => :study_map
   match '/studies/:study_id/users/:user_id/:status' => 'studies#update_user_status', :as => :study_update_user_status
+  match '/studies/:id/sent_kits_to_selected' => 'studies#sent_kits_to_selected', :as => :sent_kits_to_selected_study_users, :via => :post
+  match '/studies/:id/accept_interested_selected' => 'studies#accept_interested_selected', :as => :accept_interested_selected_study_users, :via => :post
   resources :studies
+
+  match '/filters/upload' => 'filters#upload', :as => :upload_filter, :via => :post
 
   resources :pages
   match '/' => 'pages#show', :id => 'home'

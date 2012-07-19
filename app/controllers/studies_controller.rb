@@ -53,7 +53,10 @@ class StudiesController < ApplicationController
     @study = Study.find(params[:id])
     authorize! :read, @study
     @all_participants = @study.study_participants.real
-    @participants = @study.study_participants.real.sort { |a,b| a.user.full_name <=> b.user.full_name }
+    @participants = @all_participants
+    select_target_ids(params[:target_ids].split('.').collect(&:to_i)) if params[:target_ids]
+    @participants.sort! { |a,b| a.user.full_name <=> b.user.full_name }
+
     respond_to do |format|
       format.html
       format.csv { send_data csv_for_study(@study,params[:type]), {
@@ -163,4 +166,58 @@ class StudiesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  def accept_interested_selected
+    load_selected_study_participants
+
+    n = 0
+    @selected_study_participants.each do |sp|
+      if sp.status == StudyParticipant::STATUSES['interested']
+        sp.update_attributes! :status => StudyParticipant::STATUSES['accepted']
+      end
+      n += 1
+    end
+    flash[:notice] = "Accepted #{n} participants."
+    redirect_to(params[:return_to] || @study)
+  end
+
+  def sent_kits_to_selected
+    load_selected_study_participants
+
+    if @selected_study_participants.reject { |sp| sp.status == StudyParticipant::STATUSES['accepted'] }.size > 0
+      flash[:error] = "Error: Some selected participants are not accepted into this study."
+      return redirect_to(params[:return_to] || @study)
+    end
+
+    comment = "A collection kit was mailed (##{@study.id} #{@study.name})"
+    sent_at = Time.now
+    n = 0
+    ActiveRecord::Base.transaction do
+      @selected_study_participants.each do |sp|
+        UserLog.new(:user => sp.user,
+                    :controlling_user => current_user,
+                    :comment => comment,
+                    :user_comment => comment).save!
+        sp.update_attributes! :kit_last_sent_at => sent_at
+        n += 1
+      end
+    end
+    flash[:notice] = "Logged that kits have been sent to #{n} participants."
+    redirect_to(params[:return_to] || @study)
+  end
+
+  private
+
+  def select_target_ids(target_ids)
+    ids = @participants.collect(&:user_id) & target_ids
+    @participants = @study.study_participants.where('user_id in (?)', ids)
+    @selected_study_participants = @participants
+  end
+
+  def load_selected_study_participants
+    @selected_study_participants = @study.
+      study_participants.
+      where('`study_participants`.id in (?)', params[:selected_study_participants].split(',').collect(&:to_i))
+  end
+
 end

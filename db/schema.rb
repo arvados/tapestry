@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120628172822) do
+ActiveRecord::Schema.define(:version => 20120718141950) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2111,6 +2111,7 @@ ActiveRecord::Schema.define(:version => 20120628172822) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "kit_last_sent_at"
   end
 
   add_index "study_participant_versions", ["study_participant_id"], :name => "index_study_participant_versions_on_study_participant_id"
@@ -2118,13 +2119,14 @@ ActiveRecord::Schema.define(:version => 20120628172822) do
   create_table "study_participants", :force => true do |t|
     t.integer  "user_id"
     t.integer  "study_id"
-    t.integer  "status",       :default => 0
+    t.integer  "status",           :default => 0
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "lock_version"
+    t.datetime "kit_last_sent_at"
   end
 
   add_index "study_participants", ["user_id", "study_id"], :name => "index_study_participants_on_user_id_and_study_id", :unique => true

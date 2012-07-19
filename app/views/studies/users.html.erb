@@ -1,17 +1,65 @@
+<%- content_for :head do -%>
+<%= javascript_include_tag 'apply_action' %>
+<%- end -%>
+
 <h2><%= @study.name %>: participants</h2>
+
+<div style="float:right">
+  <table><tr><td valign="bottom" style="background:#ffffdd;padding:0 .5em">
+	Select users by uploading a CSV file with participant hex IDs:<br />
+<%= form_for :upload, :url => upload_filter_path, :html => { :multipart => true } do |f| %>
+<%= hidden_field_tag :target_class, 'User' %>
+<%= hidden_field_tag :target_id_attribute, 'hex' %>
+<%= hidden_field_tag :return_to, request.path %>
+<%= file_field_tag 'file' %><br />
+<%= f.submit 'Select hex IDs from CSV file' %>
+<% end %>
+  </td><td valign="bottom">
+	or
+  </td><td valign="bottom" style="background:#ffffdd;padding:0 .5em">
+	<div style="text-align:right">
+	  <%= button_to 'Select all', request.path, :method => :get %>
+	</div>
+      </td></tr>
+    <tr><td colspan="3" style="text-align:right">
+	Apply to selected participants:
+	<%= form_tag '', :method => :post do %>
+	<%= hidden_field_tag :study_id, @study.id %>
+	<%= hidden_field_tag :return_to, request.fullpath %>
+	<%= hidden_field_tag :selected_study_participants, @participants.collect { |x| x.id.to_s }.join(',') %>
+	<%= select_tag :apply_action, options_for_select([['(Choose action)',nil], ['Update status from "interested" to "accepted"',accept_interested_selected_study_users_path], ['Record that kits have been sent',sent_kits_to_selected_study_users_path]]) %>
+	<%= submit_tag 'Apply', :confirm => "Confirm:  Do you really want to apply this action to all #{@participants.size} selected participants?" %>
+	<% end %>
+    </td></tr>
+  </table>
+</div>
 
 <table class="admin_table">
 <tr>
-<td>Undecided:</td><td><%= @all_participants.undecided.count %></td>
-<td>Interested:</td><td><%= @all_participants.interested.count %></td>
-<td>Not accepted:</td><td><%= @all_participants.not_accepted.count %></td>
+<td>Undecided:</td><td>
+    <b><%= "#{@participants.undecided.count} / " if @selected_study_participants %></b>
+    <%= @all_participants.undecided.count %></td>
+<td>Interested:</td><td>
+    <b><%= "#{@participants.interested.count} / " if @selected_study_participants %></b>
+    <%= @all_participants.interested.count %></td>
+<td>Not accepted:</td><td>
+    <b><%= "#{@participants.not_accepted.count} / " if @selected_study_participants %></b>
+    <%= @all_participants.not_accepted.count %></td>
 </tr>
 <tr>
-<td>Not interested:</td><td><%= @all_participants.not_interested.count %></td>
-<td>Accepted:</td><td><%= @all_participants.accepted.count %></td>
-<td>Removed:</td><td><%= @all_participants.removed.count %></td>
+<td>Not interested:</td><td>
+    <b><%= "#{@participants.not_interested.count} / " if @selected_study_participants %></b>
+    <%= @all_participants.not_interested.count %></td>
+<td>Accepted:</td><td>
+    <b><%= "#{@participants.accepted.count} / " if @selected_study_participants %></b>
+    <%= @all_participants.accepted.count %></td>
+<td>Removed:</td><td>
+    <b><%= "#{@participants.removed.count} / " if @selected_study_participants %></b>
+    <%= @all_participants.removed.count %></td>
 </tr>
 </table>
+
+<div style="clear:both"></div>
 
 <% if not @participants.empty? %>
 
@@ -19,12 +67,14 @@
   <tr>
     <th>Name</th>
     <th>Status</th>
+    <th>Kit last sent</th>
     <th></th>
   </tr>
   <% @participants.each do |p| %>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%= current_user.is_admin? ? link_to(p.user.full_name, admin_user_url(p.user)) : p.user.full_name %></td>
       <td><%= p.pretty_status %></td>
+      <td><%= p.kit_last_sent_at %></td>
       <td>
       <% if p.status == 2 %>
         <%= link_to('accept', study_update_user_status_path(p.study,p.user,'accepted'), :method => :post) %>
