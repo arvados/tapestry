@@ -54,7 +54,10 @@ class StudiesController < ApplicationController
     authorize! :read, @study
     @all_participants = @study.study_participants.real
     @participants = @all_participants
+
+    # filter by user IDs provided by /filters/upload
     select_target_ids(params[:target_ids].split('.').collect(&:to_i)) if params[:target_ids]
+
     @participants.sort! { |a,b| a.user.full_name <=> b.user.full_name }
 
     respond_to do |format|
