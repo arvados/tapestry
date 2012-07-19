@@ -177,8 +177,8 @@ class StudiesController < ApplicationController
     @selected_study_participants.each do |sp|
       if sp.status == StudyParticipant::STATUSES['interested']
         sp.update_attributes! :status => StudyParticipant::STATUSES['accepted']
+        n += 1
       end
-      n += 1
     end
     flash[:notice] = "Accepted #{n} participants."
     redirect_to(params[:return_to] || @study)
