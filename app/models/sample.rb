@@ -48,8 +48,22 @@ class Sample < ActiveRecord::Base
     self.last_received = Time.now
     self.owner = current_user
     save
+
     # If the researcher has the sample, they have the kit
     if self.kit and self.kit.owner != current_user
+
+      # Notify the participant if this is the first time we've seen the
+      # kit since it was claimed/returned
+      if self.kit and
+          self.kit.participant and
+          (self.kit.owner.nil? or # kit has been marked "returned"
+           self.kit.owner == self.kit.participant) and # claimed, not returned
+          !self.kit.kit_logs.collect(&:comment).index('Kit received')
+        UserMailer.kit_received_notification(self.kit.participant,
+                                             current_user,
+                                             self.kit).deliver
+      end
+
       KitLog.new(:actor => current_user, :comment => "Kit received", :kit_id => self.kit.id).save!
       self.kit.last_received = Time.now
       self.kit.owner = current_user

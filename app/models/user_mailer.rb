@@ -117,6 +117,13 @@ class UserMailer < ActionMailer::Base
     @subject += 'PGP withdrawal'
   end
 
+  def kit_received_notification(participant, researcher, kit)
+    setup_email(participant)
+    @researcher = researcher
+    @kit = kit
+    @subject += "Received kit \"#{@kit.name}\""
+  end
+
   protected
 
   def setup_email(user)
