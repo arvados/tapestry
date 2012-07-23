@@ -206,6 +206,9 @@ class StudiesController < ApplicationController
       end
     end
     flash[:notice] = "Logged that kits have been sent to #{n} participants."
+    @selected_study_participants.each do |sp|
+      UserMailer.kit_sent_notification(sp).deliver
+    end
     redirect_to(params[:return_to] || @study)
   end
 
