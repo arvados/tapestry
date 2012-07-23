@@ -1,0 +1,18 @@
+<%= @user.full_name %>,
+
+We sent a specimen collection kit to you recently
+(<%= @study_participant.kit_last_sent_at %>), but you have not
+yet claimed it.
+
+When it arrives -- or right now, if you have already
+received it -- please claim it here:
+
+  <%= kit_claim_url %>
+
+If you never receive the kit, don't worry; we will
+send you another kit when resources permit.
+
+
+Many thanks,
+
+Personal Genome Project Staff
