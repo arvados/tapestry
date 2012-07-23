@@ -69,7 +69,7 @@ phone number may be needed.</p>
 	     sp = sp.empty? ? nil : sp.first
 	     (sp.nil? or sp.is_undecided? || sp.is_not_interested?) ? 'Did not participate' : sp.pretty_status
 	     %></td>
-      <td><%= link_to s.name, study_url(:id => s.id) %></td>
+      <td><%= link_to s.name, collection_event_url(:id => s.id) %></td>
       <td><%= s.researcher.full_name %></td>
       <td><%= s.researcher.researcher_affiliation %></td>
       <td><%= s.date_approved %></td>

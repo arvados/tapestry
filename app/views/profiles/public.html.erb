@@ -37,7 +37,7 @@ None added.
       <tr>
 	<% if show_group_heading %>
 	<th rowspan="<%= sample_group.size %>" style="width: 15%">
-	  <%= link_to s.study.name, study_path(s.study) %>
+	  <%= link_to s.study.name, collection_event_path(s.study) %>
 	</th>
 	<% show_group_heading = false %>
 	<% end %>
