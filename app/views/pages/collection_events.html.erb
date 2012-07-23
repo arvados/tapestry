@@ -2,7 +2,7 @@
 
 <p>To organize specimen collection for scientific studies, researchers
 can list studies and specimen collection events here and participants
-can tell us whether they are interested in a particular study. Tissue
+can tell us whether they are interested in a particular collection event. Tissue
 samples and other specimens submitted to the PGP and collaborating
 groups will be used for a range of research purposes. This can include
 a variety of derived data and samples which will become public,
@@ -52,7 +52,7 @@ phone number may be needed.</p>
 
 <% if Study.where('open = ? and approved = ?',false,true).size > 0 %>
 
-<h3>The following stud<%= Study.where('open = ? and approved = ?',false,true).size > 1 ? 'ies are' : 'y is' %> currently closed and <strong>not</strong> seeking participants:</h3>
+<h3>The following collection event<%= Study.where('open = ? and approved = ?',false,true).size > 1 ? 's are' : ' is' %> currently closed and <strong>not</strong> seeking participants:</h3>
 
  <table class="admin_table">
   <tr>
@@ -101,5 +101,5 @@ phone number may be needed.</p>
 </table>
 <% else %>
   <p>You currently do not have any kits.</p>
-  <p><%= link_to "Claim a kit", "/studies/claim" %></p>
 <% end %>
+<p><%= link_to "Claim a kit", study_claim_kit_url %></p>

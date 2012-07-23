@@ -44,21 +44,14 @@ class PagesController < ApplicationController
       @draft_studies = Study.draft.where('researcher_id = ?',current_user.id)
     end
 
-    # Only enrolled users can go to the studies page
-    if params[:id] == 'studies'
+    # Only enrolled users can go to the collection events page
+    if params[:id] == 'collection_events'
       authorized? or return access_denied
       current_user.enrolled? or return redirect_to root_url
     end
 
-    if params[:id] == 'studies'
+    if params[:id] == 'collection_events'
       @kits = Kit.participant(current_user.id).sort{ |a,b| b.updated_at <=> a.updated_at }
-    end
-
-    # This page has now been replaced by the studies page
-    # This redirect can probably go in a few months. I removed the specimen_collection page on 2011-07-26
-    if params[:id] == 'specimen_collection' then
-      redirect_to "/pages/studies"
-      return
     end
 
     params[:page] = params[:page].to_i

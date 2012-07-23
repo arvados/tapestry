@@ -281,8 +281,8 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @study = Study.where('id = ? and open = ?',params[:study_id],true).first
     if @study.nil? then
-      # Only open studies should be available here
-      redirect_to('/pages/studies')
+      # Only open collection events should be available here
+      redirect_to('/pages/collection_events')
       return
     end
     if not @user.study_participants.empty? and not @user.study_participants.where('study_id = ?',@study.id).empty? then
@@ -328,7 +328,7 @@ class UsersController < ApplicationController
 
     if @sp.save
       flash[:notice] = 'Participation status updated.'
-      redirect_to('/pages/studies')
+      redirect_to('/pages/collection_events')
     else
       format.html { render :action => "edit_study" }
     end
