@@ -8,5 +8,15 @@ class UserLog < ActiveRecord::Base
 
   validates_presence_of :user_id
 
-  attr_accessible :user, :comment, :user_comment, :enrollment_step, :origin, :controlling_user
+  attr_accessible :user, :comment, :user_comment, :enrollment_step, :origin, :controlling_user, :info
+
+  serialize :info, OpenStruct
+
+  after_initialize :set_default_info
+
+  private
+
+  def set_default_info
+    self.info ||= OpenStruct.new
+  end
  end

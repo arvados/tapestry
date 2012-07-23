@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120718141950) do
+ActiveRecord::Schema.define(:version => 20120723172740) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1602,13 +1602,13 @@ ActiveRecord::Schema.define(:version => 20120718141950) do
     t.text     "items_to_remove"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.boolean  "remove_data",     :default => false
     t.boolean  "destroy_samples", :default => false
     t.integer  "fulfilled_by_id"
     t.datetime "fulfilled_at"
     t.text     "admin_notes"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
   end
 
   create_table "report_versions", :force => true do |t|
@@ -2487,6 +2487,7 @@ ActiveRecord::Schema.define(:version => 20120718141950) do
     t.integer  "updater_id"
     t.datetime "deleted_at"
     t.integer  "controlling_user_id"
+    t.text     "info"
   end
 
   add_index "user_log_versions", ["user_log_id"], :name => "index_user_log_versions_on_user_log_id"
@@ -2504,6 +2505,7 @@ ActiveRecord::Schema.define(:version => 20120718141950) do
     t.datetime "deleted_at"
     t.integer  "lock_version"
     t.integer  "controlling_user_id"
+    t.text     "info"
   end
 
   create_table "user_versions", :force => true do |t|
