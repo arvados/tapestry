@@ -138,6 +138,14 @@ class UserMailer < ActionMailer::Base
     @subject += "Reminder: specimen collection kit"
   end
 
+  def unreturned_kit_reminder(study_participant, kit)
+    setup_email(study_participant.user)
+    @study_participant = study_participant
+    @study = study_participant.study
+    @kit = kit
+    @subject += "Reminder: specimen collection kit"
+  end
+
   protected
 
   def setup_email(user)

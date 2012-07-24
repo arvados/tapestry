@@ -1,0 +1,15 @@
+<%= @user.full_name %>,
+
+This is just a reminder: You claimed a specimen
+collection kit recently (nickname "<%= @kit.name -%>")
+but as far as we know you have not returned it to us.
+
+If you have already returned it, please update our
+database by indicating here that you have done so:
+
+  <%= collection_events_url(:anchor => 'kits') -%>
+
+
+Many thanks,
+
+Personal Genome Project Staff
