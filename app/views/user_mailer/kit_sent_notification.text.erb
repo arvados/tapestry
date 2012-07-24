@@ -1,10 +1,13 @@
 <%= @user.full_name -%>,
 
 We would like to let you know that we have sent a specimen collection
-kit to you.
+kit to you at this address:
+
+<%= @user.shipping_address.as_multiline_string %>
 
 Please watch for it in the mail, and follow the instructions included
-with the kit when you receive it.
+with the kit when you receive it.  It may take up to 3 weeks for the
+kit to reach you.
 
 
 Many thanks,
