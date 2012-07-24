@@ -91,7 +91,7 @@ class StudiesController < ApplicationController
 
     if not current_user.is_admin? and @study.approved == nil then
       # Only approved studies should be available here for ordinary users
-      redirect_to('/pages/studies')
+      redirect_to('/pages/collection_events')
       return
     end
 

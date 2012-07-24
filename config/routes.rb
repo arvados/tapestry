@@ -83,6 +83,8 @@ Tapestry::Application.routes.draw do
   match '/collection_events/:id/sent_kits_to_selected' => 'studies#sent_kits_to_selected', :as => :sent_kits_to_selected_study_users, :via => :post
   match '/collection_events/:id/accept_interested_selected' => 'studies#accept_interested_selected', :as => :accept_interested_selected_study_users, :via => :post
   resources :collection_events, :controller => "studies"
+  match '/pages/studies', :to => redirect('/pages/collection_events')
+  match '/studies/*x', :to => redirect('/collection_events/%{x}')
 
   match '/filters/upload' => 'filters#upload', :as => :upload_filter, :via => :post
 

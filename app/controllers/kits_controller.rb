@@ -43,7 +43,7 @@ class KitsController < ApplicationController
     KitLog.new(:actor => current_user, :comment => 'Kit received by participant', :kit_id => @kit.id).save
     current_user.log("Kit #{@kit.name} (#{@kit.id}) received",nil,request.remote_ip,"Kit #{@kit.name} received")
 
-    redirect_to(:controller => 'pages', :action => 'show', :id => 'studies' )
+    redirect_to(:controller => 'pages', :action => 'show', :id => 'collection_events' )
   end
 
   # POST /kit/1/returned
@@ -52,7 +52,7 @@ class KitsController < ApplicationController
 
     if (@kit.participant != current_user) then
         flash[:error] = 'You do not have access to this kit'
-        redirect_to(:controller => 'pages', :action => 'show', :id => 'studies')
+        redirect_to(:controller => 'pages', :action => 'show', :id => 'collection_events')
         return
     end
 
@@ -72,7 +72,7 @@ class KitsController < ApplicationController
     KitLog.new(:actor => current_user, :comment => 'Kit returned to researcher', :kit_id => @kit.id).save
     current_user.log("Kit #{@kit.name} (#{@kit.id}) returned to researcher",nil,request.remote_ip,"Kit #{@kit.name} returned to researcher")
 
-    redirect_to(:controller => 'pages', :action => 'show', :id => 'studies')
+    redirect_to(:controller => 'pages', :action => 'show', :id => 'collection_events')
   end
 
    # POST /kits/1/sent
