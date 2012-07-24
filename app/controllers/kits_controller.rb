@@ -11,7 +11,7 @@ class KitsController < ApplicationController
     if (@kit.nil?) then
         flash[:error] = "We do not have a record of a kit with this name. Please double check the spelling. If you are certain the spelling is correct, please " + 
                         ActionController::Base.helpers.link_to('contact us', new_message_path) + "."
-        redirect_to(:controller => 'studies', :action => 'claim')
+        redirect_to(study_claim_kit_url)
         return
     end
   end
