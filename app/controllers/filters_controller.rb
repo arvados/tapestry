@@ -10,6 +10,22 @@ class FiltersController < ApplicationController
 
     target_ids = []
     uploaded_io = params[:file]
+
+    unless uploaded_io and (uploaded_data = uploaded_io.read)
+      flash[:error] = 'No file selected.'
+      return redirect_to(:back || params[:return_to])
+    end
+
+    rows = begin
+             CSV.parse(uploaded_data)
+           rescue
+             nil
+           end
+    if !rows or rows.empty?
+      flash[:error] = 'Failed to parse CSV file.'
+      return redirect_to(:back || params[:return_to])
+    end
+
     target_class = params[:target_class].constantize or raise Exception.new
     target_id_attribute = params[:target_id_attribute]
     target_id_attribute_args = []
@@ -21,7 +37,6 @@ class FiltersController < ApplicationController
       all_obs = target_class.visible_to(current_user)
     end
 
-    rows = CSV.parse(uploaded_io.read)
     possible = Hash.new
     (0..rows[1].length-1).each { |c| possible[c] = 0 }
     (1..[8,rows.length-1].min).each do |r|
@@ -31,6 +46,7 @@ class FiltersController < ApplicationController
           if all_obs
             ob = all_obs.select { |x| x.send(target_id_attribute.to_sym, *target_id_attribute_args) == v }
           else
+            v = unprefix_url_code(v) if target_id_attribute == 'url_code'
             ob = target_class.
               visible_to(current_user).
               send("find_all_by_#{target_id_attribute}".to_sym, v)
@@ -47,6 +63,7 @@ class FiltersController < ApplicationController
     if possible.length == 1
       attr_column = possible.keys[0]
       attr_values = rows.collect { |r| r[attr_column] }
+      attr_values.map! { |v| unprefix_url_code(v) } if target_id_attribute == 'url_code'
       if all_obs
         target_objects = all_obs.select { |x| attr_values.index(x.send(target_id_attribute.to_sym, *target_id_attribute_args)) }
       else
@@ -78,10 +95,19 @@ class FiltersController < ApplicationController
       flash[:error] = "Error: Could not figure out which column contained #{target_id_attribute} keys. #{possible.inspect}"
     end
 
-    uri = URI(params[:return_to] || back)
+    uri = URI(params[:return_to] || :back)
     uri.query = Rack::Utils.build_query(:target_ids => target_ids.join('.'))
     return_to = uri.to_s
 
     redirect_to return_to
+  end
+
+  private
+
+  def unprefix_url_code(x)
+    require 'md5'
+    x.sub(/^.*\//) do |prefix|
+      prefix == 'http://myp.gp/hu/' ? '' : MD5.hexdigest(prefix).to_i(16).to_s(36)[0..5]
+    end
   end
 end

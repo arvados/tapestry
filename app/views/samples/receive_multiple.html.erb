@@ -21,18 +21,30 @@ jQuery(function(){
 		     var i = $(this).find('input[type=checkbox]');
 		     i.attr('checked', !i[0].checked);
 		 });
+    $(document).
+	delegate('button.selectall,button.deselectall', 'click', {},
+		 function(event, ui) {
+		     $('table#which-samples tr.checkable input[type=checkbox]').
+			 attr('checked', $(event.srcElement).hasClass('selectall'));
+		 });
     });
 <% end %>
 
+<p>
+  <b>Please indicate which samples you received.</b>  Compare the
+  following sample codes with the labels on the samples themselves.
+  Tick the checkboxes for the samples you have in front of you.
+  Then click the "Receive" button below.
+</p>
+
+<p>
+  <button class="selectall">Select all</button>
+  <button class="deselectall">Deselect all</button>
+</p>
+
+<% rownumber = 0 %>
 <%= form_for(:sample, :url => receive_multiple_samples_confirm_path, :method => :post) do |f| %>
 <div class="profile-data">
-
-  <p>
-    <b>Please indicate which samples you received.</b>  Compare the
-    following sample codes with the labels on the samples themselves.
-    Tick the checkboxes for the samples you have in front of you.
-    Then click the "Receive" button below.
-  </p>
 
   <table id="which-samples">
     <thead>

@@ -220,10 +220,15 @@ class SamplesController < ApplicationController
       current_user.researcher_affiliation &&
       current_user.researcher_affiliation.match(/Coriell/i)
 
-    @samples = Sample.
+    @samples = []
+    @samples |= Sample.
       where('url_code in (?)', params[:url_codes].split(',')).
       includes(:kit).
-      includes(:participant)
+      includes(:participant) unless params[:url_codes] == 'FILE'
+    @samples |= Sample.
+      where('id in (?)', params[:target_ids].split('.')).
+      includes(:kit).
+      includes(:participant) if params[:target_ids]
 
     @reveal_participant = current_user && current_user.researcher &&
       (@hack_is_coriell || current_user.researcher_onirb)

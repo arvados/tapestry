@@ -44,3 +44,16 @@ jQuery(function(){
   <li>You can enter kit IDs and kit names.</li>
   <li>If you enter a kit ID, or multiple sample IDs, you will confirm the individual sample IDs on the next page.  (If you enter just one sample ID, we will just process it right away.)</li>
 </ul>
+
+<% if current_user.is_admin? # (not hardened yet; see FiltersController) %>
+
+<p>You can also upload a CSV file containing <em>one sample bar code per row:</em><br />
+<%= form_for :upload, :url => upload_filter_path, :html => { :multipart => true } do |f| %>
+<%= hidden_field_tag :target_class, 'Sample' %>
+<%= hidden_field_tag :target_id_attribute, 'url_code' %>
+<%= hidden_field_tag :return_to, receive_multiple_samples_path('FILE') %>
+<%= file_field_tag 'file' %><br />
+<%= f.submit 'Upload CSV of sample bar codes' %>
+<% end %>
+
+<% end %>
