@@ -561,6 +561,15 @@ class User < ActiveRecord::Base
     return FamilyRelation.find(:all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id])
   end
 
+  def normalized_shipping_address
+    return nil if !self.shipping_address
+    self.class.normalize_shipping_address(self.full_name + ", " + self.shipping_address.as_multiline_string)
+  end
+
+  def self.normalize_shipping_address(s)
+    s.gsub(/[\n\.,]/," ").gsub(/  +/,' ').gsub(/( \d{5})[- ]?\d{4} *$/, '\1').downcase if s
+  end
+
   protected
 
   def make_hex_code
