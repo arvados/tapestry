@@ -74,9 +74,11 @@
 <div style="clear:both"></div>
 
 <% if not @participants.empty? %>
+<% rownum = 0 %>
 
 <table class="admin_table">
   <tr>
+    <th>#</th>
     <th>Name</th>
     <th>Status</th>
     <th>Kit last sent</th>
@@ -84,6 +86,7 @@
   </tr>
   <% @participants.each do |p| %>
     <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%= rownum += 1 %></td>
       <td><%= current_user.is_admin? ? link_to(p.user.full_name, admin_user_url(p.user)) : p.user.full_name %></td>
       <td><%= p.pretty_status %></td>
       <td><%= p.kit_last_sent_at %></td>
