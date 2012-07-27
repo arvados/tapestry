@@ -564,7 +564,13 @@ class User < ActiveRecord::Base
   end
 
   def self.normalize_shipping_address(s)
-    s.gsub(/[\n\.,]/," ").gsub(/  +/,' ').gsub(/( \d{5})[- ]?\d{4} *$/, '\1').downcase if s
+    s.gsub(/[\n\.,\#]/," ").
+      downcase.
+      gsub(/ street /, ' st ').
+      gsub(/ drive /, ' dr ').
+      gsub(/ road /, ' rd ').
+      gsub(/( \d{5})[- ]?\d{4} *$/, '\1').
+      gsub(' ','') if s
   end
 
   protected
