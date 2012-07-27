@@ -83,7 +83,7 @@ class KitsController < ApplicationController
   end
 
   # POST /kits/sent_selected
-  before_filter :select_kit_ids, :only => :sent_selected
+  before_filter :load_selection, :only => :sent_selected
   def sent_selected
     Kit.transaction do
       already_shipped = @selected_kits.select { |x| x.shipper or x.participant }
@@ -128,8 +128,12 @@ class KitsController < ApplicationController
     if a.id > b.id
       a,b = b,a
     end
-    @selected_kits = Kit.where('id >= ? and id <= ? and study_id=?', a.id, b.id, a.study_id)
+    @where = ['id >= ? and id <= ? and study_id=?', a.id, b.id, a.study_id]
+    @selected_kits = Kit.where(*@where)
     @selected_kits_description = "between '#{a.name}' (#{a.crc_id_s}) and '#{b.name}' (#{b.crc_id_s}) from '#{a.study.name}'"
+    @selection = Selection.new(:spec => { :where => @where },
+                               :targets => @selected_kits.collect(&:id))
+    @selection.save
   end
   
   # GET /kits
@@ -297,11 +301,11 @@ class KitsController < ApplicationController
     end
   end
 
-  private
+  protected
 
-  def select_kit_ids
-    @selected_kits = Kit.
-      where('id in (?)', params[:selected_kit_ids].split(',').collect(&:to_i))
+  def load_selection
+    super
+    @selected_kits = Kit.where('id in (?)', @selection.target_ids)
     unless current_user.is_admin?
       @selected_kits = @selected_kits.where('originator_id = ?', current_user.id)
     end

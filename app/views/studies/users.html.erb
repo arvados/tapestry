@@ -46,7 +46,7 @@
 	<%= form_tag '', :method => :post do %>
 	<%= hidden_field_tag :study_id, @study.id %>
 	<%= hidden_field_tag :return_to, request.fullpath %>
-	<%= hidden_field_tag :selected_study_participants, @participants.collect { |x| x.id.to_s }.join(',') %>
+	<%= hidden_field_tag :selection_id, @selection.id if @selection %>
 	<%= select_tag :apply_action, options_for_select([['(Choose action)',nil], ['Update status from "interested" to "accepted"',accept_interested_selected_study_users_path], ['Record that kits have been sent',sent_kits_to_selected_study_users_path]]) %>
 	<%= submit_tag 'Apply', :confirm => "Confirm:  Do you really want to apply this action to all #{@participants.size} selected participants?" %>
 	<% end %>

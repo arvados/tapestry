@@ -135,6 +135,10 @@ class FiltersController < ApplicationController
       end
       target_ids = target_objects.collect &:id
 
+      @selection = Selection.new(:spec => { :table => rows },
+                                 :targets => target_ids)
+      @selection.save!
+
       # summarize what we found, so the user can sanity-check
       target_class_s = target_class.to_s.downcase
       target_class_s = target_class_s.pluralize if target_ids.count != 1
@@ -163,7 +167,9 @@ class FiltersController < ApplicationController
     end
 
     uri = URI(params[:return_to] || :back)
-    uri.query = Rack::Utils.build_query(:target_ids => target_ids.join('.'))
+    if @selection
+      uri.query = Rack::Utils.build_query(:selection_id => @selection.id)
+    end
     return_to = uri.to_s
 
     redirect_to return_to

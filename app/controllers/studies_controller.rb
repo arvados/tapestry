@@ -50,14 +50,10 @@ class StudiesController < ApplicationController
 
   # GET /studies/1/users
   def users
-    @study = Study.find(params[:id])
+    load_selection
     authorize! :read, @study
+
     @all_participants = @study.study_participants.real
-    @participants = @all_participants
-
-    # filter by user IDs provided by /filters/upload
-    select_target_ids(params[:target_ids].split('.').collect(&:to_i)) if params[:target_ids]
-
     @participants.sort! { |a,b| a.user.full_name <=> b.user.full_name }
 
     respond_to do |format|
@@ -171,7 +167,8 @@ class StudiesController < ApplicationController
   end
 
   def accept_interested_selected
-    load_selected_study_participants
+    load_selection
+    authorize! :read, @study
 
     n = 0
     @selected_study_participants.each do |sp|
@@ -185,7 +182,8 @@ class StudiesController < ApplicationController
   end
 
   def sent_kits_to_selected
-    load_selected_study_participants
+    load_selection
+    authorize! :read, @study
 
     if @selected_study_participants.reject { |sp| sp.status == StudyParticipant::STATUSES['accepted'] }.size > 0
       flash[:error] = "Error: Some selected participants are not accepted into this study."
@@ -212,18 +210,17 @@ class StudiesController < ApplicationController
     redirect_to(params[:return_to] || @study)
   end
 
-  private
+  protected
 
-  def select_target_ids(target_ids)
-    ids = @participants.collect(&:user_id) & target_ids
-    @participants = @study.study_participants.where('user_id in (?)', ids)
-    @selected_study_participants = @participants
-  end
-
-  def load_selected_study_participants
-    @selected_study_participants = @study.
-      study_participants.
-      where('`study_participants`.id in (?)', params[:selected_study_participants].split(',').collect(&:to_i))
+  def load_selection
+    super
+    @study = Study.includes(:study_participants).find(params[:id])
+    @participants = @study.study_participants.real
+    if @selection
+      ids = @study.study_participants.real.collect(&:user_id) & @selection.target_ids
+      @participants = @participants.where('user_id in (?)', ids)
+      @selected_study_participants = @participants
+    end
   end
 
 end

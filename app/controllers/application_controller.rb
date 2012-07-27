@@ -259,5 +259,8 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Not Found')
   end
 
-private
+  def load_selection
+    @selection ||= Selection.visible_to(current_user).find(params[:selection_id]) if params[:selection_id]
+  end
+
 end

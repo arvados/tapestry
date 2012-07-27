@@ -215,6 +215,7 @@ class SamplesController < ApplicationController
     redirect_to(receive_sample_path)
   end
 
+  before_filter :load_selection, :only => :receive_multiple
   def receive_multiple
     @hack_is_coriell = current_user &&
       current_user.researcher_affiliation &&
@@ -226,9 +227,9 @@ class SamplesController < ApplicationController
       includes(:kit).
       includes(:participant) unless params[:url_codes] == 'FILE'
     @samples |= Sample.
-      where('id in (?)', params[:target_ids].split('.')).
+      where('id in (?)', @selection.target_ids).
       includes(:kit).
-      includes(:participant) if params[:target_ids]
+      includes(:participant) if @selection
 
     @reveal_participant = current_user && current_user.researcher &&
       (@hack_is_coriell || current_user.researcher_onirb)
