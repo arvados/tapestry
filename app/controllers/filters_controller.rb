@@ -117,14 +117,20 @@ class FiltersController < ApplicationController
       end
       n_duplicates = nil
       if all_obs
+        rownum = -1
+        target_ids = []
         target_objects = attr_values.collect { |v|
-          if all_obs.has_key? v
+          rownum += 1
+          if all_obs[v]
+            target_ids << [all_obs[v].id, rownum]
             all_obs[v]
           else
+            target_ids << [nil, rownum]
             logger.debug "Not found: #{v}"
             nil
           end
-        }.compact
+        }
+        target_objects.compact!
         target_objects_uniq = target_objects.uniq
         n_duplicates = target_objects.count - target_objects_uniq.count
         target_objects = target_objects_uniq
@@ -132,18 +138,21 @@ class FiltersController < ApplicationController
         target_objects = target_class.
           visible_to(current_user).
           where("#{@target_id_attribute} in (?)", attr_values)
+        target_ids = target_objects.collect &:id
       end
-      target_ids = target_objects.collect &:id
 
-      @selection = Selection.new(:spec => { :table => rows },
+      @selection = Selection.new(:spec => {
+                                   :table => rows,
+                                   :attr_column => attr_column
+                                 },
                                  :targets => target_ids)
       @selection.save!
 
       # summarize what we found, so the user can sanity-check
       target_class_s = target_class.to_s.downcase
       target_class_s = target_class_s.pluralize if target_ids.count != 1
-      found = ["#{target_ids.count} #{target_class_s}"]
-      n_notfound = rows.count - target_ids.count
+      found = ["#{target_objects.count} #{target_class_s}"]
+      n_notfound = rows.count - target_objects.count
       if all_obs
         if !all_obs[attr_values[0]]
           found << "1 header row"
