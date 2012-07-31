@@ -406,6 +406,16 @@ module PhrccrsHelper
     allergies = []
     procedures = []
 
+    # When Google Health CCRs are imported in Microsoft Healthvault and then
+    # exported again, the ccr namespace is not defined like in native Microsoft
+    # Healtvault CCR documents. Go figure.
+
+    if ccr_xml.namespaces().has_key?('xmlns') and 
+     not ccr_xml.namespaces().has_key?('xmlns:ccr') and 
+     ccr_xml.namespaces()['xmlns'] == 'urn:astm-org:CCR' then
+      @ccr_xml.root.add_namespace('ccr','urn:astm-org:CCR')
+    end
+
     dem = Demographic.new
     dob = get_first(ccr_xml.xpath('//ccr:Actors/ccr:Actor/ccr:Person/ccr:DateOfBirth/ccr:ExactDateTime'))
     begin
