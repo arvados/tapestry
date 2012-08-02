@@ -40,6 +40,7 @@ class Selection < ActiveRecord::Base
   # Returns hash where key = target_id, value = array of [row_index,
   # *original_row]
   def spec_table_rows_for_all_targets
+    return @spec_table_rows_for_all_targets if @spec_table_rows_for_all_targets
     return {} if !spec[:table]
     ret = {}
     targets.each { |t|
@@ -48,6 +49,30 @@ class Selection < ActiveRecord::Base
         ret[t[0]] << [t[1], *spec[:table][t[1]]]
       end
     }
-    ret
+    @spec_table_rows_for_all_targets = ret
+  end
+
+  # Find the column in spec[:table] that is most responsive to the
+  # supplied block.
+  def spec_table_column_with_most
+    return nil if !spec[:table]
+    score = []
+    spec[:table].each do |row|
+      row.each_index do |colnum|
+        if block_given?
+          next unless yield row[colnum]
+        else
+          next unless row[colnum]
+        end
+        score[colnum] = 1 + (score[colnum] || 0)
+      end
+    end
+    if score.select { |x| x && x == score.compact.max }.count == 1
+      # One column is more responsive to supplied block than all others
+      score.index(score.compact.max)
+    else
+      # Ambiguous result
+      nil
+    end
   end
 end

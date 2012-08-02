@@ -93,6 +93,9 @@
     <th>Status</th>
     <th>Kit last sent</th>
     <th></th>
+    <% if @selection %>
+    <th>Action parameters</th>
+    <% end %>
   </tr>
   <% @participants.each do |p| %>
     <tr class="<%= cycle 'even', 'odd' %>">
@@ -109,6 +112,9 @@
         <%= link_to('accept', study_update_user_status_path(p.study,p.user,'accepted'), :confirm => 'Are you sure? This user has already been marked "not accepted".', :method => :post) %>
       <% end %>
       </td>
+      <% if @selection %>
+      <td><%= @study_participant_info[p.id].inspect %></td>
+      <% end %>
     </tr>
   <% end %>
 </table>

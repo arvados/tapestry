@@ -55,6 +55,7 @@ class StudiesController < ApplicationController
 
     @all_participants = @study.study_participants.real
     @participants.sort! { |a,b| a.user.full_name <=> b.user.full_name }
+    study_participant_info
 
     respond_to do |format|
       format.html
@@ -191,22 +192,32 @@ class StudiesController < ApplicationController
     end
 
     comment = "A collection kit was mailed (##{@study.id} #{@study.name})"
-    sent_at = Time.now
+    default_sent_at = Time.now
     n = 0
     ActiveRecord::Base.transaction do
       @selected_study_participants.each do |sp|
+        sp_info = study_participant_info[sp.id]
+        log_info = OpenStruct.new(:kit_sent_at => sp_info[:kit_last_sent_at],
+                                  :tracking_id => sp_info[:tracking_id])
         UserLog.new(:user => sp.user,
                     :controlling_user => current_user,
                     :comment => comment,
-                    :user_comment => comment).save!
-        sp.update_attributes! :kit_last_sent_at => sent_at
+                    :user_comment => comment,
+                    :info => OpenStruct.new(:kit_sent_at => sent_at,
+                                            :tracking_id => sp_info[:tracking_id])).save!
+        sp.update_attributes! :kit_last_sent_at => (log_info.kit_last_sent_at || default_sent_at)
         n += 1
       end
     end
     flash[:notice] = "Logged that kits have been sent to #{n} participants."
+    n_notified = 0
     @selected_study_participants.each do |sp|
-      UserMailer.kit_sent_notification(sp).deliver
+      unless study_participant_info[sp.id][:skip_notification]
+        UserMailer.kit_sent_notification(sp).deliver
+        n_notified += 1
+      end
     end
+    flash[:notice] = "  #{n_notified} notification#{'s' if n_notified != 1} sent."
     redirect_to(params[:return_to] || @study)
   end
 
@@ -221,6 +232,62 @@ class StudiesController < ApplicationController
       @participants = @participants.where('user_id in (?)', ids)
       @selected_study_participants = @participants
     end
+  end
+
+  def study_participant_info
+    @study_participant_info = {} if !@selection
+    return @study_participant_info if @study_participant_info
+
+    found_usa_dates = 0
+    found_native_dates = 0
+    usa_date_format = '%m/%d/%Y %H:%M %p'
+
+    timestamp_column = @selection.spec_table_column_with_most do |x|
+      unless x.respond_to?(:match) && x.match(/\d+-\d+-\d+|\d+\/\d+\/\d+/)
+        nil
+      else
+        begin
+          found_usa_dates += 1 if Time.strptime(x, usa_date_format)
+        rescue
+          found_native_dates += 1 if Time.parse(x) rescue nil
+        end
+      end
+    end
+
+    tracking_id_column = @selection.spec[:table][0].index { |x| x && x.match(/^tracking/i) } rescue nil
+    tracking_id_column ||= @selection.spec_table_column_with_most do |x|
+      x.respond_to?(:match) && x.match(/^9400\d+0000000$/)
+    end
+
+    @study_participant_info = {}
+    @participants.each do |study_participant|
+      info = {}
+      @selection.spec_table_rows_for_all_targets[study_participant.user_id].each do |spec_table_row|
+        if found_usa_dates > found_native_dates
+          t = Time.strptime(spec_table_row[timestamp_column+1], usa_date_format) rescue nil
+        else
+          t = Time.parse(spec_table_row[timestamp_column+1]) rescue nil
+        end
+        # Most recent timestamp in all rows referring to this user
+        if t
+          info[:kit_last_sent_at] = t if !info[:kit_last_sent_at] || t > info[:kit_last_sent_at]
+        end
+
+        # Number of rows referring to this user
+        info[:n_rows] ||= 0
+        info[:n_rows] += 1
+
+        # Courier tracking id
+        info[:tracking_id] = spec_table_row[tracking_id_column+1] if tracking_id_column
+      end
+
+      if info[:kit_last_sent_at] and info[:kit_last_sent_at] < 14.days.ago 
+        info[:skip_notification] = true
+      end
+
+      @study_participant_info[study_participant.id] = info
+    end
+    @study_participant_info
   end
 
 end
