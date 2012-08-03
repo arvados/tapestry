@@ -558,21 +558,6 @@ class User < ActiveRecord::Base
     return FamilyRelation.find(:all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id])
   end
 
-  def normalized_shipping_address
-    return nil if !self.shipping_address
-    self.class.normalize_shipping_address(self.full_name + ", " + self.shipping_address.as_multiline_string)
-  end
-
-  def self.normalize_shipping_address(s)
-    s.gsub(/[\n\.,\#]/," ").
-      downcase.
-      gsub(/ street /, ' st ').
-      gsub(/ drive /, ' dr ').
-      gsub(/ road /, ' rd ').
-      gsub(/( \d{5})[- ]?\d{4} *$/, '\1').
-      gsub(' ','') if s
-  end
-
   def normalized_full_name
     return nil if !self.full_name
     self.class.normalize_full_name(self.full_name)
