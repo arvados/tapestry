@@ -173,7 +173,11 @@ class Admin::UsersController < Admin::AdminControllerBase
       @log_messages << "Admin changed email address from '#{@user.email}' to '#{params[:user][:email]}'"
     end
     if (@user.pgp_id != params[:user][:pgp_id]) then
-      @log_messages << "Admin changed PGP# from PGP#{@user.pgp_id} to PGP#{params[:user][:pgp_id]}"
+      if @user.pgp_id.nil? then
+        @log_messages << "Admin assigned PGP#{params[:user][:pgp_id]}"
+      else
+        @log_messages << "Admin changed PGP# from PGP#{@user.pgp_id} to PGP#{params[:user][:pgp_id]}"
+      end
     end
     if (!@user.deactivated_at and params[:user][:deactivated_at]=='1')
       @user.deactivated_at = Time.now
