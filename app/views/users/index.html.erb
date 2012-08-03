@@ -11,7 +11,14 @@ jQuery(function() {
             "bJQueryUI": true,
             "sAjaxSource": '<%=j(users_path)%>',
             "aoColumns": [
-                { 'mDataProp': 'pgp_id' },
+                { 'mDataProp': 'pgp_id',
+                  'fnRender': function(oObj) {
+                      var r = oObj.aData.pgp_id;
+                      if(r)
+                          r = 'PGP' + r;
+                      return r;
+                  }
+                },
                 { 'mDataProp': 'hex',
                   'fnRender': function(oObj) {
                       var r = oObj.aData.hex;
@@ -73,7 +80,7 @@ jQuery(function() {
     <noscript>
       <% @users.as_api_response(:public).each do |e| -%>
       <tr><td>
-          <%= e[:pgp_id] %>
+          PGP<%= e[:pgp_id] %>
 	</td><td>
           <%= link_to e[:hex], url_for(:controller => 'profiles', :action => 'public', :hex => e[:hex]) %>
 	</td><td>

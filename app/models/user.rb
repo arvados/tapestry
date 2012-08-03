@@ -86,10 +86,7 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email,    :case_sensitive => false
   validates_uniqueness_of   :pgp_id,   :case_sensitive => false, :allow_nil => true
 
-  validates_format_of :pgp_id,
-                      :with => %r{^PGP(\d+)$},
-                      :message => "must be of the format PGPXXX with XXX a number",
-                      :allow_nil => true
+  validates :pgp_id, :numericality => true, :allow_nil => true
 
   # this comes from the alexdunae-validates_email_format_of gem, see http://code.dunae.ca/validates_email_format_of.html
   # ward, 2010-10-13
@@ -507,7 +504,7 @@ class User < ActiveRecord::Base
     elsif (other.pgp_id.nil?)
       return -1
     else
-      return pgp_id.sub(/PGP/,'').to_i <=> other.pgp_id.sub(/PGP/,'').to_i
+      return pgp_id <=> other.pgp_id
     end
   end
 
@@ -588,7 +585,7 @@ class User < ActiveRecord::Base
     sortkey = sortkey.to_s.gsub(/^user\./,'').to_sym
     case sortkey
     when :pgp_id
-      "pgp_id is null, 0+replace(pgp_id,'PGP','')"
+      sortkey
     when :hex, :enrolled
       sortkey
     when :received_sample_materials
