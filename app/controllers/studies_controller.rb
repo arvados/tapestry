@@ -199,13 +199,14 @@ class StudiesController < ApplicationController
         sp_info = study_participant_info[sp.id]
         log_info = OpenStruct.new(:kit_sent_at => sp_info[:kit_last_sent_at],
                                   :tracking_id => sp_info[:tracking_id])
+        sent_at = log_info.kit_sent_at || default_sent_at
         UserLog.new(:user => sp.user,
                     :controlling_user => current_user,
                     :comment => comment,
                     :user_comment => comment,
                     :info => OpenStruct.new(:kit_sent_at => sent_at,
                                             :tracking_id => sp_info[:tracking_id])).save!
-        sp.update_attributes! :kit_last_sent_at => (log_info.kit_last_sent_at || default_sent_at)
+        sp.update_attributes! :kit_last_sent_at => sent_at
         n += 1
       end
     end

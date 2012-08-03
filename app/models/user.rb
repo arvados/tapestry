@@ -573,6 +573,19 @@ class User < ActiveRecord::Base
       gsub(' ','') if s
   end
 
+  def normalized_full_name
+    return nil if !self.full_name
+    self.class.normalize_full_name(self.full_name)
+  end
+
+  def self.normalize_full_name(s)
+    s.gsub(/,.*/, '').
+      gsub(/[\n\.\(\)]/,' ').
+      gsub(/  +/,' ').
+      downcase.
+      strip if s
+  end
+
   protected
 
   def make_hex_code

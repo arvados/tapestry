@@ -61,6 +61,10 @@ class FiltersController < ApplicationController
     @searchkey_normalizer = "normalize_#{@target_id_attribute}".to_sym
     @searchkey_normalizer = false unless target_class.respond_to? @searchkey_normalizer
 
+    if params[:target_scope] and target_class.respond_to?(params[:target_scope].to_sym)
+      @target_scope = params[:target_scope].to_sym
+    end
+
     if !@normalize_attribute and
         @target_id_attribute_args.count == 0 and
         target_class.respond_to? "find_all_by_#{@target_id_attribute}".to_sym
@@ -68,6 +72,7 @@ class FiltersController < ApplicationController
     else
       all_obs = {}
       finder = target_class.visible_to(current_user)
+      finder = finder.send(@target_scope) if @target_scope
       finder = finder.includes(params[:target_finder_includes].to_sym) if params[:target_finder_includes]
       finder.each { |x|
         k = x.send(@target_attribute_getter, *@target_id_attribute_args)
@@ -136,7 +141,9 @@ class FiltersController < ApplicationController
         target_objects = target_objects_uniq
       else
         target_objects = target_class.
-          visible_to(current_user).
+          visible_to(current_user)
+        target_objects = target_objects.send(@target_scope) if @target_scope
+        target_objects = target_objects.
           where("#{@target_id_attribute} in (?)", attr_values)
         target_ids = target_objects.collect &:id
       end
