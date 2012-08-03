@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
   validates_presence_of     :email
   validates_length_of       :email,    :within => 6..100 #r@a.wk
   validates_uniqueness_of   :email,    :case_sensitive => false
-  validates_uniqueness_of   :pgp_id,   :case_sensitive => false, :allow_nil => true
+  validates_uniqueness_of   :pgp_id,   :case_sensitive => false, :allow_nil => true, :message => ' # has already been taken'
 
   validates :pgp_id, :numericality => true, :allow_nil => true
 

@@ -45,7 +45,7 @@
   <% @users.each do |user| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
       <% if @show.has_key?('pgp_id') and @show['pgp_id'] == true -%>
-      <td>PGP<%= user.pgp_id %></td>
+      <td><%= user.pgp_id.nil? ? '' : 'PGP' %><%= user.pgp_id %></td>
       <% end -%>
       <% if @show.has_key?('unique_hash') and @show['unique_hash'] == true -%>
       <td><%= user.unique_hash %></td>
