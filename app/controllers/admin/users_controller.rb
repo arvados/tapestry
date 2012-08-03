@@ -158,40 +158,47 @@ class Admin::UsersController < Admin::AdminControllerBase
       @user.security_answer = nil
     end
 
+    @log_messages = []
+
     if (@user.first_name != params[:user][:first_name]) then
-      @user.log("Admin changed first name from '#{@user.first_name}' to '#{params[:user][:first_name]}'")
+      @log_messages << "Admin changed first name from '#{@user.first_name}' to '#{params[:user][:first_name]}'"
     end
     if (@user.middle_name != params[:user][:middle_name]) then
-      @user.log("Admin changed middle name from '#{@user.middle_name}' to '#{params[:user][:middle_name]}'")
+      @log_messages << "Admin changed middle name from '#{@user.middle_name}' to '#{params[:user][:middle_name]}'"
     end
     if (@user.last_name != params[:user][:last_name]) then
-      @user.log("Admin changed last name from '#{@user.last_name}' to '#{params[:user][:last_name]}'")
+      @log_messages << "Admin changed last name from '#{@user.last_name}' to '#{params[:user][:last_name]}'"
     end
     if (@user.email != params[:user][:email]) then
-      @user.log("Admin changed email address from '#{@user.email}' to '#{params[:user][:email]}'")
+      @log_messages << "Admin changed email address from '#{@user.email}' to '#{params[:user][:email]}'"
     end
     if (@user.pgp_id != params[:user][:pgp_id]) then
-      @user.log("Admin changed PGP# from PGP#{@user.pgp_id} to PGP#{params[:user][:pgp_id]}")
+      @log_messages << "Admin changed PGP# from PGP#{@user.pgp_id} to PGP#{params[:user][:pgp_id]}"
     end
     if (!@user.deactivated_at and params[:user][:deactivated_at]=='1')
       @user.deactivated_at = Time.now
-      @user.log("Admin deactivated account")
+      @log_messages << "Admin deactivated account"
     elsif (@user.deactivated_at and params[:user][:deactivated_at]=='0')
       @user.deactivated_at = nil
-      @user.log("Admin reactivated account")
+      @log_messages << "Admin reactivated account"
     end
     params[:user].delete :is_deactivated
     if (!@user.suspended_at and params[:user][:suspended_at]=='1')
       @user.suspended_at = Time.now
-      @user.log("Admin suspended account")
+      @log_messages << "Admin suspended account"
     elsif (@user.suspended_at and params[:user][:suspended_at]=='0')
       @user.suspended_at = nil
-      @user.log("Admin unsuspended account")
+      @log_messages << "Admin unsuspended account"
     end
     params[:user].delete :is_suspended
 
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'
+      if not @log_messages.empty? then
+        @log_messages.each do |lm|
+          @user.log(lm)
+        end
+      end
       redirect_to admin_users_url
     else
       @mailing_lists = MailingList.all
