@@ -145,9 +145,14 @@ class Admin::UsersController < Admin::AdminControllerBase
     @user.researcher = params[:user].delete(:researcher)
     @user.researcher_onirb = params[:user].delete(:researcher_onirb)
 
+    @log_messages = []
+
     if (params[:user][:pgp_id] == '') then
       params[:user].delete(:pgp_id)
-      @user.pgp_id = nil
+      if not @user.pgp_id.nil? then
+        @log_messages << "Admin removed PGP#{params[:user][:pgp_id]}"
+        @user.pgp_id = nil
+      end
     end
     if (params[:user][:security_question] == '') then
       params[:user].delete(:security_question)
@@ -157,8 +162,6 @@ class Admin::UsersController < Admin::AdminControllerBase
       params[:user].delete(:security_answer)
       @user.security_answer = nil
     end
-
-    @log_messages = []
 
     if (@user.first_name != params[:user][:first_name]) then
       @log_messages << "Admin changed first name from '#{@user.first_name}' to '#{params[:user][:first_name]}'"
