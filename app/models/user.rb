@@ -585,7 +585,7 @@ class User < ActiveRecord::Base
     sortkey = sortkey.to_s.gsub(/^user\./,'').to_sym
     case sortkey
     when :pgp_id
-      sortkey
+      "pgp_id is null, pgp_id"
     when :hex, :enrolled
       sortkey
     when :received_sample_materials
