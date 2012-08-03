@@ -231,8 +231,8 @@ class StudiesController < ApplicationController
     if @selection
       ids = @study.study_participants.real.collect(&:user_id) & @selection.target_ids
       @participants = @participants.where('user_id in (?)', ids)
-      @selected_study_participants = @participants
     end
+    @selected_study_participants = @participants
   end
 
   def study_participant_info

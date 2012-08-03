@@ -59,24 +59,24 @@
 <table class="admin_table">
 <tr>
 <td>Undecided:</td><td>
-    <b><%= "#{@participants.undecided.count} / " if @selected_study_participants %></b>
+    <b><%= "#{@participants.undecided.count} / " if @selection %></b>
     <%= @all_participants.undecided.count %></td>
 <td>Interested:</td><td>
-    <b><%= "#{@participants.interested.count} / " if @selected_study_participants %></b>
+    <b><%= "#{@participants.interested.count} / " if @selection %></b>
     <%= @all_participants.interested.count %></td>
 <td>Not accepted:</td><td>
-    <b><%= "#{@participants.not_accepted.count} / " if @selected_study_participants %></b>
+    <b><%= "#{@participants.not_accepted.count} / " if @selection %></b>
     <%= @all_participants.not_accepted.count %></td>
 </tr>
 <tr>
 <td>Not interested:</td><td>
-    <b><%= "#{@participants.not_interested.count} / " if @selected_study_participants %></b>
+    <b><%= "#{@participants.not_interested.count} / " if @selection %></b>
     <%= @all_participants.not_interested.count %></td>
 <td>Accepted:</td><td>
-    <b><%= "#{@participants.accepted.count} / " if @selected_study_participants %></b>
+    <b><%= "#{@participants.accepted.count} / " if @selection %></b>
     <%= @all_participants.accepted.count %></td>
 <td>Removed:</td><td>
-    <b><%= "#{@participants.removed.count} / " if @selected_study_participants %></b>
+    <b><%= "#{@participants.removed.count} / " if @selection %></b>
     <%= @all_participants.removed.count %></td>
 </tr>
 </table>
