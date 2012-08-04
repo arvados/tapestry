@@ -218,7 +218,7 @@ class StudiesController < ApplicationController
         n_notified += 1
       end
     end
-    flash[:notice] = "  #{n_notified} notification#{'s' if n_notified != 1} sent."
+    flash[:notice] << "  #{n_notified} notification#{'s' if n_notified != 1} sent."
     redirect_to(params[:return_to] || @study)
   end
 
