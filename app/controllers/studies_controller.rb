@@ -227,10 +227,13 @@ class StudiesController < ApplicationController
   def load_selection
     super
     @study = Study.includes(:study_participants).find(params[:id])
-    @participants = @study.study_participants.real
     if @selection
+      # select participants by supplied user IDs, regardless of enrolled/suspended state
       ids = @study.study_participants.real.collect(&:user_id) & @selection.target_ids
-      @participants = @participants.where('user_id in (?)', ids)
+      @participants = @study.study_participants.real.includes(:user).where('user_id in (?)', ids)
+    else
+      # select all participants who are still enrolled, not_suspended
+      @participants = @study.study_participants.enrolled.includes(:user)
     end
     @selected_study_participants = @participants
   end
