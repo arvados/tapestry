@@ -14,6 +14,14 @@ class UserLog < ActiveRecord::Base
 
   after_initialize :set_default_info
 
+  def news_feed_date
+    if self.info && self.info.news_feed_date
+      self.info.news_feed_date
+    else
+      self.created_at
+    end
+  end
+
   private
 
   def set_default_info
