@@ -87,6 +87,8 @@
 <p><label for="is_test">Is test user?</label><br/>
 <%= f.check_box :is_test%></p>
 
+<div style="background: #dddddd; padding: 1em 1em; margin: 0 -1em">
+
 <p><label for="suspended_at">Is suspended?</label>  <i>(no public profile: e.g., requested deletion of data)</i><br/>
 <%= f.check_box :suspended_at %> <%= 'since '+@user.suspended_at.ctime if @user.suspended_at %></p>
 
@@ -95,6 +97,10 @@
 
 <p><label for="can_reactivate_self">Can auto-reactivate by completing a safety questionnaire?</label><br/>
 <%= f.check_box :can_reactivate_self %></p>
+
+<p><b>In order to effectively withdraw this participant</b>, tick both &ldquo;suspended&rdquo; <b>and</b> &ldquo;deactivated&rdquo; boxes.</p>
+
+</div>
 
 <p><label for="researcher">Is researcher?</label><br/>
 <%= f.check_box :researcher%></p>
