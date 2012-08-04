@@ -11,7 +11,7 @@ class StudyParticipant < ActiveRecord::Base
   validates_inclusion_of    :status,      :in => [0, 1, 2, 3, 4, 5]
 
   scope :real, joins(:user).merge(User.real)
-  scope :enrolled, joins(:user).merge(User.enrolled)
+  scope :enrolled_and_active, joins(:user).merge(User.enrolled.not_suspended.not_deactivated)
 
   scope :undecided,      joins(:user).where('status = 0').merge(User.real)
   scope :not_interested, joins(:user).where('status = 1').merge(User.real)

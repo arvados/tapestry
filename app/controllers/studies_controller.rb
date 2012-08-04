@@ -233,7 +233,7 @@ class StudiesController < ApplicationController
       @participants = @study.study_participants.real.includes(:user).where('user_id in (?)', ids)
     else
       # select all participants who are still enrolled, not_suspended
-      @participants = @study.study_participants.enrolled.includes(:user)
+      @participants = @study.study_participants.enrolled_and_active.includes(:user)
     end
     @selected_study_participants = @participants
   end

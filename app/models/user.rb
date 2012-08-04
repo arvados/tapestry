@@ -111,6 +111,7 @@ class User < ActiveRecord::Base
 
   scope :real, where("NOT (is_test <=> 1)")
   scope :not_suspended, where("suspended_at IS NULL").real
+  scope :not_deactivated, where("deactivated_at IS NULL").real
   scope :inactive, where("activated_at IS NULL").real
   scope :enrolled, where("enrolled IS NOT NULL").not_suspended.real
   scope :not_enrolled, where("enrolled IS NULL").real
