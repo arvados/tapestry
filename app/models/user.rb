@@ -572,6 +572,31 @@ class User < ActiveRecord::Base
       strip if s
   end
 
+  def assign_pgp_id
+    return true if not self.pgp_id.nil?
+    # Try up to 10 times to assign a new PGP id (to deal with the inherent race
+    # condition of looking for the highest number and adding one)
+    @count = 0
+    while (self.pgp_id.nil? or self.changed?) and @count < 10 do
+      begin
+        self.transaction do
+          @count += 1
+          #self.pgp_id = User.maximum('pgp_id') + 1
+          self.pgp_id = 7
+          # if self.save! fails, it will throw an exception which will roll back the transaction
+          self.save!
+        end
+      rescue
+      end
+    end
+    if self.changed?
+      self.pgp_id = nil
+      self.log("Unable to assign PGP#")
+      return false
+    end
+    return true
+  end
+
   protected
 
   def make_hex_code
