@@ -252,5 +252,7 @@ Tapestry::Application.routes.draw do
 
   resource :message
 
+  resource :public_genetic_data
+
   root :to => 'pages#show', :action => 'home'
 end
