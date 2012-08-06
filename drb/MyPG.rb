@@ -64,10 +64,8 @@ class MyPG
 						elsif work.action == 'process_ccr' then
 							process_ccr_worker(work)
 						elsif work.action == 'report' then
-STDERR.puts "going to start report_worker"
 							report_worker(work)
 						elsif work.action == 'process_file' then
-STDERR.puts "going to start process_file_worker"
 							process_file_worker(work)
 						end
 			      print "#{name}: finished work for user #{work.user_id}: #{work.action}\n"
