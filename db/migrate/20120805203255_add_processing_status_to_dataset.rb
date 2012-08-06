@@ -1,9 +1,9 @@
 class AddProcessingStatusToDataset < ActiveRecord::Migration
   def self.up
     add_column :datasets, :processing_status, :text
-    add_column :datasets, :processing_stopped, :boolean, :default => true
+    add_column :datasets, :processing_stopped, :boolean, :default => true, :null => false
     add_column :dataset_versions, :processing_status, :text
-    add_column :dataset_versions, :processing_stopped, :boolean, :default => true
+    add_column :dataset_versions, :processing_stopped, :boolean, :default => true, :null => false
   end
 
   def self.down

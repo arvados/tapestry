@@ -375,7 +375,7 @@ ActiveRecord::Schema.define(:version => 20120806024318) do
     t.string   "status_url"
     t.string   "download_url"
     t.text     "processing_status"
-    t.boolean  "processing_stopped",      :default => true
+    t.boolean  "processing_stopped",      :default => true,  :null => false
   end
 
   add_index "dataset_versions", ["dataset_id"], :name => "index_dataset_versions_on_dataset_id"
@@ -403,7 +403,7 @@ ActiveRecord::Schema.define(:version => 20120806024318) do
     t.string   "status_url"
     t.string   "download_url"
     t.text     "processing_status"
-    t.boolean  "processing_stopped",      :default => true
+    t.boolean  "processing_stopped",      :default => true,  :null => false
   end
 
   add_index "datasets", ["participant_id"], :name => "index_datasets_on_participant_id"
