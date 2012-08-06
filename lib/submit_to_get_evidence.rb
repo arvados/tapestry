@@ -35,4 +35,10 @@ module SubmitToGetEvidence
     self.save
   end
 
+  def report_ready?
+    report_url and (!status_url or
+                    (processing_status and
+                     processing_status[:status] == 'finished'))
+  end
+
 end

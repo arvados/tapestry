@@ -44,6 +44,10 @@ class Dataset < ActiveRecord::Base
     end
   end
 
+  def report_url
+    self.location
+  end
+
 protected
   def set_participant_id
     @p = User.where('hex = ?',self.human_id).first

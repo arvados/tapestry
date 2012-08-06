@@ -97,7 +97,7 @@ None available.
       <td><%=h g.date %></td>
       <td><%=h g.data_type %></td>
       <td><%=h g.name %></td>
-      <td><%=h link_to 'View Report', g.location if g.location %></td>
+      <td><%=h link_to 'View Report', g.report_url if g.report_ready? %></td>
       <td><%=h link_to 'Download', g.class == UserFile ? user_file_download_path(g.id) : g.download_url unless (g.class != UserFile && !g.download_url) %></td>
     </tr>
   <% end %>
