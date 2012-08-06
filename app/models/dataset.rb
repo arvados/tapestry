@@ -3,6 +3,7 @@ class Dataset < ActiveRecord::Base
   stampable
 
   serialize :processing_status, Hash
+  include SubmitToGetEvidence
 
   belongs_to :participant, :class_name => 'User'
   belongs_to :sample
@@ -43,37 +44,6 @@ class Dataset < ActiveRecord::Base
     end
   end
 
-  def submit_to_get_evidence!(make_public = 0)
-    submit_params = {
-      'api_key' => GET_EVIDENCE_API_KEY,
-      'api_secret' => GET_EVIDENCE_API_SECRET,
-      'dataset_locator' => self.locator,
-      'dataset_name' => self.name,
-      'dataset_is_public' => make_public,
-      'human_id' => self.human_id
-    }.collect {
-      |k,v| URI.encode(k, /\W/) + '=' + URI.encode(v.to_s, /\W/)
-    }.join('&')
-    json_object = JSON.parse(open("#{GET_EVIDENCE_BASE_URL}/submit?#{submit_params}").read)
-    self.location = json_object['result_url']
-    self.download_url = json_object['download_url']
-    self.status_url = json_object['status_url']
-    self.processing_stopped = false
-    self.save!
-    logger.debug self.inspect
-    self.update_processing_status! rescue nil
-  end
-
-  def update_processing_status!
-    self.processing_status = JSON.parse(open(self.status_url).read,
-                                        :symbolize_names => true)[:status]
-    self.processing_status[:updated_at] = Time.now
-    if ['finished','failed'].index(self.processing_status[:status])
-      self.processing_stopped = true
-    end
-    self.save
-  end
-
 protected
   def set_participant_id
     @p = User.where('hex = ?',self.human_id).first
@@ -82,6 +52,11 @@ protected
     if not @p.nil? then
       self.participant_id = @p.id
     end
+  end
+
+  # interface required by SubmitToGetEvidence
+  def report_url=(x)
+    self.location = x           # that's just what we call it
   end
 
 end

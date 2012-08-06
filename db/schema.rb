@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120805203255) do
+ActiveRecord::Schema.define(:version => 20120806024318) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2463,6 +2463,11 @@ ActiveRecord::Schema.define(:version => 20120805203255) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.string   "status_url"
+    t.text     "processing_status"
+    t.boolean  "processing_stopped"
+    t.string   "locator"
+    t.string   "report_url"
   end
 
   add_index "user_file_versions", ["user_file_id"], :name => "index_genetic_data_versions_on_genetic_data_id"
@@ -2479,11 +2484,16 @@ ActiveRecord::Schema.define(:version => 20120805203255) do
     t.datetime "dataset_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
     t.boolean  "upload_tos_consent"
+    t.string   "status_url"
+    t.text     "processing_status"
+    t.boolean  "processing_stopped"
+    t.string   "locator"
+    t.string   "report_url"
   end
 
   create_table "user_log_versions", :force => true do |t|

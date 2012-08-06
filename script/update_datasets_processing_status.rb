@@ -8,7 +8,9 @@ ENV["RAILS_ENV"] = "production" if production
 require File.dirname(__FILE__) + '/../config/boot'
 require File.dirname(__FILE__) + '/../config/environment'
 
-Dataset.where('status_url and not processing_stopped').each do |x|
+todo = Dataset.where('status_url <> ? and not processing_stopped', '') |
+  UserFile.where('status_url <> ? and not processing_stopped', '')
+todo.each do |x|
   ok = x.update_processing_status! rescue nil
   if ok
     if x.processing_stopped

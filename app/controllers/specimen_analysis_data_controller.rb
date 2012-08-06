@@ -38,7 +38,7 @@ private
 
   def make_public_on_get_evidence
     begin
-      @dataset.submit_to_get_evidence!(1)
+      @dataset.submit_to_get_evidence!(:make_public => true)
       return true
     rescue Exception => e
       # Callout error
