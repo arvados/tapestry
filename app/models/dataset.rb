@@ -2,6 +2,8 @@ class Dataset < ActiveRecord::Base
   acts_as_versioned
   stampable
 
+  serialize :processing_status, Hash
+
   belongs_to :participant, :class_name => 'User'
   belongs_to :sample
 
@@ -34,7 +36,11 @@ class Dataset < ActiveRecord::Base
     "Whole Genome or Exome"
   end
   def download_url
-    "http://evidence.personalgenomes.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}" if self.location.match(/evidence\.personalgenomes\.org\/hu[0-9A-F]+$/)
+    if !super and self.location and self.location.match(/evidence\.personalgenomes\.org\/hu[0-9A-F]+$/)
+      "http://evidence.personalgenomes.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}"
+    else
+      super
+    end
   end
 
   def submit_to_get_evidence!(make_public = 0)
@@ -50,7 +56,22 @@ class Dataset < ActiveRecord::Base
     }.join('&')
     json_object = JSON.parse(open("#{GET_EVIDENCE_BASE_URL}/submit?#{submit_params}").read)
     self.location = json_object['result_url']
+    self.download_url = json_object['download_url']
+    self.status_url = json_object['status_url']
+    self.processing_stopped = false
     self.save!
+    logger.debug self.inspect
+    self.update_processing_status! rescue nil
+  end
+
+  def update_processing_status!
+    self.processing_status = JSON.parse(open(self.status_url).read,
+                                        :symbolize_names => true)[:status]
+    self.processing_status[:updated_at] = Time.now
+    if ['finished','failed'].index(self.processing_status[:status])
+      self.processing_stopped = true
+    end
+    self.save
   end
 
 protected

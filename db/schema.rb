@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120803140748) do
+ActiveRecord::Schema.define(:version => 20120805203255) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -372,6 +372,10 @@ ActiveRecord::Schema.define(:version => 20120803140748) do
     t.datetime "seen_by_participant_at"
     t.datetime "published_at"
     t.integer  "sample_id"
+    t.string   "status_url"
+    t.string   "download_url"
+    t.text     "processing_status"
+    t.boolean  "processing_stopped",      :default => true
   end
 
   add_index "dataset_versions", ["dataset_id"], :name => "index_dataset_versions_on_dataset_id"
@@ -396,6 +400,10 @@ ActiveRecord::Schema.define(:version => 20120803140748) do
     t.datetime "seen_by_participant_at"
     t.datetime "published_at"
     t.integer  "sample_id"
+    t.string   "status_url"
+    t.string   "download_url"
+    t.text     "processing_status"
+    t.boolean  "processing_stopped",      :default => true
   end
 
   add_index "datasets", ["participant_id"], :name => "index_datasets_on_participant_id"
