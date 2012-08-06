@@ -22,8 +22,20 @@ class PublicGeneticDataController < ApplicationController
       }
     end
     @datasets.sort! { |b,a|
-      (a.respond_to?(:published_at) ? a.published_at : a.created_at) <=>
-      (b.respond_to?(:published_at) ? b.published_at : b.created_at)
+      a_date = a.respond_to?(:published_at) ? a.published_at : a.created_at
+      b_date = b.respond_to?(:published_at) ? b.published_at : b.created_at
+      cmp = a_date <=> b_date
+      if cmp != 0 and (a_date - b_date).abs > 3600
+        cmp
+      elsif a.participant.pgp_id and b.participant.pgp_id
+        a.participant.pgp_id <=> b.participant.pgp_id
+      elsif a.participant.pgp_id
+        -1
+      elsif b.participant.pgp_id
+        1
+      else
+        cmp
+      end
     }
   end
 end

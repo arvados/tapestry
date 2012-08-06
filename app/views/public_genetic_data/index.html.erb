@@ -16,7 +16,7 @@
   </tr>
   <% @datasets.each do |dataset| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= link_to dataset.participant.hex, public_profile_path(:hex => dataset.participant.hex) %></td>
+      <td><%= link_to dataset.participant.hex, public_profile_path(:hex => dataset.participant.hex) %><%= ", PGP#{dataset.participant.pgp_id}" if dataset.participant.pgp_id %></td>
       <td>
 	<%= dataset.class == Dataset ? 'PGP' : dataset.participant.hex %>
 	<br />
