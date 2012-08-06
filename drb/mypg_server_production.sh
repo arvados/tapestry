@@ -1,7 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
-RUBY=/usr/bin/env ruby
-P=/path/to/your/drb/folder
+## This works on GNU/Linux
+LSOF=$(lsof -p $$ | grep -E "/"$(basename "$0")"$")
+MY_PATH=$(echo $LSOF | sed -r s/'^([^\/]+)\/'/'\/'/1 2>/dev/null)
+P=$(dirname $MY_PATH)
+
+RUBY="/usr/bin/env ruby"
 SERVER=mypg_server.rb
 
 case "$1" in
