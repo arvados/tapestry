@@ -1,5 +1,10 @@
 <h2>Public genetic data</h2>
 
+<%= form_tag(public_genetic_data_path, :method => 'get') do |f| -%>
+<%= select_tag :data_type, options_for_select(@data_type_options, params[:data_type]) %>
+<%= submit_tag 'Search' %>
+<% end %>
+
 <table class="admin_table">
   <tr>
     <th>Participant</th>
