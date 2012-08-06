@@ -26,7 +26,7 @@ class UserFile < ActiveRecord::Base
 
   validates_presence_of :other_data_type, :if => 'data_type == "other"'
 
-  scope :suitable_for_get_evidence, where('dataset_file_name like ?', '%.vcf%')
+  scope :suitable_for_get_evidence, where('dataset_file_name like ? or (data_type=? and dataset_file_name like ?)', '%.vcf%', '23andMe', '%.txt')
 
   DATA_TYPES = { 'genetic data - 23andMe' => '23andMe', 
                  'genetic data - Complete Genomics' => 'Complete Genomics', 
