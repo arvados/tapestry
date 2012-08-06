@@ -21,6 +21,7 @@ class Admin::ReportsController < Admin::AdminControllerBase
     server = DRbObject.new nil, "druby://#{DRB_SERVER}:#{DRB_PORT}"
     begin
       out = server.create_report(current_user.id,@r.id,@r.name,@r.rtype)
+      flash[:notice] = "Your report request has been queued for processing"
     rescue Exception => e
       error_message = "DRB server error when trying to create a report (#{@r.name} of type #{@r.rtype}): #{e.exception}"
       flash[:error] = "Unable to queue your report for processing: " + error_message
@@ -28,7 +29,6 @@ class Admin::ReportsController < Admin::AdminControllerBase
       @r.status = error_message
       @r.save!
     end
-    flash[:notice] = "Your report request has been queued for processing"
     redirect_to admin_reports_url
   end
 
