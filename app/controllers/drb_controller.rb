@@ -44,6 +44,14 @@ class DrbController < ApplicationController
     @r.save!
   end
 
+  def process_file_ready
+    # STUB, TODO FIXME
+  end
+
+  def process_file_failed
+    # STUB, TODO FIXME
+  end
+
   protected
 
   def valid_callback

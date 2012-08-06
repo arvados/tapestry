@@ -64,8 +64,23 @@ class UserFilesController < ApplicationController
 
     respond_to do |format|
       if @user_file.save
-        flash[:notice] = 'Dataset was successfully uploaded.'
         current_user.log("Uploaded new genetic dataset '#{@user_file.name}'")
+
+        if UserFile.suitable_for_get_evidence.include?(@user_file) then
+          server = DRbObject.new nil, "druby://#{DRB_SERVER}:#{DRB_PORT}"
+          begin
+            out = server.process_file(current_user.id,@user_file.id)
+            flash[:notice] = "Dataset was successfully uploaded and has been queued for processing."
+            current_user.log("Queued new genetic dataset '#{@user_file.name}' for processing")
+          rescue Exception => e
+            error_message = "DRB server error when trying to create a report (#{@r.name} of type #{@r.rtype}): #{e.exception}"
+            flash[:error] = "Dataset was successfully uploaded. There was an error queueing the dataset for processing."
+            current_user.log(error_message,nil,request.remote_ip)
+          end
+        else
+          flash[:notice] = 'Dataset was successfully uploaded.'
+        end
+
         format.html { redirect_to(user_files_path) }
         format.xml  { render :xml => @user_file, :status => :created, :location => @user_file }
       else

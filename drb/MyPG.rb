@@ -26,6 +26,7 @@ class WorkObject
 	attr_accessor :etag
 	attr_accessor :ccr_profile_url
 	attr_accessor :ccr_contents
+	attr_accessor :user_file_id
 end
 
 class MyPG
@@ -62,8 +63,12 @@ class MyPG
 							get_ccr_worker(work)
 						elsif work.action == 'process_ccr' then
 							process_ccr_worker(work)
-						elsif work.action = 'report' then
+						elsif work.action == 'report' then
+STDERR.puts "going to start report_worker"
 							report_worker(work)
+						elsif work.action == 'process_file' then
+STDERR.puts "going to start process_file_worker"
+							process_file_worker(work)
 						end
 			      print "#{name}: finished work for user #{work.user_id}: #{work.action}\n"
 			      sleep(rand(0.1))
@@ -153,6 +158,31 @@ class MyPG
       callback('report_ready',work.user_id, { "report_id" => work.report_id, "filename" => filename })
     else
       callback('report_failed',work.user_id, { "report_id" => work.report_id, "error" => error_message })
+    end
+  end
+
+  def process_file_worker(work)
+    @uf = UserFile.find(work.user_file_id)
+
+    # We got a UserFile object (with associated Dataset object)
+    if  UserFile.suitable_for_get_evidence.include?(@uf) then
+      # See if we need to upload the file to GET-Evidence first
+      @uf.store_in_warehouse if @uf.locator.nil?
+      if @uf.locator then
+        @uf.submit_to_get_evidence!(:make_public => false,
+                                    :name => "#{@uf.user.hex} (#{@uf.name})",
+                                    :controlled_by => @uf.user.hex)
+      else
+        error_message = "Unable to store in warehouse"
+        callback('process_file_failed',work.user_id, { "user_file_id" => work.user_file_id, "dataset_id" => work.dataset_id, "error" => error_message } )
+        return
+      end
+      callback('process_file_ready',work.user_id, { "user_file_id" => work.user_file_id, "dataset_id" => work.dataset_id } )
+      return
+    else
+      error_message = "This UserFile object is not suitable for processing through GET-Evidence"
+      callback('process_file_failed',work.user_id, { "user_file_id" => work.user_file_id, "dataset_id" => work.dataset_id, "error" => error_message } )
+      return
     end
   end
 
@@ -258,7 +288,16 @@ class MyPG
 		return 0
 	end
 
- def create_report(user_id,report_id,report_name,report_type)
+   def process_file(user_id, user_file_id)
+    work = WorkObject.new()
+    work.action = 'process_file'
+    work.user_id = user_id
+    work.user_file_id = user_file_id
+    @queue.enq(work)
+    return 0
+  end
+
+  def create_report(user_id,report_id,report_name,report_type)
     work = WorkObject.new()
     work.action = 'report'
     work.user_id = user_id

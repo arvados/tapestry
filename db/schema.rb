@@ -2465,7 +2465,7 @@ ActiveRecord::Schema.define(:version => 20120806024318) do
     t.datetime "deleted_at"
     t.string   "status_url"
     t.text     "processing_status"
-    t.boolean  "processing_stopped"
+    t.boolean  "processing_stopped",   :default => false, :null => false
     t.string   "locator"
     t.string   "report_url"
   end
@@ -2474,24 +2474,24 @@ ActiveRecord::Schema.define(:version => 20120806024318) do
 
   create_table "user_files", :force => true do |t|
     t.integer  "user_id"
-    t.string   "name",                 :null => false
-    t.string   "data_type",            :null => false
+    t.string   "name",                                    :null => false
+    t.string   "data_type",                               :null => false
     t.date     "date"
-    t.text     "description",          :null => false
+    t.text     "description",                             :null => false
     t.string   "dataset_file_name"
     t.string   "dataset_content_type"
     t.integer  "dataset_file_size"
     t.datetime "dataset_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
-    t.integer  "lock_version"
     t.boolean  "upload_tos_consent"
     t.string   "status_url"
     t.text     "processing_status"
-    t.boolean  "processing_stopped"
+    t.boolean  "processing_stopped",   :default => false, :null => false
     t.string   "locator"
     t.string   "report_url"
   end
