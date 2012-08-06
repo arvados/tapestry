@@ -16,6 +16,9 @@ module SubmitToGetEvidence
       |k,v| URI.encode(k, /\W/) + '=' + URI.encode(v.to_s, /\W/)
     }.join('&')
     json_object = JSON.parse(open("#{GET_EVIDENCE_BASE_URL}/submit?#{query_string}").read)
+    unless json_object['success']
+      raise "GET-Evidence submit error: #{json_object['error']}"
+    end
     self.report_url = json_object['result_url']
     self.download_url = json_object['download_url'] if self.respond_to? :download_url
     self.status_url = json_object['status_url']
