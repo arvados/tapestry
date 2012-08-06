@@ -22,7 +22,6 @@ module SubmitToGetEvidence
     self.processing_stopped = false
     self.save!
     logger.debug self.inspect
-    self.update_processing_status! rescue nil
   end
 
   def update_processing_status!
@@ -32,7 +31,7 @@ module SubmitToGetEvidence
     if ['finished','failed'].index(self.processing_status[:status])
       self.processing_stopped = true
     end
-    self.save
+    self.save!
   end
 
   def report_ready?

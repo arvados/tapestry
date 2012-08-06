@@ -167,9 +167,15 @@ class MyPG
       # See if we need to upload the file to GET-Evidence first
       @uf.store_in_warehouse if @uf.locator.nil?
       if @uf.locator then
-        @uf.submit_to_get_evidence!(:make_public => false,
-                                    :name => "#{@uf.user.hex} (#{@uf.name})",
-                                    :controlled_by => @uf.user.hex)
+        begin
+          @uf.submit_to_get_evidence!(:make_public => false,
+                                      :name => "#{@uf.user.hex} (#{@uf.name})",
+                                      :controlled_by => @uf.user.hex)
+          @uf.update_processing_status!
+        rescue
+          error_message = "Unable to process file"
+          callback('process_file_failed',work.user_id, { "user_file_id" => work.user_file_id, "error" => error_message } )
+        end
       else
         error_message = "Unable to store in warehouse"
         callback('process_file_failed',work.user_id, { "user_file_id" => work.user_file_id, "error" => error_message } )
