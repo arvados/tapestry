@@ -65,6 +65,11 @@ class UserFile < ActiveRecord::Base
     self.user.hex
   end
 
+  def participant
+    # same interface as Dataset
+    user
+  end
+
   def store_in_warehouse
     Open3.popen3('whput',
                  '--in-manifest',
@@ -90,5 +95,4 @@ class UserFile < ActiveRecord::Base
     end
     false
   end
-
 end

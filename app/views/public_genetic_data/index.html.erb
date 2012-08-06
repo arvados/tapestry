@@ -1,0 +1,32 @@
+<h2>Public genetic data</h2>
+
+<table class="admin_table">
+  <tr>
+    <th>Participant</th>
+    <th>Source<br/>Date&nbsp;published</th>
+    <th>Data type</th>
+    <th>Name</th>
+    <th>Download</th>
+    <th>Report</th>
+  </tr>
+  <% @datasets.each do |dataset| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <td><%= link_to dataset.participant.hex, public_profile_path(:hex => dataset.participant.hex) %></td>
+      <td>
+	<%= dataset.class == Dataset ? 'PGP' : dataset.participant.hex %>
+	<br />
+	<%= (dataset.respond_to?(:published_at) ? dataset.published_at : dataset.created_at).strftime('%Y-%m-%d') %>
+      </td>
+      <td><%= dataset.data_type %></td>
+      <td><%= dataset.name %></td>
+      <td>
+	<% if dataset.class == UserFile %>
+	<%= link_to 'Download', user_file_download_path(dataset) %>
+	<% elsif dataset.download_url %>
+	<%= link_to 'Download', dataset.download_url %>
+	<% end %>
+      </td>
+      <td><%= link_to raw('View&nbsp;report'), dataset.report_url if dataset.report_ready? %></td>
+    </tr>
+  <% end %>
+</table>
