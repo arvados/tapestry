@@ -172,14 +172,14 @@ class MyPG
                                     :controlled_by => @uf.user.hex)
       else
         error_message = "Unable to store in warehouse"
-        callback('process_file_failed',work.user_id, { "user_file_id" => work.user_file_id, "dataset_id" => work.dataset_id, "error" => error_message } )
+        callback('process_file_failed',work.user_id, { "user_file_id" => work.user_file_id, "error" => error_message } )
         return
       end
-      callback('process_file_ready',work.user_id, { "user_file_id" => work.user_file_id, "dataset_id" => work.dataset_id } )
+      callback('process_file_ready',work.user_id, { "user_file_id" => work.user_file_id } )
       return
     else
       error_message = "This UserFile object is not suitable for processing through GET-Evidence"
-      callback('process_file_failed',work.user_id, { "user_file_id" => work.user_file_id, "dataset_id" => work.dataset_id, "error" => error_message } )
+      callback('process_file_failed',work.user_id, { "user_file_id" => work.user_file_id, "error" => error_message } )
       return
     end
   end
@@ -311,11 +311,11 @@ class MyPG
     if args.class == Hash then
       params = "?"
       args.each do |k,v|
-   		  params += "#{k}=" + CGI.escape(v) + "&" 
+   		  params += "#{k}=" + CGI.escape(v.to_s) + "&" 
       end
       params += "user_id=#{user_id}"
     else
- 		  params = "/#{user_id}?message=" + CGI.escape(args)
+ 		  params = "/#{user_id}?message=" + CGI.escape(args.to_s)
     end
 
     url = "http://#{@config['callback_host']}:#{@config['callback_port']}/drb/#{type}#{params}"
