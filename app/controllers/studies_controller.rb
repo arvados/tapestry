@@ -7,7 +7,11 @@ class StudiesController < ApplicationController
 
   before_filter :ensure_researcher
 
-  skip_before_filter :ensure_researcher, :only => [:show, :claim]
+  skip_before_filter :ensure_researcher, :only => [:show, :claim, :index]
+
+  def index
+    redirect_to page_path(:id => 'collection_events', :anchor => 'kits') if current_user and !current_user.researcher
+  end
 
   # GET /studies/1/map
   def map
