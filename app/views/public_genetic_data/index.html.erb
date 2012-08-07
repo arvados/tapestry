@@ -31,7 +31,13 @@
 	<%= link_to 'Download', dataset.download_url %>
 	<% end %>
       </td>
-      <td><%= link_to raw('View&nbsp;report'), dataset.report_url if dataset.report_ready? %></td>
+      <td>
+	<% if dataset.report_ready? %>
+	<%= link_to raw('View&nbsp;report'), dataset.report_url %>
+	<% elsif current_user and current_user.is_admin? and dataset.processing_status %>
+	<%= dataset.processing_status[:status] %>
+	<% end %>
+      </td>
     </tr>
   <% end %>
 </table>

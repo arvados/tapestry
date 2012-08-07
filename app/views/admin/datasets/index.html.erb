@@ -12,6 +12,7 @@
   <tr>
     <th>ID</th>
     <th>Name</th>
+    <th>Status</th>
     <th>Hex ID</th>
     <th>Released to participant</th>
     <th>Participant notified</th>
@@ -22,6 +23,7 @@
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=  dataset.id %></td>
       <td><%= link_to_if dataset.location, dataset.name, dataset.location %></td>
+      <td><%= dataset.processing_status[:status] if dataset.processing_status %></td>
       <td>
 	<%= link_to dataset.human_id, public_profile_path(dataset.human_id) if dataset.human_id %>
 	<%= link_to "(##{dataset.participant_id})", admin_user_url(dataset.participant_id) %>
