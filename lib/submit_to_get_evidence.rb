@@ -19,7 +19,6 @@ module SubmitToGetEvidence
     unless json_object['success']
       raise "GET-Evidence submit error: #{json_object['error']}"
     end
-    self.report_url = json_object['result_url']
     self.download_url = json_object['download_url'] if self.respond_to? :download_url
     self.status_url = json_object['status_url']
     self.processing_stopped = false
@@ -33,14 +32,15 @@ module SubmitToGetEvidence
     self.processing_status[:updated_at] = Time.now
     if ['finished','failed'].index(self.processing_status[:status])
       self.processing_stopped = true
+      if processing_status[:status] == 'finished'
+        self.report_url = processing_status[:result_url]
+      end
     end
     self.save!
   end
 
   def report_ready?
-    report_url and (!status_url or
-                    (processing_status and
-                     processing_status[:status] == 'finished'))
+    !!report_url
   end
 
 end
