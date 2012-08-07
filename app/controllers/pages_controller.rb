@@ -30,7 +30,7 @@ class PagesController < ApplicationController
 
     # For users who are researchers but *not* enrolled
     if logged_in? and
-        !['researcher_tools','sitemap'].index(params[:id]) and
+        !['researcher_tools','sitemap','23andme'].index(params[:id]) and
         current_user and
         current_user.enrolled.nil? and
         current_user.researcher then
