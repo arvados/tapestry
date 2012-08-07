@@ -163,7 +163,7 @@ class MyPG
     @uf = UserFile.find(work.user_file_id)
 
     # We got a UserFile object (with associated Dataset object)
-    if  UserFile.suitable_for_get_evidence.include?(@uf) then
+    if  @uf.is_suitable_for_get_evidence? then
       # See if we need to upload the file to GET-Evidence first
       @uf.store_in_warehouse if @uf.locator.nil?
       if @uf.locator then

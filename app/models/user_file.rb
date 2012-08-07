@@ -26,8 +26,6 @@ class UserFile < ActiveRecord::Base
 
   validates_presence_of :other_data_type, :if => 'data_type == "other"'
 
-  scope :suitable_for_get_evidence, where('dataset_file_name like ? or (data_type=? and dataset_file_name like ?)', '%.vcf%', '23andMe', '%.txt')
-
   DATA_TYPES = { 'genetic data - 23andMe' => '23andMe', 
                  'genetic data - Complete Genomics' => 'Complete Genomics', 
                  'genetic data - Pathway Genomics' => 'Pathway genomics', 
@@ -72,7 +70,7 @@ class UserFile < ActiveRecord::Base
 
   def is_suitable_for_get_evidence?
     (dataset_file_name.match(/\.vcf/) or
-     (dataset_file_name.match(/\.txt$/) and data_type == '23andMe'))
+     (dataset_file_name.match(/\.(txt|zip)$/i) and data_type == '23andMe'))
   end
 
   def store_in_warehouse
