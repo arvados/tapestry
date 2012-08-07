@@ -5,7 +5,7 @@ LSOF=$(lsof -p $$ | grep -E "/"$(basename "$0")"$")
 MY_PATH=$(echo $LSOF | sed -r s/'^([^\/]+)\/'/'\/'/1 2>/dev/null)
 P=$(dirname $MY_PATH)
 
-RUBY="/usr/bin/env ruby"
+RUBY="/usr/bin/env PATH=/usr/local/bin:$PATH ruby"
 SERVER=mypg_server.rb
 
 case "$1" in
