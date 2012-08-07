@@ -160,6 +160,7 @@ Tapestry::Application.routes.draw do
   resources :named_proxies
   resources :user_files
   match '/user_file/download/:id' => 'user_files#download', :as => :user_file_download
+  match '/user_files/:id/reprocess' => 'user_files#reprocess', :as => :reprocess_user_file
 
   resources :specimen_analysis_data
   match '/specimen_analysis_data/:id/publish' => 'specimen_analysis_data#publish', :as => :publish_specimen_analysis_data
@@ -214,6 +215,7 @@ Tapestry::Application.routes.draw do
       match '/reports/exam' => 'reports#exam', :as => :reports_exam
       resources :reports
       resources :datasets
+      match '/datasets/:id/reprocess' => 'datasets#reprocess', :as => :reprocess_dataset
       match '/datasets/:id/notify' => 'datasets#notify', :as => :dataset_notify_participant
       resources :content_areas do
           resources :exams do

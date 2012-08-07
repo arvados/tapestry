@@ -13,6 +13,9 @@
     <th>Name</th>
     <th>Download</th>
     <th>Report</th>
+    <% if current_user and current_user.is_admin? %>
+    <th>Admin</th>
+    <% end %>
   </tr>
   <% @datasets.each do |dataset| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
@@ -38,6 +41,15 @@
 	<%= dataset.processing_status[:status] %>
 	<% end %>
       </td>
+      <% if current_user and current_user.is_admin? and dataset.is_suitable_for_get_evidence? %>
+      <td>
+	<% if dataset.class == Dataset %>
+	<%= button_to 'Reprocess', admin_reprocess_dataset_path(dataset), :return_to => request.path, :method => 'post' %>
+	<% else %>
+	<%= button_to((dataset.locator ? 'Reprocess' : 'Process'), reprocess_user_file_path(dataset), :method => 'post') %>
+	<% end %>
+      </td>
+      <% end %>
     </tr>
   <% end %>
 </table>

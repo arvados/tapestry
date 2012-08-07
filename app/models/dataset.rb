@@ -48,6 +48,10 @@ class Dataset < ActiveRecord::Base
     self.location
   end
 
+  def is_suitable_for_get_evidence?
+    locator and !locator.empty?
+  end
+
 protected
   def set_participant_id
     @p = User.where('hex = ?',self.human_id).first

@@ -66,14 +66,14 @@ class UserFilesController < ApplicationController
       if @user_file.save
         current_user.log("Uploaded new genetic dataset '#{@user_file.name}'")
 
-        if UserFile.suitable_for_get_evidence.include?(@user_file) then
+        if @user_file.is_suitable_for_get_evidence? then
           server = DRbObject.new nil, "druby://#{DRB_SERVER}:#{DRB_PORT}"
           begin
             out = server.process_file(current_user.id,@user_file.id)
             flash[:notice] = "Dataset was successfully uploaded and has been queued for processing."
             current_user.log("Queued new genetic dataset '#{@user_file.name}' for processing")
           rescue Exception => e
-            error_message = "DRB server error when trying to create a report (#{@r.name} of type #{@r.rtype}): #{e.exception}"
+            error_message = "DRB server error when trying to create a report for #{@user_file.class} ##{@user_file.id}: #{e.exception}"
             flash[:error] = "Dataset was successfully uploaded. There was an error queueing the dataset for processing."
             current_user.log(error_message,nil,request.remote_ip)
           end
@@ -153,4 +153,22 @@ class UserFilesController < ApplicationController
                      :disposition => 'attachment' } }
     end
   end
+
+  def reprocess
+    @user_file = UserFile.find(params[:id])
+    if @user_file.is_suitable_for_get_evidence? then
+      server = DRbObject.new nil, "druby://#{DRB_SERVER}:#{DRB_PORT}"
+      begin
+        out = server.process_file(current_user.id,@user_file.id)
+        flash[:notice] = "Dataset has been queued for processing."
+        current_user.log("Queued genetic dataset ##{@user_file.id} for processing")
+      rescue Exception => e
+        error_message = "DRB server error when trying to create a report for #{@user_file.class} ##{@user_file.id}: #{e.exception}"
+        flash[:error] = "There was an error queueing the dataset for processing."
+        current_user.log(error_message,nil,request.remote_ip)
+      end
+    end
+    redirect_to(params[:return_to] || :back)
+  end
+
 end

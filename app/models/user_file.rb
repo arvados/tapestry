@@ -70,6 +70,11 @@ class UserFile < ActiveRecord::Base
     user
   end
 
+  def is_suitable_for_get_evidence?
+    (dataset_file_name.match(/\.vcf/) or
+     (dataset_file_name.match(/\.txt$/) and data_type == '23andMe'))
+  end
+
   def store_in_warehouse
     Open3.popen3('whput',
                  '--in-manifest',

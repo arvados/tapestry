@@ -1,6 +1,6 @@
 class Admin::DatasetsController < Admin::AdminControllerBase
   
-  before_filter :set_dataset, :only => [:edit, :update, :notify]
+  before_filter :set_dataset, :only => [:edit, :update, :notify, :reprocess]
 
   def index
     @datasets = Dataset.all
@@ -58,6 +58,11 @@ class Admin::DatasetsController < Admin::AdminControllerBase
     redirect_to(admin_datasets_url)
   end
 
+  def reprocess
+    submit!
+    redirect_to(params[:return_to] || :back)
+  end
+
   private
   def set_dataset
     @dataset = Dataset.find(params[:id])
@@ -65,11 +70,15 @@ class Admin::DatasetsController < Admin::AdminControllerBase
 
   def maybe_submit_to_get_evidence
     return unless params[:dataset][:submit_to_get_e]
+    submit!
+  end
+
+  def submit!
     begin
-      @dataset.submit_to_get_evidence!
+      @dataset.submit_to_get_evidence!(:make_public => !!@dataset.published_at)
     rescue Exception => e
       # Callout error
-      STDERR.puts "Error contacting GET-Evidence: #{e.inspect}"
+      logger.debug "Error contacting GET-Evidence: #{e.inspect}"
       flash[:error] = "There was an error contacting GET-Evidence. Please try again later."
     end
   end
