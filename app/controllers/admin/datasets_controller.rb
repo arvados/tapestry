@@ -60,6 +60,7 @@ class Admin::DatasetsController < Admin::AdminControllerBase
 
   def reprocess
     submit!
+    flash[:notice] = "Dataset ##{@dataset.id} re-submitted to GET-Evidence."
     redirect_to(params[:return_to] || :back)
   end
 
