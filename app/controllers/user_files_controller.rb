@@ -18,6 +18,7 @@ class UserFilesController < ApplicationController
   # GET /user_file/new.xml
   def new
     @user_file = UserFile.new
+    @user_file.data_type = params[:data_type] if params[:data_type]
 
     respond_to do |format|
       format.html # new.html.erb

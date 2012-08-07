@@ -90,6 +90,8 @@ Tapestry::Application.routes.draw do
 
   resources :pages
   match '/' => 'pages#show', :id => 'home'
+  match '/23andme' => 'pages#show', :id => '23andme', :as => 'twenty3andme'
+  match '/23andMe' => 'pages#show', :id => '23andme', :as => 'twenty3andme'
   match '/enrolled', :to => redirect('/users')
   match '/users/initial' => 'users#initial', :as => :initial_user
   match '/users/create_initial' => 'users#create_initial', :as => :create_initial_user
