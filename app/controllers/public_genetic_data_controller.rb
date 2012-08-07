@@ -14,8 +14,8 @@ class PublicGeneticDataController < ApplicationController
         @data_type_options << [k, v]
       end
     }
-    @datasets = UserFile.joins(:user).merge(User.enrolled.not_suspended) |
-      Dataset.published.joins(:participant).merge(User.enrolled.not_suspended)
+    @datasets = UserFile.joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
+      Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
     if params[:data_type] and !params[:data_type].empty?
       @datasets.reject! { |d|
         ![d.data_type, d.class.to_s].index(params[:data_type])
