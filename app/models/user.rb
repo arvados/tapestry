@@ -581,8 +581,7 @@ class User < ActiveRecord::Base
       begin
         self.transaction do
           @count += 1
-          #self.pgp_id = User.maximum('pgp_id') + 1
-          self.pgp_id = 7
+          self.pgp_id = User.maximum('pgp_id') + 1
           # if self.save! fails, it will throw an exception which will roll back the transaction
           self.save!
         end
