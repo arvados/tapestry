@@ -1,14 +1,25 @@
 <%= @user.full_name -%>,
 
+<% if @sp_info && @sp_info[:address] %>
 We would like to let you know that we have sent a specimen collection
 kit to you at this address:
 
+<%= @sp_info[:address] %>
+
+<% else %>
+We would like to let you know that we have sent a specimen collection
+kit to you.  The shipping address we have on file for you is:
+
 <%= @user.shipping_address.as_multiline_string %>
 
+<% end %>
 Please watch for it in the mail, and follow the instructions included
 with the kit when you receive it.  It may take up to 3 weeks for the
 kit to reach you.
 
+<% if @sp_info and @sp_info[:tracking_id] and !@sp_info[:tracking_id].empty? %>
+Shipment tracking ID: <%= @sp_info[:tracking_id] %>
+<% end %>
 
 Many thanks,
 

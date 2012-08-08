@@ -203,7 +203,8 @@ class StudiesController < ApplicationController
         sp_info = study_participant_info[sp.id]
         log_info = OpenStruct.new(:kit_sent_at => sp_info[:kit_last_sent_at],
                                   :news_feed_date => sp_info[:kit_last_sent_at],
-                                  :tracking_id => sp_info[:tracking_id])
+                                  :tracking_id => sp_info[:tracking_id],
+                                  :address => sp_info[:address])
         sent_at = log_info.kit_sent_at || default_sent_at
         UserLog.new(:user => sp.user,
                     :controlling_user => current_user,
@@ -217,8 +218,9 @@ class StudiesController < ApplicationController
     flash[:notice] = "Logged that kits have been sent to #{n} participants."
     n_notified = 0
     @selected_study_participants.each do |sp|
-      unless study_participant_info[sp.id][:skip_notification]
-        UserMailer.kit_sent_notification(sp).deliver
+      sp_info = study_participant_info[sp.id]
+      unless sp_info[:skip_notification]
+        UserMailer.kit_sent_notification(sp, sp_info).deliver
         n_notified += 1
       end
     end
@@ -262,6 +264,8 @@ class StudiesController < ApplicationController
       end
     end
 
+    address_column = @selection.spec[:table][0].index { |x| x && x.match(/\baddress\b/i) } rescue nil
+
     tracking_id_column = @selection.spec[:table][0].index { |x| x && x.match(/^tracking/i) } rescue nil
     tracking_id_column ||= @selection.spec_table_column_with_most do |x|
       x.respond_to?(:match) && x.match(/^9400\d+0000000$/)
@@ -287,6 +291,9 @@ class StudiesController < ApplicationController
 
         # Courier tracking id
         info[:tracking_id] = spec_table_row[tracking_id_column+1] if tracking_id_column
+
+        # Shipping address used
+        info[:address] = spec_table_row[address_column+1] if address_column
       end
 
       if info[:kit_last_sent_at] and info[:kit_last_sent_at] < 14.days.ago 
