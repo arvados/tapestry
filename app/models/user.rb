@@ -634,12 +634,12 @@ class User < ActiveRecord::Base
 
   def self.help_datatables_search(options={})
     current_user = options[:for]
-    sql_search = "hex LIKE :search OR samples.material LIKE :search"
+    sql_search = "hex LIKE :search"
     if current_user and (current_user.is_admin? or
                          current_user.is_researcher_onirb?)
       sql_search << " OR concat(first_name,' ',if(middle_name='','',concat(middle_name,' ')),last_name) LIKE :search"
     end
-    [sql_search, { :samples => {} }]
+    sql_search
   end
 
   def self.include_for_api(api_template)
