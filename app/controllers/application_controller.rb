@@ -227,6 +227,11 @@ class ApplicationController < ActionController::Base
       participants.each do |u|
         row = []
 
+        if study.is_third_party
+          csv << [u.user.app_token("Study##{study.id}")]
+          next
+        end
+
         row.push u.user.hex
         row.push u.user.app_token("Study##{study.id}")
         row.push u.user.email

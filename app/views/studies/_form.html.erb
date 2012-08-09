@@ -1,7 +1,18 @@
+<% content_for :js do %>
+jQuery(function(){
+        var $ = jQuery.noConflict();
+        $('form input[name="study[is_third_party]"][value=1]').bind('change', function(){
+		var divs = $('div.iff-is-third-party');
+		$(this).is(':checked') ? divs.show() : divs.hide();
+		divs = $('div.iff-not-third-party');
+		$(this).is(':checked') ? divs.hide() : divs.show();
+	    }).trigger('change');
+    });
+<% end %>
 
 <%= error_messages_for :study, :header_message => 'Error: data could not be saved.', :message => nil %>
 
-<%= form_for(@study, :url => collection_events_path) do |f| %>
+<%= form_for(@study, :url => @study.id ? collection_event_path(@study) : collection_events_path) do |f| %>
 
   <div class="field">
     <%= f.label :name %><br />
@@ -10,6 +21,44 @@
     <% else %>
       <%= f.text_field :name, :size => 80 %>
     <% end %>
+  </div>
+  <div style="margin:0.5em 0">
+    <div class="field">
+      <%= f.check_box :is_third_party, :disabled => true %> Third-party study? (i.e., sign-up and participation are conducted at an independent web site)
+    </div>
+    <div class="field iff-is-third-party">
+      <%= f.label :participation_url, 'URL to send participants to when they click "participate"' %>
+      <% if @study.approved then %>
+      <br /><%= @study.participation_url %>
+      <% else %>
+      <%= f.text_field :participation_url, :size => 80 %>
+      <% end %>
+      <div style="margin: .5em 0;padding:.25em .5em;border:1px dashed #666;background:#eee">
+	<% example_token = Digest::SHA1.hexdigest('example') %>
+	<ul>
+	  <li>An alphanumeric string unique to each user<sup>(1)</sup> will be appended to the URL when participants click through.</li>
+	  <li>You can get a list of valid codes that have been used by clicking the "manage participants" link for this study on <%= link_to 'your researcher home page', page_path('researcher_tools') %>.</li>
+	  <li>Your web application can verify the authenticity of these codes in real time using our API<sup>(2)</sup> &mdash; look for <code>{"valid":true}</code> in the JSON response.
+	  </li>
+	  <li>
+	    Keep the codes attached to the participants&rsquo; data in your system.  These will allow us to associate generated/returned data with the appropriate participants&rsquo; public profiles.
+	  </li>
+	</ul>
+	<blockquote>
+	  <sup>(1)</sup>&nbsp;
+	  <code>?study_id=<%= @study.id || 123 %>&amp;participant_id=<%= example_token %></code>
+	  <br />
+	  <br />
+	  <sup>(2)</sup>&nbsp;
+	  <% if @study.id %>
+	  <% example_url = verify_third_party_study_participant_id_url(:id => @study.id, :app_token => example_token) %>
+	  <code><%= example_url %></code> 
+	  <% else %>
+	  (API URL will be shown here after the study is created)
+	  <% end %>
+	</blockquote>
+      </div>
+    </div>
   </div>
   <div class="field">
     <%= f.label :participant_description, 'Description of collection event, to be seen by
@@ -40,11 +89,11 @@ researchers and internal use' %><br />
     <%= f.label :irb_associate_id %><br />
     <%= @study.irb_associate ? @study.irb_associate.full_name : 'unassigned' %>
   </div>
-  <div class="field">
+  <div class="field iff-not-third-party">
     <%= f.label :shipping_address_required %><br />
     <%= f.check_box :shipping_address_required %>
   </div>
-  <div class="field">
+  <div class="field iff-not-third-party">
     <%= f.label :phone_number_required %><br />
     <%= f.check_box :phone_number_required %>
   </div>

@@ -1,16 +1,26 @@
 class StudiesController < ApplicationController
-  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show]
+  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show, :verify_participant_id, :clickthrough_to]
 
   skip_before_filter :ensure_enrolled, :except => [:show, :claim]
   skip_before_filter :ensure_latest_consent, :except => [:show, :claim]
   skip_before_filter :ensure_recent_safety_questionnaire, :except => [:show, :claim]
 
   before_filter :ensure_researcher
-
   skip_before_filter :ensure_researcher, :only => [:show, :claim, :index]
 
+  skip_before_filter :login_required, :only => [:verify_participant_id]
+  skip_before_filter :ensure_tos_agreement, :only => [:verify_participant_id]
+  skip_before_filter :ensure_researcher, :only => [:verify_participant_id]
+  skip_before_filter :ensure_researcher, :only => :clickthrough_to
+
   def index
+    return index_third_party if request.env['PATH_INFO'].match(/third_party/)
     redirect_to page_path(:id => 'collection_events', :anchor => 'kits') if current_user and !current_user.researcher
+  end
+
+  def index_third_party
+    @studies = Study.approved.open.third_party
+    render :action => :index_third_party
   end
 
   # GET /studies/1/map
@@ -58,15 +68,22 @@ class StudiesController < ApplicationController
     authorize! :read, @study
 
     @all_participants = @study.study_participants.real
-    @participants.sort! { |a,b| a.user.full_name <=> b.user.full_name }
+    if @study.is_third_party
+      @participants = @participants.sort_by { |p| p.user.app_token("Study##{@study.id}") }
+    else
+      @participants = @participants.sort_by &:full_name
+    end
     study_participant_info
 
     respond_to do |format|
       format.html
-      format.csv { send_data csv_for_study(@study,params[:type]), {
-                     :filename    => 'StudyUsers.csv',
-                     :type        => 'application/csv',
-                     :disposition => 'attachment' } }
+      format.csv {
+        send_data csv_for_study(@study,params[:type]), {
+          :filename    => "participants_for_study#{@study.id}_#{Time.now.strftime('%Y%m%d%H%M%S')}.csv",
+          :type        => 'application/csv',
+          :disposition => 'attachment'
+        }
+      }
     end
   end
 
@@ -89,6 +106,7 @@ class StudiesController < ApplicationController
   # in guarding access to it.
   def show
     @study = Study.find(params[:id])
+    return show_third_party if request.env['PATH_INFO'].match(/third_party/)
 
     if not current_user.is_admin? and @study.approved == nil then
       # Only approved studies should be available here for ordinary users
@@ -100,6 +118,10 @@ class StudiesController < ApplicationController
       format.html # show.html.erb
       format.xml  { render :xml => @studies }
     end
+  end
+
+  def show_third_party
+    render :action => :show_third_party
   end
 
   # POST /studies
@@ -137,9 +159,11 @@ class StudiesController < ApplicationController
     params[:study].delete(:irb_associate_id)
 
     if (@study.approved) then
-      # Study name and participant description fields are immutable once the study is approved
+      # These fields are immutable once the study is approved
       params[:study].delete(:name)
       params[:study].delete(:participant_description)
+      params[:study].delete(:is_third_party)
+      params[:study].delete(:participation_url)
     end
 
     @open = params[:study].delete(:open)
@@ -226,6 +250,29 @@ class StudiesController < ApplicationController
     end
     flash[:notice] << "  #{n_notified} notification#{'s' if n_notified != 1} sent."
     redirect_to(params[:return_to] || @study)
+  end
+
+  def verify_participant_id
+    StudyParticipant.
+      where('study_id = ?', params[:id]).
+      includes(:user).
+      each do |sp|
+      if sp.user.app_token("Study##{sp.study_id}") == params[:app_token]
+        return render :json => { :valid => true }
+      end
+    end
+    return render :json => { :valid => false }, :status => 404
+  end
+
+  def clickthrough_to
+    @study = Study.third_party.find(params[:id])
+    @sp = StudyParticipant.where('study_id=? and user_id=?',
+                                 @study.id, current_user.id).first
+    @sp ||= StudyParticipant.new(:study => @study,
+                                 :user => current_user)
+    @sp.update_attributes :status => StudyParticipant::STATUSES['interested']
+    @sp.save!
+    redirect_to @study.personalized_participation_url(current_user)
   end
 
   protected

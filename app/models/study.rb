@@ -25,6 +25,10 @@ class Study < ActiveRecord::Base
   scope :requested, where('requested = ?',true)
   scope :approved, where('approved = ?',true)
   scope :draft, where('requested = ? and approved = ?',false,false)
+  scope :not_third_party, where('participation_url is ?', nil)
+  scope :third_party, where('participation_url is not ?', nil)
+  scope :open, where('open = ? and approved = ?',true,true)
+  scope :not_open, where('open = ?',false)
 
   scope :accessible, lambda { |user|
     if user.is_admin? then
@@ -43,6 +47,22 @@ class Study < ActiveRecord::Base
     self.open
   end
 
+  def is_third_party
+    !participation_url.nil?
+  end
+
+  def is_third_party=(bool)
+    participation_url = nil if !bool
+  end
+
+  def personalized_participation_url(user)
+    s = participation_url
+    s << (s.match(/\?/) ? '&' : '?')
+    s << 'study_id=' << id.to_s
+    s << '&participant_id='
+    s << user.app_token("Study##{self.id}")
+  end
+
   def status
     if self.approved then
       return 'approved'
@@ -51,6 +71,10 @@ class Study < ActiveRecord::Base
     else
       return 'draft'
     end
+  end
+
+  def study_type
+    is_third_party ? 'study' : 'collection event'
   end
 
   api_accessible :public do |t|

@@ -23,9 +23,9 @@ phone number may be needed.</p>
   <p>You last updated your shipping address <%= distance_of_time_in_words(Time.now(),ShippingAddress.find_by_user_id(current_user.id).updated_at) %> ago.</p>
 <% end %>
 
-<% if Study.where('open = ?',true).size > 0 %>
+<% if @open_collection_events.size > 0 %>
 
-<h3>The following collection event<%= Study.where('open = ?',true).size > 1 ? 's are' : ' is' %> currently seeking interested participants:</h3>
+<h3>The following collection event<%= @open_collection_events.size > 1 ? 's are' : ' is' %> currently seeking interested participants:</h3>
 
  <table class="admin_table">
   <tr>
@@ -35,7 +35,7 @@ phone number may be needed.</p>
     <th>Researcher Affiliation</th>
     <th>Opened</th>
   </tr>
-  <% Study.where('open = ?', true).sort { |a,b| b.date_opened <=> a.date_opened }.each do |s| %>
+  <% @open_collection_events.sort { |a,b| b.date_opened <=> a.date_opened }.each do |s| %>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%= s.study_participants.where('user_id = ?',current_user.id).empty? ? 'Undecided' : StudyParticipant::STATUSES[s.study_participants.where('user_id = ?',current_user.id).first.status] %></td>
       <td><%= link_to s.name, user_edit_study_url(:id => current_user.id, :study_id => s.id) %></td>
@@ -50,9 +50,9 @@ phone number may be needed.</p>
 <strong>There are currently no open studies. We hope to create some soon, please check again later!</strong>
 <% end %>
 
-<% if Study.where('open = ? and approved = ?',false,true).size > 0 %>
+<% if @closed_collection_events.size > 0 %>
 
-<h3>The following collection event<%= Study.where('open = ? and approved = ?',false,true).size > 1 ? 's are' : ' is' %> currently closed and <strong>not</strong> seeking participants:</h3>
+<h3>The following collection event<%= @closed_collection_events.size > 1 ? 's are' : ' is' %> currently closed and <strong>not</strong> seeking participants:</h3>
 
  <table class="admin_table">
   <tr>

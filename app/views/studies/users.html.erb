@@ -4,6 +4,7 @@
 
 <h2><%= @study.name %>: participants</h2>
 
+<% if current_user.is_admin? %>
 <div style="float:right">
   <table><tr><td valign="bottom" style="background:#ffffdd;padding:0 .5em">
 	Upload a CSV file with participant ID tokens:<br />
@@ -53,8 +54,9 @@
     </td></tr>
   </table>
 </div>
+<% end %>
 
-<p>Showing <%= @participants.count %> of <%= @all_participants.count %> participants who have indicated whether they are interested in this collection event.</p>
+<p>Showing <%= @participants.count %> of <%= @all_participants.count %> participants who have indicated whether they are interested in this <%= @study.study_type %>.</p>
 
 <table class="admin_table">
 <tr>
@@ -89,10 +91,15 @@
 <table class="admin_table">
   <tr>
     <th>#</th>
+    <% if @study.is_third_party %>
+    <th>Study-specific participant ID</th>
+    <th>Status</th>
+    <% else %>
     <th>Name</th>
     <th>Status</th>
     <th>Kit last sent</th>
     <th></th>
+    <% end %>
     <% if @selection %>
     <th>Action parameters</th>
     <% end %>
@@ -100,6 +107,10 @@
   <% @participants.each do |p| %>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%= rownum += 1 %></td>
+      <% if @study.is_third_party %>
+      <td><%= p.user.app_token "Study##{@study.id}" %></td>
+      <td><%= p.pretty_status %></td>
+      <% else %>
       <td><%= current_user.is_admin? ? link_to(p.user.full_name, admin_user_url(p.user)) : p.user.full_name %></td>
       <td><%= p.pretty_status %></td>
       <td><%= p.kit_last_sent_at %></td>
@@ -112,6 +123,7 @@
         <%= link_to('accept', study_update_user_status_path(p.study,p.user,'accepted'), :confirm => 'Are you sure? This user has already been marked "not accepted".', :method => :post) %>
       <% end %>
       </td>
+      <% end %>
       <% if @selection %>
       <td><%= @study_participant_info[p.id].inspect %></td>
       <% end %>
@@ -120,5 +132,5 @@
 </table>
 
 <% else %>
-<p>This collection event has no participants yet.</p>
+<p>This <%= @study.study_type %> has no participants yet.</p>
 <% end %>

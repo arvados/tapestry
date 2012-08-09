@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120806024318) do
+ActiveRecord::Schema.define(:version => 20120809174422) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2096,15 +2096,16 @@ ActiveRecord::Schema.define(:version => 20120806024318) do
     t.boolean  "approved",                  :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
     t.boolean  "open",                      :default => false
     t.datetime "date_approved"
     t.datetime "date_opened"
     t.boolean  "shipping_address_required", :default => true
     t.boolean  "phone_number_required",     :default => false
+    t.string   "participation_url"
   end
 
   create_table "study_guide_page_versions", :force => true do |t|
@@ -2184,6 +2185,7 @@ ActiveRecord::Schema.define(:version => 20120806024318) do
     t.boolean  "open",                      :default => false
     t.boolean  "shipping_address_required"
     t.boolean  "phone_number_required"
+    t.string   "participation_url"
   end
 
   add_index "study_versions", ["study_id"], :name => "index_study_versions_on_study_id"
