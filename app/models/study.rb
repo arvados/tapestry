@@ -33,6 +33,7 @@ class Study < ActiveRecord::Base
       where("researcher_id = ?",user.id)
     end
   }
+  scope :visible_to, lambda { |current_user| accessible(current_user) }
 
   def is_approved?
     self.approved

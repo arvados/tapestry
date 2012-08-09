@@ -138,15 +138,20 @@ class KitsController < ApplicationController
   
   # GET /kits
   # GET /kits.xml
+  before_filter :load_selection, :only => :index
   def index
     if current_user.is_admin?
       @all_kits = Kit.all
     else
       @all_kits = Kit.where('originator_id = ?',current_user.id)
     end
-    if params[:name_range]
-      select_name_range
+    select_name_range if params[:name_range]
+    if @selection
       @kits = @selected_kits
+      if !@selected_kits_description
+        n_studies = @selected_kits.collect(&:study_id).uniq.count
+        @selected_kits_description = "from #{n_studies} #{n_studies==1?'study':'studies'}"
+      end
     else
       @kits = @all_kits
     end
@@ -305,6 +310,7 @@ class KitsController < ApplicationController
 
   def load_selection
     super
+    return unless @selection
     @selected_kits = Kit.where('id in (?)', @selection.target_ids)
     unless current_user.is_admin?
       @selected_kits = @selected_kits.where('originator_id = ?', current_user.id)

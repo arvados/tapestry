@@ -31,6 +31,18 @@ class Kit < ActiveRecord::Base
 
   scope :assigned_to_participant, where('participant_id is not ?',nil)
 
+  scope :visible_to, lambda { |current_user|
+    if current_user and current_user.is_admin?
+      unscoped
+    elsif current_user and current_user.is_researcher?
+      joins(:study).merge(Study.visible_to(current_user))
+    elsif current_user
+      where('participant_id = ?', current_user.id)
+    else
+      where('1=0')
+    end
+  }
+
   api_accessible :id do |t|
     t.add :id
     t.add :name
@@ -94,6 +106,14 @@ class Kit < ActiveRecord::Base
       done = true if o.class.where('url_code = ?',code).empty?
     end
     code
+  end
+
+  def self.normalize_name(s)
+    s.downcase if s
+  end
+
+  def normalized_name
+    self.class.normalize_name(name)
   end
 
 end

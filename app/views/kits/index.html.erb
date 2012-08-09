@@ -3,7 +3,7 @@
 <%- end -%>
 
 <div style="float:right">
-  <table><tr><td valign="bottom">
+  <table><tr><td valign="bottom" style="background:#ffd">
 	<div>
 	  Select a range of kits:
 	</div>
@@ -14,13 +14,26 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
 <%= f.submit 'Select range' %>
 <% end %>
 	</div>
-  </td><td valign="bottom">
+  </td><td valign="bottom" style="background:#ffe">
+	<div>
+	  Upload CSV with kit names:<br />&nbsp;
+	</div>
+	<div>
+<%= form_for :upload, :url => upload_filter_path, :html => { :multipart => true } do |f| %>
+<%= hidden_field_tag :target_class, 'Kit' %>
+<%= hidden_field_tag :target_id_attribute, 'name' %>
+<%= hidden_field_tag :return_to, request.path %>
+<%= file_field_tag 'file' %><br />
+<%= f.submit 'Select kits by name' %>
+<% end %>
+	</div>
+  </td><td valign="bottom" style="background:#ffd">
 	<div style="text-align:right">
 	  <%= button_to 'Select all', kits_path, :method => :get %>
 	</div>
       </td></tr>
     <% if @selection and !@selection.target_ids.empty? %>
-    <tr><td colspan="2">
+    <tr><td colspan="3" style="text-align:right">
 	Apply to selected items:
 	<%= form_tag '', :method => :post do %>
 	<%= hidden_field_tag :return_to, request.fullpath %>
@@ -37,7 +50,7 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
 
 <% if @kits.empty? %>
 <p>No kits selected.</p>
-<% elsif @selected_kits_description %>
+<% elsif @selection %>
 <p>Selected <%= @selected_kits.size %> kits <%= @selected_kits_description -%>.</p>
 <% elsif current_user.is_admin? %>
 <p>Because you are an administrator, this page lists all <%= @all_kits.size -%> kits created by all researchers.</p>
