@@ -30,7 +30,6 @@ class User < ActiveRecord::Base
   has_many :user_files, :dependent => :destroy
   has_many :removal_requests, :dependent => :destroy
   has_many :samples, :foreign_key => 'participant_id'
-  has_many :received_samples, :foreign_key => 'participant_id', :class_name => 'Sample', :conditions => 'last_received is not null and participant_id <> owner_id'
   has_many :datasets, :foreign_key => 'participant_id'
   has_many :published_datasets, :class_name => 'Dataset', :foreign_key => 'participant_id', :conditions => 'published_at IS NOT NULL'
   has_many :spreadsheet_rows, :as => :row_target
@@ -640,7 +639,7 @@ class User < ActiveRecord::Base
                          current_user.is_researcher_onirb?)
       sql_search << " OR concat(first_name,' ',if(middle_name='','',concat(middle_name,' ')),last_name) LIKE :search"
     end
-    [sql_search, { :received_samples => {} }]
+    [sql_search, { :samples => {} }]
   end
 
   def self.include_for_api(api_template)
