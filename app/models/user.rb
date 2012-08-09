@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   has_many :user_files, :dependent => :destroy
   has_many :removal_requests, :dependent => :destroy
   has_many :samples, :foreign_key => 'participant_id'
+  has_many :received_samples, :foreign_key => 'participant_id', :class_name => 'Sample', :conditions => 'last_received is not null and participant_id <> owner_id'
   has_many :datasets, :foreign_key => 'participant_id'
   has_many :published_datasets, :class_name => 'Dataset', :foreign_key => 'participant_id', :conditions => 'published_at IS NOT NULL'
   has_many :spreadsheet_rows, :as => :row_target
@@ -618,7 +619,7 @@ class User < ActiveRecord::Base
     when :hex, :enrolled
       sortkey
     when :received_sample_materials
-      ['count(distinct samples.id)>0', { :samples => {} }]
+      ['count(distinct samples.id)>0', { :received_samples => {} }]
     when :has_ccrs
       ['count(distinct ccrs.id)>0', { :ccrs => {} }]
     when :has_relatives_enrolled
