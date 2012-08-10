@@ -2,9 +2,9 @@
 jQuery(function(){
         var $ = jQuery.noConflict();
         $('form input[name="study[is_third_party]"][value=1]').bind('change', function(){
-		var divs = $('div.iff-is-third-party');
+		var divs = $('.iff-is-third-party');
 		$(this).is(':checked') ? divs.show() : divs.hide();
-		divs = $('div.iff-not-third-party');
+		divs = $('.iff-not-third-party');
 		$(this).is(':checked') ? divs.hide() : divs.show();
 	    }).trigger('change');
     });
@@ -60,8 +60,7 @@ jQuery(function(){
     </div>
   </div>
   <div class="field">
-    <%= f.label :participant_description, 'Description of collection event, to be seen by
-participants (displayed on recruitment page)' %><br />
+    <%= f.label :participant_description, "Description of #{@study.study_type}, to be seen by participants (displayed on recruitment page)" %><br />
     <% if @study.approved then %>
       <pre>
       <%= @study.participant_description %>
@@ -71,8 +70,7 @@ participants (displayed on recruitment page)' %><br />
     <% end %>
   </div>
   <div class="field">
-    <%= f.label :researcher_description, 'Technical description of collection event for other
-researchers and internal use' %><br />
+    <%= f.label :researcher_description, "Technical description of #{@study.study_type} for other researchers and internal use" %><br />
     <%= f.text_area :researcher_description, :cols => 80 %>
   </div>
   <div class="field">
@@ -85,7 +83,7 @@ researchers and internal use' %><br />
     <% end %>
   </div>
   <div class="field">
-    <%= f.label :irb_associate_id %><br />
+    <%= f.label :irb_associate_id, 'IRB associate' %><br />
     <%= @study.irb_associate ? @study.irb_associate.full_name : 'unassigned' %>
   </div>
   <div class="field iff-not-third-party">
@@ -100,7 +98,7 @@ researchers and internal use' %><br />
     <div class="field">
       <%= f.label :requested, 'Request project approval' %><br />
       <%= f.check_box :requested %>
-      <br/><strong>Please note</strong>: when your collection event is approved, the collection event name and participant description fields will be frozen.
+      <br/><strong>Please note</strong>: when your <%= @study.study_type %> is approved, the <span class="iff-is-third-party">participation URL,</span> <%= @study.study_type %> name and participant description fields will be frozen.
     </div>
   <% end %>
   <div class="field">

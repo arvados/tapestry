@@ -74,6 +74,7 @@ class Study < ActiveRecord::Base
   end
 
   def study_type
+    return 'study or collection event' if !id
     is_third_party ? 'study' : 'collection event'
   end
 

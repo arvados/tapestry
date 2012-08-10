@@ -72,30 +72,23 @@
 
 
 <div class="narrow main">
-<h2>Researcher Tools</h2>
-
-<p>
-You can manage your collection events here.
-</p>
 
 <p>
 Your IRB status: <strong><%= current_user.researcher_onirb? ? 'on the IRB roster' : 'not on the IRB roster' %></strong>
 </p>
 
-<h3>Your collection events</h3>
-
 <% if @requested_studies.count > 0 %>
-<h4>Requested collection events</h4>
+<h4>Collection events / studies - awaiting approval</h4>
 <%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @requested_studies, :type => 'requested', :who => 'researcher' } %>
 <% end %>
 
 <% if @approved_studies.count > 0 %>
-<h4>Approved collection events</h4>
+<h4>Collection events / studies - approved</h4>
 <%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @approved_studies, :type => 'approved', :who => 'researcher' } %>
 <% end %>
 
 <% if @draft_studies.count > 0 %>
-<h4>Draft collection events</h4>
+<h4>Collection events / studies - draft</h4>
 <%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @draft_studies, :type => 'draft', :who => 'researcher' } %>
 <% end %>
 

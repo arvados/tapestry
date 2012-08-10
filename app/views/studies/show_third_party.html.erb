@@ -4,7 +4,7 @@
 Genome Project.  You can read about the study here, then decide
 whether to carry on to the study&rsquo;s own independent web site.</p>
 
-<p><%=raw CGI.escapeHTML(@study.participant_description).gsub("\r","").gsub("\n\n","</p><p>") %></p>
+<p><%=raw CGI.escapeHTML(@study.participant_description).gsub("\r","").gsub("\n\n","</p><p>").gsub("\n","<br />") %></p>
 
 <p><b>Researcher</b>: <%= @study.researcher.full_name %>, <%= @study.researcher.researcher_affiliation %></p>
 

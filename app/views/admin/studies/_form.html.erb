@@ -9,7 +9,7 @@
   </div>
   <div class="field">
     <%= f.label :participant_description %><br />
-    <pre><%= @study.participant_description %></pre>
+    <p><%=raw CGI.escapeHTML(@study.participant_description).gsub("\r","").gsub("\n\n","</p><p>").gsub("\n","<br />") %></p>
   </div>
   <div class="field">
     <%= f.label :researcher_description %><br />
@@ -20,7 +20,7 @@
     <%= @study.researcher.full_name %>
   </div>
   <div class="field">
-    <%= f.label :irb_associate_id %><br />
+    <%= f.label :irb_associate_id, 'IRB associate' %><br />
     <%= f.select :irb_associate_id, User.where('researcher_onirb = ?',true).collect {|r| [ r.full_name, r.id ] }, :include_blank => true %>
   </div>
   <% if not @study.approved then %>
