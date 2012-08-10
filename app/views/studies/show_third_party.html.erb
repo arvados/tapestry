@@ -1,17 +1,23 @@
 <h2><%= @study.name %></h2>
 
-<p>This study is <b>not</b> conducted by or supervised by the Personal
-Genome Project.  You can read about the study here, then decide
-whether to carry on to the study&rsquo;s own independent web site.</p>
+<p>This project is <b>not</b> conducted by or supervised by the
+Personal Genome Project.  You can read about it here, then decide
+whether to carry on to the project&rsquo;s own independent web
+site.</p>
 
 <p><%=raw CGI.escapeHTML(@study.participant_description).gsub("\r","").gsub("\n\n","</p><p>").gsub("\n","<br />") %></p>
 
 <p><b>Researcher</b>: <%= @study.researcher.full_name %>, <%= @study.researcher.researcher_affiliation %></p>
 
 <div style="width:300px;padding:1em;border:1px dashed #866">
-  Clicking the "participate" button below will take you to the third-party study&rsquo;s web site.  A token will be passed to confirm that you are a PGP participant &mdash; but this will not identify <i>which</i> PGP participant you are.
+  Clicking the "participate" button below will take you to the
+  project&rsquo;s web site.  A token will be passed to confirm that
+  you are a PGP participant &mdash; but the project will not yet be
+  told <i>which</i> PGP participant you are.  You may have an
+  opportunity to make that linkage later (e.g., by posting returned
+  data to your public profile).
   <br />&nbsp;
   <div style="text-align:center">
-    <%= button_to 'Participate in this study', clickthrough_to_third_party_study_path(@study) %>
+    <%= button_to 'Participate', clickthrough_to_third_party_path(@study) %>
   </div>
 </div>

@@ -24,7 +24,7 @@ jQuery(function(){
   </div>
   <div style="margin:0.5em 0">
     <div class="field">
-      <%= f.check_box :is_third_party, :disabled => !!@study.approved %> Third-party study? (i.e., sign-up and participation are conducted at an independent web site)
+      <%= f.check_box :is_third_party, :disabled => !!@study.approved %> Third-party activity? (i.e., sign-up and participation are conducted at an independent web site)
     </div>
     <div class="field iff-is-third-party">
       <%= f.label :participation_url, 'URL to send participants to when they click "participate"' %>
@@ -50,10 +50,10 @@ jQuery(function(){
 	  <br />
 	  <br />
 	  <sup>(2)</sup>&nbsp;
-	  <% example_url = verify_third_party_study_participant_id_url(:id => (@study.id || 9999), :app_token => example_token) %>
+	  <% example_url = verify_third_party_participant_id_url(:id => (@study.id || 9999), :app_token => example_token) %>
 	  <code><%= example_url %></code> 
 	  <% if !@study.id %>
-	  <br />("9999" is a placeholder; the exact API URL will be shown here after the study is created)
+	  <br />("9999" is a placeholder; the exact API URL will be shown here after the activity is created)
 	  <% end %>
 	</blockquote>
       </div>

@@ -86,9 +86,10 @@ Tapestry::Application.routes.draw do
   match '/pages/studies', :to => redirect('/pages/collection_events')
   match '/studies/*x', :to => redirect('/collection_events/%{x}')
 
-  resources :third_party_studies, :controller => 'studies'
-  match '/third_party_studies/:id/verify_participant_id/:app_token' => 'studies#verify_participant_id', :via => [:get], :as => :verify_third_party_study_participant_id
-  match '/third_party_studies/:id/clickthrough_to' => 'studies#clickthrough_to', :via => [:post], :as => :clickthrough_to_third_party_study
+  resources :third_party, :controller => 'studies'
+  match '/third_party/:id/verify_participant_id/:app_token' => 'studies#verify_participant_id', :via => [:get], :as => :verify_third_party_participant_id
+  match '/third_party/:id/clickthrough_to' => 'studies#clickthrough_to', :via => [:post], :as => :clickthrough_to_third_party
+  match '/3p/*x', :to => redirect('/third_party/%{x}')
 
   match '/filters/upload' => 'filters#upload', :as => :upload_filter, :via => :post
 

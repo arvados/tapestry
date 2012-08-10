@@ -124,6 +124,11 @@ class StudiesController < ApplicationController
     render :action => :show_third_party
   end
 
+  def new
+    @study = Study.new
+    @study.participation_url = 'http://' if request.env['PATH_INFO'].match(/third_party/)
+  end
+
   # POST /studies
   # POST /studies.xml
   def create

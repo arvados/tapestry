@@ -22,6 +22,13 @@ class Study < ActiveRecord::Base
 
   validates_presence_of :irb_associate, :message => ' is required if the study is approved', :if => :is_approved?
 
+  before_validation :normalize_third_party_fields
+  validates_format_of :participation_url, {
+    :with => %r{^https?://[^/\s]{4,}(/\S*)?$},
+    :message => 'must be a valid http:// or https:// web address',
+    :allow_nil => true
+  }
+
   scope :requested, where('requested = ?',true)
   scope :approved, where('approved = ?',true)
   scope :draft, where('requested = ? and approved = ?',false,false)
@@ -47,12 +54,16 @@ class Study < ActiveRecord::Base
     self.open
   end
 
+  def normalize_third_party_fields
+    self.participation_url = nil if !@is_third_party
+  end
+
   def is_third_party
-    !participation_url.nil?
+    !self.participation_url.nil?
   end
 
   def is_third_party=(bool)
-    participation_url = nil if !bool
+    @is_third_party = (bool && bool.to_s != '0')
   end
 
   def personalized_participation_url(user)
@@ -75,7 +86,7 @@ class Study < ActiveRecord::Base
 
   def study_type
     return 'study or collection event' if !id
-    is_third_party ? 'study' : 'collection event'
+    is_third_party ? 'activity' : 'collection event'
   end
 
   api_accessible :public do |t|
