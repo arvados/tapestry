@@ -105,12 +105,15 @@ jQuery(function(){
     <%= f.label :approved %><br />
     <%= @study.approved ? 'Yes' : 'No' %>
   </div>
-  <% if @study.approved then %>
-    <div class="field">
-      <%= f.label :open %><br />
-      <%= f.check_box :open %>
-    </div>
-  <% end %>
+  <div class="field">
+    <%= f.label :open %><br />
+    <%= f.check_box :open %>
+    <% if @study.approved then %>
+    Currently accepting participants?
+    <% else %>
+    Start accepting participants immediately after admin approval?
+    <% end %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>
