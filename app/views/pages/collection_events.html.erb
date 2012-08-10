@@ -62,7 +62,7 @@ phone number may be needed.</p>
     <th>Researcher Affiliation</th>
     <th>Approved</th>
   </tr>
-  <% Study.where('open = ? and approved = ?', false, true).sort { |a,b| b.date_approved <=> a.date_approved }.each do |s| %>
+  <% @closed_collection_events.sort { |a,b| b.date_approved <=> a.date_approved }.each do |s| %>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=
 	     sp = s.study_participants.where('user_id = ?',current_user.id)

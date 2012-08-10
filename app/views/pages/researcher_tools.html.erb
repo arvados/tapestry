@@ -77,22 +77,10 @@
 Your IRB status: <strong><%= current_user.researcher_onirb? ? 'on the IRB roster' : 'not on the IRB roster' %></strong>
 </p>
 
-<% if @requested_studies.count > 0 %>
-<h4>Collection events / studies - awaiting approval</h4>
-<%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @requested_studies, :type => 'requested', :who => 'researcher' } %>
-<% end %>
+<% if @studies.count > 0 %>
+<h4>Collection events / studies</h4>
+<%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @studies, :type => 'all', :who => 'researcher' } %>
 
-<% if @approved_studies.count > 0 %>
-<h4>Collection events / studies - approved</h4>
-<%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @approved_studies, :type => 'approved', :who => 'researcher' } %>
-<% end %>
-
-<% if @draft_studies.count > 0 %>
-<h4>Collection events / studies - draft</h4>
-<%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @draft_studies, :type => 'draft', :who => 'researcher' } %>
-<% end %>
-
-<% if @requested_studies.count > 0 or @approved_studies.count > 0 or @draft_studies.count > 0 then %>
 Legend: U: Undecided | I: Interested | NI: Not interested | A: Accepted | NA: Not accepted | R: Removed
 
 <% else %>

@@ -7,6 +7,6 @@
 <% end %>
 
 <% if @studies.count > 0 %>
-<%= render :partial => 'table' %>
+<%= render :partial => 'admin/researchers/studiestable', :locals => { :studies => @studies, :type => 'all', :who => 'researcher' } %>
 <% end %>
 

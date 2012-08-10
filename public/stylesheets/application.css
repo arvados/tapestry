@@ -895,6 +895,19 @@ div.formError {
   background-color: #ddd;
 }
 
+.studiestable tr.status-open td {
+    background: #efe;
+}
+.studiestable tr.status-approved td {
+    background: #fff;
+}
+.studiestable tr.status-draft td {
+    background: #ddd;
+}
+.studiestable tr.status-requested td {
+    background: #eee;
+}
+
 .exam_progress {
   border: 2px solid #5D7CBB;
   width: 300px;

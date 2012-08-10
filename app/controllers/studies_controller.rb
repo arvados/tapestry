@@ -16,6 +16,7 @@ class StudiesController < ApplicationController
   def index
     return index_third_party if request.env['PATH_INFO'].match(/third_party/)
     redirect_to page_path(:id => 'collection_events', :anchor => 'kits') if current_user and !current_user.researcher
+    @studies = Study.all if current_user and current_user.is_admin?
   end
 
   def index_third_party

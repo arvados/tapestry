@@ -1,14 +1,12 @@
-<table class="admin_table">
+<table class="admin_table studiestable">
   <tr>
     <th>Name</th>
-    <% if who != 'researcher' or (current_user.is_admin? and type == 'all') %>
+    <% if who != 'researcher' %>
     <th>Researcher</th>
     <% end %>
     <th>IRB associate</th>
-    <% if who != 'researcher' or (current_user.is_admin? and type == 'all') %>
     <th>Status</th>
-    <% end %>
-    <% if type != 'draft' and who != 'researcher' %>
+    <% if who == 'admin' %>
     <th></th>
     <% end %>
     <th>U</th>
@@ -25,27 +23,28 @@
     <th>Participants</th>
     <% end %>
   </tr>
-  <% studies.sort { |a,b| a.name <=> b.name }.each do |study| %>
-    <tr class="<%= cycle 'even', 'odd' %>">
+  <% studies.sort { |a,b| b.created_at <=> a.created_at }.each do |study| %>
+    <tr class="status-<%= study.status %>">
       <td><%= link_to study.name, (who == 'admin' ? edit_admin_study_url(study) : edit_collection_event_url(study) ) %></td>
-      <% if who != 'researcher' or (current_user.is_admin? and type == 'all') %>
+      <% if who != 'researcher' %>
       <td><%= link_to study.researcher.full_name, admin_user_url(study.researcher) %></td>
       <% end %>
       <td>
-          <% if study.irb_associate.nil? then %>
-            <%= link_to 'unassigned', (who == 'admin' ? edit_admin_study_url(study) : edit_collection_event_url(study) ) %>
-          <% else %>
-            <%= ( who == 'admin' ? link_to(study.irb_associate.full_name, admin_user_url(study.irb_associate)) : study.irb_associate.full_name ) %>
-          <% end %>
+        <% if study.irb_associate.nil? then %>
+        <%= link_to_if(who == 'admin', 'unassigned', edit_admin_study_url(study)) %>
+        <% else %>
+        <%= link_to_if(who == 'admin', study.irb_associate.full_name, admin_user_url(study.irb_associate)) %>
+        <% end %>
       </td>
-      <% if who != 'researcher' or (current_user.is_admin? and type == 'all') %>
-      <td><%= study.status %></td>
-      <% if type == 'requested' %>
-        <td><%= link_to 'Approve', edit_admin_study_url(study.id) %></td>
-      <% end %>
-      <% if type == 'approved' %>
-        <td><%= link_to 'Remove approval', edit_admin_study_url(study.id) %></td>
-      <% end %>
+      <td><%= study.long_status %></td>
+      <% if who == 'admin' %>
+      <td>
+	<% if study.status == 'requested' %>
+        <%= link_to 'Approve', edit_admin_study_url(study.id) %>
+	<% elsif study.approved %>
+	<%= link_to 'Remove approval', edit_admin_study_url(study.id) %>
+	<% end %>
+      </td>
       <% end %>
       <td><%= link_to(study.study_participants.undecided.count, study_users_path(study, :format => 'csv', :type => 'undecided')) %></td>
       <td><%= link_to(study.study_participants.interested.count, study_users_path(study, :format => 'csv', :type => 'interested')) %></td>

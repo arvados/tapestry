@@ -75,12 +75,26 @@ class Study < ActiveRecord::Base
   end
 
   def status
-    if self.approved then
-      return 'approved'
+    if self.open and self.approved then
+      'open'
+    elsif self.approved then
+      'approved'
     elsif self.requested then
-      return 'requested'
+      'requested'
     else
-      return 'draft'
+      'draft'
+    end
+  end
+
+  def long_status
+    if self.open and self.approved then
+      'approved, open to participants'
+    elsif self.approved then
+      'approved, closed'
+    elsif self.requested then
+      'pending admin approval'
+    else
+      'draft'
     end
   end
 
