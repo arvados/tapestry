@@ -67,7 +67,7 @@
 <%= f.text_field :email %></p>
 
 <p><label for="activated">Activated</label><br/>
-<%= @user.active? ? @user.activated_at : 'No' %></p>
+<%= @user.active? ? @user.activated_at : "No -- activation URL is #{activate_url(@user.activation_code)}" %></p>
 
 <p><label for="password">Password</label><br/>
 <%= f.password_field :password %></p>
