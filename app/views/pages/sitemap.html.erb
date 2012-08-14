@@ -6,11 +6,11 @@
       <p>
 	<%= link_to 'Email and password', edit_user_path(current_user) %>
 	<br />
-	<%= link_to 'Shipping address', user_shipping_address_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Shipping address', user_shipping_address_path %>
 	<br />
-	<%= link_to 'Mailing lists', edit_user_path(current_user, :anchor => 'mailinglists') %>
+	<%= link_to_if !current_user.hex.empty?, 'Mailing lists', edit_user_path(current_user, :anchor => 'mailinglists') %>
 	<br />
-	<%= link_to 'Withdraw', edit_user_path(current_user, :anchor => 'withdraw') %>
+	<%= link_to_if !current_user.hex.empty?, 'Withdraw', edit_user_path(current_user, :anchor => 'withdraw') %>
 <!--
 	<br />
 	<%= content_tag :span, 'Identity verification', :class => 'nolink' %>
@@ -26,15 +26,15 @@
 	<%= content_tag :span, raw('&rarr;&nbsp;history'), :class => 'nolink' %>
 	<br />
 -->
-	<%= link_to 'Safety questionnaires', safety_questionnaires_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Safety questionnaires', safety_questionnaires_path %>
 	<br />
-	&rarr;&nbsp;<%= link_to 'submit new', new_safety_questionnaire_path %>
+	&rarr;&nbsp;<%= link_to_if !current_user.hex.empty?, 'submit new', new_safety_questionnaire_path %>
 	<br />
-	&rarr;&nbsp;<%= link_to 'history', safety_questionnaires_path %>
+	&rarr;&nbsp;<%= link_to_if !current_user.hex.empty?, 'history', safety_questionnaires_path %>
 	<br />
 	<%= link_to 'Designated proxies', named_proxies_path %>
 	<br />
-	<%= link_to 'Enrollment letter', enrollment_application_results_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Enrollment letter', enrollment_application_results_path %>
       </p>
     </div>
     <div style="display:table-cell; width: 5%">
@@ -42,33 +42,33 @@
     <div style="display:table-cell; width: 30%">
       <h2>Public profile</h2>
       <p>
-	<%= link_to_if current_user.hex, 'View and edit', public_profile_path(current_user.hex) %>
+	<%= link_to_if !current_user.hex.empty?, 'View and edit', current_user.hex.empty? ? '' : public_profile_path(current_user.hex) %>
 	<br />
-	<%= link_to_if current_user.hex, 'Upload and manage files', user_files_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Upload and manage files', user_files_path %>
 	<br />
-	<%= link_to_if current_user.hex, 'Personal health records', phrccr_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Personal health records', phrccr_path %>
 	<br />
-	<%= link_to_if current_user.hex, 'Specimen tracking', public_profile_path(current_user.hex, :anchor => 'samples') %>
+	<%= link_to_if !current_user.hex.empty?, 'Specimen tracking', current_user.hex.empty? ? '' : public_profile_path(current_user.hex, :anchor => 'samples') %>
 	<br />
-	<%= link_to_if current_user.hex, 'Specimen analysis results', specimen_analysis_data_index_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Specimen analysis results', specimen_analysis_data_index_path %>
       </p>
       <h2>Specimens</h2>
       <p>
-	<%= link_to_if current_user.hex, 'Donate specimens', page_path('collection_events') %>
+	<%= link_to_if !current_user.hex.empty?, 'Donate specimens', page_path('collection_events') %>
 	<br />
-	<%= link_to_if current_user.hex, 'Claim a kit', study_claim_kit_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Claim a kit', study_claim_kit_path %>
 	<br />
-	<%= link_to_if current_user.hex, 'Specimen log', public_profile_path(current_user.hex, :anchor => 'samples') %>
+	<%= link_to_if !current_user.hex.empty?, 'Specimen log', current_user.hex.empty? ? '' : public_profile_path(current_user.hex, :anchor => 'samples') %>
 	<br />
-	<%= link_to_if current_user.hex, 'Review and publish specimen analysis results', specimen_analysis_data_index_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Review and publish specimen analysis results', specimen_analysis_data_index_path %>
       </p>
       <h2>Contributing trait data</h2>
       <p>
-	<%= link_to_if current_user.hex, 'Personal health records', phrccr_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Personal health records', phrccr_path %>
 	<br />
-	<%= link_to_if current_user.hex, 'Trait surveys', trait_surveys_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Trait surveys', trait_surveys_path %>
 	<br />
-	<%= link_to_if current_user.hex, 'Upload and manage files', user_files_path %>
+	<%= link_to_if !current_user.hex.empty?, 'Upload and manage files', user_files_path %>
       </p>
     </div>
     <% end %>
