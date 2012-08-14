@@ -18,6 +18,58 @@ jQuery(function(){
   $('#safety_questionnaire_has_changes_false').change(function(){
     $('#safety_questionnaire_has_changes_true').change();
   });
+
+  $('#events_has_changes_true').change(function(){
+    if ($('#events_has_changes_true')[0].checked) {
+      $('#events_comments').show('fast');
+    } else {
+      $('#events_comments').hide('fast');
+    }
+  });
+  $('#events_has_changes_false').change(function(){
+    $('#events_has_changes_true').change();
+  });
+
+  $('#reactions_has_changes_true').change(function(){
+    if ($('#reactions_has_changes_true')[0].checked) {
+      $('#reactions_comments').show('fast');
+    } else {
+      $('#reactions_comments').hide('fast');
+    }
+  });
+  $('#reactions_has_changes_false').change(function(){
+    $('#reactions_has_changes_true').change();
+  });
+
+  $('#contact_has_changes_true').change(function(){
+    if ($('#contact_has_changes_true')[0].checked) {
+      $('#contact_comments').show('fast');
+    } else {
+      $('#contact_comments').hide('fast');
+    }
+  });
+  $('#contact_has_changes_false').change(function(){
+    $('#contact_has_changes_true').change();
+  });
+
+  $('#healthcare_has_changes_true').change(function(){
+    if ($('#healthcare_has_changes_true')[0].checked) {
+      $('#healthcare_comments').show('fast');
+    } else {
+      $('#healthcare_comments').hide('fast');
+    }
+  });
+  $('#healthcare_has_changes_false').change(function(){
+    $('#healthcare_has_changes_true').change();
+  });
+
+  // For page load
+  $('#safety_questionnaire_has_changes_true').change();
+  $('#events_has_changes_true').change();
+  $('#reactions_has_changes_true').change();
+  $('#contact_has_changes_true').change();
+  $('#healthcare_has_changes_true').change();
+
 });
 <% end -%>
 
@@ -34,19 +86,35 @@ jQuery(function(){
   <div id="questions" style="display:none">
   <p>
     <strong>2. What negative and/or positive events have happened to you and/or your relatives related to your participation in the PGP?</strong><br/>
-    <%= f.text_area :events, :size => "80x10" %>
+    <%= radio_button_tag(:events_has_changes, "false", { :selected => true } ) %> Nothing to report<br/>
+    <%= radio_button_tag(:events_has_changes, "true") %> Add comment<br/>
+    <div id="events_comments" style="display:none">
+      <%= f.text_area :events, :size => "80x10" %>
+    </div>
   </p>
   <p>
     <strong>3. What are the reactions or responses of relatives and acquaintances to the posting of your genetic and medical data? </strong><br/>
+    <%= radio_button_tag(:reactions_has_changes, "false", { :selected => true } ) %> Nothing to report<br/>
+    <%= radio_button_tag(:reactions_has_changes, "true") %> Add comment<br/>
+    <div id="reactions_comments" style="display:none">
     <%= f.text_area :reactions, :size => "80x10" %>
+    </div>
   </p>
   <p>
     <strong>4. Please report incidents of being contacted regarding your data being posted online.</strong><br/>
+    <%= radio_button_tag(:contact_has_changes, "false", { :selected => true } ) %> Nothing to report<br/>
+    <%= radio_button_tag(:contact_has_changes, "true") %> Add comment<br/>
+    <div id="contact_comments" style="display:none">
     <%= f.text_area :contact, :size => "80x10" %>
+    </div>
   </p>
   <p>
     <strong>5. In what ways has this study positively or negatively influenced your health care or interactions with your medical care providers?</strong><br/>
+    <%= radio_button_tag(:healthcare_has_changes, "false", { :selected => true } ) %> Nothing to report<br/>
+    <%= radio_button_tag(:healthcare_has_changes, "true") %> Add comment<br/>
+    <div id="healthcare_comments" style="display:none">
     <%= f.text_area :healthcare, :size => "80x10" %>
+    </div>
   </p>
   </div>
   <p>

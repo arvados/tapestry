@@ -16,19 +16,35 @@ adverse events are occurring. Thanks for your cooperation.
   <div id="questions">
   <p>
     <strong>2. What negative and/or positive events have happened to you and/or your relatives related to your participation in the PGP?</strong><br/>
-    <%= f.text_area :events, :readonly => true, :size => "80x10" %>
+    <% if @safety_questionnaire.events != '' then -%>
+      <%= f.text_area :events, :readonly => true, :size => "80x10" %>
+    <% else -%>
+      Nothing to report.
+    <% end -%>
   </p>
   <p>
     <strong>3. What are the reactions or responses of relatives and acquaintances to the posting of your genetic and medical data? </strong><br/>
-    <%= f.text_area :reactions, :size => "80x10" %>
+    <% if @safety_questionnaire.reactions != '' then -%>
+      <%= f.text_area :reactions, :size => "80x10" %>
+    <% else -%>
+      Nothing to report.
+    <% end -%>
   </p>
   <p>
     <strong>4. Please report incidents of being contacted regarding your data being posted online.</strong><br/>
-    <%= f.text_area :contact, :size => "80x10" %>
+    <% if @safety_questionnaire.contact != '' then -%>
+      <%= f.text_area :contact, :size => "80x10" %>
+    <% else -%>
+      Nothing to report.
+    <% end -%>
   </p>
   <p>
     <strong>5. In what ways has this study positively or negatively influenced your health care or interactions with your medical care providers?</strong><br/>
-    <%= f.text_area :healthcare, :size => "80x10" %>
+    <% if @safety_questionnaire.healthcare != '' then -%>
+      <%= f.text_area :healthcare, :size => "80x10" %>
+    <% else -%>
+      Nothing to report.
+    <% end -%>
   </p>
   </div>
 <% end %>
