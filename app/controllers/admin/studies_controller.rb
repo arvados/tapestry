@@ -20,6 +20,7 @@ class Admin::StudiesController < Admin::AdminControllerBase
     @approved = params[:study].delete(:approved)
     if ((@study.approved != @approved) and (@study.approved == false)) then
       @study.date_approved = Time.now()
+      @study.date_opened = Time.now if @study.open
     end
     @study.approved = @approved
     @study.requested = false if @study.approved
