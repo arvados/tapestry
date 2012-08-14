@@ -1,13 +1,19 @@
 module Admin::SafetyQuestionnairesHelper
   # TODO: Move to a separate presenter class instead of a helper.
-  def csv_for_safety_questionnaires(safety_questionnaires)
+  def csv_for_safety_questionnaires(safety_questionnaires, question)
 
     # precache associations
     safety_questionnaires = SafetyQuestionnaire.find(safety_questionnaires.map(&:id),
         :include => [:user]).sort { |x,y| x.datetime <=> y.datetime }
 
-    user_fields = %w(full_name).freeze
-    safety_questionnaire_fields = %w(datetime has_changes events reactions contact healthcare).freeze
+    user_fields = %w(hex).freeze
+    if question.nil? then
+      safety_questionnaire_fields = %w(datetime has_changes events reactions contact healthcare).freeze
+    else
+      question = question.to_i
+      question_field = ['events','reactions','contact','healthcare'][question - 1]
+      safety_questionnaire_fields = ['datetime', question_field].freeze
+    end
 
     buf = ''
 
@@ -16,6 +22,10 @@ module Admin::SafetyQuestionnairesHelper
 
     CSV.generate_row(header_row, header_row.size, buf)
     safety_questionnaires.each do |sq|
+      if not question.nil? then
+        # If this is the question-specific report, do not include lines when the participant left the response blank for this question
+        next if sq.send(question_field) == ''
+      end
 
       row = []
       user_fields.each do |field|

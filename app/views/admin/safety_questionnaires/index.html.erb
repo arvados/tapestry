@@ -6,19 +6,29 @@
 Download this list of safety questionnaire responses as <%= link_to 'CSV',
   admin_safety_questionnaires_url(:format => 'csv') %>
 
+<p>
+Download the responses to individual questions: <br/>
+<%= link_to 'question 1 CSV', admin_safety_questionnaires_url(:format => 'csv', :question => '1') %> <br/>
+<%= link_to 'question 2 CSV', admin_safety_questionnaires_url(:format => 'csv', :question => '2') %> <br/>
+<%= link_to 'question 3 CSV', admin_safety_questionnaires_url(:format => 'csv', :question => '3') %> <br/>
+<%= link_to 'question 4 CSV', admin_safety_questionnaires_url(:format => 'csv', :question => '4') %> <br/>
+
+</p>
+
+
 <h3>Responses</h3>
 <table class="admin_table">
   <tr>
-    <th>User</th>
+    <th>huID</th>
     <th>Submitted</th>
     <th>Changes reported</th>
   </tr>
   <% @safety_questionnaires.each do |sq| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%=h sq.user.full_name %></td>
-      <td><%=h sq.datetime %></td>
+      <td><%= link_to sq.user.hex, admin_user_path(sq) %></td>
+      <td><%= sq.datetime %></td>
       <td>
-        <%= h sq.has_changes ? 'yes' : 'no' -%>
+        <%= sq.has_changes ? 'yes' : 'no' -%>
       </td>
       <td><%= link_to 'View', safety_questionnaire_path(sq) %></td>
     </tr>
