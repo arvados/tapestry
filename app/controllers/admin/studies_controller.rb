@@ -16,6 +16,7 @@ class Admin::StudiesController < Admin::AdminControllerBase
 
   def update
     @study = Study.find(params[:id])
+    params[:study].delete :is_third_party
     @study.irb_associate = params[:study].delete(:irb_associate)
     @approved = params[:study].delete(:approved)
     if ((@study.approved != @approved) and (@study.approved == false)) then

@@ -8,6 +8,14 @@
     <%= @study.name %>
   </div>
   <div class="field">
+    <%= f.label :is_third_party, 'Activity type' %><br />
+    <%= f.check_box :is_third_party, :disabled => true %> Third-party activity? (i.e., sign-up and participation are conducted at an independent web site)
+  </div>
+  <div class="field">
+    <%= f.label :participation_url %><br />
+    <%= @study.is_third_party ? @study.participation_url : 'N/A' %>
+  </div>
+  <div class="field">
     <%= f.label :participant_description %><br />
     <p><%=raw CGI.escapeHTML(@study.participant_description).gsub("\r","").gsub("\n\n","</p><p>").gsub("\n","<br />") %></p>
   </div>

@@ -55,6 +55,7 @@ class Study < ActiveRecord::Base
   end
 
   def normalize_third_party_fields
+    @is_third_party = self.is_third_party if @is_third_party.nil?
     self.participation_url = nil if !@is_third_party
   end
 
