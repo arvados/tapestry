@@ -34,7 +34,7 @@ class Study < ActiveRecord::Base
   scope :draft, where('requested = ? and approved = ?',false,false)
   scope :not_third_party, where('participation_url is ?', nil)
   scope :third_party, where('participation_url is not ?', nil)
-  scope :open, where('open = ? and approved = ?',true,true)
+  scope :open_now, where('open = ? and approved = ?',true,true)
   scope :not_open, where('open = ?',false)
 
   scope :accessible, lambda { |user|

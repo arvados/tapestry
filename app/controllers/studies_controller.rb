@@ -20,7 +20,7 @@ class StudiesController < ApplicationController
   end
 
   def index_third_party
-    @studies = Study.approved.open.third_party
+    @studies = Study.approved.third_party.open_now
     render :action => :index_third_party
   end
 

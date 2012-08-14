@@ -283,7 +283,7 @@ class UsersController < ApplicationController
 
   def edit_study
     @user = User.find(params[:id])
-    @study = Study.not_third_party.open.where('id = ?',params[:study_id]).first
+    @study = Study.approved.not_third_party.open_now.where('id = ?',params[:study_id]).first
     if @study.nil? then
       # Only open collection events should be available here
       redirect_to('/pages/collection_events')

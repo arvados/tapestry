@@ -63,7 +63,7 @@ class PagesController < ApplicationController
 
     if params[:id] == 'collection_events'
       @kits = Kit.participant(current_user.id).sort{ |a,b| b.updated_at <=> a.updated_at }
-      @open_collection_events = Study.not_third_party.open
+      @open_collection_events = Study.not_third_party.open_now.approved
       @closed_collection_events = Study.not_third_party.not_open.approved
     end
 
