@@ -6,7 +6,6 @@ class PublicGeneticDataController < ApplicationController
   def index
     @data_type_options = []
     @data_type_options << ['All data types', nil]
-    @data_type_options << ['Whole genome', 'Whole genome']
     UserFile::DATA_TYPES.each { |k,v|
       if v == 'other'
         @data_type_options << [v, v]
