@@ -12,8 +12,7 @@ ENV["RAILS_ENV"] = "production" if production
 require File.dirname(__FILE__) + '/../config/boot'
 require File.dirname(__FILE__) + '/../config/environment'
 
-DAYS_BEFORE_REMINDER = 21
-DAYS_BEFORE_STALE = 31   # days_before_reminder + max cron interval
+DAYS_BEFORE_STALE = 10   # max cron interval
 MAX_TO_SEND = 30         # per script invocation. use -1 for unlimited
 n_to_send = 0
 n_sent = 0
@@ -22,10 +21,11 @@ n_sent = 0
 
 StudyParticipant.real.accepted.
   includes(:study, :user => [:kits, :user_logs]).
-  where('studies.approved = ? and kits.owner_id = kits.participant_id and kits.last_received < ? and kits.last_received > ?',
+  where('studies.approved = ? and kits.owner_id = kits.participant_id and studies.days_before_unreturned_kit_reminder > 0 and kits.last_received < date_add(?,interval -studies.days_before_unreturned_kit_reminder day) and kits.last_received > date_add(?,interval -(studies.days_before_unreturned_kit_reminder + ?) day)',
         true,
-        Time.now - DAYS_BEFORE_REMINDER.days,
-        Time.now - DAYS_BEFORE_STALE.days).
+        Time.now,
+        Time.now,
+        DAYS_BEFORE_STALE).
   each do |study_participant|
 
   user = study_participant.user
@@ -33,8 +33,8 @@ StudyParticipant.real.accepted.
   user.kits.select { |kit|
     kit.study == study and
     kit.participant == kit.owner and
-    kit.last_received < Time.now - DAYS_BEFORE_REMINDER.days and
-    kit.last_received > Time.now - DAYS_BEFORE_STALE.days
+    kit.last_received < Time.now - study.days_before_unreturned_kit_reminder.days and
+    kit.last_received > Time.now - (study.days_before_unreturned_kit_reminder + DAYS_BEFORE_STALE).days
   }.each do |kit|
 
     # Check whether the participant has already been reminded to

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120809174422) do
+ActiveRecord::Schema.define(:version => 20120815154628) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2106,6 +2106,7 @@ ActiveRecord::Schema.define(:version => 20120809174422) do
     t.boolean  "shipping_address_required", :default => true
     t.boolean  "phone_number_required",     :default => false
     t.string   "participation_url"
+    t.integer  "days_before_unreturned_kit_reminder", :default => 21
   end
 
   create_table "study_guide_page_versions", :force => true do |t|
@@ -2186,6 +2187,7 @@ ActiveRecord::Schema.define(:version => 20120809174422) do
     t.boolean  "shipping_address_required"
     t.boolean  "phone_number_required"
     t.string   "participation_url"
+    t.integer  "days_before_unreturned_kit_reminder", :default => 21
   end
 
   add_index "study_versions", ["study_id"], :name => "index_study_versions_on_study_id"
