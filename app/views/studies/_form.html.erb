@@ -46,14 +46,14 @@ jQuery(function(){
 	</ul>
 	<blockquote>
 	  <sup>(1)</sup>&nbsp;
-	  <code>?study_id=<%= @study.id || 123 %>&amp;participant_id=<%= example_token %></code>
+	  <code>?study_id=<%= @study.id || 1234 %>&amp;participant_id=<%= example_token %></code>
 	  <br />
 	  <br />
 	  <sup>(2)</sup>&nbsp;
-	  <% example_url = verify_third_party_participant_id_url(:id => (@study.id || 9999), :app_token => example_token) %>
+	  <% example_url = verify_third_party_participant_id_url(:id => (@study.id || 1234), :app_token => example_token) %>
 	  <code><%= example_url %></code> 
 	  <% if !@study.id %>
-	  <br />("9999" is a placeholder; the exact API URL will be shown here after the activity is created)
+	  <br />("1234" is a placeholder; the exact API URL will be shown here after the activity is created)
 	  <% end %>
 	</blockquote>
       </div>
