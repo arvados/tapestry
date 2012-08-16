@@ -105,11 +105,19 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
     end
 
     @bulk_message.recipients.each do |user|
-      begin
-        UserMailer.bulk_message(@bulk_message,user).deliver
-        user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) sent to #{user.email}")
-      rescue Exception => e
-        user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) could not be sent to #{user.email}: #{e.inspect()}")
+      if user.suspended_at.nil? and (user.deactivated_at.nil? or user.can_reactivate_self) then
+        begin
+          UserMailer.bulk_message(@bulk_message,user).deliver
+          user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) sent to #{user.email}")
+        rescue Exception => e
+          user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) could not be sent to #{user.email}: #{e.inspect()}")
+        end
+      else
+        if !user.suspended_at.nil? then
+          user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user is suspended")
+        elsif !user.deactivated_at.nil? and not user.can_reactivate_self then
+          user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user is deactivated and may not reactivate themself")
+        end
       end
     end
 
