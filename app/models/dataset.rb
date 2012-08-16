@@ -16,6 +16,7 @@ class Dataset < ActiveRecord::Base
   validate :must_have_valid_human_id
 
   scope :released_to_participant, where('released_to_participant')
+  scope :seen_by_participant, where('seen_by_participant_at is not null')
   scope :published, where('published_at is not null')
   scope :unpublished, where('published_at is null')
 

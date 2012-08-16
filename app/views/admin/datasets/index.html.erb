@@ -1,9 +1,14 @@
 <h2>Datasets</h2>
-
-<h3>
-  Datasets: <%= @datasets.size %>
-</h3>
-
+  <table class="admin_table">
+  <tr>
+    <td><strong>All:</strong></td><td align="right"><%= @datasets.size %></td>
+    <td><strong>Released to participant:</strong></td><td align="right"><%= Dataset.released_to_participant.size %></td>
+  </tr>
+  <tr>
+    <td><strong>Published:</strong></td><td align="right"><%= Dataset.published.size %></td>
+    <td><strong>Seen by participant:</strong></td><td align="right"><%= Dataset.seen_by_participant.size %></td>
+  </tr>
+  </table>
 <p>
   <%= link_to 'Create new dataset', new_admin_dataset_path %>
 </p>
