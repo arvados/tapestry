@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120815154628) do
+ActiveRecord::Schema.define(:version => 20120816123500) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2092,21 +2092,22 @@ ActiveRecord::Schema.define(:version => 20120815154628) do
     t.text     "researcher_description"
     t.integer  "researcher_id"
     t.integer  "irb_associate_id"
-    t.boolean  "requested",                 :default => false
-    t.boolean  "approved",                  :default => false
+    t.boolean  "requested",                           :default => false
+    t.boolean  "approved",                            :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
-    t.integer  "lock_version"
-    t.boolean  "open",                      :default => false
+    t.boolean  "open",                                :default => false
     t.datetime "date_approved"
     t.datetime "date_opened"
-    t.boolean  "shipping_address_required", :default => true
-    t.boolean  "phone_number_required",     :default => false
+    t.boolean  "shipping_address_required",           :default => true
+    t.boolean  "phone_number_required",               :default => false
     t.string   "participation_url"
     t.integer  "days_before_unreturned_kit_reminder", :default => 21
+    t.boolean  "auto_accept",                         :default => false
   end
 
   create_table "study_guide_page_versions", :force => true do |t|
@@ -2183,7 +2184,7 @@ ActiveRecord::Schema.define(:version => 20120815154628) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
-    t.boolean  "open",                      :default => false
+    t.boolean  "open",                                :default => false
     t.boolean  "shipping_address_required"
     t.boolean  "phone_number_required"
     t.string   "participation_url"

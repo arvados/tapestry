@@ -328,7 +328,14 @@ class UsersController < ApplicationController
     end
 
     @sp = @user.study_participants.where('study_id = ?',@study.id).first
-    @sp.status = StudyParticipant::STATUSES[params[:study_participant]['status']]
+
+    if @study.auto_accept and params[:study_participant]['status'] == 'interested' then
+      @status = 'accepted'
+    else
+      @status = params[:study_participant]['status']
+    end
+
+    @sp.status = StudyParticipant::STATUSES[@status]
 
     if @sp.save
       flash[:notice] = 'Participation status updated.'

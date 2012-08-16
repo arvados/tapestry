@@ -98,6 +98,10 @@ jQuery(function(){
     <%= f.label :days_before_unreturned_kit_reminder, 'Days to wait (after a participant receives and claims a kit) before sending a reminder to return it (enter 0 to disable this reminder)' %><br />
     <%= f.number_field :days_before_unreturned_kit_reminder, :min => 0, :max => 365, :step => 1 %>
   </div>
+  <div class="field iff-not-third-party">
+    <%= f.label :auto_accept, "Automatically accept interested participants into the study" %><br />
+    <%= f.check_box :auto_accept %>
+  </div>
   <% if not @study.approved then %>
     <div class="field">
       <%= f.label :requested, 'Request project approval' %><br />
