@@ -4,8 +4,10 @@ class PagesController < ApplicationController
 
   before_filter :ensure_valid
   helper_method :total_user_count, :recent_students, :recent_sponsors, :recent_causes
+
   skip_before_filter :login_required, :only => [:show]
   skip_before_filter :ensure_enrolled, :only => [:show]
+  skip_before_filter :ensure_active, :only => [ :show ]
 
   def show
     @page_title = params[:id].titleize
@@ -18,6 +20,11 @@ class PagesController < ApplicationController
 
     if !current_user and params[:id] == 'researcher_tools' then
       redirect_to unauthorized_user_url
+      return
+    end
+
+    if current_user and not current_user.deactivated_at.nil? then
+      redirect_to deactivated_user_url
       return
     end
 

@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
   skip_before_filter :ensure_enrolled
+  skip_before_filter :ensure_active
 
   def new
     @message = Message.new

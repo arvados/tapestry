@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   skip_before_filter :ensure_enrolled
+  skip_before_filter :ensure_active, :only => [ :deactivated ]
 
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :participant_survey, :show_log, :unauthorized, :shipping_address, :switch_to, :index ]
+  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :participant_survey, :show_log, :unauthorized, :shipping_address, :switch_to, :index, :deactivated ]
   skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized, :index ]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :switch_to, :index ]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
@@ -242,6 +243,9 @@ class UsersController < ApplicationController
   end
 
   def unauthorized
+  end
+
+  def deactivated
   end
 
   def accept_tos

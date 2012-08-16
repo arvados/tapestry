@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
   before_filter :ensure_latest_consent
   before_filter :ensure_recent_safety_questionnaire
   before_filter :ensure_enrolled
+  before_filter :ensure_active
   before_filter :only_owner_can_change, :only => [:edit, :update, :destroy]
   before_filter :prevent_setting_ownership, :only => [:create, :update]
 
@@ -135,6 +136,12 @@ class ApplicationController < ActionController::Base
   def ensure_enrolled
     if not logged_in? or current_user.nil? or not current_user.enrolled
       redirect_to unauthorized_user_url
+    end
+  end
+
+  def ensure_active
+    if not current_user.nil? and current_user.enrolled and not current_user.deactivated_at.nil?
+      redirect_to deactivated_user_url
     end
   end
 

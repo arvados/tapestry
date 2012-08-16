@@ -101,6 +101,7 @@ Tapestry::Application.routes.draw do
   match '/users/accept_tos' => 'users#accept_tos', :as => :accept_tos_user
   match '/users/consent' => 'users#consent', :as => :consent_user
   match '/users/unauthorized' => 'users#unauthorized', :as => :unauthorized_user
+  match '/users/deactivated' => 'users#deactivated', :as => :deactivated_user
   match '/users/created/:id' => 'users#created', :as => :created_user
   match '/users/show_log' => 'users#show_log', :as => :show_log_user
   match '/users/:id/withdraw' => 'users#withdraw', :as => :withdraw_user, :via => :post

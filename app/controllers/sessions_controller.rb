@@ -6,13 +6,15 @@ class SessionsController < ApplicationController
   skip_before_filter :prevent_setting_ownership, :only => [:create]
   skip_before_filter :only_owner_can_change
 
-  # Allow user to log out when they have not 
-  # * agreed to the TOS yet
-  # * taken latest consent yet
-  # * taken safety questionnaire yet
+  # Allow user to log out when they
+  # * have not agreed to the TOS yet
+  # * have not taken latest consent yet
+  # * have not taken safety questionnaire yet
+  # * are deactivated
   skip_before_filter :ensure_tos_agreement, :only => [:destroy]
   skip_before_filter :ensure_latest_consent, :only => [:destroy]
   skip_before_filter :ensure_recent_safety_questionnaire, :only => [:destroy]
+  skip_before_filter :ensure_active, :only => [:destroy]
 
   def new
   end

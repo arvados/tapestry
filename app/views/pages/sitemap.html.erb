@@ -1,6 +1,6 @@
 <div style="display:table" class="sitemap">
   <div style="display:table-row">
-    <% if current_user %>
+    <% if current_user and current_user.deactivated_at.nil? %>
     <div style="display:table-cell; width: 30%">
       <h2>Account</h2>
       <p>

@@ -1,0 +1,9 @@
+<h2>Sorry</h2>
+
+<p>
+  <b>Your account was deactivated</b> at <%= current_user.deactivated_at.localtime.ctime %>.
+</p>
+
+<% if current_user.can_reactivate_self -%>
+You can re-activate your account by <%= link_to 'taking a safety questionnaire', new_safety_questionnaire_url %>.
+<% end -%>
