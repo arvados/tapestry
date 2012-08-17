@@ -1,16 +1,21 @@
 class SamplesController < ApplicationController
 
-  before_filter :ensure_researcher, :except => [ 'show', 'show_log', 'participant_note', 'update_participant_note', 'mark_as_destroyed' ]
+  before_filter :ensure_researcher, :except => [ 'show', 'show_log', 'participant_note', 'update_participant_note', 'mark_as_destroyed', :index ]
   skip_before_filter :ensure_enrolled, :except => [ 'participant_note', 'update_participant_note' ]
   skip_before_filter :ensure_latest_consent, :except => [ 'participant_note', 'update_participant_note' ]
   skip_before_filter :ensure_recent_safety_questionnaire, :except => [ 'participant_note', 'update_participant_note' ]
+  skip_before_filter :login_required, :only => [:index]
+  skip_before_filter :ensure_active, :only => [:index]
+  skip_before_filter :ensure_tos_agreement, :only => [:index]
 
   # GET /samples
   # GET /samples.xml
   def index
-    @samples = Sample.scoped.includes([:kit, :participant, :study])
-
-    @samples = @samples.where('samples.owner_id = ? OR studies.creator_id = ?', current_user.id, current_user.id) unless current_user.is_admin?
+    @page_title = 'Specimens'
+    @samples = Sample.scoped.
+      includes([:kit, :participant, :study, :owner, :parent_samples]).
+      visible_to(current_user).
+      where('parent_samples_samples.id is ?',nil) # omit derived samples
 
     if params[:study_id]
       @samples = @samples.where('samples.study_id = ?', params[:study_id])
@@ -19,15 +24,23 @@ class SamplesController < ApplicationController
     respond_to do |format|
       format.csv {
         buf = FasterCSV.generate(String.new, :force_quotes => true) do |csv|
-          csv << %w(sample_id sample_url_code kit_sample_name kit_id kit_name participant_hex)
+          csv << %w(sample_id sample_url_code kit_sample_name kit_id kit_name participant_hex material amount unit location)
           @samples = @samples.includes(:kit_design_sample)
           @samples.each { |s|
+            privileged = current_user and (current_user.id == s.participant_id or
+                                           current_user.id == s.owner_id or
+                                           current_user.id == s.study.creator_id)
             csv << [s.crc_id_s,
-                    s.url_code,
+                    (s.url_code if privileged),
                     s.kit_design_sample ? s.kit_design_sample.name : nil,
-                    s.kit ? s.kit.crc_id_s : nil,
-                    s.kit ? s.kit.name : nil,
-                    s.participant ? s.participant.hex : nil]
+                    (privileged and s.kit) ? s.kit.crc_id_s : nil,
+                    (privileged and s.kit) ? s.kit.name : nil,
+                    s.participant ? s.participant.hex : nil,
+                    s.material,
+                    s.amount,
+                    s.unit,
+                    s.owner ? (s.owner.is_researcher? ? s.owner.researcher_affiliation : s.owner.hex) : nil
+                   ]
           }
         end
         forwhat = params[:study_id] ? "ForStudy#{params[:study_id]}" : ""

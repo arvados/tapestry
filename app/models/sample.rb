@@ -34,12 +34,12 @@ class Sample < ActiveRecord::Base
   scope :real, where('samples.is_destroyed is ?',nil)
   scope :destroyed, where('samples.is_destroyed is not ?',nil)
   scope :visible_to, lambda { |user|
-    if user.is_admin?
+    if user and user.is_admin?
       unscoped.scoped(:include => [:study, :participant, :owner])
     else
       real.scoped(:include => [:study, :participant, :owner],
-                  :conditions => ['samples.owner_id=? or studies.creator_id=?',
-                                  user.id, user.id])
+                  :conditions => ['? in (samples.participant_id, samples.owner_id, studies.creator_id) or (samples.participant_id is not ? and samples.owner_id is not ? and samples.owner_id <> samples.participant_id)',
+                                  (user ? user.id : -1), nil, nil])
     end
   }
 
@@ -106,13 +106,20 @@ class Sample < ActiveRecord::Base
     s
   end
 
-  api_accessible :researcher do |t|
-    t.add :id
-    t.add :study, :template => :researcher
+  api_accessible :public do |t|
+    t.add :study, :template => :public
     t.add :participant, :template => :id
     t.add :owner, :template => :id
-    t.add :kit, :template => :id
     t.add :crc_id_s, :as => :crc_id
+    t.add :material
+    t.add :amount
+    t.add :unit
+  end
+
+  api_accessible :researcher, :extend => :public do |t|
+    t.add :id
+    t.add :study, :template => :researcher
+    t.add :kit, :template => :id
     t.add :qc_result
   end
 
@@ -146,9 +153,13 @@ class Sample < ActiveRecord::Base
       s << " or #{table_name}.url_code like :search"
     end
     s << " or users.hex like :search"
-    s << " or kits.name like :search"
-    s << " or ((:search like '_passed_' or :search like '_failed_') and qc_result like concat('%QC Status',:search))"
-    [s, { :kit => {}, :participant => {} }]
+    s << " or owners_samples.researcher_affiliation like :search"
+    s << " or studies.name like :search"
+    if options[:for] and (options[:for].is_researcher? or options[:for].is_admin?)
+      s << " or kits.name like :search" 
+      s << " or ((:search like '_passed_' or :search like '_failed_') and qc_result like concat('%QC Status',:search))"
+    end
+    [s, { :kit => {}, :participant => {}, :owner => {} }]
   end
 
   def self.normalize_url_code(s)

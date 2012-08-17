@@ -1,4 +1,4 @@
-<h2>Samples</h2>
+<h2>Specimens</h2>
 
 <% content_for :js do %>
 jQuery(function() {
@@ -22,8 +22,21 @@ jQuery(function() {
                       return r;
                   }
                 },
+                { 'mDataProp': 'material',
+                        'fnRender': function(oObj) {
+                        var s='';
+                        if (oObj.aData.material) {
+                            s += oObj.aData.material;
+                            if (oObj.aData.amount && oObj.aData.unit)
+                                s += ', ' + oObj.aData.amount + ' ' + oObj.aData.unit;
+                        }
+                        return s;
+                    }
+                },
                 { 'mDataProp': 'study.name' },
-                { 'mDataProp': 'kit.name' },
+                { 'mDataProp': 'kit.name',
+                  'bVisible': <%= (current_user) ? 'true' : 'false' %>
+                },
                 { 'mDataProp': 'participant.hex',
                   'fnRender': function(oObj) {
                       if (!oObj.aData.participant ||
@@ -33,6 +46,7 @@ jQuery(function() {
                   }
                 },
                 { 'mDataProp': 'qc_result.QC Status',
+                  'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
                   'asSorting': ['desc','asc']
                 },
                 { 'mDataProp': 'owner.display_name',
@@ -42,11 +56,14 @@ jQuery(function() {
                           return '';
                       if (oObj.aData.owner.hex)
 			  return '<a href="/profile/'+oObj.aData.owner.hex+'">'+oObj.aData.owner.hex+'</a>';
+                      if (oObj.aData.owner.researcher_affiliation)
+                          return oObj.aData.owner.researcher_affiliation;
                       else
                           return oObj.aData.owner.full_name;
                   }
                 },
                 { 'mDataProp': 'log_url',
+                  'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
                   'bSortable': false,
                   'fnRender': function(oObj) {
                       if(!oObj.aData.id)
@@ -54,6 +71,7 @@ jQuery(function() {
                       return '&nbsp;<a href="/samples/'+oObj.aData.id+'/log">log</a>&nbsp;';
                   } },
                 { 'mDataProp': 'edit_url',
+                  'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
                   'bSortable': false,
                   'fnRender': function(oObj) {
                       if(!oObj.aData.id)
@@ -61,6 +79,7 @@ jQuery(function() {
                       return '&nbsp;<a href="/samples/'+oObj.aData.id+'/edit">edit</a>&nbsp;';
                   } },
                 { 'mDataProp': 'delete_url',
+                  'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
                   'bSortable': false,
                   'fnRender': function(oObj) {
                       if(!oObj.aData.id || oObj.aData.last_mailed)
@@ -79,27 +98,34 @@ jQuery(function() {
   <%= javascript_include_tag 'jquery.dataTables.renderers' %>
 <% end %>
 
-<% if current_user.is_admin? %>
-<p>Because you are an administrator, this page lists all samples by any researcher.</p>
+<% if current_user and current_user.is_admin? %>
+<p>Because you are an administrator, this page lists all samples (specimen containers) that have been created by any researcher, even unclaimed/unused ones.</p>
+<% elsif current_user and current_user.is_researcher? %>
+<p>This page lists all samples (specimen containers) created for your collection events, and all specimens that have been collected from participants.</p>
+<% elsif current_user %>
+<p>This page lists all specimen containers claimed by you, and all specimens that have been collected from participants.</p>
 <% else %>
-<p>Listed below are the samples in your possession.</p>
+<p>This page lists all specimens that have been collected from participants.</p>
 <% end %>
 
+<% if current_user and current_user.is_researcher? %>
 <p>
   <%= link_to 'Enter IDs of received samples here', receive_sample_path %>
   when you receive samples from a participant or researcher.
 </p>
+<% end %>
 
 <noscript><%= will_paginate @samples %></noscript>
 <table id="samples" style="width: 100%" class="admin_table">
   <thead>
     <tr>
-      <th width="15%">Number</th>
-      <th width="35%">Study</th>
-      <th width="10%">Kit</th>
-      <th width="10%">Participant</th>
+      <th width="10%">Number</th>
+      <th width="10%">Material</th>
+      <th width="35%">Collection event</th>
+      <th width="8%">Kit</th>
+      <th width="7%">Participant</th>
       <th width="8%">QC</th>
-      <th width="12%">Owner</th>
+      <th width="12%">Location</th>
       <th width="5%">&nbsp;</th>
       <th width="5%">&nbsp;</th>
       <th width="5%">&nbsp;</th>
