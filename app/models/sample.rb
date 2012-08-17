@@ -132,6 +132,10 @@ class Sample < ActiveRecord::Base
     case sortkey
     when 'id', 'crc_id'
       "#{table_name}.#{sortkey}"
+    when 'material'
+      "#{table_name}.#{sortkey} #{options[:sql_direction]}, #{table_name}.amount"
+    when 'owner'
+      'owners_samples.researcher_affiliation'
     when 'study.name'
       ['studies.name', { :study => {} }]
     when 'participant.hex'

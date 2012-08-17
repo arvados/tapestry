@@ -45,9 +45,11 @@ module DatatablesResponder
       sortkey = params["mDataProp_#{sortcol}".to_sym]
       next if !sortkey
 
+      sql_direction = params["sSortDir_#{sortcol_index}".to_sym] == 'desc' ? 'desc' : 'asc'
+
       # sql_column === the sql expression we're sorting on, or an
       # array: [sql_expression, joins]
-      sql_column = model.help_datatables_sort_by(sortkey.to_sym, options)
+      sql_column = model.help_datatables_sort_by(sortkey.to_sym, options.merge(:sql_direction => sql_direction))
 
       if sql_column.class == Array
         sql_column, j = sql_column
@@ -56,7 +58,6 @@ module DatatablesResponder
       end
       sql_column = sql_column.to_s
       sql_column = "#{model.table_name}.#{sql_column}" unless sql_column.index('.')
-      sql_direction = params["sSortDir_#{sortcol_index}".to_sym] == 'desc' ? 'desc' : 'asc'
       sql_orders.push "#{sql_column} #{sql_direction}"
     end
     sql_order = sql_orders.empty? ? "#{model.table_name}.id asc" : sql_orders.join(',')

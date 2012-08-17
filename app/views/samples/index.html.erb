@@ -98,15 +98,21 @@ jQuery(function() {
   <%= javascript_include_tag 'jquery.dataTables.renderers' %>
 <% end %>
 
+<p>
 <% if current_user and current_user.is_admin? %>
-<p>Because you are an administrator, this page lists all samples (specimen containers) that have been created by any researcher, even unclaimed/unused ones.</p>
+Because you are an administrator, this page lists all samples (specimen containers) that have been created by any researcher, even unclaimed/unused ones.
 <% elsif current_user and current_user.is_researcher? %>
-<p>This page lists all samples (specimen containers) created for your collection events, and all specimens that have been collected from participants.</p>
+This page lists all samples (specimen containers) created for your collection events, and all specimens that have been collected from participants.
 <% elsif current_user %>
-<p>This page lists all specimen containers claimed by you, and all specimens that have been collected from participants.</p>
+This page lists all specimen containers claimed by you, and all specimens that have been collected from participants.
 <% else %>
-<p>This page lists all specimens that have been collected from participants.</p>
+This page lists all specimens that have been collected from participants.
 <% end %>
+</p>
+
+<p>
+The "Search" box may be used to search on any field; e.g., "blood", "Coriell", "hu43860C".
+</p>
 
 <% if current_user and current_user.is_researcher? %>
 <p>
