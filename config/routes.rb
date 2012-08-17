@@ -31,6 +31,7 @@ Tapestry::Application.routes.draw do
   match '/samples/m/:url_code/undo_reception' => 'samples#mobile_undo_reception', :as => :mobile_sample_undo_reception, :via => :get
   match '/samples/m/:url_code/receive' => 'samples#mobile_receive', :as => :mobile_sample_receive, :via => :get
   match '/samples/m/:url_code' => 'samples#mobile', :as => :mobile_sample, :via => :get
+  resources :specimens, :controller => "samples"
 
   resources :unused_kit_names
 
