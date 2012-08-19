@@ -35,6 +35,8 @@ module SubmitToGetEvidence
       if processing_status[:status] == 'finished'
         self.report_url = processing_status[:result_url]
       end
+    else
+      self.processing_stopped = false
     end
     self.save!
   end
