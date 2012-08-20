@@ -1,5 +1,5 @@
 class SafetyQuestionnairesController < ApplicationController
-  skip_before_filter :ensure_active, :only => [ :new, :create ]
+  skip_before_filter :ensure_active, :only => [ :new, :create, :require ]
   skip_before_filter :ensure_recent_safety_questionnaire
 
   def require
