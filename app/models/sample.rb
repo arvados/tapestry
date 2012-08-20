@@ -145,7 +145,7 @@ class Sample < ActiveRecord::Base
     when 'url_code'
       (options[:for] and options[:for].is_admin?) ? 'samples.url_code' : 'sample.id'
     when 'qc_result.QC Status'
-      ['qc_result like "%QC Status%" desc, qc_result like "%QC Status%Passed%"']
+      ['#{table_name}.qc_result like "%QC Status%" desc, #{table_name}.qc_result like "%QC Status%Passed%"']
     else
       'samples.crc_id'
     end
@@ -161,7 +161,7 @@ class Sample < ActiveRecord::Base
     s << " or studies.name like :search"
     if options[:for] and (options[:for].is_researcher? or options[:for].is_admin?)
       s << " or kits.name like :search" 
-      s << " or ((:search like '_passed_' or :search like '_failed_') and qc_result like concat('%QC Status',:search))"
+      s << " or ((:search like '_passed_' or :search like '_failed_') and #{table_name}.qc_result like concat('%QC Status',:search))"
     end
     [s, { :kit => {}, :participant => {}, :owner => {} }]
   end
