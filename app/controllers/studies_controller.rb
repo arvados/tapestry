@@ -70,9 +70,9 @@ class StudiesController < ApplicationController
 
     @all_participants = @study.study_participants.real
     if @study.is_third_party
-      @participants = @participants.sort_by { |p| p.user.app_token("Study##{@study.id}") }
+      @sorted_participants = @participants.sort_by { |p| p.user.app_token("Study##{@study.id}") }
     else
-      @participants = @participants.sort_by { |p| p.user.full_name }
+      @sorted_participants = @participants.sort_by { |p| p.user.full_name }
     end
     study_participant_info
 

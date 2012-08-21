@@ -104,7 +104,7 @@
     <th>Action parameters</th>
     <% end %>
   </tr>
-  <% @participants.each do |p| %>
+  <% @sorted_participants.each do |p| %>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%= rownum += 1 %></td>
       <% if @study.is_third_party %>
