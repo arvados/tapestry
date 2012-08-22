@@ -9,7 +9,7 @@ jQuery(function() {
             "bProcessing": true,
             "bServerSide": true,
             "bJQueryUI": true,
-            "sAjaxSource": '<%=j(users_path)%>',
+            "sAjaxSource": '<%=j(users_path(:selection_id => params[:selection_id]))%>',
             "aoColumns": [
                 { 'mDataProp': 'pgp_id',
                   'fnRender': function(oObj) {

@@ -10,16 +10,19 @@ class UsersController < ApplicationController
   # Make sure people sign the latest TOS and Consent before they do safety questionnaires
   skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
 
+  before_filter :load_selection, :only => :index
   def index
     @page_title = 'Participant profiles'
+    @users = User.publishable
+    @users = @users.where('id in (?)', @selection.target_ids) if @selection
     respond_to do |format|
       format.html {
         page = params[:page] || 1
         per_page = params[:per_page] || 20
-        @users = User.publishable.paginate(:page => page, :per_page => per_page)
+        @users = @users.paginate(:page => page, :per_page => per_page)
       }
       format.json {
-        respond_with User.publishable
+        respond_with @users
       }
     end
   end
