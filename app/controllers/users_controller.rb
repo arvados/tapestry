@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   def index
     @page_title = 'Participant profiles'
     @users = User.publishable
-    @users = @users.where('id in (?)', @selection.target_ids) if @selection
+    @users = @users.where('users.id in (?)', @selection.target_ids) if @selection
     respond_to do |format|
       format.html {
         page = params[:page] || 1
