@@ -272,7 +272,14 @@ class ApplicationController < ActionController::Base
   end
 
   def load_selection
-    @selection ||= Selection.visible_to(current_user).find(params[:selection_id]) if params[:selection_id]
+    if params[:selection_id]
+      if params[:selection_id].to_s.index('_')
+        (s_id, s_tok) = params[:selection_id].to_s.split('_')
+        @selection ||= Selection.where('id=? and unguessable=?', s_id, s_tok).first
+      else
+        @selection ||= Selection.visible_to(current_user).where('id=?', params[:selection_id]).first
+      end
+    end
   end
 
 end

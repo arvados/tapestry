@@ -184,7 +184,7 @@ class FiltersController < ApplicationController
 
     uri = URI(params[:return_to] || :back)
     if @selection
-      uri.query = Rack::Utils.build_query(:selection_id => @selection.id)
+      uri.query = Rack::Utils.build_query(:selection_id => [@selection.id, @selection.unguessable].join('_'))
     end
     return_to = uri.to_s
 

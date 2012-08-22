@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120816123500) do
+ActiveRecord::Schema.define(:version => 20120822023556) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1925,6 +1925,7 @@ ActiveRecord::Schema.define(:version => 20120816123500) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "unguessable"
   end
 
   add_index "selection_versions", ["selection_id"], :name => "index_selection_versions_on_selection_id"
@@ -1939,6 +1940,7 @@ ActiveRecord::Schema.define(:version => 20120816123500) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "lock_version"
+    t.string   "unguessable"
   end
 
   create_table "shipping_address_versions", :force => true do |t|

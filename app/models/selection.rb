@@ -7,8 +7,18 @@ class Selection < ActiveRecord::Base
   serialize :targets, Array
 
   scope :visible_to, lambda { |user|
-    where('creator_id = ?', user.id)
+    if user
+      where('creator_id = ?', user.id)
+    else
+      where('1=0')
+    end
   }
+
+  before_save :assign_unguessable
+
+  def assign_unguessable
+    self.unguessable ||= rand(2**36).to_s(36)
+  end
 
   def target_ids
     return [] if !targets
