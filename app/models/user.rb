@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
   has_many :confirmed_relatives, :through => :family_relations, :source => :relative, :conditions => 'is_confirmed and users.enrolled is not null and users.suspended_at is null'
   has_many :relatives, :class_name => 'User', :through => :family_relations
   has_many :user_files, :dependent => :destroy
+  has_many :genetic_data_user_files, :class_name => 'UserFile', :conditions => 'report_url is not null and report_url <> ""', :dependent => :destroy
   has_many :removal_requests, :dependent => :destroy
   has_many :samples, :foreign_key => 'participant_id'
   has_many :received_samples, :foreign_key => 'participant_id', :class_name => 'Sample', :conditions => 'last_received is not null and participant_id <> owner_id'
@@ -201,7 +202,7 @@ class User < ActiveRecord::Base
     t.add 'ccrs.size', :as => :has_ccrs
     t.add 'confirmed_family_relations.size', :as => :has_relatives_enrolled
     t.add 'published_datasets.size', :as => :has_whole_genome_data
-    t.add 'user_files.size', :as => :has_other_user_files
+    t.add 'genetic_data_user_files.size', :as => :has_other_genetic_data
   end
 
   api_accessible :researcher, :extend => :public do |t|
@@ -626,8 +627,8 @@ class User < ActiveRecord::Base
       ['count(distinct family_relations.id)', { :confirmed_family_relations => {} }]
     when :has_whole_genome_data
       ['count(distinct datasets.id)', { :published_datasets => {} }]
-    when :has_other_user_files
-      ['count(distinct user_files.id)', { :user_files => {} }]
+    when :has_other_genetic_data
+      ['count(distinct user_files.id)', { :genetic_data_user_files => { } }]
     else
       :hex
     end
@@ -644,7 +645,7 @@ class User < ActiveRecord::Base
   end
 
   def self.include_for_api(api_template)
-    [:ccrs, :user_files, :published_datasets, :samples, :confirmed_family_relations]
+    [:ccrs, :genetic_data_user_files, :published_datasets, :samples, :confirmed_family_relations]
   end
 
 end

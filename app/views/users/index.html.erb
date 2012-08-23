@@ -40,7 +40,7 @@ jQuery(function() {
                 { 'mDataProp': 'has_whole_genome_data',
                   'asSorting': ['desc','asc'],
                   'fnRender': Renderer.hide_zeroes },
-                { 'mDataProp': 'has_other_user_files',
+                { 'mDataProp': 'has_other_genetic_data',
                   'asSorting': ['desc','asc'],
                   'fnRender': Renderer.hide_zeroes }
                 ]
@@ -94,7 +94,7 @@ jQuery(function() {
 	</td><td>
           <%= e[:has_whole_genome_data] %>
 	</td><td>
-          <%= e[:has_other_user_files] %>
+          <%= e[:has_other_genetic_data] %>
       </td></tr>
       <% end -%>
     </noscript>
