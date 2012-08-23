@@ -98,7 +98,14 @@ None available.
       <td><%=h g.data_type %></td>
       <td><%=h g.name %></td>
       <td><%=h link_to 'View Report', g.report_url if g.report_ready? %></td>
-      <td><%=h link_to 'Download', g.class == UserFile ? user_file_download_path(g.id) : g.download_url unless (g.class != UserFile && !g.download_url) %></td>
+      <td>
+	<% unless (g.class != UserFile && !g.download_url) %>
+	<%=h link_to 'Download', g.class == UserFile ? user_file_download_path(g.id) : g.download_url %>
+	<% if g.respond_to? :dataset and g.dataset.respond_to? :size %>
+	<%= "(#{number_to_human_size(g.dataset.size)})" %>
+	<% end %>
+	<% end %>
+      </td>
     </tr>
   <% end %>
 </table>
