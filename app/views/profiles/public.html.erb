@@ -101,9 +101,7 @@ None available.
       <td>
 	<% unless (g.class != UserFile && !g.download_url) %>
 	<%=h link_to 'Download', g.class == UserFile ? user_file_download_path(g.id) : g.download_url %>
-	<% if g.respond_to? :dataset and g.dataset.respond_to? :size %>
-	<%= "(#{number_to_human_size(g.dataset.size)})" %>
-	<% end %>
+	<%= "(#{number_to_human_size(g.data_size)})" if g.data_size %>
 	<% end %>
       </td>
     </tr>

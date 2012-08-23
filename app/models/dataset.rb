@@ -30,6 +30,7 @@ class Dataset < ActiveRecord::Base
   end
 
   before_validation :set_participant_id
+  before_save :set_data_size
 
   # implement "genetic data" interface
   def date
@@ -61,6 +62,16 @@ protected
     # We have a validator that handles the case where @p is nil
     if not @p.nil? then
       self.participant_id = @p.id
+    end
+  end
+
+  def set_data_size
+    self.data_size = nil
+    if locator
+      manifest = `whget '#{locator.gsub("'","'\\''")}'`
+      if (m = manifest.match /^[^\n]+ 0:(\d+):\S+\n?$/)
+        self.data_size = m[1].to_i
+      end
     end
   end
 

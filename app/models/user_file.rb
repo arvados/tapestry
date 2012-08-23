@@ -69,6 +69,10 @@ class UserFile < ActiveRecord::Base
     user
   end
 
+  def data_size
+    dataset.size if dataset and dataset.size
+  end
+
   def is_suitable_for_get_evidence?
     (dataset_file_name.match(/\.vcf/) or
      (dataset_file_name.match(/\.(txt|zip)$/i) and data_type == '23andMe'))
