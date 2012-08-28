@@ -14,16 +14,6 @@ class Admin::UsersController < Admin::AdminControllerBase
                      :filename    => "#{@timestamp}-hupgp_failed_eligibility_survey.csv",
                      :type        => 'application/csv',
                      :disposition => 'attachment' } 
-        elsif params[:exam_results] then
-          send_data csv_for_exam_results, {
-                     :filename    => "#{@timestamp}-hupgp_exam_results.csv",
-                     :type        => 'application/csv',
-                     :disposition => 'attachment' }
-        elsif params[:exam_question_and_answer_key] then
-          send_data csv_for_exam_question_and_answer_key, {
-                     :filename    => "#{@timestamp}-hupgp_exam_question_and_answer_key.csv",
-                     :type        => 'application/csv',
-                     :disposition => 'attachment' }
         else
           send_data csv_for_users(@unpaginated_users), {
                      :filename    => "#{@timestamp}-hupgp_users.csv",
@@ -296,76 +286,6 @@ class Admin::UsersController < Admin::AdminControllerBase
        :joins => "INNER JOIN users ON users.id = user_files.user_id",
        :conditions => "users.is_test = false",
        :order => "data_type, user_id")
-  end
-
-  def absolute_pitch_survey_questions
-    aps = Survey.find_by_name("Absolute Pitch Survey")
-    survey_users = User.find(:all, :conditions => 'absolute_pitch_survey_completion IS NOT NULL AND NOT is_test = true', :order => 'hex')
-    questions = []
-    if not aps.nil? then
-      aps.survey_sections.each {|s|
-        questions << s.survey_questions
-      }
-    end
-    questions = questions.flatten.sort{|x,y| x.id <=> y.id }.select{|q| q.question_type != 'end'}
-
-    report = StringIO.new
-
-    CSV::Writer.generate(report) do |csv|
-      questions.each_with_index { |q, i|
-        csv << [ i+1, q.text ]
-      }
-    end
-    report.rewind
-
-    send_data report.read,
-            :type => 'text/csv; charset=iso-8859-1; header=present',
-            :disposition => "attachment; filename=absolute_pitch_survey_questions.csv"
-  end
-
-  def absolute_pitch_survey_export
-    aps = Survey.find_by_name("Absolute Pitch Survey")
-    survey_users = User.find(:all, :conditions => 'absolute_pitch_survey_completion IS NOT NULL AND NOT is_test = true', :order => 'hex')
-    questions = []
-    if not aps.nil? then
-      aps.survey_sections.each {|s|
-        questions << s.survey_questions
-      }
-    end
-    questions = questions.flatten.sort{|x,y| x.id <=> y.id }.select{|q| q.question_type != 'end'}
-
-    header = ['hexid']
-    questions.each_with_index {|q, i| 
-      header << "Question " + (i + 1).to_s
-    }
-
-    user_answers = []
-    survey_users.each {|u|
-      answers = [u.hex]
-      questions.each_with_index {|q, i|
-        answer = u.survey_answers.select { |a| a.survey_question_id == q.id }
-        if answer.nil? || answer.length == 0
-          answers << ''
-        else
-          answers << answer.map {|a| a.text}.join(";")
-        end
-      }
-      user_answers << answers
-    }
-
-    report = StringIO.new
-
-    CSV::Writer.generate(report) do |csv|
-      csv << header
-      user_answers.each {|r|
-        csv << r
-      }
-    end
-    report.rewind
-
-    send_data report.read,
-            :type => 'text/csv; charset=iso-8859-1; header=present',
-            :disposition => "attachment; filename=absolute_pitch_survey_results.csv"
   end
 
   protected

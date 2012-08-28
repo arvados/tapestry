@@ -186,7 +186,116 @@ class MyPG
         end
       end
     end
-    csv_filename = generate_csv_filename('exam_results', true)
+    csv_filename = generate_csv_filename('exam_report', true)
+    outFile = File.new(csv_filename, 'w')
+    outFile.write(buf)
+    outFile.close
+    return csv_filename
+  end
+
+  def create_absolute_pitch_survey_question_key_report_worker(work)
+    aps = Survey.find_by_name("Absolute Pitch Survey")
+    survey_users = User.find(:all, :conditions => 'absolute_pitch_survey_completion IS NOT NULL AND NOT is_test = true', :order => 'hex')
+    questions = []
+    if not aps.nil? then
+      aps.survey_sections.each {|s|
+        questions << s.survey_questions
+      }
+    end
+    questions = questions.flatten.sort{|x,y| x.id <=> y.id }.select{|q| q.question_type != 'end'}
+
+    report = StringIO.new
+
+    CSV::Writer.generate(report) do |csv|
+      questions.each_with_index { |q, i|
+        csv << [ i+1, q.text ]
+      }
+    end
+    report.rewind
+
+    csv_filename = generate_csv_filename('absolute_pitch_survey_question_key', true)
+    outFile = File.new(csv_filename, 'w')
+    outFile.write(report.read)
+    outFile.close
+    return csv_filename
+  end
+
+  def create_absolute_pitch_survey_report_worker(work)
+    aps = Survey.find_by_name("Absolute Pitch Survey")
+    survey_users = User.find(:all, :conditions => 'absolute_pitch_survey_completion IS NOT NULL AND NOT is_test = true', :order => 'hex')
+    questions = []
+    if not aps.nil? then
+      aps.survey_sections.each {|s|
+        questions << s.survey_questions
+      }
+    end
+    questions = questions.flatten.sort{|x,y| x.id <=> y.id }.select{|q| q.question_type != 'end'}
+
+    header = ['hexid']
+    questions.each_with_index {|q, i|
+      header << "Question " + (i + 1).to_s
+    }
+
+    user_answers = []
+    survey_users.each {|u|
+      answers = [u.hex]
+      questions.each_with_index {|q, i|
+        answer = u.survey_answers.select { |a| a.survey_question_id == q.id }
+        if answer.nil? || answer.length == 0
+          answers << ''
+        else
+          answers << answer.map {|a| a.text}.join(";")
+        end
+      }
+      user_answers << answers
+    }
+
+    report = StringIO.new
+
+    CSV::Writer.generate(report) do |csv|
+      csv << header
+      user_answers.each {|r|
+        csv << r
+      }
+    end
+    report.rewind
+
+    csv_filename = generate_csv_filename('absolute_pitch_survey', true)
+    outFile = File.new(csv_filename, 'w')
+    outFile.write(report.read)
+    outFile.close
+    return csv_filename
+  end
+
+  def create_exam_question_key_report_worker(work)
+    buf = ''
+    # first the questions
+    header_row = ['Question id','Exam version id','Kind','Ordinal','Question']
+    CSV.generate_row(header_row, header_row.size, buf)
+    ExamQuestion.all.each do |eq|
+          row = []
+          row.push eq.id
+          row.push eq.exam_version_id
+          row.push eq.kind
+          row.push eq.ordinal
+          row.push eq.question
+          CSV.generate_row(row, row.size, buf)
+    end
+    # now the answers
+    header_row = ['','','','']
+    CSV.generate_row(header_row, header_row.size, buf)
+    header_row = ['Answer id','Question id','Correct','','Answer']
+    CSV.generate_row(header_row, header_row.size, buf)
+    AnswerOption.all.each do |ao|
+          row = []
+          row.push ao.id
+          row.push ao.exam_question_id
+          row.push ao.correct
+          row.push '' # so as not to mess up layout too much for questions, above
+          row.push ao.answer
+          CSV.generate_row(row, row.size, buf)
+    end
+    csv_filename = generate_csv_filename('exam_question_key', true)
     outFile = File.new(csv_filename, 'w')
     outFile.write(buf)
     outFile.close
@@ -198,9 +307,15 @@ class MyPG
     begin
       if work.report_name == 'exam' and work.report_type == 'csv' then
         filename = create_exam_report_worker(work)
+      elsif work.report_name == 'exam_question_key' and work.report_type == 'csv' then
+        filename = create_exam_question_key_report_worker(work)
       elsif work.report_name == 'enrollment' and work.report_type == 'csv' then
         filename = create_enrollment_report_worker(work)
-      else
+      elsif work.report_name == 'absolute_pitch' and work.report_type == 'csv' then
+        filename = create_absolute_pitch_survey_report_worker(work)
+      elsif work.report_name == 'absolute_pitch_question_key' and work.report_type == 'csv' then
+        filename = create_absolute_pitch_survey_question_key_report_worker(work)
+    else
         error_message = "Unknown report name #{work.report_name} or type #{work.report_type}"
       end
 		rescue Exception => e

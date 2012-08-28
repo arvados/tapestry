@@ -5,8 +5,8 @@ class Report < ActiveRecord::Base
   belongs_to :user
 
   def short_status
-    if status =~ /^Failed:/ then
-      return 'Failed'
+    if status.length > 20 then
+      return "<p title=\"#{h(status)}\">#{h(status[0..19])}...</p>"
     else
       return status
     end

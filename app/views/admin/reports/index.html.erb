@@ -1,12 +1,30 @@
 <h2>Reports</h2>
 
-Download Absolute Pitch Survey results as <%= link_to 'CSV', admin_absolute_pitch_survey_export_path() %> (<%= link_to 'Question Key', admin_absolute_pitch_survey_questions_path() %>)<br />
+<h3>Request new report: </h3>
 
-<p><%= link_to 'Exam report question and answer Key', admin_users_url(:format => 'csv', :exam_question_and_answer_key => :true) %></p>
+<table class="admin_table">
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr class="even">
+    <td>Absolute Pitch Survey</td>
+    <td><%= link_to 'Results (csv)', admin_reports_queue_url(:report_name => 'absolute_pitch', :report_type => 'csv') %></td>
+    <td><%= link_to 'Question key (csv)', admin_reports_queue_url(:report_name => 'absolute_pitch_question_key', :report_type => 'csv') %></td>
+  </tr>
+  <tr class="odd">
+    <td>Entrance Exam</td>
+    <td><%= link_to 'Results (csv)', admin_reports_queue_url(:report_name => 'exam', :report_type => 'csv') %></td>
+    <td><%= link_to 'Question key (csv)', admin_reports_queue_url(:report_name => 'exam_question_key', :report_type => 'csv') %></td>
+  </tr>
+  <tr class="even">
+    <td>Enrollment</td>
+    <td><%= link_to 'Report (csv)', admin_reports_queue_url(:report_name => 'enrollment', :report_type => 'csv') %><br /></td>
+    <td></td>
+  </tr>
+</table>
 
-Request new report: <br/>
-
-* <%= link_to 'exam (csv)', admin_reports_queue_url(:report_name => 'exam', :report_type => 'csv') %><br />
-* <%= link_to 'enrollment statistics (csv)', admin_reports_queue_url(:report_name => 'enrollment', :report_type => 'csv') %><br />
+<h3>Previously requested reports: </h3>
 
 <%= render :partial => 'reportstable' %>

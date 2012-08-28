@@ -15,7 +15,7 @@
       <td><%= report.rtype %></td>
       <td><%= report.requested %></td>
       <td><%= report.created %></td>
-      <td><%= report.short_status() %></td>
+      <td><%= raw(report.short_status()) %></td>
       <td><%= report.user.full_name %></td>
       <td><%= report.status == 'Ready' ? link_to('download',admin_report_download_url(report.id)) : '' %></td>
     </tr>
