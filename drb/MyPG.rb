@@ -110,6 +110,61 @@ class MyPG
     return @config
   end
 
+  def create_enrollment_report_worker(work)
+    users = User.real
+
+    user_table = Hash.new()
+
+    User.has_completed('signup').select('count(users.id) as count,YEAR(enrollment_step_completions.created_at) as year,MONTH(enrollment_step_completions.created_at) as month').group("YEAR(enrollment_step_completions.created_at), MONTH(enrollment_step_completions.created_at)").each do |r|
+      month = "#{r.year}-#{sprintf("%02d",r.month)}"
+      user_table[month] = Hash.new() if not user_table.has_key?(month)
+      user_table[month]['signup'] = r.count
+    end
+
+    User.enrolled.select('count(id) as count,YEAR(enrolled) as year,MONTH(enrolled) as month').group("YEAR(enrolled), MONTH(enrolled)").each do |r|
+      month = "#{r.year}-#{sprintf("%02d",r.month)}"
+      user_table[month] = Hash.new() if not user_table.has_key?(month)
+      user_table[month]['enrolled'] = r.count
+    end
+
+    User.deactivated.where('can_reactivate_self = ?',false).select('count(id) as count,YEAR(deactivated_at) as year,MONTH(deactivated_at) as month').group("YEAR(deactivated_at), MONTH(deactivated_at)").each do |r|
+      month = "#{r.year}-#{sprintf("%02d",r.month)}"
+      user_table[month] = Hash.new() if not user_table.has_key?(month)
+      user_table[month]['withdrawn'] = r.count
+    end
+
+    buf = ''
+    header_row = ['Month','Signed up','Enrolled','Withdrawn']
+
+    CSV.generate_row(header_row, header_row.size, buf)
+
+    user_table.sort.reverse.each do |month,data|
+      row = []
+      row.push month
+      if data.has_key?('signup') then
+        row.push data['signup']
+      else
+        row.push 0
+      end
+      if data.has_key?('enrolled') then
+        row.push data['enrolled']
+      else
+        row.push 0
+      end
+      if data.has_key?('withdrawn') then
+        row.push data['withdrawn']
+      else
+        row.push 0
+      end
+      CSV.generate_row(row, row.size, buf)
+    end
+    csv_filename = generate_csv_filename('enrollment_report', true)
+    outFile = File.new(csv_filename, 'w')
+    outFile.write(buf)
+    outFile.close
+    return csv_filename
+  end
+
   def create_exam_report_worker(work)
     users = User.real
 
@@ -143,6 +198,8 @@ class MyPG
     begin
       if work.report_name == 'exam' and work.report_type == 'csv' then
         filename = create_exam_report_worker(work)
+      elsif work.report_name == 'enrollment' and work.report_type == 'csv' then
+        filename = create_enrollment_report_worker(work)
       else
         error_message = "Unknown report name #{work.report_name} or type #{work.report_type}"
       end

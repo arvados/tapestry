@@ -4,6 +4,9 @@ Download Absolute Pitch Survey results as <%= link_to 'CSV', admin_absolute_pitc
 
 <p><%= link_to 'Exam report question and answer Key', admin_users_url(:format => 'csv', :exam_question_and_answer_key => :true) %></p>
 
-Request new report: <%= link_to 'exam (csv)', admin_reports_queue_url(:report_name => 'exam', :report_type => 'csv') %><br />
+Request new report: <br/>
+
+* <%= link_to 'exam (csv)', admin_reports_queue_url(:report_name => 'exam', :report_type => 'csv') %><br />
+* <%= link_to 'enrollment statistics (csv)', admin_reports_queue_url(:report_name => 'enrollment', :report_type => 'csv') %><br />
 
 <%= render :partial => 'reportstable' %>
