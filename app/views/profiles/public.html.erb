@@ -91,6 +91,7 @@ None available.
     <th>Name</th>
     <th>&nbsp;</th>
     <th>&nbsp;</th>
+    <th>&nbsp;</th>
   </tr>
   <% @user_files_and_datasets.each do |g| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
@@ -102,6 +103,11 @@ None available.
 	<% unless (g.class != UserFile && !g.download_url) %>
 	<%=h link_to 'Download', g.class == UserFile ? user_file_download_path(g.id) : g.download_url %>
 	<%= "(#{number_to_human_size(g.data_size)})" if g.data_size %>
+	<% end %>
+      </td>
+      <td>
+	<% if (m=g.report_metadata) and m[:called_num] %>
+	<%= number_with_delimiter(m[:called_num]) %> positions&nbsp;covered
 	<% end %>
       </td>
     </tr>
