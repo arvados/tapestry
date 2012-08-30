@@ -37,4 +37,18 @@ class PublicGeneticDataController < ApplicationController
       end
     }
   end
+
+  def statistics
+    @datasets = UserFile.joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
+      Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
+    @data_type_stats = {}
+    @datasets.each do |d|
+      stats = @data_type_stats[d.data_type] ||= {
+        :positions_covered => 0,
+        :N => 0
+      }
+      stats[:positions_covered] += d.report_metadata[:called_num] rescue nil
+      stats[:N] += 1
+    end
+  end
 end

@@ -1,0 +1,74 @@
+<% content_for :js do %>
+jQuery(function() {
+    var $ = jQuery.noConflict();
+    $(document).ready(function() {
+        $('#data_types').removeClass('admin_table');
+        $('#data_types').dataTable( {
+            "bInfo": false,
+            "sPaginationType": 'full_numbers',
+            "sDom": '<"H">t<"F">',
+            "bProcessing": false,
+            "bServerSide": false,
+            "bJQueryUI": true,
+            "bAutoWidth": true,
+            "bLengthChange": false,
+            "iDisplayLength": -1,
+            "aaSorting": [[4,'desc'],[2,'desc']],
+            "aoColumns":
+                [
+                 { },
+                 { 'asSorting': [ 'desc', 'asc' ], 'iDataSort': 2 },
+                 { 'bVisible': false },
+                 { 'asSorting': [ 'desc', 'asc' ], 'iDataSort': 4 },
+                 { 'bVisible': false }
+                 ]
+            } ).
+            fnSkipMissingDataProps();
+    } );
+});
+<% end %>
+<% content_for :head do %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSetFilteringDelay' %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSkipMissingDataProps' %>
+  <%= javascript_include_tag 'jquery.dataTables.renderers' %>
+<% end %>
+
+
+<h2><%= link_to 'Public genetic data', public_genetic_data_path %>
+  &rarr;
+  statistics</h2>
+
+<div style="width: 50em">
+<table class="admin_table" id="data_types" style="width:100%">
+  <thead>
+    <tr>
+      <th>Data type</th>
+      <th style="text-align:right">Number of datasets</th>
+      <th style="text-align:right;display:none">Number of datasets</th>
+      <th style="text-align:right">Positions covered</th>
+      <th style="text-align:right;display:none">Positions covered</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% @data_type_stats.each do |data_type, stats| -%>
+      <tr>
+	<td>
+	  <%= link_to data_type, public_genetic_data_path(:data_type => data_type) %>
+	</td>
+	<td style="text-align:right">
+	  <%= number_with_delimiter stats[:N] %>
+	</td>
+	<td style="text-align:right;display:none">
+	  <%= stats[:N] %>
+	</td>
+	<td style="text-align:right">
+          <%= number_with_delimiter stats[:positions_covered] if stats[:positions_covered] > 0 %>
+	</td>
+	<td style="text-align:right;display:none">
+          <%= stats[:positions_covered] %>
+	</td>
+      </tr>
+      <% end %>
+  </tbody>
+</table>
+</div>
