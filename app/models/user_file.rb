@@ -3,6 +3,7 @@ class UserFile < ActiveRecord::Base
   acts_as_paranoid_versioned :version_column => :lock_version
 
   serialize :processing_status, Hash
+  serialize :report_metadata, Hash
   include SubmitToGetEvidence
 
   # See config/initializers/paperclip.rb for the definition of :user_id and :filename

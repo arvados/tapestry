@@ -3,6 +3,7 @@ class Dataset < ActiveRecord::Base
   stampable
 
   serialize :processing_status, Hash
+  serialize :report_metadata, Hash
   include SubmitToGetEvidence
 
   belongs_to :participant, :class_name => 'User'

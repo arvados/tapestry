@@ -34,11 +34,26 @@ module SubmitToGetEvidence
       self.processing_stopped = true
       if processing_status[:status] == 'finished'
         self.report_url = processing_status[:result_url]
+        fetch_report_metadata
       end
     else
       self.processing_stopped = false
     end
     self.save!
+  end
+
+  def fetch_report_metadata
+    if self.report_url
+      report_json_url = self.report_url
+      if report_json_url.index('?')
+        report_json_url += '&format=json'
+      else
+        report_json_url += '?format=json'
+      end
+      report_data = JSON.parse(open(report_json_url).read,
+                               :symbolize_names => true)
+      self.report_metadata = report_data[:metadata] rescue nil
+    end
   end
 
   def report_ready?
