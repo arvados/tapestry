@@ -52,7 +52,9 @@ module SubmitToGetEvidence
       end
       report_data = JSON.parse(open(report_json_url).read,
                                :symbolize_names => true)
-      self.report_metadata = report_data[:metadata] rescue nil
+      if report_data[:metadata].class == Hash
+        self.report_metadata = report_data[:metadata]
+      end
     end
   end
 
