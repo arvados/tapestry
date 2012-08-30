@@ -83,8 +83,8 @@ class KitsController < ApplicationController
   end
 
   # POST /kits/sent_selected
-  before_filter :load_selection, :only => :sent_selected
   def sent_selected
+    load_selection
     Kit.transaction do
       already_shipped = @selected_kits.select { |x| x.shipper or x.participant }
       if already_shipped.empty?
@@ -138,8 +138,8 @@ class KitsController < ApplicationController
   
   # GET /kits
   # GET /kits.xml
-  before_filter :load_selection, :only => :index
   def index
+    load_selection
     if current_user.is_admin?
       @all_kits = Kit.all
     else
