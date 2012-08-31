@@ -1,4 +1,5 @@
 class UserFile < ActiveRecord::Base
+  acts_as_api
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
 
@@ -103,5 +104,19 @@ class UserFile < ActiveRecord::Base
       end
     end
     false
+  end
+
+  api_accessible :public do |t|
+    t.add :id
+    t.add :name
+    t.add :participant, :template => :id
+    t.add :data_size
+    t.add :report_metadata
+  end
+
+  api_accessible :researcher, :extend => :public do |t|
+  end
+
+  api_accessible :privileged, :extend => :researcher do |t|
   end
 end

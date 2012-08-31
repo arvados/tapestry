@@ -39,6 +39,13 @@ class PublicGeneticDataController < ApplicationController
         cmp
       end
     }
+    respond_to do |format|
+      format.html
+      format.json {
+        logger.debug @datasets.inspect
+        respond_with @datasets, :model => Dataset
+      }
+    end
   end
 
   def statistics

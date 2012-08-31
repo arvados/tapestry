@@ -34,6 +34,14 @@ module DatatablesResponder
     sortcol_max = [params[:iSortingCols].to_i - 1, 5].min
     sql_orders = []
     joins = {}
+
+    if !subset.respond_to? :scoped
+      # Subset is an array, not an AR scope.  This is not yet
+      # supported; for now, just return the entire set, and expect
+      # the client to do the sorting itself.
+      sortcol_max = -1
+    end
+
     (0..sortcol_max).each do |sortcol_index|
       # sortcol_index='0' === the first key we're sorting on
 
@@ -60,31 +68,43 @@ module DatatablesResponder
       sql_column = "#{model.table_name}.#{sql_column}" unless sql_column.index('.')
       sql_orders.push "#{sql_column} #{sql_direction}"
     end
-    sql_order = sql_orders.empty? ? "#{model.table_name}.id asc" : sql_orders.join(',')
-    sql_search = '1'
-    if (params[:sSearch] and
-        params[:sSearch].length > 0 and
-        model.respond_to? :help_datatables_search)
-      sql_search = model.help_datatables_search(options)
-      if sql_search.class == Array
-        sql_search, j = sql_search
-        joins.merge!(j) { |k,ov,nv| ov.merge(nv) } if j
-        subset = subset.scoped(:include => j) if j
+
+    if !subset.respond_to? :scoped
+      # Subset is an array, not an AR scope.  This is not yet
+      # supported; for now, just return the entire set, and expect the
+      # client to search by itself.
+    else
+      sql_order = sql_orders.empty? ? "#{model.table_name}.id asc" : sql_orders.join(',')
+      sql_search = '1'
+      if (params[:sSearch] and
+          params[:sSearch].length > 0 and
+          model.respond_to? :help_datatables_search)
+        sql_search = model.help_datatables_search(options)
+        if sql_search.class == Array
+          sql_search, j = sql_search
+          joins.merge!(j) { |k,ov,nv| ov.merge(nv) } if j
+          subset = subset.scoped(:include => j) if j
+        end
       end
     end
 
-    @total = subset.visible_to(options[:for])
+    @total = subset
+    @total = @total.visible_to(options[:for]) if subset.respond_to? :visible_to
 
-    conditions = [ sql_search, { :search => "%#{params[:sSearch]}%" } ]
-    @filtered = @total.scoped(:conditions => conditions,
-                              :include => joins)
+    if @total.respond_to? :scoped
+      conditions = [ sql_search, { :search => "%#{params[:sSearch]}%" } ]
+      @filtered = @total.scoped(:conditions => conditions,
+                                :include => joins)
 
-    @selected = @filtered.scoped(:order => sql_order,
-                                 :offset => page_start,
-                                 :limit => per_page,
-                                 :group => "#{model.table_name}.id")
+      @selected = @filtered.scoped(:order => sql_order,
+                                   :offset => page_start,
+                                   :limit => per_page,
+                                   :group => "#{model.table_name}.id")
+    else
+      @selected = @filtered = @total
+    end
 
-    if model.respond_to? :include_for_api
+    if model and model.respond_to? :include_for_api
       # re-fetch the desired records by id, using :include =>
       # model.include_for_api this time; otherwise, ActiveRecord will
       # look up the associations one by one during
@@ -96,12 +116,20 @@ module DatatablesResponder
       @retrieved = @selected
     end
 
+    if @retrieved.respond_to? :as_api_response
+      aaData = @retrieved.as_api_response(options[:api_template])
+    else
+      aaData = @retrieved.collect do |x|
+        x.as_api_response(options[:api_template])
+      end
+    end
+
     {
-      'aModel' => options[:model_name],
+      'sModel' => options[:model_name],
       'sEcho' => params[:sEcho].to_i,
       'iTotalRecords' => @total.size,
       'iTotalDisplayRecords' => @filtered.size,
-      'aaData' => @retrieved.as_api_response(options[:api_template])
+      'aaData' => aaData
     }
   end
 end

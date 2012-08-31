@@ -1,4 +1,5 @@
 class Dataset < ActiveRecord::Base
+  acts_as_api
   acts_as_versioned
   stampable
 
@@ -54,6 +55,23 @@ class Dataset < ActiveRecord::Base
 
   def is_suitable_for_get_evidence?
     locator and !locator.empty?
+  end
+
+  api_accessible :public do |t|
+    t.add :id
+    t.add :name, :if => :published_at
+    t.add :participant, :template => :id, :if => :published_at
+    t.add :data_size, :if => :published_at
+    t.add :report_metadata, :if => :published_at
+  end
+
+  api_accessible :researcher, :extend => :public do |t|
+  end
+
+  api_accessible :privileged, :extend => :researcher do |t|
+    t.add :name
+    t.add :participant, :template => :id
+    t.add :data_size
   end
 
 protected
