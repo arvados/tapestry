@@ -52,6 +52,7 @@ class PublicGeneticDataController < ApplicationController
     @datasets.each do |d|
       data_type = d.data_type
       data_type = 'other' unless @data_type_name.has_key? data_type
+      next unless 0 == @data_type_name[data_type].index('genetic data - ')
       stats = @data_type_stats[data_type] ||= {
         :positions_covered => 0,
         :N => 0
