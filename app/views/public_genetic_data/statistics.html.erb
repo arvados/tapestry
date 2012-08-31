@@ -53,7 +53,7 @@ jQuery(function() {
       <% @data_type_stats.each do |data_type, stats| -%>
       <tr>
 	<td>
-	  <%= link_to data_type, public_genetic_data_path(:data_type => data_type) %>
+	  <%= link_to (data_type == 'other' ? 'other' : @data_type_name[data_type]), public_genetic_data_path(:data_type => data_type) %>
 	</td>
 	<td style="text-align:right">
 	  <%= number_with_delimiter stats[:N] %>
