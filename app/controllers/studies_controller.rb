@@ -29,8 +29,12 @@ class StudiesController < ApplicationController
     @study = Study.find(params[:id])
     authorize! :read, @study
 
+    claimed_kit_addrs = @study.kits.claimed.includes(:participant => :shipping_address).collect { |x| x.participant.shipping_address.id }
+    returned_kit_addrs = @study.kits.returned.includes(:participant => :shipping_address).collect { |x| x.participant.shipping_address.id }
+    received_kit_addrs = @study.kits.received.includes(:participant => :shipping_address).collect { |x| x.participant.shipping_address.id }
+
     # The call to compact will filter out nil elements
-    @json = @study.study_participants.accepted.collect { |p| p.user.shipping_address }.compact.to_gmaps4rails do |shipping_address, marker|
+    @json = @study.study_participants.accepted.includes(:user => {:shipping_address => :user}).collect { |p| p.user.shipping_address }.compact.to_gmaps4rails do |shipping_address, marker|
       # green: claimed
       # blue: returned
       # brown: received by researcher
@@ -38,11 +42,11 @@ class StudiesController < ApplicationController
       # we can not distinguish between these 2 states.
       @picture = '/images/yellow.png'
       # Claimed by participant
-      @picture = '/images/green.png' if @study.kits.claimed.collect { |x| x.participant.shipping_address.id }.include?(shipping_address.id)
+      @picture = '/images/green.png' if claimed_kit_addrs.include?(shipping_address.id)
       # Returned to researcher
-      @picture = '/images/blue.png' if @study.kits.returned.collect { |x| x.participant.shipping_address.id }.include?(shipping_address.id)
+      @picture = '/images/blue.png' if returned_kit_addrs.include?(shipping_address.id)
       # Received by researcher
-      @picture = '/images/brown.png' if @study.kits.received.collect { |x| x.participant.shipping_address.id }.include?(shipping_address.id)
+      @picture = '/images/brown.png' if received_kit_addrs.include?(shipping_address.id)
       marker.picture({
                         :picture => @picture,
                         :width =>  23,
