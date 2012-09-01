@@ -1,5 +1,18 @@
 <table class="admin_table studiestable">
   <tr>
+    <th></th>
+    <% if who != 'researcher' %>
+    <th></th>
+    <% end %>
+    <th></th>
+    <th></th>
+    <% if who == 'admin' %>
+    <th></th>
+    <% end %>
+    <th colspan="7">Click to download CSV</th>
+    <th colspan="3">Click to view/manage</th>
+  </tr>
+  <tr>
     <th>Name</th>
     <% if who != 'researcher' %>
     <th>Researcher</th>
@@ -18,6 +31,7 @@
     <th>Samples</th>
     <th></th><%# map %>
     <th></th><%# manage participants %>
+    <th>Kits</th>
   </tr>
   <% studies.sort { |a,b| b.created_at <=> a.created_at }.each do |study| %>
     <tr class="status-<%= study.status %>">
@@ -59,6 +73,11 @@
       <td>
 	<% if study.approved %>
 	<%= link_to('Manage participants', study_users_path(study)) %>
+	<% end %>
+      </td>
+      <td>
+	<% if study.approved %>
+	<%= link_to study.kits.size.to_s, kits_path(:study_id => study.id) if study.kits.size > 0 %>
 	<% end %>
       </td>
     </tr>

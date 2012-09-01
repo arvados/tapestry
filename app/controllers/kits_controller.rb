@@ -141,10 +141,14 @@ class KitsController < ApplicationController
   def index
     load_selection
     if current_user.is_admin?
-      @all_kits = Kit.all
+      @all_kits = Kit.where('1')
     else
       @all_kits = Kit.where('originator_id = ?',current_user.id)
     end
+    if params[:study_id]
+      @all_kits = @all_kits.where('study_id = ?', params[:study_id])
+    end
+    @all_kits = @all_kits.includes([:participant, :owner, :originator, :shipper, :kit_design, :study])
     select_name_range if params[:name_range]
     if @selection
       @kits = @selected_kits
@@ -155,11 +159,27 @@ class KitsController < ApplicationController
     else
       @kits = @all_kits
     end
-    @kits = @kits.paginate(:page => params[:page] || 1, :per_page => 30)
+
+    @kit_status_count = @kits.inject({}) { |h,k|
+      h[k.short_status] ||= 0
+      h[k.short_status] += 1
+      h
+    }.collect { |status,n|
+      [status, n]
+    }.sort_by { |status,n|
+      Kit::STATUSES[status][0]
+    }
 
     respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @kits }
+      format.html {
+        @kits = @kits.paginate(:page => params[:page] || 1, :per_page => 30)
+      }
+      format.xml  {
+        render :xml => @kits
+      }
+      format.json {
+        respond_with @kits.sort_by(&:id), :max_per_page => -1
+      }
     end
   end
 
@@ -301,7 +321,7 @@ class KitsController < ApplicationController
     @kit.destroy
 
     respond_to do |format|
-      format.html { redirect_to(kits_url) }
+      format.html { redirect_to(request.referer || kits_url) }
       format.xml  { head :ok }
     end
   end

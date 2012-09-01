@@ -1,24 +1,144 @@
 <%- content_for :head do -%>
 <%= javascript_include_tag 'apply_action' %>
+<%= stylesheet_link_tag 'kits' %>
 <%- end -%>
+
+<% content_for :js do %>
+jQuery(function() {
+    var $ = jQuery.noConflict();
+    $(document).ready(function() {
+        $("noscript").remove();
+        $('#kits').removeClass('admin_table');
+        x = $('#kits').dataTable( {
+            "bProcessing": true,
+            "bJQueryUI": true,
+            "sAjaxSource": '<%=j(kits_path(:study_id => params[:study_id], :selection_id => (@selection ? @selection.id : nil)))%>',
+            "sDom": '<"H"lipfr>t<"F">',
+            "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            "iDisplayLength": -1,
+            "aoColumns": [
+                { 'mDataProp': 'id_sequence',
+                  'fnRender': function(oObj) {
+                        return oObj.iDataRow+1;
+                    },
+                  'bSortable': true
+                },
+                { 'mDataProp': 'name' },
+                { 'mDataProp': 'numeric_status',
+                  'bVisible': false
+                },
+                { 'mDataProp': 'short_status',
+                  'iDataSort': 2,
+                  'bUseRendered': false,
+                  'fnRender': function(oObj) {
+                        return oObj.aData.short_status + ' ' + Renderer.date_to_metric(new Date(oObj.aData.status_changed_at)).replace('-','&#8209;');
+                  }
+                },
+                { 'mDataProp': 'age',
+                  'bUseRendered': false,
+                  'sType': 'numeric',
+                  'fnRender': function(oObj) {
+                      return '' + Math.floor(oObj.aData.age / 86400) + 'd';
+                  }
+                },
+                { 'mDataProp': 'id',
+                  'bVisible': false
+                },
+                { 'mDataProp': 'crc_id',
+                  'fnRender': function(oObj) {
+                      var r = '' + oObj.aData.crc_id;
+                      if(oObj.aData.id)
+                          r = '<a href="/kits/'+oObj.aData.id+'">'+r+'</a>';
+                      if (oObj.aData.url_code)
+                          r += ' (' + oObj.aData.url_code + ')';
+                      return r;
+                  }
+                },
+                { 'mDataProp': 'study.name',
+                  'bVisible': <%= params[:study_id] ? 'false' : 'true' %>,
+                  'bSearchable': <%= params[:study_id] ? 'false' : 'true' %>
+                },
+                { 'mDataProp': 'kit_design.name' },
+                { 'mDataProp': 'participant.hex',
+                  'fnRender': function(oObj) {
+                      if (!oObj.aData.participant ||
+                          !oObj.aData.participant.hex)
+                          return '';
+                      return '<a href="/profile/'+oObj.aData.participant.hex+'">'+oObj.aData.participant.hex+'</a>';
+                  }
+                },
+                { 'mDataProp': 'owner.full_name',
+                  'fnRender': function(oObj) {
+                      if (!oObj.aData.owner || !oObj.aData.participant)
+                          return '';
+                      else if (oObj.aData.participant.id == oObj.aData.owner.id)
+                          return oObj.aData.owner.hex;
+                      else
+                          return oObj.aData.owner.full_name;
+                  }
+                },
+                { 'mDataProp': 'originator.full_name' },
+                { 'mDataProp': 'shipper.full_name' },
+                { 'mDataProp': 'log_url',
+                  'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
+                  'bSortable': false,
+                  'fnRender': function(oObj) {
+                      if(!oObj.aData.id)
+                          return '';
+                      return '&nbsp;<a href="/kits/'+oObj.aData.id+'/log">log</a>&nbsp;';
+                  } },
+                { 'mDataProp': 'edit_url',
+                  'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
+                  'bSortable': false,
+                  'fnRender': function(oObj) {
+                      if(!oObj.aData.id)
+                          return '';
+                      return '&nbsp;<a href="/kits/'+oObj.aData.id+'/edit">edit</a>&nbsp;';
+                  } },
+                { 'mDataProp': 'delete_url',
+                  'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
+                  'bSortable': false,
+                  'fnRender': function(oObj) {
+                      if(!oObj.aData.id || oObj.aData.last_mailed)
+                          return '';
+                      return '&nbsp;<a href="/kits/'+oObj.aData.id+'" data-method="delete" data-confirm="Are you sure?" rel="nofollow">delete</a>&nbsp;';
+                  } } ]
+            } );
+        x.fnSkipMissingDataProps();
+        x.fnSetFilteringDelay();
+    } );
+    $('a.select-status').click(function(){
+        $('#kits_wrapper div.dataTables_filter input[type=text]').
+            val($(this).attr('select-status')).
+            trigger('keyup');
+        return false;
+    });
+});
+<% end %>
+<% content_for :head do %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSetFilteringDelay' %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSkipMissingDataProps' %>
+  <%= javascript_include_tag 'jquery.dataTables.renderers' %>
+<% end %>
 
 <div style="float:right">
   <table><tr><td valign="bottom" style="background:#ffd">
-	<div>
-	  Select a range of kits:
-	</div>
-	<div style="text-align:right">
+        <div>
+          Select a range of kits:
+        </div>
+        <div style="text-align:right">
 <%= form_for :name_range, :url => kits_path, :html => { :method => "GET" } do |f| %>
+<%= hidden_field_tag :study_id, params[:study_id] %>
 between <%= f.text_field :a, :size => 10, :value => (params[:name_range].respond_to?(:[]) ? params[:name_range][:a] : '') %><br />
 and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?(:[]) ? params[:name_range][:b] : '') %><br />
 <%= f.submit 'Select range' %>
 <% end %>
-	</div>
-  </td><td valign="bottom" style="background:#ffe">
-	<div>
-	  Upload CSV with kit names:<br />&nbsp;
-	</div>
-	<div>
+        </div>
+      </td><td valign="bottom" style="background:#ffe">
+        <div>
+          Upload CSV with kit names:<br />&nbsp;
+        </div>
+        <div>
 <%= form_for :upload, :url => upload_filter_path, :html => { :multipart => true } do |f| %>
 <%= hidden_field_tag :target_class, 'Kit' %>
 <%= hidden_field_tag :target_id_attribute, 'name' %>
@@ -26,21 +146,24 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
 <%= file_field_tag 'file' %><br />
 <%= f.submit 'Select kits by name' %>
 <% end %>
-	</div>
-  </td><td valign="bottom" style="background:#ffd">
-	<div style="text-align:right">
-	  <%= button_to 'Select all', kits_path, :method => :get %>
-	</div>
-      </td></tr>
+        </div>
+      </td><td valign="bottom" style="background:#ffd">
+        <div style="text-align:right">
+          <%= form_tag '', :method => :get, :html => { :class => 'button_to' } do %>
+          <%= hidden_field_tag :study_id, params[:study_id] %>
+          <%= submit_tag 'Select all' %>
+          <% end %>
+        </div>
+    </td></tr>
     <% if @selection and !@selection.target_ids.empty? %>
     <tr><td colspan="3" style="text-align:right">
-	Apply to selected items:
-	<%= form_tag '', :method => :post do %>
-	<%= hidden_field_tag :return_to, request.fullpath %>
-	<%= hidden_field_tag :selection_id, @selection.id %>
-	<%= select_tag :apply_action, options_for_select([['(Choose action)',nil], ['Mark as sent',sent_selected_kits_path]]) %>
-	<%= submit_tag 'Apply', :confirm => "Confirm:  Do you really want to apply this action to all #{@selected_kits.size} selected kits?" %>
-	<% end %>
+        Apply to selected items:
+        <%= form_tag '', :method => :post do %>
+        <%= hidden_field_tag :return_to, request.fullpath %>
+        <%= hidden_field_tag :selection_id, @selection.id %>
+        <%= select_tag :apply_action, options_for_select([['(Choose action)',nil], ['Mark as sent',sent_selected_kits_path]]) %>
+        <%= submit_tag 'Apply', :confirm => "Confirm:  Do you really want to apply this action to all #{@selected_kits.size} selected kits?" %>
+        <% end %>
     </td></tr>
     <% end %>
   </table>
@@ -52,48 +175,73 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
 <p>No kits selected.</p>
 <% elsif @selection %>
 <p>Selected <%= @selected_kits.size %> kits <%= @selected_kits_description -%>.</p>
+<% elsif params[:study_id] %>
+<p>Showing all kits from '<%= @kits.first.study.name %>'.</p>
 <% elsif current_user.is_admin? %>
 <p>Because you are an administrator, this page lists all <%= @all_kits.size -%> kits created by all researchers.</p>
 <% else %>
 <p>Showing all <%= @all_kits.size %> of your kits.</p>
 <% end %>
 
+<p>Status: <%= raw @kit_status_count.collect { |s,n| "#{n} #{link_to s, '#', :class=>"select-status", :"select-status"=>s}" }.join ", " %>.</p>
+
 <br clear="all" />
 
 <% if @kits.count > 0 %>
-<%= will_paginate @kits %>
-<table class="admin_table">
-  <tr>
-    <th>Name</th>
-    <th>Number</th>
-    <th>Collection event</th>
-    <th>Kit design</th>
-    <th>Participant</th>
-    <th>Owner</th>
-    <th>Originator</th>
-    <th>Shipper</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<noscript>
+  <%= will_paginate @kits %>
+</noscript>
+<table class="admin_table" id="kits" style="width:100%">
+  <thead>
+    <tr>
+      <th style="text-align:right">#</th>
+      <th>Name</th>
+      <th style="display:none;width:0">Numeric status</th>
+      <th>Status</th>
+      <th>Age</th>
+      <th style="display:none;width:0">id</th>
+      <th>Number</th>
+      <th>Collection event</th>
+      <th>Kit design</th>
+      <th>Participant</th>
+      <th>Owner</th>
+      <th>Originator</th>
+      <th>Shipper</th>
+      <th style="width:5%"></th>
+      <th style="width:5%"></th>
+      <th style="width:5%"></th>
+    </tr>
+  </thead>
 
-<% @kits.each do |kit| %>
-  <tr>
-    <td><%= link_to(kit.name, kit_path(kit)) %></td>
-    <td><%= kit.crc_id_s %></td>
-    <td><%= kit.study.name %></td>
-    <td><%= kit.kit_design.name %></td>
-    <td><%= kit.participant.nil? ? '' : link_to(kit.participant.hex, admin_user_path(kit.participant)) %></td>
-    <td><%= kit.owner.nil? ? '' : (kit.owner.is_researcher? ? kit.owner.full_name : kit.owner.hex) %></td>
-    <td><%= (kit.originator.nil? || !kit.originator.is_researcher?) ? '' : kit.originator.full_name %></td>
-    <td><%= kit.shipper.nil? ? link_to('Mark as sent', sent_kit_path(kit), :method => :post, :confirm => "Are you sure you want to mark kit #{kit.name} as sent?") : kit.shipper.full_name %></td>
-    <td><%= link_to 'Log', show_kit_log_path(kit), :class => "iframe", :title => "Kit log for #{kit.name}" %></td>
-    <td><%= link_to 'Edit', edit_kit_path(kit) %></td>
-    <td><%= kit.last_mailed.nil? ? link_to('Delete', kit, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
-  </tr>
-<% end %>
+  <tbody>
+    <noscript>
+      <% n = 0 %>
+      <% @kits.sort_by(&:id).each do |kit| %>
+      <tr>
+        <td><%= n += 1 %></td>
+        <td><%= link_to(kit.name, kit_path(kit)) %></td>
+        <td class="display:none;width:0"><%= kit.numeric_status %></td>
+        <td><%= kit.status %></td>
+        <td><%= (kit.age/86400).floor.to_s + 'd' %></td>
+        <td class="display:none;width:0"><%= kit.id %></td>
+        <td><%= kit.crc_id_s %></td>
+        <td><%= kit.study.name %></td>
+        <td><%= kit.kit_design.name %></td>
+        <td><%= kit.participant.nil? ? '' : link_to(kit.participant.hex, admin_user_path(kit.participant)) %></td>
+        <td><%= kit.owner.nil? ? '' : (kit.owner.is_researcher? ? kit.owner.full_name : kit.owner.hex) %></td>
+        <td><%= (kit.originator.nil? || !kit.originator.is_researcher?) ? '' : kit.originator.full_name %></td>
+        <td><%= kit.shipper.nil? ? link_to('Mark as sent', sent_kit_path(kit), :method => :post, :confirm => "Are you sure you want to mark kit #{kit.name} as sent?") : kit.shipper.full_name %></td>
+        <td><%= link_to 'Log', show_kit_log_path(kit), :class => "iframe", :title => "Kit log for #{kit.name}" %></td>
+        <td><%= link_to 'Edit', edit_kit_path(kit) %></td>
+        <td><%= kit.last_mailed.nil? ? link_to('Delete', kit, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
+      </tr>
+      <% end %>
+    </noscript>
+  </tbody>
 </table>
-<%= will_paginate @kits %>
+<noscript>
+  <%= will_paginate @kits %>
+</noscript>
 <% end %>
 
 

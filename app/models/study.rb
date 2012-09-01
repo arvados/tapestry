@@ -104,11 +104,17 @@ class Study < ActiveRecord::Base
     is_third_party ? 'activity' : 'collection event'
   end
 
-  api_accessible :public do |t|
+  api_accessible :id do |t|
     t.add :name
   end
 
+  api_accessible :public, :extend => :id do |t|
+  end
+
   api_accessible :researcher, :extend => :public do |t|
+  end
+
+  api_accessible :privileged, :extend => :public do |t|
   end
 
 end

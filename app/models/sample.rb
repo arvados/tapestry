@@ -106,6 +106,13 @@ class Sample < ActiveRecord::Base
     s
   end
 
+  api_accessible :id do |t|
+    t.add :crc_id_s, :as => :crc_id
+    t.add :material
+    t.add :amount
+    t.add :unit
+  end
+
   api_accessible :public do |t|
     t.add :study, :template => :public
     t.add :participant, :template => :id

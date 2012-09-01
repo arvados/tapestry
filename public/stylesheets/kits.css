@@ -1,0 +1,4 @@
+@charset "UTF-8";
+table#kits tbody td:first-child {
+    text-align: right;
+}

@@ -53,18 +53,41 @@ class Kit < ActiveRecord::Base
     "%08d" % crc_id
   end
 
-  def status
+  STATUSES = {
+    'created' => [0, 'Kit created'],
+    'sent' => [1, 'Kit shipped to participant'],
+    'claimed' => [2, 'Kit claimed by participant'],
+    'returned' => [3, 'Kit returned by participant'],
+    'received' => [4, 'Kit received by researcher'],
+    'lost' => [5, 'Kit lost'],
+    'received-unclaimed' => [6, 'Kit received unclaimed'],
+    'unknown' => [7, 'Unknown']
+  }
+
+  def short_status
     if self.participant.nil? and self.shipper.nil? then
-      'Kit created'
+      'created'
     elsif self.participant and self.owner.nil? and not self.last_received.nil? then
-      'Participant returned kit to researcher'
+      'returned'
     elsif self.shipper and self.owner.nil? then
-      'Kit shipped to participant'
+      'sent'
     elsif self.participant and self.owner == self.participant then
-      'Participant has kit'
+      'claimed'
     elsif self.participant and not self.owner.nil? and self.owner != self.participant then
-      'Kit has been received by researcher'
+      'received'
+    elsif self.participant.nil? and not self.last_received.nil?
+      'received-unclaimed'
+    else
+      'unknown'
     end
+  end
+
+  def numeric_status
+    STATUSES[short_status][0]
+  end
+
+  def status
+    STATUSES[short_status][1]
   end
 
   def send_to_participant!(current_user)
@@ -114,6 +137,43 @@ class Kit < ActiveRecord::Base
 
   def normalized_name
     self.class.normalize_name(name)
+  end
+
+  def status_changed_at
+    [created_at, last_mailed, last_received].compact.max
+  end
+
+  def age
+    Time.now - status_changed_at
+  end
+
+  api_accessible :public do |t|
+    t.add :id
+    t.add :name
+    t.add :age
+    t.add :status_changed_at
+    t.add :study, :template => :id
+    t.add :participant, :template => :id
+    t.add :owner, :template => :id
+    t.add :crc_id_s, :as => :crc_id
+    t.add :last_mailed
+    t.add :last_received
+    t.add :originator, :template => :id
+    t.add :shipper, :template => :id
+    t.add :kit_design, :template => :id
+    t.add :status
+    t.add :short_status
+    t.add :numeric_status
+  end
+
+  api_accessible :researcher, :extend => :public do |t|
+  end
+
+  api_accessible :privileged, :extend => :researcher do |t|
+  end
+
+  def self.include_for_api(api_template)
+    [:study, :participant, :owner, :shipper, :originator, :kit_design]
   end
 
 end

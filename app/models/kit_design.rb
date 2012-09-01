@@ -1,4 +1,5 @@
 class KitDesign < ActiveRecord::Base
+  acts_as_api
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
 
@@ -27,4 +28,8 @@ class KitDesign < ActiveRecord::Base
     not self.frozen
   end
 
+  api_accessible :id do |t|
+    t.add :id
+    t.add :name
+  end
 end
