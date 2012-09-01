@@ -176,4 +176,37 @@ class Kit < ActiveRecord::Base
     [:study, :participant, :owner, :shipper, :originator, :kit_design]
   end
 
+  def self.csv_attribute_list
+    ['name',
+     ['crc_id_s', 'number'],
+     ['(age/86400).floor', 'age'],
+     ['short_status', 'status'],
+     ['numeric_status', 'status#'],
+     'status_changed_at',
+     'kit_logs.last.updated_at',
+     'kit_logs.last.actor.public_name',
+     'kit_logs.last.comment',
+     'last_mailed',
+     'last_received',
+     ['originator.public_name', 'originator'],
+     ['shipper.public_name', 'shipper'],
+     ['participant.public_name', 'participant'],
+     ['owner.public_name', 'owner'],
+     'kit_design.name',
+     'study.name' ]
+  end
+
+  def as_csv_row
+    self.class.csv_attribute_list.collect do |a|
+      eval(a.class == Array ? a[0] : a) rescue nil
+    end
+  end
+
+  def self.as_csv_header_row
+    csv_attribute_list.collect do |a|
+      (a.class == Array ? a[1] : a).
+        sub('.public_name', '').
+        gsub(/[\._]/, ' ')
+    end
+  end
 end

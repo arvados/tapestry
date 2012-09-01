@@ -180,6 +180,23 @@ class KitsController < ApplicationController
       format.json {
         respond_with @kits.sort_by(&:id), :max_per_page => -1
       }
+      format.csv {
+        @kits = @kits.includes(:kit_logs => :actor)
+        buf = FasterCSV.generate(String.new, :force_quotes => true) do |csv|
+          csv << Kit.as_csv_header_row.unshift('sequence')
+          seq = 0
+          @kits.each do |k|
+            csv << k.as_csv_row.unshift(seq += 1)
+          end
+        end
+        prefix = @selection ? 'Selected' : ''
+        forwhat = params[:study_id] ? "ForStudy#{params[:study_id]}" : ""
+        send_data buf, {
+          :filename    => "#{prefix}Kits#{forwhat}-#{Time.now.strftime '%Y%m%d%H%M%S'}.csv",
+          :type        => 'application/csv',
+          :disposition => 'attachment'
+        }
+      }
     end
   end
 

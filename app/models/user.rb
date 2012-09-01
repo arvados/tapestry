@@ -561,6 +561,16 @@ class User < ActiveRecord::Base
     return FamilyRelation.find(:all, :conditions => ['relative_id = ? AND NOT is_confirmed', self.id])
   end
 
+  def public_name
+    if is_researcher?
+      full_name
+    elsif hex and is_enrolled? and not suspended_at
+      hex
+    else
+      'N/A'
+    end
+  end
+
   def normalized_full_name
     return nil if !self.full_name
     self.class.normalize_full_name(self.full_name)

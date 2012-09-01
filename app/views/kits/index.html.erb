@@ -171,17 +171,22 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
 
 <h2>Kits</h2>
 
+<p>
 <% if @kits.empty? %>
-<p>No kits selected.</p>
-<% elsif @selection %>
-<p>Selected <%= @selected_kits.size %> kits <%= @selected_kits_description -%>.</p>
-<% elsif params[:study_id] %>
-<p>Showing all kits from '<%= @kits.first.study.name %>'.</p>
-<% elsif current_user.is_admin? %>
-<p>Because you are an administrator, this page lists all <%= @all_kits.size -%> kits created by all researchers.</p>
+  No kits selected.
 <% else %>
-<p>Showing all <%= @all_kits.size %> of your kits.</p>
+  <% if @selection %>
+    Selected <%= @selected_kits.size %> kits <%= @selected_kits_description -%>.
+  <% elsif params[:study_id] %>
+    Showing all kits from '<%= @kits.first.study.name %>'.
+  <% elsif current_user.is_admin? %>
+    Because you are an administrator, this page lists all <%= @all_kits.size -%> kits created by all researchers.
+  <% else %>
+    Showing all <%= @all_kits.size %> of your kits.
+  <% end %>
+  <%= link_to raw('Download&nbsp;CSV'), kits_path(:study_id => params[:study_id], :selection_id => (@selection ? @selection.id : nil), :format => 'csv') %>
 <% end %>
+</p>
 
 <p>Status: <%= raw @kit_status_count.collect { |s,n| "#{n} #{link_to s, '#', :class=>"select-status", :"select-status"=>s}" }.join ", " %>.</p>
 
