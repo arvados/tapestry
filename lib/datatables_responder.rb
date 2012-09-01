@@ -21,13 +21,14 @@ module DatatablesResponder
       page_start = params[:iDisplayStart].to_i
       page = (1 + page_start / params[:iDisplayLength].to_i).to_i rescue nil
       page ||= 1
-      per_page = params[:iDisplayLength] || 10
+      per_page = params[:iDisplayLength]
     else
       page = params[:page] || 1
-      per_page = params[:per_page] || 100
+      per_page = params[:per_page]
     end
     page = [page.to_i, 1].max
-    per_page = [per_page.to_i, 100].min
+    per_page ||= 2**26
+    per_page = [per_page.to_i, options[:max_per_page] || 100].min unless options[:max_per_page] == -1
     page_start ||= (page - 1) * per_page
 
     must_do_custom_sort = false
