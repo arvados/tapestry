@@ -62,4 +62,27 @@ class StudyParticipant < ActiveRecord::Base
     status == 5
   end
 
+  def claimed_kit_sent_at(kit_sent_at)
+    best_guess_kit = nil
+    best_guess_kit_claimed_at = nil
+    self.user.kits.each do |k|
+      if k.study_id == self.study_id
+        k.kit_logs.each do |kl|
+          if kl.actor_id == self.user_id
+            # If k was claimed before kit_sent_at, keep looking for
+            # one claimed after kit_sent_at.
+            next if kit_sent_at and kl.created_at < kit_sent_at
+            # Otherwise, this participant really has received this kit
+            # since the given date.  Return the earliest-claimed of
+            # all such kits.
+            if !best_guess_kit or best_guess_kit_claimed_at > kl.created_at
+              best_guess_kit = k
+              best_guess_kit_claimed_at = kl.created_at
+            end
+          end
+        end
+      end
+    end
+    [best_guess_kit, best_guess_kit_claimed_at]
+  end
 end

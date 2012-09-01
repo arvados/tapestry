@@ -97,8 +97,12 @@
     <% else %>
     <th>Name</th>
     <th>Status</th>
+    <th></th><%# remove/accept actions %>
     <th>Kit last sent</th>
-    <th></th>
+    <th>Kit claimed</th>
+    <th>Kit status</th>
+    <th>Age</th>
+    <th>Other kits?</th>
     <% end %>
     <% if @selection %>
     <th>Action parameters</th>
@@ -113,7 +117,6 @@
       <% else %>
       <td><%= current_user.is_admin? ? link_to(p.user.full_name, admin_user_url(p.user)) : p.user.full_name %></td>
       <td><%= p.pretty_status %></td>
-      <td><%= p.kit_last_sent_at %></td>
       <td>
       <% if p.status == 2 %>
         <%= link_to('accept', study_update_user_status_path(p.study,p.user,'accepted'), :method => :post) %>
@@ -123,7 +126,15 @@
         <%= link_to('accept', study_update_user_status_path(p.study,p.user,'accepted'), :confirm => 'Are you sure? This user has already been marked "not accepted".', :method => :post) %>
       <% end %>
       </td>
+      <td><%= p.kit_last_sent_at %></td>
+
+      <% claimed_kit, claimed_kit_at = p.claimed_kit_sent_at(p.kit_last_sent_at) %>
+      <td><%= claimed_kit.name if claimed_kit %></td>
+      <td><%= claimed_kit.short_status if claimed_kit %></td>
+      <td style="text-align:right"><%= (claimed_kit.age/86400).floor if claimed_kit %></td>
+      <td><%= p.user.kits.select { |k| k.study_id==p.study_id and (!claimed_kit or k.id != claimed_kit.id) }.collect(&:name).join(' ') %></td>
       <% end %>
+
       <% if @selection %>
       <td><%= @study_participant_info[p.id].inspect %></td>
       <% end %>

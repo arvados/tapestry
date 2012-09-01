@@ -213,12 +213,18 @@ class ApplicationController < ActionController::Base
   # TODO: Move to a separate presenter class instead of a helper.
   def csv_for_study(study,type)
     @participants = study.study_participants.real.send(type)
+    @participants = StudyParticipant.
+      includes({:user => [:shipping_address,
+                          :user_files,
+                          :ccrs,
+                          {:kits => :kit_logs}]}).
+      where('study_participants.id in (?)', @participants.collect(&:id))
     csv_for_study_worker(study,@participants)
   end
 
   def csv_for_study_worker(study,participants)
 
-    user_fields = %w(hex token e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip phone_number).freeze
+    user_fields = %w(hex token e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip phone_number kit_last_sent_at kit_name kit_status kit_status_changed other_kits).freeze
 
     FasterCSV.generate(String.new, :force_quotes => true) do |csv|
 
@@ -236,8 +242,8 @@ class ApplicationController < ActionController::Base
         row.push u.user.app_token("Study##{study.id}")
         row.push u.user.email
         row.push u.user.full_name
-        row.push u.user.ccrs.count > 0 ? 'y' : 'n'
-        row.push u.user.user_files.count > 0 ? 'y' : 'n'
+        row.push u.user.ccrs.size > 0 ? 'y' : 'n'
+        row.push u.user.user_files.size > 0 ? 'y' : 'n'
         if u.user.shipping_address then
           row.push u.user.shipping_address.address_line_1
           row.push u.user.shipping_address.address_line_2
@@ -261,6 +267,20 @@ class ApplicationController < ActionController::Base
           end
           row.push u.user.phone_number
         end
+
+        row.push u.kit_last_sent_at
+        claimed_kit, claimed_kit_at = u.claimed_kit_sent_at(u.kit_last_sent_at)
+        if claimed_kit
+          row.push claimed_kit.name
+          row.push claimed_kit.short_status
+          row.push claimed_kit.status_changed_at
+        else
+          3.times { row.push '' }
+        end
+        row.push u.user.kits.
+          select { |k| k != claimed_kit and k.study_id==study.id }.
+          collect(&:name).
+          join(' ')
 
         csv << row
       end

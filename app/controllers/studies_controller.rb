@@ -73,6 +73,10 @@ class StudiesController < ApplicationController
     load_selection
     authorize! :read, @study
 
+    @participants = StudyParticipant.
+      includes([:study, {:user => {:kits => :kit_logs}}]).
+      where('study_participants.id in (?)', @participants.collect(&:id))
+
     @all_participants = @study.study_participants.real
     if @study.is_third_party
       @sorted_participants = @participants.sort_by { |p| p.user.app_token("Study##{@study.id}") }
