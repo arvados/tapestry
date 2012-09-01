@@ -128,7 +128,7 @@ jQuery(function() {
         </div>
         <div style="text-align:right">
 <%= form_for :name_range, :url => kits_path, :html => { :method => "GET" } do |f| %>
-<%= hidden_field_tag :study_id, params[:study_id] %>
+<%= hidden_field_tag :study_id, params[:study_id] if params[:study_id] %>
 between <%= f.text_field :a, :size => 10, :value => (params[:name_range].respond_to?(:[]) ? params[:name_range][:a] : '') %><br />
 and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?(:[]) ? params[:name_range][:b] : '') %><br />
 <%= f.submit 'Select range' %>
@@ -150,7 +150,7 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
       </td><td valign="bottom" style="background:#ffd">
         <div style="text-align:right">
           <%= form_tag '', :method => :get, :html => { :class => 'button_to' } do %>
-          <%= hidden_field_tag :study_id, params[:study_id] %>
+          <%= hidden_field_tag :study_id, params[:study_id] if params[:study_id] %>
           <%= submit_tag 'Select all' %>
           <% end %>
         </div>
