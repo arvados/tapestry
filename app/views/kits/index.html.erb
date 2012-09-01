@@ -78,7 +78,15 @@ jQuery(function() {
                   }
                 },
                 { 'mDataProp': 'originator.full_name' },
-                { 'mDataProp': 'shipper.full_name' },
+                { 'mDataProp': 'shipper.full_name',
+                  'fnRender': function(oObj) {
+                      if(!oObj.aData.shipper)
+                          return '<a href="/kits/'+oObj.aData.id+'/sent" data-method="post" data-confirm="Are you sure you want to mark kit '+oObj.aData.name+' as sent?" rel="nofollow">Mark as sent</a>';
+                      else if(!oObj.aData.shipper.full_name)
+                          return '---';
+                      else
+                          return oObj.aData.shipper.full_name;
+                  } },
                 { 'mDataProp': 'log_url',
                   'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
                   'bSortable': false,
