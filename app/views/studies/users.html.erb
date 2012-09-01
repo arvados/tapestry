@@ -2,6 +2,38 @@
 <%= javascript_include_tag 'apply_action' %>
 <%- end -%>
 
+<% content_for :js do %>
+jQuery(function() {
+    var $ = jQuery.noConflict();
+    $(document).ready(function() {
+        $('#study_users').removeClass('admin_table');
+        x = $('#study_users').dataTable( {
+            "bProcessing": true,
+            "bJQueryUI": true,
+            "sDom": '<"H"lipfr>t<"F">',
+            "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            "iDisplayLength": -1,
+            "aoColumnDefs": [
+              { "bSearchable": false, "aTargets": [2] },
+              { "bVisible": false, "aTargets": [3] } ]
+            } );
+        x.fnSkipMissingDataProps();
+        x.fnSetFilteringDelay();
+    } );
+    $('a[select-status]').click(function(){
+        $('#study_users_wrapper div.dataTables_filter input[type=text]').
+            val('status:' + $(this).attr('select-status')).
+            trigger('keyup');
+        return false;
+    });
+});
+<% end %>
+<% content_for :head do %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSetFilteringDelay' %>
+  <%= javascript_include_tag 'jquery.dataTables.fnSkipMissingDataProps' %>
+  <%= javascript_include_tag 'jquery.dataTables.renderers' %>
+<% end %>
+
 <h2><%= @study.name %>: participants</h2>
 
 <% if current_user.is_admin? %>
@@ -60,24 +92,24 @@
 
 <table class="admin_table">
 <tr>
-<td>Undecided:</td><td>
+<td><a href="#" select-status="undecided">Undecided</a>:</td><td>
     <b><%= "#{@participants.undecided.count} / " if @selection %></b>
     <%= @all_participants.undecided.count %></td>
-<td>Interested:</td><td>
+<td><a href="#" select-status="interested">Interested</a>:</td><td>
     <b><%= "#{@participants.interested.count} / " if @selection %></b>
     <%= @all_participants.interested.count %></td>
-<td>Not accepted:</td><td>
+<td><a href="#" select-status="notaccepted">Not accepted</a>:</td><td>
     <b><%= "#{@participants.not_accepted.count} / " if @selection %></b>
     <%= @all_participants.not_accepted.count %></td>
 </tr>
 <tr>
-<td>Not interested:</td><td>
+<td><a href="#" select-status="notinterested">Not interested</a>:</td><td>
     <b><%= "#{@participants.not_interested.count} / " if @selection %></b>
     <%= @all_participants.not_interested.count %></td>
-<td>Accepted:</td><td>
+<td><a href="#" select-status="accepted">Accepted</a>:</td><td>
     <b><%= "#{@participants.accepted.count} / " if @selection %></b>
     <%= @all_participants.accepted.count %></td>
-<td>Removed:</td><td>
+<td><a href="#" select-status="removed">Removed</a>:</td><td>
     <b><%= "#{@participants.removed.count} / " if @selection %></b>
     <%= @all_participants.removed.count %></td>
 </tr>
@@ -88,35 +120,42 @@
 <% if not @participants.empty? %>
 <% rownum = 0 %>
 
-<table class="admin_table">
-  <tr>
-    <th>#</th>
-    <% if @study.is_third_party %>
-    <th>Study-specific participant ID</th>
-    <th>Status</th>
-    <% else %>
-    <th>Name</th>
-    <th>Status</th>
-    <th></th><%# remove/accept actions %>
-    <th>Kit last sent</th>
-    <th>Kit claimed</th>
-    <th>Kit status</th>
-    <th>Age</th>
-    <th>Other kits?</th>
-    <% end %>
-    <% if @selection %>
-    <th>Action parameters</th>
-    <% end %>
-  </tr>
-  <% @sorted_participants.each do |p| %>
+<table class="admin_table" id="study_users" style="width:100%">
+  <thead>
+    <tr>
+      <th>#</th>
+      <% if @study.is_third_party %>
+      <th>Study-specific participant ID</th>
+      <th>Status</th>
+      <th style="display:none"></th><%# searchable status %>
+      <% else %>
+      <th>Name</th>
+      <th>Status</th>
+      <th style="display:none"></th><%# searchable status %>
+      <th></th><%# remove/accept actions %>
+      <th>Kit last sent</th>
+      <th>Kit claimed</th>
+      <th>Kit status</th>
+      <th>Age</th>
+      <th>Other kits?</th>
+      <% end %>
+      <% if @selection %>
+      <th>Action parameters</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sorted_participants.each do |p| %>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%= rownum += 1 %></td>
       <% if @study.is_third_party %>
       <td><%= p.user.app_token "Study##{@study.id}" %></td>
       <td><%= p.pretty_status %></td>
+      <td style="display:none">status:<%= p.pretty_status.downcase.gsub(' ','') %></td>
       <% else %>
       <td><%= current_user.is_admin? ? link_to(p.user.full_name, admin_user_url(p.user)) : p.user.full_name %></td>
       <td><%= p.pretty_status %></td>
+      <td style="display:none">status:<%= p.pretty_status.downcase.gsub(' ','') %></td>
       <td>
       <% if p.status == 2 %>
         <%= link_to('accept', study_update_user_status_path(p.study,p.user,'accepted'), :method => :post) %>
@@ -139,7 +178,8 @@
       <td><%= @study_participant_info[p.id].inspect %></td>
       <% end %>
     </tr>
-  <% end %>
+    <% end %>
+  </tbody>
 </table>
 
 <% else %>
