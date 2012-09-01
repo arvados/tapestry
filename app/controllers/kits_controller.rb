@@ -79,7 +79,7 @@ class KitsController < ApplicationController
   def sent
     @kit = Kit.find(params[:id])
     @kit.send_to_participant!(current_user)
-    redirect_to(:controller => 'kits', :action => 'index')
+    redirect_to(request.referer || kits_url(:study_id => @kit.study_id))
   end
 
   # POST /kits/sent_selected
@@ -96,7 +96,7 @@ class KitsController < ApplicationController
         flash[:error] = "Action cancelled because #{already_shipped.size} of the selected kits have already been sent to participants."
       end
     end
-    redirect_to (params[:return_to] or kits_path)
+    redirect_to (params[:return_to] || request.referer || kits_url(:study_id => params[:study_id]))
   end
 
   def select_name_range
@@ -272,7 +272,7 @@ class KitsController < ApplicationController
       end
     end
     flash[:notice] = "Created #{n_created} kits."
-    redirect_to(:controller => 'kits', :action => 'index')
+    redirect_to(request.referer || kits_url(:study_id => params[:kit][:study_id]))
   end
 
   # POST /kits
@@ -299,7 +299,7 @@ class KitsController < ApplicationController
         # Log this
         KitLog.new(:actor => current_user, :comment => 'Kit created', :kit_id => @kit.id).save
         flash[:notice] = 'Kit was successfully created.'
-        format.html { redirect_to(:controller => 'kits', :action => 'index') }
+        format.html { redirect_to(request.referer || kits_url(:study_id => @kit.study_id)) }
         format.xml  { render :xml => @kit, :status => :created, :location => @kit }
       else
         format.html { render :action => "new" }
@@ -317,7 +317,7 @@ class KitsController < ApplicationController
       if @kit.update_attributes(params[:kit])
         flash[:notice] = 'Kit was successfully updated.'
         KitLog.new(:actor => current_user, :comment => 'Kit updated', :kit_id => @kit.id).save
-        format.html { redirect_to(:controller => 'kits', :action => 'index') }
+        format.html { redirect_to(request.referer || kits_url(:study_id => @kit.study_id)) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -332,13 +332,13 @@ class KitsController < ApplicationController
     @kit = Kit.find(params[:id])
     if not @kit.last_mailed.nil? then
       flash[:error] = 'This kit can no longer be deleted, it is marked as sent'
-      redirect_to(:controller => 'kits', :action => 'index')
+      redirect_to(request.referer || kits_url(:study_id => @kit.study_id))
       return
     end
     @kit.destroy
 
     respond_to do |format|
-      format.html { redirect_to(request.referer || kits_url) }
+      format.html { redirect_to(request.referer || kits_url(:study_id => @kit.study_id)) }
       format.xml  { head :ok }
     end
   end
