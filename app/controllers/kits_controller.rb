@@ -160,15 +160,7 @@ class KitsController < ApplicationController
       @kits = @all_kits
     end
 
-    @kit_status_count = @kits.inject({}) { |h,k|
-      h[k.short_status] ||= 0
-      h[k.short_status] += 1
-      h
-    }.collect { |status,n|
-      [status, n]
-    }.sort_by { |status,n|
-      Kit::STATUSES[status][0]
-    }
+    @kit_status_count = Kit.status_counts(@kits)
 
     respond_to do |format|
       format.html {

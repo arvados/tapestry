@@ -85,6 +85,12 @@ class StudiesController < ApplicationController
     end
     study_participant_info
 
+    @last_kit_for_each_participant = @participants.collect do |p|
+      p.claimed_kit_sent_at(p.kit_last_sent_at)[0]
+    end
+    @kit_status_count = Kit.status_counts(@last_kit_for_each_participant.compact)
+    @kit_status_count << ['none', @last_kit_for_each_participant.select(&:nil?).size]
+
     respond_to do |format|
       format.html
       format.csv {

@@ -209,4 +209,16 @@ class Kit < ActiveRecord::Base
         gsub(/[\._]/, ' ')
     end
   end
+
+  def self.status_counts(kits)
+    kits.inject({}) { |h,k|
+      h[k.short_status] ||= 0
+      h[k.short_status] += 1
+      h
+    }.collect { |status,n|
+      [status, n]
+    }.sort_by { |status,n|
+      STATUSES[status][0]
+    }
+  end
 end
