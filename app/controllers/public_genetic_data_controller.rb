@@ -52,10 +52,14 @@ class PublicGeneticDataController < ApplicationController
       Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
     @data_type_stats = {}
     @data_type_name = {}
+    @time_series = {}
+    @total_positions_covered = 0
     UserFile::DATA_TYPES.each do |longversion, shortversion|
       @data_type_name[shortversion] = longversion
     end
-    @datasets.each do |d|
+    @extrapolate_x0 = 1.year.ago
+    @extrapolate_y0 = nil
+    @datasets.sort_by(&:published_at).each do |d|
       data_type = d.data_type
       data_type = 'other' unless @data_type_name.has_key? data_type
       next unless 0 == @data_type_name[data_type].index('genetic data - ')
@@ -63,8 +67,39 @@ class PublicGeneticDataController < ApplicationController
         :positions_covered => 0,
         :N => 0
       }
-      stats[:positions_covered] += d.report_metadata[:called_num] rescue nil
+      begin
+        @total_positions_covered += d.report_metadata[:called_num]
+        stats[:positions_covered] += d.report_metadata[:called_num]
+        @extrapolate_x1 = d.published_at
+      rescue
+        # ignore base-counting fail
+      end
       stats[:N] += 1
+
+      @time_series[data_type] ||= {
+        'data' => [],
+        'label' => data_type + ' datasets'
+      }
+      @time_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+                                          stats[:N]]
+      @time_series['positions_covered'] ||= {
+        'data' => [],
+        'label' => 'Positions covered'
+      }
+      @time_series['positions_covered']['data'] << [(d.published_at.to_f*1000).floor,
+                                                    @total_positions_covered]
+      if @extrapolate_y0.nil? and d.published_at >= @extrapolate_x0
+        @extrapolate_y0 = @total_positions_covered
+      end
     end
+
+    # Extend each @time_series to Time.now
+    @time_series.keys.each do |s|
+      @time_series[s]['data'] << [Time.now.to_f*1000,
+                                  @time_series[s]['data'].last[1]]
+    end
+
+    @positions_covered_per_s = ((@total_positions_covered - @extrapolate_y0) /
+                                (@extrapolate_x1 - @extrapolate_x0)).floor rescue 0
   end
 end

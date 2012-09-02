@@ -72,3 +72,65 @@ jQuery(function() {
   </tbody>
 </table>
 </div>
+
+<div style="width:800px">
+  <div style="width:800px;height:400px" id="plotdiv"></div>
+
+  <p style="text-align:center">
+    <b>
+      &ldquo;<span id="extrapolated-positions-covered"><%= @total_positions_covered %></span>&nbsp;positions&nbsp;covered.&rdquo;
+    </b>
+  </p>
+</div>
+
+<% content_for :js do %>
+var time_series_plot;
+jQuery(function() {
+    var $ = jQuery.noConflict();
+    $(document).ready(function() {
+            var time_series = <%=raw @time_series.values.sort_by{|s| 0-s['data'].last[1]}.to_json %>;
+            for (var i=0; i<time_series.length; i++)
+                if (time_series[i].label == 'Positions covered') {
+                    time_series[i].yaxis = 2;
+                    time_series.unshift(time_series.splice(i,1)[0]);
+                    break;
+                }
+            var o = {
+                xaxes: [{
+                    mode: 'time'
+                }],
+                yaxes: [ { position: 'right' },
+                         { position: 'left',
+                           tickFormatter: function(v) {
+                                 if (v>=1000000000000)
+                                     return '' + Math.floor(v/1000000000000) + 'T';
+                                 if (v>=1000000000)
+                                     return '' + Math.floor(v/1000000000) + 'G';
+                                 if (v>=1000000)
+                                     return '' + Math.floor(v/1000000) + 'M';
+                                 return v;
+                             }
+                         } ],
+                legend: {
+                    position: 'nw'
+                }
+            };
+            time_series_plot = $.plot($('div#plotdiv'), time_series, o);
+
+            var t0 = new Date();
+            window.setInterval(function() {
+                    var t1 = new Date();
+                    var x = <%= @total_positions_covered %> + <%= @positions_covered_per_s %> * (t1-t0) / 1000;
+                    var s = '' + Math.floor(x);
+                    while (s.match(/\d\d\d\d/)) {
+                        s = s.replace(/(.*\d)(\d\d\d)/,'$1,$2');
+                    }
+                    $('span#extrapolated-positions-covered').html(s);
+                }, 200);
+    } );
+});
+<% end %>
+<% content_for :head do %>
+  <%= javascript_include_tag 'jquery.flot.js' %>
+  <%= javascript_include_tag 'jquery.flot.time.js' %>
+<% end %>

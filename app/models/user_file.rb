@@ -106,6 +106,11 @@ class UserFile < ActiveRecord::Base
     false
   end
 
+  # to match Dataset interface
+  def published_at
+    created_at
+  end
+
   api_accessible :public do |t|
     t.add :id
     t.add :name
