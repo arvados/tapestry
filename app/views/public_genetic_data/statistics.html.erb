@@ -117,7 +117,7 @@ jQuery(function() {
             };
             time_series_plot = $.plot($('div#plotdiv'), time_series, o);
 
-            var t0 = new Date();
+            var t0 = <%= @extrapolate_x1.to_i * 1000 %>;
             window.setInterval(function() {
                     var t1 = new Date();
                     var x = <%= @total_positions_covered %> + <%= @positions_covered_per_s %> * (t1-t0) / 1000;
