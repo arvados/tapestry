@@ -42,7 +42,6 @@ class PublicGeneticDataController < ApplicationController
     respond_to do |format|
       format.html
       format.json {
-        logger.debug @datasets.inspect
         respond_with @datasets, :model => Dataset
       }
     end
