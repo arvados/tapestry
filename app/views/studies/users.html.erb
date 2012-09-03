@@ -174,10 +174,10 @@ jQuery(function() {
       </td>
       <td><%= p.kit_last_sent_at %></td>
 
-      <td><%= claimed_kit.name if claimed_kit %></td>
+      <td><%= link_to claimed_kit.name, kit_path(claimed_kit) if claimed_kit %></td>
       <td><%= claimed_kit.short_status if claimed_kit %></td>
       <td style="text-align:right"><%= (claimed_kit.age/86400).floor if claimed_kit %></td>
-      <td><%= p.user.kits.select { |k| k.study_id==p.study_id and (!claimed_kit or k.id != claimed_kit.id) }.collect(&:name).join(' ') %></td>
+      <td><%=raw p.user.kits.select { |k| k.study_id==p.study_id and (!claimed_kit or k.id != claimed_kit.id) }.collect { |k| link_to k.name, kit_path(k) }.join(' ') %></td>
       <% end %>
 
       <% if @selection %>
