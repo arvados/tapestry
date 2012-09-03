@@ -12,13 +12,13 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>Study:</b>
-  <%= @kit.study.name %>
+  <b>Collection event:</b>
+  <%= link_to @kit.study.name, collection_event_path(@kit.study) %>
 </p>
 
 <p>
   <b>Kit design:</b>
-  <%= @kit.kit_design.name %>
+  <%= link_to_if (current_user && current_user.is_researcher?), @kit.kit_design.name, edit_kit_design_path(@kit.kit_design) %>
 </p>
 
 <p>
