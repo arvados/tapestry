@@ -65,7 +65,9 @@ class Kit < ActiveRecord::Base
   }
 
   def short_status
-    if self.participant.nil? and self.shipper.nil? then
+    if self.lost_at then
+      'lost'
+    elsif self.participant.nil? and self.shipper.nil? then
       'created'
     elsif self.participant and self.owner.nil? and not self.last_received.nil? then
       'returned'
@@ -91,6 +93,7 @@ class Kit < ActiveRecord::Base
   end
 
   def send_to_participant!(current_user)
+    self.lost_at = nil          # If I was lost before, evidently I am not now
     self.last_mailed = Time.now()
     self.shipper_id = current_user.id
     # Nobody 'owns' the kit at the moment
@@ -140,7 +143,7 @@ class Kit < ActiveRecord::Base
   end
 
   def status_changed_at
-    [created_at, last_mailed, last_received].compact.max
+    [created_at, last_mailed, last_received, lost_at].compact.max
   end
 
   def age

@@ -29,6 +29,7 @@ class KitsController < ApplicationController
     @kit.last_received = Time.now()
     @kit.participant = current_user
     @kit.owner = current_user
+    @kit.lost_at = nil  # If it was lost before, evidently it is not now
     @kit.save
 
     @kit.samples.each do |s|
@@ -56,6 +57,7 @@ class KitsController < ApplicationController
         return
     end
 
+    @kit.lost_at = nil # If it was lost before, evidently it is not now
     @kit.last_mailed = Time.now()
     # Nobody 'owns' the kit at the moment
     @kit.owner = nil
@@ -97,6 +99,18 @@ class KitsController < ApplicationController
       end
     end
     redirect_to (params[:return_to] || request.referer || kits_url(:study_id => params[:study_id]))
+  end
+
+  def lost
+    @kit = Kit.find(params[:id])
+    ActiveRecord::Base.transaction do
+      @kit.update_attributes :lost_at => Time.now
+      KitLog.new(:kit_id => @kit.id,
+                 :actor => current_user,
+                 :comment => 'Kit marked as lost').save!
+    end
+    flash[:notice] = "Marked kit #{@kit.crc_id_s} \"#{@kit.name}\" as lost."
+    return redirect_to(request.referer || kit_url(@kit))
   end
 
   def select_name_range
@@ -195,11 +209,6 @@ class KitsController < ApplicationController
   # GET /kits/1/log
   def show_log
     @kit = Kit.find(params[:id])
-    @kit_log = KitLog.where('kit_id = ?', @kit.id).sort { |a,b|
-      cmp = b.created_at <=> a.created_at
-      cmp = b.id <=> a.id if cmp == 0
-      cmp
-    }
   end
 
   # GET /kits/1
@@ -230,9 +239,9 @@ class KitsController < ApplicationController
     end
   end
 
-  # GET /kits/1/edit
+  # You can't really edit a kit, beyond pushing buttons on the "show kit" page
   def edit
-    @kit = Kit.find(params[:id])
+    redirect_to kit_path(params[:id])
   end
 
   def create_many

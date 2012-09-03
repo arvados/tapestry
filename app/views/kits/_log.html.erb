@@ -1,0 +1,19 @@
+<table class="admin_table">
+  <tr>
+    <th>When</th>
+    <th>Who</th>
+    <th>What</th>
+  </tr>
+  <% @kit.kit_logs.sort.reverse.each do |log| %>
+  <tr>
+    <td><%= log.created_at %></td>
+    <td><%= log.actor.is_researcher? ? log.actor.full_name : link_to(log.actor.hex, public_profile_path(log.actor.hex)) %></td>
+    <td>
+      <%= log.comment %>
+      <% if log.controlling_user and log.controlling_user != log.actor %>
+      <i>(logged by <%= log.controlling_user.full_name %>)</i>
+      <% end %>
+    </td>
+  </tr>
+  <% end %>
+</table>

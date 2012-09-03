@@ -26,6 +26,12 @@ class KitLog < ActiveRecord::Base
     self.kit
   end
 
+  def <=>(b)
+    cmp = self.created_at <=> b.created_at
+    cmp = self.id <=> b.id if cmp == 0
+    cmp
+  end
+
   private
 
   def set_controlling_user

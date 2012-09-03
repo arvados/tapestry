@@ -67,6 +67,7 @@ class Sample < ActiveRecord::Base
       KitLog.new(:actor => current_user, :comment => "Kit received", :kit_id => self.kit.id).save!
       self.kit.last_received = Time.now
       self.kit.owner = current_user
+      self.kit.lost_at = nil
       self.kit.save!
     end
   end

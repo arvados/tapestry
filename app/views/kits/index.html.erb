@@ -87,22 +87,6 @@ jQuery(function() {
                       else
                           return oObj.aData.shipper.full_name;
                   } },
-                { 'mDataProp': 'log_url',
-                  'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
-                  'bSortable': false,
-                  'fnRender': function(oObj) {
-                      if(!oObj.aData.id)
-                          return '';
-                      return '&nbsp;<a href="/kits/'+oObj.aData.id+'/log">log</a>&nbsp;';
-                  } },
-                { 'mDataProp': 'edit_url',
-                  'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
-                  'bSortable': false,
-                  'fnRender': function(oObj) {
-                      if(!oObj.aData.id)
-                          return '';
-                      return '&nbsp;<a href="/kits/'+oObj.aData.id+'/edit">edit</a>&nbsp;';
-                  } },
                 { 'mDataProp': 'delete_url',
                   'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
                   'bSortable': false,
@@ -221,8 +205,6 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
       <th>Originator</th>
       <th>Shipper</th>
       <th style="width:5%"></th>
-      <th style="width:5%"></th>
-      <th style="width:5%"></th>
     </tr>
   </thead>
 
@@ -244,8 +226,6 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
         <td><%= kit.owner.nil? ? '' : (kit.owner.is_researcher? ? kit.owner.full_name : kit.owner.hex) %></td>
         <td><%= (kit.originator.nil? || !kit.originator.is_researcher?) ? '' : kit.originator.full_name %></td>
         <td><%= kit.shipper.nil? ? link_to('Mark as sent', sent_kit_path(kit), :method => :post, :confirm => "Are you sure you want to mark kit #{kit.name} as sent?") : kit.shipper.full_name %></td>
-        <td><%= link_to 'Log', show_kit_log_path(kit), :class => "iframe", :title => "Kit log for #{kit.name}" %></td>
-        <td><%= link_to 'Edit', edit_kit_path(kit) %></td>
         <td><%= kit.last_mailed.nil? ? link_to('Delete', kit, :confirm => 'Are you sure?', :method => :delete) : '' %></td>
       </tr>
       <% end %>

@@ -1,17 +1,15 @@
+<h2>Kit <%= @kit.crc_id_s %>, &ldquo;<%= @kit.name %>&rdquo;</h2>
 
-<h2>Kit '<%= @kit.name %>'</h2>
+<table class="admin_table">
+  <tr>
+    <td>Status:</td>
+    <td><b><%= @kit.short_status %></b></td>
+  </tr><tr>
+    <td colspan="2"><%= @kit.status %>.</td>
+  </tr>
+</table>
 
 <p id="notice"><%= notice %></p>
-
-<p>
-  <b>Name:</b>
-  <%= link_to(@kit.name, kit_path(@kit)) %>
-</p>
-
-<p>
-  <b>Number:</b>
-  <%= @kit.crc_id_s %>
-</p>
 
 <p>
   <b>Study:</b>
@@ -30,23 +28,17 @@
 
 <p>
   <b>Owner:</b>
-  <% if @kit.owner.nil? %>
-  <% elsif @kit.owner.is_researcher? %>
-  <%= @kit.owner.full_name %>
-  <% else %>
-  <%= @kit.owner.hex %>
-  <% end %>
+  <%= @kit.owner.public_name if @kit.owner %>
 </p>
 
 <p>
   <b>Originator:</b>
-  <%= (@kit.originator.nil? || !@kit.originator.is_researcher?) ? '' : @kit.originator.full_name %></td>
-  <%= @kit.creator_id %>
+  <%= @kit.originator.public_name if @kit.originator %>
 </p>
 
 <p>
   <b>Shipper:</b>
-  <%= (@kit.shipper.nil? or (@kit.owner == current_user and @kit.owner.is_researcher?)) ? link_to('Mark as sent', sent_kit_path(@kit), :method => :post, :confirm => "Are you sure you want to mark kit #{@kit.name} as sent?") : @kit.shipper.full_name %>
+  <%= @kit.shipper.public_name if @kit.shipper %>
 </p>
 
 <h2>Samples</h2>
@@ -77,10 +69,34 @@
     <% elsif not sample.is_destroyed.nil? %>
     <td><%= 'Marked as destroyed on ' + sample.is_destroyed.to_s %></td>
     <% elsif sample.is_destroyed.nil? %>
-    <td><%= link_to('Mark as destroyed', sample_destroyed_path(sample), :confirm => 'Are you sure?', :method => :post) %></td>
+    <td><%= button_to 'Mark as destroyed', sample_destroyed_path(sample), :confirm => 'Are you sure?', :method => :post %></td>
     <% end %>
   </tr>
 <% end %>
 </table>
 
 
+<h2>Log</h2>
+
+<%= render :partial => 'log' if @kit.kit_logs.first %>
+
+<% if current_user and current_user.is_researcher? %>
+<table class="admin_table">
+  <tbody>
+    <% if @kit.lost_at.nil? %>
+    <tr>
+      <td><%= button_to raw('Mark as lost'), lost_kit_path(@kit), :confirm => 'Are you sure?', :method => :post %></td>
+      <td>Do this if the kit has been lost in the mail on the way to a participant (e.g., you shipped it a long time ago, and nobody has claimed it or seen it since).</td>
+    </tr>
+    <% end %>
+    <% if @kit.shipper.nil? or @kit.owner == current_user %>
+    <tr>
+      <td>
+        <%= button_to 'Mark as sent', sent_kit_path(@kit), :method => :post, :confirm => "Are you sure you want to mark kit ##{@kit.crc_id_s} (#{@kit.name}) as sent?" %>
+      </td>
+      <td>Do this if you have shipped the kit to a participant.</td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
