@@ -65,6 +65,13 @@ class UserMailer < ActionMailer::Base
     user.log("Sent password reset link: #{@body[:url]}")
   end
 
+  def email_change_notification(user, old_email)
+    setup_email(user)
+    @subject += 'Email address changed'
+    @recipients = old_email unless defined? SEND_ALL_USER_EMAIL_TO
+    user.log("Sent email change notification")
+  end
+
   def family_relation_notification(family_relation)
     setup_email(family_relation.relative)
     @subject += 'You have been added as a family member'

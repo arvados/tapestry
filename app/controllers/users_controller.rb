@@ -92,17 +92,21 @@ class UsersController < ApplicationController
     # If no mailing lists are selected, we don't get the parameter back from the browser
     params[:user]['mailing_list_ids'] = [] if not params[:user].has_key?('mailing_list_ids')
 
-    if params[:user][:email] != @user.email then
-      @user.log "Changed email address from '#{@user.email}' to '#{params[:user][:email]}'"
-    end
-
     # Avoid empty string phone numbers in the database
     if params[:user][:phone_number] == '' then
       params[:user][:phone_number] = nil
     end
 
+    @old_user_email = @user.email
+
     if @user.update_attributes(params[:user])
-      flash[:notice] = 'User updated.'
+
+      if @old_user_email != @user.email then
+        @user.log "Changed email address from '#{@old_user_email}' to '#{@user.email}'"
+        UserMailer.deliver_email_change_notification(@user, @old_user_email)
+      end
+
+      flash[:notice] = 'Account information updated.'
       redirect_to(params[:return_to] || root_url)
     else
       @mailing_lists = MailingList.all
