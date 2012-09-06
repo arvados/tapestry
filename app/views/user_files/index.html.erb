@@ -10,18 +10,29 @@
     <th>Date</th>
     <th>Data Type</th>
     <th>Name</th>
+    <th>File name</th>
+    <th>Size</th>
     <th>&nbsp;</th>
     <th>&nbsp;</th>
     <th>&nbsp;</th>
   </tr>
   <% @user_files.each do |g| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%=h g.date %></td>
-      <td><%=h g.data_type %></td>
-      <td><%=h g.name %></td>
-      <td><%= link_to 'Download', user_file_download_path(g.id) %></td>
-      <td><%= link_to 'Edit', edit_user_file_path(g) %></td>
-      <td><%= link_to 'Delete', user_file_path(g.id), :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= g.date %></td>
+      <td><%= g.data_type %></td>
+      <td><%= g.name %></td>
+      <td>
+        <% if g.is_incomplete? %>
+        <%= g.longupload_file_name or raw('&mdash;') %>
+        <br /><b>(incomplete<%= " - #{100 * g.longupload_bytes_received / g.longupload_size}% uploaded" rescue nil %>)</b>
+        <% else %>
+        <%= g.dataset_file_name %>
+        <% end %>
+        </td>
+      <td><%= number_to_human_size(g.data_size) or raw('&mdash;') %></td>
+      <td><%= link_to 'Download', user_file_download_path(g.id) unless g.is_incomplete? %></td>
+      <td><%= link_to (g.is_incomplete? ? 'Edit/resume' : 'Edit'), edit_user_file_path(g) %></td>
+      <td><%= link_to 'Remove', user_file_path(g.id), :confirm => 'Are you sure?', :method => :delete %></td>
     </tr>
   <% end %>
 </table>

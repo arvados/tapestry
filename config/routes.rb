@@ -171,6 +171,7 @@ Tapestry::Application.routes.draw do
   resources :user_files
   match '/user_file/download/:id' => 'user_files#download', :as => :user_file_download
   match '/user_files/:id/reprocess' => 'user_files#reprocess', :as => :reprocess_user_file
+  match '/user_files/:id/longupload' => 'user_files#longupload', :as => :longupload_user_file, :via => :post
 
   resources :specimen_analysis_data
   match '/specimen_analysis_data/:id/publish' => 'specimen_analysis_data#publish', :as => :publish_specimen_analysis_data

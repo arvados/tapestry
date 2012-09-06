@@ -6,24 +6,34 @@ class UserFile < ActiveRecord::Base
   serialize :processing_status, Hash
   serialize :report_metadata, Hash
   include SubmitToGetEvidence
+  include Longupload::Target
+  include Longupload::StoresInWarehouse
+
+  scope :find_all_by_longupload_info, lambda { |info|
+    where('user_id = ? and (id = ? or (longupload_fingerprint = ? and longupload_file_name = ?))',
+          info[:user].id,
+          info[:longupload_id].to_i,
+          info[:longupload_fingerprint],
+          info[:longupload_file_name])
+  }
+  scope :downloadable, where('dataset_file_size is ? or locator is not ?', nil, nil)
 
   # See config/initializers/paperclip.rb for the definition of :user_id and :filename
   has_attached_file :dataset, :path => "/data/#{ROOT_URL}/genetic_data/:user_id/:id/:style/:filename.:extension"
 
   belongs_to :user
 
-  attr_accessible :user, :user_id, :name, :date, :description, :data_type, :dataset, :upload_tos_consent
+  attr_accessible :user, :user_id, :name, :date, :description, :data_type, :dataset, :upload_tos_consent, :longupload_size, :longupload_fingerprint, :longupload_file_name, :using_plain_upload
 
   attr_accessor :other_data_type
+  attr_accessor :using_plain_upload
 
   validates_presence_of    :user_id
   validates_presence_of    :name
-  validates_uniqueness_of  :name
 
+  validates_presence_of :dataset, :message => ': please select a file to upload.', :if => :using_plain_upload
+  validates_attachment_size :dataset, :less_than => 31457280, :message => ': maximum file size is 30 MiB.', :if => :using_plain_upload
   validates_presence_of    :data_type, :message => ': please select a data type.'
-  validates_attachment_presence   :dataset, :message => ': please select a file for upload.'
-  validates_attachment_size :dataset, :less_than => 31457280, :message => ': maximum file size is 30 MiB'
-
   validates_acceptance_of :upload_tos_consent, :accept => true
 
   validates_presence_of :other_data_type, :if => 'data_type == "other"'
@@ -72,15 +82,31 @@ class UserFile < ActiveRecord::Base
   end
 
   def data_size
-    dataset.size if dataset and dataset.size
+    if dataset and dataset.size
+      dataset.size
+    elsif dataset_file_size
+      dataset_file_size
+    elsif longupload_size
+      longupload_size
+    end
+  end
+
+  def is_plain_upload?
+    dataset_file_size and !locator and !longupload_size
+  end
+
+  def is_incomplete?
+    !dataset_file_size and !locator
   end
 
   def is_suitable_for_get_evidence?
-    (dataset_file_name.match(/\.vcf/) or
-     (dataset_file_name.match(/\.(txt|zip)$/i) and data_type == '23andMe'))
+    dataset_file_name and
+      (dataset_file_name.match(/\.vcf/) or
+       (dataset_file_name.match(/\.(txt|zip)$/i) and data_type == '23andMe'))
   end
 
   def store_in_warehouse
+    return true if locator and !dataset.path # it's already (only) in warehouse
     Open3.popen3('whput',
                  '--in-manifest',
                  "--name=/tapestry/#{ROOT_URL}/#{self.class}/#{self.id}",
@@ -106,6 +132,31 @@ class UserFile < ActiveRecord::Base
     false
   end
 
+  def after_longupload_file
+    super
+    self.dataset_file_size = longupload_size
+    self.dataset_file_name = longupload_file_name
+    self.dataset_updated_at = Time.now
+    self.dataset_content_type = 'application/octet-stream' # fixme - longupload client doesn't provide this info
+    save!
+  end
+
+  # Longupload::StoresInWarehouse#after_longupload_file uses this
+  def warehouse_manifest_locator=(x)
+    self.locator = x
+  end
+
+  # get an IO object that will supply file data from "read" method
+  def data_stream
+    if self.is_incomplete?
+      nil
+    elsif self.locator and !File.exists?(self.dataset.path)
+      IO.popen("whget -r '#{self.locator}/'", 'rb')
+    else
+      File.new(self.dataset.path, 'rb')
+    end
+  end
+
   # to match Dataset interface
   def published_at
     created_at
@@ -123,5 +174,8 @@ class UserFile < ActiveRecord::Base
   end
 
   api_accessible :privileged, :extend => :researcher do |t|
+  end
+
+  api_accessible :owner, :extend => :public do |t|
   end
 end

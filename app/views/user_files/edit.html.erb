@@ -1,5 +1,10 @@
-<h2>Edit dataset</h2>
+<h2><%= link_to 'Uploaded data', user_files_path %> &rarr; Edit</h2>
+
+<% if @user_file.dataset_file_name || @user_file.longupload_file_name %>
+<p>Uploaded file:
+  <code><%= @user_file.dataset_file_name || @user_file.longupload_file_name %></code> (<%= number_to_human_size(@user_file.data_size) %>)
+  <b><%= "(incomplete; #{number_to_human_size(@user_file.longupload_bytes_received)} uploaded)" if @user_file.is_incomplete? %></b>
+</p>
+<% end %>
 
 <%= render 'form' %>
-
-

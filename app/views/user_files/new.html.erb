@@ -1,12 +1,22 @@
-<h2>Upload data</h2>
+<h2><%= link_to 'Uploaded data', user_files_path %> &rarr; Upload new file</h2>
 
+<% if @user_file.using_plain_upload %>
 <p>
-You can upload genetic and health data here. File size is limited to 30 MB. You
-are encouraged to upload compressed files. Please make sure to select your data
-type from the 'Data Type' dropdown box. If your dataset is larger than 30 MB,
-please <%= link_to('contact us', new_message_path) %>.
+  You can upload genetic and health data here. File size is limited to
+  30&nbsp;MiB. You are encouraged to upload compressed files. Please
+  make sure to select your data type from the &ldquo;Data Type&rdquo;
+  dropdown box.
 </p>
+<p>
+  If your file is larger than 30&nbsp;MiB, try using a different (or
+  newer) web browser, like Firefox or Chrome.  
 
+  <%= link_to 'Browsers supporting the HTML5 File API', 'http://caniuse.com/fileapi' %>
+
+  can use a fancy upload interface which supports resuming interrupted
+  uploads.
+</p>
+<% end %>
 
 <%= render 'form' %>
 

@@ -27,7 +27,8 @@ class User < ActiveRecord::Base
   has_many :confirmed_family_relations, :class_name => 'FamilyRelation', :include => :relative, :conditions => 'is_confirmed and users.enrolled is not null and users.suspended_at is null'
   has_many :confirmed_relatives, :through => :family_relations, :source => :relative, :conditions => 'is_confirmed and users.enrolled is not null and users.suspended_at is null'
   has_many :relatives, :class_name => 'User', :through => :family_relations
-  has_many :user_files, :dependent => :destroy
+  has_many :incomplete_user_files, :dependent => :destroy, :class_name => 'UserFile', :conditions => ['dataset_file_size is ? and locator is ?', nil, nil]
+  has_many :user_files, :dependent => :destroy, :conditions => ['dataset_file_size is not ? or locator is not ?', nil, nil]
   has_many :genetic_data_user_files, :class_name => 'UserFile', :conditions => 'report_url is not null and report_url <> ""', :dependent => :destroy
   has_many :removal_requests, :dependent => :destroy
   has_many :samples, :foreign_key => 'participant_id'

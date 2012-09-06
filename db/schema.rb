@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120903002555) do
+ActiveRecord::Schema.define(:version => 20120905153951) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2476,37 +2476,49 @@ ActiveRecord::Schema.define(:version => 20120903002555) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
-    t.string   "status_url"
-    t.text     "processing_status"
-    t.boolean  "processing_stopped",   :default => false, :null => false
     t.string   "locator"
     t.string   "report_url"
+    t.string   "status_url"
+    t.text     "processing_status"
+    t.boolean  "processing_stopped",        :default => false, :null => false
+    t.text     "report_metadata"
+    t.string   "longupload_fingerprint"
+    t.string   "longupload_file_name"
+    t.integer  "longupload_size"
+    t.integer  "longupload_bytes_received"
+    t.text     "warehouse_blocks"
   end
 
   add_index "user_file_versions", ["user_file_id"], :name => "index_genetic_data_versions_on_genetic_data_id"
 
   create_table "user_files", :force => true do |t|
     t.integer  "user_id"
-    t.string   "name",                                    :null => false
-    t.string   "data_type",                               :null => false
+    t.string   "name",                                         :null => false
+    t.string   "data_type",                                    :null => false
     t.date     "date"
-    t.text     "description",                             :null => false
+    t.text     "description",                                  :null => false
     t.string   "dataset_file_name"
     t.string   "dataset_content_type"
     t.integer  "dataset_file_size"
     t.datetime "dataset_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
     t.boolean  "upload_tos_consent"
-    t.string   "status_url"
-    t.text     "processing_status"
-    t.boolean  "processing_stopped",   :default => false, :null => false
     t.string   "locator"
     t.string   "report_url"
+    t.string   "status_url"
+    t.text     "processing_status"
+    t.boolean  "processing_stopped",        :default => false, :null => false
+    t.text     "report_metadata"
+    t.string   "longupload_fingerprint"
+    t.string   "longupload_file_name"
+    t.integer  "longupload_size"
+    t.integer  "longupload_bytes_received"
+    t.text     "warehouse_blocks"
   end
 
   create_table "user_log_versions", :force => true do |t|

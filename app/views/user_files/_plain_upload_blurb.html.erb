@@ -1,0 +1,19 @@
+<% if @user_file.id and @user_file.is_incomplete? %>
+<div style="border: dashed 1px #aaa;padding:0 1em">
+  <p>
+    <b>Note:</b> you seem to have already started uploading a file using
+    the fancy uploader, then switched to the old fashioned upload
+    interface.  You can&rsquo;t resume your upload this way.
+    You <b>can</b>:
+    <ul>
+      <li>use this form to update the name, description, etc.;</li>
+      <li>use a
+
+        <%=link_to 'supported browser', 'http://caniuse.com/fileapi' %>
+
+        to finish uploading the file; or</li>
+      <li><%= link_to 'start a new upload', new_user_file_path %>.</li>
+    </ul>
+  </p>
+</div>
+<% end %>

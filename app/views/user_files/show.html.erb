@@ -1,0 +1,21 @@
+<h2><%= @user_file.name %></h2>
+
+<table class="admin_table">
+  <tr>
+    <td>Participant</td><td><%= link_to @user_file.user.hex, public_profile_path(@user_file.user.hex) %></td>
+  </tr><tr>
+    <td>Date</td><td><%= @user_file.date %></td>
+  </tr><tr>
+    <td>Data Type</td><td><%= @user_file.data_type %></td>
+  </tr><tr>
+    <td>Name</td><td><%= @user_file.name %></td>
+  </tr><tr>
+    <td>File name</td><td><%= @user_file.dataset_file_name %></td>
+  </tr><tr>
+    <td>Size</td><td><%= number_to_human_size(@user_file.data_size) %></td>
+  </tr>
+</table>
+
+<p>
+<%= button_to 'Download this file', user_file_download_path(@user_file), :method => 'get' %>
+</p>

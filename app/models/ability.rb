@@ -60,6 +60,9 @@ class Ability
     # The creator of a study may manipulate it as they see fit
     can :manage, Study, :creator_id => user.id
 
+    can :create, UserFile if user.is_enrolled?
+    can :manage, UserFile, :user_id => user.id
+
     ## Database entries
     # As a last resort, look for specific database permission entries 
     user.permissions_granted_to.each do |permission|

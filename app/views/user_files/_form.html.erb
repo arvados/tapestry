@@ -1,64 +1,270 @@
  <%= error_messages_for :user_file, :header_message => 'Error: dataset could not be uploaded', :message => nil %>
 
-<table>
-<%= form_for(@user_file, :html => {:multipart => true}) do |f| %>
-   <tr>
-     <td>
-    <%= f.label :data_type %><span style="color: red"> * </span><br />
-    <%= f.select :data_type, UserFile::DATA_TYPES, :include_blank => true  %>
-     </td>
-     <td>
-    <div id="other_data_type_div">
-    <%= f.label :other_data_type %><span style="color: red"> * </span><br />
-    <%= f.text_field :other_data_type %>
-    </div>
-     </td>
-   </tr>
-   <tr>
-     <td colspan="2">
-    Name for your file (publicly shared)<span style="color: red"> * </span><br />
-    <%= f.text_field :name, :size => 100 %>
-     </td>
-   </tr>
-   <tr>
-     <td colspan="2">
-    <label for="upload_file">Select File</label><span style="color: red">* </span><br /> 
-    <%= f.file_field :dataset %>
-     </td>
-   </tr>
-   <tr>
-     <td colspan="2">
-    <label for="date">Dataset creation date:</label><br />
-    <%= f.date_select :date, { :include_blank => true, :start_year => 2000, :end_year => Time.now.year } %>
-     </td>
-   </tr>
-   <tr>
-     <td colspan="2">
-    <%= f.label :description %><br />
-    <%= f.text_area :description, :size => "60x5" %>
-     </td>
-   </tr>
-  </table>
+<% unless @user_file.using_plain_upload %>
+<div class="display-during-detection" style="padding:1em 2em;border:2px solid #aaa;text-align:center">
+  <p>Checking browser compatibility...</p>
+</div>
+<div class="ui-helper-hidden display-after-detection">
+  <% unless @user_file.id %><%# don't say this when resuming incomplete file %>
   <p>
-  You must read and agree to the following terms and conditions before uploading any data to your PGP participant profile.
+    You can upload genetic and health data here. Large files are
+    accepted, but you are still encouraged to upload compressed
+    files. Please make sure to select your data type from the
+    &ldquo;Data Type&rdquo; dropdown box.
   </p>
+  <% end %>
   <p>
-  <strong>1. Upload Your Own, Accurate Information.</strong> Pursuant to <a href="http://www.personalgenomes.org/tos.html">PersonalGenomes.org’s Terms of Service</a>, you may only upload to PG.org data, including genetic, health, or trait data, that you own or otherwise have the right to use. You also agree that you will not intentionally upload any false, misleading or inaccurate data. If you find out that you’ve uploaded any data that is not yours or that is inaccurate, please delete the data and <%= link_to('notify us immediately', new_message_path) %>.
-  </p>
-  <p>
-  <strong>2. Information You Upload Will Be Public.</strong> Remember that all data uploaded to PG.org, including all genetic, health, or trait data, will become part of the PG.org’s public database. All data will be publicly distributed under the CC0 universal waiver and will be available without restriction to any third party visiting the PG.org website or otherwise accessing the database, all as described in more detail in PG.org’s Terms of Service.
-  </p>
-  <p>
-It is important that you are aware that <strong>you will have a limited ability to alter or remove any data once uploaded</strong>. Please remember to review all of your data prior to upload to ensure that all unwanted identifying information (including names, email addresses and social security numbers) has been removed. You should remove or redact any information you do not feel comfortable sharing publicly. You may also wish to review the <a href="http://www.personalgenomes.org/consent">participant informed consent agreement</a>, particularly Section 7 which describes the risks of making data, including genetic, health, or trait data, publicly available, prior to uploading any data.
-  </p>
-  <p>
-<strong>3. The Rest of PG.org’s Terms of Service Apply.</strong> Please review PG.org’s terms of use, which apply to all data uploaded to your participant profile. 
-  </p>
-  <p>
-    <%= f.check_box :upload_tos_consent %><span style="color: red"> * </span>I have read and agree to the terms and conditions for uploading data to my PGP participant profile. 
-  </p>
+    <b>Technology note:</b> This page uses fancy new browser features
+    to enable large file uploads. If it doesn&rsquo;t work for you,
+    please either try a
 
-  <p>
-    <%= f.submit "Proceed" %>
+    <%=link_to 'different browser', 'http://caniuse.com/fileapi' %>,
+
+    use the
+
+    <%= link_to 'good old fashioned upload method', url_for(:user_file => {:using_plain_upload => true}) %>
+
+    (for files smaller than 30&nbsp;megabytes), or
+
+    <%= link_to('contact us', new_message_path) %> to report a bug.
   </p>
+<% else %>
+<%= render :partial => 'plain_upload_blurb' %>
+<% end %>
+
+<%= form_for(@user_file, :remote => !@user_file.using_plain_upload, :html => {:multipart => true, :'data-type' => 'json'}) do |f| %>
+<table>
+  <tr>
+    <td>
+      <%= f.label :data_type %><span style="color: red"> * </span><br />
+      <%= f.select :data_type, UserFile::DATA_TYPES, :include_blank => true  %>
+    </td>
+    <td>
+      <div id="other_data_type_div">
+        <%= f.label :other_data_type %><span style="color: red"> * </span><br />
+        <%= f.text_field :other_data_type %>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      Name for your file (publicly shared)<span style="color: red"> * </span><br />
+      <%= f.text_field :name, :size => 100 %>
+    </td>
+  </tr>
+  <% if @user_file.using_plain_upload and !@user_file.id %>
+  <tr>
+    <td colspan="2">
+      <label for="upload_file">Select File</label><span style="color: red">* </span><br />
+      <%= f.file_field :dataset %>
+      <%= f.hidden_field :using_plain_upload, :value => true %>
+    </td>
+  </tr>
+  <% end %>
+  <tr>
+    <td colspan="2">
+      <label for="date">Dataset creation date:</label><br />
+      <%= f.date_select :date, { :include_blank => true, :start_year => 2000, :end_year => Time.now.year } %>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <%= f.label :description %><br />
+      <%= f.text_area :description, :size => "60x5" %>
+    </td>
+  </tr>
+</table>
+
+<p>
+  You must read and agree to the following terms and conditions before uploading any data to your PGP participant profile.
+</p>
+<p>
+  <strong>1. Upload Your Own, Accurate Information.</strong> Pursuant to <a href="http://www.personalgenomes.org/tos.html">PersonalGenomes.org’s Terms of Service</a>, you may only upload to PG.org data, including genetic, health, or trait data, that you own or otherwise have the right to use. You also agree that you will not intentionally upload any false, misleading or inaccurate data. If you find out that you’ve uploaded any data that is not yours or that is inaccurate, please delete the data and <%= link_to('notify us immediately', new_message_path) %>.
+</p>
+<p>
+  <strong>2. Information You Upload Will Be Public.</strong> Remember that all data uploaded to PG.org, including all genetic, health, or trait data, will become part of the PG.org’s public database. All data will be publicly distributed under the CC0 universal waiver and will be available without restriction to any third party visiting the PG.org website or otherwise accessing the database, all as described in more detail in PG.org’s Terms of Service.
+</p>
+<p>
+  It is important that you are aware that <strong>you will have a limited ability to alter or remove any data once uploaded</strong>. Please remember to review all of your data prior to upload to ensure that all unwanted identifying information (including names, email addresses and social security numbers) has been removed. You should remove or redact any information you do not feel comfortable sharing publicly. You may also wish to review the <a href="http://www.personalgenomes.org/consent">participant informed consent agreement</a>, particularly Section 7 which describes the risks of making data, including genetic, health, or trait data, publicly available, prior to uploading any data.
+</p>
+<p>
+  <strong>3. The Rest of PG.org’s Terms of Service Apply.</strong> Please review PG.org’s terms of use, which apply to all data uploaded to your participant profile. 
+</p>
+<p>
+  <%= f.check_box :upload_tos_consent %><span style="color: red"> * </span>I have read and agree to the terms and conditions for uploading data to my PGP participant profile. 
+</p>
+
+<% if @user_file.using_plain_upload %>
+<p>
+  <% if !@user_file.id %>
+  <%= f.submit "Proceed", :disable_with => 'Uploading...' %>
+  <% else %>
+  <%= f.submit "Save", :disable_with => 'Saving...' %>
+  <% end %>
+</p>
+<% end %>
+
+<% end %><%# form %>
+
+<% unless @user_file.using_plain_upload %>
+
+<form class="longuploadform">
+  <% if !@user_file.id or @user_file.is_incomplete? %>
+  <div style="display:inline-block;border:1px solid #aaa;padding:.5em 1em">
+    <label for="upload_file">
+      <span style="color: red">* </span>
+      <% if @user_file.longupload_file_name %>
+      Choose the same file you started uploading earlier: <code><b><%= @user_file.longupload_file_name %></b></code>
+      <% else %>
+      Select File
+      <% end %>
+    </label><br />
+    <%= file_field_tag :dataset %>
+    <br />
+  </div>
+  <% end %>
+</form>
+
+<div style="height:1em"></div>
+
+<table>
+  <tr><td>
+      <%= button_to 'Save and upload', '#', :class => "longupload-go", :style => 'width:10em' %>
+    </td><td>
+      <%= button_to 'Stop', '#', :class => "longupload-stop ui-helper-hidden", :disabled => true %>
+    </td><td>
+      &nbsp;<br />&nbsp;
+  </td></tr>
+</table>
+
+<div id="longupload-progress-container" class="ui-helper-hidden" style="padding:.5em 1em; border: 1px solid #aaa">
+  <div id="longupload-progress"></div>
+</div>
+<div class="validation-error ui-helper-hidden" style="padding:.5em 1em; border: 1px solid #aaa">
+</div>
+<div id="longupload-complete-message" class="ui-helper-hidden" style="padding:.5em 1em; border: 1px solid #aaa">
+  <p>
+    Your upload is complete.
+    <%= link_to 'Back to list of uploads...', user_files_path %>
+  </p>
+</div>
+
+<%= content_for :head do %>
+<%= javascript_include_tag 'jquery-ui/jquery.ui.progressbar.js' %>
+<%= javascript_include_tag 'jquery-ui/jquery.effects.core.js' %>
+<%= javascript_include_tag 'jquery-ui/jquery.effects.highlight.js' %>
+<%= javascript_include_tag 'hashes.min.js' %>
+<%= javascript_include_tag 'jquery.longupload' %>
+<%= stylesheet_link_tag 'jquery.ui.progressbar' %>
+<% end %>
+<%= content_for :js do %>
+function rstr2hex(s) { return s; }
+function rstr_md5(s) { return (new Hashes.MD5).setUTF8(false).hex(s); }
+jQuery(function() {
+        var $ = jQuery.noConflict();
+
+        if (!$.fn.longupload.fnCheckCompatibility()) {
+            // Fall back to plain upload
+            $('div.display-during-detection p').html('Large file support is not available in this browser.  Redirecting to plain upload page...');
+            window.location.href = '<%=j(url_for(:user_file => {:using_plain_upload => true}))%>';
+            return;
+        }
+        $('div.display-during-detection').hide();
+        $('div.display-after-detection').show();
+
+        var $gobutton = $('input.longupload-go');
+        $gobutton.
+            bind('enable-and-relabel', function() {
+                    var l = 'Save';
+                    if ($('form input:file').length > 0)
+                        l = 'Save and upload';
+                    $(this).
+                        attr('value',l).
+                        attr('disabled',false);
+                }).
+            trigger('enable-and-relabel');
+        $.fn.longupload.defaults.sUploadHandlerURI = $('form').attr('action');
+        $.fn.longupload.defaults.sProgressTarget = '#longupload-progress';
+        $('form :file').longupload();
+        $('input.longupload-stop').click(function(){
+                $('form :file').longupload('stop');
+                $(this).attr('disabled',true);
+                return false;
+            });
+        $('input.longupload-go').click(function(){
+                $(this).attr('disabled',true).attr('value','Saving...');
+                $('form[data-remote]').submit();
+                return false;
+            });
+        $('input:file').bind('longupload-failure longupload-abort', function(event) {
+                $gobutton.trigger('enable-and-relabel');
+                $('#longupload-progress-container').effect('highlight',{},8000);
+            });
+        $(document).bind('longupload-queue-finish', function(event, jobs) {
+                if (event.type != 'longupload-queue-finish') return;
+                if (jobs.length == 0) {
+                    $('#longupload-progress-container').hide();
+                    $('form.longuploadform div').effect('highlight',{},8000);
+                    $gobutton.trigger('enable-and-relabel');
+                }
+                else {
+                    $('#longupload-complete-message').
+                        show().
+                        effect('highlight',{},8000);
+                    window.location.href = '<%= j(user_files_path) %>';
+                }
+                $('input.longupload-stop').attr('disabled',true).hide();
+            });
+        $('form[data-remote]').
+            bind('ajax:before ajax:beforeSend', function(evt, xhr, settings) {
+                    $('#longupload-complete-message').hide();
+                    $('div.validation-error').hide();
+                }).
+            bind('ajax:success', function (evt,data,status,xhr) {
+                    var formdata = {};
+                    if (window.history.replaceState)
+                        window.history.replaceState({}, document.title, data.item_path);
+                    $(this).attr('action', data.item_update_path);
+                    $(this).attr('method', 'put');
+                    if (0 == $('form.longuploadform :file').length) {
+                        window.location.href = '/user_files';
+                        return true;
+                    }
+                    $('#longupload-progress').html('');
+                    $('#longupload-progress-container').show();
+                    $('input.longupload-stop').attr('disabled',false).show();
+                    try {
+                        $gobutton.
+                            attr('disabled',true).
+                            attr('value','Uploading...');
+                        $('form.longuploadform :file').longupload('go', {
+                                oUploadHandlerData: formdata,
+                                sUploadHandlerURI: data.upload_handler
+                                    });
+                    } catch(e) {
+                        alert(e);
+                    }
+                }).
+            bind('ajax:error ajax:failure', function (evt,xhr,status,error) {
+                    var errors, errorText;
+                    $gobutton.trigger('enable-and-relabel');
+                    try {
+                        errors = $.parseJSON(xhr.responseText);
+                    } catch(err) {
+                        console.log(xhr.responseText);
+                        errors = {message:"Please reload the page and try again"};
+                    }
+                    errorText = "Errors encountered while trying to save:\n<ul>";
+                    for(error in errors) {
+                        errorText += "<li>" + error + ' ' + errors[error] + "</li>\n";
+                    }
+                    errorText += "</ul>\n";
+                    $('div.validation-error').html(errorText).show();
+                    return false;
+                });
+    });
+<% end %>
+<% end %><%# unless nolongupload %>
+<% unless @user_file.using_plain_upload %>
+</div> <%# display-after-detection %>
 <% end %>
