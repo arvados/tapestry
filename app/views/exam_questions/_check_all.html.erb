@@ -1,5 +1,5 @@
 <div class="question">
-  <p><%= @exam_question.question %></p>
+  <p><strong>Question <%= @exam_question.ordinal %>:</strong> <%= @exam_question.question %></p>
 
   <%= form_tag answer_content_area_exam_exam_question_path(@content_area, @exam, @exam_question) do %>
 
