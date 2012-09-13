@@ -175,8 +175,10 @@ class Sample < ActiveRecord::Base
   end
 
   def self.normalize_url_code(s)
-    s.sub(/^.*\//) do |prefix|
-      prefix == 'http://myp.gp/hu/' ? '' : MD5.hexdigest(prefix).to_i(16).to_s(36)[0..5]
+    if s.respond_to? :sub
+      s.sub(/^.*\//) do |prefix|
+        prefix == 'http://myp.gp/hu/' ? '' : MD5.hexdigest(prefix).to_i(16).to_s(36)[0..5]
+      end
     end
   end
 end

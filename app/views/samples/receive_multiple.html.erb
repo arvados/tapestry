@@ -99,3 +99,27 @@ jQuery(function(){
 </div>
 
 <% end %>
+
+<% if @selection and (nfk = @selection.notfound_keys) and !nfk.empty? %>
+<div style="clear:both; border:1px dashed #800;padding:.5em 1em;margin-top:2em">
+  <p>
+    <%= nfk.size %> of the provided sample IDs <%= nfk.size==1 ? 'was' : 'were' %> not found.
+    <ul>
+      <% i=-1; nfk.each do |k| %>
+      <% if (i += 1) == 32 and nfk.size > 64 %>
+      <li><b>[and <%= nfk.size-32 %> more, not shown]</b></li>
+      <% break %>
+      <% end %>
+      <li>
+        <% if k %>
+        &ldquo;<%= k %>&rdquo;
+        <% else %>
+        nil
+        <% end %>
+      </li>
+      <% end %>
+    </ul>
+  </p>
+</div>
+        
+<% end %>

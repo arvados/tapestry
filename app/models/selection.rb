@@ -33,6 +33,30 @@ class Selection < ActiveRecord::Base
     }.compact
   end
 
+  # Return a list of table rows (if available) that did not match any
+  # targets.
+  def notfound_rows
+    return nil if !spec[:table]
+    notfound_row_indices = (0..spec[:table].size).to_a
+    targets.each do |t|
+      if t.class == Array and t[0] and t[1]
+        notfound_row_indices[t[1]] = nil
+      end
+    end
+    notfound_row_indices.compact.collect do |i|
+      spec[:table][i]
+    end
+  end
+
+  # Return a list of keys (i.e., values in the attr_column of table
+  # rows, if available) that did not match any targets.
+  def notfound_keys
+    return nil if !spec[:table]
+    notfound_rows.collect { |r|
+      r and r[spec[:attr_column]]
+    }.uniq
+  end
+
   # For a given target id, get an array of the table rows (if
   # available) that caused that target to be included in the
   # selection.  Each element in the returned array is the original
