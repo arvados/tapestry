@@ -274,6 +274,10 @@ class Admin::UsersController < Admin::AdminControllerBase
     @trios = User.trios
   end
 
+  def families
+    @participants_with_family_members = User.joins(:family_relations).group('user_id having count(*) > 0')
+  end
+
   def google_phr_report
     @google_phrs = Ccr.find(:all,
        :joins => "INNER JOIN users ON users.id = ccrs.user_id",

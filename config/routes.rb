@@ -199,6 +199,7 @@ Tapestry::Application.routes.draw do
   match '/admin/users/export_log' => 'admin/users#export_log', :as => :admin_export_log_users
   match '/admin/users/ineligible' => 'admin/users#ineligible', :as => :admin_ineligible_users
   match '/admin/users/trios' => 'admin/users#trios', :as => :admin_trios
+  match '/admin/users/families' => 'admin/users#families', :as => :admin_families
   match '/admin/users/user_files_report' => 'admin/users#user_files_report', :as => :admin_user_files_report
   match '/admin/users/google_phr_report' => 'admin/users#google_phr_report', :as => :admin_google_phr_report
   match '/admin/users/activate/:id' => 'admin/users#activate', :as => :activate_admin_user

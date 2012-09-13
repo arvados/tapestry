@@ -1,0 +1,42 @@
+<h2>Participants with family members</h2>
+<p>
+There are currently <%= @participants_with_family_members.length %> participants with family members enrolled.
+<p/>
+<table class="admin_table">
+<tr>
+  <th>Participant</th>
+  <th>Twin</th>
+  <th>Siblings</th>
+  <th>Half siblings</th>
+  <th>Parents</th>
+  <th>Aunts / Uncles</th>
+  <th>Grandparents</th>
+  <th>Cousin or more distant</th>
+  <th>Other enrolled family members</th>
+  <th>Not genetically related</th>
+</tr>
+<% @participants_with_family_members.each do |t| 
+    twins = t.family_relations.select {|r| r.relation == 'monozygotic/identical twin'}
+    siblings = t.family_relations.select {|r| r.relation == 'sibling'}
+    half_siblings = t.family_relations.select {|r| r.relation == 'half sibling'}
+    parents = t.family_relations.select {|r| r.relation == 'parent'}
+    aunts_uncles = t.family_relations.select {|r| r.relation == 'aunt/uncle' }
+    grandparents = t.family_relations.select {|r| r.relation == 'grandparent'}
+    cousins_etc = t.family_relations.select {|r| r.relation == 'cousin or more distant'}
+    unrelated = t.family_relations.select {|r| r.relation == 'not genetically related (e.g. husband/wife)'}
+    other_family_members = t.family_relations.select {|r| r.relation != 'parent' and r.relation != 'monozygotic/identical twin' and r.relation != 'grandparent' and r.relation != 'sibling' and r.relation != 'aunt/uncle' and r.relation != 'not genetically related (e.g. husband/wife)' and r.relation != 'half sibling' and r.relation != 'cousin or more distant' }
+%>
+<tr class="<%= cycle 'even', 'odd' %>">
+  <td><%= link_to t.hex, public_profile_path(:hex => t.hex) %></td>
+  <td><% twins.each do |p| %><%= link_to p.relative.hex, public_profile_path(:hex => p.relative.hex) %>&nbsp; <% end %></td>
+  <td><% siblings.each do |p| %><%= link_to p.relative.hex, public_profile_path(:hex => p.relative.hex) %>&nbsp; <% end %></td>
+  <td><% half_siblings.each do |p| %><%= link_to p.relative.hex, public_profile_path(:hex => p.relative.hex) %>&nbsp; <% end %></td>
+  <td><% parents.each do |p| %><%= link_to p.relative.hex, public_profile_path(:hex => p.relative.hex) %>&nbsp; <% end %></td>
+  <td><% aunts_uncles.each do |p| %><%= link_to p.relative.hex, public_profile_path(:hex => p.relative.hex) %>&nbsp; <% end %></td>
+  <td><% grandparents.each do |p| %><%= link_to p.relative.hex, public_profile_path(:hex => p.relative.hex) %>&nbsp; <% end %></td>
+  <td><% cousins_etc.each do |p| %><%= link_to p.relative.hex, public_profile_path(:hex => p.relative.hex) %>&nbsp; <% end %></td>
+  <td><% other_family_members.each do |p| %><%= link_to p.relative.hex, public_profile_path(:hex => p.relative.hex) %>&nbsp; <% end %></td>
+  <td><% unrelated.each do |p| %><%= link_to p.relative.hex, public_profile_path(:hex => p.relative.hex) %>&nbsp; <% end %></td>
+</tr>
+<% end %>
+</table>
