@@ -275,7 +275,7 @@ class Admin::UsersController < Admin::AdminControllerBase
   end
 
   def families
-    @participants_with_family_members = User.joins(:family_relations).group('user_id having count(*) > 0')
+    @participants_with_family_members = User.joins(:family_relations).where('is_confirmed is true and relation in ("monozygotic/identical twin","parent","sibling","grandparent","aunt/uncle","half sibling","cousin or more distant","not genetically related (e.g. husband/wife)")').group('user_id having count(*) > 0')
   end
 
   def google_phr_report

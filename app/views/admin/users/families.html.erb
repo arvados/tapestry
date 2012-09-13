@@ -1,7 +1,10 @@
 <h2>Participants with family members</h2>
 <p>
-There are currently <%= @participants_with_family_members.length %> participants with family members enrolled.
+There are currently <%= User.joins(:family_relations).where('is_confirmed is true').group('user_id having count(*) > 0').length %> participants with confirmed family members.
 <p/>
+<p>
+The following table lists all people with confirmed family relationships.
+</p>
 <table class="admin_table">
 <tr>
   <th>Participant</th>
