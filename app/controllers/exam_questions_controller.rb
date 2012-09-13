@@ -46,11 +46,28 @@ class ExamQuestionsController < ApplicationController
   private
 
   def load_exam_models
-    @content_area    = ContentArea.find params[:content_area_id]
-    @exam            = @content_area.exams.find params[:exam_id]
+    @content_area    = ContentArea.find_by_id(params[:content_area_id])
+    if @content_area.nil?
+      redirect_to root_url
+      return
+    end
+    @exam            = @content_area.exams.find_by_id(params[:exam_id])
+    if @exam.nil?
+      redirect_to root_url
+      return
+    end
     @exam_version    = @exam.version_for(current_user)
+    if @exam_version.nil?
+      redirect_to root_url
+      return
+    end
     @exam_response   = ExamResponse.find_by_user_id_and_exam_version_id(current_user, @exam_version)
-    @exam_question   = @exam_version.exam_questions.find params[:id]
+    # @exam_response is only present when /answer is called; it's ok to be nil otherwise
+    @exam_question   = @exam_version.exam_questions.find_by_id(params[:id])
+    if @exam_question.nil?
+      redirect_to root_url
+      return
+    end
   end
 
   def remove_existing_response
