@@ -183,16 +183,26 @@ class UserFilesController < ApplicationController
     end
 
     if @user_file.data_size > 2**26
-      # when fetching "#{locator}/" we assume there is only one file
-      # in the manifest -- longupload currently ensures that, but we
-      # should be able to detect multi-file manifests and respond with
-      # a tarball instead of just concatenating all the files.
-      return redirect_to('/whget.php' +
-                         '?locator=' + Rack::Utils.escape(@user_file.locator + '/') +
+      # Here we assume there is only one file in the manifest, and
+      # it's not in a subdir.  Longupload currently ensures that, but
+      # we should be able to detect multi-file manifests and respond
+      # with a tarball instead of failing.
+      if defined? WAREHOUSE_WEB_ROOT and
+          defined? WAREHOUSE_FS_ROOT and
+          (filelist = Dir.glob("#{WAREHOUSE_FS_ROOT}/#{@user_file.locator}/*")) and
+          filelist.size == 1
+        return redirect_to filelist[0].sub(WAREHOUSE_FS_ROOT, WAREHOUSE_WEB_ROOT)
+      elsif defined? WAREHOUSE_PROXY_SCRIPT_PATH
+        return redirect_to(WAREHOUSE_PROXY_SCRIPT_PATH +
+                           '?locator=' + Rack::Utils.escape(@user_file.locator + '/') +
                          '&filename=' + Rack::Utils.escape(filename) +
                          '&size=' + @user_file.data_size.to_s +
                          '&type=' + Rack::Utils.escape(@user_file.dataset_content_type) +
                          '&disposition=attachment')
+      else
+        flash[:error] = "Sorry, downloading large files is not yet supported."
+        return redirect_to url_for(@user_file)
+      end
     end
 
     respond_to do |format|

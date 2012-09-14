@@ -72,4 +72,7 @@ Tapestry::Application.configure do
   TRAITWISE_LOGIN = "you@example.com"
   TRAITWISE_PASSWORD = "your_traitwise_password"
 
+  WAREHOUSE_WEB_ROOT = "/warehouse" # Apache alias pointing to whmount target
+  WAREHOUSE_FS_ROOT = "/warehouse" # whmount target
+  # WAREHOUSE_PROXY_SCRIPT_PATH = "/whget.php" # alternative to using whmount
 end

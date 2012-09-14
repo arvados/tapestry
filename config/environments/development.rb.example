@@ -49,5 +49,7 @@ Tapestry::Application.configure do
 
   GET_2012_SECRET = 'xxxxxxxx'
   
+  WAREHOUSE_WEB_ROOT = "/warehouse" # Apache alias pointing to whmount target
+  WAREHOUSE_FS_ROOT = "/warehouse" # whmount target
+  # WAREHOUSE_PROXY_SCRIPT_PATH = "/whget.php" # alternative to using whmount
 end
-
