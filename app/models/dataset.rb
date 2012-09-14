@@ -39,7 +39,7 @@ class Dataset < ActiveRecord::Base
     published_at
   end
   def data_type
-    name.match(/exome/) ? "23andMe" : "Complete Genomics"
+    "Complete Genomics"
   end
   def download_url
     if !super and self.location and self.location.match(/evidence\.personalgenomes\.org\/hu[0-9A-F]+$/)
