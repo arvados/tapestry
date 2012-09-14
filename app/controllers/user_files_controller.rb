@@ -172,17 +172,9 @@ class UserFilesController < ApplicationController
   def download
     @user_file = UserFile.find(params[:id])
 
-    begin
-      io = @user_file.data_stream
-      filename = @user_file.user.hex + '_' + @user_file.created_at.strftime('%Y%m%d%H%M%S') + '.' + (@user_file.dataset.path || @user_file.longupload_file_name).sub(/^.*\./,'')
-    rescue Exception => e
-      @user_file.user.log("Error downloading user file: #{e.exception} #{e.inspect()}",nil,request.remote_ip,"Error retrieving dataset ##{@user_file.id} '#{@user_file.name}' for download.")
-      flash[:error] = 'There was an error retrieving the dataset. Please try again later.'
-      redirect_to url_for(@user_file)
-      return
-    end
+    filename = @user_file.user.hex + '_' + @user_file.created_at.strftime('%Y%m%d%H%M%S') + '.' + (@user_file.dataset.path || @user_file.longupload_file_name).sub(/^.*\./,'')
 
-    if @user_file.data_size > 2**26
+    if @user_file.data_size > 2**20 and !File.exists? @user_file.dataset.path
       # Here we assume there is only one file in the manifest, and
       # it's not in a subdir.  Longupload currently ensures that, but
       # we should be able to detect multi-file manifests and respond
@@ -203,6 +195,15 @@ class UserFilesController < ApplicationController
         flash[:error] = "Sorry, downloading large files is not yet supported."
         return redirect_to url_for(@user_file)
       end
+    end
+
+    begin
+      io = @user_file.data_stream
+    rescue Exception => e
+      @user_file.user.log("Error downloading user file: #{e.exception} #{e.inspect()}",nil,request.remote_ip,"Error retrieving dataset ##{@user_file.id} '#{@user_file.name}' for download.")
+      flash[:error] = 'There was an error retrieving the dataset. Please try again later.'
+      redirect_to url_for(@user_file)
+      return
     end
 
     respond_to do |format|
