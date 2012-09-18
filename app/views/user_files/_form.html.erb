@@ -1,4 +1,9 @@
- <%= error_messages_for :user_file, :header_message => 'Error: dataset could not be uploaded', :message => nil %>
+<%= content_for :head do %>
+<%= javascript_include_tag 'user_files' %>
+<%= stylesheet_link_tag 'user_files' %>
+<% end %>
+
+<%= error_messages_for :user_file, :header_message => 'Error: dataset could not be uploaded', :message => nil %>
 
 <% unless @user_file.using_plain_upload %>
 <div class="display-during-detection" style="padding:1em 2em;border:2px solid #aaa;text-align:center">
@@ -34,35 +39,38 @@
 
 <%= form_for(@user_file, :remote => !@user_file.using_plain_upload, :html => {:multipart => true, :'data-type' => 'json'}) do |f| %>
 <table>
-  <tr>
+  <tr style="vertical-align: top">
     <td>
       <%= f.label :data_type %><span style="color: red"> * </span><br />
       <%= f.select :data_type, UserFile::DATA_TYPES, :include_blank => true  %>
     </td>
-    <td>
+    <td rowspan="4">
       <div id="other_data_type_div">
         <%= f.label :other_data_type %><span style="color: red"> * </span><br />
         <%= f.text_field :other_data_type %>
       </div>
+      <%= render :partial => 'data_type_advice' %>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td style="vertical-align: top">
       Name for your file (publicly shared)<span style="color: red"> * </span><br />
-      <%= f.text_field :name, :size => 100 %>
+      <%= f.text_field :name, :size => 40 %>
     </td>
   </tr>
   <% if @user_file.using_plain_upload and !@user_file.id %>
   <tr>
-    <td colspan="2">
+    <td style="vertical-align: top">
       <label for="upload_file">Select File</label><span style="color: red">* </span><br />
       <%= f.file_field :dataset %>
       <%= f.hidden_field :using_plain_upload, :value => true %>
     </td>
   </tr>
+  <% else %>
+  <tr><td></td></tr><%# otherwise, above rowspan will go wild %>
   <% end %>
   <tr>
-    <td colspan="2">
+    <td style="vertical-align: top">
       <label for="date">Dataset creation date:</label><br />
       <%= f.date_select :date, { :include_blank => true, :start_year => 2000, :end_year => Time.now.year } %>
     </td>
