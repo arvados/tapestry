@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120919161320) do
+ActiveRecord::Schema.define(:version => 20120919163122) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2485,7 +2485,7 @@ ActiveRecord::Schema.define(:version => 20120919161320) do
     t.string   "longupload_fingerprint"
     t.string   "longupload_file_name"
     t.integer  "longupload_size",           :limit => 8
-    t.integer  "longupload_bytes_received"
+    t.integer  "longupload_bytes_received", :limit => 8
     t.text     "warehouse_blocks",          :limit => 2147483647
   end
 
@@ -2517,7 +2517,7 @@ ActiveRecord::Schema.define(:version => 20120919161320) do
     t.string   "longupload_fingerprint"
     t.string   "longupload_file_name"
     t.integer  "longupload_size",           :limit => 8
-    t.integer  "longupload_bytes_received"
+    t.integer  "longupload_bytes_received", :limit => 8
     t.text     "warehouse_blocks",          :limit => 2147483647
   end
 
