@@ -52,13 +52,12 @@ class PublicGeneticDataController < ApplicationController
       Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
     @data_type_stats = {}
     @data_type_name = {}
-    @time_series = {}
-    @total_positions_covered = 0
+    @coverage_series = {}
+    @datasets_series = {}
+    @t0 = nil
     UserFile::DATA_TYPES.each do |longversion, shortversion|
       @data_type_name[shortversion] = longversion
     end
-    @extrapolate_x0 = 1.year.ago
-    @extrapolate_y0 = nil
     @datasets.sort_by(&:published_at).each do |d|
       data_type = d.data_type
       data_type = 'other' unless @data_type_name.has_key? data_type
@@ -67,39 +66,53 @@ class PublicGeneticDataController < ApplicationController
         :positions_covered => 0,
         :N => 0
       }
+      add_to_coverage_series = false
       begin
-        @total_positions_covered += d.report_metadata[:called_num]
         stats[:positions_covered] += d.report_metadata[:called_num]
-        @extrapolate_x1 = d.published_at
+        add_to_coverage_series = true
       rescue
         # ignore base-counting fail
       end
       stats[:N] += 1
 
-      @time_series[data_type] ||= {
-        'data' => [],
-        'label' => data_type + ' datasets'
+      @t0 ||= (d.published_at.to_f*1000).floor
+
+      @datasets_series[data_type] ||= {
+        'data' => [[@t0, 0]],
+        'label' => data_type + ' datasets',
+        'data_type' => data_type
       }
-      @time_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
-                                          stats[:N]]
-      @time_series['positions_covered'] ||= {
-        'data' => [],
-        'label' => 'Positions covered'
-      }
-      @time_series['positions_covered']['data'] << [(d.published_at.to_f*1000).floor,
-                                                    @total_positions_covered]
-      if @extrapolate_y0.nil? and d.published_at >= @extrapolate_x0
-        @extrapolate_y0 = @total_positions_covered
+      @datasets_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+                                              @datasets_series[data_type]['data'].last[1]]
+      @datasets_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+                                              stats[:N]]
+
+      if add_to_coverage_series
+        @coverage_series[data_type] ||= {
+          'data' => [[@t0, 0]],
+          'label' => data_type + ' coverage',
+          'data_type' => data_type
+        }
+        @coverage_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+                                                @coverage_series[data_type]['data'].last[1]]
+        @coverage_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+                                                stats[:positions_covered]]
       end
     end
 
-    # Extend each @time_series to Time.now
-    @time_series.keys.each do |s|
-      @time_series[s]['data'] << [Time.now.to_f*1000,
-                                  @time_series[s]['data'].last[1]]
+    # Extend each series to Time.now and sort by total coverage
+    @datasets_series, @coverage_series = [@datasets_series, @coverage_series].collect do |series|
+      series.keys.each do |s|
+        series[s]['data'] << [Time.now.to_f*1000,
+                              series[s]['data'].last[1]]
+      end
+      series.values.sort_by { |s|
+        begin
+          0-@coverage_series[s['data_type']]['data'].last[1]
+        rescue
+          2**32 - s['data'].last[1]
+        end
+      }
     end
-
-    @positions_covered_per_s = ((@total_positions_covered - @extrapolate_y0) /
-                                (@extrapolate_x1 - @extrapolate_x0)).floor rescue 0
   end
 end

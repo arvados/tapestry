@@ -73,14 +73,9 @@ jQuery(function() {
 </table>
 </div>
 
-<div style="width:800px">
-  <div style="width:800px;height:400px" id="plotdiv"></div>
-
-  <p style="text-align:center">
-    <b>
-      &ldquo;<span id="extrapolated-positions-covered"><%= @total_positions_covered %></span>&nbsp;positions&nbsp;covered.&rdquo;
-    </b>
-  </p>
+<div style="width:700px">
+  <div style="width:700px;height:350px" id="coverage_series"></div>
+  <div style="width:700px;height:350px" id="datasets_series"></div>
 </div>
 
 <% content_for :js do %>
@@ -88,45 +83,37 @@ var time_series_plot;
 jQuery(function() {
     var $ = jQuery.noConflict();
     $(document).ready(function() {
-            var time_series = <%=raw @time_series.values.sort_by{|s| 0-s['data'].last[1]}.to_json %>;
-            for (var i=0; i<time_series.length; i++)
-                if (time_series[i].label == 'Positions covered') {
-                    time_series[i].yaxis = 2;
-                    time_series.unshift(time_series.splice(i,1)[0]);
-                    break;
+        var coverage_series = <%=raw @coverage_series.to_json %>;
+        var datasets_series = <%=raw @datasets_series.to_json %>;
+        var o = {
+            xaxis: {
+                mode: 'time'
+            },
+            yaxis: {
+                position: 'right',
+                tickFormatter: function(v) {
+                    if (v>=1000000000000)
+                        return '' + Math.floor(v/1000000000000) + 'T';
+                    if (v>=1000000000)
+                        return '' + Math.floor(v/1000000000) + 'G';
+                    if (v>=1000000)
+                        return '' + Math.floor(v/1000000) + 'M';
+                    if (v>=1000)
+                        return '' + Math.floor(v/1000) + 'K';
+                    return v;
                 }
-            var o = {
-                xaxes: [{
-                    mode: 'time'
-                }],
-                yaxes: [ { position: 'right' },
-                         { position: 'left',
-                           tickFormatter: function(v) {
-                                 if (v>=1000000000000)
-                                     return '' + Math.floor(v/1000000000000) + 'T';
-                                 if (v>=1000000000)
-                                     return '' + Math.floor(v/1000000000) + 'G';
-                                 if (v>=1000000)
-                                     return '' + Math.floor(v/1000000) + 'M';
-                                 return v;
-                             }
-                         } ],
-                legend: {
-                    position: 'nw'
-                }
-            };
-            time_series_plot = $.plot($('div#plotdiv'), time_series, o);
+            },
+            legend: {
+                position: 'nw'
+            }
+        };
+        o.yaxis.transform = function(v) { if(v==0)return v; return Math.log(v); };
+        o.yaxis.inverseTransform = function(v) { if(v==0)return v; return Math.exp(v); };
 
-            var t0 = <%= @extrapolate_x1.to_i * 1000 %>;
-            window.setInterval(function() {
-                    var t1 = new Date();
-                    var x = <%= @total_positions_covered %> + <%= @positions_covered_per_s %> * (t1-t0) / 1000;
-                    var s = '' + Math.floor(x);
-                    while (s.match(/\d\d\d\d/)) {
-                        s = s.replace(/(.*\d)(\d\d\d)/,'$1,$2');
-                    }
-                    $('span#extrapolated-positions-covered').html(s);
-                }, 200);
+        o.yaxis.ticks = [0,10,100,1000];
+        datasets_series_plot = $.plot($('div#datasets_series'), datasets_series, o);
+        o.yaxis.ticks = [0,1000,1000000,1000000000,1000000000000];
+        coverage_series_plot = $.plot($('div#coverage_series'), coverage_series, o);
     } );
 });
 <% end %>
