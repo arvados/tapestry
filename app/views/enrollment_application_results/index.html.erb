@@ -46,9 +46,11 @@ PGP Staff
 <% end %>
 
 <% elsif current_user.has_completed?('enrollment_application') then %>
+
 <p>Thanks for submitting your enrollment application.  The review process may
-take 1-2 months or more.  We will review your application as soon as we can.
-Once a determination has been made we will update this page.</p>
+take three to four business days or more.  We will review your application as
+soon as we can.  Once a determination has been made we will update this
+page.</p>
 
 You submitted your enrollment application on <%= current_user.enrollment_step_completions.find_by_enrollment_step_id(EnrollmentStep.find_by_keyword('enrollment_application')).created_at %>
 <% end %>
