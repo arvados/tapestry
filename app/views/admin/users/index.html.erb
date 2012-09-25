@@ -27,6 +27,7 @@
     <li><%= link_to "Show enrolled users", admin_users_path(:enrolled => true) %></li>
     <li><%= link_to "Show enrolled users with PGP #", admin_users_path(:pgp_id => true) %></li>
     <li><%= link_to "Show users eligible to be enrolled (who have submitted their enrollment application)", admin_users_path(:eligible_for_enrollment => true) %></li>
+    <li><%= link_to "Show users eligible to be enrolled (who have submitted their enrollment application) with willing twin", admin_users_path(:eligible_for_enrollment_with_willing_twin => true) %></li>
     <li><%= link_to "Show users ineligible to be enrolled (who have submitted their enrollment application)", admin_users_path(:ineligible_for_enrollment => true) %></li>
     <li><%= link_to "Show users ineligible to be enrolled (who failed the eligibility survey)", admin_users_path(:failed_eligibility_survey => true) %></li>
     <li><%= link_to "Show users at the exam step in the enrollment process", admin_users_path(:at_or_in_exam => true) %></li>

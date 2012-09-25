@@ -315,6 +315,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     elsif params[:eligible_for_enrollment]
       @unpaginated_users = User.eligible_for_enrollment
       @result = "Searching for users eligible for enrollment"
+    elsif params[:eligible_for_enrollment_with_willing_twin]
+      @unpaginated_users = User.eligible_for_enrollment_with_willing_twin
+      @result = "Searching for users eligible for enrollment with willing twin"
     elsif params[:ineligible_for_enrollment]
       @unpaginated_users = User.ineligible_for_enrollment
       @result = "Searching for users ineligible for enrollment (submitted application)"

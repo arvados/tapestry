@@ -158,6 +158,20 @@ class User < ActiveRecord::Base
     }
   }
 
+  scope :eligible_for_enrollment_with_willing_twin, lambda {
+    joins = [:enrollment_step_completions, :screening_survey_response]
+    enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
+    conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and
+        screening_survey_responses.monozygotic_twin = 'willing' and
+        screening_survey_responses.us_citizen_or_resident = 1 and
+        enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id} and users.id not in (select user_id from waitlists group by user_id)"
+    {
+      :conditions => conditions_sql,
+      :order => 'enrollment_step_completions.created_at',
+      :joins => joins,
+    }
+  }
+
   scope :eligible_for_enrollment, lambda {
     joins = [:enrollment_step_completions, :screening_survey_response]
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
