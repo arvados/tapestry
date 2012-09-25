@@ -402,7 +402,7 @@ class Admin::UsersController < Admin::AdminControllerBase
       @result = ''
     end
 
-    @result += ": #{@unpaginated_users.size} found" if (@result != '')
+    @result += ": #{@unpaginated_users.length} found" if (@result != '')
     @users = @unpaginated_users.sort.paginate(:page => params[:page] || 1)
   end
 
