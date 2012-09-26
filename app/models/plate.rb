@@ -25,6 +25,23 @@ class Plate < ActiveRecord::Base
     "%08d" % crc_id
   end
 
+  def transfer_sample_to_position(sample, plate_layout_position, actor)
+    ps = PlateSample.where('plate_id=? and plate_layout_position_id=?',
+                           self.id, plate_layout_position.id).first
+    if ps
+      ps.sample = sample
+      ps.is_unusable = false
+      ps.save!
+    else
+      PlateSample.new(:plate => self,
+                      :sample => sample,
+                      :plate_layout_position => plate_layout_position).save!
+    end
+    SampleLog.new(:actor => actor,
+                  :comment => "Sample transferred to plate #{self.crc_id_s} (id=#{self.id}) well #{plate_layout_position.name} (id=#{plate_layout_position.id})",
+                  :sample_id => sample.id).save!
+  end
+
   def dup(options)
     actor = options[:actor]
     ActiveRecord::Base.transaction do

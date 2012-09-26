@@ -44,6 +44,7 @@ jQuery(function(){
 
 <% rownumber = 0 %>
 <%= form_for(:sample, :url => receive_multiple_samples_confirm_path, :method => :post) do |f| %>
+<%= hidden_field_tag :selection_id, @selection.id if @selection %>
 <div class="profile-data">
 
   <table id="which-samples">
@@ -53,13 +54,14 @@ jQuery(function(){
 	<th>Kit name / sample code</th>
 	<th>Sample name / device</th>
 	<th>Participant</th>
-	<th>Current / previous researcher</th>
+	<th>Action</th>
       </tr>
     </thead>
     <tbody>
       <% @samples.each do |sample| %>
-      <tr class="<%= "checkable" if sample.owner != current_user %>">
-	<td style="text-align:center"><%= check_box 'confirm_url_codes', sample.url_code, :checked => !!@default_checked_hack[sample.url_code] if sample.owner != current_user %></td>
+      <% row_is_checkable = (sample.owner != current_user || (@sample_info[sample.id] && @sample_info[sample.id][:plate])) %>
+      <tr class="<%= "checkable" if row_is_checkable %>">
+	<td style="text-align:center"><%= check_box 'confirm_url_codes', sample.url_code, :checked => !!@default_checked_hack[sample.url_code] if row_is_checkable %></td>
 	<td>
 	  <% if sample.kit %>
 	  <%= sample.kit.name %> &mdash;
@@ -81,11 +83,30 @@ jQuery(function(){
 	  <% end %>
 	</td>
 	<td>
-	  <% if sample.owner == current_user %>
-	  You
+	  <% if sample.owner != current_user %>
+	  Receive
+	  <% if sample.owner and sample.owner == sample.participant %>
+	  from participant
 	  <% elsif sample.owner and sample.owner.researcher %>
+	  from 
 	  <%= sample.owner.full_name %>,
 	  <%= sample.owner.researcher_affiliation %>
+	  <% end %>
+	  <br />
+	  <% end %>
+	  <% if @selection and @sample_info[sample.id] and @sample_info[sample.id][:plate] %>
+	  &rarr; <%= @sample_info[sample.id][:plate_layout_position].name %>
+	  on
+	  <%= link_to @sample_info[sample.id][:plate].crc_id_s, @sample_info[sample.id][:plate] %>
+	  (<%= @sample_info[sample.id][:plate].description %>)
+	  <% if @sample_info[sample.id][:position_collision] %>
+	  <br />
+	  <span style="background:#f88; padding: 1px 1em">
+	    Replacing sample <%= link_to @sample_info[sample.id][:position_collision].sample.crc_id_s, @sample_info[sample.id][:position_collision].sample %>
+	  </span>
+	  <% end %>
+	  <% elsif sample.owner == current_user %>
+	  <span style="color: #888">(already received; nothing to do)</span>
 	  <% end %>
 	</td>
       </tr>

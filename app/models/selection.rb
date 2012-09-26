@@ -88,13 +88,15 @@ class Selection < ActiveRecord::Base
 
   # Find the column in spec[:table] that is most responsive to the
   # supplied block.
-  def spec_table_column_with_most
+  def spec_table_column_with_most(*args)
     return nil if !spec[:table]
     score = []
     spec[:table].each do |row|
       row.each_index do |colnum|
         if block_given?
           next unless yield row[colnum]
+        elsif args.size == 1 and args[0].respond_to? :index
+          next unless args[0].index(row[colnum])
         else
           next unless row[colnum]
         end

@@ -181,4 +181,61 @@ class Sample < ActiveRecord::Base
       end
     end
   end
+
+  def self.load_selection_info(selection)
+    @sample_info = {}
+    if selection
+      plate_position_column = selection.spec_table_column_with_most(PlateLayoutPosition.all.collect &:name)
+      plate_position_column ||= selection.spec[:table][0].index { |x| x && x.match(/plate.*well/i) } rescue nil
+      plate_crc_id_column = selection.spec_table_column_with_most(Plate.all.collect &:crc_id_s)
+      if plate_position_column and plate_crc_id_column
+        selection.spec_table_rows_for_all_targets.each do |sample_id, spec_table_rows|
+          spec_table_rows.each do |spec_table_row|
+            (plate, position) = load_plate_and_position(spec_table_row[plate_crc_id_column+1],
+                                                        spec_table_row[plate_position_column+1])
+            position_collision = nil
+            if plate and position
+              plate.plate_samples.each do |ps|
+                if (!ps.is_unusable and
+                    ps.plate_layout_position_id == position.id)
+                  position_collision = ps
+                end
+              end
+            end
+            if position_collision and position_collision.sample_id == sample_id
+              # this sample is already transferred to this plate and position
+              plate = nil
+              plate_layout_position = nil
+              position_collision = nil
+            end
+            @sample_info[sample_id] = {
+              :row_number => spec_table_row[0],
+              :plate => plate,
+              :plate_layout_position => position,
+              :position_collision => position_collision
+            }
+          end
+        end
+      end
+    end
+    @sample_info
+  end
+
+  protected
+  def self.load_plate_and_position(plate_crc_id, position_name)
+    @@plate_by_crc_id ||= {}
+    begin
+      @@plate_by_crc_id[plate_crc_id] ||= Plate.
+        where('crc_id = ?', plate_crc_id.to_i).
+        includes(:plate_layout => :plate_layout_positions, :plate_samples => {}).
+        first
+      p = @@plate_by_crc_id[plate_crc_id]
+      [p, p.plate_layout.plate_layout_positions.select { |lp| lp.name == position_name }.first]
+    rescue
+      nil
+    end
+  end
+  def self.plate_by_crc_id
+    @@plate_by_crc_id
+  end
 end

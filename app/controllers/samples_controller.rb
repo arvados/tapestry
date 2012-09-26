@@ -202,6 +202,7 @@ class SamplesController < ApplicationController
   end
 
   def receive_multiple_confirm
+    load_selection
     if params[:confirm_url_codes]
       @selected = params[:confirm_url_codes].
         reject { |url_code,checked| checked.to_s != '1' }
@@ -214,16 +215,37 @@ class SamplesController < ApplicationController
       # just make sure the database is being case-sensitive
       @selected[sample.url_code].to_s == '1'
     }
-    @done = @samples.select { |sample|
-      sample.owner != current_user
-    }.each { |sample|
-      sample_received(sample)
-      SampleLog.new(:actor => current_user, :comment => "Sample received by researcher", :sample_id => sample.id).save
+    @received_samples = []
+    @plated_samples = []
+    @plates = []
+    @samples.each { |sample|
+      if sample.owner != current_user
+        @received_samples << sample
+        sample_received(sample)
+        SampleLog.new(:actor => current_user, :comment => "Sample received by researcher", :sample_id => sample.id).save
+      end
+      si = @sample_info[sample.id]
+      if si and si[:plate]
+        @plated_samples << sample
+        @plates << si[:plate]
+        si[:plate].transfer_sample_to_position(sample, si[:plate_layout_position], current_user)
+      end
     }
-    if @done.empty?
+    if @received_samples.empty? and @plated_samples.empty?
       flash[:warning] = "No samples were received.  Nothing happened at all."
     else
-      flash[:notice] = "Received #{@samples.size} sample#{'s' if @samples.size > 1}: #{@samples.collect(&:url_code).join(', ')}"
+      s = ""
+      if !@received_samples.empty?
+        s << "Received #{@received_samples.size} sample#{'s' if @received_samples.size > 1}"
+        if @received_samples.size < 16
+          s << ": #{@received_samples.collect(&:url_code).join(', ')}"
+        end
+        s << ". "
+      end
+      if !@plated_samples.empty?
+        s << "Transferred #{@plated_samples.size} sample#{'s' if @plated_samples.size > 1} to plate#{'s' if @plates.uniq.size > 1} #{@plates.uniq.collect(&:crc_id_s).join(', ')}."
+      end
+      flash[:notice] = s
     end
     redirect_to(receive_sample_path)
   end
@@ -237,10 +259,14 @@ class SamplesController < ApplicationController
     @samples = []
     @samples |= Sample.
       where('url_code in (?)', params[:url_codes].split(',')).
+      includes(:original_kit_design_sample).
+      includes(:owner).
       includes(:kit).
       includes(:participant) unless params[:url_codes] == 'FILE'
     @samples |= Sample.
       where('id in (?)', @selection.target_ids).
+      includes(:original_kit_design_sample).
+      includes(:owner).
       includes(:kit).
       includes(:participant) if @selection
 
@@ -248,7 +274,9 @@ class SamplesController < ApplicationController
       (@hack_is_coriell || current_user.researcher_onirb)
 
     @samples.sort! { |a,b|
-      if a.kit and b.kit and a.kit != b.kit
+      if @sample_info and @sample_info[a.id] and @sample_info[b.id]
+        @sample_info[a.id][:row_number] <=> @sample_info[b.id][:row_number]
+      elsif a.kit and b.kit and a.kit != b.kit
         a.kit.name <=> b.kit.name
       else
         a.id - b.id
@@ -412,4 +440,10 @@ class SamplesController < ApplicationController
   def set_page_title
     @page_title = "Samples: #{@sample.crc_id_s} ({@sample.name})" if @sample
   end
+
+  def load_selection
+    super
+    @sample_info = Sample.load_selection_info(@selection)
+  end
+
 end
