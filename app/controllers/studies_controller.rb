@@ -274,6 +274,12 @@ class StudiesController < ApplicationController
   end
 
   def verify_participant_id
+    study = Study.where('id = ?', params[:id].to_i).first
+    if params[:id].to_i > 0 and
+        study and study.is_third_party and
+        params[:app_token] == '00000000000000000000000000000000'
+      return render :json => { :valid => true }
+    end
     StudyParticipant.
       where('study_id = ?', params[:id]).
       includes(:user).
