@@ -1,9 +1,8 @@
-<h2><%= @study.name %></h2>
+<p><i>Note: This activity is <b>not</b> conducted by or supervised by
+the Personal Genome Project.  The description below may include links
+to an independent web site.</i></p>
 
-<p>This project is <b>not</b> conducted by or supervised by the
-Personal Genome Project.  You can read about it here, then decide
-whether to carry on to the project&rsquo;s own independent web
-site.</p>
+<h2><%= @study.name %></h2>
 
 <p><%=raw CGI.escapeHTML(@study.participant_description).gsub("\r","").gsub("\n\n","</p><p>").gsub("\n","<br />") %></p>
 
@@ -14,8 +13,9 @@ site.</p>
   project&rsquo;s web site.  A token will be passed to confirm that
   you are a PGP participant &mdash; but the project will not yet be
   told <i>which</i> PGP participant you are.  You may have an
-  opportunity to make that linkage later (e.g., by posting returned
-  data to your public profile).
+  opportunity to make that linkage later to enable certain features,
+  such as adding research data you receive from third party activities
+  to your public PGP profile.
   <br />&nbsp;
   <div style="text-align:center">
     <%= button_to 'Participate', clickthrough_to_third_party_path(@study) %>
