@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120919163122) do
+ActiveRecord::Schema.define(:version => 20121001115600) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -366,8 +366,8 @@ ActiveRecord::Schema.define(:version => 20120919163122) do
     t.datetime "updated_at"
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.boolean  "released_to_participant", :default => false
-    t.string   "locator",                 :default => ""
+    t.boolean  "released_to_participant",  :default => false
+    t.string   "locator",                  :default => ""
     t.datetime "sent_notification_at"
     t.datetime "seen_by_participant_at"
     t.datetime "published_at"
@@ -375,9 +375,10 @@ ActiveRecord::Schema.define(:version => 20120919163122) do
     t.string   "status_url"
     t.string   "download_url"
     t.text     "processing_status"
-    t.boolean  "processing_stopped",      :default => true,  :null => false
+    t.boolean  "processing_stopped",       :default => true,  :null => false
     t.integer  "data_size"
     t.text     "report_metadata"
+    t.datetime "published_anonymously_at"
   end
 
   add_index "dataset_versions", ["dataset_id"], :name => "index_dataset_versions_on_dataset_id"
@@ -396,8 +397,8 @@ ActiveRecord::Schema.define(:version => 20120919163122) do
     t.integer  "version"
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.boolean  "released_to_participant", :default => false
-    t.string   "locator",                 :default => ""
+    t.boolean  "released_to_participant",  :default => false
+    t.string   "locator",                  :default => ""
     t.datetime "sent_notification_at"
     t.datetime "seen_by_participant_at"
     t.datetime "published_at"
@@ -405,9 +406,10 @@ ActiveRecord::Schema.define(:version => 20120919163122) do
     t.string   "status_url"
     t.string   "download_url"
     t.text     "processing_status"
-    t.boolean  "processing_stopped",      :default => true,  :null => false
+    t.boolean  "processing_stopped",       :default => true,  :null => false
     t.integer  "data_size"
     t.text     "report_metadata"
+    t.datetime "published_anonymously_at"
   end
 
   add_index "datasets", ["participant_id"], :name => "index_datasets_on_participant_id"
@@ -2503,10 +2505,10 @@ ActiveRecord::Schema.define(:version => 20120919163122) do
     t.datetime "dataset_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
-    t.integer  "lock_version"
     t.boolean  "upload_tos_consent"
     t.string   "status_url"
     t.text     "processing_status"

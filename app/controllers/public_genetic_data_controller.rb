@@ -3,7 +3,48 @@ class PublicGeneticDataController < ApplicationController
   skip_before_filter :ensure_enrolled
   skip_before_filter :ensure_latest_consent
   skip_before_filter :ensure_recent_safety_questionnaire
+
+  def anonymous
+    # Only return anonymous genetic data for which the owner has taken all trait surveys
+
+    participants_with_trait_surveys = Hash.new()
+    shortest = 0
+
+    # Make a list of every participant that has taken each trait survey
+    TRAIT_SURVEY_IDS.each do |ts_id|
+      participants_with_trait_surveys[ts_id] = Nonce.where("target_class='GoogleSurvey' and target_id = ?",ts_id).map { |n| n.owner_id }
+      shortest = ts_id if participants_with_trait_surveys[ts_id].length < shortest or shortest == 0
+    end
+
+    users = Array.new()
+    # Now we know the maximum possible number of people that have completed
+    # *all* trait surveys, namely participants_with_trait_surveys[shortest].length.
+    # Let's start from that (shortest) list to whittle it down to the real list
+    # of participants who have completed all trait surveys.
+    participants_with_trait_surveys[shortest].each do |uid|
+      skip = false
+      participants_with_trait_surveys.each do |k,v|
+        if not v.include?(uid) then
+          skip = true
+          break
+        end
+      end
+      users << User.find(uid)
+    end
+
+    # Now get the anonymous datasets, and limit them to those users for which we have trait survey results 
+    @datasets = Dataset.published_anonymously.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant).merge(users)
+
+    index_worker(:published_anonymously_at)
+  end
+
   def index
+    @datasets = UserFile.joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
+      Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
+    index_worker(:published_at)
+  end
+
+  def index_worker(sort_column)
     @data_type_options = []
     @data_type_options << ['All data types', nil]
     @known_data_type = {}
@@ -15,8 +56,6 @@ class PublicGeneticDataController < ApplicationController
       end
       @known_data_type[v] = true
     }
-    @datasets = UserFile.joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
-      Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
     if params[:data_type] and !params[:data_type].empty?
       @datasets.reject! { |d|
         ![d.data_type, d.class.to_s].index(params[:data_type]) and
@@ -24,8 +63,8 @@ class PublicGeneticDataController < ApplicationController
       }
     end
     @datasets.sort! { |b,a|
-      a_date = a.respond_to?(:published_at) ? a.published_at : a.created_at
-      b_date = b.respond_to?(:published_at) ? b.published_at : b.created_at
+      a_date = a.respond_to?(sort_column) ? a.send(sort_column) : a.created_at
+      b_date = b.respond_to?(sort_column) ? b.send(sort_column) : b.created_at
       cmp = a_date <=> b_date
       if cmp != 0 and (a_date - b_date).abs > 3600
         cmp

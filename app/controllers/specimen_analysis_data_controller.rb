@@ -15,13 +15,18 @@ class SpecimenAnalysisDataController < ApplicationController
   end
 
   def publish
-    if make_public_on_get_evidence then
+    if params[:anonymous] then
+      @dataset.published_anonymously_at = Time.now()
+      @dataset.save
+      flash[:notice] = 'Your dataset has been published anonymously. Please make sure to take all the trait surveys. Thank you!'
+      current_user.log("Participant published dataset #{@dataset.name} (#{@dataset.id}) anonymously")
+    elsif make_public_on_get_evidence then
       @dataset.published_at = Time.now()
       @dataset.save
       flash[:notice] = 'Your dataset has been published. Thank you!'
       current_user.log("Participant published dataset #{@dataset.name} (#{@dataset.id})")
     else
-      flash[:error] = 'There was an error making your dataset public. The site administrators have been notified, and we will fix this problem as soon as possible. Please come back in a little bit to try again.'
+      flash[:error] = 'There was an error publishing your dataset. The site administrators have been notified, and we will fix this problem as soon as possible. Please come back in a little bit to try again.'
       current_user.log("Participant tried to publish dataset #{@dataset.name} (#{@dataset.id}) but the call to GET-Evidence failed. Dataset not made public yet, user informed of error and asked to come back later to try again.")
     end 
     redirect_to specimen_analysis_data_index_url

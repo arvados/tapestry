@@ -12,6 +12,49 @@ and your unpublished specimen analysis data will not be made public.</p>
 may not use this data for any medical or clinical purpose unless the data are
 first confirmed by a licensed healthcare professional. </p>
 
+<% if current_user.datasets.released_to_participant.unpublished.size > 0 or current_user.datasets.published_anonymously.size > 0 %>
+<h3>Critical Assessment of Genome Interpretation Challenge</h3>
+
+<p><strong>CAGI genome release:</strong> Currently the PGP is working together
+with CAGI (Critical Assessment of Genome Interpretation) on their <a
+href="https://genomeinterpretation.org/content/2012-challenges">annual
+challenge</a>. If you are interested in having your genome used in CAGI's
+interpretation challenge, select "Release as CAGI genome" in the specimen
+analysis history table below and make sure to complete the following PGP trait
+surveys: </p>
+
+<ul>
+<li>Cancer
+<li>Endocrine, metabolic, nutritional, and immune
+<li>Blood
+<li>Nervous system
+<li>Vision and hearing
+<li>Circulatory system
+<li>Respiratory system
+<li>Digestive and genitourinary systems
+<li>Skin and subcutaneous tissue
+<li>Congenital traits and anomalies
+<li>Symptoms, signs, and other conditions
+</ul>
+
+<p>
+If you select the "Release as CAGI genome" option, your genome data will be
+made public immediately but it will <i>not</i> be immediately linked to your
+public profile. Which participant the genome belongs to is kept secret for
+the duration of the competition. Researchers will try to predict your
+traits based on your genome data. The end of CAGI is currently scheduled
+for October 31. Once the challenge has ended, your genome will be publicly
+associated with your public profile.
+</p>
+
+<p>
+As with other PGP surveys, answers to the trait surveys will be made public
+on your PGP profile immediately. These surveys are not limited to the CAGI
+competition; any PGP participant may complete them to add trait and disease
+information to their public PGP profile.
+</p>
+<% end -%>
+
 <h3>Specimen analysis history</h3>
 <table class="admin_table">
   <tr>
@@ -27,7 +70,18 @@ first confirmed by a licensed healthcare professional. </p>
       <td><%= dataset.name %></td>
       <td><%= dataset.sample ? link_to(dataset.sample.crc_id_s, public_profile_path(current_user.hex, :anchor => 'samples')) : '-' %></td>
       <td><%= link_to_if dataset.location, 'view', dataset.location %></td>
-      <td><%= dataset.published_at.nil? ? raw("<strong>" + (dataset.seen_by_participant_at + 30.days).strftime("%b %e, %Y").to_s + "</strong> or " + link_to('Publish now', publish_specimen_analysis_data_path(dataset), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available right now?')) : dataset.published_at.strftime("%b %e, %Y").to_s %></td>
+      <td>
+<%
+if dataset.published_at.nil? and dataset.published_anonymously_at.nil? then
+  publication_date = raw("<strong>" + (dataset.seen_by_participant_at + 30.days).strftime("%b %e, %Y").to_s + "</strong> or " + link_to('Release as CAGI genome', publish_specimen_analysis_data_path(dataset,:anonymous => true), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available as a CAGI genome right now?') + " or " + link_to('Publish now', publish_specimen_analysis_data_path(dataset), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available right now?'))
+elsif dataset.published_anonymously_at.nil? then
+  publication_date = dataset.published_at.strftime("%b %e, %Y").to_s
+elsif dataset.published_at.nil? then
+  publication_date = "Published anonymously on " + dataset.published_anonymously_at.strftime("%b %e, %Y").to_s
+end
+-%>
+        <%= publication_date %>
+      </td>
     </tr>
   <% end %>
 </table>
