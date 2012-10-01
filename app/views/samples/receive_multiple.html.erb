@@ -85,8 +85,8 @@ jQuery(function(){
 	<td>
 	  <% if sample.owner != current_user %>
 	  Receive
-	  <% if sample.owner and sample.owner == sample.participant %>
-	  from participant
+	  <% if (sample.participant && (!sample.owner || sample.owner == sample.participant)) %>
+	  from participant <%= sample.participant.hex if sample.participant.is_enrolled? %>
 	  <% elsif sample.owner and sample.owner.researcher %>
 	  from 
 	  <%= sample.owner.full_name %>,
