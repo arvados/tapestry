@@ -101,6 +101,10 @@ class ProfilesController < ApplicationController
       @sample_groups[-1].push s
     end
 
-    @user_files_and_datasets = @user.published_datasets | @user.user_files
+    @user_files_and_datasets = (@user.published_datasets | @user.user_files).sort do |a,b|
+      a_date = (a.respond_to?(:date) && a.date) ? Time.parse(a.date.to_s) : a.published_at
+      b_date = (b.respond_to?(:date) && b.date) ? Time.parse(b.date.to_s) : b.published_at
+      b_date <=> a_date
+    end
   end
 end

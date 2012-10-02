@@ -1,0 +1,98 @@
+<div class="profile-data">
+  <table>
+    <thead>
+      <tr>
+	<% if @options[:show_participant_column] %>
+	<th style="width:auto">Participant</th>
+	<% end %>
+	<% if @options[:show_date_published_column] %>
+	<th style="width:auto">Published</th>
+	<% end %>
+	<% if @options[:show_date_column] %>
+	<th style="width:auto">Date</th>
+	<% end %>
+	<th style="width:auto">Data type</th>
+	<th>Name</th>
+	<th>Download</th>
+	<th>Report</th>
+	<% if @options[:show_admin_column] and @current_user and @current_user.is_admin? %>
+	<th style="text-align:center">Admin</th>
+	<% end %>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    <% @datasets.each do |dataset| -%>
+    <tr class="<%= cycle 'even', 'odd' %>">
+      <% if @options[:show_participant_column] %>
+      <td style="width:auto"><%= link_to dataset.participant.hex, public_profile_path(:hex => dataset.participant.hex) %><%= ", PGP#{dataset.participant.pgp_id}" if dataset.participant.pgp_id %></td>
+      <% end %>
+
+      <% if @options[:show_date_published_column] %>
+      <td style="width:auto;white-space:nowrap">
+	<%= raw '<strong>' if dataset.class == Dataset %>
+	<%= (dataset.respond_to?(:published_at) ? dataset.published_at : dataset.created_at).strftime('%Y-%m-%d') %>
+	<%= raw '</strong>' if dataset.class == Dataset %>
+      </td>
+      <% end %>
+
+      <% if @options[:show_date_column] %>
+      <td style="width:auto;white-space:nowrap">
+	<%= Time.parse(dataset.date.to_s).strftime('%Y-%m-%d') if dataset.respond_to?(:date) %>
+      </td>
+      <% end %>
+
+      <td style="width:auto"><%= dataset.data_type %></td>
+      <td><%= dataset.name %></td>
+      <td>
+	<% if dataset.class == UserFile %>
+	<%= link_to 'Download', user_file_download_path(dataset) %>
+	<br /><%= "(#{number_to_human_size(dataset.data_size)})" if dataset.data_size %>
+	<% elsif dataset.download_url %>
+	<%= link_to 'Download', dataset.download_url %>
+	<br /><%= "(#{number_to_human_size(dataset.data_size)})" if dataset.data_size %>
+	<% end %>
+      </td>
+      <td>
+	<% if dataset.report_ready? %>
+	<%= link_to raw('View&nbsp;report'), dataset.report_url %>
+
+	<% if (m=dataset.report_metadata) %>
+	<% if (chr = m[:chromosomes]).respond_to? :index %>
+	<% if chr.index('chrX') && !chr.index('chrY') %>
+	<br />&bull;&nbsp;female
+	<% elsif chr.index('chrX') && chr.index('chrY') %>
+	<br />&bull;&nbsp;male
+	<% end %>
+	<% if m[:called_num] %>
+	<br />&bull;&nbsp;<%= number_with_delimiter(m[:called_num]) %> positions&nbsp;covered
+	<% end %>
+
+	<% end %>
+	<%= raw "<br />&bull;&nbsp;ref.&nbsp;#{dataset.report_metadata[:genome_build]}" rescue nil %>
+	<% end %>
+
+	<% elsif @current_user and @current_user.is_admin? and dataset.processing_status %>
+	<%= dataset.processing_status[:status] %>
+	<% end %>
+      </td>
+      <% if @options[:show_admin_column] and @current_user and @current_user.is_admin? %>
+      <td style="text-align:center">
+	<% if dataset.is_suitable_for_get_evidence? %>
+	<div style="display:inline-block">
+	  <% if dataset.class == Dataset %>
+	  <%= button_to 'Reprocess', admin_reprocess_dataset_path(dataset), :return_to => request.path, :method => 'post' %>
+	  <% else %>
+	  <%= button_to((dataset.locator ? 'Reprocess' : 'Process'), reprocess_user_file_path(dataset), :method => 'post') %>
+	  <% end %>
+	</div>
+	<% end %>
+	<div style="display:inline-block">
+	  <%= link_to 'Edit user', edit_admin_user_path(dataset.participant) %>
+	</div>
+      </td>
+      <% end %>
+    </tr>
+    <% end %>
+  </table>
+</div>

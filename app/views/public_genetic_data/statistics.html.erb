@@ -13,13 +13,15 @@ jQuery(function() {
             "bAutoWidth": true,
             "bLengthChange": false,
             "iDisplayLength": -1,
-            "aaSorting": [[4,'desc'],[2,'desc']],
+            "aaSorting": [[6,'desc'],[4,'desc'],[2,'desc']],
             "aoColumns":
                 [
                  { },
                  { 'asSorting': [ 'desc', 'asc' ], 'iDataSort': 2 },
                  { 'bVisible': false },
                  { 'asSorting': [ 'desc', 'asc' ], 'iDataSort': 4 },
+                 { 'bVisible': false },
+                 { 'asSorting': [ 'desc', 'asc' ], 'iDataSort': 6 },
                  { 'bVisible': false }
                  ]
             } ).
@@ -38,13 +40,15 @@ jQuery(function() {
   &rarr;
   statistics</h2>
 
-<div style="width: 50em">
+<div style="width: 60em">
 <table class="admin_table" id="data_types" style="width:100%">
   <thead>
     <tr>
-      <th>Data type</th>
+      <th style="text-align:left">Data type</th>
       <th style="text-align:right">Number of datasets</th>
       <th style="text-align:right;display:none">Number of datasets</th>
+      <th style="text-align:right">Number of individuals</th>
+      <th style="text-align:right;display:none">Number of individuals</th>
       <th style="text-align:right">Positions covered</th>
       <th style="text-align:right;display:none">Positions covered</th>
     </tr>
@@ -56,10 +60,16 @@ jQuery(function() {
 	  <%= link_to (data_type == 'other' ? 'other' : @data_type_name[data_type]), public_genetic_data_path(:data_type => data_type) %>
 	</td>
 	<td style="text-align:right">
-	  <%= number_with_delimiter stats[:N] %>
+	  <%= number_with_delimiter stats[:n_datasets] %>
 	</td>
 	<td style="text-align:right;display:none">
-	  <%= stats[:N] %>
+	  <%= stats[:n_datasets] %>
+	</td>
+	<td style="text-align:right">
+	  <%= number_with_delimiter stats[:n_individuals] %>
+	</td>
+	<td style="text-align:right;display:none">
+	  <%= stats[:n_individuals] %>
 	</td>
 	<td style="text-align:right">
           <%= number_with_delimiter stats[:positions_covered] if stats[:positions_covered] > 0 %>

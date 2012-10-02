@@ -83,36 +83,7 @@ None available.
 <h3>Uploaded data <% if logged_in? and @user == current_user -%><%= link_to "[edit]", user_files_path() %><% end -%></h3>
 
 <% if (@user_files_and_datasets.size > 0) -%>
-
-<table class="admin_table">
-  <tr>
-    <th>Date</th>
-    <th>Data Type</th>
-    <th>Name</th>
-    <th>&nbsp;</th>
-    <th>&nbsp;</th>
-    <th>&nbsp;</th>
-  </tr>
-  <% @user_files_and_datasets.each do |g| -%>
-    <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%=h g.date %></td>
-      <td><%=h g.data_type %></td>
-      <td><%=h g.name %></td>
-      <td><%=h link_to 'View Report', g.report_url if g.report_ready? %></td>
-      <td>
-	<% unless (g.class != UserFile && !g.download_url) %>
-	<%=h link_to 'Download', g.class == UserFile ? user_file_download_path(g.id) : g.download_url %>
-	<%= "(#{number_to_human_size(g.data_size)})" if g.data_size %>
-	<% end %>
-      </td>
-      <td>
-	<% if (m=g.report_metadata) and m[:called_num] %>
-	<%= number_with_delimiter(m[:called_num]) %> positions&nbsp;covered
-	<% end %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+<%= render_cell :public_genetic_data, :list, :datasets => @user_files_and_datasets, :show_participant_column => false, :show_date_column => true, :current_user => current_user %>
 <% else -%>
 None available.
 <% end -%>

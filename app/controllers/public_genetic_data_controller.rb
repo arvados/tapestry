@@ -105,7 +105,8 @@ class PublicGeneticDataController < ApplicationController
       next unless 0 == @data_type_name[data_type].index('genetic data - ')
       stats = @data_type_stats[data_type] ||= {
         :positions_covered => 0,
-        :N => 0
+        :n_individuals => 0,
+        :n_datasets => 0
       }
       add_to_coverage_series = false
       begin
@@ -114,19 +115,21 @@ class PublicGeneticDataController < ApplicationController
       rescue
         # ignore base-counting fail
       end
-      stats[:N] += 1
+      stats[:n_datasets] += 1
 
       @t0 ||= (d.published_at.to_f*1000).floor
 
       @datasets_series[data_type] ||= {
         'data' => [[@t0, 0]],
         'label' => data_type + ' datasets',
+        'participants' => {},
         'data_type' => data_type
       }
       @datasets_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
                                               @datasets_series[data_type]['data'].last[1]]
       @datasets_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
-                                              stats[:N]]
+                                              stats[:n_datasets]]
+      @datasets_series[data_type]['participants'][d.participant.hex] = true
 
       if add_to_coverage_series
         @coverage_series[data_type] ||= {
@@ -139,6 +142,10 @@ class PublicGeneticDataController < ApplicationController
         @coverage_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
                                                 stats[:positions_covered]]
       end
+    end
+
+    @datasets_series.each do |data_type, series|
+      @data_type_stats[data_type][:n_individuals] = series['participants'].keys.size
     end
 
     # Extend each series to Time.now and sort by total coverage

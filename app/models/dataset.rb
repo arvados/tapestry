@@ -50,6 +50,7 @@ class Dataset < ActiveRecord::Base
     end
   end
 
+
   def report_url
     self.location
   end
