@@ -111,6 +111,8 @@
 	<%= link_to 'Specimens collected from participants', specimens_path %>
 	<br />
 	<%= link_to 'Public genetic data', public_genetic_data_path %>
+	and
+	<%= link_to 'statistics', url_for(:controller => :public_genetic_data, :action => :statistics) %>
 	<br />
 	<%= link_to 'CAGI genomes', public_anonymous_genetic_data_path %>
 <!--

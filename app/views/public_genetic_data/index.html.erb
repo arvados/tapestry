@@ -1,5 +1,12 @@
 <h2>Public genetic data</h2>
 
+<p>See also:
+  <ul>
+    <li><%= link_to 'Genetic data statistics', { :action => :statistics } %> &mdash; published data over time, split by data provider</li>
+    <li><%= link_to 'Participant directory', users_path %> &mdash; all enrolled users</li>
+  </ul>
+</p>
+
 <%= form_tag(public_genetic_data_path, :method => 'get') do |f| -%>
 <%= select_tag :data_type, options_for_select(@data_type_options, params[:data_type]) %>
 <%= submit_tag 'Search' %>

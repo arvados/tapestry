@@ -47,8 +47,8 @@ jQuery(function() {
       <th style="text-align:left">Data type</th>
       <th style="text-align:right">Number of datasets</th>
       <th style="text-align:right;display:none">Number of datasets</th>
-      <th style="text-align:right">Number of individuals</th>
-      <th style="text-align:right;display:none">Number of individuals</th>
+      <th style="text-align:right">Number of participants</th>
+      <th style="text-align:right;display:none">Number of participants</th>
       <th style="text-align:right">Positions covered</th>
       <th style="text-align:right;display:none">Positions covered</th>
     </tr>
@@ -66,10 +66,10 @@ jQuery(function() {
 	  <%= stats[:n_datasets] %>
 	</td>
 	<td style="text-align:right">
-	  <%= number_with_delimiter stats[:n_individuals] %>
+	  <%= number_with_delimiter stats[:participants].size %>
 	</td>
 	<td style="text-align:right;display:none">
-	  <%= stats[:n_individuals] %>
+	  <%= stats[:participants].size %>
 	</td>
 	<td style="text-align:right">
           <%= number_with_delimiter stats[:positions_covered] if stats[:positions_covered] > 0 %>
@@ -84,8 +84,10 @@ jQuery(function() {
 </div>
 
 <div style="width:700px">
+  <h2>Positions covered</h2>
   <div style="width:700px;height:350px" id="coverage_series"></div>
-  <div style="width:700px;height:350px" id="datasets_series"></div>
+  <h2>Number of participants</h2>
+  <div style="width:700px;height:350px" id="participants_series"></div>
 </div>
 
 <% content_for :js do %>
@@ -94,7 +96,7 @@ jQuery(function() {
     var $ = jQuery.noConflict();
     $(document).ready(function() {
         var coverage_series = <%=raw @coverage_series.to_json %>;
-        var datasets_series = <%=raw @datasets_series.to_json %>;
+        var participants_series = <%=raw @participants_series.to_json %>;
         var o = {
             xaxis: {
                 mode: 'time'
@@ -114,14 +116,15 @@ jQuery(function() {
                 }
             },
             legend: {
-                position: 'nw'
+                position: 'nw',
+		backgroundOpacity: 0.4
             }
         };
         o.yaxis.transform = function(v) { if(v==0)return v; return Math.log(v); };
         o.yaxis.inverseTransform = function(v) { if(v==0)return v; return Math.exp(v); };
 
         o.yaxis.ticks = [0,10,100,1000];
-        datasets_series_plot = $.plot($('div#datasets_series'), datasets_series, o);
+        participants_series_plot = $.plot($('div#participants_series'), participants_series, o);
         o.yaxis.ticks = [0,1000,1000000,1000000000,1000000000000];
         coverage_series_plot = $.plot($('div#coverage_series'), coverage_series, o);
     } );

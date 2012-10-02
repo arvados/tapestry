@@ -1231,3 +1231,6 @@ div.sitemap .nolink {
   padding: 0 0 0 10px;
 }
 
+body .dataTables_wrapper {
+    min-height: 1px;
+}

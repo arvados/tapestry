@@ -12,7 +12,7 @@ class PublicGeneticDataController < ApplicationController
 
     # Make a list of every participant that has taken each trait survey
     TRAIT_SURVEY_IDS.each do |ts_id|
-      participants_with_trait_surveys[ts_id] = Nonce.where("target_class='GoogleSurvey' and target_id = ?",ts_id).map { |n| n.owner_id }
+      participants_with_trait_surveys[ts_id] = Nonce.where("target_class=? and target_id = ?",'GoogleSurvey',ts_id).map { |n| n.owner_id }
       shortest = ts_id if participants_with_trait_surveys[ts_id].length < shortest or shortest == 0
     end
 
@@ -94,7 +94,7 @@ class PublicGeneticDataController < ApplicationController
     @data_type_stats = {}
     @data_type_name = {}
     @coverage_series = {}
-    @datasets_series = {}
+    @participants_series = {}
     @t0 = nil
     UserFile::DATA_TYPES.each do |longversion, shortversion|
       @data_type_name[shortversion] = longversion
@@ -105,8 +105,8 @@ class PublicGeneticDataController < ApplicationController
       next unless 0 == @data_type_name[data_type].index('genetic data - ')
       stats = @data_type_stats[data_type] ||= {
         :positions_covered => 0,
-        :n_individuals => 0,
-        :n_datasets => 0
+        :n_datasets => 0,
+        :participants => {}
       }
       add_to_coverage_series = false
       begin
@@ -119,22 +119,21 @@ class PublicGeneticDataController < ApplicationController
 
       @t0 ||= (d.published_at.to_f*1000).floor
 
-      @datasets_series[data_type] ||= {
+      @participants_series[data_type] ||= {
         'data' => [[@t0, 0]],
-        'label' => data_type + ' datasets',
-        'participants' => {},
+        'label' => data_type,
         'data_type' => data_type
       }
-      @datasets_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
-                                              @datasets_series[data_type]['data'].last[1]]
-      @datasets_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
-                                              stats[:n_datasets]]
-      @datasets_series[data_type]['participants'][d.participant.hex] = true
+      stats[:participants][d.participant.hex] = true
+      @participants_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+                                                  @participants_series[data_type]['data'].last[1]]
+      @participants_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+                                                  stats[:participants].size]
 
       if add_to_coverage_series
         @coverage_series[data_type] ||= {
           'data' => [[@t0, 0]],
-          'label' => data_type + ' coverage',
+          'label' => data_type,
           'data_type' => data_type
         }
         @coverage_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
@@ -144,12 +143,8 @@ class PublicGeneticDataController < ApplicationController
       end
     end
 
-    @datasets_series.each do |data_type, series|
-      @data_type_stats[data_type][:n_individuals] = series['participants'].keys.size
-    end
-
     # Extend each series to Time.now and sort by total coverage
-    @datasets_series, @coverage_series = [@datasets_series, @coverage_series].collect do |series|
+    @participants_series, @coverage_series = [@participants_series, @coverage_series].collect do |series|
       series.keys.each do |s|
         series[s]['data'] << [Time.now.to_f*1000,
                               series[s]['data'].last[1]]
