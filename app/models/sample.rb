@@ -186,7 +186,7 @@ class Sample < ActiveRecord::Base
     @sample_info = {}
     if selection
       plate_position_column = selection.spec_table_column_with_most(PlateLayoutPosition.all.collect &:name)
-      plate_position_column ||= selection.spec[:table][0].index { |x| x && x.match(/plate.*well/i) } rescue nil
+      plate_position_column ||= selection.spec[:table][0].index { |x| x && x.match(/plate.*well|well.*id/i) } rescue nil
       plate_crc_id_column = selection.spec_table_column_with_most(Plate.all.collect &:crc_id_s)
       if plate_position_column and plate_crc_id_column
         selection.spec_table_rows_for_all_targets.each do |sample_id, spec_table_rows|
