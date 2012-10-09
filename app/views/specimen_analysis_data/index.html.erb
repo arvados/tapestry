@@ -13,6 +13,9 @@ may not use this data for any medical or clinical purpose unless the data are
 first confirmed by a licensed healthcare professional. </p>
 
 <% if current_user.datasets.released_to_participant.unpublished.size > 0 or current_user.datasets.published_anonymously.size > 0 %>
+
+<div class="redborder">
+
 <h3>Critical Assessment of Genome Interpretation Challenge</h3>
 
 <p><strong>CAGI genome release:</strong> Currently the PGP is working together
@@ -24,17 +27,18 @@ analysis history table below and make sure to complete the following PGP trait
 surveys: </p>
 
 <ul>
-<li>Cancer
-<li>Endocrine, metabolic, nutritional, and immune
-<li>Blood
-<li>Nervous system
-<li>Vision and hearing
-<li>Circulatory system
-<li>Respiratory system
-<li>Digestive and genitourinary systems
-<li>Skin and subcutaneous tissue
-<li>Congenital traits and anomalies
-<li>Symptoms, signs, and other conditions
+<li><%= link_to 'Cancer', google_survey_path(6) %>
+<li><%= link_to 'Endocrine, Metabolic, Nutritional, and Immunity', google_survey_path(7) %>
+<li><%= link_to 'Blood', google_survey_path(8) %>
+<li><%= link_to 'Nervous system', google_survey_path(9) %>
+<li><%= link_to 'Vision and hearing', google_survey_path(10) %>
+<li><%= link_to 'Circulatory system', google_survey_path(11) %>
+<li><%= link_to 'Respiratory system', google_survey_path(12) %>
+<li><%= link_to 'Digestive system', google_survey_path(13) %>
+<li><%= link_to 'Genitourinary Systems', google_survey_path(14) %>
+<li><%= link_to 'Skin and subcutaneous tissue', google_survey_path(15) %>
+<li><%= link_to 'Musculoskeletal System and Connective Tissue', google_survey_path(16) %>
+<li><%= link_to 'Congenital traits and anomalies', google_survey_path(17) %>
 </ul>
 
 <p>
@@ -43,7 +47,7 @@ made public immediately but it will <i>not</i> be immediately linked to your
 public profile. Which participant the genome belongs to is kept secret for
 the duration of the competition. Researchers will try to predict your
 traits based on your genome data. The end of CAGI is currently scheduled
-for October 31. Once the challenge has ended, your genome will be publicly
+to be November 2012. Once the challenge has ended, your genome will be publicly
 associated with your public profile.
 </p>
 
@@ -54,6 +58,8 @@ competition; any PGP participant may complete them to add trait and disease
 information to their public PGP profile.
 </p>
 <% end -%>
+
+</div>
 
 <h3>Specimen analysis history</h3>
 <table class="admin_table">

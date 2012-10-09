@@ -1224,3 +1224,10 @@ div.sitemap .nolink {
     color: #bbb;
     cursor: default;
 }
+
+.redborder {
+  border-style:solid;
+  border-color:#ff0000 #ff0000;
+  padding: 0 0 0 10px;
+}
+
