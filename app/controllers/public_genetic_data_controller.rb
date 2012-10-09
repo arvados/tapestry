@@ -21,15 +21,17 @@ class PublicGeneticDataController < ApplicationController
     # *all* trait surveys, namely participants_with_trait_surveys[shortest].length.
     # Let's start from that (shortest) list to whittle it down to the real list
     # of participants who have completed all trait surveys.
-    participants_with_trait_surveys[shortest].each do |uid|
-      skip = false
-      participants_with_trait_surveys.each do |k,v|
-        if not v.include?(uid) then
-          skip = true
-          break
+    if not participants_with_trait_surveys.empty? then
+      participants_with_trait_surveys[shortest].each do |uid|
+        skip = false
+        participants_with_trait_surveys.each do |k,v|
+          if not v.include?(uid) then
+            skip = true
+            break
+          end
         end
+        users << User.find(uid)
       end
-      users << User.find(uid)
     end
 
     # Now get the anonymous datasets, and limit them to those users for which we have trait survey results 
