@@ -69,7 +69,9 @@
 	<%= link_to_if !current_user.hex.empty?, 'Trait surveys', trait_surveys_path %>
 	<br />
 	<%= link_to_if !current_user.hex.empty?, 'Upload and manage files', user_files_path %>
-      </p>
+	<br />
+	<%= link_to_if !current_user.hex.empty?, 'Third party projects', third_party_index_path %>
+     </p>
     </div>
     <% end %>
     <div style="display:table-cell; width: 5%">
