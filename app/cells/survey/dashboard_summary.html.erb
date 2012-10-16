@@ -5,10 +5,10 @@
 <ul>
   <% GoogleSurvey.where('is_listed').each do |google_survey| %>
   <li>
-    <%= link_to google_survey.name, google_survey %>
     <% if @user.google_surveys.include?(google_survey) -%>
       <%= image_tag('tick.png') %>
     <% end -%>
+    <%= link_to google_survey.name, google_survey %>
   </li>
   <% end %>
   <li><%= link_to "Absolute Pitch Survey", "/absolute_pitch_surveys" %></li>
