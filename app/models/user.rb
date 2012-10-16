@@ -39,6 +39,8 @@ class User < ActiveRecord::Base
 
   has_many :ccrs, :order => 'id ASC'
 
+  has_many :google_surveys, :dependent => :destroy
+
   has_one  :shipping_address, :dependent => :destroy
 
   scope :shipping_address, joins(:shipping_addresses)
