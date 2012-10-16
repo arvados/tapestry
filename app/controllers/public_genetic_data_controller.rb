@@ -35,7 +35,7 @@ class PublicGeneticDataController < ApplicationController
     end
 
     # Now get the anonymous datasets, and limit them to those users for which we have trait survey results 
-    @datasets = Dataset.published_anonymously.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant).merge(users)
+    @datasets = Dataset.published_anonymously.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant).where('participant_id in (?)',users)
 
     index_worker(:published_anonymously_at)
   end

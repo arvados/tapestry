@@ -45,6 +45,9 @@ class Dataset < ActiveRecord::Base
   def download_url
     if !super and self.location and self.location.match(/evidence\.personalgenomes\.org\/hu[0-9A-F]+$/)
       "http://evidence.personalgenomes.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}"
+    elsif published_anonymously_at then
+      # Do not leak the dataset name!
+      super.sub(/download_genome_id=(.*?)&download_nickname=.*access_token/,'download_genome_id=\1&download_nickname=\1&access_token')
     else
       super
     end
