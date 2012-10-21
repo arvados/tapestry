@@ -9,6 +9,7 @@
   <tr>
     <th>Source<br/>Date&nbsp;published</th>
     <th>Data type</th>
+    <th>ID</th>
     <th>Download</th>
     <% if current_user and current_user.is_admin? %>
     <th style="text-align:center">Admin</th>
@@ -22,6 +23,7 @@
 	<%= (dataset.respond_to?(:published_anonymously_at) ? dataset.published_anonymously_at : dataset.created_at).strftime('%Y-%m-%d') %>
       </td>
       <td><%= dataset.data_type %></td>
+      <td><%= dataset.get_evidence_genome_id %></td>
       <td>
 	<% if dataset.download_url %>
 	<%= link_to 'Download', dataset.download_url %>

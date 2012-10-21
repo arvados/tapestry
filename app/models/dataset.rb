@@ -39,9 +39,11 @@ class Dataset < ActiveRecord::Base
   def date
     published_at
   end
+
   def data_type
     "Complete Genomics"
   end
+
   def download_url
     if !super and self.location and self.location.match(/evidence\.personalgenomes\.org\/hu[0-9A-F]+$/)
       "http://evidence.personalgenomes.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}"
@@ -54,6 +56,12 @@ class Dataset < ActiveRecord::Base
     end
   end
 
+  def get_evidence_genome_id
+    return '' if self.download_url.nil?
+    matches = self.download_url.match(/download_genome_id=(.*?)&/)
+    return '' if matches.nil?
+    return matches[1]
+  end
 
   def report_url
     self.location
