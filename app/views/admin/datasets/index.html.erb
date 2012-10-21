@@ -4,11 +4,13 @@
     <td><strong>All:</strong></td><td align="right"><%= @datasets.size %></td>
     <td><strong>Released to participant:</strong></td><td align="right"><%= Dataset.released_to_participant.size %></td>
     <td><strong>Not released to participant:</strong></td><td align="right"><%= Dataset.not_released_to_participant.size %></td>
+    <td><strong>Age of oldest unreleased dataset:</strong></td><td align="right"><%= Dataset.not_released_to_participant.size > 0 ? distance_of_time_in_words_to_now(Dataset.not_released_to_participant.minimum(:created_at)) : 'all datasets released!' %></td>
   </tr>
   <tr>
     <td><strong>Published:</strong></td><td align="right"><%= Dataset.published.size %></td>
+    <td><strong>Published anonymously:</strong></td><td align="right"><%= Dataset.published_anonymously.size %></td>
     <td><strong>Seen by participant:</strong></td><td align="right"><%= Dataset.seen_by_participant.size %></td>
-    <td><strong>Age of oldest unreleased dataset:</strong></td><td align="right"><%= Dataset.not_released_to_participant.size > 0 ? distance_of_time_in_words_to_now(Dataset.not_released_to_participant.minimum(:created_at)) : 'all datasets released!' %></td>
+    <td>&nbsp;</td>
   </tr>
   </table>
 <p>
@@ -30,7 +32,14 @@
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=  dataset.id %></td>
       <td><%= link_to_if dataset.location, dataset.name, dataset.location %></td>
-      <td><%= dataset.processing_status[:status] if dataset.processing_status %></td>
+      <td>
+        <% if dataset.processing_status then -%>
+          <%= dataset.processing_status[:status] %>
+          <% if dataset.processing_status[:status] == 'finished' -%>
+	          <%= button_to 'Reprocess', admin_reprocess_dataset_path(dataset), :return_to => request.path, :method => 'post' %>
+          <% end -%>
+        <% end -%>
+      </td>
       <td>
 	<%= link_to dataset.human_id, public_profile_path(dataset.human_id) if dataset.human_id %>
 	<%= link_to "(##{dataset.participant_id})", admin_user_url(dataset.participant_id) %>
