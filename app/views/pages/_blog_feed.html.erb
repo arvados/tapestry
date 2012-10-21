@@ -6,7 +6,7 @@
   <p>
     <b><%= link_to bp.title, bp.post_url %></b>
     <br />
-    <%=raw bp.description %>
+    <%=raw bp.news_feed_raw_summary %>
     <br />
     <span style="color: #444"><%= bp.posted_at.strftime('%B %-d') %> &mdash; <%= bp.feed_url.split('//')[1].split('/')[0] %></span>
   </p>
