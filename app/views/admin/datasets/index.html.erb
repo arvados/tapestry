@@ -35,7 +35,7 @@
       <td>
         <% if dataset.processing_status then -%>
           <%= dataset.processing_status[:status] %>
-          <% if dataset.processing_status[:status] == 'finished' -%>
+          <% if dataset.processing_status[:status] == 'finished' or dataset.processing_status[:status] == 'failed' -%>
 	          <%= button_to 'Reprocess', admin_reprocess_dataset_path(dataset), :return_to => request.path, :method => 'post' %>
           <% end -%>
         <% end -%>
