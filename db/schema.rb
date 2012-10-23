@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121001115600) do
+ActiveRecord::Schema.define(:version => 20121023121325) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1296,6 +1296,7 @@ ActiveRecord::Schema.define(:version => 20121001115600) do
     t.string   "owner_class"
     t.integer  "target_id"
     t.string   "target_class"
+    t.datetime "deleted"
   end
 
   add_index "nonces", ["nonce"], :name => "index_nonces_on_nonce"

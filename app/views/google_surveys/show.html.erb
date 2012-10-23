@@ -48,6 +48,7 @@
       <td><%= nonce.created_at.localtime.ctime %></td>
       <td><%= a=GoogleSurveyAnswer.where(:google_survey_id => @google_survey.id, :nonce_id => nonce.id, :column => 1); (t=Time.parse(a[0].answer)) and t.ctime if a and a.size==1 and a[0].answer %></td>
       <td><%= nonce.used_at.localtime.ctime if nonce.used_at %></td>
+      <td><%= link_to('Delete',delete_google_survey_answers_url(nonce), :confirm => 'Are you sure? This set of survey answers will be deleted.', :method => :delete) if nonce.used_at %></td>
     </tr>
     <% end %>
   </tbody>

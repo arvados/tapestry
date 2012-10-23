@@ -1,6 +1,10 @@
 class Nonce < ActiveRecord::Base
   validates_uniqueness_of :nonce
 
+  default_scope where(:deleted => nil)
+
+  scope :deleted, unscoped.where('deleted is not null')
+
   def after_initialize
     return if self.nonce
     self.nonce = rand(2**256-1).to_s(36)

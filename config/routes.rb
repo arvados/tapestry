@@ -61,6 +61,7 @@ Tapestry::Application.routes.draw do
     post 'synchronize', :on => :member
     post 'download', :on => :member
   end
+  match '/nonce/:id' => 'nonces#delete', :as => :delete_google_survey_answers, :via => :delete
 
   resources :google_spreadsheets do
     post 'synchronize', :on => :member
