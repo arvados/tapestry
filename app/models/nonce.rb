@@ -1,4 +1,7 @@
 class Nonce < ActiveRecord::Base
+  stampable
+  acts_as_paranoid_versioned :version_column => :lock_version
+
   validates_uniqueness_of :nonce
 
   default_scope where(:deleted => nil)

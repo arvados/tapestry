@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121023121325) do
+ActiveRecord::Schema.define(:version => 20121024165525) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -766,6 +766,22 @@ ActiveRecord::Schema.define(:version => 20121023121325) do
     t.text     "header_row"
   end
 
+  create_table "google_survey_answer_versions", :force => true do |t|
+    t.integer  "google_survey_answer_id"
+    t.integer  "lock_version"
+    t.integer  "google_survey_id"
+    t.integer  "column"
+    t.text     "answer"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "nonce_id"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+  end
+
+  add_index "google_survey_answer_versions", ["google_survey_answer_id"], :name => "index_google_survey_answer_versions_on_google_survey_answer_id"
+
   create_table "google_survey_answers", :force => true do |t|
     t.integer  "google_survey_id"
     t.integer  "column"
@@ -773,7 +789,27 @@ ActiveRecord::Schema.define(:version => 20121023121325) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "nonce_id"
+    t.integer  "lock_version"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
   end
+
+  create_table "google_survey_question_versions", :force => true do |t|
+    t.integer  "google_survey_question_id"
+    t.integer  "lock_version"
+    t.integer  "google_survey_id"
+    t.integer  "column"
+    t.text     "question"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "is_hidden"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+  end
+
+  add_index "google_survey_question_versions", ["google_survey_question_id"], :name => "index_google_survey_question_versions_on_google_survey_question"
 
   create_table "google_survey_questions", :force => true do |t|
     t.integer  "google_survey_id"
@@ -782,7 +818,36 @@ ActiveRecord::Schema.define(:version => 20121023121325) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "is_hidden"
+    t.integer  "lock_version"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
   end
+
+  create_table "google_survey_versions", :force => true do |t|
+    t.integer  "google_survey_id"
+    t.integer  "lock_version"
+    t.integer  "user_id"
+    t.integer  "oauth_service_id"
+    t.string   "spreadsheet_key"
+    t.string   "userid_hash_secret"
+    t.integer  "userid_populate_entry"
+    t.integer  "userid_response_column"
+    t.datetime "last_downloaded_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+    t.string   "form_url"
+    t.boolean  "open"
+    t.text     "description"
+    t.boolean  "is_result_public",       :default => true
+    t.boolean  "is_listed",              :default => true
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+  end
+
+  add_index "google_survey_versions", ["google_survey_id"], :name => "index_google_survey_versions_on_google_survey_id"
 
   create_table "google_surveys", :force => true do |t|
     t.integer  "user_id"
@@ -800,6 +865,10 @@ ActiveRecord::Schema.define(:version => 20121023121325) do
     t.text     "description"
     t.boolean  "is_result_public",       :default => true
     t.boolean  "is_listed",              :default => true
+    t.integer  "lock_version"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
   end
 
   create_table "immunization_name_versions", :force => true do |t|
@@ -1287,6 +1356,24 @@ ActiveRecord::Schema.define(:version => 20121023121325) do
     t.datetime "updated_at"
   end
 
+  create_table "nonce_versions", :force => true do |t|
+    t.integer  "nonce_id"
+    t.integer  "lock_version"
+    t.integer  "owner_id"
+    t.string   "nonce"
+    t.datetime "created_at"
+    t.datetime "used_at"
+    t.datetime "updated_at"
+    t.string   "owner_class"
+    t.integer  "target_id"
+    t.string   "target_class"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+  end
+
+  add_index "nonce_versions", ["nonce_id"], :name => "index_nonce_versions_on_nonce_id"
+
   create_table "nonces", :force => true do |t|
     t.integer  "owner_id"
     t.string   "nonce"
@@ -1296,6 +1383,10 @@ ActiveRecord::Schema.define(:version => 20121023121325) do
     t.string   "owner_class"
     t.integer  "target_id"
     t.string   "target_class"
+    t.integer  "lock_version"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
     t.datetime "deleted"
   end
 
