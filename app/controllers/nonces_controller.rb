@@ -7,7 +7,12 @@ class NoncesController < ApplicationController
     if not nonce.nil? and nonce.target_class == 'GoogleSurvey' and nonce.owner_class == 'User' then
       nonce.deleted = Time.now
       nonce.save!
-      current_user.log("Marked google survey answers for nonce with id #{nonce.id} (#{nonce.nonce}) as deleted")
+
+      GoogleSurveyAnswer.where('nonce_id = ?',nonce.id).each do |gas|
+        gas.destroy
+      end
+
+      current_user.log("Deleted google survey answers for nonce with id #{nonce.id} (#{nonce.nonce}) at participant's request")
     
       respond_to do |format|
         format.html { redirect_to(google_survey_url(GoogleSurvey.find(nonce.target_id))) }
