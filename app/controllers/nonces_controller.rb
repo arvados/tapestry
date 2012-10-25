@@ -13,6 +13,14 @@ class NoncesController < ApplicationController
       end
 
       current_user.log("Deleted google survey answers for nonce with id #{nonce.id} (#{nonce.nonce}) at participant's request")
+
+      # Trigger a re-sync for the survey to purge the deleted lines from the csv file we serve
+      ok, error_message = GoogleSurvey.find(nonce.target_id).synchronize!
+      if ok
+        flash[:notice] = "Deleted set of survey answers."
+      else
+        flash[:error] = error_message
+      end
     
       respond_to do |format|
         format.html { redirect_to(google_survey_url(GoogleSurvey.find(nonce.target_id))) }
