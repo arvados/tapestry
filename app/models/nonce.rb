@@ -8,7 +8,10 @@ class Nonce < ActiveRecord::Base
 
   scope :deleted, unscoped.where('deleted is not null')
 
-  def after_initialize
+  after_initialize :calculate_nonce
+  before_destroy :do_not_destroy
+
+  def calculate_nonce
     return if self.nonce
     self.nonce = rand(2**256-1).to_s(36)
     self.created_at = Time.now
@@ -22,7 +25,7 @@ class Nonce < ActiveRecord::Base
     save!
   end
 
-  def before_destroy
+  def do_not_destroy
     return false
   end
 end
