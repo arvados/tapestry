@@ -110,6 +110,9 @@ class GoogleSurvey < ActiveRecord::Base
       nonce = nonce_value ? Nonce.find_by_nonce(nonce_value) : nil
       if nonce.nil?
         logger.info "Invalid nonce #{nonce_value} on data row #{datarow_count}."
+        # Remove this row from the results. It is bogus because we can not link it up to
+        # a nonce. It could be data that has been marked in our database.
+        processed_datarows.pop
         next
       end
       if (nonce.owner_class != 'User' or
