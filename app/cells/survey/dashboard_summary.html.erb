@@ -5,8 +5,11 @@
 <ul>
   <% GoogleSurvey.where('is_listed').each do |google_survey| %>
   <li>
-    <% if @user.google_surveys.include?(google_survey) -%>
-      <%= image_tag('tick.png') %>
+    <% Nonce.where(:owner_class => 'User', :owner_id => @user.id, :target_class => 'GoogleSurvey', :target_id => google_survey.id).each do |n| -%>
+      <% if n.used_at -%>
+        <%= image_tag('tick.png') %>
+        <% break -%>
+      <% end -%>
     <% end -%>
     <%= link_to google_survey.name, google_survey %>
   </li>
