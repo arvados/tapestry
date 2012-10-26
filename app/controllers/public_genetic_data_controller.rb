@@ -7,30 +7,14 @@ class PublicGeneticDataController < ApplicationController
   def anonymous
     # Only return anonymous genetic data for which the owner has taken all trait surveys
 
-    participants_with_trait_surveys = Hash.new()
-    shortest = 0
+    users = Array.new()
 
     # Make a list of every participant that has taken each trait survey
     TRAIT_SURVEY_IDS.each do |ts_id|
-      participants_with_trait_surveys[ts_id] = Nonce.where("target_class=? and target_id = ?",'GoogleSurvey',ts_id).map { |n| n.owner_id }
-      shortest = ts_id if participants_with_trait_surveys[ts_id].length < shortest or shortest == 0
-    end
-
-    users = Array.new()
-    # Now we know the maximum possible number of people that have completed
-    # *all* trait surveys, namely participants_with_trait_surveys[shortest].length.
-    # Let's start from that (shortest) list to whittle it down to the real list
-    # of participants who have completed all trait surveys.
-    if not participants_with_trait_surveys.empty? then
-      participants_with_trait_surveys[shortest].each do |uid|
-        skip = false
-        participants_with_trait_surveys.each do |k,v|
-          if not v.include?(uid) then
-            skip = true
-            break
-          end
-        end
-        users << User.find(uid)
+      if users.empty? then
+        users = Nonce.where("target_class=? and target_id = ?",'GoogleSurvey',ts_id).map { |n| n.owner_id }
+      else
+        users = users & Nonce.where("target_class=? and target_id = ?",'GoogleSurvey',ts_id).map { |n| n.owner_id }
       end
     end
 
