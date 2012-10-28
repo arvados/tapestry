@@ -4,6 +4,16 @@ class Admin::DatasetsController < Admin::AdminControllerBase
 
   def index
     @datasets = Dataset.all
+
+    @users = Array.new()
+    # Make a list of every participant that has taken each trait survey
+    TRAIT_SURVEY_IDS.each do |ts_id|
+      if @users.empty? then
+        @users = Nonce.where("target_class=? and target_id = ?",'GoogleSurvey',ts_id).map { |n| n.owner_id }
+      else
+       @users = @users & Nonce.where("target_class=? and target_id = ?",'GoogleSurvey',ts_id).map { |n| n.owner_id }
+      end
+    end
   end
 
   def edit

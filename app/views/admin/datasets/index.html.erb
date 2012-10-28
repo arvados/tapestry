@@ -47,7 +47,16 @@
       <td><%= dataset.released_to_participant ? 'Yes' : 'No' %></td>
       <td><%= dataset.sent_notification_at.to_s %></td>
       <td><%= dataset.seen_by_participant_at.to_s %></td>
-      <td><%= dataset.published_at.to_s %></td>
+      <td>
+         <% if not dataset.published_at.nil? then -%>
+           <%= dataset.published_at.to_s %>
+         <% elsif not dataset.published_anonymously_at.nil? then -%>
+           <%= dataset.published_anonymously_at.to_s %><br/><i>anonymously</i>
+         <% end -%>
+        <% if (not dataset.published_at.nil? or not dataset.published_anonymously_at.nil?) and not @users.include?(dataset.participant_id) -%>
+          <br/><strong>Trait surveys incomplete</strong>
+        <% end -%>
+      </td>
       <td><%= link_to 'Edit', edit_admin_dataset_path(dataset) %></td>
       <% if not dataset.released_to_participant then -%>
       <td><%= link_to 'Destroy', [:admin, dataset], :confirm => 'Are you sure you want to delete this dataset?', :method => :delete %></td>
