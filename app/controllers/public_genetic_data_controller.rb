@@ -12,9 +12,9 @@ class PublicGeneticDataController < ApplicationController
     # Make a list of every participant that has taken each trait survey
     TRAIT_SURVEY_IDS.each do |ts_id|
       if users.empty? then
-        users = Nonce.where("target_class=? and target_id = ?",'GoogleSurvey',ts_id).map { |n| n.owner_id }
+        users = Nonce.where("target_class=? and target_id = ? and used_at is not null",'GoogleSurvey',ts_id).map { |n| n.owner_id }
       else
-        users = users & Nonce.where("target_class=? and target_id = ?",'GoogleSurvey',ts_id).map { |n| n.owner_id }
+        users = users & Nonce.where("target_class=? and target_id = ? and used_at is not null",'GoogleSurvey',ts_id).map { |n| n.owner_id }
       end
     end
 
