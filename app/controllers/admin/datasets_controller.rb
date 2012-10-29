@@ -86,7 +86,13 @@ class Admin::DatasetsController < Admin::AdminControllerBase
 
   def submit!
     begin
-      @dataset.submit_to_get_evidence!(:make_public => !!@dataset.published_at)
+      @submitopts = {}
+      @submitopts[:make_public] = !!@dataset.published_at
+      if @dataset.published_anonymously_at and !@dataset.published_at
+        @submitopts[:human_id] = ''
+        @submitopts[:name] = ''
+      end
+      @dataset.submit_to_get_evidence!(@submitopts)
     rescue Exception => e
       # Callout error
       logger.debug "Error contacting GET-Evidence: #{e.inspect}"

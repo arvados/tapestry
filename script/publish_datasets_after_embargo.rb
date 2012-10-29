@@ -14,7 +14,7 @@ require File.dirname(__FILE__) + '/../config/environment'
 # been reactivated?) it should be dealt with manually.
 
 Dataset.
-  where('published_at is null and seen_by_participant_at < ? and seen_by_participant > ?', Time.now - 30.days, Time.now - 32.days).
+  where('published_at is null and published_anonymously_at is null and seen_by_participant_at < ? and seen_by_participant > ?', Time.now - 30.days, Time.now - 32.days).
   joins(:participant).
   merge(User.enrolled.not_suspended.not_deactivated).
   each do |ds|

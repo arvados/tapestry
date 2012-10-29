@@ -20,7 +20,7 @@ class SpecimenAnalysisDataController < ApplicationController
       @dataset.save
       # Just in case, remove the hu_id and name reference from the dataset on the GET-E report
       # We don't link to the report, but its url can easily be guessed based on other public GET-E reports
-      @dataset.submit_to_get_evidence!(:options => { :name => '', :human_id => '' })
+      @dataset.submit_to_get_evidence!(:name => '', :human_id => '')
       flash[:notice] = 'Your dataset has been published anonymously. Please make sure to take all the trait surveys. Thank you!'
       current_user.log("Participant published dataset #{@dataset.name} (#{@dataset.id}) anonymously")
     elsif make_public_on_get_evidence then
