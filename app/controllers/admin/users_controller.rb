@@ -127,15 +127,24 @@ class Admin::UsersController < Admin::AdminControllerBase
   end
 
   def update
+    @log_messages = []
+
     @user = User.find params[:id]
     @user.controlling_user = current_user
     @user.is_admin = params[:user].delete(:is_admin)
     @user.is_test = params[:user].delete(:is_test)
+    if (@user.deceased != params[:user][:deceased]) then
+      if not @user.deceased then
+        @log_messages << "Marked as deceased by admin"
+      else
+        @log_messages << "Marked as alive by admin"
+      end
+    end
+    @user.deceased = params[:user].delete(:deceased)
     @user.can_reactivate_self = params[:user].delete(:can_reactivate_self)
     @user.researcher = params[:user].delete(:researcher)
     @user.researcher_onirb = params[:user].delete(:researcher_onirb)
 
-    @log_messages = []
 
     if (params[:user][:pgp_id] == '') then
       params[:user].delete(:pgp_id)

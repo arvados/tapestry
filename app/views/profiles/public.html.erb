@@ -12,6 +12,12 @@
 
 <div align="right">Public profile url: <%= link_to public_profile_url_string(@user), public_profile_path(:hex => @user.hex) %></div>
 
+<% if @user.deceased then -%>
+<p>
+<strong>This participant is deceased.</strong>
+</p>
+<% end -%>
+
 <h3>Personal Health Records<% if logged_in? and @user == current_user -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
 <% if @ccr != nil -%>
 <div class="admin_table">

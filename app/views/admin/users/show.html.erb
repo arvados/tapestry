@@ -2,6 +2,9 @@
 <% if @user.is_test? -%>
 <div class="flash error">This is not a real account: it is a test account.</div>
 <% end -%>
+<% if @user.deceased? -%>
+<div class="flash warning">This participant is marked as deceased.</div>
+<% end -%>
 
 <h3>User details</h3>
 Unique identifier: <%= @user.unique_hash %><br/>
