@@ -15,7 +15,7 @@ class PasswordsController < ApplicationController
 
     if user
       flash[:notice] = "An email has been sent to #{CGI.escapeHTML(email)} with instructions for resetting your password."
-      UserMailer.deliver_password_reset(user)
+      UserMailer.password_reset(user).deliver
       redirect_to root_url
     else
       flash[:notice] = "We could not find an account with that email address."
