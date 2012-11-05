@@ -99,11 +99,13 @@ protected
   end
 
   def set_data_size
-    self.data_size = nil
-    if locator and locator.match /^[\da-f]{32}/
-      manifest = `whget '#{locator.gsub("'","'\\''")}'`
-      if (m = manifest.match /^[^\n]+ 0:(\d+):\S+\n?$/)
-        self.data_size = m[1].to_i
+    if locator_changed? then
+      self.data_size = nil
+      if locator and locator.match /^[\da-f]{32}/
+        manifest = `whget '#{locator.gsub("'","'\\''")}'`
+        if (m = manifest.match /^[^\n]+ 0:(\d+):\S+\n?$/)
+          self.data_size = m[1].to_i
+        end
       end
     end
   end
