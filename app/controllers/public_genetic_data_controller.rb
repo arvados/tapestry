@@ -74,7 +74,8 @@ class PublicGeneticDataController < ApplicationController
 
   def statistics
     @datasets = UserFile.joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
-      Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
+      Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant) |
+      Dataset.published_anonymously.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
     @data_type_stats = {}
     @data_type_name = {}
     @coverage_series = {}
@@ -83,7 +84,10 @@ class PublicGeneticDataController < ApplicationController
     UserFile::DATA_TYPES.each do |longversion, shortversion|
       @data_type_name[shortversion] = longversion
     end
-    @datasets.sort_by(&:published_at).each do |d|
+    #@datasets.sort_by(&:published_at).each do |d|
+    @datasets.sort_by { |d| d.published_at.nil? ? d.published_anonymously_at : d.published_at }.each do |d|
+      published_at = d.published_at
+      published_at = d.published_anonymously_at if d.published_at.nil?
       data_type = d.data_type
       data_type = 'other' unless @data_type_name.has_key? data_type
       next unless 0 == @data_type_name[data_type].index('genetic data - ')
@@ -101,7 +105,7 @@ class PublicGeneticDataController < ApplicationController
       end
       stats[:n_datasets] += 1
 
-      @t0 ||= (d.published_at.to_f*1000).floor
+      @t0 ||= (published_at.to_f*1000).floor
 
       @participants_series[data_type] ||= {
         'data' => [[@t0, 0]],
@@ -109,9 +113,9 @@ class PublicGeneticDataController < ApplicationController
         'data_type' => data_type
       }
       stats[:participants][d.participant.hex] = true
-      @participants_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+      @participants_series[data_type]['data'] << [(published_at.to_f*1000).floor,
                                                   @participants_series[data_type]['data'].last[1]]
-      @participants_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+      @participants_series[data_type]['data'] << [(published_at.to_f*1000).floor,
                                                   stats[:participants].size]
 
       if add_to_coverage_series
@@ -120,9 +124,9 @@ class PublicGeneticDataController < ApplicationController
           'label' => data_type,
           'data_type' => data_type
         }
-        @coverage_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+        @coverage_series[data_type]['data'] << [(published_at.to_f*1000).floor,
                                                 @coverage_series[data_type]['data'].last[1]]
-        @coverage_series[data_type]['data'] << [(d.published_at.to_f*1000).floor,
+        @coverage_series[data_type]['data'] << [(published_at.to_f*1000).floor,
                                                 stats[:positions_covered]]
       end
     end
