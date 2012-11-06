@@ -16,7 +16,7 @@ class UserFile < ActiveRecord::Base
           info[:longupload_fingerprint],
           info[:longupload_file_name])
   }
-  scope :downloadable, where('dataset_file_size is ? or locator is not ?', nil, nil)
+  scope :downloadable, where('dataset_file_size is not ? or locator is not ?', nil, nil)
 
   # See config/initializers/paperclip.rb for the definition of :user_id and :filename
   has_attached_file :dataset, :path => "/data/#{ROOT_URL}/genetic_data/:user_id/:id/:style/:filename.:extension"

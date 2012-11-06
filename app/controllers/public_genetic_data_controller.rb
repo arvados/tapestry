@@ -25,7 +25,7 @@ class PublicGeneticDataController < ApplicationController
   end
 
   def index
-    @datasets = UserFile.joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
+    @datasets = UserFile.downloadable.joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
       Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
     index_worker(:published_at)
   end
