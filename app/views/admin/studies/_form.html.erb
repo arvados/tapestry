@@ -31,6 +31,15 @@
     <%= f.label :irb_associate_id, 'IRB associate' %><br />
     <%= f.select :irb_associate_id, User.where('researcher_onirb = ?',true).collect {|r| [ r.full_name, r.id ] }, :include_blank => true %>
   </div>
+  <div class="field">
+    <%= f.label :open %><br />
+    <%= f.check_box :open %>
+    <% if @study.approved then %>
+    Currently accepting participants?
+    <% else %>
+    Start accepting participants immediately after admin approval?
+    <% end %>
+  </div>
   <% if not @study.approved then %>
     <div class="field">
       <%= f.label :requested %><br />

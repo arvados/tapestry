@@ -18,13 +18,15 @@ class Admin::StudiesController < Admin::AdminControllerBase
     @study = Study.find(params[:id])
     params[:study].delete :is_third_party
     @study.irb_associate = params[:study].delete(:irb_associate)
+    @was_open = @study.open && @study.approved
+    @study.open = params[:study].delete(:open)
     @approved = params[:study].delete(:approved)
     if ((@study.approved != @approved) and (@study.approved == false)) then
       @study.date_approved = Time.now()
-      @study.date_opened = Time.now if @study.open
     end
     @study.approved = @approved
     @study.requested = false if @study.approved
+    @study.date_opened = Time.now if @study.open and @study.approved and !@was_open
 
     if @study.update_attributes(params[:study])
       flash[:notice] = 'Study updated.'
