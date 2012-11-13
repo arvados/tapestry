@@ -110,6 +110,56 @@ class MyPG
     return @config
   end
 
+  def create_international_users_scoreboard_worker(work)
+    user_table = Hash.new()
+
+    InternationalParticipant.select("count(international_participants.id) AS count, country").group("country").each do |r|
+      user_table[r.country] = Hash.new() if not user_table.has_key?(r.country)
+      user_table[r.country]['count'] = r.count.to_i
+    end
+    buf = ''
+    header_row = ['Country','Count']
+
+    CSV.generate_row(header_row, header_row.size, buf)
+
+    user_table.sort { |a,b| b[1]['count'] <=> a[1]['count'] }.each do |month,data|
+      row = []
+      row.push month
+      row.push data['count']
+      CSV.generate_row(row, row.size, buf)
+    end
+    csv_filename = generate_csv_filename('international_users_scoreboard', true)
+    outFile = File.new(csv_filename, 'w')
+    outFile.write(buf)
+    outFile.close
+    return csv_filename
+  end
+
+  def create_international_users_list_worker(work)
+    user_table = Hash.new()
+
+    InternationalParticipant.all.each do |r|
+      user_table[r.email] = Hash.new() if not user_table.has_key?(r.email)
+      user_table[r.email]['country'] = r.country
+    end
+    buf = ''
+    header_row = ['E-mail','Country']
+
+    CSV.generate_row(header_row, header_row.size, buf)
+
+    user_table.sort { |a,b| a[1]['country'] <=> b[1]['country'] }.each do |month,data|
+      row = []
+      row.push month
+      row.push data['country']
+      CSV.generate_row(row, row.size, buf)
+    end
+    csv_filename = generate_csv_filename('international_users_list', true)
+    outFile = File.new(csv_filename, 'w')
+    outFile.write(buf)
+    outFile.close
+    return csv_filename
+  end
+
   def create_enrollment_report_worker(work)
     users = User.real
 
@@ -311,6 +361,10 @@ class MyPG
         filename = create_exam_question_key_report_worker(work)
       elsif work.report_name == 'enrollment' and work.report_type == 'csv' then
         filename = create_enrollment_report_worker(work)
+      elsif work.report_name == 'international_users_scoreboard' and work.report_type == 'csv' then
+        filename = create_international_users_scoreboard_worker(work)
+      elsif work.report_name == 'international_users_list' and work.report_type == 'csv' then
+        filename = create_international_users_list_worker(work)
       elsif work.report_name == 'absolute_pitch' and work.report_type == 'csv' then
         filename = create_absolute_pitch_survey_report_worker(work)
       elsif work.report_name == 'absolute_pitch_question_key' and work.report_type == 'csv' then
