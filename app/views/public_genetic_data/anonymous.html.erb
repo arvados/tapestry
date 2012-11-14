@@ -7,7 +7,6 @@
 
 <table class="admin_table">
   <tr>
-    <th>Source<br/>Date&nbsp;published</th>
     <th>Data type</th>
     <th>ID</th>
     <th>Download</th>
@@ -15,13 +14,8 @@
     <th style="text-align:center">Admin</th>
     <% end %>
   </tr>
-  <% @datasets.each do |dataset| -%>
+  <% @datasets.sort { |a,b| a.get_evidence_genome_id <=> b.get_evidence_genome_id }.each do |dataset| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td>
-	PGP
-	<br />
-	<%= (dataset.respond_to?(:published_anonymously_at) ? dataset.published_anonymously_at : dataset.created_at).strftime('%Y-%m-%d') %>
-      </td>
       <td><%= dataset.data_type %></td>
       <td><%= dataset.get_evidence_genome_id %></td>
       <td>
