@@ -147,6 +147,7 @@ class ApplicationController < ActionController::Base
 
   def ensure_recent_safety_questionnaire
     if logged_in? and current_user and current_user.enrolled and not current_user.has_recent_safety_questionnaire
+      flash[:warning] = 'You have been redirected to this page because you are due to complete a quarterly safety questionnaire. You will need to complete this before interacting with your PGP account. Thanks!'
       redirect_to require_safety_questionnaire_url
     end
   end
