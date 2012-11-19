@@ -5,7 +5,7 @@ class AddDeceasedToUsers < ActiveRecord::Migration
   end
 
   def self.down
-    remove_column :user_versions, :deceased
+    remove_column :user_versions, :boolean
     remove_column :users, :deceased
   end
 end

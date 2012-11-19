@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121024165525) do
+ActiveRecord::Schema.define(:version => 20121119184456) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2704,6 +2704,7 @@ ActiveRecord::Schema.define(:version => 20121024165525) do
     t.datetime "suspended_at"
     t.boolean  "can_reactivate_self"
     t.string   "phone_number"
+    t.boolean  "deceased"
   end
 
   add_index "user_versions", ["user_id"], :name => "index_user_versions_on_user_id"
@@ -2761,6 +2762,7 @@ ActiveRecord::Schema.define(:version => 20121024165525) do
     t.datetime "suspended_at"
     t.boolean  "can_reactivate_self"
     t.string   "phone_number",                                    :default => ""
+    t.boolean  "deceased"
   end
 
   create_table "waitlist_versions", :force => true do |t|
