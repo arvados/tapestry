@@ -245,6 +245,7 @@ Tapestry::Application.routes.draw do
       resources :phr_reports
       resources :oauth_services
       resources :removal_requests
+      match 'mail_preview/:action(/:a(/:b))' => 'user_mailer_previews#:action'
   end
 
   resources :geographic_information
