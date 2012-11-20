@@ -4,6 +4,8 @@ The PGP currently enrolls U.S. citizens and permanent residents only. However, w
 
 <%= error_messages_for :international_participant, :header_message => 'Error: data could not be saved.', :message => nil %>
 
+<p><strong>If you are a U.S citizen or permanent resident, please <%= link_to 'click here here to enroll', :signup -%>.</strong></p>
+
 <%= form_for @international_participant do |f| %>
 
   <p>
