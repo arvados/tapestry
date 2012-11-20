@@ -1,5 +1,30 @@
 <h2>Eligibility Questionnaire</h2>
 
+<%= content_for :js do %>
+jQuery(function(){
+  var $ = jQuery.noConflict();
+  $('#screening_survey_response_monozygotic_twin_willing').change(function(){
+    hasWillingTwin = $('#screening_survey_response_monozygotic_twin_willing')[0].checked;
+    if (hasWillingTwin) {
+      $('#twin_information').show('fast');
+    } else {
+      $('#twin_information').hide('fast');
+    }
+  });
+  $('#screening_survey_response_monozygotic_twin_no').change(function(){
+    $('#screening_survey_response_monozygotic_twin_willing').change();
+  });
+  $('#screening_survey_response_monozygotic_twin_unknown').change(function(){
+    $('#screening_survey_response_monozygotic_twin_willing').change();
+  });
+  $('#screening_survey_response_monozygotic_twin_unwilling').change(function(){
+    $('#screening_survey_response_monozygotic_twin_willing').change();
+  });
+  // For page load
+  $('#screening_survey_response_monozygotic_twin_willing').change();
+});
+<% end -%>
+
 <%= form_for @screening_survey_response, :url => screening_surveys_path, :html => { :method => :put } do |f| -%>
 <%= error_messages_for :screening_survey_response %>
 
@@ -51,6 +76,34 @@ Permanent Resident Card (USCIS Form I-551) ?" %>
     <br/>
   <% end -%>
 </p>
+
+<div id="twin_information" class="redborder">
+<p>
+You have indicated you have a living, identical (monozygotic) twin who is
+willing to participate in this research study.
+</p>
+<p>
+In order for you to enroll in this study, your twin will also need to enroll.
+</p>
+<p>
+Please provide the name and e-mail address of your twin. It is important to use
+the e-mail address that your twin will use/has used for their
+personalgenomes.org account.
+</p>
+<table>
+<tr>
+<td><strong><%= f.label(:twin_name, 'Full name of your twin') %></strong></td>
+<td><%= f.text_field(:twin_name) %></td>
+</tr>
+<tr>
+<td><strong><%= f.label(:twin_name, 'E-mail address of your twin') %></strong></td>
+<td><%= f.text_field(:twin_email) %></td>
+</tr>
+</table>
+<p>
+Please continue the enrollment process. Once both you and your twin have
+submitted your enrollment application, we can enroll you in the study.
+</div>
 
 <p class="question" id="question4">
   <span class="question">

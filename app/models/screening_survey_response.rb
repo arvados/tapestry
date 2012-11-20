@@ -14,6 +14,9 @@ class ScreeningSurveyResponse < ActiveRecord::Base
   scope :us_citizen_or_resident, where("us_citizen_or_resident is true")
   scope :age_21, where("age_21 is true")
 
+  validates :twin_name, :presence => true, :if => Proc.new {|ssr| ssr.monozygotic_twin == 'willing' }
+  validates :twin_email, :presence => true, :format => { :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i }, :if => Proc.new {|ssr| ssr.monozygotic_twin == 'willing' }
+
   scope :passed, monozygotic_ok.worrisome_ok.information_disclosure_ok.past_genetic_test_ok.us_citizen_or_resident.age_21
 
   scope :failed, where("monozygotic_twin not in ('no','willing') or 

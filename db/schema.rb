@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121119184456) do
+ActiveRecord::Schema.define(:version => 20121030110259) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2012,6 +2012,8 @@ ActiveRecord::Schema.define(:version => 20121119184456) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.string   "twin_name"
+    t.string   "twin_email"
   end
 
   create_table "selection_versions", :force => true do |t|

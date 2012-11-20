@@ -8,16 +8,19 @@ class ScreeningSurveysController < ApplicationController
   end
 
   def update
-    @screening_survey_response.update_attributes(params[:screening_survey_response])
-    if current_user.has_completed?('screening_surveys')
-      step = EnrollmentStep.find_by_keyword('screening_surveys')
-      current_user.log('Completed Eligibility Questionnaire',step)
-      flash[:notice] = 'You have completed the eligibility questionnaire.  Please continue to the questionnaire results.'
+    if @screening_survey_response.update_attributes(params[:screening_survey_response])
+      if current_user.has_completed?('screening_surveys')
+        step = EnrollmentStep.find_by_keyword('screening_surveys')
+        current_user.log('Completed Eligibility Questionnaire',step)
+        flash[:notice] = 'You have completed the eligibility questionnaire.  Please continue to the questionnaire results.'
+      else
+        # People who submit partial results to the eligibility questionnaire, before completing it even once
+        flash[:notice] = 'Your eligibility questionnaire answers have been updated.'
+      end
+      redirect_to root_path
     else
-      # People who submit partial results to the eligibility questionnaire, before completing it even once
-      flash[:notice] = 'Your eligibility questionnaire answers have been updated.'
+      render :action => 'show'
     end
-    redirect_to root_path
   end
 
   def results
