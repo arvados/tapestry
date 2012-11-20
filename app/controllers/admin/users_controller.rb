@@ -134,9 +134,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     @user.is_admin = params[:user].delete(:is_admin)
     @user.is_test = params[:user].delete(:is_test)
     if (@user.deceased != params[:user][:deceased]) then
-      if not @user.deceased then
+      if not @user.deceased and params[:user][:deceased] == '1' then
         @log_messages << "Marked as deceased by admin"
-      else
+      elsif @user.deceased and params[:user][:deceased] == '0' then
         @log_messages << "Marked as alive by admin"
       end
     end
@@ -174,7 +174,7 @@ class Admin::UsersController < Admin::AdminControllerBase
     if (@user.email != params[:user][:email]) then
       @log_messages << "Admin changed email address from '#{@user.email}' to '#{params[:user][:email]}'"
     end
-    if (@user.pgp_id != params[:user][:pgp_id]) then
+    if (@user.pgp_id.to_s != params[:user][:pgp_id]) then
       if @user.pgp_id.nil? then
         @log_messages << "Admin assigned PGP#{params[:user][:pgp_id]}"
       else
