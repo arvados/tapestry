@@ -149,7 +149,7 @@ class Admin::UsersController < Admin::AdminControllerBase
     if (params[:user][:pgp_id] == '') then
       params[:user].delete(:pgp_id)
       if not @user.pgp_id.nil? then
-        @log_messages << "Admin removed PGP#{params[:user][:pgp_id]}"
+        @log_messages << "Admin removed PGP#{@user.pgp_id}"
         @user.pgp_id = nil
       end
     end
@@ -174,8 +174,8 @@ class Admin::UsersController < Admin::AdminControllerBase
     if (@user.email != params[:user][:email]) then
       @log_messages << "Admin changed email address from '#{@user.email}' to '#{params[:user][:email]}'"
     end
-    if (@user.pgp_id.to_s != params[:user][:pgp_id]) then
-      if @user.pgp_id.nil? then
+    if (@user.pgp_id.to_s != params[:user][:pgp_id].to_s) then
+      if @user.pgp_id.nil? and params[:user][:pgp_id] != '' then
         @log_messages << "Admin assigned PGP#{params[:user][:pgp_id]}"
       else
         @log_messages << "Admin changed PGP# from PGP#{@user.pgp_id} to PGP#{params[:user][:pgp_id]}"
