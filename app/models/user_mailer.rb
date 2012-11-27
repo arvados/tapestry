@@ -69,7 +69,8 @@ class UserMailer < ActionMailer::Base
     setup_email(user)
     @subject += 'Email address changed'
     @recipients = old_email unless defined? SEND_ALL_USER_EMAIL_TO
-    user.log("Sent email change notification")
+    @body[:old_email] = old_email
+    user.log("Sent email change notification") unless user.id.nil? # (preview)
   end
 
   def family_relation_notification(family_relation)
