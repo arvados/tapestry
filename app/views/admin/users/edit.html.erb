@@ -1,52 +1,13 @@
 <h2><%= @user.full_name -%> -- <%= @user.email -%> [<%= link_to 'Show', admin_user_url(@user) %>]</h2>
 
-<h3>User details</h3>
 <% @user.password = @user.password_confirmation = nil %>
 
 <%= form_for [:admin, @user], :html => { :method => :put } do |f| -%>
 <%= error_messages_for :user %>
 
-<p>Completed Content Areas:<br/>
-<%= @user.completed_content_area_count %> / <%= ContentArea.count %> (<%= link_to 'Details', admin_user_exam_responses_path(@user) %>)</p>
-
-<p>
-  Current Enrollment Step:<br/>
-  <% if @user.next_enrollment_step -%>
-    <%= @user.next_enrollment_step.ordinal %> <%= @user.next_enrollment_step.title %>
-  <% else -%>
-    Finished
-  <% end -%>
-</p>
-
 <% if @user.next_enrollment_step -%>
   <p>Promote to the next enrollment step:<br/>
   <%= link_to 'Promote', promote_admin_user_url(@user), :method => 'PUT' %></p>
-<% end -%>
-
-<% if @ccr and @ccr_history.length > 0 %>
-<h3>All PHRs</h3>
-<table>
-<% @ccr_history.each { |version| %>
-<tr>
-  <td><%= link_to version, ccr_admin_user_url(@user) + '?version=' + version %>
-  </td>
-</tr>
-<% } %>
-</table>
-<% end %>
-
-<% if @user.waitlists.any? -%>
-  <h3>Waitlistings</h3>
-  <p>This user has been waitlisted:</p>
-  <ol>
-    <% @user.waitlists.each do |waitlist| -%>
-      <li>On <%= waitlist.created_at %>: <%= h waitlist.reason %></li>
-    <% end -%>
-  </ol>
-<% end -%>
-
-<% if @user.eligibility_survey_version -%>
-  <p>This user has passed eligibility survey version <%= @user.eligibility_survey_version %>.
 <% end -%>
 
 <h3>Edit User Account</h3>
