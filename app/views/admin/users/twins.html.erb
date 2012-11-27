@@ -1,0 +1,28 @@
+<h2>Users eligible for enrollment with willing twin</h2>
+
+<% if User.eligible_for_enrollment_with_willing_twin.count > 1 then -%>
+There are currently <%= User.eligible_for_enrollment_with_willing_twin.count %> users who are eligible for enrollment and have a willing twin.
+<% elsif User.eligible_for_enrollment_with_willing_twin.count > 0 -%>
+There is currently 1 user who is eligible for enrollment and has a willing twin.
+<% end -%>
+<p/>
+<table class="admin_table">
+<tr>
+  <th>Name</th>
+  <th>E-mail</th>
+  <th>Twin name</th>
+  <th>Twin e-mail</th>
+  <th>Edit</th>
+  <th>Enroll</th>
+</tr>
+<% @twins.sort { |a,b| a.full_name <=> b.full_name }.each do |t| %>
+<tr>
+  <td><%= link_to t.full_name, admin_user_url(t) %></td>
+  <td><%= t.email %></td>
+  <td><%= t.screening_survey_response.twin_name %></td>
+  <td><%= t.screening_survey_response.twin_email %></td>
+  <td><%= link_to 'Edit', edit_admin_user_url(t) %></td>
+  <td><%= button_to "Enroll", admin_enroll_single_user_url(t) + "?redir_dest=" + url_encode(admin_twins_users_url), :confirm => "Are you sure you want to enroll #{t.full_name}?", :method => :put %></td>
+</tr>
+<% end %>
+</table>

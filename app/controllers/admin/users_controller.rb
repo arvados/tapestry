@@ -62,6 +62,42 @@ class Admin::UsersController < Admin::AdminControllerBase
     render :layout => "none"
   end
 
+  def enroll_single_user
+    flash.delete(:error)
+    flash.delete(:notice)
+    @redir_dest = params[:redir_dest]
+    @redir_dest ||= admin_twins_users_url
+    if request.put? then
+      if params[:id] then
+        u = User.find(params[:id]*1)
+        if u.nil? then
+          flash[:error] = "User not found"
+        else
+          begin
+            u.promote!
+          rescue Exceptions::MissingStep => exception then
+            u.log("Could not be enrolled: #{exception.message}")
+            flash[:error] = '' if flash[:error].nil?
+            flash[:error] += "Could not enroll #{u.full_name} (#{u.id}): #{exception.message}<br/>"
+          else
+            if u.screening_survey_response.monozygotic_twin == 'willing' then
+              u.log("Enrolled by #{current_user.full_name} -- manual enrollment with willing twin")
+            else
+              u.log("Enrolled by #{current_user.full_name}")
+              flash[:notice] = "#{u.full_name} was enrolled"
+            end
+            UserMailer.deliver_enrollment_decision_notification(u)
+          end
+        end
+      else
+        flash[:error] = "Missing parameter"
+      end
+    else
+      flash[:error] = "Wrong method call"
+    end
+    redirect_to @redir_dest
+  end
+
   def enroll
     flash.delete(:error)
     flash.delete(:notice)
@@ -268,6 +304,10 @@ class Admin::UsersController < Admin::AdminControllerBase
     user.reload
     flash[:notice] = "User demoted"
     redirect_to :action => 'edit'
+  end
+
+  def twins
+    @twins = User.eligible_for_enrollment_with_willing_twin
   end
 
   def ineligible

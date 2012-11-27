@@ -195,6 +195,8 @@ Tapestry::Application.routes.draw do
   match '/admin/scoreboards' => 'admin/scoreboards#index', :as => :admin_scoreboards
   match '/admin/researchers' => 'admin/researchers#index', :as => :admin_researchers
   match '/admin/users/enroll' => 'admin/users#enroll', :as => :admin_enroll_users
+  match '/admin/users/enroll_single_user/:id' => 'admin/users#enroll_single_user', :as => :admin_enroll_single_user
+  match '/admin/users/twins' => 'admin/users#twins', :as => :admin_twins_users
   match '/admin/users/active' => 'admin/users#active', :as => :admin_active_users
   match '/admin/users/activity' => 'admin/users#activity', :as => :admin_activity_users
   match '/admin/users/log' => 'admin/users#log', :as => :admin_log_users

@@ -9,6 +9,12 @@
   <%= submit_tag 'Do it' %>
 </p>
 <% end %>
-</table>
+
+<% if User.eligible_for_enrollment_with_willing_twin.count > 1 then -%>
+<strong>There are currently <%= User.eligible_for_enrollment_with_willing_twin.count -%> user(s) who are eligible for enrollment but have a willing twin. These people are not listed below; please go to the <%= link_to("twins page", admin_twins_users_url) %> to enroll them.</strong>
+<% elsif User.eligible_for_enrollment_with_willing_twin.count > 0 -%>
+<strong>There is currently 1 user who is eligible for enrollment but has a willing twin. That person is not listed below; please go to the <%= link_to("twins page", admin_twins_users_url) %> to enroll him or her.</strong>
+<% end -%>
+
 <%= render :partial => 'usertable' %>
 
