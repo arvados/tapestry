@@ -87,20 +87,20 @@
   </td>
 </tr>
 <tr class="grey_background">
-  <td>
-    <%= f.label "suspended_at", "Suspended?", :class => 'strong' %><br/>
-    <i>(no public profile: e.g., requested deletion of data)</i><br/>
-    <%= f.check_box :suspended_at%> <%= 'since '+@user.suspended_at.ctime if @user.suspended_at %>
-  </td>
   <td colspan="2">
     <%= f.label "deactivated_at", "Deactivated?", :class => 'strong' %><br/>
     <i>(e.g., safety questionnaire requirement not satisfied.  Cannot "access or update" account; home page replaced by "your account was deactivated" message)</i><br/>
     <%= f.check_box :deactivated_at %> <%= 'since '+@user.deactivated_at.ctime if @user.deactivated_at %>
   </td>
+  <td>
+    <%= f.label "suspended_at", "Suspended?", :class => 'strong' %><br/>
+    <i>(no public profile: e.g., requested deletion of data)</i><br/>
+    <%= f.check_box :suspended_at%> <%= 'since '+@user.suspended_at.ctime if @user.suspended_at %>
+  </td>
 </tr>
 <tr class="grey_background">
   <td colspan="3">
-    <b>In order to effectively withdraw this participant</b>, tick both &ldquo;suspended&rdquo; <b>and</b> &ldquo;deactivated&rdquo; boxes.
+    <b>In order to effectively withdraw this participant</b>, tick both &ldquo;deactivated&rdquo; <b>and</b> &ldquo;suspended&rdquo; boxes.
   </td>
 </tr>
 <tr class="grey_background">
