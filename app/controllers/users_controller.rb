@@ -289,7 +289,7 @@ class UsersController < ApplicationController
   end
 
   def edit_study
-    @user = User.find(params[:id])
+    @user = current_user
     @study = Study.approved.not_third_party.open_now.where('id = ?',params[:study_id]).first
     if @study.nil? then
       # Only open collection events should be available here
