@@ -67,6 +67,9 @@ Public profile url: <%= link_to public_profile_url_string(@user), public_profile
   </ol>
 <% end -%>
 
+<h3>Activated</h3>
+<%= @user.active? ? @user.activated_at : "No -- activation URL is #{activate_url(@user.activation_code)}" %>
+
 <%= render :partial => 'profiles/enrollment_history' %>
 
 <% if @user.next_enrollment_step -%>

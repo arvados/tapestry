@@ -1234,3 +1234,13 @@ div.sitemap .nolink {
 body .dataTables_wrapper {
     min-height: 1px;
 }
+
+.strong {
+  font-weight: bold;
+}
+
+.grey_background {
+  background: #dddddd;
+  padding: 1em 1em;
+  margin: 0 -1em;
+}
