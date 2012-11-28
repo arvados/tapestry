@@ -59,7 +59,7 @@ Tapestry::Application.routes.draw do
   resources :google_surveys do
     post 'participate', :on => :member
     post 'synchronize', :on => :member
-    post 'download', :on => :member
+    match 'download', :on => :member
   end
   match '/nonce/:id' => 'nonces#delete', :as => :delete_google_survey_answers, :via => :delete
 
