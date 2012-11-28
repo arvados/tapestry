@@ -12,6 +12,11 @@ class GoogleSurvey < ActiveRecord::Base
 
   CACHE_DIR = "/data/" + ROOT_URL + "/google_surveys"
 
+  def responses
+    Nonce.used.where('owner_class = ? and target_class = ? and target_id = ?',
+                     'User', self.class.to_s, self.id)
+  end
+
   def self.create_legacy_nonces!
     added = 0
     default_survey = GoogleSurvey.where(:open => true)[0] rescue return

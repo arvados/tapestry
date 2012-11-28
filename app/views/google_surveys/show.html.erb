@@ -10,7 +10,7 @@
 
 <p><%=raw CGI.escapeHTML(@google_survey.description).gsub("\r","").gsub("\n\n","</p><p>") %></p>
 
-<% if @can_edit or (current_user.enrolled and @google_survey.open) %>
+<% if @can_edit or (current_user and current_user.enrolled and @google_survey.open) %>
 <p>
   <%= button_to 'Participate in this survey', participate_google_survey_path(@google_survey) %>
 </p>
@@ -23,7 +23,8 @@
 
 <% if @can_download %>
 <p>
-  <%= button_to 'Download results', download_google_survey_path(@google_survey) %>
+  <%= button_to "Download responses as CSV", download_google_survey_path(@google_survey) %>
+  (<%= @google_survey.responses.size %> responses from <%= @google_survey.responses.collect(&:owner_id).uniq.size %> participants)
 </p>
 <% end %>
 
@@ -34,13 +35,14 @@
 <% end %>
 
 
+<% if @nonces %>
 <h3>Your participation in this survey</h3>
 <% if !@nonces.empty? %>
 <table class="admin_table">
   <thead>
     <th>Started taking survey</th>
     <th>Completed survey</th>
-    <th>Results retrieved</th>
+    <th>Responses retrieved</th>
   </thead>
   <tbody>
     <% @nonces.each do |nonce| %>
@@ -55,6 +57,7 @@
 </table>
 <% else %>
 <p>You have not participated in this survey.</p>
+<% end %>
 <% end %>
 
 
@@ -82,7 +85,7 @@
 </p>
 
 <p>
-  <b>Key or URL for Google Docs spreadsheet where results appear:</b>
+  <b>Key or URL for Google Docs spreadsheet where responses appear:</b>
   <%=h @google_survey.spreadsheet_key %>
 </p>
 
@@ -97,13 +100,13 @@
 </p>
 
 <p>
-  <b>Results last synchronized:</b>
+  <b>Responses last synchronized:</b>
   <%=h @google_survey.last_downloaded_at %>
 </p>
 
 <% if @can_edit %>
 <p>
-  <%= button_to 'Synchronize results from Google now', synchronize_google_survey_path(@google_survey) %>
+  <%= button_to 'Synchronize responses from Google now', synchronize_google_survey_path(@google_survey) %>
 </p>
 
 <%= link_to 'Edit', edit_google_survey_path(@google_survey) %>

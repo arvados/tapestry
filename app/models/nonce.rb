@@ -7,6 +7,7 @@ class Nonce < ActiveRecord::Base
   default_scope where(:deleted => nil)
 
   scope :deleted, unscoped.where('deleted is not null')
+  scope :used, where('used_at is not ?', nil)
 
   after_initialize :calculate_nonce
   before_destroy :do_not_destroy

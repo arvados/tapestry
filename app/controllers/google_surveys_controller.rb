@@ -1,6 +1,8 @@
 class GoogleSurveysController < ApplicationController
   before_filter :ensure_researcher, :except => [:participate, :show, :index, :download]
   skip_before_filter :ensure_enrolled, :except => [:participate]
+  skip_before_filter :login_required, :only => [:show, :index, :download]
+  skip_before_filter :ensure_active, :only => [:show, :index, :download]
 
   def participate
     @google_survey = GoogleSurvey.find(params[:id])
@@ -23,13 +25,14 @@ class GoogleSurveysController < ApplicationController
   end
 
   def decide_view_mode
-    @can_edit = current_user.is_admin? or (@google_survey and @google_survey.user_id == current_user.id)
-    @min_view = !@can_edit and !current_user.is_researcher?
+    @can_edit = current_user and (current_user.is_admin? or (@google_survey and @google_survey.user_id == current_user.id))
+    @min_view = !@can_edit and !(current_user and current_user.is_researcher?)
     @can_download = (@google_survey and
                      @google_survey.last_downloaded_at and
                      (@google_survey.is_result_public or
-                      @google_survey.user_id == current_user.id or
-                      current_user.is_admin?))
+                      (current_user and
+                       (@google_survey.user_id == current_user.id or
+                        current_user.is_admin?))))
   end
 
   def synchronize
@@ -78,7 +81,7 @@ class GoogleSurveysController < ApplicationController
     decide_view_mode
 
     @nonces = Nonce.where(:owner_class => 'User', :owner_id => current_user.id,
-                          :target_class => 'GoogleSurvey', :target_id => @google_survey.id)
+                          :target_class => 'GoogleSurvey', :target_id => @google_survey.id) if current_user
 
     respond_to do |format|
       format.html # show.html.erb
