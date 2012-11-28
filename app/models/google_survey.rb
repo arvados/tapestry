@@ -95,6 +95,7 @@ class GoogleSurvey < ActiveRecord::Base
 
     nonce_column = nil
     datarow_count = 0
+    processed_nonces = {}
     nonce_re = Regexp.new('^[0-9a-z]{24,}$')
     md5_re = Regexp.new('^[0-9a-f]{32}$')
     datarows.each do |row|
@@ -115,17 +116,26 @@ class GoogleSurvey < ActiveRecord::Base
       nonce = nonce_value ? Nonce.find_by_nonce(nonce_value) : nil
       if nonce.nil?
         logger.info "Invalid nonce #{nonce_value} on data row #{datarow_count}."
-        # Remove this row from the results. It is bogus because we can not link it up to
-        # a nonce. It could be data that has been marked in our database.
+        # Remove this row from the results. It is bogus because we can
+        # not link it up to a nonce. It could be data that has been
+        # marked "removed" in our database.
         processed_datarows.pop
         next
-      end
-      if (nonce.owner_class != 'User' or
+      elsif (nonce.owner_class != 'User' or
           nonce.target_class != 'GoogleSurvey' or
           nonce.target_id != self.id)
         logger.warn "Nonce #{nonce_value} for data row #{datarow_count} was not issued for this survey."
+        processed_datarows.pop
+        next
+      elsif processed_nonces.has_key? nonce.id
+        # This nonce had already been used when this response row was
+        # added.  The nonce could have been published in the meantime,
+        # so we can't be sure this response was entered by the
+        # participant we issued the nonce to.
+        processed_datarows.pop
         next
       end
+      processed_nonces[nonce.id] = true
 
       u = User.find(nonce.owner_id)
       if u.nil?
