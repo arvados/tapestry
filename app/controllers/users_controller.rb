@@ -312,7 +312,7 @@ class UsersController < ApplicationController
 
       if @study.shipping_address_required and @user.shipping_address.nil? then
         flash[:error] = 'This study requires that you provide a shipping address.'
-        redirect_to(user_edit_study_url(@user,@study))
+        redirect_to(user_edit_study_url(:study_id => @study.id))
         return
       end
 
@@ -320,7 +320,7 @@ class UsersController < ApplicationController
           @user.shipping_address.nil? and
           @user.phone_number.nil? then
         flash[:error] = 'This study requires that you provide a phone number.'
-        redirect_to(user_edit_study_url(@user,@study))
+        redirect_to(user_edit_study_url(:study_id => @study.id))
         return
       end
 

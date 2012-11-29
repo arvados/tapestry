@@ -11,7 +11,7 @@
 </p>
 <ul>
 <% @studies_pending.each do |study| %>
-<li><%= link_to_if @user, study.name, (@user ? user_edit_study_url(:id => @user.id, :study_id => study.id) : nil) %></li>
+<li><%= link_to_if @user, study.name, (@user ? user_edit_study_url(:study_id => study.id) : nil) %></li>
 <% end %>
 <li>Learn more about <%= link_to 'other current and past collection events', '/pages/collection_events' %></li>
 </ul>
