@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   skip_before_filter :ensure_enrolled
   skip_before_filter :ensure_active, :only => [ :deactivated, :switch_to, :tos, :accept_tos, :consent ]
 
-  before_filter :ensure_current_user_may_edit_this_user, :except => [ :initial, :create_initial, :new, :new_researcher, :new2, :create, :create_researcher, :activate, :created, :resend_signup_notification, :resend_signup_notification_form, :accept_enrollment, :tos, :accept_tos, :consent, :participant_survey, :show_log, :unauthorized, :shipping_address, :switch_to, :index, :deactivated ]
+  before_filter :load_current_user
   skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized, :index ]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :switch_to, :index, :deactivated]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
@@ -82,13 +82,11 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find params[:id]
     @mailing_lists = MailingList.all
     @page_title = 'My Account' if @user == current_user
   end
 
   def update
-    @user = User.find params[:id]
     # If no mailing lists are selected, we don't get the parameter back from the browser
     params[:user]['mailing_list_ids'] = [] if not params[:user].has_key?('mailing_list_ids')
 
@@ -175,7 +173,6 @@ class UsersController < ApplicationController
   end
 
   def created
-    @user = User.find_by_id(params[:id])
     if not @user then
       flash[:error] = "User not found. Please try again."
       redirect_to root_path
@@ -187,7 +184,6 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.find params[:id]
     UserMailer.deliver_delete_request(@user)
     logout_killing_session!
     flash[:notice] = "A request to delete your account has been sent."
@@ -406,9 +402,8 @@ class UsersController < ApplicationController
 
   private
 
-  def ensure_current_user_may_edit_this_user
-    return redirect_to root_url unless current_user && ( current_user.id == params[:id].to_i ) && !current_user.deactivated_at # || current_user.admin?
-    @user = User.find(params[:id])
+  def load_current_user
+    @user = current_user
   end
 
   def ensure_invited
