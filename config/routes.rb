@@ -124,6 +124,8 @@ Tapestry::Application.routes.draw do
   match '/users/participant_survey' => 'users#participant_survey'
   resources :shipping_addresses
   match '/user/shipping_address' => 'users#shipping_address', :as => 'user_shipping_address'
+  match '/user/edit' => 'users#edit', :as => 'edit_user', :method => :get
+  match '/user/update' => 'users#update', :as => 'update_user', :method => :post
   resources :users
 
   resource :session
