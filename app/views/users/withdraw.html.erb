@@ -5,7 +5,7 @@ deactivate your account.  After doing so, you will no longer be able
 to access or update your account and the PGP will no longer contact
 you.</p>
 
-<%= form_for(@removal_request, { :url => withdraw_confirm_user_path(current_user) }) do |f| %>
+<%= form_for(@removal_request, { :url => withdraw_confirm_user_url }) do |f| %>
 
 <%= f.hidden_field :remove_data %>
 <%= f.hidden_field :destroy_samples %>

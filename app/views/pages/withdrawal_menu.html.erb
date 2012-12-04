@@ -8,7 +8,7 @@ other participant data</b> and information associated with your
 account, but the PGP will no longer contact you and you will not be
 able to access or update your account.</p>
 
-<%= button_to 'Withdraw from the study', withdraw_user_path(current_user), :method => :post %>
+<%= button_to 'Withdraw from the study', withdraw_user_url, :method => :post %>
 
 <p>You are free to decide at any time that <b>you no longer want your
 tissue samples, DNA sequence or other specimen analysis data, cell
@@ -17,7 +17,7 @@ described in the consent form, it may not be possible to prevent the
 future use of your data, cell lines and/or other information in
 certain circumstances.</p>
 
-<%= form_for RemovalRequest.new, :url => withdraw_user_path(current_user), :method => :post do |f| %>
+<%= form_for RemovalRequest.new, :url => withdraw_user_url, :method => :post do |f| %>
 <p>
 
 <%= f.check_box :remove_data %>
