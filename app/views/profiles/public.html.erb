@@ -138,7 +138,11 @@ None added.
 	<%= link_to_if((logged_in? and survey_result[:survey].is_listed), survey_result[:survey].name, survey_result[:survey]) %>
       </th>
       <td>
+	<% if survey_result[:timestamp] %>
+	Responses submitted <%= survey_result[:timestamp] %>.
+	<% else %>
 	Responses collected <%= survey_result[:collected_at] %>.
+	<% end %>
 	<a href="#" onclick="jQuery('.survey_result_<%= survey_result[:nonce] %>').toggle(); jQuery(this).html(jQuery('.survey_result_<%= survey_result[:nonce] %>').is(':visible') ? 'Hide responses' : 'Show responses'); return false;">Show responses</a>
       </td>
     </tr>
