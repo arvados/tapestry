@@ -2,6 +2,7 @@
   <table>
     <thead>
       <tr>
+	<th style="width:20px" class="collection-column"></th>
 	<% if @options[:show_participant_column] %>
 	<th style="width:auto">Participant</th>
 	<% end %>
@@ -23,7 +24,8 @@
     <tbody>
     </tbody>
     <% @datasets.each do |dataset| -%>
-    <tr>
+    <tr data-file-row data-locator="<%= dataset.locator %>" data-index-in-manifest="<%= dataset.index_in_manifest %>">
+      <td style="width:20px" class="collection-column"></td>
       <% if @options[:show_participant_column] %>
       <td style="width:auto"><%= link_to dataset.participant.hex, public_profile_path(:hex => dataset.participant.hex) %><%= ", PGP#{dataset.participant.pgp_id}" if dataset.participant.pgp_id %></td>
       <% end %>
@@ -52,8 +54,7 @@
 	<%= link_to 'Download', dataset.download_url, :rel => 'nofollow' %>
 	<br /><%= "(#{number_to_human_size(dataset.data_size)})" if dataset.data_size %>
 	<% elsif dataset.class == Dataset %>
-	<%= link_to 'Download', dataset_download_path(dataset), :rel => 'nofollow' %>
-	<br /><%= "(#{number_to_human_size(dataset.data_size)})" if dataset.data_size %>
+	<%= "(#{number_to_human_size(dataset.data_size)})" if dataset.data_size %>
 	<% end %>
       </td>
       <td>
