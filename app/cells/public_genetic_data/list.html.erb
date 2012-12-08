@@ -24,14 +24,14 @@
     <tbody>
     </tbody>
     <% @datasets.each do |dataset| -%>
-    <tr data-file-row data-locator="<%= dataset.locator %>" data-index-in-manifest="<%= dataset.index_in_manifest %>">
+    <tr data-file-row data-locator="<%= dataset.locator %>" data-index-in-manifest="<%= dataset.index_in_manifest %>" data-file-size="<%= dataset.data_size %>">
       <td style="width:20px" class="collection-column"></td>
       <% if @options[:show_participant_column] %>
-      <td style="width:auto"><%= link_to dataset.participant.hex, public_profile_path(:hex => dataset.participant.hex) %><%= ", PGP#{dataset.participant.pgp_id}" if dataset.participant.pgp_id %></td>
+      <td style="width:auto" data-summarize-as="participant"><%= link_to dataset.participant.hex, public_profile_path(:hex => dataset.participant.hex) %><%= ", PGP#{dataset.participant.pgp_id}" if dataset.participant.pgp_id %></td>
       <% end %>
 
       <% if @options[:show_date_published_column] %>
-      <td style="width:auto;white-space:nowrap">
+      <td style="width:auto;white-space:nowrap" data-summarize-as="list-distinct">
 	<%= raw '<strong>' if dataset.class == Dataset %>
 	<%= (dataset.respond_to?(:published_at) ? dataset.published_at : dataset.created_at).strftime('%Y-%m-%d') %>
 	<%= raw '</strong>' if dataset.class == Dataset %>
@@ -39,14 +39,14 @@
       <% end %>
 
       <% if @options[:show_date_column] %>
-      <td style="width:auto;white-space:nowrap">
+      <td style="width:auto;white-space:nowrap" data-summarize-as="list-distinct">
 	<%= Time.parse(dataset.date.to_s).strftime('%Y-%m-%d') if dataset.respond_to?(:date) %>
       </td>
       <% end %>
 
-      <td style="width:auto"><%= dataset.data_type %></td>
-      <td><%= dataset.name %></td>
-      <td>
+      <td style="width:auto" data-summarize-as="list-distinct"><%= dataset.data_type %></td>
+      <td data-summarize-as="name"><%= dataset.name %></td>
+      <td data-summarize-as="size">
 	<% if dataset.class == UserFile %>
 	<%= link_to 'Download', user_file_download_path(dataset), :rel => 'nofollow' %>
 	<br /><%= "(#{number_to_human_size(dataset.data_size)})" if dataset.data_size %>
@@ -57,7 +57,7 @@
 	<%= "(#{number_to_human_size(dataset.data_size)})" if dataset.data_size %>
 	<% end %>
       </td>
-      <td>
+      <td data-summarize-as="none">
 	<% if dataset.report_ready? %>
 	<%= link_to raw('View&nbsp;report'), dataset.report_url %>
 
