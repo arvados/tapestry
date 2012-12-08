@@ -51,6 +51,9 @@
 	<% elsif dataset.download_url %>
 	<%= link_to 'Download', dataset.download_url, :rel => 'nofollow' %>
 	<br /><%= "(#{number_to_human_size(dataset.data_size)})" if dataset.data_size %>
+	<% elsif dataset.class == Dataset %>
+	<%= link_to 'Download', dataset_download_path(dataset), :rel => 'nofollow' %>
+	<br /><%= "(#{number_to_human_size(dataset.data_size)})" if dataset.data_size %>
 	<% end %>
       </td>
       <td>

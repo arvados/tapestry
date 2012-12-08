@@ -8,6 +8,7 @@ class UserFile < ActiveRecord::Base
   include SubmitToGetEvidence
   include Longupload::Target
   include Longupload::StoresInWarehouse
+  include FileDataInWarehouse
 
   scope :find_all_by_longupload_info, lambda { |info|
     where('user_id = ? and (id = ? or (longupload_fingerprint = ? and longupload_file_name = ?))',
@@ -23,7 +24,7 @@ class UserFile < ActiveRecord::Base
 
   belongs_to :user
 
-  attr_accessible :user, :user_id, :name, :date, :description, :data_type, :dataset, :upload_tos_consent, :longupload_size, :longupload_fingerprint, :longupload_file_name, :using_plain_upload
+  attr_accessible :user, :user_id, :name, :date, :description, :data_type, :dataset, :upload_tos_consent, :longupload_size, :longupload_fingerprint, :longupload_file_name, :using_plain_upload, :index_in_manifest, :path_in_manifest, :locator
 
   attr_accessor :other_data_type
   attr_accessor :using_plain_upload
@@ -91,6 +92,15 @@ class UserFile < ActiveRecord::Base
     end
   end
 
+  def initialize(*x)
+    super(*x)
+    if x.last.is_a? Hash
+      self.dataset_file_size ||= x.last[:file_size]
+      self.dataset_file_name ||= x.last[:file_name]
+      self.name ||= x.last[:file_name]
+    end
+  end
+
   def is_plain_upload?
     dataset_file_size and !locator and !longupload_size
   end
@@ -100,7 +110,8 @@ class UserFile < ActiveRecord::Base
   end
 
   def is_suitable_for_get_evidence?
-    dataset_file_name and
+    index_in_manifest.nil? and
+      dataset_file_name and
       (dataset_file_name.match(/\.vcf/i) or
        dataset_file_name.match(/\.gff(\.bz2|\.gz)?$/i) or
        dataset_file_name.match(/^masterVar.*ASM\.tsv(\.bz2|\.gz)?$/i) or
