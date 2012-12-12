@@ -20,9 +20,9 @@
       <td><%= dataset.get_evidence_genome_id %></td>
       <td>
 	<% if dataset.download_url %>
-	<%= link_to 'Download', dataset.download_url, :rel => 'nofollow' %>
+	<%= link_to 'Download', dataset.anonymous_download_url, :rel => 'nofollow' %>
 	<%= "(#{number_to_human_size(dataset.data_size)})" if dataset.data_size %>
-	<%= link_to 'Download GFF file', dataset.download_url.gsub(/download_genome_id/,'download_type=ns&download_genome_id'), :rel => 'nofollow' %>
+	<%= link_to 'Download GFF file', dataset.anonymous_gff_download_url, :rel => 'nofollow' %>
 	<% end %>
       </td>
       <% if current_user and current_user.is_admin? %>

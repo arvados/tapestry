@@ -44,6 +44,14 @@ class Dataset < ActiveRecord::Base
     "Complete Genomics"
   end
 
+  def anonymous_download_url
+    self.read_attribute(:download_url).sub(/download_genome_id=(.*?)&download_nickname=.*access_token/,'download_genome_id=\1&download_nickname=\1&access_token')
+  end
+
+  def anonymous_gff_download_url
+    self.read_attribute(:download_url).sub(/download_genome_id=(.*?)&download_nickname=.*access_token/,'download_type=ns&download_genome_id=\1&download_nickname=\1&access_token')
+  end
+
   def download_url
     if !super and self.location and self.location.match(/evidence\.personalgenomes\.org\/hu[0-9A-F]+$/)
       "http://evidence.personalgenomes.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}"
@@ -57,8 +65,8 @@ class Dataset < ActiveRecord::Base
   end
 
   def get_evidence_genome_id
-    return '' if self.download_url.nil?
-    matches = self.download_url.match(/download_genome_id=(.*?)&/)
+    return '' if self.read_attribute(:download_url).nil?
+    matches = self.read_attribute(:download_url).match(/download_genome_id=(.*?)&/)
     return '' if matches.nil?
     return matches[1]
   end
