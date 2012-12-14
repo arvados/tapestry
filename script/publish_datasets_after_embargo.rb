@@ -18,6 +18,7 @@ Dataset.
   joins(:participant).
   merge(User.enrolled.not_suspended.not_deactivated).
   each do |ds|
+  ds = Dataset.find(ds.id)
   ds.published_at = Time.now
   ds.save!
   ds.submit_to_get_evidence!(:make_public => true)
