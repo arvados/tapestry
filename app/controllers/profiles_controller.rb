@@ -42,6 +42,7 @@ class ProfilesController < ApplicationController
       response[:answers].each do |answer|
         if answer.answer and answer.column != response[:survey].userid_response_column
           response[:qa].push [answer.google_survey_question.question, answer.answer]
+          response[:timestamp] = answer.answer if answer.google_survey_question.question == 'Timestamp'
         end
       end
       @google_survey_results.push response

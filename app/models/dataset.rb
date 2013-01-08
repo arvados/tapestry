@@ -6,6 +6,7 @@ class Dataset < ActiveRecord::Base
   serialize :processing_status, Hash
   serialize :report_metadata, Hash
   include SubmitToGetEvidence
+  include FileDataInWarehouse
 
   belongs_to :participant, :class_name => 'User'
   belongs_to :sample
@@ -34,6 +35,13 @@ class Dataset < ActiveRecord::Base
 
   before_validation :set_participant_id
   before_save :set_data_size
+
+  # FileDataInWarehouse initializes this way
+  def initialize(*x)
+    super(*x)
+    self.data_size ||= x.last[:file_size]
+    self.name ||= x.last[:file_name]
+  end
 
   # implement "genetic data" interface
   def date
@@ -76,7 +84,7 @@ class Dataset < ActiveRecord::Base
   end
 
   def is_suitable_for_get_evidence?
-    locator and !locator.empty?
+    locator and !locator.empty? and index_in_manifest.nil?
   end
 
   api_accessible :public do |t|
@@ -107,7 +115,7 @@ protected
   end
 
   def set_data_size
-    if locator_changed? then
+    if locator_changed? and index_in_manifest.nil? then
       self.data_size = nil
       if locator and locator.match /^[\da-f]{32}/
         manifest = `whget '#{locator.gsub("'","'\\''")}'`

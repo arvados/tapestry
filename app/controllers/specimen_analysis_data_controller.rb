@@ -12,6 +12,15 @@ class SpecimenAnalysisDataController < ApplicationController
         current_user.log("Participant saw dataset #{ds.name} (#{ds.id})")
       end
     end
+    @trait_surveys = GoogleSurvey.
+      where('id in (?)', TRAIT_SURVEY_IDS).
+      order(:id)
+    @trait_surveys_completed = Nonce.
+      where('owner_class=? and owner_id=? and target_class=? and target_id in (?) and used_at is not ?',
+            'User', current_user.id,
+            'GoogleSurvey', TRAIT_SURVEY_IDS,
+            nil).
+      collect(&:target_id)
   end
 
   def publish

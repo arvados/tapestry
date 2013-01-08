@@ -1244,3 +1244,11 @@ body .dataTables_wrapper {
   padding: 1em 1em;
   margin: 0 -1em;
 }
+
+.transparent {
+  zoom: 1;
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  -khtml-opacity: 0;
+  opacity: 0;
+}

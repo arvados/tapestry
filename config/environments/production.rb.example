@@ -75,4 +75,8 @@ Tapestry::Application.configure do
   WAREHOUSE_WEB_ROOT = "/warehouse" # Apache alias pointing to whmount target
   WAREHOUSE_FS_ROOT = "/warehouse" # whmount target
   # WAREHOUSE_PROXY_SCRIPT_PATH = "/whget.php" # alternative to using whmount
+
+  TRAIT_SURVEY_IDS = [6,7,8,9,10,11,12,13,14,15,16,17]
+
+  # ANONYMOUS_PUBLICATION_OPTION = true
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121030110259) do
+ActiveRecord::Schema.define(:version => 20121208050415) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -366,8 +366,8 @@ ActiveRecord::Schema.define(:version => 20121030110259) do
     t.datetime "updated_at"
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.boolean  "released_to_participant",  :default => false
-    t.string   "locator",                  :default => ""
+    t.boolean  "released_to_participant",               :default => false
+    t.string   "locator",                               :default => ""
     t.datetime "sent_notification_at"
     t.datetime "seen_by_participant_at"
     t.datetime "published_at"
@@ -375,10 +375,12 @@ ActiveRecord::Schema.define(:version => 20121030110259) do
     t.string   "status_url"
     t.string   "download_url"
     t.text     "processing_status"
-    t.boolean  "processing_stopped",       :default => true,  :null => false
-    t.integer  "data_size"
+    t.boolean  "processing_stopped",                    :default => true,  :null => false
+    t.integer  "data_size",                :limit => 8
     t.text     "report_metadata"
     t.datetime "published_anonymously_at"
+    t.string   "path_in_manifest"
+    t.integer  "index_in_manifest"
   end
 
   add_index "dataset_versions", ["dataset_id"], :name => "index_dataset_versions_on_dataset_id"
@@ -397,8 +399,8 @@ ActiveRecord::Schema.define(:version => 20121030110259) do
     t.integer  "version"
     t.integer  "creator_id"
     t.integer  "updater_id"
-    t.boolean  "released_to_participant",  :default => false
-    t.string   "locator",                  :default => ""
+    t.boolean  "released_to_participant",               :default => false
+    t.string   "locator",                               :default => ""
     t.datetime "sent_notification_at"
     t.datetime "seen_by_participant_at"
     t.datetime "published_at"
@@ -406,10 +408,12 @@ ActiveRecord::Schema.define(:version => 20121030110259) do
     t.string   "status_url"
     t.string   "download_url"
     t.text     "processing_status"
-    t.boolean  "processing_stopped",       :default => true,  :null => false
-    t.integer  "data_size"
+    t.boolean  "processing_stopped",                    :default => true,  :null => false
+    t.integer  "data_size",                :limit => 8
     t.text     "report_metadata"
     t.datetime "published_anonymously_at"
+    t.string   "path_in_manifest"
+    t.integer  "index_in_manifest"
   end
 
   add_index "datasets", ["participant_id"], :name => "index_datasets_on_participant_id"
@@ -2583,6 +2587,8 @@ ActiveRecord::Schema.define(:version => 20121030110259) do
     t.integer  "longupload_size",           :limit => 8
     t.integer  "longupload_bytes_received", :limit => 8
     t.text     "warehouse_blocks",          :limit => 2147483647
+    t.string   "path_in_manifest"
+    t.integer  "index_in_manifest"
   end
 
   add_index "user_file_versions", ["user_file_id"], :name => "index_genetic_data_versions_on_genetic_data_id"
@@ -2615,6 +2621,8 @@ ActiveRecord::Schema.define(:version => 20121030110259) do
     t.integer  "longupload_size",           :limit => 8
     t.integer  "longupload_bytes_received", :limit => 8
     t.text     "warehouse_blocks",          :limit => 2147483647
+    t.string   "path_in_manifest"
+    t.integer  "index_in_manifest"
   end
 
   create_table "user_log_versions", :force => true do |t|

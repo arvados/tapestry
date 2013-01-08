@@ -174,25 +174,11 @@ class UserFilesController < ApplicationController
 
     filename = @user_file.user.hex + '_' + @user_file.created_at.strftime('%Y%m%d%H%M%S') + '.' + (@user_file.dataset.path || @user_file.longupload_file_name).sub(/^.*\./,'')
 
-    if @user_file.data_size > 2**20 and !File.exists? @user_file.dataset.path
-      # Here we assume there is only one file in the manifest, and
-      # it's not in a subdir.  Longupload currently ensures that, but
-      # we should be able to detect multi-file manifests and respond
-      # with a tarball instead of failing.
-      if defined? WAREHOUSE_WEB_ROOT and
-          defined? WAREHOUSE_FS_ROOT and
-          (filelist = Dir.glob("#{WAREHOUSE_FS_ROOT}/#{@user_file.locator}/*")) and
-          filelist.size == 1
-        return redirect_to filelist[0].sub(WAREHOUSE_FS_ROOT, WAREHOUSE_WEB_ROOT)
-      elsif defined? WAREHOUSE_PROXY_SCRIPT_PATH
-        return redirect_to(WAREHOUSE_PROXY_SCRIPT_PATH +
-                           '?locator=' + Rack::Utils.escape(@user_file.locator + '/') +
-                         '&filename=' + Rack::Utils.escape(filename) +
-                         '&size=' + @user_file.data_size.to_s +
-                         '&type=' + Rack::Utils.escape(@user_file.dataset_content_type) +
-                         '&disposition=attachment')
+    if !File.exists? @user_file.dataset.path
+      if (x = @user_file.download_url)
+        return redirect_to x
       else
-        flash[:error] = "Sorry, downloading large files is not yet supported."
+        flash[:error] = "Sorry, this file is temporarily unavailable."
         return redirect_to url_for(@user_file)
       end
     end

@@ -12,55 +12,6 @@ and your unpublished specimen analysis data will not be made public.</p>
 may not use this data for any medical or clinical purpose unless the data are
 first confirmed by a licensed healthcare professional. </p>
 
-<% if current_user.datasets.released_to_participant.unpublished.size > 0 or current_user.datasets.published_anonymously.size > 0 %>
-
-<div class="redborder">
-
-<h3>Critical Assessment of Genome Interpretation Challenge</h3>
-
-<p><strong>CAGI genome release:</strong> Currently the PGP is working together
-with CAGI (Critical Assessment of Genome Interpretation) on their <a
-href="https://genomeinterpretation.org/content/2012-challenges">annual
-challenge</a>. If you are interested in having your genome used in CAGI's
-interpretation challenge, select "Release as CAGI genome" in the specimen
-analysis history table below and make sure to complete the following PGP trait
-surveys: </p>
-
-<ul>
-<li><%= link_to 'Cancer', google_survey_path(6) %>
-<li><%= link_to 'Endocrine, Metabolic, Nutritional, and Immunity', google_survey_path(7) %>
-<li><%= link_to 'Blood', google_survey_path(8) %>
-<li><%= link_to 'Nervous system', google_survey_path(9) %>
-<li><%= link_to 'Vision and hearing', google_survey_path(10) %>
-<li><%= link_to 'Circulatory system', google_survey_path(11) %>
-<li><%= link_to 'Respiratory system', google_survey_path(12) %>
-<li><%= link_to 'Digestive system', google_survey_path(13) %>
-<li><%= link_to 'Genitourinary Systems', google_survey_path(14) %>
-<li><%= link_to 'Skin and subcutaneous tissue', google_survey_path(15) %>
-<li><%= link_to 'Musculoskeletal System and Connective Tissue', google_survey_path(16) %>
-<li><%= link_to 'Congenital traits and anomalies', google_survey_path(17) %>
-</ul>
-
-<p>
-If you select the "Release as CAGI genome" option, your genome data will be
-made public immediately but it will <i>not</i> be immediately linked to your
-public profile. Which participant the genome belongs to is kept secret for
-the duration of the competition. Researchers will try to predict your
-traits based on your genome data. The end of CAGI is currently scheduled
-to be November 2012. Once the challenge has ended, your genome will be publicly
-associated with your public profile.
-</p>
-
-<p>
-As with other PGP surveys, answering these surveys is entirely optional. The
-answers you submit will be made public on your PGP profile immediately. These
-surveys are not limited to the CAGI competition; any PGP participant may
-complete them to add trait and disease information to their public PGP profile.
-</p>
-<% end -%>
-
-</div>
-
 <h3>Specimen analysis history</h3>
 <table class="admin_table">
   <tr>
@@ -79,15 +30,65 @@ complete them to add trait and disease information to their public PGP profile.
       <td>
 <%
 if dataset.published_at.nil? and dataset.published_anonymously_at.nil? then
-  publication_date = raw("<strong>" + (dataset.seen_by_participant_at + 30.days).strftime("%b %e, %Y").to_s + "</strong> or " + link_to('Release as CAGI genome', publish_specimen_analysis_data_path(dataset,:anonymous => true), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available as a CAGI genome right now?') + " or " + link_to('Publish now', publish_specimen_analysis_data_path(dataset), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available right now?'))
+  publication_date = "<strong>" + (dataset.seen_by_participant_at + 30.days).strftime("%b %e, %Y").to_s + "</strong>"
+  if defined? ANONYMOUS_PUBLICATION_OPTION
+    publication_date << "<br /> or " + link_to(raw('Release&nbsp;as&nbsp;CAGI&nbsp;genome'), publish_specimen_analysis_data_path(dataset,:anonymous => true), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available as a CAGI genome right now?') + raw('&nbsp;(see&nbsp;below)<br />')
+  end
+  publication_date << " or " + link_to(raw('Publish&nbsp;now'), publish_specimen_analysis_data_path(dataset), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available right now?')
 elsif dataset.published_anonymously_at.nil? then
   publication_date = dataset.published_at.strftime("%b %e, %Y").to_s
 elsif dataset.published_at.nil? then
   publication_date = "Published anonymously on " + dataset.published_anonymously_at.strftime("%b %e, %Y").to_s
 end
 -%>
-        <%= publication_date %>
+        <%= raw publication_date %>
       </td>
     </tr>
   <% end %>
 </table>
+
+<% if (defined?(ANONYMOUS_PUBLICATION_OPTION) and current_user.datasets.released_to_participant.unpublished.size > 0) or current_user.datasets.published_anonymously.size > 0 %>
+
+<div style="height: 2em"></div>
+
+<div class="redborder">
+
+<h3>Critical Assessment of Genome Interpretation Challenge</h3>
+
+<p><strong>CAGI genome release:</strong> Currently the PGP is working together
+with CAGI (Critical Assessment of Genome Interpretation) on their <a
+href="https://genomeinterpretation.org/content/2012-challenges">annual
+challenge</a>. If you are interested in having your genome used in CAGI's
+interpretation challenge, select "Release as CAGI genome" in the specimen
+analysis history table above and make sure to complete the following PGP trait
+surveys: </p>
+
+<ul>
+<% @trait_surveys.each do |ts| %>
+<li>
+  <% ticked = @trait_surveys_completed.index(ts.id) %>
+  <%= image_tag('tick.png', ticked ? {} : { :class => 'transparent' }) %>
+  <%= link_to ts.name, google_survey_path(ts.id), { :style => ticked ? 'font-weight: normal' : 'font-weight: bold' } %>
+</li>
+<% end %>
+</ul>
+
+<p>
+If you select the "Release as CAGI genome" option, your genome data will be
+made public immediately but it will <i>not</i> be immediately linked to your
+public profile. Which participant the genome belongs to is kept secret for
+the duration of the competition. Researchers will try to predict your
+traits based on your genome data. The end of CAGI is currently scheduled
+to be March 28, 2013. Once the challenge has ended, your genome will be publicly
+associated with your public profile.
+</p>
+
+<p>
+As with other PGP surveys, answering these surveys is entirely optional. The
+answers you submit will be made public on your PGP profile immediately. These
+surveys are not limited to the CAGI competition; any PGP participant may
+complete them to add trait and disease information to their public PGP profile.
+</p>
+
+</div>
+<% end -%>
