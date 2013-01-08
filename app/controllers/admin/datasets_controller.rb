@@ -1,6 +1,6 @@
 class Admin::DatasetsController < Admin::AdminControllerBase
   
-  before_filter :set_dataset, :only => [:edit, :update, :notify, :reprocess]
+  before_filter :set_dataset, :only => [:edit, :update, :release, :notify, :reprocess]
 
   def index
     @datasets = Dataset.all
@@ -23,12 +23,16 @@ class Admin::DatasetsController < Admin::AdminControllerBase
     @dataset = Dataset.new
   end
 
-  def notify
+
+  def release
     @dataset.released_to_participant = true
     @dataset.save!
-
     @dataset.participant.log("Dataset '#{@dataset.name}' with id #{@dataset.id} was released to this participant")
 
+    notify
+  end
+
+  def notify
     UserMailer.dataset_notification_message(specimen_analysis_data_index_url, @dataset.participant).deliver
 
     @dataset.sent_notification_at = Time.now()

@@ -232,6 +232,7 @@ Tapestry::Application.routes.draw do
       resources :datasets
       match '/datasets/:id/reprocess' => 'datasets#reprocess', :as => :reprocess_dataset
       match '/datasets/:id/notify' => 'datasets#notify', :as => :dataset_notify_participant
+      match '/datasets/:id/release' => 'datasets#release', :as => :dataset_release_participant
       resources :content_areas do
           resources :exams do
               resources :exam_versions do
