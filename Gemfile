@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 source 'http://gemcutter.org'
 source 'http://gems.github.com'
 
-gem 'rails', '3.0.18'
+gem 'rails', '3.0.19'
 
 gem 'mysql'
 gem 'cancan'
