@@ -104,7 +104,7 @@ jQuery(function(){
   </div>
   <% if not @study.approved then %>
     <div class="field">
-      <%= f.label :requested, 'Request project approval' %><br />
+      <%= f.label :requested, 'Request activity approval' %><br />
       <%= f.check_box :requested %>
       <br/><strong>Please note</strong>: when your <%= @study.study_type %> is approved, the <span class="iff-is-third-party">participation URL,</span> <%= @study.study_type %> name and participant description fields will be frozen.
     </div>
