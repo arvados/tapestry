@@ -18,10 +18,10 @@
 
 <% if Study.approved.third_party.open_now.size > 0 %>
 <p>
-  There <%= are_n_things(Study.third_party.open_now.size, 'third party project') %> currently seeking participants.
+  There <%= are_n_things(Study.third_party.open_now.size, 'third party activity') %> currently seeking participants.
 
   <ul>
-  <li>Learn more about <%= link_to 'third party projects', third_party_index_url %></li>
+  <li>Learn more about <%= link_to 'third party activities', third_party_index_url %></li>
   </ul>
 </p>
 <% end %>
