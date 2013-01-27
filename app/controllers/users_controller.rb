@@ -173,6 +173,9 @@ class UsersController < ApplicationController
   end
 
   def created
+    # DO NOT REMOVE THIS LINE! load_current_user can not load @user here yet,
+    # because the user has not logged in yet.
+    @user = User.find_by_id(params[:id])
     if not @user then
       flash[:error] = "User not found. Please try again."
       redirect_to root_path
