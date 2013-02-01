@@ -4,7 +4,7 @@ to an independent web site.</i></p>
 
 <h2><%= @study.name %></h2>
 
-<p><%= raw RedCloth.new(@study.participant_description).to_html %></p>
+<%= raw RedCloth.new(@study.participant_description).to_html %>
 
 <p><b>Researcher</b>: <%= @study.researcher.full_name %>, <%= @study.researcher.researcher_affiliation %></p>
 
