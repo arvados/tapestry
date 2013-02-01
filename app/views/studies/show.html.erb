@@ -7,5 +7,11 @@
     <strong>Researcher</strong><br />
     <p><%= @study.researcher.full_name %></p>
     <strong>IRB Researcher</strong><br />
-    <p><%= @study.irb_associate.full_name %></p>
+    <p>
+      <% if @study.irb_associate %>
+      <%= @study.irb_associate.full_name %>
+      <% else %>
+      (not assigned)
+      <% end %>
+    </p>
 
