@@ -69,9 +69,11 @@ class Study < ActiveRecord::Base
 
   def personalized_participation_url(user)
     s = participation_url
-    s << (s.match(/\?/) ? '&' : '?')
-    s << 'study_id=' << id.to_s
-    s << '&participant_id='
+    unless s.match(/\?.*=$/)    # url?code=
+      s << (s.match(/\?/) ? '&' : '?')
+      s << 'study_id=' << id.to_s
+      s << '&participant_id='
+    end
     s << user.app_token("Study##{self.id}")
   end
 

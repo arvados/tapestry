@@ -36,9 +36,14 @@ jQuery(function(){
       <div style="margin: .5em 0;padding:.25em .5em;border:1px dashed #666;background:#eee">
 	<% example_token = Digest::SHA1.hexdigest('example') %>
 	<ul>
-	  <li>An alphanumeric string unique to each user<sup>(1)</sup> will be appended to the URL when participants click through.</li>
+	  <li>An alphanumeric string unique to each user, along with our ID number for this activity, will be appended to the URL as a query string<sup>(1)</sup> when participants click through.
+	    <ul>
+	      <li>If the URL contains <code>?</code>, we will append <code>&amp;...</code> instead of <code>?...</code>.</li>
+	      <li>If the URL contains <code>?</code> and ends with <code>=</code> then we will append the bare alphanumeric string<sup>(2)</sup>.</li>
+	    </ul>
+	  </li>
 	  <li>You can get a list of valid codes that have been used by clicking the "manage participants" link for this study on <%= link_to 'your researcher home page', page_path('researcher_tools') %>.</li>
-	  <li>Your web application can verify the authenticity of these codes in real time using our API<sup>(2)</sup> &mdash; look for <code>{"valid":true}</code> in the JSON response.
+	  <li>Your web application can verify the authenticity of these codes in real time using our API<sup>(3)</sup> &mdash; look for <code>{"valid":true}</code> in the JSON response.
 	  </li>
 	  <li>
 	    Keep the codes attached to the participants&rsquo; data in your system.  These will allow us to associate generated/returned data with the appropriate participants&rsquo; public profiles.
@@ -50,6 +55,10 @@ jQuery(function(){
 	  <br />
 	  <br />
 	  <sup>(2)</sup>&nbsp;
+	  <code><%= example_token %></code>
+	  <br />
+	  <br />
+	  <sup>(3)</sup>&nbsp;
 	  <% example_url = verify_third_party_participant_id_url(:id => (@study.id || 1234), :app_token => example_token) %>
 	  <code><%= example_url %></code> 
 	  <% if !@study.id %>
