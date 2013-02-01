@@ -3,7 +3,7 @@
     <strong>Name</strong><br />
     <p><%= @study.name %></p>
     <strong>Description</strong><br />
-    <p><pre><%= @study.participant_description %></pre></p>
+    <%= raw RedCloth.new(@study.participant_description).to_html %>
     <strong>Researcher</strong><br />
     <p><%= @study.researcher.full_name %></p>
     <strong>IRB Researcher</strong><br />

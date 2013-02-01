@@ -4,7 +4,7 @@ to an independent web site.</i></p>
 
 <h2><%= @study.name %></h2>
 
-<p><%=raw CGI.escapeHTML(@study.participant_description).gsub("\r","").gsub("\n\n","</p><p>").gsub("\n","<br />") %></p>
+<p><%= raw RedCloth.new(@study.participant_description).to_html %></p>
 
 <p><b>Researcher</b>: <%= @study.researcher.full_name %>, <%= @study.researcher.researcher_affiliation %></p>
 

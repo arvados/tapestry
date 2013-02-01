@@ -71,9 +71,7 @@ jQuery(function(){
   <div class="field">
     <%= f.label :participant_description, "Description of #{@study.study_type}, to be seen by participants (displayed on recruitment page)" %><br />
     <% if @study.approved then %>
-      <pre>
-      <%= @study.participant_description %>
-      </pre>
+      <%= raw RedCloth.new(@study.participant_description).to_html %>
     <% else %>
       <%= f.text_area :participant_description, :cols => 80 %>
     <% end %>

@@ -17,11 +17,11 @@
   </div>
   <div class="field">
     <%= f.label :participant_description %><br />
-    <p><%=raw CGI.escapeHTML(@study.participant_description).gsub("\r","").gsub("\n\n","</p><p>").gsub("\n","<br />") %></p>
+    <p><%= raw RedCloth.new(@study.participant_description).to_html %></p>
   </div>
   <div class="field">
     <%= f.label :researcher_description %><br />
-    <%= @study.researcher_description %>
+    <%= raw RedCloth.new(@study.researcher_description).to_html %>
   </div>
   <div class="field">
     <%= f.label :researcher_id %><br />
