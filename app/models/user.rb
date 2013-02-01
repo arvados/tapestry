@@ -566,6 +566,9 @@ class User < ActiveRecord::Base
   # "cheap irrevocable oAuth" mechanism.
   def app_token(app_identifier)
     return @cached_app_token if @cached_app_identifier == app_identifier
+    if defined? GET_2013_APP_IDENTIFIER and GET_2013_APP_IDENTIFIER == app_identifier
+      return Digest::SHA1.hexdigest(self.hex + GET_2013_SECRET)[0,6].upcase
+    end
     secret = Tapestry::Application.config.secret_token
     raise "Installation problem: Application.config.secret_token not properly defined" if secret.length < 16
     @cached_app_identifier = app_identifier
