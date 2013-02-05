@@ -2,6 +2,9 @@
 <% if recent.size > 0 %>
 <div style="float: right; width: 50%">
   <h2>Latest blog posts</h2>
+  <% if defined? BLOG_EMAIL_SUBSCRIPTION_URL -%>
+  <a href="<%= BLOG_EMAIL_SUBSCRIPTION_URL %>">Subscribe to the blog via e-mail</a>
+  <% end -%>
   <% recent.each do |bp| %>
   <p>
     <b><%= link_to bp.title, bp.post_url %></b>
