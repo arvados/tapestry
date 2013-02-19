@@ -16,7 +16,7 @@ class AddRemoveDataAndDestroySamplesToRemovalRequests < ActiveRecord::Migration
     remove_column :removal_requests, :deleted_at
     remove_column :removal_requests, :admin_notes
     remove_column :removal_requests, :fulfilled_at
-    remove_column :removal_requests, :fulfilled_by_id
+    remove_column :removal_requests, :fulfilled_by
     remove_column :removal_requests, :destroy_samples
     remove_column :removal_requests, :remove_data
   end
