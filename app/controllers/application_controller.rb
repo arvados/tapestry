@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
   before_filter :ensure_active
   before_filter :only_owner_can_change, :only => [:edit, :update, :destroy]
   before_filter :prevent_setting_ownership, :only => [:create, :update]
+  before_filter :ensure_dataset_release
 
   around_filter :profile
 
@@ -146,20 +147,29 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_recent_safety_questionnaire
-    if logged_in? and current_user and current_user.enrolled and not current_user.has_recent_safety_questionnaire
+    if logged_in? and current_user and current_user.enrolled and not current_user.has_recent_safety_questionnaire and (not session[:real_uid] or not session[:switch_back_to])
       flash[:warning] = 'You have been redirected to this page because you are due to complete a quarterly safety questionnaire. You will need to complete this before interacting with your PGP account. Thanks!'
       redirect_to require_safety_questionnaire_url
     end
   end
 
   def ensure_tos_agreement
-    if logged_in? and current_user and current_user.documents.kind('tos', 'v1').empty?
+    if logged_in? and current_user and current_user.documents.kind('tos', 'v1').empty? and (not session[:real_uid] or not session[:switch_back_to])
       redirect_to tos_user_url
     end
   end
 
+  def ensure_dataset_release
+    if logged_in? and current_user and (not session[:real_uid] or not session[:switch_back_to])
+      if current_user.datasets.released_to_participant.size != current_user.datasets.seen_by_participant.size
+        flash[:warning] = 'You have been redirected to this page because you have new raw genomic data and a preliminary genome analysis to review. Please do so below. Thanks!'
+        redirect_to specimen_analysis_data_index_url
+      end
+    end
+  end
+
   def ensure_latest_consent
-    if logged_in? and current_user and current_user.enrolled and current_user.documents.kind('consent', LATEST_CONSENT_VERSION).empty?
+    if logged_in? and current_user and current_user.enrolled and current_user.documents.kind('consent', LATEST_CONSENT_VERSION).empty? and (not session[:real_uid] or not session[:switch_back_to])
       redirect_to consent_user_url
     end
   end

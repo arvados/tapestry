@@ -1,6 +1,7 @@
 class SafetyQuestionnairesController < ApplicationController
   skip_before_filter :ensure_active, :only => [ :new, :create, :require ]
   skip_before_filter :ensure_recent_safety_questionnaire
+  skip_before_filter :ensure_dataset_release
 
   def require
     # This is just a sanity check; unenrolled users accessing this view would otherwise

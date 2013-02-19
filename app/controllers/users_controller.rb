@@ -9,6 +9,9 @@ class UsersController < ApplicationController
   skip_before_filter :ensure_latest_consent, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
   # Make sure people sign the latest TOS and Consent before they do safety questionnaires
   skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
+  # Make sure people sign the latest TOS and Consent before they review new datasets
+  skip_before_filter :ensure_dataset_release, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
+
 
   before_filter :load_selection, :only => :index
   def index

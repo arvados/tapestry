@@ -3,6 +3,8 @@ class SpecimenAnalysisDataController < ApplicationController
   before_filter :set_dataset, :only => [:publish]
   before_filter :only_participant_can_operate, :only => [:publish]
 
+  skip_before_filter :ensure_dataset_release
+
   def index
     @datasets = current_user.datasets.where('released_to_participant')
     @datasets.each do |ds|
