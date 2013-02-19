@@ -5,14 +5,22 @@ class SpecimenAnalysisDataController < ApplicationController
 
   skip_before_filter :ensure_dataset_release
 
+  skip_before_filter :ensure_dataset_release
+
   def index
     @datasets = current_user.datasets.where('released_to_participant')
-    @datasets.each do |ds|
-      if ds.seen_by_participant_at.nil?
-        ds.seen_by_participant_at = Time.now() 
-        ds.save
-        current_user.log("Participant saw dataset #{ds.name} (#{ds.id})")
+    # Mark datasets as seen by participant, but *only* if it is really them, and not
+    # a cloaked admin, who is viewing this page.
+    if not session[:real_uid] or not session[:switch_back_to] then
+      @datasets.each do |ds|
+        if ds.seen_by_participant_at.nil?
+          ds.seen_by_participant_at = Time.now()
+          ds.save
+          current_user.log("Participant saw dataset #{ds.name} (#{ds.id})")
+        end
       end
+    else
+      flash[:warning] = 'You a cloaked administrator; viewing this page does not set the "seen_by_participant_at" flag on the datasets listed'
     end
     @trait_surveys = GoogleSurvey.
       where('id in (?)', TRAIT_SURVEY_IDS).

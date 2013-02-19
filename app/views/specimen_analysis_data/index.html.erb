@@ -23,22 +23,26 @@ first confirmed by a licensed healthcare professional. </p>
   </tr>
   <% @datasets.each do |dataset| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= dataset.seen_by_participant_at.strftime("%b %e, %Y").to_s %></td>
+      <td><%= dataset.seen_by_participant_at ? dataset.seen_by_participant_at.strftime("%b %e, %Y").to_s : '' %></td>
       <td><%= dataset.name %></td>
       <td><%= dataset.sample ? link_to(dataset.sample.crc_id_s, public_profile_path(current_user.hex, :anchor => 'samples')) : '-' %></td>
       <td><%= link_to_if dataset.location, 'view', dataset.location %></td>
       <td>
 <%
-if dataset.published_at.nil? and dataset.published_anonymously_at.nil? then
-  publication_date = "<strong>" + (dataset.seen_by_participant_at + 30.days).strftime("%b %e, %Y").to_s + "</strong>"
-  if defined? ANONYMOUS_PUBLICATION_OPTION
-    publication_date << "<br /> or " + link_to(raw('Release&nbsp;as&nbsp;CAGI&nbsp;genome'), publish_specimen_analysis_data_path(dataset,:anonymous => true), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available as a CAGI genome right now?') + raw('&nbsp;(see&nbsp;below)<br />')
+if not dataset.seen_by_participant_at.nil? then
+  if dataset.published_at.nil? and dataset.published_anonymously_at.nil? then
+    publication_date = "<strong>" + (dataset.seen_by_participant_at + 30.days).strftime("%b %e, %Y").to_s + "</strong>"
+    if defined? ANONYMOUS_PUBLICATION_OPTION
+      publication_date << "<br /> or " + link_to(raw('Release&nbsp;as&nbsp;CAGI&nbsp;genome'), publish_specimen_analysis_data_path(dataset,:anonymous => true), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available as a CAGI genome right now?') + raw('&nbsp;(see&nbsp;below)<br />')
+    end
+    publication_date << " or " + link_to(raw('Publish&nbsp;now'), publish_specimen_analysis_data_path(dataset), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available right now?')
+  elsif dataset.published_anonymously_at.nil? then
+    publication_date = dataset.published_at.strftime("%b %e, %Y").to_s
+  elsif dataset.published_at.nil? then
+    publication_date = "Published anonymously on " + dataset.published_anonymously_at.strftime("%b %e, %Y").to_s
   end
-  publication_date << " or " + link_to(raw('Publish&nbsp;now'), publish_specimen_analysis_data_path(dataset), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available right now?')
-elsif dataset.published_anonymously_at.nil? then
-  publication_date = dataset.published_at.strftime("%b %e, %Y").to_s
-elsif dataset.published_at.nil? then
-  publication_date = "Published anonymously on " + dataset.published_anonymously_at.strftime("%b %e, %Y").to_s
+else
+  publication_date = ''
 end
 -%>
         <%= raw publication_date %>
