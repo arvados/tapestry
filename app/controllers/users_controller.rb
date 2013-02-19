@@ -367,13 +367,14 @@ class UsersController < ApplicationController
       rr = RemovalRequest.new(params[:removal_request])
       rr.update_attributes(:user => @user)
       rr.save!
-      if rr.remove_data
+      if rr.destroy_samples
         @user.log('Requested destruction of tissue samples and cell lines.')
       end
       if rr.remove_data
         @user.log('Requested removal of data from public database.')
         unless @user.suspended_at
-          @user.update_attributes(:suspended_at => Time.now)
+          @user.suspended_at = Time.now
+          @user.save!
         end
       end
     end
