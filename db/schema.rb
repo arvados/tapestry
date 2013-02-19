@@ -1701,7 +1701,7 @@ ActiveRecord::Schema.define(:version => 20121208050415) do
     t.datetime "updated_at"
     t.boolean  "remove_data",        :default => false
     t.boolean  "destroy_samples",    :default => false
-    t.integer  "fulfilled_by_id"
+    t.integer  "fulfilled_by"
     t.datetime "fulfilled_at"
     t.text     "admin_notes"
     t.datetime "deleted_at"
@@ -1716,7 +1716,7 @@ ActiveRecord::Schema.define(:version => 20121208050415) do
     t.datetime "updated_at"
     t.boolean  "remove_data",     :default => false
     t.boolean  "destroy_samples", :default => false
-    t.integer  "fulfilled_by_id"
+    t.integer  "fulfilled_by"
     t.datetime "fulfilled_at"
     t.text     "admin_notes"
     t.datetime "deleted_at"
