@@ -38,8 +38,8 @@ class Sample < ActiveRecord::Base
       unscoped.scoped(:include => [:study, :participant, :owner])
     else
       real.scoped(:include => [:study, :participant, :owner],
-                  :conditions => ['? in (samples.participant_id, samples.owner_id, studies.creator_id) or (samples.participant_id is not ? and samples.owner_id is not ? and samples.owner_id <> samples.participant_id)',
-                                  (user ? user.id : -1), nil, nil])
+                  :conditions => ['? in (samples.participant_id, samples.owner_id, studies.creator_id) or (samples.participant_id is not ? and samples.owner_id is not ? and samples.owner_id <> samples.participant_id and users.suspended_at is ?)',
+                                  (user ? user.id : -1), nil, nil, nil])
     end
   }
 
