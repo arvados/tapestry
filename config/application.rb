@@ -2,6 +2,16 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
+if RUBY_VERSION >= '1.9'
+  # Silently ignore any "require 'jcode'" by any module (e.g., gdata)
+  # -- use built-in unicode support instead.
+  class Object
+    def require(*args)
+      if args[0] == 'jcode' then true else super(*args) end
+    end
+  end
+end
+
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
