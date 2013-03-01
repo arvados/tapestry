@@ -11,8 +11,8 @@
       <th>Name</th>
       <th>Data?</th>
       <th>Samples?</th>
-      <th>Created</th>
-      <th>Fulfilled?</th>
+      <th>Requested</th>
+      <th>Fulfilled</th>
       <th>Admin notes?</th>
       <th></th>
     </tr>
@@ -22,8 +22,12 @@
     <tr>
       <td><%= admin_removal_request.user.hex %></td>
       <td><%= admin_removal_request.user.full_name %></td>
-      <td><%= 'Remove data' if admin_removal_request.remove_data %></td>
-      <td><%= 'Destroy samples' if admin_removal_request.destroy_samples %></td>
+      <td><%= 'Remove' if admin_removal_request.remove_data %></td>
+      <td>
+        <% if admin_removal_request.destroy_samples %>
+        Destroy <%= link_to_if (admin_removal_request.user.samples.count>0), admin_removal_request.user.samples.count, specimens_path(:q => admin_removal_request.user.hex, :include_derived_samples => true) %>
+        <% end %>
+      </td>
       <td><%= admin_removal_request.created_at %></td>
       <td>
 	<% if admin_removal_request.fulfilled_at %>

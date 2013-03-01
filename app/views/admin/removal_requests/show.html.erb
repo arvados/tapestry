@@ -1,34 +1,55 @@
 <h2><%= link_to 'Requests to remove data and destroy samples', admin_removal_requests_path %> &rarr; #<%= @admin_removal_request.id %></h2>
 
-<p>
-  <b>User:</b>
-  <%= @admin_removal_request.user.full_name %>
-</p>
+<table class="admin_table">
+  <thead></thead>
+  <tbody>
+    <tr>
+      <td>
+        <b>User</b>
+      </td><td>
+        <%= @admin_removal_request.user.full_name %>
+      </td><td>
+        <%= link_to "public profile #{@admin_removal_request.user.hex}", public_profile_path(@admin_removal_request.user.hex) %>
+        /
+        <%= link_to 'show', admin_user_path(@admin_removal_request.user) %>
+        /
+        <%= link_to 'edit', edit_admin_user_path(@admin_removal_request.user) %>
+      </td>
+    </tr><tr>
+      <td>
+        <b>Requested data removal?</b>
+      </td><td colspan="2">
+        <%= @admin_removal_request.remove_data %>
+      </td>
+    </tr><tr>
+      <td>
+        <b>Requested sample destruction?</b>
+      </td><td>
+        <%= @admin_removal_request.destroy_samples %>
+      </td><td>
+        <%= link_to "#{@admin_removal_request.user.samples.count} samples associated with this participant", specimens_path(:q => @admin_removal_request.user.hex, :include_derived_samples => true) %>
+      </td>
+    </tr><tr>
+      <td>
+        <b>Requested at:</b>
+      </td><td colspan="2">
+        <%= @admin_removal_request.created_at %>
+      </td>
+    </tr><tr>
+      <td>
+        <b>Fulfilled at:</b>
+      </td><td colspan="2">
+        <%= @admin_removal_request.fulfilled_at %>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-<p>
-  <b>Requested data removal?</b>
-  <%= @admin_removal_request.remove_data %>
-</p>
-
-<p>
-  <b>Requested sample destruction?</b>
-  <%= @admin_removal_request.destroy_samples %>
-</p>
-
-<p>
-  <b>Created at:</b>
-  <%= @admin_removal_request.created_at %>
-</p>
-
-<p>
-  <b>Fulfilled at:</b>
-  <%= @admin_removal_request.fulfilled_at %>
-</p>
-
+<br clear="all" />
 <%= form_for @admin_removal_request, :url => admin_removal_request_path(@admin_removal_request), :method => :post do |f| %>
 
 <% unless @admin_removal_request.fulfilled_at %>
-<%= f.submit 'Close', :confirm => 'Mark this request as fulfilled?' %>
+<%= f.submit 'Mark this request as fulfilled', :confirm => 'Mark this request as fulfilled?' %>
 <% end %>
 
 <p>
