@@ -2,7 +2,7 @@ require 'stringio'
 require 'csv'
 require 'drb'
 require 'ostruct'
-require 'md5'
+require 'digest/md5'
 require 'time'
 require 'open3'
 
