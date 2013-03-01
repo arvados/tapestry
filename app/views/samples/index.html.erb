@@ -7,10 +7,11 @@ jQuery(function() {
         $("noscript").remove();
         $("#samples").removeClass('admin_table');
         $('#samples').dataTable( {
+            "oSearch": { "sSearch": <%= raw (params[:q] || '').to_json %> },
             "bProcessing": true,
             "bServerSide": true,
             "bJQueryUI": true,
-            "sAjaxSource": '<%=j(samples_path)%>',
+            "sAjaxSource": '<%=j(samples_path(:include_derived_samples => params[:include_derived_samples]))%>',
             "aoColumns": [
                 { 'mDataProp': 'crc_id',
                   'fnRender': function(oObj) {

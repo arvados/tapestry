@@ -14,8 +14,12 @@ class SamplesController < ApplicationController
     @page_title = 'Specimens'
     @samples = Sample.scoped.
       includes([:kit, :participant, :study, :owner, :parent_samples]).
-      visible_to(current_user).
-      where('parent_samples_samples.id is ?',nil) # omit derived samples
+      visible_to(current_user)
+
+    unless params[:include_derived_samples]
+      @samples = @samples.
+        where('parent_samples_samples.id is ?',nil)
+    end
 
     if params[:study_id]
       @samples = @samples.where('samples.study_id = ?', params[:study_id])
