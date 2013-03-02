@@ -1,21 +1,24 @@
+<%= button_to 'New unit', new_unit_path, :class => 'btn btn-primary pull-right' %>
+
 <h2>Units</h2>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-  </tr>
+<table class="admin_table table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
 
-<% @units.each do |unit| %>
-  <tr>
-    <td><%= unit.name %></td>
-    <td><%= link_to 'Edit', edit_unit_path(unit) %></td>
-    <td><%= link_to 'Destroy', unit, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+    <% @units.each do |unit| %>
+    <tr>
+      <td><%= unit.name %></td>
+      <td><%= link_to 'Edit', edit_unit_path(unit) %></td>
+      <td><%= link_to 'Destroy', unit, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+    <% end %>
+
+  </tbody>
 </table>
-
-<br />
-
-<%= link_to 'New unit', new_unit_path %>

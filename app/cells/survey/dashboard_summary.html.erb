@@ -15,8 +15,6 @@
   </li>
   <% end %>
   <li><%= link_to "Absolute Pitch Survey", "/absolute_pitch_surveys" %></li>
-  <li><%= link_to "Personal Health Records", "/phrccr" %></li>
-  <li><%= link_to "Family Relationships", "/family_relations" %></li>
   <li><%= link_to_if @user, "Geographic Information", "/geographic_information/#{@user.id if @user}/edit" %></li>
   <% TraitwiseSurvey.where('is_listed').each do |traitwise_survey| %>
   <li><%= link_to traitwise_survey.name, traitwise_survey %></li>

@@ -1,3 +1,5 @@
+<%= button_to 'New Traitwise survey', new_traitwise_survey_path, :class => 'btn btn-primary pull-right' unless @min_view %>
+
 <h2>Traitwise surveys</h2>
 
 <table class="admin_table">
@@ -23,7 +25,3 @@
   </tr>
 <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New Traitwise survey', new_traitwise_survey_path unless @min_view %>

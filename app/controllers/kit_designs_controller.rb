@@ -6,6 +6,14 @@ class KitDesignsController < ApplicationController
 
   before_filter :ensure_researcher
 
+  def index
+    if current_user.is_admin?
+      @kit_designs = KitDesign.all
+    else
+      @kit_designs = current_user.kit_designs
+    end
+  end
+
   # GET /kit_designs/new
   # GET /kit_designs/new.xml
   def new

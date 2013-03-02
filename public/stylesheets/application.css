@@ -46,14 +46,16 @@ ul, ol {
 	margin-bottom: 18px;
 }
 
+/*
 li {
 	margin-top: 6px;
 	margin-bottom: 6px;
 }
 
 ul > li {
-	list-style: square;
+        list-style: square;
 }
+*/
 
 a:link, a:active, a:visited {
 	color: #4e689e;
@@ -1195,7 +1197,7 @@ table.plate-samples {
 }
 
 #participant-dashboard ul {
-    margin: 0;
+    margin-top: 0;
 }
 
 #participant-dashboard ul > li {
@@ -1251,4 +1253,41 @@ body .dataTables_wrapper {
   -moz-opacity: 0;
   -khtml-opacity: 0;
   opacity: 0;
+}
+
+
+/* override link underline (above) */
+.container .navbar .nav a {
+    text-decoration: none;
+    font-size: 11pt;
+    font-weight: normal;
+}
+
+/* override bootstrap */
+div.field label {
+    display: inline;
+    margin-bottom: 0;
+}
+input,textarea,.uneditable-input {
+    width: auto;
+}
+select {
+    width: auto;
+}
+.tooltip.in {
+    opacity: 1.0;
+    filter: alpha(opacity=100);
+}
+.tooltip.in .tooltip-inner {
+    background: #eeeebb;
+    color: #000;
+    text-align: left;
+}
+.tooltip.in .tooltip-arrow {
+    border-right-color: #eeeebb;
+}
+
+/* shim to make pull-right work even without bootstrap */
+.pull-right {
+    float: right;
 }

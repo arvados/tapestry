@@ -1,4 +1,4 @@
-<table class="admin_table studiestable">
+<table class="admin_table table table-bordered table-hover studiestable">
   <tr>
     <th></th>
     <% if who != 'researcher' %>
@@ -83,3 +83,10 @@
     </tr>
   <% end %>
 </table>
+
+<% if Study.accessible(current_user).size > 0 %>
+
+<h2>Download participant lists</h2>
+<%= render :partial => 'admin/researchers/study_participants_filter' %>
+
+<% end %>

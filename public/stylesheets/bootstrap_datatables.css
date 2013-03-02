@@ -1,0 +1,27 @@
+/* see http://www.datatables.net/blog/Twitter_Bootstrap */
+
+div.dataTables_length label {
+    float: left;
+    text-align: left;
+}
+ 
+div.dataTables_length select {
+}
+ 
+div.dataTables_filter label {
+    float: right;
+}
+ 
+div.dataTables_info {
+    padding-top: 8px;
+}
+ 
+div.dataTables_paginate {
+    float: right;
+    margin: 0;
+}
+ 
+table {
+    margin-bottom: 6px !important;
+    clear: both;
+}

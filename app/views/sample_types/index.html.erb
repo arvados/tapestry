@@ -1,6 +1,8 @@
-<h2>List sample types</h2>
+<%= button_to 'New sample type', new_sample_type_path, :class => 'btn btn-primary pull-right' %>
 
-<table>
+<h2>Sample types</h2>
+
+<table class="admin_table table">
   <tr>
     <th>Name</th>
     <th>Tissue type</th>
@@ -27,7 +29,3 @@
   </tr>
 <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New sample type', new_sample_type_path %>

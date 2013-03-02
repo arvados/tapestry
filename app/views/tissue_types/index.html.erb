@@ -1,6 +1,8 @@
+<%= button_to 'New tissue type', new_tissue_type_path, :class => 'btn btn-primary pull-right' %>
+
 <h2>Tissue types</h2>
 
-<table>
+<table class="admin_table table table-hover">
   <tr>
     <th>Name</th>
     <th></th>
@@ -16,7 +18,3 @@
   </tr>
 <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New tissue type', new_tissue_type_path %>

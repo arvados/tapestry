@@ -1,6 +1,8 @@
+<%= button_to 'New device type', new_device_type_path, :class => 'btn btn-primary pull-right' %>
+
 <h2>Device types</h2>
 
-<table>
+<table class="admin_table table table-hover">
   <tr>
     <th>Name</th>
     <th>Description</th>
@@ -17,7 +19,3 @@
   </tr>
 <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New device type', new_device_type_path %>

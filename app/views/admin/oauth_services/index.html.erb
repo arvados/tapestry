@@ -1,15 +1,20 @@
+<%= button_to 'New Oauth service', new_admin_oauth_service_path, :class => 'btn btn-primary pull-right' %>
+
 <h2>OAuth services</h2>
 
-<table class="admin_table">
-  <tr>
-    <th>Name</th>
-    <th>Scope</th>
-    <th>Consumer key</th>
-    <th>Private key</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<table class="admin_table table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Scope</th>
+      <th>Consumer key</th>
+      <th>Private key</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
 
 <% @admin_oauth_services.each do |admin_oauth_service| %>
   <tr>
@@ -22,8 +27,6 @@
     <td><%= button_to 'Destroy', admin_oauth_service_path(admin_oauth_service), :confirm => 'Are you sure?', :method => :delete unless !admin_oauth_service.oauth_tokens.empty? %></td>
   </tr>
 <% end %>
+
+  </tbody>
 </table>
-
-<br />
-
-<%= link_to 'New Oauth service', new_admin_oauth_service_path %>

@@ -34,7 +34,25 @@ EOS
     raw(content)
   end
 
-  def nav_element(text, link)
+  def bootstrap?
+    (session[:bootstrap] = params[:bootstrap] || session[:bootstrap]) == '1'
+  end
+
+  def bootstrap_nav_element(text, link, opts={}, *args)
+    if current_page?(link)
+      opts = opts.dup
+      opts[:class] ||= ''
+      opts[:class] += ' active'
+    end
+    content_tag(:li, opts) do
+      link_to(text, link, *args)
+    end
+  end
+
+  def nav_element(text, link, opts={}, *args)
+    if bootstrap?
+      return bootstrap_nav_element(text, link, opts, *args)
+    end
     content_tag(:li, (current_page?(link) ? {:class => 'current'} : {})) do
       link_to(text, link)
     end

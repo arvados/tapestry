@@ -8,6 +8,9 @@ jQuery(function() {
         $("#samples").removeClass('admin_table');
         $('#samples').dataTable( {
             "oSearch": { "sSearch": <%= raw (params[:q] || '').to_json %> },
+<% if bootstrap? && false %>
+            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+<% end %>
             "bProcessing": true,
             "bServerSide": true,
             "bJQueryUI": true,

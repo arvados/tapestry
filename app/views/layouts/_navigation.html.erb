@@ -1,3 +1,6 @@
+<% if session[:bootstrap] == '1' %>
+<%= render :partial => 'layouts/bootstrap_nav' %>
+<% else %>
 <div class="menu">
   <ul class="links">
     <% unless current_user %>
@@ -30,4 +33,5 @@
       <%= nav_element 'Mailing Lists', admin_mailing_lists_path %>
     </ul>
   </div>
+<% end %>
 <% end %>

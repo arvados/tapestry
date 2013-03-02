@@ -1,6 +1,4 @@
-<h2>Researcher Admin Tools</h2>
-
-<h3>Collection events</h3>
+<h2>Collection events</h2>
 
 <% if @requested_studies.count > 0 %>
 <h4>Requested collection events</h4>
@@ -22,11 +20,3 @@ Legend: U: Undecided | I: Interested | NI: Not interested | A: Accepted | NA: No
 <% else %>
 You do not have any collection events yet.
 <% end %>
-
-<h3>Parameters</h3>
-
-<ul>
-  <li><%= link_to raw("<strong>Tissue Types</strong>"), url_for(:controller => '/tissue_types', :action => 'index') %></li>
-  <li><%= link_to raw("<strong>Device Types</strong>"), url_for(:controller => '/device_types', :action => 'index') %></li>
-  <li><%= link_to raw("<strong>Units</strong>"), url_for(:controller => '/units', :action => 'index') %></li>
-</ul>

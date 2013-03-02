@@ -57,15 +57,15 @@ This information is private and not part of your public profile.
 <a name="mailinglists"></a>
 
 <h2>Manage mailing list subscriptions</h2>
-<table class="admin_table">
+<table class="admin_table table table-bordered" style="width: 45em">
   <tr>
-    <th>Name</th>
-    <th>Subscribed</th>
+    <th style="width:30em">Name</th>
+    <th style="text-align:center; width:5em">Subscribed</th>
   </tr>
   <% @mailing_lists.each do |mailing_list| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= mailing_list.name %></td>
-      <td align="right">
+      <td style="width:30em"><%= mailing_list.name %></td>
+      <td style="text-align:center; width:5em">
         <%= check_box_tag "user[mailing_list_ids][]", mailing_list.id, @user.mailing_list_ids.include?(mailing_list.id) -%>
       </td>
     </tr>

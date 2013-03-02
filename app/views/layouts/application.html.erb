@@ -2,10 +2,33 @@
 <html>
 <head>
   <title>Personal Genome Project: <%= controller.page_title %></title>
+  <% if bootstrap? %>
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/stylesheets/bootstrap_datatables.css" rel="stylesheet" media="screen">
+  <% end %>
   <%= stylesheet_link_tag 'redmond/jquery-ui-1.8.11.custom', 'ui.slider.extras', 'dataTables/css/demo_table_jui', 'application', 'plate_layout', :media => 'all' %>
   <%= stylesheet_link_tag 'print', :media => 'print' %>
   <!--[if lte IE 7]><%= stylesheet_link_tag 'application-ie' %><![endif]-->
   <%= javascript_include_tag :defaults %>
+
+<% if bootstrap? %>
+  <%= javascript_tag do %>
+    $.extend( $.fn.dataTableExt.oStdClasses, {
+        "sSortAsc": "header headerSortDown",
+        "sSortDesc": "header headerSortUp",
+        "sSortable": "header"
+    } );
+    $.extend( $.fn.dataTableExt.oStdClasses, {
+        "sWrapper": "dataTables_wrapper form-inline"
+    } );
+    jQuery(document).ready(function() {
+      jQuery('button,input[type=submit]').addClass('btn');
+      jQuery('.nav .dropdown li a[title]').tooltip({animation:false,placement:'right',container:'body'});
+    });
+  <% end %>
+  <%= javascript_include_tag 'datatables_bootstrap_paging' %>
+<% end %>
+
   <%= javascript_tag do %>
     <%= yield :js %>
   <% end %>
@@ -37,16 +60,33 @@
 
     <div class="clear"><!-- --></div>
   </div>
+
   <div id="foot">
     <div id="privacy_tos">
-        <span><a href="http://www.personalgenomes.org/privacypolicy.html">Privacy Policy</a></span>
-	&bull;
-        <span><a href="http://www.personalgenomes.org/tos.html">Terms of Use</a></span>
+      <span><%= link_to 'Site map', '/pages/sitemap' -%></span>
+      &bull;
+      <span><a href="http://www.personalgenomes.org/privacypolicy.html">Privacy Policy</a></span>
+      &bull;
+      <span><a href="http://www.personalgenomes.org/tos.html">Terms of Use</a></span>
     </div>
     <div id="copyright">
+<% if request.fullpath.match /^\/profile\// %>
+      <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+        <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/" style="text-decoration:none;">
+          <img src="https://i.creativecommons.org/l/zero/1.0/88x31.png" border="0" alt="CC0" />
+        </a>
+        <br />
+        To the extent possible under law, <a href="http://www.personalgenomes.org" rel="dct:publisher"><span property="dct:title">PersonalGenomes.org</span></a>
+        has waived all copyright and related or neighboring rights to
+        <span property="dct:title">Personal Genome Project Participant Genetic and Trait Dataset</span>.
+        This work is published from
+        <span about="www.personalgenomes.org" property="vcard:Country" datatype="dct:ISO3166" content="US">United States</span>.
+      </p>
+<% else %>
       <p>
         <span>Copyright &copy; PersonalGenomes.org</span>
       </p>
+<% end %>
     </div>
   </div>
 
@@ -55,6 +95,9 @@
   </div>
 
   <%= render :partial => 'layouts/google_analytics' %>
+  <% if bootstrap? %>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+  <% end %>
 
 </body>
 </html>

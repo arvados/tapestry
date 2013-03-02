@@ -1,0 +1,32 @@
+<%= button_to 'New kit design', new_kit_design_path, :class => 'btn btn-primary pull-right' %>
+
+<h2>Kit designs</h2>
+
+<table class="admin_table table">
+  <thead>
+    <th>Name</th>
+    <th>Frozen?</th>
+    <th>Edit</th>
+  </thead>
+  <tbody>
+    <% if @kit_designs.count == 0 %>
+    <tr><td>(no kit designs)</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <% end %>
+    <% @kit_designs.sort { |a,b| a.name <=> b.name }.each do |kd| %>
+    <tr>
+      <td>
+        <%= kd.name %>
+      </td><td>
+        <%= 'FROZEN' if kd.frozen %>
+      </td><td>
+        <% if current_user.id == kd.owner_id %>
+        <%= button_to 'Edit', edit_kit_design_path(kd.id) %>
+        <% else %>
+        Owner: <%= kd.owner.full_name %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+

@@ -8,3 +8,5 @@ config/initializers/secret_token.rb
 drb/MyPG.yml
 vendor/plugins/rails_upgrade/
 config/environments/*.rb
+git-commit.version
+*~

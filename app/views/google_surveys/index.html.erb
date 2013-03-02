@@ -1,3 +1,5 @@
+<%= button_to 'New Google survey', new_google_survey_path, :class => 'btn btn-primary pull-right' unless @min_view %>
+
 <h2>Participant surveys</h2>
 
 <table class="admin_table">
@@ -39,4 +41,3 @@
 
 <br />
 
-<%= link_to 'New Google survey', new_google_survey_path unless @min_view %>
