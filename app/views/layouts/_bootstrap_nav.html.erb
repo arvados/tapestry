@@ -50,8 +50,6 @@
         <li class="dropdown">
           <%= link_to raw('Researcher <b class="caret"></b>'), '/pages/researcher_tools', :id => 'dropdown-researcher', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-researcher">
-            <%= nav_element 'Researcher home', '/pages/researcher_tools', {}, :role => 'menuitem' %>
-            <li role="presentation" class="divider"></li>
             <%= nav_element 'Collection events', collection_events_path, {}, :role => 'menuitem' %>
             <%= nav_element 'Kits', kits_path, {}, :role => 'menuitem' %>
             <%= nav_element 'Samples', samples_path, {}, :role => 'menuitem' %>

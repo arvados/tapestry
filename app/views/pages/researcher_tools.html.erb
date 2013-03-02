@@ -87,13 +87,6 @@ Legend: U: Undecided | I: Interested | NI: Not interested | A: Accepted | NA: No
 You do not have any collection events yet.
 <% end %>
 
-<% if Study.accessible(current_user).size > 0 %>
-
-<h4>Download participant lists</h4>
-<%= render :partial => 'admin/researchers/study_participants_filter' %>
-
-<% end %>
-
 </div>
 
 <div class="clear"><!-- --></div>
