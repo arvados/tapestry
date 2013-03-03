@@ -124,7 +124,7 @@ class User < ActiveRecord::Base
   # User.test is a built-in method, so we have to call our scope something else
   scope :is_test, where("is_test = 1")
   scope :researcher, where("researcher = 1")
-  scope :publishable, enrolled
+  scope :publishable, enrolled.where("suspended_at IS NULL").real
   scope :suspended, where("suspended_at IS NOT NULL").real
   scope :deactivated, where("deactivated_at IS NOT NULL").real
   scope :visible_to, lambda { |current_user|

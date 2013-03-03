@@ -1279,12 +1279,28 @@ select {
     filter: alpha(opacity=100);
 }
 .tooltip.in .tooltip-inner {
-    background: #eeeebb;
+    background: #ffe571;
     color: #000;
     text-align: left;
 }
 .tooltip.in .tooltip-arrow {
-    border-right-color: #eeeebb;
+    border-right-color: #ffe571;
+}
+.navbar-inner {
+    background-image: -moz-linear-gradient(top,#fff,#91a9d1)
+    background-image: -webkit-gradient(top,#fff,#91a9d1)
+    background-image: -webkit-linear-gradient(top,#fff,#91a9d1)
+    background-image: -o-linear-gradient(top,#fff,#91a9d1);
+    background-image: linear-gradient(to bottom,#fff,#91a9d1);
+    background-repeat: repeat-x;
+    border: 1px solid #5d7dbb;
+}
+.navbar li a.mypgpid, .navbar li a.mypgpid:hover {
+    background: #c7d3e8;
+    color: #000;
+}
+.navbar-inner > .nav > li > a:hover {
+    background: #e5e5e5;
 }
 
 /* shim to make pull-right work even without bootstrap */

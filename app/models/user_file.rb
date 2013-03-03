@@ -18,6 +18,14 @@ class UserFile < ActiveRecord::Base
           info[:longupload_file_name])
   }
   scope :downloadable, where('dataset_file_size is not ? or locator is not ?', nil, nil)
+  scope :visible_to, lambda { |user|
+    if user and user.is_admin?
+      downloadable
+    else
+      downloadable.scoped(:include => [:user],
+                          :conditions => ['users.enrolled is not ? and users.suspended_at is ?', nil, nil])
+    end
+  }
 
   # See config/initializers/paperclip.rb for the definition of :user_id and :filename
   has_attached_file :dataset, :path => "/data/#{ROOT_URL}/genetic_data/:user_id/:id/:style/:filename.:extension"

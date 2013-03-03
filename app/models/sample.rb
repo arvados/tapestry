@@ -33,6 +33,7 @@ class Sample < ActiveRecord::Base
 
   scope :real, where('samples.is_destroyed is ?',nil)
   scope :destroyed, where('samples.is_destroyed is not ?',nil)
+  scope :no_parent, includes(:parent_samples).where('sample_origins.id is ?', nil)
   scope :visible_to, lambda { |user|
     if user and user.is_admin?
       unscoped.scoped(:include => [:study, :participant, :owner])

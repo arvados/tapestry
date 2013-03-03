@@ -1,15 +1,18 @@
+<% if !current_user %>
+  <%= link_to raw('Log in &nbsp;<i class="icon icon-white icon-play"></i>'), login_url, :class => 'btn btn-large btn-warning pull-right', :style => 'margin-top: -78px; margin-right: 12px; text-decoration: none; color: #fff' %>
+<% elsif current_user.enrolled and current_user.hex %>
+  <%= link_to raw('Logged in &nbsp; <i class="icon icon-white icon-user"></i> &nbsp; ' + current_user.hex), public_profile_path(current_user.hex), :class => 'btn btn-primary pull-right', :style => 'margin-top: -78px; margin-right: 12px; text-decoration: none; color: #fff' %>
+<% end %>
+
 <div class="container">
   <div class="navbar"><div class="navbar-inner">
     <ul class="nav">
-      <% unless current_user %>
-        <%= nav_element 'Log in', login_url -%>
-      <% else %>
-        <%= nav_element 'Home', root_url -%>
 
-        <% if !current_user.deactivated_at %>
+      <% if current_user and !current_user.deactivated_at %>
         <li class="dropdown">
           <%= link_to raw('Account <b class="caret"></b>'), edit_user_path, :id => 'dropdown-participate', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-participate">
+            <%= nav_element 'Home', root_path %>
             <%= nav_element 'Email, password, security question', edit_user_path, {}, :title => 'Also your phone number.' %>
             <%= nav_element 'Named proxies', named_proxies_path, {}, :title => 'They act on your behalf if you are incapacitated.' %>
             <%= nav_element 'Shipping address', user_shipping_address_path, {}, :title => 'We send tissue collection kits to you.' %>
@@ -25,12 +28,14 @@
             <%= nav_element 'Withdraw', page_path(:withdrawal_menu), {}, :title => 'Stop participating in the study.' %>
           </ul>
         </li>
-        <% end %>
+      <% end %>
 
-        <% if current_user and current_user.enrolled and !current_user.deactivated_at %>
+      <% if current_user and current_user.enrolled and !current_user.deactivated_at %>
         <li class="dropdown">
           <%= link_to raw('Participate <b class="caret"></b>'), root_path, :id => 'dropdown-participate', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-participate">
+            <%= nav_element 'View and edit public profile', public_profile_path(current_user.hex) %>
+            <li role="presentation" class="divider"></li>
             <%= nav_element 'Manage family relationships', family_relations_path, {}, :title => 'If you have family members enrolled in the PGP, you can tell us about that.' %>
             <%= nav_element 'Sign up for tissue collections', collection_events_path, {}, :title => 'This is how we get your spit.' %>
             <%= nav_element 'Claim a collection kit', study_claim_kit_path, {}, :title => 'Do this when you receive a kit in the mail.' %>
@@ -44,9 +49,9 @@
             <%= nav_element 'Third party activities', third_party_index_path, {}, :title => 'Projects that are related or similar to, but not part of, the PGP.' %>
           </ul>
         </li>
-        <% end %>
+      <% end %>
 
-        <% if current_user.is_researcher? or current_user.is_admin? %>
+      <% if current_user and (current_user.is_researcher? or current_user.is_admin?) %>
         <li class="dropdown">
           <%= link_to raw('Researcher <b class="caret"></b>'), '/pages/researcher_tools', :id => 'dropdown-researcher', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-researcher">
@@ -68,9 +73,9 @@
             <%= nav_element 'Permissions', permissions_path, {}, :role => 'menuitem' %>
           </ul>
         </li>
-        <% end %>
+      <% end %>
 
-        <% if current_user.is_admin? %>
+      <% if current_user and current_user.is_admin? %>
         <li class="dropdown">
           <%= link_to raw('Admin <b class="caret"></b>'), admin_root_path, :id => 'dropdown-admin', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-admin">
@@ -94,16 +99,35 @@
             <%= nav_element 'OAuth services', '/admin/oauth_services' %>
           </ul>
         </li>
-        <% end %>
+      <% end %>
 
+      <li class="dropdown">
+        <%= link_to raw('Public data <b class="caret"></b>'), public_genetic_data_path, :id => 'dropdown-public-data', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-public-data">
+          <%= nav_element "Participants", users_path, {}, :title => "#{User.publishable.count} participants are enrolled in the study." %>
+	  <%= nav_element 'Participant surveys', google_surveys_path, {}, :title => "#{GoogleSurvey.where(:is_listed => true).collect(&:responses).flatten.count} responses to #{GoogleSurvey.where(:is_listed => true).count} surveys are available for unrestricted public use." %>
+          <%= nav_element 'Tissue samples', specimens_path, {}, :title => "#{Sample.real.no_parent.visible_to(current_user).count} blood, saliva, and other tissue samples are linked to public health/trait profiles and available for unrestricted public use." %>
+          <%= nav_element 'Whole genome sequences and other data', public_genetic_data_path, {}, :title => "#{Dataset.published_or_published_anonymously.count} whole genome sequences, and #{UserFile.visible_to(current_user).count} other data files, are linked to public health/trait profiles and available for unrestricted public use." %>
+	  <%= nav_element 'CAGI genomes', public_anonymous_genetic_data_path, {}, :title => 'As part of a genome interpretation challenge, these genetic data sets were initially published without being linked with specific PGP participant profiles.  (Aside from this special case, every PGP data set is linked to an individual health/trait profile.)' %>
+          <li role="presentation" class="divider"></li>
+          <%= nav_element 'Genetic data publication statistics', url_for(:controller => :public_genetic_data, :action => :statistics) %>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <%= link_to raw('About <b class="caret"></b>'), 'http://personalgenomes.org', :id => 'dropdown-about-us', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-about-us">
+          <%= nav_element raw('Learn more at <u>personalgenomes.org</u> &nbsp;<i class="icon icon-hand-right"></i>'), 'http://personalgenomes.org', {}, :title => "This study is part of a global effort to encourage the development of personal genomics technology and practices." %>
+        </ul>
+      </li>
+
+      <% if current_user %>
         <%= nav_element raw('Contact <i class="icon icon-envelope"></i>'), new_message_url -%>
       <% end %>
+
     </ul>
     <ul class="nav pull-right">
       <% if current_user %>
-        <% if current_user.enrolled and current_user.hex %>
-          <%= nav_element current_user.hex, public_profile_path(current_user.hex), {}, :style => 'background: #eeeeff' %>
-        <% end %>
         <%= nav_element raw('Log out <i class="icon-off"></i>'), logout_url -%>
       <% end %>
     </ul>

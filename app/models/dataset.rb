@@ -25,6 +25,7 @@ class Dataset < ActiveRecord::Base
   scope :released_to_but_not_seen_by_participant, released_to_participant.not_seen_by_participant
   scope :published, where('published_at is not null')
   scope :published_anonymously, where('published_anonymously_at is not null')
+  scope :published_or_published_anonymously, where('published_at is not null or published_anonymously_at is not null')
   scope :unpublished, where('published_at is null and published_anonymously_at is null')
 
   attr_accessor :submit_to_get_e

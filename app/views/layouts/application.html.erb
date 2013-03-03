@@ -4,7 +4,8 @@
   <title>Personal Genome Project: <%= controller.page_title %></title>
   <% if bootstrap? %>
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/stylesheets/bootstrap_datatables.css" rel="stylesheet" media="screen">
+    <%= stylesheet_link_tag 'bootstrap.min', :media => 'screen' if false %>
+    <%= stylesheet_link_tag 'bootstrap_datatables', :media => 'screen' %>
   <% end %>
   <%= stylesheet_link_tag 'redmond/jquery-ui-1.8.11.custom', 'ui.slider.extras', 'dataTables/css/demo_table_jui', 'application', 'plate_layout', :media => 'all' %>
   <%= stylesheet_link_tag 'print', :media => 'print' %>
@@ -41,10 +42,11 @@
 
   <div id="body">
 
-
     <h1 class="verbose"><%= link_to raw('<span>Personal Genome Project</span>'), root_url %></h1>
 
-    <%= render :partial => 'layouts/navigation' %>
+    <%= render :partial => 'layouts/navigation' if !bootstrap? %>
+    <%= render :partial => 'layouts/bootstrap_nav' if bootstrap? %>
+
     <div class="clear"><!-- --></div>
 
     <%= breadcrumbs %>
