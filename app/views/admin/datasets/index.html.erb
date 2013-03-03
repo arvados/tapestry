@@ -29,7 +29,6 @@
     <th></th>
     <th></th>
     <th></th>
-    <th></th>
   </tr>
   <% @datasets.each do |dataset| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
@@ -39,7 +38,7 @@
         <% if dataset.processing_status then -%>
           <%= dataset.processing_status[:status] %>
           <% if dataset.processing_status[:status] == 'finished' or dataset.processing_status[:status] == 'failed' -%>
-	          <%= button_to 'Reprocess', admin_reprocess_dataset_path(dataset), :return_to => request.path, :method => 'post' %>
+	          <%= button_to 'Reprocess', admin_reprocess_dataset_path(dataset), :return_to => request.path, :method => 'post', :class => 'btn btn-mini' %>
           <% end -%>
         <% end -%>
       </td>
@@ -63,17 +62,21 @@
       <td><%= link_to 'Edit', edit_admin_dataset_path(dataset) %></td>
 
       <% if not dataset.released_to_participant then -%>
+
       <td><%= link_to 'Destroy', [:admin, dataset], :confirm => 'Are you sure you want to delete this dataset?', :method => :delete %></td>
       <td><%= link_to('Notify participant', admin_dataset_release_participant_url(dataset), :confirm => 'Are you sure you want to release this dataset to the participant and notify them of its existence?') if dataset.participant && (!dataset.participant.deactivated_at || dataset.participant.can_reactivate_self) && !dataset.participant.suspended_at %></td>
+
+      <% elsif dataset.sent_notification_at and not dataset.seen_by_participant_at then -%>
+
+      <td></td>
+      <td><%= link_to('Re-notify participant', admin_dataset_notify_participant_url(dataset), :confirm => 'Are you sure you want to re-notify this participant of the release of this dataset?') if dataset.participant && (!dataset.participant.deactivated_at || dataset.participant.can_reactivate_self) && !dataset.participant.suspended_at %></td>
+
       <% else %>
+
       <td></td><td></td>
+
       <% end -%>
 
-      <% if dataset.sent_notification_at and not dataset.seen_by_participant_at then -%>
-      <td><%= link_to('Re-notify participant', admin_dataset_notify_participant_url(dataset), :confirm => 'Are you sure you want to re-notify this participant of the release of this dataset?') if dataset.participant && (!dataset.participant.deactivated_at || dataset.participant.can_reactivate_self) && !dataset.participant.suspended_at %></td>
-      <% else %>
-      <td></td>
-      <% end -%>
     </tr>
   <% end %>
 </table>
