@@ -1287,20 +1287,24 @@ select {
     border-right-color: #ffe571;
 }
 .navbar-inner {
-    background-image: -moz-linear-gradient(top,#fff,#91a9d1)
-    background-image: -webkit-gradient(top,#fff,#91a9d1)
-    background-image: -webkit-linear-gradient(top,#fff,#91a9d1)
+    background-image: -moz-linear-gradient(top,#fff,#91a9d1);
+    background-image: -webkit-gradient(top,#fff,#91a9d1);
+    background-image: -webkit-linear-gradient(top,#fff,#91a9d1);
     background-image: -o-linear-gradient(top,#fff,#91a9d1);
     background-image: linear-gradient(to bottom,#fff,#91a9d1);
     background-repeat: repeat-x;
     border: 1px solid #5d7dbb;
 }
-.navbar li a.mypgpid, .navbar li a.mypgpid:hover {
-    background: #c7d3e8;
+.navbar .nav>li>a {
     color: #000;
 }
-.navbar-inner > .nav > li > a:hover {
-    background: #e5e5e5;
+.navbar-inner > .nav > li > a:hover, .navbar .nav li.dropdown.open>.dropdown-toggle, .navbar .nav li.dropdown.active>.dropdown-toggle, .navbar .nav li.dropdown.open.active>.dropdown-toggle {
+    background: #fff;
+    color: #000;
+}
+.navbar .nav>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus {
+    background: #fff;
+    color: #000;
 }
 
 /* shim to make pull-right work even without bootstrap */
