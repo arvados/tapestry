@@ -9,7 +9,6 @@
     <ul class="nav">
 
       <% if current_user and !current_user.deactivated_at %>
-        <% cache('nav_participate') do %>
         <li class="dropdown">
           <%= link_to raw('Account <b class="caret"></b>'), edit_user_path, :id => 'dropdown-participate', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-participate">
@@ -29,7 +28,6 @@
             <%= nav_element 'Withdraw', page_path(:withdrawal_menu), {}, :title => 'Stop participating in the study.' %>
           </ul>
         </li>
-        <% end %>
       <% end %>
 
       <% if current_user and current_user.enrolled and !current_user.deactivated_at %>
@@ -54,7 +52,6 @@
       <% end %>
 
       <% if current_user and (current_user.is_researcher? or current_user.is_admin?) %>
-        <% cache('nav_researcher') do %>
         <li class="dropdown">
           <%= link_to raw('Researcher <b class="caret"></b>'), '/pages/researcher_tools', :id => 'dropdown-researcher', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-researcher">
@@ -76,11 +73,9 @@
             <%= nav_element 'Permissions', permissions_path, {}, :role => 'menuitem' %>
           </ul>
         </li>
-        <% end %>
       <% end %>
 
       <% if current_user and current_user.is_admin? %>
-        <% cache('nav_admin') do %>
         <li class="dropdown">
           <%= link_to raw('Admin <b class="caret"></b>'), admin_root_path, :id => 'dropdown-admin', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-admin">
@@ -104,23 +99,20 @@
             <%= nav_element 'OAuth services', '/admin/oauth_services' %>
           </ul>
         </li>
-        <% end %>
       <% end %>
 
-      <% cache('nav_public_data') do %>
       <li class="dropdown">
         <%= link_to raw('Public data <b class="caret"></b>'), public_genetic_data_path, :id => 'dropdown-public-data', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-public-data">
-          <%= nav_element "Participants", users_path, {}, :title => "#{User.publishable.count} participants are enrolled in the study." %>
-	  <%= nav_element 'Participant surveys', google_surveys_path, {}, :title => "#{GoogleSurvey.where(:is_listed => true).collect(&:responses).flatten.count} responses to #{GoogleSurvey.where(:is_listed => true).count} surveys are available for unrestricted public use." %>
-          <%= nav_element 'Tissue samples', specimens_path, {}, :title => "#{Sample.real.no_parent.visible_to(nil).count} blood, saliva, and other tissue samples are linked to public health/trait profiles and available for unrestricted public use." %>
-          <%= nav_element 'Whole genome sequences and other data', public_genetic_data_path, {}, :title => "#{Dataset.published_or_published_anonymously.count} whole genome sequences, and #{UserFile.visible_to(nil).count} other data files, are linked to public health/trait profiles and available for unrestricted public use." %>
+          <%= nav_element "Participants", users_path, {}, :title => "#{public_data_stats[:publishable_user_count]} participants are enrolled in the study." %>
+	  <%= nav_element 'Participant surveys', google_surveys_path, {}, :title => "#{public_data_stats[:google_survey_response_count]} responses to #{public_data_stats[:google_survey_count]} surveys are available for unrestricted public use." %>
+          <%= nav_element 'Tissue samples', specimens_path, {}, :title => "#{public_data_stats[:sample_count]} blood, saliva, and other tissue samples are linked to public health/trait profiles and available for unrestricted public use." %>
+          <%= nav_element 'Whole genome sequences and other data', public_genetic_data_path, {}, :title => "#{public_data_stats[:sample_count]} whole genome sequences, and #{public_data_stats[:user_files]} other data files, are linked to public health/trait profiles and available for unrestricted public use." %>
 	  <%= nav_element 'CAGI genomes', public_anonymous_genetic_data_path, {}, :title => 'As part of a genome interpretation challenge, these genetic data sets were initially published without being linked with specific PGP participant profiles.  (Aside from this special case, every PGP data set is linked to an individual health/trait profile.)' %>
           <li role="presentation" class="divider"></li>
           <%= nav_element 'Genetic data publication statistics', url_for(:controller => :public_genetic_data, :action => :statistics) %>
         </ul>
       </li>
-      <% end %>
 
       <li class="dropdown">
         <%= link_to raw('About <b class="caret"></b>'), 'http://personalgenomes.org', :id => 'dropdown-about-us', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>

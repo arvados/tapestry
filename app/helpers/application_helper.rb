@@ -34,6 +34,32 @@ EOS
     raw(content)
   end
 
+  def public_data_stats
+    Rails.cache.fetch 'public_data_stats' do
+      { :publishable_user_count =>
+        User.publishable.count,
+
+        :google_survey_response_count =>
+        GoogleSurvey.
+        where(:is_listed => true).
+        collect(&:responses).
+        flatten.count,
+
+        :google_survey_count =>
+        GoogleSurvey.where(:is_listed => true).count,
+
+        :sample_count =>
+        Sample.real.no_parent.visible_to(nil).count,
+
+        :datasets =>
+        Dataset.published_or_published_anonymously.count,
+
+        :user_files =>
+        UserFile.visible_to(nil).count
+      }
+    end
+  end
+
   def bootstrap?
     (session[:bootstrap] = params[:bootstrap] || session[:bootstrap]) == '1'
   end
