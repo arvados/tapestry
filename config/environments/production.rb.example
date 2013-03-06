@@ -53,6 +53,7 @@ Tapestry::Application.configure do
   }
   
   ROOT_URL = 'tapestry.example.com'
+  ROOT_URL_SCHEME = 'https://'
   ADMIN_EMAIL = 'This Should Be You <you@example.com>'
   WITHDRAWAL_NOTIFICATION_EMAIL = 'This Should Be You <you@example.com>'
   SYSTEM_EMAIL = 'sysadmin@example.com'

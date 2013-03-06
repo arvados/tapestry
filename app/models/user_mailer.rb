@@ -24,7 +24,7 @@ class UserMailer < ActionMailer::Base
   end
 
   def signup_notification(user)
-    @url  = "https://#{ROOT_URL}/activate/#{user.activation_code}"
+    @url  = "#{ROOT_URL_SCHEME}#{ROOT_URL}/activate/#{user.activation_code}"
     @user = user
     @recipient = user.email
     @recipient = SEND_ALL_USER_EMAIL_TO if defined? SEND_ALL_USER_EMAIL_TO
@@ -54,7 +54,7 @@ class UserMailer < ActionMailer::Base
       @recipients = "#{ADMIN_EMAIL}"
     end
     @subject     = "PGP account deletion request"
-    @body[:url]  = "https://#{ROOT_URL}/admin/users"
+    @body[:url]  = "#{ROOT_URL_SCHEME}#{ROOT_URL}/admin/users"
     user.log("PGP account deletion request")
   end
 
@@ -77,8 +77,8 @@ class UserMailer < ActionMailer::Base
     setup_email(family_relation.relative)
     @subject += 'You have been added as a family member'
     @family_relation = family_relation
-    @body[:url] = "https://#{ROOT_URL}/family_relations"
-    @body[:login_url]  = "https://#{ROOT_URL}/login"
+    @body[:url] = "#{ROOT_URL_SCHEME}#{ROOT_URL}/family_relations"
+    @body[:login_url]  = "#{ROOT_URL_SCHEME}#{ROOT_URL}/login"
     family_relation.relative.log("Sent family relation notification: added as a family member (#{@family_relation.relation}) by #{@family_relation.user.hex}")
   end
 

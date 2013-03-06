@@ -26,11 +26,13 @@ Tapestry::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
 
   ROOT_URL = 'localhost:3000'
+  ROOT_URL_SCHEME = 'http://'
+
   ADMIN_EMAIL = 'This Should Be You <you@example.com>'
   WITHDRAWAL_NOTIFICATION_EMAIL = 'This Should Be You <you@example.com>'
   SYSTEM_EMAIL = 'sysadmin@example.com'
   SEND_ALL_USER_EMAIL_TO = 'you@example.com'
-  
+
   ENV['RECAPTCHA_PUBLIC_KEY'] = 'YOUR_RECAPTCHA_PUBLIC_KEY'
   ENV['RECAPTCHA_PRIVATE_KEY'] = 'YOUR_RECAPTCHA_PRIVATE_KEY'
   

@@ -93,7 +93,7 @@ EOS
   end
 
   def public_profile_url_string(user)
-    return "#{request.protocol}#{ROOT_URL}#{public_profile_path(:hex => user.hex) }"
+    return "#{ROOT_URL_SCHEME}#{ROOT_URL}#{public_profile_path(:hex => user.hex) }"
   end
 
   # Override error_messages_for to make error messages prettier
