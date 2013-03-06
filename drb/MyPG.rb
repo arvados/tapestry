@@ -57,7 +57,7 @@ class MyPG
 		  Thread.new("consumer #{i}") do |name|
 		    begin
 		      work = @queue.deq
-					begin
+          begin
 			      print "#{name}: started work for user #{work.user_id}: #{work.action}\n"
 						if work.action == 'get_ccr' then
 							get_ccr_worker(work)
@@ -71,7 +71,12 @@ class MyPG
 			      print "#{name}: finished work for user #{work.user_id}: #{work.action}\n"
 			      sleep(rand(0.1))
 					rescue Exception => e
-						puts "Trapped exception in worker"
+            if e.to_s =~ /has gone away/ or e.to_s =~ /Lost connection/ then
+              puts "MySQL went away; re-establishing connection and retrying."
+              ActiveRecord::Base.establish_connection and retry
+              retry
+            end
+						puts "Trapped exception in worker: #{e.to_s}"
             puts "#{work.action}: job failed: #{e.inspect()}"
             puts "#{e.backtrace()}"
     				callback('userlog',work.user_id,
@@ -369,10 +374,15 @@ class MyPG
         filename = create_absolute_pitch_survey_report_worker(work)
       elsif work.report_name == 'absolute_pitch_question_key' and work.report_type == 'csv' then
         filename = create_absolute_pitch_survey_question_key_report_worker(work)
-    else
+      else
         error_message = "Unknown report name #{work.report_name} or type #{work.report_type}"
       end
 		rescue Exception => e
+      if e.to_s =~ /has gone away/ or e.to_s =~ /Lost connection/ then
+        puts "MySQL went away; re-establishing connection and retrying."
+        ActiveRecord::Base.establish_connection and retry
+        retry
+      end
       error_message = e.inspect()
 			puts "Trapped exception in report_worker"
       puts "#{work.action}: job failed: #{error_message}"
@@ -447,6 +457,11 @@ class MyPG
       end
 
     rescue Exception => e
+      if e.to_s =~ /has gone away/ or e.to_s =~ /Lost connection/ then
+        puts "MySQL went away; re-establishing connection and retrying."
+        ActiveRecord::Base.establish_connection and retry
+        retry
+      end
       error_message = e.inspect()
       puts "Trapped exception in process_ccr_worker"
       puts "#{work.action}: job failed: #{error_message}"
