@@ -51,10 +51,10 @@ EOS
         :sample_count =>
         Sample.real.no_parent.visible_to(nil).count,
 
-        :datasets =>
+        :published_dataset_count =>
         Dataset.published_or_published_anonymously.count,
 
-        :user_files =>
+        :user_file_count =>
         UserFile.visible_to(nil).count
       }
     end
