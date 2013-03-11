@@ -25,8 +25,8 @@ class GoogleSurveysController < ApplicationController
   end
 
   def decide_view_mode
-    @can_edit = current_user and (current_user.is_admin? or (@google_survey and @google_survey.user_id == current_user.id))
-    @min_view = !@can_edit and !(current_user and current_user.is_researcher?)
+    @can_edit = current_user && (current_user.is_admin? || (@google_survey && @google_survey.user_id == current_user.id))
+    @min_view = !@can_edit && !(current_user && current_user.is_researcher?)
     @can_download = (@google_survey and
                      @google_survey.last_downloaded_at and
                      (@google_survey.is_result_public or
@@ -67,6 +67,12 @@ class GoogleSurveysController < ApplicationController
     else
       @google_surveys = GoogleSurvey.all
     end
+
+    @my_google_survey_responses = current_user.nil? ? [] : Nonce.
+      where(:owner_class => 'User',
+            :owner_id => current_user.id,
+            :target_class => 'GoogleSurvey').
+      select(&:used_at)
 
     respond_to do |format|
       format.html # index.html.erb

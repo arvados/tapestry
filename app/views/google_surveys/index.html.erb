@@ -2,12 +2,13 @@
 
 <h2>Participant surveys</h2>
 
-<table class="admin_table">
+<table class="admin_table table">
   <thead>
     <tr>
+      <% if current_user %><th>Your participation</th><% end %>
       <th>Survey name</th>
       <th>Researcher</th>
-      <% if current_user %><th>OAuth service</th><% end %>
+      <% if !@min_view %><th>OAuth service</th><% end %>
       <th>Responses retrieved</th>
       <th>Responses</th>
       <th>Participants</th>
@@ -22,9 +23,14 @@
 
     <% @google_surveys.each do |google_survey| %>
     <tr>
+      <% if current_user %>
+      <td>
+        <%= link_to image_tag('tick.png', :title => 'You have responded to this survey.  Click to view your response history.'), google_survey if @my_google_survey_responses.collect(&:target_id).index(google_survey.id) %>
+      </td>
+      <% end %>
       <td><%= link_to google_survey.name, google_survey %></td>
       <td><%= google_survey.user.full_name %></td>
-      <% if current_user %><td><%= google_survey.oauth_service.name %></td><% end %>
+      <% if !@min_view %><td><%= google_survey.oauth_service.name %></td><% end %>
       <td><%= google_survey.last_downloaded_at %></td>
       <td><%= google_survey.responses.size %></td>
       <td><%= google_survey.responses.collect(&:owner_id).uniq.size %></td>
