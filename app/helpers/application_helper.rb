@@ -45,6 +45,14 @@ EOS
         collect(&:responses).
         flatten.count,
 
+        :google_survey_respondent_count =>
+        GoogleSurvey.
+        where(:is_listed => true).
+        collect(&:responses).
+        flatten.
+        collect(&:owner_id).
+        uniq.count,
+
         :google_survey_count =>
         GoogleSurvey.where(:is_listed => true).count,
 

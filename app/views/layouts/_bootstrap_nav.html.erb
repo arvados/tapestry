@@ -8,45 +8,45 @@
   <div class="navbar"><div class="navbar-inner">
     <ul class="nav">
 
-      <% if current_user and !current_user.deactivated_at %>
-        <li class="dropdown">
-          <%= link_to raw('Account <b class="caret"></b>'), edit_user_path, :id => 'dropdown-participate', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-participate">
-            <%= nav_element 'Home', root_path %>
-            <%= nav_element 'Email, password, security question', edit_user_path, {}, :title => 'Also your phone number.' %>
-            <%= nav_element 'Named proxies', named_proxies_path, {}, :title => 'They act on your behalf if you are incapacitated.' %>
-            <%= nav_element 'Shipping address', user_shipping_address_path, {}, :title => 'We send tissue collection kits to you.' %>
-            <%= nav_element 'Mailing list subscriptions', edit_user_path(:anchor => 'mailinglists'), {}, :title => 'We send email sometimes.' %>
-
-            <% if !current_user.hex.empty? %>
-            <li role="presentation" class="divider"></li>
-            <%= nav_element 'Safety questionnaires', safety_questionnaires_path %>
-            <%= nav_element 'Enrollment letter', enrollment_application_results_path %>
-            <% end %>
-
-            <li role="presentation" class="divider"></li>
-            <%= nav_element 'Withdraw', page_path(:withdrawal_menu), {}, :title => 'Stop participating in the study.' %>
-          </ul>
-        </li>
-      <% end %>
-
       <% if current_user and current_user.enrolled and !current_user.deactivated_at %>
         <li class="dropdown">
           <%= link_to raw('Participate <b class="caret"></b>'), root_path, :id => 'dropdown-participate', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-participate">
-            <%= nav_element 'View and edit public profile', public_profile_path(current_user.hex) %>
+            <%= nav_element 'Home', root_path %>
+            <%= nav_element 'Public profile', public_profile_path(current_user.hex) %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Manage family relationships', family_relations_path, {}, :title => 'If you have family members enrolled in the PGP, you can tell us about that.' %>
-            <%= nav_element 'Sign up for tissue collections', collection_events_path, {}, :title => 'This is how we get your spit.' %>
-            <%= nav_element 'Claim a collection kit', study_claim_kit_path, {}, :title => 'Do this when you receive a kit in the mail.' %>
-            <%= nav_element 'Review specimen analysis data', specimen_analysis_data_index_path, {}, :title => 'Manage publication of your genome sequence data.' %>
+            <%= nav_element 'Family relationships', family_relations_path %>
+            <%= nav_element 'Specimen collections', collection_events_path %>
+            <%= nav_element 'Claim a kit', study_claim_kit_path %>
+            <%= nav_element 'Review returned data', specimen_analysis_data_index_path %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Upload personal health records', phrccr_path, {}, :title => 'Copy data from Microsoft HealthVault to your public profile.' %>
-            <%= nav_element 'Upload genetic and health data', user_files_path, {}, :title => 'Upload files to your public profile.' %>
+            <%= nav_element 'Import health records', phrccr_path %>
+            <%= nav_element 'Upload genetic/health files', user_files_path %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Respond to participant surveys', google_surveys_path, {}, :title => 'Answer questions about traits, health, and ancestry.' %>
+            <%= nav_element 'Participant surveys', google_surveys_path %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Third party activities', third_party_index_path, {}, :title => 'Projects that are related or similar to, but not part of, the PGP.' %>
+            <%= nav_element 'Third party activities', third_party_index_path, {}, :title => 'External studies PGP participants may join' %>
+          </ul>
+        </li>
+      <% end %>
+
+      <% if current_user and !current_user.deactivated_at %>
+        <li class="dropdown">
+          <%= link_to raw('Account <b class="caret"></b>'), edit_user_path, :id => 'dropdown-participate', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-participate">
+            <%= nav_element 'Home', root_path unless current_user.enrolled %><%# ergo no Participate menu %>
+            <%= nav_element 'Email, phone, and password', edit_user_path %>
+            <%= nav_element 'Named proxies', named_proxies_path %>
+            <%= nav_element 'Shipping address', user_shipping_address_path %>
+            <%= nav_element 'Mailing list subscriptions', edit_user_path(:anchor => 'mailinglists') %>
+
+            <% if !current_user.hex.empty? %>
+            <li role="presentation" class="divider"></li>
+            <%= nav_element 'Safety questionnaires', safety_questionnaires_path %>
+            <% end %>
+
+            <li role="presentation" class="divider"></li>
+            <%= nav_element 'Withdraw', page_path(:withdrawal_menu), {} %>
           </ul>
         </li>
       <% end %>
@@ -104,11 +104,11 @@
       <li class="dropdown">
         <%= link_to raw('Public data <b class="caret"></b>'), public_genetic_data_path, :id => 'dropdown-public-data', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-public-data">
-          <%= nav_element "Participants", users_path, {}, :title => "#{public_data_stats[:publishable_user_count]} participants are enrolled in the study." %>
-	  <%= nav_element 'Participant surveys', google_surveys_path, {}, :title => "#{public_data_stats[:google_survey_response_count]} responses to #{public_data_stats[:google_survey_count]} surveys are available for unrestricted public use." %>
-          <%= nav_element 'Tissue samples', specimens_path, {}, :title => "#{public_data_stats[:sample_count]} blood, saliva, and other tissue samples are linked to public health/trait profiles and available for unrestricted public use." %>
-          <%= nav_element 'Whole genome sequences and other data', public_genetic_data_path, {}, :title => "#{public_data_stats[:published_dataset_count]} whole genome sequences, and #{public_data_stats[:user_file_count]} other data files, are linked to public health/trait profiles and available for unrestricted public use." %>
-	  <%= nav_element 'CAGI genomes', public_anonymous_genetic_data_path, {}, :title => 'As part of a genome interpretation challenge, these genetic data sets were initially published without being linked with specific PGP participant profiles.  (Aside from this special case, every PGP data set is linked to an individual health/trait profile.)' %>
+          <%= nav_element "Participants", users_path, {}, :title => "#{public_data_stats[:publishable_user_count]} participant profiles" %>
+	  <%= nav_element 'Participant surveys', google_surveys_path, {}, :title => "#{public_data_stats[:google_survey_count]} surveys taken by #{public_data_stats[:google_survey_respondent_count]} participants" %>
+          <%= nav_element 'Tissue samples', specimens_path, {}, :title => "#{public_data_stats[:sample_count]} blood, saliva, and other tissue samples" %>
+          <%= nav_element 'Whole genome sequences and other data', public_genetic_data_path, {}, :title => "#{public_data_stats[:published_dataset_count]} whole genome sequences and #{public_data_stats[:user_file_count]} other genetic data" %>
+	  <%= nav_element 'CAGI genomes', public_anonymous_genetic_data_path, {}, :title => 'Temporarily unlinked to participant profiles' %>
           <li role="presentation" class="divider"></li>
           <%= nav_element 'Genetic data publication statistics', url_for(:controller => :public_genetic_data, :action => :statistics) %>
         </ul>
