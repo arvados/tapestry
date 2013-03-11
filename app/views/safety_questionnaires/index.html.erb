@@ -1,14 +1,18 @@
-<h2>Safety Questionnaire Responses</h2>
+<h2>Submit a new safety questionnaire</h2>
+
 <p>
-Review your submitted safety questionnaire answers below.</p>
+<%= link_to 'Click here to submit a new safety questionnaire.', new_safety_questionnaire_path %>
+</p>
+
+<h2>Safety questionnaire responses</h2>
+
+<% if !@safety_questionnaires.empty? %>
  
-<% if @safety_questionnaires != [] %>
- 
-<strong>Safety Questionnaires:</strong>
-<table class="admin_table">
+<table class="admin_table table" style="width: auto">
   <tr>
     <th>Submitted</th>
     <th>Changes reported</th>
+    <th></th>
   </tr>
   <% @safety_questionnaires.each do |sq| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
@@ -26,6 +30,3 @@ Review your submitted safety questionnaire answers below.</p>
 You have not yet submitted a safety questionnaire.
 
 <% end %>
-<p>
-<%= link_to 'Continue', root_path %>
-</p>
