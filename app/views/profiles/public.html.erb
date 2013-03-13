@@ -145,6 +145,11 @@ None added.
 	<% end %>
 	<a href="#" onclick="jQuery('.survey_result_<%= survey_result[:nonce] %>').toggle(); jQuery(this).html(jQuery('.survey_result_<%= survey_result[:nonce] %>').is(':visible') ? 'Hide responses' : 'Show responses'); return false;">Show responses</a>
       </td>
+      <% if logged_in? and @user == current_user -%>
+      <td style="border: 0">
+        <%= button_to('Delete',delete_google_survey_answers_url(survey_result[:nonce]), :confirm => 'Are you sure? This set of survey answers will be deleted.', :method => :delete) %>
+      </td>
+      <% end -%>
     </tr>
     <% survey_result[:qa].each {|qa| %>
     <tr class="survey_result_<%= survey_result[:nonce] %> ui-helper-hidden">
