@@ -69,7 +69,8 @@ EOS
   end
 
   def bootstrap?
-    (session[:bootstrap] = params[:bootstrap] || session[:bootstrap]) == '1'
+    # default to bootstrap, switch to legacy with [any]?bootstrap=0
+    (session[:bootstrap] = params[:bootstrap] || session[:bootstrap]) != '0'
   end
 
   def bootstrap_nav_element(text, link, opts={}, *args)
