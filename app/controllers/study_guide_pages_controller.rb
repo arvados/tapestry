@@ -9,8 +9,9 @@ class StudyGuidePagesController < ApplicationController
     @content_area = ContentArea.find(@ev.exam.content_area.id)
 
     if @sgp.nil? then
-      raise ActionController::RoutingError,
-            "No such study guide page"
+      # Hmm, no study guide for this exam. Just go straight to the exam.
+      @content_area = ContentArea.find(@ev.exam.content_area.id)
+      redirect_to content_area_retake_exam_path(@content_area, @ev.exam)
       return
     end 
   end
