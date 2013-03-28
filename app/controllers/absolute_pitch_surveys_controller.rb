@@ -44,10 +44,17 @@ class AbsolutePitchSurveysController < ApplicationController
       return
     end
 
-    if !current_user.absolute_pitch_survey_completion.nil?
-      redirect_to :action => 'review', :id => current_user.hex
-      return
-    end
+    # This would prevent reloading survey pages. However, from the
+    # user's perspective, it's confusing: the "back" button works,
+    # saving new responses from there works, but then, instead of
+    # seeing the next section, we go to the "review" page. This is
+    # especially weird if you say "no perfect pitch" in section 1,
+    # (which completes the survey), then go back and change it to
+    # "yes".
+    # 
+    # if !current_user.absolute_pitch_survey_completion.nil?
+    #   return redirect_to :action => 'review', :id => current_user.hex
+    # end
 
     survey = Survey.find(:first, :conditions => { :name => 'Absolute Pitch Survey' })
 
@@ -75,7 +82,7 @@ class AbsolutePitchSurveysController < ApplicationController
     user_answers.each {|a|
       if @answers[a.survey_question_id].nil?
         @answers[a.survey_question_id] = [ a.text ]
-      else @answers[a.survey_question_id].kind_of?(Array)
+      elsif @answers[a.survey_question_id].kind_of?(Array)
         @answers[a.survey_question_id] << a.text
       end
     }    
@@ -171,7 +178,9 @@ class AbsolutePitchSurveysController < ApplicationController
     end
 
     last_answer = nil
-    answers.each {|a|
+    answers.
+      sort_by { |a| a[1][:survey_question_id].to_i rescue 0 }.
+      each {|a|
       survey_question_id = a[1][:survey_question_id]
       answer_text_param = a[1][:text]
       if answer_text_param.kind_of?(Array)
