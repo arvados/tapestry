@@ -117,6 +117,7 @@ class AbsolutePitchSurveysController < ApplicationController
 
     # If the survey is already complete, redirect to the review page
     if !current_user.absolute_pitch_survey_completion.nil?
+      flash[:error] = 'Please retake the survey to make changes to your answers'
       return redirect_to :action => 'review', :id => current_user.hex
     end
 
