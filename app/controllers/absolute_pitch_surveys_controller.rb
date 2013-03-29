@@ -44,17 +44,10 @@ class AbsolutePitchSurveysController < ApplicationController
       return
     end
 
-    # This would prevent reloading survey pages. However, from the
-    # user's perspective, it's confusing: the "back" button works,
-    # saving new responses from there works, but then, instead of
-    # seeing the next section, we go to the "review" page. This is
-    # especially weird if you say "no perfect pitch" in section 1,
-    # (which completes the survey), then go back and change it to
-    # "yes".
-    # 
-    # if !current_user.absolute_pitch_survey_completion.nil?
-    #   return redirect_to :action => 'review', :id => current_user.hex
-    # end
+    # If the survey is already complete, redirect to the review page
+    if !current_user.absolute_pitch_survey_completion.nil?
+      return redirect_to :action => 'review', :id => current_user.hex
+    end
 
     survey = Survey.find(:first, :conditions => { :name => 'Absolute Pitch Survey' })
 
@@ -121,6 +114,11 @@ class AbsolutePitchSurveysController < ApplicationController
   def save
     section_id = Integer(params[:id])
     survey_section = SurveySection.find(section_id)
+
+    # If the survey is already complete, redirect to the review page
+    if !current_user.absolute_pitch_survey_completion.nil?
+      return redirect_to :action => 'review', :id => current_user.hex
+    end
 
     if params[:commit] == "Back"
       redirect_to :action => 'index', :id => survey_section.previous_section_id
