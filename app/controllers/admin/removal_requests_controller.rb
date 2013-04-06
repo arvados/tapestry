@@ -63,7 +63,7 @@ class Admin::RemovalRequestsController < ApplicationController
     @removal_request.update_attributes(params[:removal_request])
     if params[:commit] == 'Close'
       @removal_request.update_attributes(:fulfilled_at => Time.now,
-                                         :fulfilled_by => current_user)
+                                         :fulfilled_by => current_user.id)
     end
     redirect_to admin_removal_requests_path
   end
