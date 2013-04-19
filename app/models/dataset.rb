@@ -52,7 +52,11 @@ class Dataset < ActiveRecord::Base
   end
 
   def data_type
-    "Complete Genomics"
+    if name.match /^Microbiome/
+      "Microbiome"
+    else
+      "Complete Genomics"
+    end
   end
 
   def anonymous_download_url

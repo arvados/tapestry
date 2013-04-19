@@ -60,6 +60,7 @@ class UserFile < ActiveRecord::Base
                  'health records - CCR XML' => 'health records - CCR XML',
                  'biometric data - CSV or similar' => 'biometric data - CSV or similar',
                  'image - PNG or JPEG or similar' => 'image',
+                 'microbiome data' => 'Microbiome',
                  'other (please specify)' => 'other'
                }.sort
 

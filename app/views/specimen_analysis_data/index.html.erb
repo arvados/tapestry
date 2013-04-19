@@ -26,7 +26,15 @@ first confirmed by a licensed healthcare professional. </p>
       <td><%= dataset.seen_by_participant_at ? dataset.seen_by_participant_at.strftime("%b %e, %Y").to_s : '' %></td>
       <td><%= dataset.name %></td>
       <td><%= dataset.sample ? link_to(dataset.sample.crc_id_s, public_profile_path(current_user.hex, :anchor => 'samples')) : '-' %></td>
-      <td><%= link_to_if dataset.location, 'view', dataset.location %></td>
+      <td>
+        <% if dataset.location %>
+        <%= link_to_if dataset.location, 'view', dataset.location %>
+        <% elsif dataset.download_url %>
+        <%= link_to 'Download', dataset.download_url, :rel => 'nofollow' %>
+        <% else %>
+        (not&nbsp;available)
+        <% end %>
+      </td>
       <td>
 <%
 if not dataset.seen_by_participant_at.nil? then
