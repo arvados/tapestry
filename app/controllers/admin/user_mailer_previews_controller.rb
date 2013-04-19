@@ -18,7 +18,8 @@ class Admin::UserMailerPreviewsController < Admin::AdminControllerBase
 
   def dataset_notification
     @u = User.where('hex=?', params[:a]).first || current_user
-    render_plain UserMailer.dataset_notification_message specimen_analysis_data_index_url, @u
+    @d = Dataset.where('id=?', params[:b]).first || Dataset.last
+    render_plain UserMailer.dataset_notification_message specimen_analysis_data_index_url, @u, @d
   end
 
   protected

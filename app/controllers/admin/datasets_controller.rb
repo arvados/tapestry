@@ -33,7 +33,7 @@ class Admin::DatasetsController < Admin::AdminControllerBase
   end
 
   def notify
-    UserMailer.dataset_notification_message(specimen_analysis_data_index_url, @dataset.participant).deliver
+    UserMailer.dataset_notification_message(specimen_analysis_data_index_url, @dataset.participant, @dataset).deliver
 
     @dataset.sent_notification_at = Time.now()
     @dataset.save!
