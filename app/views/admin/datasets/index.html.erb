@@ -29,6 +29,7 @@
     <th></th>
     <th></th>
     <th></th>
+    <th></th>
   </tr>
   <% @datasets.each do |dataset| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
@@ -59,6 +60,7 @@
           <br/><strong>Trait surveys incomplete</strong>
         <% end -%>
       </td>
+      <td><%= link_to 'Download', dataset_download_path(dataset) %></td>
       <td><%= link_to 'Edit', edit_admin_dataset_path(dataset) %></td>
 
       <% if not dataset.released_to_participant then -%>
