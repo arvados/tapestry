@@ -20,7 +20,7 @@ class SpecimenAnalysisDataController < ApplicationController
         end
       end
     else
-      flash[:warning] = 'You a cloaked administrator; viewing this page does not set the "seen_by_participant_at" flag on the datasets listed'
+      flash[:warning] = 'You are an administrator, logged in as a participant, so viewing this page does not set the "seen_by_participant_at" flag on the datasets listed'
     end
     @trait_surveys = GoogleSurvey.
       where('id in (?)', TRAIT_SURVEY_IDS).
