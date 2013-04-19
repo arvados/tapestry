@@ -11,7 +11,7 @@ class DatasetsController < ApplicationController
           (@dataset.participant_id == current_user.id and
            @dataset.released_to_participant)))
       x = @dataset.download_url
-      return redirect_to(x) if x and false
+      return redirect_to(x) if x
       flash[:error] = "Sorry, this file is temporarily unavailable."
       return redirect_to :back
     end
