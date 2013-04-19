@@ -3,7 +3,7 @@ class Admin::DatasetsController < Admin::AdminControllerBase
   before_filter :set_dataset, :only => [:edit, :update, :release, :notify, :reprocess]
 
   def index
-    @datasets = Dataset.all
+    @datasets = Dataset.includes(:participant).all
 
     @users = Array.new()
     # Make a list of every participant that has taken each trait survey
