@@ -198,4 +198,17 @@ EOS
       t.strftime '%B %-d'
     end
   end
+
+  def alert_classes_for_flash_key(key)
+    key = key.to_s
+    if key == 'warning'
+      'alert alert-block'
+    elsif key == 'error'
+      'alert alert-block alert-error'
+    elsif key == 'notice'
+      'alert alert-block alert-info'
+    else
+      'alert alert-block alert-' + key
+    end
+  end
 end

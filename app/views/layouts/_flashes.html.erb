@@ -1,5 +1,8 @@
 <div id="flash">
   <% flash.each do |key, value| -%>
-    <div class="flash <%= raw(key) %>"><%= raw(flash.delete key) %></div>
+    <div class="<%= raw(alert_classes_for_flash_key(key)) %>">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= raw(flash.delete key) %>
+    </div>
   <% end -%>
 </div>

@@ -1,6 +1,6 @@
 <%= error_messages_for :sample, :header_message => 'Error: data could not be saved.', :message => nil %>
 <% if not @sample.is_destroyed.nil? %>
-  <div class="flash error">This sample was marked as destroyed on <%= @sample.is_destroyed %>.</div> 
+  <div class="<%= raw(alert_classes_for_flash_key(:error)) %>">This sample was marked as destroyed on <%= @sample.is_destroyed %>.</div> 
 <% end %>
 <%= form_for(@sample) do |f| %>
   <div class="field">
