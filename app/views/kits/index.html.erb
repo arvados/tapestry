@@ -161,6 +161,10 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
   </table>
 </div>
 
+<div>
+
+<%= button_to 'Create kits', new_kit_path, :class => 'btn btn-primary pull-right', :style => 'margin-right: 2em' %>
+
 <h2>Kits</h2>
 
 <p>
@@ -181,6 +185,8 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
 </p>
 
 <p>Status: <%= raw @kit_status_count.collect { |s,n| "#{n} #{link_to s, '#', :class=>"select-status", :"select-status"=>s}" }.join ", " %>.</p>
+
+</div>
 
 <br clear="all" />
 
