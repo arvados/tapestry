@@ -109,7 +109,9 @@
 	  <%= nav_element 'Participant surveys', google_surveys_path, {}, :title => "#{public_data_stats[:google_survey_count]} surveys taken by #{public_data_stats[:google_survey_respondent_count]} participants" %>
           <%= nav_element 'Tissue samples', specimens_path, {}, :title => "#{public_data_stats[:sample_count]} blood, saliva, and other tissue samples" %>
           <%= nav_element 'Whole genome sequences and other data', public_genetic_data_path, {}, :title => "#{public_data_stats[:published_dataset_count]} whole genome sequences and #{public_data_stats[:user_file_count]} other genetic data" %>
+          <% if public_data_stats[:anonymous_dataset_count] > 0 %>
 	  <%= nav_element 'CAGI genomes', public_anonymous_genetic_data_path, {}, :title => 'Temporarily unlinked to participant profiles' %>
+          <% end %>
           <li role="presentation" class="divider"></li>
           <%= nav_element 'Genetic data publication statistics', url_for(:controller => :public_genetic_data, :action => :statistics) %>
         </ul>

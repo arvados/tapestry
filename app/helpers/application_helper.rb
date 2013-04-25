@@ -62,6 +62,9 @@ EOS
         :published_dataset_count =>
         Dataset.published_or_published_anonymously.count,
 
+        :anonymous_dataset_count =>
+        Dataset.published_anonymously.count,
+
         :user_file_count =>
         UserFile.visible_to(nil).count
       }

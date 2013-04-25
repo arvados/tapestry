@@ -5,6 +5,10 @@
 <%= submit_tag 'Search' %>
 <% end %>
 
+<% if @datasets.empty? %>
+<p>There are no anonymously published datasets right now.</p>
+<% else %>
+
 <table class="admin_table">
   <tr>
     <th>Data type</th>
@@ -35,3 +39,5 @@
     </tr>
   <% end %>
 </table>
+
+<% end %>
