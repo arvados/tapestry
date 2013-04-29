@@ -91,6 +91,24 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
     @bulk_message = BulkMessage.find(params[:id])
   end
 
+  def test_message
+    @bulk_message = BulkMessage.find(params[:id])
+
+    begin
+      UserMailer.bulk_message(@bulk_message,current_user).deliver
+      current_user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) test: sent to #{current_user.email}")
+    rescue Exception => e
+      current_user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) test: could not be sent to #{current_user.email}: #{e.inspect()}")
+    end
+
+    @bulk_message.tested = true
+    @bulk_message.tested_at = Time.now()
+    @bulk_message.save!
+
+    flash[:notice] = "Message tested: sent to your e-mail address. Please check the user log for delivery errors."
+    redirect_to admin_bulk_messages_url
+  end
+
   def send_message
     @bulk_message = BulkMessage.find(params[:id])
     if @bulk_message.recipients.size == 0 then
@@ -100,6 +118,11 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
     end
     if @bulk_message.sent then
       flash[:error] = "Message was already sent, not re-sent."
+      redirect_to admin_bulk_messages_url
+      return
+    end
+    if not @bulk_message.tested then
+      flash[:error] = "Message was not tested yet. Please click the 'test' link before you send."
       redirect_to admin_bulk_messages_url
       return
     end

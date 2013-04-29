@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121208050415) do
+ActiveRecord::Schema.define(:version => 20130429095500) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -228,6 +228,8 @@ ActiveRecord::Schema.define(:version => 20121208050415) do
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "tested",          :default => false
+    t.datetime "tested_at"
   end
 
   add_index "bulk_message_versions", ["bulk_message_id"], :name => "index_bulk_message_versions_on_bulk_message_id"
@@ -243,6 +245,8 @@ ActiveRecord::Schema.define(:version => 20121208050415) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "lock_version"
+    t.boolean  "tested",       :default => false
+    t.datetime "tested_at"
   end
 
   create_table "ccr_versions", :force => true do |t|
@@ -1701,7 +1705,7 @@ ActiveRecord::Schema.define(:version => 20121208050415) do
     t.datetime "updated_at"
     t.boolean  "remove_data",        :default => false
     t.boolean  "destroy_samples",    :default => false
-    t.integer  "fulfilled_by"
+    t.integer  "fulfilled_by_id"
     t.datetime "fulfilled_at"
     t.text     "admin_notes"
     t.datetime "deleted_at"
@@ -1716,7 +1720,7 @@ ActiveRecord::Schema.define(:version => 20121208050415) do
     t.datetime "updated_at"
     t.boolean  "remove_data",     :default => false
     t.boolean  "destroy_samples", :default => false
-    t.integer  "fulfilled_by"
+    t.integer  "fulfilled_by_id"
     t.datetime "fulfilled_at"
     t.text     "admin_notes"
     t.datetime "deleted_at"
