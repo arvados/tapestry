@@ -456,23 +456,17 @@ class Admin::UsersController < Admin::AdminControllerBase
   end
 
   def log_worker(params,paginate=1)
-    if params[:filter] then
+    filter = '%'
+    @filtered = params[:filter] || ''
+    if params[:filter]
       filter = '%' + params[:filter] + '%'
-      if paginate == 1 then
-        @logs = UserLog.where('comment like ?',filter).sort { |x,y| y.created_at <=> x.created_at }
-      else
-        @logs = UserLog.includes(:user).where('comment like ?',filter).sort { |x,y| y.created_at <=> x.created_at }
-      end
-      @filtered = params[:filter]
-    else
-      if paginate == 1 then
-        @logs = UserLog.find(:all).sort { |x,y| y.created_at <=> x.created_at }
-      else
-        @logs = UserLog.find(:all, :include => :user).sort { |x,y| y.created_at <=> x.created_at }
-      end
-      @filtered = ''
     end
-    if paginate == 1 then
+
+    @logs = UserLog.
+      includes(:user).
+      where('comment like ? or users.hex like ?', filter, filter).
+      order('user_logs.created_at desc')
+    if paginate == 1
       @logs = @logs.paginate(:page => params[:page] || 1, :per_page => 30)
     end
     return @logs, @filtered

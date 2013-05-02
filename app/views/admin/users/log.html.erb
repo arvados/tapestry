@@ -3,25 +3,21 @@
 <h2>User Logs</h2>
 
 <%= form_tag admin_log_users_path, { :method => 'get' } do  %>
-  Filter: <%= text_field_tag :filter %>
+  Filter: <%= text_field_tag :filter, (params[:filter] || '') %>
   <%= submit_tag 'Search' %>
-<% end %>
-
-<% if @filtered != '' then %>
-  <p>Showing results filtered by "<strong><%= @filtered %></strong>"</p>
 <% end %>
 
 <%= error_messages_for :user %>
 
 <%= will_paginate @logs %>
-<table class="admin_table">
+<table class="table table-condensed">
   <tr>
     <th>When</th>
     <th>Who</th>
     <th>Log entry</th>
   </tr>
   <% @logs.each do |entry| -%>
-    <tr class="<%= cycle 'even', 'odd' %>">
+    <tr>
       <td width="150"><%= entry.created_at %></td>
       <td>
         <% if entry.user.nil? then %>
