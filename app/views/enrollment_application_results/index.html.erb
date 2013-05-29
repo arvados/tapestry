@@ -44,11 +44,22 @@ PGP Staff
 <%= link_to 'GET STARTED', accept_enrollment_user_path %>
 <% end %>
 
+<% elsif current_user.has_completed?('enrollment_application') and not User.eligible_for_enrollment_with_willing_twin.where(:id => current_user.id).empty? then %>
+<p>Thanks for submitting your enrollment application.</p>
+
+You submitted your enrollment application on <%= current_user.enrollment_step_completions.find_by_enrollment_step_id(EnrollmentStep.find_by_keyword('enrollment_application')).created_at %>
+
+<p>Because you indicated you have a twin, both you and your twin will have to
+be enrolled at the same time by a staff member. This will happen when you both
+have submitted your enrollment application.</p>
+
+<p>Please contact <a href="mailto:support@personalgenomes.org">support@personalgenomes.org</a> with any questions.</p>
+
 <% elsif current_user.has_completed?('enrollment_application') then %>
 <p>Thanks for submitting your enrollment application.</p>
 
 You submitted your enrollment application on <%= current_user.enrollment_step_completions.find_by_enrollment_step_id(EnrollmentStep.find_by_keyword('enrollment_application')).created_at %>
 
-<p>Unfortunately, you are currently not eligible for enrollment in the PGP study. Please contact <a href="mailto:support@personalgenomes.org">support@personalgenomes.org</a> if you have questions.</p>
+<p>Unfortunately, you are currently not eligible for enrollment in the PGP study. Please contact <a href="mailto:support@personalgenomes.org">support@personalgenomes.org</a> with any questions.</p>
 
 <% end %>
