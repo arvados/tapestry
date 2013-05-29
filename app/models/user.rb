@@ -344,6 +344,7 @@ class User < ActiveRecord::Base
   def complete_enrollment_step(step)
     raise Exceptions::MissingStep.new("No enrollment step to complete.") if step.nil?
 
+    enrollment_application_step = EnrollmentStep.find_by_keyword('enrollment_application')
     final_pre_enrollment_step = EnrollmentStep.find_by_keyword('enrollment_application_results')
     exam_enrollment_step = EnrollmentStep.find_by_keyword('content_areas')
     consent_enrollment_step = EnrollmentStep.find_by_keyword('participation_consent')
@@ -367,6 +368,15 @@ class User < ActiveRecord::Base
       self.consent_version = consent_version
       self.documents << Document.new(:keyword => 'consent', :version => consent_version, :timestamp => Time.now())
       save
+    end
+
+    if (step == enrollment_application_step) then
+      if not User.eligible_for_enrollment.find_by_email(self.email).nil? then
+        # We auto-enroll eligible users now
+        complete_enrollment_step(next_enrollment_step)
+      else
+        # Is it possible to get this far without being eligible?
+      end
     end
   end
 
