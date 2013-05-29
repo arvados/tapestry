@@ -1,4 +1,5 @@
 <h2>Collection events</h2>
+<%= button_to 'Create collection event', new_collection_event_path, :class => 'btn btn-primary pull-right', :style => 'margin-right: 2em', :method => :get %>
 
 <% if current_user.is_admin? %>
 <p>Because you are an administrator, this page lists all collection events by any researcher.</p>
