@@ -1,5 +1,9 @@
 <h2><%= link_to 'Uploaded data', user_files_path %> &rarr; Upload new file</h2>
 
+<div class="change_warning">
+WARNING: While the PGP is a non-anonymous study, some participants have inadvertently shared private information via file uploads (e.g. email address). Please read the instructions below carefully.
+</div>
+
 <% if @user_file.using_plain_upload %>
 <p>
   You can upload genetic and other data here. File size is limited to
