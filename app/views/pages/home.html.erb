@@ -32,6 +32,7 @@
         <span class="title">
           <% if step == @next_step -%>
             <%= link_to step.title, :controller => step.keyword, :action => 'index'  %>
+            <div style="font-size: 70px; float: right; color: orange; border-top : 10px solid transparent;">⇦</div>
           <% else -%>
             <%= step.title %>
           <% end -%>
