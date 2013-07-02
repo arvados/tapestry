@@ -100,6 +100,8 @@ class Dataset < ActiveRecord::Base
     t.add :participant, :template => :id, :if => :published_at
     t.add :data_size, :if => :published_at
     t.add :report_metadata, :if => :published_at
+    t.add :locator, :if => :published_at
+    t.add :download_url, :if => :published_at
   end
 
   api_accessible :researcher, :extend => :public do |t|
