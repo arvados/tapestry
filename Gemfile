@@ -11,9 +11,9 @@ gem 'cancan'
 
 gem "paperclip", "~> 2.3.3"
 gem 'gchart'
-gem 'nokogiri'
+gem 'nokogiri', '~> 1.5.6'
 gem 'gdata', :require => 'gdata'
-gem 'carmen'
+gem 'carmen', '~> 0.2.13'
 gem 'hoptoad_notifier', "~> 2.3"
 gem 'will_paginate'
 gem 'alexdunae-validates_email_format_of', :require => 'validates_email_format_of'
