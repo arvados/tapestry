@@ -396,10 +396,18 @@ class UsersController < ApplicationController
       session[:user_id] = target_uid
       session.delete :real_uid
       session.delete :switch_back_to
+      # at this point @user is still the target user, and @user.controlling_user is still set
+      # to the admin uid, so this log entry will be correct
+      @user.log('Admin logged out from user account.')
     elsif current_user.is_admin?
       session[:real_uid] = current_user.id
       session[:switch_back_to] = current_user.create_userswitch_cookie
       session[:user_id] = target_uid
+      # the controlling_user field is only set on the next redirect, so fake it here to make
+      # the log entry correct
+      @target_user = User.find(target_uid)
+      @target_user.controlling_user = current_user
+      @target_user.log('Admin logged in as user.')
     else
       return access_denied
     end
