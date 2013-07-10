@@ -13,12 +13,20 @@
 <table class="table table-condensed">
   <tr>
     <th>When</th>
+    <th>Admin</th>
     <th>Who</th>
     <th>Log entry</th>
   </tr>
   <% @logs.each do |entry| -%>
     <tr>
       <td width="150"><%= entry.created_at %></td>
+      <td>
+        <% if entry.controlling_user.nil? or entry.controlling_user_id == entry.user_id then -%>
+          &nbsp;
+        <% else -%>
+          <%= entry.controlling_user.first_name %>
+        <% end -%>
+      </td>
       <td>
         <% if entry.user.nil? then %>
           No user.
