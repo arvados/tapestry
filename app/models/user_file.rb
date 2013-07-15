@@ -190,6 +190,7 @@ class UserFile < ActiveRecord::Base
     t.add :participant, :template => :id
     t.add :data_size
     t.add :report_metadata
+    t.add :locator
   end
 
   api_accessible :researcher, :extend => :public do |t|
