@@ -264,7 +264,7 @@ class Admin::UsersController < Admin::AdminControllerBase
     user.promote!
     user.reload
     flash[:notice] = "User promoted"
-    redirect_to edit_admin_user_url(user)
+    redirect_to admin_user_url(user)
   end
 
   def activate
