@@ -12,8 +12,13 @@ require File.dirname(__FILE__) + '/../config/environment'
 
 count = 0
 
+if not defined?(SITE_PREFIX) or SITE_PREFIX == 'xx' then
+  puts "ERROR: please set SITE_PREFIX to a globally unique value in your environment file"
+  exit 1
+end
+
 while NextHex.all.count < 1000 do
-  begin code = "hu%06X" % rand(2**24) end while User.unscoped.find_by_hex(code)
+  begin code = "#{SITE_PREFIX}%06X" % rand(2**24) end while User.unscoped.find_by_hex(code)
   n = NextHex.new()
   n.hex=code
   n.save!

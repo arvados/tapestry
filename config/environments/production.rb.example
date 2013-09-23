@@ -82,4 +82,8 @@ Tapestry::Application.configure do
   BLOG_EMAIL_SUBSCRIPTION_URL = ''
 
   # ANONYMOUS_PUBLICATION_OPTION = true
+
+  # This is your site prefix. It should be unique across all Tapestry installs.
+  SITE_PREFIX = 'xx'
+
 end
