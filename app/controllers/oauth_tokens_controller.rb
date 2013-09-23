@@ -1,5 +1,6 @@
 class OauthTokensController < ApplicationController
   include ApplicationHelper
+  skip_before_filter :ensure_enrolled
 
   def index
     @services = OauthService.all
