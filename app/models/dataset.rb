@@ -42,8 +42,10 @@ class Dataset < ActiveRecord::Base
   # FileDataInWarehouse initializes this way
   def initialize(*x)
     super(*x)
-    self.data_size ||= x.last[:file_size]
-    self.name ||= x.last[:file_name]
+    if x.last.respond_to? :[]
+      self.data_size ||= x.last[:file_size]
+      self.name ||= x.last[:file_name]
+    end
   end
 
   # implement "genetic data" interface
