@@ -163,7 +163,7 @@ and <%= f.text_field :b, :size => 10, :value => (params[:name_range].respond_to?
 
 <div>
 
-<%= button_to 'Create kits', new_kit_path, :class => 'btn btn-primary pull-right', :style => 'margin-right: 2em' %>
+<%= button_to 'Create kits', new_kit_path, :class => 'btn btn-primary pull-right', :style => 'margin-right: 2em', :method => :get %>
 
 <h2>Kits</h2>
 
