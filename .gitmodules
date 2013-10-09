@@ -6,7 +6,7 @@
 	url = git://git.clinicalfuture.com/longupload.git
 [submodule "lib/jsHashes"]
 	path = lib/jsHashes
-	url = git://github.com/h2non/jsHashes.git
+	url = git://github.com/h2non/jshashes.git
 [submodule "lib/jquery-ui"]
 	path = lib/jquery-ui
 	url = git://github.com/jquery/jquery-ui.git
