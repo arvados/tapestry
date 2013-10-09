@@ -84,7 +84,6 @@ class PublicGeneticDataController < ApplicationController
     UserFile::DATA_TYPES.each do |longversion, shortversion|
       @data_type_name[shortversion] = longversion
     end
-    #@datasets.sort_by(&:published_at).each do |d|
     @datasets.sort_by { |d| d.published_at.nil? ? d.published_anonymously_at : d.published_at }.each do |d|
       published_at = d.published_at
       published_at = d.published_anonymously_at if d.published_at.nil?
