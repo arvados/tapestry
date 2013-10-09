@@ -3,6 +3,7 @@ class PublicGeneticDataController < ApplicationController
   skip_before_filter :ensure_enrolled
   skip_before_filter :ensure_latest_consent
   skip_before_filter :ensure_recent_safety_questionnaire
+  include PublicGeneticDataHelper
 
   def anonymous
     # Only return anonymous genetic data for which the owner has taken all trait surveys
@@ -73,18 +74,56 @@ class PublicGeneticDataController < ApplicationController
   end
 
   def statistics
-    @datasets = UserFile.joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
-      Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant) |
-      Dataset.published_anonymously.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
     @data_type_stats = {}
     @data_type_name = {}
     @coverage_series = {}
     @participants_series = {}
-    @t0 = nil
+
+    @datasets = UserFile.joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
+      Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant) |
+      Dataset.published_anonymously.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
+    @sorted_datasets = @datasets.sort_by { |d| d.published_at.nil? ? d.published_anonymously_at : d.published_at }
+    @sorted_users = User.enrolled.sort_by(&:enrolled)
+    @sorted_sample_logs = SampleLog.where('comment like ?', '%received by researcher%').includes(:sample).sort_by(&:created_at)
+
+    @t0 = @sorted_users.first.enrolled ||
+      @sorted_datasets.first.published_at ||
+      @sorted_datasets.first.published_anonymously_at
+
+    @sorted_users.each do |user|
+      @participants_series[:enrolled] ||= {
+        'data' => [[jstime(@t0), 0]],
+        'label' => 'Participants enrolled',
+        'data_type' => 'enrolled',
+        'lines' => { 'show' => true, 'fill' => 0.2 }
+      }
+      @participants_series[:enrolled]['data'] << [jstime(user.enrolled),
+                                                  @participants_series[:enrolled]['data'].last[1]]
+      @participants_series[:enrolled]['data'] << [jstime(user.enrolled),
+                                                  @participants_series[:enrolled]['data'].last[1] + 1]
+    end
+
+    @counted_participant = {}
+    @sorted_sample_logs.each do |sample_log|
+      next if not sample_log.sample.participant_id
+      next if @counted_participant[sample_log.sample.participant_id]
+      @counted_participant[sample_log.sample.participant_id] = true
+      @participants_series[:with_samples] ||= {
+        'data' => [[jstime(@t0), 0]],
+        'label' => 'Participants with samples collected',
+        'data_type' => 'with_samples',
+        'lines' => { 'show' => true, 'fill' => 0.2 }
+      }
+      @participants_series[:with_samples]['data'] << [jstime(sample_log.created_at),
+                                                      @participants_series[:with_samples]['data'].last[1]]
+      @participants_series[:with_samples]['data'] << [jstime(sample_log.created_at),
+                                                      @participants_series[:with_samples]['data'].last[1] + 1]
+    end
+
     UserFile::DATA_TYPES.each do |longversion, shortversion|
       @data_type_name[shortversion] = longversion
     end
-    @datasets.sort_by { |d| d.published_at.nil? ? d.published_anonymously_at : d.published_at }.each do |d|
+    @sorted_datasets.each do |d|
       published_at = d.published_at
       published_at = d.published_anonymously_at if d.published_at.nil?
       data_type = d.data_type
@@ -93,47 +132,70 @@ class PublicGeneticDataController < ApplicationController
       stats = @data_type_stats[data_type] ||= {
         :positions_covered => 0,
         :n_datasets => 0,
-        :participants => {}
+        :participants => {},
+        :participants_with_wgs => {}
       }
       add_to_coverage_series = false
+      add_to_wgs_series = false
       begin
         stats[:positions_covered] += d.report_metadata[:called_num]
         add_to_coverage_series = true
+        if d.report_metadata[:called_num] > 1000000000
+          add_to_wgs_series = true
+          stats[:participants_with_wgs][d.participant.hex] = true
+        end
       rescue
         # ignore base-counting fail
       end
       stats[:n_datasets] += 1
 
-      @t0 ||= (published_at.to_f*1000).floor
-
       @participants_series[data_type] ||= {
-        'data' => [[@t0, 0]],
+        'data' => [[jstime(@t0), 0]],
         'label' => data_type,
         'data_type' => data_type
       }
       stats[:participants][d.participant.hex] = true
-      @participants_series[data_type]['data'] << [(published_at.to_f*1000).floor,
+      @participants_series[data_type]['data'] << [jstime(published_at),
                                                   @participants_series[data_type]['data'].last[1]]
-      @participants_series[data_type]['data'] << [(published_at.to_f*1000).floor,
+      @participants_series[data_type]['data'] << [jstime(published_at),
                                                   stats[:participants].size]
 
       if add_to_coverage_series
         @coverage_series[data_type] ||= {
-          'data' => [[@t0, 0]],
+          'data' => [[jstime(@t0), 0]],
           'label' => data_type,
           'data_type' => data_type
         }
-        @coverage_series[data_type]['data'] << [(published_at.to_f*1000).floor,
+        @coverage_series[data_type]['data'] << [jstime(published_at),
                                                 @coverage_series[data_type]['data'].last[1]]
-        @coverage_series[data_type]['data'] << [(published_at.to_f*1000).floor,
+        @coverage_series[data_type]['data'] << [jstime(published_at),
                                                 stats[:positions_covered]]
+      end
+
+      if add_to_wgs_series
+        @participants_series[:with_wgs] ||= {
+          'data' => [[jstime(@t0), 0]],
+          'label' => 'Participants with published WGS data',
+          'data_type' => 'with_wgs',
+          'lines' => { 'show' => true, 'fill' => 0.2 }
+        }
+        @participants_series[:with_wgs]['data'] << [jstime(published_at),
+                                                    @participants_series[:with_wgs]['data'].last[1]]
+        @participants_series[:with_wgs]['data'] << [jstime(published_at),
+                                                    stats[:participants_with_wgs].size]
       end
     end
 
+    @samples_series = {
+      :enrolled => @participants_series.delete(:enrolled),
+      :with_samples => @participants_series.delete(:with_samples),
+      :with_wgs => @participants_series.delete(:with_wgs)
+    }
+
     # Extend each series to Time.now and sort by total coverage
-    @participants_series, @coverage_series = [@participants_series, @coverage_series].collect do |series|
+    @participants_series, @coverage_series, @samples_series = [@participants_series, @coverage_series, @samples_series].collect do |series|
       series.keys.each do |s|
-        series[s]['data'] << [Time.now.to_f*1000,
+        series[s]['data'] << [jstime(Time.now),
                               series[s]['data'].last[1]]
       end
       series.values.sort_by { |s|

@@ -86,8 +86,10 @@ jQuery(function() {
 <div style="width:700px">
   <h2>Positions covered</h2>
   <div style="width:700px;height:350px" id="coverage_series"></div>
-  <h2>Number of participants</h2>
+  <h2>Number of participants per data type</h2>
   <div style="width:700px;height:350px" id="participants_series"></div>
+  <h2>Pipeline: enrolled &rarr; samples collected &rarr; WGS data published</h2>
+  <div style="width:700px;height:350px" id="samples_series"></div>
 </div>
 
 <% content_for :js do %>
@@ -97,6 +99,7 @@ jQuery(function() {
     $(document).ready(function() {
         var coverage_series = <%=raw @coverage_series.to_json %>;
         var participants_series = <%=raw @participants_series.to_json %>;
+        var samples_series = <%=raw @samples_series.to_json %>;
         var o = {
             xaxis: {
                 mode: 'time'
@@ -123,8 +126,13 @@ jQuery(function() {
         o.yaxis.transform = function(v) { if(v==0)return v; return Math.log(v); };
         o.yaxis.inverseTransform = function(v) { if(v==0)return v; return Math.exp(v); };
 
+        o.xaxis.min = Math.max(1274567890000, <%=jstime(@t0)%>);
+        o.yaxis.ticks = [0,10,100,1000,10000];
+        samples_series_plot = $.plot($('div#samples_series'), samples_series, o);
+        o.xaxis.min = Math.max(1274567890000, <%=jstime(@t0)%>);
         o.yaxis.ticks = [0,10,100,1000];
         participants_series_plot = $.plot($('div#participants_series'), participants_series, o);
+        o.xaxis.min = Math.max(1274567890000, <%=jstime(@t0)%>);
         o.yaxis.ticks = [0,1000,1000000,1000000000,1000000000000];
         coverage_series_plot = $.plot($('div#coverage_series'), coverage_series, o);
     } );
