@@ -22,7 +22,7 @@ namespace :db do
       fixtures = fixture_files.map do |fixture_path, table_name|
         Fixtures.new(connection, table_name, nil, fixture_path)
       end
-      connection.transaction(Thread.current['open_transactions'] == 0) do
+      connection.transaction() do
         fixtures.reverse.each { |fixture| fixture.delete_existing_fixtures }
         fixtures.each { |fixture| fixture.insert_fixtures }
 
