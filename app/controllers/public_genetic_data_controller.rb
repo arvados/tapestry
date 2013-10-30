@@ -195,10 +195,11 @@ class PublicGeneticDataController < ApplicationController
     # Extend each series to Time.now and sort by total coverage
     @participants_series, @coverage_series, @samples_series = [@participants_series, @coverage_series, @samples_series].collect do |series|
       series.keys.each do |s|
+        next if not series[s] or not series[s].has_key?('data')
         series[s]['data'] << [jstime(Time.now),
                               series[s]['data'].last[1]]
       end
-      series.values.sort_by { |s|
+      series.values.reject {|key,value| value.nil? }.sort_by { |s|
         begin
           0-@coverage_series[s['data_type']]['data'].last[1]
         rescue
