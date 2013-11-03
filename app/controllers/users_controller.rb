@@ -258,7 +258,7 @@ class UsersController < ApplicationController
   end
 
   def accept_tos
-    tos_version = 'v1'
+    tos_version = LATEST_TOS_VERSION
     if current_user.documents.kind('tos', tos_version).empty?
       current_user.documents << Document.new(:keyword => 'tos', :version => tos_version, :timestamp => Time.now())
       current_user.save!

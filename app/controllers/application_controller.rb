@@ -154,7 +154,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_tos_agreement
-    if logged_in? and current_user and current_user.documents.kind('tos', 'v1').empty? and (not session[:real_uid] or not session[:switch_back_to])
+    if logged_in? and current_user and current_user.documents.kind('tos', LATEST_TOS_VERSION).empty? and (not session[:real_uid] or not session[:switch_back_to])
       redirect_to tos_user_url
     end
   end

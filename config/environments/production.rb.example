@@ -63,6 +63,7 @@ Tapestry::Application.configure do
   
   GOOGLE_HEALTH_URL = "https://www.google.com/health"
   
+  LATEST_TOS_VERSION = 'v1'
   LATEST_EXAM_VERSION = 'v20120430'
   LATEST_CONSENT_VERSION = 'v20110912'
   
