@@ -24,7 +24,7 @@
     <tbody>
     </tbody>
     <% @datasets.each do |dataset| -%>
-    <tr data-file-row data-locator="<%= dataset.locator %>" data-index-in-manifest="<%= dataset.index_in_manifest %>" data-file-size="<%= dataset.data_size %>">
+    <tr data-file-row data-participant-id="<%= dataset.respond_to?(:participant_id) ? dataset.participant_id : dataset.user_id %>" data-locator="<%= dataset.locator %>" data-index-in-manifest="<%= dataset.index_in_manifest %>" data-file-size="<%= dataset.data_size %>">
       <td style="width:20px" class="collection-column"></td>
       <% if @options[:show_participant_column] %>
       <td style="width:auto" data-summarize-as="participant"><%= link_to dataset.participant.hex, public_profile_path(:hex => dataset.participant.hex) %><%= ", PGP#{dataset.participant.pgp_id}" if dataset.participant.pgp_id %></td>

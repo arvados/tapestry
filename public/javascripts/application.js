@@ -1,3 +1,4 @@
+// -*- mode: javascript; tab-width: 8; indent-tabs-mode: nil; -*-
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
@@ -42,11 +43,15 @@ jQuery(document).ready(function($) {
 	    not("[data-index-in-manifest='']").
 	    each(function() {
 	    var collapse_row;
+            var participant_id = $(this).attr('data-participant-id');
 	    var locator = $(this).attr('data-locator');
 	    if (locator == "") return $(this).show();
-	    if ($('tr[data-collection-row][data-locator="'+locator+'"]').length > 0)
+	    if ($('tr[data-collection-row]' +
+                  '[data-locator="'+locator+'"]' +
+                  '[data-participant-id="'+participant_id+'"]').length > 0)
 		return;
-	    var trs = $('tr[data-locator="' + locator + '"]');
+	    var trs = $('tr[data-locator="' + locator + '"]' +
+                        '[data-participant-id="' + participant_id + '"]');
 	    if (trs.length > 1) {
 		collapse_row = trs.first().clone();
 		collapse_row.attr('data-collection-row', trs.length);
@@ -62,11 +67,13 @@ jQuery(document).ready(function($) {
 			return i==a.indexOf(x);
 		    });
 		    if (s == 'size') {
-			var size = 0;
+			var size;
 			trs.each(function() {
-			    size += parseInt($(this).attr('data-file-size'));
-			});
-			$(this).html(number_to_human_size(size));
+                            var trsize = $(this).attr('data-file-size');
+                            if (trsize)
+                                size = (size || 0) + parseInt(trsize);
+                        });
+			$(this).html(size ? number_to_human_size(size) : '');
 		    }
 		    else if (s == 'list-distinct')
 			$(this).html(unique_values.join("<br />"));
@@ -100,8 +107,10 @@ jQuery(document).ready(function($) {
 	// Toggle the non-first rows when "show more" is clicked
 	$('tr[data-file-row][data-locator]').delegate('.click-to-expand-collection', 'click', function() {
 	    var tr = $(this).parents('tr').first();
+	    var participant_id = tr.attr('data-participant-id');
 	    var locator = tr.attr('data-locator');
-	    var trs = $('tr[data-locator="' + locator + '"]').
+	    var trs = $('tr[data-locator="' + locator + '"]' +
+                        '[data-participant-id="' + participant_id + '"]').
 		not('[data-collection-row]');
 	    if (tr.find('.ui-icon.ui-icon-plusthick').length > 0) {
 		trs.fadeIn();
