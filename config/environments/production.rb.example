@@ -91,4 +91,7 @@ Tapestry::Application.configure do
   PRIVACY_POLICY_URL = 'http://www.personalgenomes.org/privacypolicy.html'
   TOS_URL = 'http://www.personalgenomes.org/tos.html'
 
+  # Your Google Analytics Tracker ID, usually this looks something like UA-XXXXX-X
+  GOOGLE_ANALYTICS_TRACKER_ID = ''
+
 end
