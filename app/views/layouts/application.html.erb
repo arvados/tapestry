@@ -68,9 +68,9 @@
     <div id="privacy_tos">
       <span><%= link_to 'Site map', '/pages/sitemap' -%></span>
       &bull;
-      <span><a href="http://www.personalgenomes.org/privacypolicy.html">Privacy Policy</a></span>
+      <span><a href="<%= PRIVACY_POLICY_URL %>">Privacy Policy</a></span>
       &bull;
-      <span><a href="http://www.personalgenomes.org/tos.html">Terms of Use</a></span>
+      <span><a href="<%= TOS_URL %>">Terms of Use</a></span>
     </div>
     <div id="copyright">
 <% if request.fullpath.match /^\/profile\// %>

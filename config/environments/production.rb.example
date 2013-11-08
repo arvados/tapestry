@@ -87,4 +87,8 @@ Tapestry::Application.configure do
   # This is your site prefix. It should be unique across all Tapestry installs.
   SITE_PREFIX = 'xx'
 
+  # These are the URLs for your privacy policy and your terms of service
+  PRIVACY_POLICY_URL = 'http://www.personalgenomes.org/privacypolicy.html'
+  TOS_URL = 'http://www.personalgenomes.org/tos.html'
+
 end
