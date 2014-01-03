@@ -28,32 +28,6 @@ class Admin::UsersController < Admin::AdminControllerBase
     (@logs, @filtered) = log_worker(params)
   end
 
-  def export_log
-    (@logs, @filtered) = log_worker(params,0)
-    report = StringIO.new
-
-    header = ['When','Who','Log entry']
-
-    CSV::Writer.generate(report) do |csv|
-      csv << header
-      @logs.each {|r|
-        if r.user.nil? then
-          id = ''
-        elsif r.user.hex == '' then
-          id = r.user.unique_hash
-        else
-          id = r.user.hex
-        end
-        csv << [ r.created_at, id, r.comment ]
-      }
-    end
-    report.rewind
-
-    send_data report.read,
-            :type => 'text/csv; charset=iso-8859-1; header=present',
-            :disposition => "attachment; filename=user_log.csv"
-  end
-
   def active
   end
 

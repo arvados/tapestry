@@ -204,7 +204,6 @@ Tapestry::Application.routes.draw do
   match '/admin/users/active' => 'admin/users#active', :as => :admin_active_users
   match '/admin/users/activity' => 'admin/users#activity', :as => :admin_activity_users
   match '/admin/users/log' => 'admin/users#log', :as => :admin_log_users
-  match '/admin/users/export_log' => 'admin/users#export_log', :as => :admin_export_log_users
   match '/admin/users/ineligible' => 'admin/users#ineligible', :as => :admin_ineligible_users
   match '/admin/users/trios' => 'admin/users#trios', :as => :admin_trios
   match '/admin/users/families' => 'admin/users#families', :as => :admin_families

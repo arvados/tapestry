@@ -27,6 +27,7 @@ class WorkObject
 	attr_accessor :ccr_profile_url
 	attr_accessor :ccr_contents
 	attr_accessor :user_file_id
+	attr_accessor :filter
 end
 
 class MyPG
@@ -136,6 +137,40 @@ class MyPG
     csv_filename = generate_csv_filename('international_users_scoreboard', true)
     outFile = File.new(csv_filename, 'w')
     outFile.write(buf)
+    outFile.close
+    return csv_filename
+  end
+
+  def create_user_log_report_worker(work)
+    filter = '%'
+    filter = '%' + work.filter + '%' if work.filter
+
+    @logs = UserLog.
+      includes(:user).
+      where('comment like ? or users.hex like ?', filter, filter).
+      order('user_logs.created_at desc')
+
+    report = StringIO.new
+
+    header = ['When','Who','Log entry']
+
+    CSV::Writer.generate(report) do |csv|
+      csv << header
+      @logs.each {|r|
+        if r.user.nil? then
+          id = ''
+        elsif r.user.hex == '' then
+          id = r.user.unique_hash
+        else
+          id = r.user.hex
+        end
+        csv << [ r.created_at, id, r.comment ]
+      }
+    end
+    report.rewind
+    csv_filename = generate_csv_filename('user_log', true)
+    outFile = File.new(csv_filename, 'w')
+    outFile.write(report.read)
     outFile.close
     return csv_filename
   end
@@ -374,6 +409,8 @@ class MyPG
         filename = create_absolute_pitch_survey_report_worker(work)
       elsif work.report_name == 'absolute_pitch_question_key' and work.report_type == 'csv' then
         filename = create_absolute_pitch_survey_question_key_report_worker(work)
+      elsif work.report_name == 'user_log' and work.report_type == 'csv' then
+        filename = create_user_log_report_worker(work)
       else
         error_message = "Unknown report name #{work.report_name} or type #{work.report_type}"
       end
@@ -542,13 +579,14 @@ class MyPG
     return 0
   end
 
-  def create_report(user_id,report_id,report_name,report_type)
+  def create_report(user_id,report_id,report_name,report_type,filter='')
     work = WorkObject.new()
     work.action = 'report'
     work.user_id = user_id
     work.report_id = report_id.to_s
     work.report_name = report_name
     work.report_type = report_type
+    work.filter = filter
     @queue.enq(work)
     return 0
   end

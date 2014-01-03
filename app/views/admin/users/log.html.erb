@@ -40,5 +40,5 @@
 </table>
 <%= will_paginate @logs %>
 
-Download results as <%= link_to 'CSV', admin_export_log_users_path(:filter => params[:filter]) %><br />
+Download results as <%= link_to 'CSV', admin_reports_queue_url(:report_name => 'user_log', :report_type => 'csv', :filter => params[:filter]) %>
 

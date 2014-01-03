@@ -20,7 +20,7 @@ class Admin::ReportsController < Admin::AdminControllerBase
 
     server = DRbObject.new nil, "druby://#{DRB_SERVER}:#{DRB_PORT}"
     begin
-      out = server.create_report(current_user.id,@r.id,@r.name,@r.rtype)
+      out = server.create_report(current_user.id,@r.id,@r.name,@r.rtype,params[:filter])
       flash[:notice] = "Your report request has been queued for processing"
     rescue Exception => e
       error_message = "DRB server error when trying to create a report (#{@r.name} of type #{@r.rtype}): #{e.exception}"
