@@ -144,30 +144,57 @@ class MyPG
   def create_user_log_report_worker(work)
     filter = '%'
     filter = '%' + work.filter + '%' if work.filter
+    counter = 0
 
-    @logs = UserLog.
-      includes(:user).
-      where('comment like ? or users.hex like ?', filter, filter).
-      order('user_logs.created_at desc')
+    @users = Hash.new()
+
+    # Build a @users hash to look up the appropriate user label (below).
+    # This is much faster than letting AR do the job for each UserLog record.
+    # There are orders of magnitude more UserLog records than User records, so
+    # in terms of memory vs speed, this is a pretty good tradeoff.
+    puts "#{Time.now().to_s} Start making @users hash"
+    User.find_each do |u|
+      if u.hex == '' then
+        @users[u.id] = u.unique_hash
+      else
+        @users[u.id] = u.hex
+      end
+    end
+    puts "#{Time.now().to_s} Done making @users hash"
 
     report = StringIO.new
 
     header = ['When','Who','Log entry']
 
+    # Ideally we'd have something like
+    #    order('user_logs.created_at desc')
+    # in the UserLog AR call, but find_each doesn't support sorting.
+    # The use of find_each is absolutely essential to keep memory use more
+    # reasonable. Using 'each' leads to completely unreasonable memory use.
+    #
+    # I also experimented with larger batch sizes (5000, 10000 - default is 1000)
+    # but they don't make this export measurably faster. They do increase memory
+    # usage, so I decided to stick to the default.
     CSV::Writer.generate(report) do |csv|
       csv << header
-      @logs.each {|r|
-        if r.user.nil? then
-          id = ''
-        elsif r.user.hex == '' then
-          id = r.user.unique_hash
-        else
-          id = r.user.hex
-        end
-        csv << [ r.created_at, id, r.comment ]
-      }
+
+      if filter == '%' then
+        UserLog.find_each { |r|
+          csv << [ r.created_at, @users.has_key?(r.user_id) ? @users[r.user_id] : '', r.comment ]
+          puts "#{Time.now().to_s} UserLog counter: #{counter.to_s}" if ((counter % 1000) == 0)
+          counter += 1
+        }
+      else
+        UserLog.where('comment like ? or users.hex like ?', filter, filter) { |r|
+          csv << [ r.created_at, @users.has_key?(r.user_id) ? @users[r.user_id] : '', r.comment ]
+          puts "#{Time.now().to_s} UserLog counter: #{counter.to_s}" if ((counter % 1000) == 0)
+          counter += 1
+        }
+      end
     end
+    puts "#{Time.now().to_s} UserLog counter: csv generation complete, about to write it to disk"
     report.rewind
+
     csv_filename = generate_csv_filename('user_log', true)
     outFile = File.new(csv_filename, 'w')
     outFile.write(report.read)
