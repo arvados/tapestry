@@ -25,54 +25,8 @@ Tapestry::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
 
-  ROOT_URL = 'localhost:3000'
-  ROOT_URL_SCHEME = 'http://'
-
-  ADMIN_EMAIL = 'This Should Be You <you@example.com>'
-  WITHDRAWAL_NOTIFICATION_EMAIL = 'This Should Be You <you@example.com>'
-  SYSTEM_EMAIL = 'sysadmin@example.com'
-  SEND_ALL_USER_EMAIL_TO = 'you@example.com'
-
-  ENV['RECAPTCHA_PUBLIC_KEY'] = 'YOUR_RECAPTCHA_PUBLIC_KEY'
-  ENV['RECAPTCHA_PRIVATE_KEY'] = 'YOUR_RECAPTCHA_PRIVATE_KEY'
-  
-  GOOGLE_HEALTH_URL = "https://www.google.com/h9"
-  
-  LATEST_TOS_VERSION = 'v1'
-  LATEST_EXAM_VERSION = 'v20120430'
-  LATEST_CONSENT_VERSION = 'v20110912'
-  
-  DRB_SERVER = '127.0.0.1'
-  DRB_PORT = '9901'
-  DRB_CALLBACK_SOURCE_IP = '127.0.0.1'
-  
-  TRAITWISE_LOGIN = "you@example.com"
-  TRAITWISE_PASSWORD = "your_traitwise_password"
-
-  SURVEY_SALT = 'GENERATE_ME_NOW'
-
-  SUPPORT_EMAIL = 'support@example.com'
-
-  GET_2012_SECRET = 'xxxxxxxx'
-  
-  WAREHOUSE_WEB_ROOT = "/warehouse" # Apache alias pointing to whmount target
-  WAREHOUSE_FS_ROOT = "/warehouse" # whmount target
-  # WAREHOUSE_PROXY_SCRIPT_PATH = "/whget.php" # alternative to using whmount
-
-  TRAIT_SURVEY_IDS = [6,7,8,9,10,11,12,13,14,15,16,17]
-
-  BLOG_EMAIL_SUBSCRIPTION_URL = ''
-
-  # ANONYMOUS_PUBLICATION_OPTION = true
-
-  # This is your site prefix. It should be unique across all Tapestry installs.
-  SITE_PREFIX = 'xx'
-
-  # These are the URLs for your privacy policy and your terms of service
-  PRIVACY_POLICY_URL = 'http://www.personalgenomes.org/privacypolicy.html'
-  TOS_URL = 'http://www.personalgenomes.org/tos.html'
-
-  # Your Google Analytics Tracker ID, usually this looks something like UA-XXXXX-X
-  GOOGLE_ANALYTICS_TRACKER_ID = ''
-
+  ActionMailer::Base.smtp_settings = {
+    :domain => "example.com",
+    :address => 'outgoing.example.com'
+  }
 end

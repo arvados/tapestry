@@ -1,0 +1,71 @@
+common:
+  # This is your site prefix. For production sites, it has to be globally
+  # unique across all Tapestry installs. The convention is to use two
+  # alphanumeric characters.
+  site_prefix: 'xx'
+
+  root_url: 'your.tapestry.url'
+  root_url_scheme: 'https://'
+
+  admin_email: 'This Should Be You <you@example.com>'
+  withdrawal_notification_email: 'This Should Be You <you@example.com>'
+  system_email: 'sysadmin@example.com'
+  support_email: 'support@example.com'
+
+  # Your recaptcha keys
+  recaptcha_public_key: 'your-recaptcha-public-key'
+  recaptcha_private_key: 'your-recaptcha-private-key'
+
+  # Set this to your blog feedburner (or similar) address
+  blog_email_subscription_url: ''
+
+  # These are the URLs to your privacy policy and your terms of service
+  privacy_policy_url: 'http://your.domain/privacypolicy.html'
+  tos_url: 'http://your.domain/tos.html'
+
+  latest_tos_version: 'v1'
+  latest_exam_version: 'vYYYYMMDD'
+
+  previous_consent_version: 'vYYYYMMDD'
+  latest_consent_version: 'vYYYYMMDD'
+
+  drb_server: '127.0.0.1'
+  drb_port: '9900'
+  drb_callback_source_ip: '127.0.0.1'
+
+  traitwise_login: 'you@example.com'
+  traitwise_password: 'your_traitwise_password'
+
+  get_2013_secret: 'your_get_2013_secret'
+  get_2013_app_identifier: 'your_get_2013_app_identifier'
+
+  get_evidence_base_url: 'http://evidence.personalgenomes.org'
+  get_evidence_api_key: 'your-get-evidence-api-key'
+  get_evidence_api_secret: 'your-get-evidence-api-secret'
+
+  enable_self_service_withdrawal: true
+
+  warehouse_web_root: '/warehouse' # Apache alias pointing to whmount target
+  warehouse_fs_root: '/warehouse'  # whmount target
+  #warehouse_proxy_script_path: '/whget.php' # alternative to using whmount
+
+  trait_survey_ids: [1,2,3]
+
+  blog_email_subscription_url: ''
+
+  # Allow anonymous publication of public dataset (for CAGI contest)
+  anonymous_publication_option: false
+
+  # Your Google Analytics Tracker ID, usually this looks something like UA-XXXXX-X
+  google_analytics_tracker_id: ''
+
+development:
+  google_health_url: 'https://www.google.com/h9'
+
+  # When set and not blank, all outgoing Tapestry participant e-mail will be
+  # sent to this e-mail address instead of to the participant.
+  send_all_user_email_to: 'you@example.com'
+
+production:
+  google_health_url: 'https://www.google.com/health'
+
