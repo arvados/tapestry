@@ -51,7 +51,7 @@ Tapestry::Application.configure do
 
   SURVEY_SALT = 'GENERATE_ME_NOW'
 
-  RT_EMAIL = 'support@example.com'
+  SUPPORT_EMAIL = 'support@example.com'
 
   GET_2012_SECRET = 'xxxxxxxx'
   

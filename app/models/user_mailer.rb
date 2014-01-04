@@ -13,13 +13,13 @@ class UserMailer < ActionMailer::Base
     headers['X-PGP-Unique-Hash'] = user.unique_hash
     headers['X-PGP-Detected-Browser'] = message.env['HTTP_USER_AGENT']
     mail(:from => message.email,
-         :to => RT_EMAIL,
+         :to => SUPPORT_EMAIL,
          :subject => "#{message.category}: #{message.subject}")
   end
 
   def bulk_message(bulk_message,recipient)
     @message = bulk_message.body
-    mail(:from => RT_EMAIL,
+    mail(:from => SUPPORT_EMAIL,
          :to => recipient.email,
          :subject => "#{bulk_message.subject}")
   end
