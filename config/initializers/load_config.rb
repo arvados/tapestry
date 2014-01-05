@@ -6,8 +6,13 @@ end
 default_config_common = YAML.load_file("#{::Rails.root.to_s}/config/config.defaults.yml")['common']
 default_config_environment = YAML.load_file("#{::Rails.root.to_s}/config/config.defaults.yml")[::Rails.env.to_s]
 
+default_config_common ||= {}
+default_config_environment ||= {}
+
 if File.exists?("#{::Rails.root.to_s}/config/config.yml")
-  APP_CONFIG = default_config_common.merge(default_config_environment).merge(YAML.load_file("#{::Rails.root.to_s}/config/config.yml")[::Rails.env.to_s])
+  site_config_environment = YAML.load_file("#{::Rails.root.to_s}/config/config.yml")[::Rails.env.to_s]
+  site_config_environment ||= {}
+  APP_CONFIG = default_config_common.merge(default_config_environment).merge(site_config_environment)
 else
   APP_CONFIG = default_config_common.merge(default_config_environment)
 end
