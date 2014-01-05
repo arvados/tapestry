@@ -22,8 +22,6 @@ class ApplicationController < ActionController::Base
   before_filter :prevent_setting_ownership, :only => [:create, :update]
   before_filter :ensure_dataset_release
 
-  around_filter :profile
-
   respond_to :json, :xml, :html
   class MyResponder < ActionController::Responder
     include PublicApiResponder
@@ -196,21 +194,6 @@ class ApplicationController < ActionController::Base
     before_filter options do |controller|
       controller.send(:add_breadcrumb, name, url)
     end
-  end
-
-  # See http://www.dcmanges.com/blog/rails-performance-tuning-workflow
-  # and http://ruby-prof.rubyforge.org/files/examples/graph_txt.html
-  # and http://ruby-prof.rubyforge.org/
-  # Usage: add ?profile=true to your url to get the ruby-prof output.
-  # This is not permitted on the production url, for obvious reasons.
-  def profile
-    return yield if params[:profile].nil? or ROOT_URL == 'my.personalgenomes.org'
-    result = RubyProf.profile { yield }
-    printer = RubyProf::GraphPrinter.new(result)
-    out = StringIO.new
-    printer.print(out, 0)
-    response.body.replace out.string
-    response.content_type = "text/plain"
   end
 
 #  def template_exists?(path)

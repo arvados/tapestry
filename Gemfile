@@ -17,7 +17,6 @@ gem 'carmen', '~> 0.2.13'
 gem 'hoptoad_notifier', "~> 2.3"
 gem 'will_paginate'
 gem 'alexdunae-validates_email_format_of', :require => 'validates_email_format_of'
-gem 'ruby-prof'
 gem 'newrelic_rpm'
 
 gem 'rails3_acts_as_paranoid', "~> 0.0.9"
