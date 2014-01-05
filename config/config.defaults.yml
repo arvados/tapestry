@@ -23,6 +23,10 @@ common:
   privacy_policy_url: 'http://your.domain/privacypolicy.html'
   tos_url: 'http://your.domain/tos.html'
 
+  # The URLs to your current consent document and badge
+  consent_document_url: 'http://your.domain/your_consent_document.pdf'
+  consent_badge_url: 'http://your.domain/your_consent_badge.png'
+
   latest_tos_version: 'v1'
   latest_exam_version: 'vYYYYMMDD'
 
