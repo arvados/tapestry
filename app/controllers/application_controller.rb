@@ -21,12 +21,30 @@ class ApplicationController < ActionController::Base
   before_filter :only_owner_can_change, :only => [:edit, :update, :destroy]
   before_filter :prevent_setting_ownership, :only => [:create, :update]
   before_filter :ensure_dataset_release
+  before_filter :set_locale
 
   respond_to :json, :xml, :html
   class MyResponder < ActionController::Responder
     include PublicApiResponder
     include DatatablesResponder
   end
+
+  # Allow forcing of the locale via URL query parameter 'locale'
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
+
+  # Pass the locale options through in every request, but only if
+  # we're not using the default locale
+  def default_url_options(options={})
+    logger.debug "default_url_options is passed options: #{options.inspect}\n"
+    if I18n.locale != I18n.default_locale
+      { :locale => I18n.locale }
+    else
+      { }
+    end
+  end
+
   def self.responder
     MyResponder
   end
