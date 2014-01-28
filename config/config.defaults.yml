@@ -63,6 +63,10 @@ common:
   # Your Google Analytics Tracker ID, usually this looks something like UA-XXXXX-X
   google_analytics_tracker_id: ''
 
+  # Locales
+  available_locales: [:en, :de]
+  default_locale: :en
+
 development:
   google_health_url: 'https://www.google.com/h9'
 

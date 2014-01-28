@@ -1,0 +1,14 @@
+de:
+  users:
+    index:
+      participant_profiles: "Teilnehmerprofile"
+      participant_profiles_index_body: "Die Teilnehmer der PGP haben sich freiwillig, um ihre DNA-Sequenzen, medizinische Informationen, und andere persönliche Informationen mit der Forschungsgemeinschaft und der Öffentlichkeit zu teilen."
+      participant_profiles_index_as_irb_user: "Weil Sie ein IRB-gelistet Forscher oder Administrator sind, können Sie für die Teilnehmer durch vollständige Name oder die Teilnehmer-ID suchen. Normale Benutzer können nur von Teilnehmer-ID suchen."
+    
+      participant_ID: "Teilnehmer-ID"
+      date_enrolled: "Datum eingeschrieben"
+      received_samples: "Erhaltene Proben"
+      health_records: "Die Gesundheitsakten"
+      relatives_enrolled: "Verwandte eingeschrieben"
+      whole_genome_datasets: "Gesamtgenom-Datensätze"
+      other_genetic_data: "Andere genetische Daten"

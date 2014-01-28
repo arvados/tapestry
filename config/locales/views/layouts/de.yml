@@ -1,0 +1,89 @@
+de:
+  layouts:
+    bootstrap_nav:
+      # Account menu
+      account: "Konto"
+      home: "Homepage"
+      email_phone_and_password: "E-Mail, Telefon und Passwort"
+      named_proxies: "Benannte Stimmrechtsvertreter"
+      shipping_address: 'Lieferadresse'
+      mailing_list_subscriptions: 'Mailingliste Abonnements'
+      user_log: 'Benutzer Log'
+      safety_questionnaires: 'Sicherheit Fragebögen'
+      withdraw: 'entziehen'
+
+      # Researcher menu
+      researcher: "Forscher"
+      collection_events: "Kollektion Veranstaltungen"
+      kits: "Kits"
+      samples: "Proben"
+      plates: "Platten"
+      kit_designs: "Kit-Designs"
+      device_types: "Gerätetypen"
+      sample_types: "Probentypen"
+      google_surveys: "Google Umfragen"
+      traitwise_surveys: "Traitwise Umfragen"
+      google_spreadsheets: "Google Spreadsheets"
+      oauth_tokens: "OAuth Tokens"
+      permissions: "Berechtigungen"
+
+      # Admin menu
+      admin: "Admin"
+      users: "Benutzer"
+      datasets: "Datensammlungen"
+      exams: "Prüfungen"
+      invited_email_addresses: "Eingeladen E-Mail-Adressen"
+      phr_reports: "PGA Berichten"
+      removal_requests: "Entfernung Anfragen"
+      withdrawal_comments: "Widerrufsrecht Kommentare"
+      reports: "Berichten"
+      mailing_lists: "Mailing-Listen"
+      international_users_scoreboard: "Internationale Nutzer Anzeigetafel"
+      tissue_types: "Gewebetypen"
+      units: "Einheiten"
+      oauth_services: "OAuth Dienstleistungen"
+
+      # Public data menu
+      public_data: "Öffentliche Daten"
+      participants: "Teilnehmer"
+      participant_surveys: "Teilnehmerbefragungen"
+      participant_profiles: {
+        one: "1 Teilnehmer-Profil",
+        other: "%{count} Teilnehmer-Profilen"
+      }
+      participant_surveys_taken_1: {
+        one: "1 Umfrage ",
+        other: "%{count} Umfragen "
+      }
+      participant_surveys_taken_2: {
+        one: "von 1 Teilnehmer übernommen",
+        other: "von %{count} Teilnehmern übernommen"
+      }
+      tissue_samples: "Gewebeproben"
+      tissue_samples_collected: {
+        one: "1 Blut, Speichel oder anderen Gewebeprobe",
+        other: "%{count} Blut, Speichel oder anderen Gewebeproben"
+      }
+      whole_genome_sequences_and_other_data: "Whole-Genom-Sequenzen und andere Daten"
+      whole_genome_sequences_and_other_data_collected_1: {
+        one: "1. ganze Genomsequenz ",
+        other: "%{count} ganze Genomsequenzen "
+      }
+      whole_genome_sequences_and_other_data_collected_2: {
+        one: " und ein anderer genetischer Datensatzes",
+        other: " und %{count} andere genetische Datensätze"
+      }
+      genetic_data_publication_statistics: "Genetische Daten Veröffentlichung Statistiken"
+
+      # About menu
+      about: "Über"
+      website: "Website"
+      blog: "Blog"
+      on_twitter: "auf Twitter"
+
+      # Contact menu
+      contact: "Kontakt"
+
+      # Log out menu
+      log_out: "ausloggen"
+

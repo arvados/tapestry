@@ -32,108 +32,108 @@
 
       <% if current_user and !current_user.deactivated_at %>
         <li class="dropdown">
-          <%= link_to raw('Account <b class="caret"></b>'), edit_user_path, :id => 'dropdown-participate', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
+          <%= link_to raw(t('.account')) + raw(' <b class="caret"></b>'), edit_user_path, :id => 'dropdown-participate', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-participate">
-            <%= nav_element 'Home', root_path unless current_user.enrolled %><%# ergo no Participate menu %>
-            <%= nav_element 'Email, phone, and password', edit_user_path %>
-            <%= nav_element 'Named proxies', named_proxies_path %>
-            <%= nav_element 'Shipping address', user_shipping_address_path %>
-            <%= nav_element 'Mailing list subscriptions', edit_user_path(:anchor => 'mailinglists') %>
-            <%= nav_element 'User log', url_for(:controller => 'users', :action => 'show_log') %>
+            <%= nav_element t('.home'), root_path unless current_user.enrolled %><%# ergo no Participate menu %>
+            <%= nav_element t('_email_phone_and password'), edit_user_path %>
+            <%= nav_element t('.named_proxies'), named_proxies_path %>
+            <%= nav_element t('.shipping_address'), user_shipping_address_path %>
+            <%= nav_element t('.mailing_list_subscriptions'), edit_user_path(:anchor => 'mailinglists') %>
+            <%= nav_element t('.user_log'), url_for(:controller => 'users', :action => 'show_log') %>
 
             <% if !current_user.hex.empty? %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Safety questionnaires', safety_questionnaires_path %>
+            <%= nav_element t('.safety_questionnaires'), safety_questionnaires_path %>
             <% end %>
 
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Withdraw', page_path(:withdrawal_menu), {} %>
+            <%= nav_element t('.withdraw'), page_path(:withdrawal_menu), {} %>
           </ul>
         </li>
       <% end %>
 
       <% if current_user and (current_user.is_researcher? or current_user.is_admin?) %>
         <li class="dropdown">
-          <%= link_to raw('Researcher <b class="caret"></b>'), '/pages/researcher_tools', :id => 'dropdown-researcher', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
+          <%= link_to raw(t('.researcher')) + raw(' <b class="caret"></b>'), '/pages/researcher_tools', :id => 'dropdown-researcher', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-researcher">
-            <%= nav_element 'Collection events', collection_events_path, {}, :role => 'menuitem' %>
-            <%= nav_element 'Kits', kits_path, {}, :role => 'menuitem' %>
-            <%= nav_element 'Samples', samples_path, {}, :role => 'menuitem' %>
-            <%= nav_element 'Plates', plates_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.collection_events'), collection_events_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.kits'), kits_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.samples'), samples_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.plates'), plates_path, {}, :role => 'menuitem' %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Kit designs', kit_designs_path, {}, :role => 'menuitem' %>
-            <%= nav_element 'Device types', device_types_path, {}, :role => 'menuitem' %>
-            <%= nav_element 'Sample types', sample_types_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.kit_designs'), kit_designs_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.device_types'), device_types_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.sample_types'), sample_types_path, {}, :role => 'menuitem' %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Google surveys', google_surveys_path, {}, :role => 'menuitem' %>
-            <%= nav_element 'Traitwise surveys', traitwise_surveys_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.google_surveys'), google_surveys_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.traitwise_surveys'), traitwise_surveys_path, {}, :role => 'menuitem' %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Google spreadsheets', google_spreadsheets_path, {}, :role => 'menuitem' %>
-            <%= nav_element 'OAuth tokens', oauth_tokens_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.google_spreadsheets'), google_spreadsheets_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.oauth_tokens'), oauth_tokens_path, {}, :role => 'menuitem' %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Permissions', permissions_path, {}, :role => 'menuitem' %>
+            <%= nav_element t('.permissions'), permissions_path, {}, :role => 'menuitem' %>
           </ul>
         </li>
       <% end %>
 
       <% if current_user and current_user.is_admin? %>
         <li class="dropdown">
-          <%= link_to raw('Admin <b class="caret"></b>'), admin_root_path, :id => 'dropdown-admin', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
+          <%= link_to raw(t('.admin')) + raw(' <b class="caret"></b>'), admin_root_path, :id => 'dropdown-admin', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-admin">
-            <%= nav_element 'Users', admin_users_path %>
-            <%= nav_element 'Datasets', admin_datasets_path %>
-            <%= nav_element 'Exams', admin_content_areas_path %>
-            <%= nav_element 'Invited Email Addresses', admin_invited_emails_path %>
-            <%= nav_element 'PHR Reports', '/admin/phr_reports' %>
-            <%= nav_element 'Removal requests', admin_removal_requests_path %>
-            <%= nav_element 'Withdrawal comments', withdrawal_comments_path %>
+            <%= nav_element t('.users'), admin_users_path %>
+            <%= nav_element t('.datasets'), admin_datasets_path %>
+            <%= nav_element t('.exams'), admin_content_areas_path %>
+            <%= nav_element t('.invited_email_addresses'), admin_invited_emails_path %>
+            <%= nav_element t('.phr_reports'), '/admin/phr_reports' %>
+            <%= nav_element t('.removal_requests'), admin_removal_requests_path %>
+            <%= nav_element t('.withdrawal_comments'), withdrawal_comments_path %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Reports', admin_reports_path %>
-            <%= nav_element 'Mailing lists', admin_mailing_lists_path %>
-            <%= nav_element 'International users scoreboard', '/admin/scoreboards' %>
+            <%= nav_element t('.reports'), admin_reports_path %>
+            <%= nav_element t('.mailing_lists'), admin_mailing_lists_path %>
+            <%= nav_element t('.international_users_scoreboard'), '/admin/scoreboards' %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Collection events', '/admin/researchers' %>
-            <%= nav_element 'Tissue types', tissue_types_path %>
-            <%= nav_element 'Device types', device_types_path %>
-            <%= nav_element 'Units', units_path %>
+            <%= nav_element t('.collection_events'), '/admin/researchers' %>
+            <%= nav_element t('.tissue_types'), tissue_types_path %>
+            <%= nav_element t('.device_types'), device_types_path %>
+            <%= nav_element t('.units'), units_path %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'OAuth services', '/admin/oauth_services' %>
+            <%= nav_element t('.oauth_services'), '/admin/oauth_services' %>
           </ul>
         </li>
       <% end %>
 
       <li class="dropdown">
-        <%= link_to raw('Public data <b class="caret"></b>'), public_genetic_data_path, :id => 'dropdown-public-data', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
+        <%= link_to raw(t('.public_data')) + raw(' <b class="caret"></b>'), public_genetic_data_path, :id => 'dropdown-public-data', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-public-data">
-          <%= nav_element "Participants", users_path, {}, :title => "#{public_data_stats[:publishable_user_count]} participant profiles" %>
-	  <%= nav_element 'Participant surveys', google_surveys_path, {}, :title => "#{public_data_stats[:google_survey_count]} surveys taken by #{public_data_stats[:google_survey_respondent_count]} participants" %>
-          <%= nav_element 'Tissue samples', specimens_path, {}, :title => "#{public_data_stats[:sample_count]} blood, saliva, and other tissue samples" %>
-          <%= nav_element 'Whole genome sequences and other data', public_genetic_data_path, {}, :title => "#{public_data_stats[:published_dataset_count]} whole genome sequences and #{public_data_stats[:user_file_count]} other genetic data" %>
+          <%= nav_element t('.participants'), users_path, {}, :title => t('.participant_profiles', :count => public_data_stats[:publishable_user_count]) %>
+	  <%= nav_element t('.participant_surveys'), google_surveys_path, {}, :title => t('.participant_surveys_taken_1',:count => public_data_stats[:google_survey_count]) + t('.participant_surveys_taken_2', :count => public_data_stats[:google_survey_respondent_count]) %>
+          <%= nav_element t('.tissue_samples'), specimens_path, {}, :title => t('.tissue_samples_collected', :count => public_data_stats[:sample_count]) %>
+          <%= nav_element t('.whole_genome_sequences_and_other_data'), public_genetic_data_path, {}, :title => t('.whole_genome_sequences_and_other_data_collected_1', :count => public_data_stats[:published_dataset_count]) + t('.whole_genome_sequences_and_other_data_collected_2', :count => public_data_stats[:user_file_count]) %>
           <% if public_data_stats[:anonymous_dataset_count] > 0 %>
 	  <%= nav_element 'CAGI genomes', public_anonymous_genetic_data_path, {}, :title => 'Temporarily unlinked to participant profiles' %>
           <% end %>
           <li role="presentation" class="divider"></li>
-          <%= nav_element 'Genetic data publication statistics', url_for(:controller => :public_genetic_data, :action => :statistics) %>
+          <%= nav_element t('.genetic_data_publication_statistics'), url_for(:controller => :public_genetic_data, :action => :statistics) %>
         </ul>
       </li>
 
       <li class="dropdown">
-        <%= link_to raw('About <b class="caret"></b>'), 'http://personalgenomes.org', :id => 'dropdown-about-us', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
+        <%= link_to raw(t('.about')) + raw(' <b class="caret"></b>'), 'http://personalgenomes.org', :id => 'dropdown-about-us', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-about-us">
-          <%= nav_element raw('<u>PersonalGenomes.org website</u>'), 'http://personalgenomes.org' %>
-          <%= nav_element raw('<u>PGP Blog</u>'), 'http://blog.personalgenomes.org' %>
-          <%= nav_element raw('<u>@PGorg on Twitter</u>'), 'https://twitter.com/@PGorg' %>
+          <%= nav_element raw('<u>PersonalGenomes.org ') + raw(t('.website')) + raw('</u>'), 'http://personalgenomes.org' %>
+          <%= nav_element raw('<u>PGP ') + raw(t('.blog')) + raw('</u>'), 'http://blog.personalgenomes.org' %>
+          <%= nav_element raw('<u>@PGorg ') + raw(t('.on_twitter')) + raw('</u>'), 'https://twitter.com/@PGorg' %>
         </ul>
       </li>
 
       <% if current_user %>
-        <%= nav_element raw('Contact <i class="icon icon-envelope"></i>'), new_message_url -%>
+        <%= nav_element raw(t('.contact')) + raw(' <i class="icon icon-envelope"></i>'), new_message_url -%>
       <% end %>
 
     </ul>
     <ul class="nav pull-right">
       <% if current_user %>
-        <%= nav_element raw('Log out <i class="icon-off"></i>'), logout_url -%>
+        <%= nav_element raw(t('.log_out')) + raw(' <i class="icon-off"></i>'), logout_url -%>
       <% end %>
     </ul>
   </div></div>

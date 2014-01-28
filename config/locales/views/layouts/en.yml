@@ -1,0 +1,89 @@
+en:
+  layouts:
+    bootstrap_nav:
+      # Account menu
+      account: "Account"
+      home: "Home"
+      email_phone_and_password: 'Email, phone, and password'
+      named_proxies: 'Named proxies'
+      shipping_address: 'Shipping address'
+      mailing_list_subscriptions: 'Mailing list subscriptions'
+      user_log: 'User log'
+      safety_questionnaires: 'Safety questionnaires'
+      withdraw: 'Withdraw'
+
+      # Researcher menu
+      researcher: "Researcher"
+      collection_events: "Collection events"
+      kits: "Kits"
+      samples: "Samples"
+      plates: "Plates"
+      kit_designs: "Kit designs"
+      device_types: "Device types"
+      sample_types: "Sample types"
+      google_surveys: "Google surveys"
+      traitwise_surveys: "Traitwise surveys"
+      google_spreadsheets: "Google spreadsheets"
+      oauth_tokens: "OAuth tokens"
+      permissions: "Permissions"
+
+      # Admin menu
+      admin: "Admin"
+      users: "Users"
+      datasets: "Datasets"
+      exams: "Exams"
+      invited_email_addresses: "Invited E-mail Addresses"
+      phr_reports: "PHR Reports"
+      removal_requests: "Removal Requests"
+      withdrawal_comments: "Withdrawal comments"
+      reports: "Reports"
+      mailing_lists: "Mailing lists"
+      international_users_scoreboard: "International users scoreboard"
+      tissue_types: "Tissue types"
+      units: "Units"
+      oauth_services: "OAuth services"
+
+      # Public data menu
+      public_data: "Public data"
+      participants: "Participants"
+      participant_surveys: "Participant surveys"
+      participant_profiles: {
+        one: "1 participant profile",
+        other: "%{count} participant profiles"
+      }
+      participant_surveys_taken_1: {
+        one: "%{count} survey ",
+        other: "%{count} surveys "
+      }
+      participant_surveys_taken_2: {
+        one: "taken by %{count} participant",
+        other: "taken by %{count} participants"
+      }
+      tissue_samples: "Tissue samples"
+      tissue_samples_collected: {
+        one: "1 blood, saliva, or other tissue sample",
+        other: "%{count} blood, saliva, or other tissue samples"
+      }
+      whole_genome_sequences_and_other_data: "Whole genome sequences and other data"
+      whole_genome_sequences_and_other_data_collected_1: {
+        one: "1 whole genome sequence",
+        other: "%{count} whole genome sequences"
+      }
+      whole_genome_sequences_and_other_data_collected_2: {
+        one: " and 1 other genetic dataset",
+        other: " and %{count} other genetic datasets"
+      }
+      genetic_data_publication_statistics: "Genetic data publication statistics"
+
+      # About menu
+      about: "About"
+      website: "Website"
+      blog: "Blog"
+      on_twitter: "on Twitter"
+
+      # Contact menu
+      contact: "Contact"
+
+      # Log out menu
+      log_out: "Log out"
+
