@@ -39,7 +39,6 @@ class ApplicationController < ActionController::Base
   # Pass the locale options through in every request, but only if
   # we're not using the default locale
   def default_url_options(options={})
-    logger.debug "default_url_options is passed options: #{options.inspect}\n"
     if I18n.locale != I18n.default_locale
       { :locale => I18n.locale }
     else
