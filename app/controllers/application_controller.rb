@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   include AuthenticatedSystem
   include Userstamp  
 
+  layout APP_CONFIG['application_layout']
+
   # cancan
   rescue_from CanCan::AccessDenied do |exception|
     Rails.logger.info "Access denied on action #{exception.action} : #{exception.subject.inspect}"

@@ -59,7 +59,7 @@ class StudiesController < ApplicationController
 
     flash[:notice] = "No approved participants with valid shipping addresses were found" if @json == '[]'
 
-    render :layout => "gmaps"
+    render :layout => APP_CONFIG['application_layout_gmaps']
   end
 
   # GET /studies/claim

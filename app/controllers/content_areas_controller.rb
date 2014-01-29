@@ -1,6 +1,6 @@
 class ContentAreasController < ApplicationController
   skip_before_filter :ensure_enrolled
-  layout 'exam'
+  layout APP_CONFIG['application_layout_exam']
 
   def index
     @content_areas = ContentArea.ordered

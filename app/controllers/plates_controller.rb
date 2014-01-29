@@ -173,7 +173,7 @@ class PlatesController < ApplicationController
       }
     end
 
-    render :layout => 'mobile'
+    render :layout => APP_CONFIG['application_layout_mobile']
   end
 
   def mobile_select_layout_mask

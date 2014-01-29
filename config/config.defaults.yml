@@ -67,6 +67,12 @@ common:
   available_locales: [:en, :de]
   default_locale: :en
 
+  # Layouts
+  application_layout: 'tapestry_default'
+  application_layout_exam: 'tapestry_default_exam'
+  application_layout_gmaps: 'tapestry_default_gmaps'
+  application_layout_mobile: 'tapestry_default_mobile'
+
 development:
   google_health_url: 'https://www.google.com/h9'
 
