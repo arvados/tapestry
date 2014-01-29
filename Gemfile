@@ -18,6 +18,8 @@ gem 'will_paginate'
 gem 'alexdunae-validates_email_format_of', :require => 'validates_email_format_of'
 gem 'newrelic_rpm'
 
+gem 'i18n', '0.5.3'
+
 gem 'rails3_acts_as_paranoid', "~> 0.0.9"
 gem 'cure_acts_as_versioned', :require => 'acts_as_versioned'
 gem 'userstamp'
