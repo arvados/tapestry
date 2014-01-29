@@ -6,7 +6,7 @@ jQuery(function() {
     $(document).ready(function() {
         $("noscript").remove();
         $('#participants').dataTable( {
-            <% if I18n.default_locale != :en -%>
+            <% if I18n.locale != :en -%>
             "oLanguage": { "sUrl": "locales/dataTables.<%= I18n.locale.to_s %>.txt" },
             <% end -%>
             "bProcessing": true,
