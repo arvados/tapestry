@@ -544,7 +544,7 @@ ul.sublinks li a {
 #foot p {
 	color: #5d7cbb;
 	font: 11px/16px Arial, Helvetica, sans-serif;
-	margin: 6px 0;
+	margin: -7px 0;
 }
 
 #foot_big p {
@@ -589,7 +589,7 @@ ul.sublinks li a {
 #foot #copyright {
 	text-align: right;
 	padding: 12px 24px;
-        width: 30%;
+  width: 30%;
 	float: right;
 }
 
@@ -600,7 +600,7 @@ color: #7f97c9;
 #foot_big #copyright {
 	text-align: right;
 	padding: 12px 24px;
-        width: 30%;
+  width: 30%;
 	float: right;
 }
 
