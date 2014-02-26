@@ -2,8 +2,8 @@ module SubmitToGetEvidence
 
   def submit_to_get_evidence!(options = {})
     submit_params = {
-      'api_key' => GET_EVIDENCE_API_KEY,
-      'api_secret' => GET_EVIDENCE_API_SECRET,
+      'api_key' => APP_CONFIG['get_evidence_api_key'],
+      'api_secret' => APP_CONFIG['get_evidence_api_secret'],
       'dataset_locator' => self.locator,
       'dataset_name' => options[:name] || self.name,
       'dataset_is_public' => options[:make_public] ? '1' : '0',
@@ -15,7 +15,7 @@ module SubmitToGetEvidence
     query_string = submit_params.collect {
       |k,v| URI.encode(k, /\W/) + '=' + URI.encode(v.to_s, /\W/)
     }.join('&')
-    json_object = JSON.parse(open("#{GET_EVIDENCE_BASE_URL}/submit?#{query_string}").read)
+    json_object = JSON.parse(open("#{APP_CONFIG['get_evidence_base_url']}/submit?#{query_string}").read)
     unless json_object['success']
       raise "GET-Evidence submit error: #{json_object['error']}"
     end
