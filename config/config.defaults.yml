@@ -30,7 +30,6 @@ common:
   latest_tos_version: 'v1'
   latest_exam_version: 'vYYYYMMDD'
 
-  previous_consent_version: 'vYYYYMMDD'
   latest_consent_version: 'vYYYYMMDD'
 
   drb_server: '127.0.0.1'

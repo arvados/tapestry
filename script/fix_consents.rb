@@ -8,7 +8,14 @@
 #
 # Ward, 2012-02-21
 
-PREVIOUS_CONSENT_VERSION = 'v20111215'
+#PREVIOUS_CONSENT_VERSION = 'v20130221'
+
+if not defined? PREVIOUS_CONSENT_VERSION
+  puts "Please define PREVIOUS_CONSENT_VERSION"
+  exit 1
+end
+
+exit 2
 
 # Default is development
 production = ARGV[0] == "production"
@@ -23,15 +30,15 @@ require File.dirname(__FILE__) + '/../config/environment'
 count = 0
 User.all.each do |u|
 	
-  if u.documents.kind('consent', LATEST_CONSENT_VERSION).empty? and 
+  if u.documents.kind('consent', APP_CONFIG['latest_consent_version']).empty? and 
      not u.documents.kind('consent', PREVIOUS_CONSENT_VERSION).empty? then
       count += 1
   		puts u.full_name
       puts u.id
       puts u.consent_version
-      u.consent_version = LATEST_CONSENT_VERSION
-      u.documents << Document.new(:keyword => 'consent', :version => LATEST_CONSENT_VERSION, :timestamp => Time.now())
-       u.log('Signed full consent form version ' + LATEST_CONSENT_VERSION + ' (auto)')
+      u.consent_version = APP_CONFIG['latest_consent_version']
+      u.documents << Document.new(:keyword => 'consent', :version => APP_CONFIG['latest_consent_version'], :timestamp => Time.now())
+       u.log('Signed full consent form version ' + APP_CONFIG['latest_consent_version'] + ' (auto)')
       u.save
   end
 end
