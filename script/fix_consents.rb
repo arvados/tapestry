@@ -15,8 +15,6 @@ if not defined? PREVIOUS_CONSENT_VERSION
   exit 1
 end
 
-exit 2
-
 # Default is development
 production = ARGV[0] == "production"
 staging = ARGV[0] == "staging"
