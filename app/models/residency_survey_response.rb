@@ -3,7 +3,8 @@ class ResidencySurveyResponse < ActiveRecord::Base
   acts_as_paranoid_versioned :version_column => :lock_version
 
   after_save :complete_enrollment_step
-  validate :zip_is_5_characters_if_us_resident
+  validate :residency_validation
+
   attr_protected :user_id
 
   def complete_enrollment_step
@@ -29,16 +30,6 @@ class ResidencySurveyResponse < ActiveRecord::Base
     us_resident && can_travel_to_boston
   end
 
-  def validate
-    if (us_resident == true)
-      require_attribute 'zip' do
-        require_attribute 'can_travel_to_boston'
-      end
-    elsif (us_resident == false)
-      require_attribute 'country'
-    end
-  end
-
   def waitlist_message
     if us_resident
       if !can_travel_to_boston
@@ -53,11 +44,16 @@ class ResidencySurveyResponse < ActiveRecord::Base
 
   private
 
-  def zip_is_5_characters_if_us_resident
-    if us_resident
-      unless zip =~ /\d{5}/
-        errors.add(:zip, 'must be 5 numeric digits')
+  def residency_validation
+    if (us_resident == true)
+      require_attribute 'zip' do
+        unless zip =~ /\d{5}/
+          errors.add(:zip, 'must be 5 numeric digits')
+        end
+        require_attribute 'can_travel_to_boston'
       end
+    elsif (us_resident == false)
+      require_attribute 'country'
     end
   end
 
