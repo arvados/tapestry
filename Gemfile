@@ -32,7 +32,7 @@ gem 'verhoeff', "~> 2.0.0"
 gem 'fastercsv'
 gem 'acts_as_api'
 group :test do
-  gem "shoulda", "~> 2.11.0"
+  gem "shoulda", "~> 2.11.3"
   gem 'redgreen'
 end
 
