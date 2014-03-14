@@ -35,7 +35,7 @@ end
 
 Factory.sequence(:email) { |n| "person#{n}@example.org" }
 
-Factory.sequence(:pgp_id) { |n| "PGP#{n}" }
+Factory.sequence(:pgp_id) { |n| "#{n}" }
 
 Factory.sequence(:enrollment_step_ordinal) { |n| n }
 
