@@ -1,4 +1,6 @@
 Tapestry::Application.routes.draw do
+  root :to => 'pages#show', :id => 'home'
+
   match '/study_guide_pages/:exam_id/:ordinal' => 'study_guide_pages#show', :as => :show_study_guide_page
   match '/study_guide_pages/:exam_id' => 'study_guide_pages#index', :as => :study_guide_page
 
@@ -97,7 +99,6 @@ Tapestry::Application.routes.draw do
   match '/filters/upload' => 'filters#upload', :as => :upload_filter, :via => :post
 
   resources :pages
-  match '/' => 'pages#show', :id => 'home'
   match '/23andme' => 'pages#show', :id => '23andme', :as => 'twenty3andme'
   match '/23andMe' => 'pages#show', :id => '23andme', :as => 'twenty3andme'
   match '/enrolled', :to => redirect('/users')
@@ -275,6 +276,4 @@ Tapestry::Application.routes.draw do
 
   resource :public_genetic_data
   match '/public_genetic_data/anonymous' => 'public_genetic_data#anonymous', :as => :public_anonymous_genetic_data
-
-  root :to => 'pages#show', :action => 'home'
 end
