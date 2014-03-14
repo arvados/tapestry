@@ -15,8 +15,8 @@ gem 'gdata', :require => 'gdata'
 gem 'carmen', '~> 0.2.13'
 gem 'hoptoad_notifier', "~> 2.3"
 gem 'will_paginate'
-gem 'alexdunae-validates_email_format_of', :require => 'validates_email_format_of'
 gem 'newrelic_rpm'
+gem 'validates_email_format_of', :git => 'git://github.com/alexdunae/validates_email_format_of.git'
 
 gem 'i18n', '0.5.3'
 
