@@ -93,9 +93,7 @@ class User < ActiveRecord::Base
 
   validates :pgp_id, :numericality => true, :allow_nil => true
 
-  # this comes from the alexdunae-validates_email_format_of gem, see http://code.dunae.ca/validates_email_format_of.html
-  # ward, 2010-10-13
-  validates_email_format_of :email, :message => MSG_EMAIL_BAD
+  validates :email, :email_format => {:message => MSG_EMAIL_BAD}
 
   # We allow nil because we have lots of legacy records with value nil
   validates_format_of :zip,
@@ -137,13 +135,13 @@ class User < ActiveRecord::Base
     end
   }
 
-  scope :failed_eligibility_survey, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('screening_surveys').id).merge(ScreeningSurveyResponse.failed) rescue nil
+  scope :failed_eligibility_survey, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('screening_surveys')[:id]).merge(ScreeningSurveyResponse.failed) rescue nil
 
   # These are users who have submitted their enrollment application, but are ineligible. There are a few possible causes for this:
   # - the rules have changed since they started the enrollment process (v1 of the eligibility questionnaire did not ask about citizenship/residency)
   # - there was a bug in v1 of the enrollment process that apparently let some people through who should not have been
   # - they submitted their application before we rolled out v2 of the eligibility questionnaire, and passing v2 is now required to be enrolled
-  scope :ineligible_for_enrollment, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('enrollment_application').id).merge(ScreeningSurveyResponse.failed) rescue nil
+  scope :ineligible_for_enrollment, not_enrolled.joins(:enrollment_step_completions, :screening_survey_response).where('enrollment_step_completions.enrollment_step_id = ?',EnrollmentStep.find_by_keyword('enrollment_application')[:id]).merge(ScreeningSurveyResponse.failed) rescue nil
 
   scope :waitlisted, lambda {
     joins = [ :waitlists ]
