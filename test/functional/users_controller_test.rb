@@ -1,6 +1,5 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require 'test_helper'
 require 'users_controller'
-require File.dirname(__FILE__) + '/../macros/login'
 
 # Re-raise errors caught by the controller.
 class UsersController; def rescue_action(e) raise e end; end
