@@ -2,18 +2,6 @@
 
 one:
   name: MyString
-  references: 
-  references: 
-  participant_id: 
-  owner_id: 
-  creator_id: 
-  shipper_id: 
 
 two:
-  name: MyString
-  references: 
-  references: 
-  participant_id: 
-  owner_id: 
-  creator_id: 
-  shipper_id: 
+  name: MyString2

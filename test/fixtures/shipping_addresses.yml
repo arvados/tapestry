@@ -2,16 +2,14 @@
 
 one:
   user: 
-  line1: MyString
-  line2: MyString
-  line3: MyString
+  address_line_1: MyString
+  address_line_2: MyString
   city: MyString
   state: MyString
 
 two:
   user: 
-  line1: MyString
-  line2: MyString
-  line3: MyString
+  address_line_1: MyString
+  address_line_2: MyString
   city: MyString
   state: MyString

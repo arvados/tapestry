@@ -10,7 +10,6 @@ one:
   instructions_file_name: MyString
   instructions_content_type: MyString
   instructions_file_size: 1
-  instructions_updated_at: 2011-06-15 21:33:16
 
 two:
   name: MyString
@@ -22,4 +21,3 @@ two:
   instructions_file_name: MyString
   instructions_content_type: MyString
   instructions_file_size: 1
-  instructions_updated_at: 2011-06-15 21:33:16

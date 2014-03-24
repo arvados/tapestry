@@ -14,7 +14,6 @@ one:
   researcher_note: MyString
   concentration: MyString
   amount: MyString
-  amount_unit: MyString
   material: MyString
 
 two:
@@ -31,5 +30,4 @@ two:
   researcher_note: MyString
   concentration: MyString
   amount: MyString
-  amount_unit: MyString
   material: MyString
