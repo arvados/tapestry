@@ -52,13 +52,13 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
       should 'require the zip code to be 5 digits long' do
         @residency_survey_response.zip = '1234'
         assert ! @residency_survey_response.valid?
-        assert @residency_survey_response.errors.on(:zip)
+        assert @residency_survey_response.errors[:zip]
       end
 
       should 'require the zip code to be numerical digits' do
         @residency_survey_response.zip = 'abcde'
         assert ! @residency_survey_response.valid?
-        assert @residency_survey_response.errors.on(:zip)
+        assert @residency_survey_response.errors[:zip]
       end
 
       context 'with a zip code' do
