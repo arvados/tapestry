@@ -2,6 +2,7 @@ genetic_literacy:
   id: 1
   title: Genetic Literacy
   description: Genetic Literacy Description
+  ordinal: 1
 
 hsr_literacy:
   id: 2
