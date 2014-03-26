@@ -14,7 +14,6 @@ gem 'gchart'
 gem 'nokogiri', '~> 1.5.6'
 gem 'gdata', :require => 'gdata'
 gem 'carmen', '~> 0.2.13'          # A repository of geographic regions
-gem 'hoptoad_notifier', "~> 2.3"   # POSTs to a server (like Redmine) when exceptions occur (deprecated, now replaced by airbrake gem)
 gem 'will_paginate'
 gem 'validates_email_format_of', :git => 'git://github.com/alexdunae/validates_email_format_of.git'
 
@@ -27,7 +26,7 @@ gem 'userstamp'
 gem 'factory_girl_rails', "~> 1.3.0"
 gem 'mocha', :require => false     # Mocking and stubbing library
 gem 'recaptcha', :require => "recaptcha/rails"
-gem 'limerick_rake'                # Long-since deprecated. For which tasks do we need this? The rake db:bootstrap:load makes the tests work, but there's also a db:seed_enrollment_steps that could make that work
+gem 'limerick_rake'                # Long-since deprecated. Still apparently a little useful because of the rake db:bootstrap(:load) task which can quickly give us some sample content areas and exam questions.
 gem 'verhoeff', "~> 2.0.0"         # Verhoeff checksums used by Kit model
 gem 'fastercsv'
 gem 'acts_as_api'
