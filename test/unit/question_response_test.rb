@@ -106,11 +106,11 @@ class QuestionResponseTest < ActiveSupport::TestCase
   should "return only correct responses on .correct" do
     correct_response = Factory(:question_response)
     correct_response.correct = true
-    correct_response.save(false)
+    correct_response.save(:validate => false)
 
     incorrect_response = Factory(:question_response)
     incorrect_response.correct = false
-    incorrect_response.save(false)
+    incorrect_response.save(:validate => false)
 
     assert_equal [correct_response], QuestionResponse.correct
   end
