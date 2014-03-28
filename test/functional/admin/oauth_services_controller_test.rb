@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Admin::OauthServicesControllerTest < ActionController::TestCase
   setup do
-    @admin_oauth_service = admin_oauth_services(:one)
+    @admin_oauth_service = oauth_services(:one)
   end
 
   test "should get index" do
@@ -17,7 +17,7 @@ class Admin::OauthServicesControllerTest < ActionController::TestCase
   end
 
   test "should create admin_oauth_service" do
-    assert_difference('Admin::OauthService.count') do
+    assert_difference('OauthService.count') do
       post :create, :admin_oauth_service => @admin_oauth_service.attributes
     end
 
@@ -40,7 +40,7 @@ class Admin::OauthServicesControllerTest < ActionController::TestCase
   end
 
   test "should destroy admin_oauth_service" do
-    assert_difference('Admin::OauthService.count', -1) do
+    assert_difference('OauthService.count', -1) do
       delete :destroy, :id => @admin_oauth_service.to_param
     end
 

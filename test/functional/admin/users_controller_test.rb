@@ -153,12 +153,12 @@ class Admin::UsersControllerTest < ActionController::TestCase
         get :index, :screening_eligibility_group => "1"
 
         assert_equal users, assigns(:users)
-        assert_select 'a[href=?]', formatted_admin_users_url(:format => 'csv', :screening_eligibility_group => "1")
+        assert_select 'a[href=?]', admin_users_url(:format => 'csv', :screening_eligibility_group => "1")
       end
 
       should 'link to the CSV download with the same filter when params[:completed] is specified' do
         get :index, :completed => 'some_step'
-        assert_select 'a[href=?]', formatted_admin_users_url(:format => 'csv', :completed => 'some_step')
+        assert_select 'a[href=?]', admin_users_url(:format => 'csv', :completed => 'some_step')
       end
     end
 

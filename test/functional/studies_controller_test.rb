@@ -36,7 +36,7 @@ class StudiesControllerTest < ActionController::TestCase
 
   test "should update study" do
     put :update, :id => @study.to_param, :study => @study.attributes
-    assert_redirected_to study_path(assigns(:study))
+    assert_redirected_to collection_event_path(assigns(:study))
   end
 
   test "should destroy study" do
