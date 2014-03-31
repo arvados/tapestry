@@ -258,16 +258,10 @@ class UsersController < ApplicationController
 
   def accept_tos
     tos_version = LATEST_TOS_VERSION
-    if current_user.documents.kind('tos', tos_version).empty?
-      current_user.documents << Document.new(:keyword => 'tos', :version => tos_version, :timestamp => Time.now())
-      current_user.save!
-      current_user.log "Accepted TOS #{tos_version}"
+    if current_user.accept_tos(tos_version)
       flash[:notice] = 'Thank you for agreeing with our Terms of Service.'
-      redirect_to root_url
-    else
-      # They've already accepted this version of the terms of service
-      redirect_to root_url
-    end
+    end      
+    redirect_to root_url
   end
 
   def participant_survey

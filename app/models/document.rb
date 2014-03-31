@@ -5,6 +5,8 @@ class Document < ActiveRecord::Base
   belongs_to :user
   validates_presence_of :user_id
 
+  TOS = 'tos'
+
   scope :kind, lambda { |keyword,version|
     { :conditions => { :keyword => keyword, :version => version }, :order => 'version DESC' }
   }
@@ -13,6 +15,7 @@ class Document < ActiveRecord::Base
     { :conditions => { :keyword => keyword }, :order => 'version DESC' }
   }
 
+  # PH: TODO: remove as I'm pretty sure these are not used anywhere
   scope :tos, { :conditions => "keyword = 'tos'", :order => 'version DESC' }
   scope :eligibility_survey, { :conditions => "keyword = 'eligibility_survey'", :order => 'version DESC'  }
   scope :consent, { :conditions => "keyword = 'consent'", :order => 'version DESC'  }
