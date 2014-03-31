@@ -5,6 +5,7 @@ class Test::Unit::TestCase
       setup do
         @user = Factory :user
         @user.activate!
+        @user.accept_tos
         login_as @user
       end
 
@@ -26,6 +27,8 @@ class Test::Unit::TestCase
     context "A logged in admin" do
       setup do
         @user = Factory :admin_user
+        @user.activate!
+        @user.accept_tos
         login_as @user
       end
       merge_block(&blk)

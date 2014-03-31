@@ -318,6 +318,17 @@ class User < ActiveRecord::Base
     save(:validate => false)
   end
 
+  # Returns true if newly accepted, nil if it had been already accepted
+  def accept_tos(tos_version = LATEST_TOS_VERSION)
+    if self.documents.kind(Document::TOS, tos_version).empty?
+      # if empty then it has not yet accepted
+      self.documents << Document.new(:keyword => Document::TOS, :version => tos_version, :timestamp => Time.now())
+      self.save!
+      self.log "Accepted TOS #{tos_version}"
+      true
+    end
+  end
+
   def log(comment,step=nil,origin=nil,user_comment=nil)
     UserLog.new(:user => self, :comment => comment, :user_comment => user_comment, :enrollment_step => step, :origin => origin, :controlling_user => self.controlling_user).save!
   end
