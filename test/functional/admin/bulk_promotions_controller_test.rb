@@ -3,14 +3,9 @@ require 'test_helper'
 class Admin::BulkPromotionsControllerTest < ActionController::TestCase
   should_route :get, '/admin/bulk_promotions/new', { :action => 'new' }
 
-  context 'when logged in as a non-admin' do
-    setup do
-      @user = Factory(:user)
-      @user.activate!
-      login_as @user
-    end
+  logged_in_user_context do
 
-    should 'not allow access to the admin/bulk_promotions controller' do
+    should 'not allow non-admin user access to the admin/bulk_promotions controller' do
       get :new
 
       assert_response :redirect
@@ -18,12 +13,7 @@ class Admin::BulkPromotionsControllerTest < ActionController::TestCase
     end
   end
 
-  context 'when logged in as admin' do
-    setup do
-      @admin = Factory(:admin_user)
-      @admin.activate!
-      login_as @admin
-    end
+  logged_in_as_admin do
 
     should "render the new form on GET to #new" do
       get :new

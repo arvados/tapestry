@@ -1,12 +1,8 @@
 require 'test_helper'
 
 class Admin::UsersControllerTest < ActionController::TestCase
-  context 'when logged in as a non-admin' do
-    setup do
-      @user = Factory(:user)
-      @user.activate!
-      login_as @user
-    end
+
+  logged_in_user_context do
 
     should 'not allow access to the admin/users controller' do
       get :index
@@ -15,12 +11,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
     end
   end
 
-  context 'when logged in as an admin' do
-    setup do
-      @admin = Factory(:admin_user)
-      @admin.activate!
-      login_as @admin
-    end
+  logged_in_as_admin do
 
     context 'on GET to edit for a user' do
       setup do

@@ -3,14 +3,7 @@ require 'test_helper'
 class Admin::InvitedEmailsControllerTest < ActionController::TestCase
   should_route :get, '/admin/invited_emails', :controller => 'admin/invited_emails', :action => 'index'
 
-  context 'when logged in as a non-admin' do
-    setup do
-      @user = Factory(:user)
-      @user.activate!
-      assert !@user.is_admin?
-
-      login_as @user
-    end
+  logged_in_user_context do
 
     should 'not allow access' do
       get :index
@@ -19,14 +12,7 @@ class Admin::InvitedEmailsControllerTest < ActionController::TestCase
     end
   end
 
-  context 'when logged in as an admin' do
-    setup do
-      @user = Factory(:user, :is_admin => true)
-      @user.activate!
-      assert @user.is_admin?
-
-      login_as @user
-    end
+  logged_in_as_admin do
 
     context 'with some invited emails' do
       setup do
