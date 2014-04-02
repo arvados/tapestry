@@ -328,7 +328,11 @@ class User < ActiveRecord::Base
   end
 
   def log(comment,step=nil,origin=nil,user_comment=nil)
-    UserLog.new(:user => self, :comment => comment, :user_comment => user_comment, :enrollment_step => step, :origin => origin, :controlling_user => self.controlling_user).save!
+    self.user_logs.create!(:comment => comment, 
+                           :user_comment => user_comment, 
+                           :enrollment_step => step, 
+                           :origin => origin, 
+                           :controlling_user => self.controlling_user)
   end
 
   def promote!
@@ -358,8 +362,7 @@ class User < ActiveRecord::Base
     exam_enrollment_step = EnrollmentStep.find_by_keyword('content_areas')
     consent_enrollment_step = EnrollmentStep.find_by_keyword('participation_consent')
     if ! EnrollmentStepCompletion.find_by_user_id_and_enrollment_step_id(self, step)
-      completion = EnrollmentStepCompletion.new :enrollment_step => step
-      enrollment_step_completions << completion
+      self.enrollment_step_completions.create :enrollment_step => step
       log("Completed enrollment step: #{step.title}", step)
     end
 
