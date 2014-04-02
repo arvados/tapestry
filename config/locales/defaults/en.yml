@@ -5,3 +5,19 @@ en:
         zip: "Postal code"
       shipping_address:
         zip: "Postal code"
+    errors:
+      models:
+        informed_consent_response:
+          attributes:
+            twin:
+              inclusion:
+                Please indicate whether you have an identical twin.
+            recontact:
+              inclusion:
+                Please indicate whether you are willing to be recontacted.
+            name:
+              confirmation:
+                Your name signature must match the name that you signed up with.
+            email:
+              confirmation:
+                Your email signature must match the email that you signed up with.

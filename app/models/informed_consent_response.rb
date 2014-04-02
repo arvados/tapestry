@@ -4,8 +4,13 @@ class InformedConsentResponse < ActiveRecord::Base
 
   belongs_to :user
 
-  attr_protected :user_id
-  validates_presence_of :user_id
-  validates_inclusion_of :twin,      :in => [0, 1, 2], :message => 'must be Yes, No or Unsure'
-  validates_inclusion_of :recontact, :in => [0, 1], :message => 'must be Yes or No'
+  attr_accessor :name, :name_confirmation, :email, :email_confirmation
+
+  # attr_protected :user_id
+  validates :user_id, :presence => true
+  validates :twin, :inclusion => { :in => [0, 1, 2] }
+  validates :recontact, :inclusion => { :in => [0, 1] }
+  validates :name, :confirmation => true
+  validates :email, :confirmation => true
+
 end
