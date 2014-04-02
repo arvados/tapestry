@@ -14,14 +14,13 @@ class ParticipationConsentsController < ApplicationController
     # whitelist
     new_attrs = icr_params.delete_if{|k,v| !%w(twin recontact).include?(k) }
     new_attrs.merge!({
-      :user_id => current_user.id,
       :name => params[:participation_consent][:name],
       :name_confirmation => current_user.full_name,
       :email => params[:participation_consent][:email],
       :email_confirmation => current_user.email
     })
 
-    @informed_consent_response = InformedConsentResponse.create( new_attrs )
+    @informed_consent_response = current_user.create_informed_consent_response( new_attrs )
 
     if @informed_consent_response.valid?
       step = EnrollmentStep.find_by_keyword('participation_consent')
