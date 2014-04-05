@@ -69,11 +69,26 @@ module Tapestry
     # This default override folder can itself be overridden using the environment variable TAPESTRY_OVERRIDE_PATH.
     # This folder and any subfolders, files, etc. can be left empty if no override behaviour is desired.
     # Currently only app/views is supported.
+    # PH: It is my impression that if one wants to use the automatic-reloading development feature of Rails that
+    # this path can't be outside of Rails.root, but I am not 100% sure on this yet.
     override_path = ENV['TAPESTRY_OVERRIDE_PATH'] || "#{Rails.root}/site_specific"
 
     # Add a second view path (normally only "app/views" is in the list of view paths).
     # Anything in this directory matching the app/views directory tree will override the default.
+    # (PH: Note that I already tried:
+    #      config.paths.app.unshift "#{override_path}/app"
+    # and it did not seem to work as expected. The major app subfolders seem to each need to have their own explicit addition here.)
     config.paths.app.views.unshift "#{override_path}/app/views"
+
+    # Same for some other useful ones... Currently only lib.
+    # PH: Not all config.paths work as one might expect. If adding a new type of override, make sure it works before assuming it will.
+    config.paths.lib.unshift "#{override_path}/lib"
+
+    # Trying to use config.paths.config to override locales doesn't work as expected, and anyway for locales there are better
+    # mechanisms that merge translations from all locale files.
+    # At the risk of it being misleading, the so-called override path can be used for these too, since it makes
+    # sense to put _all_ site-specific files in the same directory.
+    config.i18n.load_path += Dir[File.join(override_path, 'config', 'locales', '*.{rb,yml}')]
 
   end
 end
