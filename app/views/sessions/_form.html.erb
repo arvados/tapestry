@@ -20,6 +20,6 @@ jQuery('input#email').focus();
 <p><%= submit_tag 'Log in' %></p>
 
 <h2>Sign up for the PGP</h2>
- 
-<p>Interested in enrolling in the PGP? <a href="http://www.personalgenomes.org/signup.html">Sign-up here</a>.</p>
+
+<p>Interested in enrolling in the PGP? <%= link_to 'Sign up here', signup_path %>.</p>
  <% end -%>
