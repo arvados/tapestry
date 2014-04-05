@@ -2,7 +2,7 @@ class InformedConsentResponse < ActiveRecord::Base
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
 
-  include SiteSpecific::Validations
+  include SiteSpecific::Validations rescue {}
 
   belongs_to :user
 

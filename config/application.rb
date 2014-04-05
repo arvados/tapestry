@@ -78,11 +78,11 @@ module Tapestry
     # (PH: Note that I already tried:
     #      config.paths.app.unshift "#{override_path}/app"
     # and it did not seem to work as expected. The major app subfolders seem to each need to have their own explicit addition here.)
+    # (PH: I also tried to do this with lib and it also had unpredictable results. Use these paths with caution.)
     config.paths.app.views.unshift "#{override_path}/app/views"
 
-    # Same for some other useful ones... Currently only lib.
-    # PH: Not all config.paths work as one might expect. If adding a new type of override, make sure it works before assuming it will.
-    config.paths.lib.unshift "#{override_path}/lib"
+    # Let's use an analogous set-up for lib
+    config.autoload_paths += ["#{override_path}/lib"]
 
     # Trying to use config.paths.config to override locales doesn't work as expected, and anyway for locales there are better
     # mechanisms that merge translations from all locale files.
