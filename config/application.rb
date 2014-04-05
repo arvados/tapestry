@@ -63,5 +63,17 @@ module Tapestry
       end
     end
 
+    # Specify the directory that we hope will eventually allow overriding any Tapestry behaviour.
+    # The folders inside this directory will exactly mimic those in Rails.root.
+    # By default this is a subfolder of Rails.root called "site_specific".
+    # This default override folder can itself be overridden using the environment variable TAPESTRY_OVERRIDE_PATH.
+    # This folder and any subfolders, files, etc. can be left empty if no override behaviour is desired.
+    # Currently only app/views is supported.
+    override_path = ENV['TAPESTRY_OVERRIDE_PATH'] || "#{Rails.root}/site_specific"
+
+    # Add a second view path (normally only "app/views" is in the list of view paths).
+    # Anything in this directory matching the app/views directory tree will override the default.
+    config.paths.app.views.unshift "#{override_path}/app/views"
+
   end
 end
