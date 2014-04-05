@@ -65,8 +65,8 @@ module Tapestry
 
     # Add a second view path (normally only "app/views" is in the list of view paths).
     # Anything in this directory matching the app/views directory tree will override the default.
-    # Therefore to override pages/_dashboard.html.erb create a file with this name and path: app/views/site_specific/pages/_dashboard.html.erb
-    config.paths.app.views.unshift "#{Rails.root}/app/views/site_specific"
+    # Therefore to override pages/_dashboard.html.erb create a file with this name and path: app/views_site_specific/pages/_dashboard.html.erb
+    config.paths.app.views.unshift "#{Rails.root}/app/views_site_specific"
 
   end
 end
