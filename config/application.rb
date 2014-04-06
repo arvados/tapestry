@@ -82,7 +82,7 @@ module Tapestry
     config.paths.app.views.unshift "#{override_path}/app/views"
 
     # Let's use an analogous set-up for lib
-    config.autoload_paths += ["#{override_path}/lib"]
+    config.autoload_paths.unshift "#{override_path}/lib"
 
     # Trying to use config.paths.config to override locales doesn't work as expected, and anyway for locales there are better
     # mechanisms that merge translations from all locale files.
