@@ -37,7 +37,7 @@ class PrivacySurveyResponse < ActiveRecord::Base
   }
 
   PAST_GENETIC_TEST_PARTICIPATION_OPTIONS = {
-    'Yes and if requested, I would share any information with the PGP.' => 'yes',
+    I18n.t('questions.past_genetic_test_participation.yes') => 'yes',
     'Yes, but I would prefer to keep this information confidential.' => 'confidential',
     'No.' => 'no',
     'Unsure' => 'unsure',
@@ -67,11 +67,6 @@ class PrivacySurveyResponse < ActiveRecord::Base
   end
 
   def waitlist_message
-    <<-EOS
-    Thank you for your interest in participating in the PGP.
-    You should be completely comfortable with your participation in the PGP,
-    with any possible findings, and with sharing your information publicly
-    before participation.
-    EOS
+    I18n.t 'messages.waitlist.privacy'
   end
 end
