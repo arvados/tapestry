@@ -43,7 +43,7 @@ class UsersController < ApplicationController
     logout_keeping_session!
     @user = User.new(params[:user])
     @user.is_test = true
-    success = @user && @user.save 
+    success = @user && @user.save
     errors = @user.errors
 
     if success && errors.empty?
@@ -131,8 +131,8 @@ class UsersController < ApplicationController
       flash.delete(:error)
       # Same for recaptcha_error. Why does this happen?
       flash.delete(:recaptcha_error)
-      flash[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
-      redirect_to :action => 'created', :id => @user
+      flash.now[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
+      redirect_to :action => 'created', :id => @user, :notice => "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
     else
       flash.delete(:recaptcha_error)
       render :action => 'new_researcher'
@@ -158,8 +158,8 @@ class UsersController < ApplicationController
       flash.delete(:error)
       # Same for recaptcha_error. Why does this happen?
       flash.delete(:recaptcha_error)
-      flash[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
-      redirect_to :action => 'created', :id => @user
+      flash.now[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
+      redirect_to :action => 'created', :id => @user, :notice => "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
     else
 #      flash[:error]  = "Please double-check your signup information below.<br/>&nbsp;"
       flash.delete(:recaptcha_error)
@@ -184,6 +184,7 @@ class UsersController < ApplicationController
       redirect_to root_path
       return
     end
+    flash.now[:notice] = params[:notice] if params[:notice]
     signup_enrollment_step = EnrollmentStep.find_by_keyword('signup')
     @user.log('Signed mini consent form version ' + LATEST_CONSENT_VERSION,signup_enrollment_step)
   end
@@ -260,7 +261,7 @@ class UsersController < ApplicationController
     tos_version = LATEST_TOS_VERSION
     if current_user.accept_tos(tos_version)
       flash[:notice] = 'Thank you for agreeing with our Terms of Service.'
-    end      
+    end
     redirect_to root_url
   end
 
@@ -269,7 +270,7 @@ class UsersController < ApplicationController
   end
 
   def show_log
-    @log = current_user.user_logs.where('user_comment is not null').order('created_at DESC')
+    @log = UserLog.find(:all, :conditions => "user_id = #{current_user.id} and user_comment is not null", :order => 'created_at DESC')
     @log = @log.paginate(:page => params[:page] || 1, :per_page => 20)
   end
 
