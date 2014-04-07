@@ -69,11 +69,11 @@ module Tapestry
     # This default override folder can itself be overridden using the environment variable TAPESTRY_OVERRIDE_PATH.
     # This folder and any subfolders, files, etc. can be left empty if no override behaviour is desired.
     # Currently only app/views is supported.
-    override_path = ENV['TAPESTRY_OVERRIDE_PATH'] || "#{Rails.root}/site_specific"
+    config.site_override_path = ENV['TAPESTRY_OVERRIDE_PATH'] || "#{Rails.root}/site_specific"
 
     # Add a second view path (normally only "app/views" is in the list of view paths).
     # Anything in this directory matching the app/views directory tree will override the default.
-    config.paths.app.views.unshift "#{override_path}/app/views"
+    config.paths.app.views.unshift "#{config.site_override_path}/app/views"
 
   end
 end
