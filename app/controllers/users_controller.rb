@@ -43,7 +43,7 @@ class UsersController < ApplicationController
     logout_keeping_session!
     @user = User.new(params[:user])
     @user.is_test = true
-    success = @user && @user.save 
+    success = @user && @user.save
     errors = @user.errors
 
     if success && errors.empty?
@@ -261,7 +261,7 @@ class UsersController < ApplicationController
     tos_version = LATEST_TOS_VERSION
     if current_user.accept_tos(tos_version)
       flash[:notice] = 'Thank you for agreeing with our Terms of Service.'
-    end      
+    end
     redirect_to root_url
   end
 
