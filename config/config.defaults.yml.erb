@@ -51,6 +51,8 @@ common:
   # If set to true then a user's navigational choices will be limited by ApplicationController#ensure_tos_agreement
   ensure_tos: true
 
+  <%= Section::CONFIG_KEY %>: [ <%= Section::SIGNUP %> ]
+
   warehouse_web_root: '/warehouse' # Apache alias pointing to whmount target
   warehouse_fs_root: '/warehouse'  # whmount target
   #warehouse_proxy_script_path: '/whget.php' # alternative to using whmount
