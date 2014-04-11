@@ -216,8 +216,6 @@ EOS
   end
 
   def include_section?(section)
-    puts "include_section? called for section #{section}"
-    APP_CONFIG[Section::CONFIG_KEY].include?( section.to_s ) ||
-      APP_CONFIG[Section::CONFIG_KEY].include?( section )
+    Section::include_section?(section)
   end
 end

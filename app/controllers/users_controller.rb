@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_filter :ensure_enrolled, :if => include_section?(Section::SIGNUP)
+  skip_before_filter :ensure_enrolled, :if => :okay_to_skip_ensure_enrolled
   skip_before_filter :ensure_active, :only => [ :deactivated, :switch_to, :tos, :accept_tos, :consent ]
 
   before_filter :load_current_user
@@ -12,8 +12,10 @@ class UsersController < ApplicationController
   # Make sure people sign the latest TOS and Consent before they review new datasets
   skip_before_filter :ensure_dataset_release, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
 
-
   before_filter :load_selection, :only => :index
+
+  before_filter (:only => :index) {|c| c.check_section_disabled(Section::PUBLIC_DATA) }
+
   def index
     @page_title = 'Participant profiles'
     @users = User.publishable
@@ -28,6 +30,12 @@ class UsersController < ApplicationController
         respond_with @users
       }
     end
+  end
+
+  # If the "Signup" section of Tapestry is activated then it is okay to skip checking
+  # that the current user is enrolled to access this controller.
+  def okay_to_skip_ensure_enrolled
+    include_section?(Section::SIGNUP)
   end
 
   def initial

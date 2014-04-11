@@ -100,6 +100,18 @@ class ApplicationController < ActionController::Base
     model_name.constantize rescue nil
   end
 
+  def include_section?(section)
+    Section::include_section?(section)
+  end
+
+  def check_section_disabled(section)
+    section_disabled unless include_section?(section)
+  end
+
+  def section_disabled
+    redirect_to unauthorized_user_url
+  end
+
   def only_owner_can_change
     return true if current_user and current_user.is_admin?
     @model = model
