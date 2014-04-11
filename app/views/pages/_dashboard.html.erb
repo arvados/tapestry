@@ -23,15 +23,17 @@
 
       <% if current_user.is_enrolled? and !current_user.deactivated_at %>
 
-      <% if current_user.datasets.released_to_participant.size > 0 -%>
-      <h2>Specimen analysis data</h2>
-      <span class="<%= 'highlight-nextstep' if current_user.datasets.released_to_participant.unpublished.size > 0 %>">
-      <%= link_to 'Review and publish', specimen_analysis_data_index_path %> analysis data
-      </span>
-      <% end -%>
+        <% if current_user.datasets.released_to_participant.size > 0 -%>
+          <h2>Specimen analysis data</h2>
+          <span class="<%= 'highlight-nextstep' if current_user.datasets.released_to_participant.unpublished.size > 0 %>">
+            <%= link_to 'Review and publish', specimen_analysis_data_index_path %> analysis data
+          </span>
+        <% end -%>
 
-      <h2>Your specimens</h2>
-      <%= render_cell :news_item, :feed, :user => current_user, :show => [:specimens], :limit => 10 %>
+        <% if include_section?(Section::SAMPLES) %>
+          <h2>Your specimens</h2>
+          <%= render_cell :news_item, :feed, :user => current_user, :show => [:specimens], :limit => 10 %>
+        <% end %>
 
       <% end %>
     </div>

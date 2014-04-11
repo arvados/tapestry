@@ -46,7 +46,7 @@ class PagesController < ApplicationController
     end
 
     if logged_in? and params[:id] == 'researcher_tools' then
-      @google_surveys = GoogleSurvey.find_all_by_user_id(current_user.id)
+      @google_surveys = include_section?(Section::GOOGLE_SURVEYS) ? GoogleSurvey.find_all_by_user_id(current_user.id) : []
       @google_spreadsheets = GoogleSpreadsheet.find_all_by_user_id(current_user.id)
       @studies = Study.where('researcher_id = ?',current_user.id)
 
