@@ -95,7 +95,10 @@
       <p>
 	<%= link_to 'Log in', new_session_path %>
 	<br />
-	<%= link_to 'Sign up', 'http://www.personalgenomes.org/signup.html' %>
+
+        <% if include_section?(Section::SIGNUP) %>
+        	<%= link_to 'Sign up', 'http://www.personalgenomes.org/signup.html' %>
+        <% end %>
       </p>
       <% end %>
       <h2>Community</h2>

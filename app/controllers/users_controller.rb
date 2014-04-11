@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_filter :ensure_enrolled
+  skip_before_filter :ensure_enrolled, :if => include_section?(Section::SIGNUP)
   skip_before_filter :ensure_active, :only => [ :deactivated, :switch_to, :tos, :accept_tos, :consent ]
 
   before_filter :load_current_user
