@@ -1,8 +1,19 @@
 class GoogleSurveysController < ApplicationController
+  before_filter {|c| c.check_section_disabled(Section::GOOGLE_SURVEYS) }
   before_filter :ensure_researcher, :except => [:participate, :show, :index, :download]
   skip_before_filter :ensure_enrolled, :except => [:participate]
   skip_before_filter :login_required, :only => [:show, :index, :download]
   skip_before_filter :ensure_active, :only => [:show, :index, :download]
+  before_filter :get_object, :only => [ :synchronize, :download, :show, :edit, :update, :destroy ]
+  before_filter :decide_view_mode, :only => [ :synchronize, :download, :index, :show ]
+  before_filter :check_section_disabled_special, :only => [:show, :index, :download]
+
+  # Need a special method for the semi-complicated permissions of this controller.
+  # Basically if the PUBLIC_DATA section is *not* enabled then only certain surveys can be seen.
+  # NB: That the entire google surveys section of Tapestry can be deactivated at once (see the earlier before_filter)
+  def check_section_disabled_special
+    @min_view = true unless include_section?(Section::PUBLIC_DATA)
+  end
 
   def participate
     @google_survey = GoogleSurvey.find(params[:id])
@@ -36,8 +47,6 @@ class GoogleSurveysController < ApplicationController
   end
 
   def synchronize
-    get_object
-    decide_view_mode
     ok, error_message = @google_survey.synchronize!
     if ok
       flash[:notice] = 'Results synchronized at ' + @google_survey.last_downloaded_at.to_s
@@ -48,8 +57,6 @@ class GoogleSurveysController < ApplicationController
   end
 
   def download
-    get_object
-    decide_view_mode
     return access_denied unless @can_download
     filename = @google_survey.name.gsub(' ','_').camelcase + '-' + @google_survey.last_downloaded_at.strftime('%Y%m%d%H%M%S') + '.csv'
     send_data(File.open(@google_survey.processed_csv_file, "rb").read,
@@ -61,7 +68,6 @@ class GoogleSurveysController < ApplicationController
   # GET /google_surveys
   # GET /google_surveys.xml
   def index
-    decide_view_mode
     if @min_view
       @google_surveys = GoogleSurvey.where(:is_listed => true)
     else
@@ -83,9 +89,6 @@ class GoogleSurveysController < ApplicationController
   # GET /google_surveys/1
   # GET /google_surveys/1.xml
   def show
-    get_object
-    decide_view_mode
-
     @nonces = Nonce.where(:owner_class => 'User', :owner_id => current_user.id,
                           :target_class => 'GoogleSurvey', :target_id => @google_survey.id) if current_user
 
@@ -108,7 +111,6 @@ class GoogleSurveysController < ApplicationController
 
   # GET /google_surveys/1/edit
   def edit
-    get_object
   end
 
   # POST /google_surveys
@@ -131,8 +133,6 @@ class GoogleSurveysController < ApplicationController
   # PUT /google_surveys/1
   # PUT /google_surveys/1.xml
   def update
-    get_object
-
     respond_to do |format|
       if @google_survey.update_attributes(params[:google_survey])
         format.html { redirect_to(@google_survey, :notice => 'Google survey was successfully updated.') }
@@ -147,7 +147,6 @@ class GoogleSurveysController < ApplicationController
   # DELETE /google_surveys/1
   # DELETE /google_surveys/1.xml
   def destroy
-    get_object
     @google_survey.destroy
 
     respond_to do |format|

@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
+  before_filter( :only => :index ) {|c| c.check_section_disabled(Section::PUBLIC_DATA) }
   skip_before_filter :ensure_enrolled, :if => :okay_to_skip_ensure_enrolled
   skip_before_filter :ensure_active, :only => [ :deactivated, :switch_to, :tos, :accept_tos, :consent ]
-
   before_filter :load_current_user
   skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized, :index ]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :switch_to, :index, :deactivated]
@@ -11,10 +11,7 @@ class UsersController < ApplicationController
   skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
   # Make sure people sign the latest TOS and Consent before they review new datasets
   skip_before_filter :ensure_dataset_release, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
-
   before_filter :load_selection, :only => :index
-
-  before_filter (:only => :index) {|c| c.check_section_disabled(Section::PUBLIC_DATA) }
 
   def index
     @page_title = 'Participant profiles'
