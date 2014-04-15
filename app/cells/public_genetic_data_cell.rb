@@ -1,4 +1,4 @@
-class PublicGeneticDataCell < Cell::Rails
+class PublicGeneticDataCell < TapestryBaseCell
 
   def list(opts)
     @options = opts

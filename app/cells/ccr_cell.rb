@@ -1,7 +1,4 @@
-class CcrCell < Cell::Rails
-
-  include ApplicationHelper
-  helper_method :humanize_date
+class CcrCell < TapestryBaseCell
 
   def dashboard_summary(options)
     @user = options[:user]
