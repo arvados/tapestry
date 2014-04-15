@@ -20,10 +20,12 @@
     developed for prospective PGP volunteers. This is designed to help
     participants learn concepts relevant to passing the entrance exam.
   </li>
-  <li><strong>PGP Public Profiles:</strong> The public profile pages
-    for enrolled participants in the PGP can
-    be <a href="/users/">reviewed online</a>.
-  </li>
+  <% if include_section?(Section::PUBLIC_DATA) %>
+    <li><strong>PGP Public Profiles:</strong> The public profile pages
+      for enrolled participants in the PGP can
+      be <a href="/users/">reviewed online</a>.
+    </li>
+  <% end %>
   <li><strong>Family History:</strong> We encourage you to
     participate in the US Surgeon
     General's <a href="http://familyhistory.hhs.gov/">Family Health

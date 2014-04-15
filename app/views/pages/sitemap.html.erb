@@ -42,8 +42,10 @@
     <div style="display:table-cell; width: 30%">
       <h2>Public profile</h2>
       <p>
-	<%= link_to_if !current_user.hex.empty?, 'View and edit', current_user.hex.empty? ? '' : public_profile_path(current_user.hex) %>
-	<br />
+        <% if include_section?(Section::PUBLIC_PROFILE) %>
+        	<%= link_to_if !current_user.hex.empty?, 'View and edit', current_user.hex.empty? ? '' : public_profile_path(current_user.hex) %>
+	        <br />
+        <% end %>
 	<%= link_to_if !current_user.hex.empty?, 'Upload and manage files', user_files_path %>
 	<br />
 	<%= link_to_if !current_user.hex.empty?, 'Personal health records', phrccr_path %>

@@ -1,5 +1,5 @@
 class ProfilesController < ApplicationController
-
+  before_filter {|c| c.check_section_disabled(Section::PUBLIC_PROFILE) }
   skip_before_filter :login_required, :only => [:public]
   skip_before_filter :ensure_enrolled, :only => [:public]
 

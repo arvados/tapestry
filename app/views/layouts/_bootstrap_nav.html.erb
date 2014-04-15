@@ -13,7 +13,9 @@
           <%= link_to raw('Participate <b class="caret"></b>'), root_path, :id => 'dropdown-participate', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-participate">
             <%= nav_element 'Home', root_path %>
-            <%= nav_element 'Public profile', public_profile_path(current_user.hex) %>
+            <% if include_section?(Section::PUBLIC_PROFILE) %>
+              <%= nav_element 'Public profile', public_profile_path(current_user.hex) %>
+            <% end %>
             <li role="presentation" class="divider"></li>
             <%= nav_element 'Family relationships', family_relations_path %>
             <%= nav_element 'Specimen collections', collection_events_path %>
