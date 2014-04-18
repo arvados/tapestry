@@ -62,7 +62,7 @@ class UserMailer < ActionMailer::Base
   def password_reset(user)
     setup_email(user)
     @subject    += 'Reset your password'
-    @body[:url]  = edit_password_url(:id => user.id, :key => user.crypted_password)
+    @body[:url]  = "#{ROOT_URL_SCHEME}#{ROOT_URL}/password/edit?id=#{user.id}&key=#{user.crypted_password}"
     user.log("Sent password reset link: #{@body[:url]}")
   end
 
