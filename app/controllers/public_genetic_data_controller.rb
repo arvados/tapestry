@@ -199,7 +199,7 @@ class PublicGeneticDataController < ApplicationController
         series[s]['data'] << [jstime(Time.now),
                               series[s]['data'].last[1]]
       end
-      series.values.reject {|key,value| value.nil? }.sort_by { |s|
+      series.values.compact.sort_by { |s|
         begin
           0-@coverage_series[s['data_type']]['data'].last[1]
         rescue
