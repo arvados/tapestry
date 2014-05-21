@@ -3,7 +3,6 @@
 one:
   name: MyString
   description: MyText
-  kitdesign: 
   tissue: MyString
   device: MyString
   sort_order: 1
@@ -13,7 +12,6 @@ one:
 two:
   name: MyString
   description: MyText
-  kitdesign: 
   tissue: MyString
   device: MyString
   sort_order: 1

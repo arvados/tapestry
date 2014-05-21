@@ -56,6 +56,10 @@ common:
   # If set to true then a user's navigational choices will be limited by ApplicationController#ensure_tos_agreement
   ensure_tos: true
 
+  # List of sections that this installation of Tapestry wants to display/enable (see app/models/section.rb)
+  # It is strongly encouraged to list the enabled sections as embedded Ruby module references, as shown here.
+  enabled_sections: [ <%= Section::SIGNUP %> ]
+
   warehouse_web_root: '/warehouse' # Apache alias pointing to whmount target
   warehouse_fs_root: '/warehouse'  # whmount target
   #warehouse_proxy_script_path: '/whget.php' # alternative to using whmount

@@ -1,4 +1,6 @@
-class Test::Unit::TestCase
+class ActiveSupport::TestCase
+
+  include AuthenticatedTestHelper
 
   def self.logged_in_user_context(&blk)
     context 'as an activated and logged in user' do

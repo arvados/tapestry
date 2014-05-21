@@ -3,20 +3,21 @@
 source 'http://rubygems.org'
 source 'http://gems.github.com'
 
+ruby '1.8.7'
 gem 'rails', '3.0.20'
 
 gem 'mysql'
 gem 'cancan'
 
-gem "paperclip", "~> 2.3.3"
+# Paperclip: file attachments
+gem "paperclip", "~> 2.3.16"
 gem 'gchart'
 gem 'nokogiri', '~> 1.5.6'
 gem 'gdata', :require => 'gdata'
+# Carmen: A repository of geographic regions
 gem 'carmen', '~> 0.2.13'
-gem 'hoptoad_notifier', "~> 2.3"
 gem 'will_paginate'
-gem 'alexdunae-validates_email_format_of', :require => 'validates_email_format_of'
-gem 'newrelic_rpm'
+gem 'validates_email_format_of', :git => 'git://github.com/alexdunae/validates_email_format_of.git'
 
 gem 'i18n', '0.5.3'
 
@@ -25,14 +26,17 @@ gem 'cure_acts_as_versioned', :require => 'acts_as_versioned'
 gem 'userstamp'
 
 gem 'factory_girl_rails', "~> 1.3.0"
+# Mocha: Mocking and stubbing library
 gem 'mocha', :require => false
-gem 'recaptcha'
+gem 'recaptcha', :require => "recaptcha/rails"
+# Limerick_rake: Long-since deprecated. Still apparently a little useful because of the rake db:bootstrap(:load) task which can quickly give us some sample content areas and exam questions.
 gem 'limerick_rake'
+# Verhoeff: checksums used by Kit model
 gem 'verhoeff', "~> 2.0.0"
 gem 'fastercsv'
 gem 'acts_as_api'
 group :test do
-  gem "shoulda", "~> 2.11.0"
+  gem "shoulda", "~> 2.11.3"
   gem 'redgreen'
 end
 

@@ -1,8 +1,10 @@
 class PublicGeneticDataController < ApplicationController
+  before_filter      {|c| c.check_section_disabled(Section::PUBLIC_DATA) }
   skip_before_filter :login_required
   skip_before_filter :ensure_enrolled
   skip_before_filter :ensure_latest_consent
   skip_before_filter :ensure_recent_safety_questionnaire
+
   include PublicGeneticDataHelper
 
   def anonymous
@@ -19,7 +21,7 @@ class PublicGeneticDataController < ApplicationController
       end
     end
 
-    # Now get the anonymous datasets, and limit them to those users for which we have trait survey results 
+    # Now get the anonymous datasets, and limit them to those users for which we have trait survey results
     @datasets = Dataset.published_anonymously.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant).where('participant_id in (?)',users)
 
     index_worker(:published_anonymously_at)

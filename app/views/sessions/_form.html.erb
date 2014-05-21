@@ -19,7 +19,11 @@ jQuery('input#email').focus();
 
 <p><%= submit_tag 'Log in' %></p>
 
-<h2>Sign up for the PGP</h2>
+  <% if include_section?(Section::SIGNUP) %>
 
-<p>Interested in enrolling in the PGP? <%= link_to 'Sign up here', APP_CONFIG['signup_url'] %>.</p>
- <% end -%>
+    <h2>Sign up for the PGP</h2>
+
+    <p>Interested in enrolling in the PGP? <%= link_to 'Sign up here', APP_CONFIG['signup_url'] %></p>
+  <% end %>
+
+<% end -%>

@@ -2,8 +2,8 @@
   <%= link_to "
         Retake: #{exam_version.title}
         (#{exam_response.correct_response_count} of #{exam_version.question_count} correct)
-      ", study_guide_page_path({ :exam_id => exam_version.exam.id }), :method => 'post' %>
+      ", study_guide_page_path({ :exam_id => exam_version.exam.id }) %>
 <% else %>
   <%= link_to "#{exam.title} (#{pluralize exam_version.exam_questions.count, 'question'})",
-               show_study_guide_page_path({ :exam_id => exam_version.exam.id, :ordinal => 1 }), :method => 'post' %>
+               show_study_guide_page_path({ :exam_id => exam_version.exam.id, :ordinal => 1 }) %>
 <% end %>

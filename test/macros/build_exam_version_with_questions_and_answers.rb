@@ -1,4 +1,4 @@
-class Test::Unit::TestCase
+class ActiveSupport::TestCase
 
   def build_exam_version_with_questions_and_answers
     exam_version = Factory(:exam_version)

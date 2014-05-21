@@ -1,5 +1,5 @@
 class Admin::MailingListsController < Admin::AdminControllerBase
-  
+
   before_filter :set_mailing_list, :only => [:edit, :update]
 
   def index

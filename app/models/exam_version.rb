@@ -40,7 +40,7 @@ class ExamVersion < ActiveRecord::Base
 
   def cannot_publish_without_questions
     if published && exam_questions.empty?
-      errors.add_to_base 'You cannot publish an exam without any questions in it.'
+      errors.add :base, 'You cannot publish an exam without any questions in it.'
     end
   end
 

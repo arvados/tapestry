@@ -8,12 +8,7 @@ class Admin::ReportsControllerTest < ActionController::TestCase
         { :controller => 'admin/reports', :action => 'index' } )
   end
 
-  context 'when logged in as a non-admin' do
-    setup do
-      @user = Factory(:user)
-      @user.activate!
-      login_as @user
-    end
+  logged_in_user_context do
 
     context 'on GET to index' do
       setup { get :index }
@@ -21,12 +16,7 @@ class Admin::ReportsControllerTest < ActionController::TestCase
     end
   end
 
-  context 'when logged in as an admin' do
-    setup do
-      @user = Factory(:admin_user)
-      @user.activate!
-      login_as @user
-    end
+  logged_in_as_admin do
 
     context 'on GET to index' do
       setup { get :index }
