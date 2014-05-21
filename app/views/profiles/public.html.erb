@@ -4,8 +4,8 @@
 
   <p>Sorry, this user does not exist.</p>
 
-  <p>Interested in enrolling? <%= link_to 'Sign up here', signup_path %></p>
-  
+  <p>Interested in enrolling? <%= link_to 'Sign up here', APP_CONFIG['signup_url'] %></p>
+
 <% else -%>
 
 <h2>Public Profile -- <%= @user.hex -%></h2>
