@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 module Authentication
   module ByCookieToken
-    # Stuff directives into including module 
+    # Stuff directives into including module
     def self.included( recipient )
       recipient.extend( ModelClassMethods )
       recipient.class_eval do
@@ -12,7 +12,7 @@ module Authentication
     #
     # Class Methods
     #
-    module ModelClassMethods      
+    module ModelClassMethods
     end # class methods
 
     #
@@ -20,7 +20,7 @@ module Authentication
     #
     module ModelInstanceMethods
       def remember_token?
-        (!remember_token.blank?) && 
+        (!remember_token.blank?) &&
           remember_token_expires_at && (Time.now.utc < remember_token_expires_at.utc)
       end
 
@@ -42,12 +42,12 @@ module Authentication
       # refresh token (keeping same expires_at) if it exists
       def refresh_token
         if remember_token?
-          self.remember_token = self.class.make_token 
-          save(:validate => false)      
+          self.remember_token = self.class.make_token
+          save(:validate => false)
         end
       end
 
-      # 
+      #
       # Deletes the server-side record of the authentication token.  The
       # client-side (browser cookie) and server-side (this remember_token) must
       # always be deleted together.
@@ -59,12 +59,12 @@ module Authentication
       end
     end # instance methods
   end
-  
+
 
   #
   #
   module ByCookieTokenController
-    # Stuff directives into including module 
+    # Stuff directives into including module
     def self.included( recipient )
       recipient.extend( ControllerClassMethods )
       recipient.class_eval do
@@ -77,7 +77,7 @@ module Authentication
     #
     module ControllerClassMethods
     end # class methods
-    
+
     module ControllerInstanceMethods
     end # instance methods
   end
