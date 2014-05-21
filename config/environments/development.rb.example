@@ -29,4 +29,12 @@ Tapestry::Application.configure do
     :domain => "example.com",
     :address => 'outgoing.example.com'
   }
+
+  # Explicitly make certain modules reload when changes are detected rather than having to restart Rails server
+  # This is necessary especially for files that are outside of the normal Rails directory hierarchy, where files contained within
+  # certain folders are automatically reloaded after changes when in development.
+  #
+  # If you are not overriding validations in a site-specific way then you do not need to uncomment the following line
+  # ActiveSupport::Dependencies.explicitly_unloadable_constants << 'SiteSpecific::Validations'
+
 end

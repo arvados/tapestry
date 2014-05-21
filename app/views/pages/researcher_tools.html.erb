@@ -39,14 +39,21 @@
   <li><%= link_to raw("<strong>Sample Types</strong>"), url_for(:controller => 'sample_types', :action => 'index') %></li>
 
   <li><strong>Your surveys</strong><br/>
-  <% @google_surveys.sort { |a,b| a.name <=> b.name }.each do |survey| %>
-  &nbsp;&nbsp;<%= link_to survey.name, edit_google_survey_path(survey.id) %><br/>
+  <% if include_section?(Section::GOOGLE_SURVEYS) %>
+    <% @google_surveys.sort { |a,b| a.name <=> b.name }.each do |survey| %>
+      &nbsp;&nbsp;
+      <%= link_to survey.name, edit_google_survey_path(survey.id) %>
+      <br/>
+    <% end %>
+    &nbsp;&nbsp;
+    <small>
+      Google: <%= link_to 'View all', url_for(:controller => 'google_surveys', :action => 'index') %>
+      /
+      <%= link_to 'Create new', url_for(:controller => 'google_surveys', :action => 'new') %><br/>
+    </small>
+    &nbsp;&nbsp;
   <% end %>
-  &nbsp;&nbsp;<small>Google: <%= link_to 'View all', url_for(:controller => 'google_surveys', :action => 'index') %>
-  /
-  <%= link_to 'Create new', url_for(:controller => 'google_surveys', :action => 'new') %><br/>
-  </small>
-  &nbsp;&nbsp;<small>Traitwise: <%= link_to 'View all', url_for(:controller => 'traitwise_surveys', :action => 'index') %>
+  <small>Traitwise: <%= link_to 'View all', url_for(:controller => 'traitwise_surveys', :action => 'index') %>
   /
   <%= link_to 'Create new', url_for(:controller => 'traitwise_surveys', :action => 'new') %>
   </small>

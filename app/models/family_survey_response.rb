@@ -57,11 +57,7 @@ class FamilySurveyResponse < ActiveRecord::Base
   end
 
   def waitlist_message
-    <<-EOS
-    Thank you for your interest in participating in the PGP.
-    We can currently only enroll individuals 21 or older,
-    and any monozygotic twins must be willing to participate.
-    EOS
+    I18n.t 'messages.waitlist.family'
   end
 
   private

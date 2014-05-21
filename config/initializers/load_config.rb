@@ -1,10 +1,18 @@
+CONFIG_DEFAULTS_FILENAME = "#{Rails.root}/config/config.defaults.yml.erb"
+
 # Load the configuration defaults first
-if not File.exists?("#{::Rails.root.to_s}/config/config.defaults.yml")
-  die("Could not find #{::Rails.root.to_s}/config/config.defaults.yml")
+if not File.exists? CONFIG_DEFAULTS_FILENAME
+  die("Could not find #{CONFIG_DEFAULTS_FILENAME}")
 end
 
-default_config_common = YAML.load_file("#{::Rails.root.to_s}/config/config.defaults.yml")['common']
-default_config_environment = YAML.load_file("#{::Rails.root.to_s}/config/config.defaults.yml")[::Rails.env.to_s]
+def load_yaml_erb(filename)
+  YAML.load( ERB.new( File.read( filename ) ).result )
+end
+
+config_defaults = load_yaml_erb(CONFIG_DEFAULTS_FILENAME)
+
+default_config_common = config_defaults['common']
+default_config_environment = config_defaults[Rails.env]
 
 default_config_common ||= {}
 default_config_environment ||= {}

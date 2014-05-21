@@ -214,4 +214,8 @@ EOS
       'alert alert-block alert-' + key
     end
   end
+
+  def include_section?(section)
+    Section::include_section?(section)
+  end
 end

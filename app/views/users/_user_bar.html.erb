@@ -3,6 +3,9 @@
   <div id="user-bar-action"  >(<%= link_to "log out", logout_path, { :title => "Log out" }    %>)</div>
 <% else -%>
   <div id="user-bar-greeting"><%= abbr_tag_with_IP 'Not logged in', :style => 'border: none;' %></div>
-  <div id="user-bar-action"  ><%= link_to "Log in",  login_path,  { :title => "Log in" } %> /
-                               <%= link_to "Sign up", signup_path, { :title => "Create an account" } %></div>
+  <div id="user-bar-action"  ><%= link_to "Log in",  login_path,  { :title => "Log in" } %>
+    <% if include_section?(Section::SIGNUP) %>
+      / <%= link_to "Sign up", APP_CONFIG['signup_url'], { :title => "Create an account" } %>
+    <% end %>
+  </div>
 <% end -%>

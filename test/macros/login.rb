@@ -7,7 +7,7 @@ class ActiveSupport::TestCase
       setup do
         @user = Factory :user
         @user.activate!
-        @user.accept_tos
+        @user.accept_tos if APP_CONFIG['ensure_tos']
         login_as @user
       end
 
@@ -30,7 +30,7 @@ class ActiveSupport::TestCase
       setup do
         @user = Factory :admin_user
         @user.activate!
-        @user.accept_tos
+        @user.accept_tos if APP_CONFIG['ensure_tos']
         login_as @user
       end
       merge_block(&blk)

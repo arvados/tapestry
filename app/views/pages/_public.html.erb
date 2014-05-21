@@ -7,7 +7,7 @@
   <ul>
     <li>21 years of age or older
     </li>
-    <li>Resident of the United States      
+    <li>Resident of the United States
     </li>
     <li>Pass the entrance exam
     </li>
@@ -22,17 +22,18 @@
   <ul>
     <li>Description of the enrollment process (link)
     </li>
-    <li>Existing participant profile pages (link)      
+    <li>Existing participant profile pages (link)
     </li>
-    <li>Informed consent documents (link)      
+    <li>Informed consent documents (link)
     </li>
     <li>Educational resources (link)
     </li>
   </ul>
 </p>
 
-
-<h2>Apply Now for Enrollment</h2>
-<p>
-<strong><%= link_to 'Begin the enrollment process', signup_url %></strong>.
-</p>
+<% if include_section?(Section::SIGNUP) %>
+  <h2>Apply Now for Enrollment</h2>
+  <p>
+    <strong><%= link_to 'Begin the enrollment process', APP_CONFIG['signup_url'] %></strong>.
+  </p>
+<% end %>

@@ -16,7 +16,7 @@ class FamilyRelationsController < ApplicationController
         current_user.save!
         current_user.log("Family relationships status updated to yes.")
         flash[:notice] = 'Family relationships status updated to yes.'
-      rescue        
+      rescue
         flash[:error] = 'Could not save due to user validation error. Please contact admin.'
       end
       redirect_to(family_relations_url)
@@ -77,9 +77,9 @@ class FamilyRelationsController < ApplicationController
       render :action => 'new'
       return
     end
-    
+
     if !relative.enrolled
-      flash[:error] = 'The user you specified is not yet enrolled in the PGP.'
+      flash[:error] = t('messages.not_yet_enrolled')
       render :action => 'new'
       return
     end
@@ -123,7 +123,7 @@ class FamilyRelationsController < ApplicationController
 
     if @family_relation.save
       flash[:notice] = 'Family member added.'
-      if !@family_relation.is_confirmed      
+      if !@family_relation.is_confirmed
       	flash[:notice] += ' An email has been sent to confirm this relationship.'
         UserMailer.deliver_family_relation_notification(@family_relation)
       end

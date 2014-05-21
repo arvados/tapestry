@@ -1,5 +1,7 @@
 class SamplesController < ApplicationController
-
+  # TODO: Determine how permissions should work if PUBLIC_DATA is disabled but SAMPLES are enabled
+  before_filter( :only => :index ) {|c| c.check_section_disabled(Section::PUBLIC_DATA) }
+  before_filter {|c| c.check_section_disabled(Section::SAMPLES) }
   before_filter :ensure_researcher, :except => [ 'show', 'show_log', 'participant_note', 'update_participant_note', 'mark_as_destroyed', :index ]
   skip_before_filter :ensure_enrolled, :except => [ 'participant_note', 'update_participant_note' ]
   skip_before_filter :ensure_latest_consent, :except => [ 'participant_note', 'update_participant_note' ]

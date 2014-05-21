@@ -19,6 +19,11 @@ common:
   # Set this to your blog feedburner (or similar) address
   blog_email_subscription_url: ''
 
+  # This is the URL to a custom signup URL.
+  # Do not override to use the default signup page, but if external then be sure to use a complete URL reference.
+  # e.g.: 'http://www.personalgenomes.org/harvard/sign-up'
+  signup_url: '/signup'
+
   # These are the URLs to your privacy policy and your terms of service
   privacy_policy_url: 'http://your.domain/privacypolicy.html'
   tos_url: 'http://your.domain/tos.html'
@@ -47,6 +52,13 @@ common:
   get_evidence_api_secret: 'your-get-evidence-api-secret'
 
   enable_self_service_withdrawal: true
+
+  # If set to true then a user's navigational choices will be limited by ApplicationController#ensure_tos_agreement
+  ensure_tos: true
+
+  # List of sections that this installation of Tapestry wants to display/enable (see app/models/section.rb)
+  # It is strongly encouraged to list the enabled sections as embedded Ruby module references, as shown here.
+  enabled_sections: [ <%= Section::SIGNUP %> ]
 
   warehouse_web_root: '/warehouse' # Apache alias pointing to whmount target
   warehouse_fs_root: '/warehouse'  # whmount target

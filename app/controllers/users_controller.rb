@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  skip_before_filter :ensure_enrolled
+  before_filter( :only => :index ) {|c| c.check_section_disabled(Section::PUBLIC_DATA) }
+  skip_before_filter :ensure_enrolled, :if => :okay_to_skip_ensure_enrolled
   skip_before_filter :ensure_active, :only => [ :deactivated, :switch_to, :tos, :accept_tos, :consent ]
-
   before_filter :load_current_user
   skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized, :index ]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :switch_to, :index, :deactivated]
@@ -11,9 +11,8 @@ class UsersController < ApplicationController
   skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
   # Make sure people sign the latest TOS and Consent before they review new datasets
   skip_before_filter :ensure_dataset_release, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
-
-
   before_filter :load_selection, :only => :index
+
   def index
     @page_title = 'Participant profiles'
     @users = User.publishable
@@ -30,6 +29,12 @@ class UsersController < ApplicationController
     end
   end
 
+  # If the "Signup" section of Tapestry is activated then it is okay to skip checking
+  # that the current user is enrolled to access this controller.
+  def okay_to_skip_ensure_enrolled
+    include_section?(Section::SIGNUP)
+  end
+
   def initial
     @user = User.new(params[:user])
   end
@@ -43,7 +48,7 @@ class UsersController < ApplicationController
     logout_keeping_session!
     @user = User.new(params[:user])
     @user.is_test = true
-    success = @user && @user.save 
+    success = @user && @user.save
     errors = @user.errors
 
     if success && errors.empty?
@@ -131,7 +136,7 @@ class UsersController < ApplicationController
       flash.delete(:error)
       # Same for recaptcha_error. Why does this happen?
       flash.delete(:recaptcha_error)
-      flash[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
+      flash[:notice] = t('messages.sent_email_verification', :email => @user.email, :admin_email => ADMIN_EMAIL) # "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your inbox for an e-mail from us<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
       redirect_to :action => 'created', :id => @user
     else
       flash.delete(:recaptcha_error)
@@ -158,7 +163,7 @@ class UsersController < ApplicationController
       flash.delete(:error)
       # Same for recaptcha_error. Why does this happen?
       flash.delete(:recaptcha_error)
-      flash[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
+      flash[:notice] = t('messages.sent_email_verification', :email => @user.email, :admin_email => ADMIN_EMAIL)
       redirect_to :action => 'created', :id => @user
     else
 #      flash[:error]  = "Please double-check your signup information below.<br/>&nbsp;"
@@ -226,7 +231,7 @@ class UsersController < ApplicationController
       return
     end
     UserMailer.signup_notification(@user).deliver
-    flash.now[:notice] = "We have re-sent an e-mail to #{@user.email} in order to confirm your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
+    flash[:notice] = t('messages.resent_email_verification', :email => @user.email, :admin_email => ADMIN_EMAIL)
     render :template => 'users/created'
   end
 
@@ -260,7 +265,7 @@ class UsersController < ApplicationController
     tos_version = LATEST_TOS_VERSION
     if current_user.accept_tos(tos_version)
       flash[:notice] = 'Thank you for agreeing with our Terms of Service.'
-    end      
+    end
     redirect_to root_url
   end
 
