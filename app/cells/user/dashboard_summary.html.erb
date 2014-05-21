@@ -19,7 +19,7 @@
 
 <% elsif @user %>
 
-<p><%= t('messages.enrolled_since', humanize_date(@user.enrolled)) %></p>
+<p><%= t('messages.enrolled_since', :since_date => humanize_date(@user.enrolled)) %></p>
 
 <% end %>
 
