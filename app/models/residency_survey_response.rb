@@ -42,13 +42,11 @@ class ResidencySurveyResponse < ActiveRecord::Base
   def waitlist_message
     if us_resident
       if !can_travel_to_boston
-        return 'Thank you for your interest in participating in the PGP.  If at some point in the future you are able to participate, please let us know!'
+        I18n.t 'messages.waitlist.residency'
       end
     else
-      return 'Thank you for your interest in participating in the PGP.  If at some point in the future you are able to participate, please let us know!'
+      I18n.t 'messages.waitlist.residency'
     end
-
-    nil
   end
 
   private

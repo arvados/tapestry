@@ -131,8 +131,8 @@ class UsersController < ApplicationController
       flash.delete(:error)
       # Same for recaptcha_error. Why does this happen?
       flash.delete(:recaptcha_error)
-      flash.now[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
-      redirect_to :action => 'created', :id => @user, :notice => "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
+      flash[:notice] = t('messages.sent_email_verification', :email => @user.email, :admin_email => ADMIN_EMAIL) # "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your inbox for an e-mail from us<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
+      redirect_to :action => 'created', :id => @user
     else
       flash.delete(:recaptcha_error)
       render :action => 'new_researcher'
@@ -158,8 +158,8 @@ class UsersController < ApplicationController
       flash.delete(:error)
       # Same for recaptcha_error. Why does this happen?
       flash.delete(:recaptcha_error)
-      flash.now[:notice] = "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
-      redirect_to :action => 'created', :id => @user, :notice => "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
+      flash[:notice] = t('messages.sent_email_verification', :email => @user.email, :admin_email => ADMIN_EMAIL)
+      redirect_to :action => 'created', :id => @user
     else
 #      flash[:error]  = "Please double-check your signup information below.<br/>&nbsp;"
       flash.delete(:recaptcha_error)
@@ -184,7 +184,6 @@ class UsersController < ApplicationController
       redirect_to root_path
       return
     end
-    flash.now[:notice] = params[:notice] if params[:notice]
     signup_enrollment_step = EnrollmentStep.find_by_keyword('signup')
     @user.log('Signed mini consent form version ' + LATEST_CONSENT_VERSION,signup_enrollment_step)
   end
@@ -227,7 +226,7 @@ class UsersController < ApplicationController
       return
     end
     UserMailer.signup_notification(@user).deliver
-    flash.now[:notice] = "We have re-sent an e-mail to #{@user.email} in order to confirm your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
+    flash[:notice] = t('messages.resent_email_verification', :email => @user.email, :admin_email => ADMIN_EMAIL)
     render :template => 'users/created'
   end
 
@@ -270,7 +269,7 @@ class UsersController < ApplicationController
   end
 
   def show_log
-    @log = UserLog.find(:all, :conditions => "user_id = #{current_user.id} and user_comment is not null", :order => 'created_at DESC')
+    @log = current_user.user_logs.where('user_comment is not null').order('created_at DESC')
     @log = @log.paginate(:page => params[:page] || 1, :per_page => 20)
   end
 

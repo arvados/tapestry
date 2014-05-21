@@ -21,3 +21,35 @@ en:
             email:
               confirmation:
                 Your email signature must match the email that you signed up with.
+  messages:
+    report_changes:
+      Please indicate if you would like to report changes to the PGP.
+    report_changes_comment:
+      "If you would like to report changes to the PGP, please add a comment to one or more of the questions. Otherwise, please select 'No, I would like to report no changes to the PGP.' in question 1."
+    enrolled_since:
+      You have been enrolled in the PGP since %{since_date}.
+    review_consent_error:
+      You must review the PGP Consent Form before proceeding.
+    not_yet_enrolled:
+      The user you specified in not yet enrolled in the PGP.
+    sent_email_verification:
+      We have sent an e-mail to %{email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from %{admin_email}
+    resent_email_verification:
+      We have re-sent an e-mail to %{email} in order to confirm your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from %{admin_email}
+    waitlist:
+      family: >
+        Thank you for your interest in participating in the PGP.
+        We can currently only enroll individuals 21 or older,
+        and any monozygotic twins must be willing to participate.
+      privacy: >
+        Thank you for your interest in participating in the PGP.
+        You should be completely comfortable with your participation in the PGP,
+        with any possible findings, and with sharing your information publicly
+        before participation.
+      residency: >
+        Thank you for your interest in participating in the PGP.
+        If at some point in the future you are able to participate, please let us know!
+  questions:
+    past_genetic_test_participation:
+      yes:
+        Yes and if requested, I would share any information with the PGP.

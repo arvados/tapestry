@@ -11,7 +11,7 @@ class ConsentReviewsController < ApplicationController
       current_user.complete_enrollment_step(step)
       redirect_to root_path
     else
-      flash[:error] = 'You must review the PGP Consent Form before proceeding.'
+      flash[:error] = t('messages.review_consent_error')
       render :action => 'show'
     end
   end

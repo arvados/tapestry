@@ -19,7 +19,7 @@
 
 <% elsif @user %>
 
-<p>You have been enrolled in the PGP since <%= humanize_date(@user.enrolled) %>.</p>
+<p><%= t('messages.enrolled_since', humanize_date(@user.enrolled)) %></p>
 
 <% end %>
 
