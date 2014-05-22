@@ -93,11 +93,11 @@
       <% else %>
       <h2>Account</h2>
       <p>
-	<%= link_to 'Log in', new_session_path %>
-	<br />
+	      <%= link_to 'Log in', new_session_path %>
+	      <br />
 
         <% if include_section?(Section::SIGNUP) %>
-        	<%= link_to 'Sign up', APP_CONFIG['signup_url'] %>
+          <%= link_to 'Sign up', APP_CONFIG['signup_url'] %>
         <% end %>
       </p>
       <% end %>
