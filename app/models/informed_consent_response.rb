@@ -2,8 +2,6 @@ class InformedConsentResponse < ActiveRecord::Base
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
 
-  include SiteSpecific::Validations rescue {}
-
   belongs_to :user
 
   serialize :other_answers, Hash
@@ -17,6 +15,8 @@ class InformedConsentResponse < ActiveRecord::Base
   validates :recontact, :inclusion => { :in => [0, 1] }
   validates :name, :confirmation => true
   validates :email, :confirmation => true
+
+  include SiteSpecific::Validations rescue {}
 
   def init_other_answers
     self.other_answers = {}
