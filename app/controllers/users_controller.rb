@@ -136,7 +136,7 @@ class UsersController < ApplicationController
       flash.delete(:error)
       # Same for recaptcha_error. Why does this happen?
       flash.delete(:recaptcha_error)
-      flash[:notice] = t('messages.sent_email_verification', :email => @user.email, :admin_email => ADMIN_EMAIL) # "We have sent an e-mail to #{@user.email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your inbox for an e-mail from us<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from #{ADMIN_EMAIL}"
+      flash[:notice] = t('messages.sent_email_verification', :email => @user.email, :admin_email => ADMIN_EMAIL)
       redirect_to :action => 'created', :id => @user
     else
       flash.delete(:recaptcha_error)
