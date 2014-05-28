@@ -22,7 +22,9 @@
             <%= nav_element 'Claim a kit', study_claim_kit_path %>
             <%= nav_element 'Review returned data', specimen_analysis_data_index_path %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element 'Import health records', phrccr_path %>
+            <% if include_section?(Section::CCR) %>
+              <%= nav_element 'Import health records', phrccr_path %>
+            <% end %>
             <%= nav_element 'Upload genetic & other files', user_files_path %>
             <% if include_section?(Section::GOOGLE_SURVEYS) %>
               <li role="presentation" class="divider"></li>

@@ -1,8 +1,11 @@
 class PhrccrsController < ApplicationController
   include PhrccrsHelper
+
+  before_filter {|c| c.check_section_disabled(Section::CCR) }
+  before_filter :store_location
+
   attr_accessor :ccr
   attr_accessor :outFile
-  before_filter :store_location
   attr_accessor :processing_time
   attr_accessor :download_time
 
