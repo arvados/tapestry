@@ -26,17 +26,19 @@ class ExamsControllerTest < ActionController::TestCase
         context 'on POST to start' do
           setup do
             @count = @user.exam_responses.count
-            post :start, :content_area_id => @content_area, :id => @exam
+            post :start, :content_area_id => @content_area[:id], :id => @exam[:id]
           end
 
-          should_redirect_to 'content_area_exam_exam_question_url(@content_area, @exam, @exam_version.exam_questions.first)'
+          should 'do the redirection to the right page' do
+            assert_redirected_to content_area_exam_exam_question_url(@content_area[:id], @exam[:id], @exam_version.exam_questions.first[:id])
+          end
 
           should 'create a new exam response' do
             assert_equal @count+1, @user.exam_responses.count
           end
 
           should 'assign the current_user to the exam response user' do
-            assert_equal @user, ExamResponse.last.user
+            assert_equal @user[:id], ExamResponse.last.user[:id]
           end
         end
       end
@@ -54,10 +56,12 @@ class ExamsControllerTest < ActionController::TestCase
           setup do
             @exam_response_count = ExamResponse.count
             @user_exam_response_count = @user.exam_responses.count
-            post :retake, :content_area_id => @content_area, :id => @exam
+            post :retake, :content_area_id => @content_area[:id], :id => @exam[:id]
           end
 
-          should_redirect_to 'content_area_exam_exam_question_path(@content_area, @exam, @exam_version.exam_questions.first)'
+          should 'do the redirection to the right page' do
+            assert_redirected_to content_area_exam_exam_question_url(@content_area[:id], @exam[:id], @exam_version.exam_questions.first[:id])
+          end
 
           should 'create a new exam response' do
             assert_equal @exam_response_count+1, ExamResponse.count
