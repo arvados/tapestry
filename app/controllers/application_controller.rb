@@ -27,6 +27,12 @@ class ApplicationController < ActionController::Base
   before_filter :ensure_dataset_release
   before_filter :set_locale
 
+  # See ActionController::RequestForgeryProtection for details
+  # Uncomment the :secret if you're not using the cookie session store
+  protect_from_forgery # :secret => '0123456789abcdef0123456789abcdef'
+  # but not in test
+  skip_before_filter :verify_authenticity_token, :if => lambda{ Rails.env == 'test' }
+
   respond_to :json, :xml, :html
   class MyResponder < ActionController::Responder
     include PublicApiResponder
@@ -63,10 +69,6 @@ class ApplicationController < ActionController::Base
       :model_name => model_name
     }.merge(options)
   end
-
-  # See ActionController::RequestForgeryProtection for details
-  # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery # :secret => '0123456789abcdef0123456789abcdef'
 
   # See ActionController::Base for details
   # Uncomment this to filter the contents of submitted sensitive data parameters
@@ -238,8 +240,6 @@ class ApplicationController < ActionController::Base
 #    rescue ActionView::MissingTemplate
 #      false
 #  end
-
-  protect_from_forgery
 
   # TODO: Move to a separate presenter class instead of a helper.
   def csv_for_study(study,type)
