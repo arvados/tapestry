@@ -2,9 +2,13 @@
 <html>
 <head>
   <title>Personal Genome Project: <%= controller.page_title %></title>
+  <% if bootstrap? %>
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <%= stylesheet_link_tag 'bootstrap.min', :media => 'screen' if false %>
+  <% end %>
   <%= stylesheet_link_tag 'tapestry_default' %>
   <!--[if lte IE 7]><%= stylesheet_link_tag 'tapestry_default-ie' %>><![endif]-->
-  <%= javascript_include_tag 'jquery-1.5.2.min', 'jquery-custom-extensions' %>
+  <%= javascript_include_tag :defaults %>
   <%= javascript_tag do %>
     <%= yield :js %>
   <% end %>
@@ -13,7 +17,9 @@
   <div id="body">
     <h1 class="verbose"><%= link_to raw('<span>Personal Genome Project</span>'), root_url %></h1>
 
-    <%= render :partial => 'layouts/navigation' %>
+    <%= render :partial => 'layouts/navigation' if !bootstrap? %>
+    <%= render :partial => 'layouts/bootstrap_nav' if bootstrap? %>
+
     <div class="clear"><!-- --></div>
 
     <%= breadcrumbs %>
@@ -35,5 +41,11 @@
 
   <%= render :partial => 'layouts/google_analytics' %>
 
+<% if bootstrap? %>
+  <%= javascript_include_tag 'bootstrap_mods' %>
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+<% end %>
+
 </body>
 </html>
+

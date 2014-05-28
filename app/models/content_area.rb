@@ -8,6 +8,7 @@ class ContentArea < ActiveRecord::Base
 
   scope :ordered, { :order => 'ordinal' }
 
+  # PH: I want to understand these completed_by? methods better
   def any_version_completed_by?(user)
     exams.all? do |exam|
       !exam.version_for(user) || (

@@ -28,6 +28,7 @@ class ExamVersion < ActiveRecord::Base
   end
 
   def completed_by?(user)
+    # PH: Should not this rather be "all" rather than any? Seems to me ALL the answers should be correct...
     exam_responses.for_user(user).select(&:correct?).any?
   end
 
