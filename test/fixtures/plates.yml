@@ -3,11 +3,9 @@
 one:
   crc_id: 1
   url_code: MyString
-  creator: 
   description: MyText
 
 two:
-  crc_id: 1
-  url_code: MyString
-  creator: 
+  crc_id: 2
+  url_code: MyString2
   description: MyText

@@ -1,0 +1,65 @@
+signup:
+  ordinal: 1
+  keyword: signup
+  title: signup
+  description: signup
+
+screening_surveys:
+  ordinal: 2
+  keyword: screening_surveys
+  title: screening_surveys
+  description: screening_surveys
+
+screening_survey_results:
+  ordinal: 3
+  keyword: screening_survey_results
+  title: screening_survey_results
+  description: screening_survey_results
+
+content_areas:
+  ordinal: 4
+  keyword: content_areas
+  title: content_areas
+  description: content_areas
+
+consent_review:
+  ordinal: 5
+  keyword: consent_review
+  title: consent_review
+  description: consent_review
+
+participation_consent:
+  ordinal: 6
+  keyword: participation_consent
+  title: participation_consent
+  description: participation_consent
+
+named_proxies:
+  ordinal: 7
+  keyword: named_proxies
+  title: named_proxies
+  description: named_proxies
+
+baseline_trait_collection_notification:
+  ordinal: 8
+  keyword: baseline_trait_collection_notification
+  title: baseline_trait_collection_notification
+  description: baseline_trait_collection_notification
+
+identity_verification_notification:
+  ordinal: 9
+  keyword: identity_verification_notification
+  title: identity_verification_notification
+  description: identity_verification_notification
+
+enrollment_application:
+  ordinal: 10
+  keyword: enrollment_application
+  title: enrollment_application
+  description: enrollment_application
+
+enrollment_application_results:
+  ordinal: 11
+  keyword: enrollment_application_results
+  title: enrollment_application_results
+  description: enrollment_application_results

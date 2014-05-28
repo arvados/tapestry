@@ -1,4 +1,4 @@
-class Test::Unit::TestCase
+class ActiveSupport::TestCase
   def trap_exception(exception_class=Exception)
     @exception = nil
     begin

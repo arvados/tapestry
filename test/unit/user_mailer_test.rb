@@ -1,11 +1,10 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require 'user_mailer'
 
-class UserMailerTest < Test::Unit::TestCase
+class UserMailerTest < ActiveSupport::TestCase
   FIXTURES_PATH = File.dirname(__FILE__) + '/../fixtures'
   CHARSET = "utf-8"
 
-  include ActionMailer::Quoting
   include ActionView::Helpers::UrlHelper
   include ActionController::UrlWriter
 
@@ -34,7 +33,4 @@ class UserMailerTest < Test::Unit::TestCase
       IO.readlines("#{FIXTURES_PATH}/user_mailer/#{action}")
     end
 
-    def encode(subject)
-      quoted_printable(subject, CHARSET)
-    end
 end

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Admin::UsersHelperTest < Test::Unit::TestCase
+class Admin::UsersHelperTest < ActiveSupport::TestCase
 
   context "with some users who have CSV-destined data" do
     setup do

@@ -19,7 +19,7 @@ module SubmitToGetEvidence
     unless json_object['success']
       raise "GET-Evidence submit error: #{json_object['error']}"
     end
-    self.download_url = json_object['download_url'] if self.respond_to? :download_url
+    self.download_url = json_object['download_url'] if self.respond_to? :download_url=
     self.status_url = json_object['status_url']
     self.processing_stopped = false
     self.save!

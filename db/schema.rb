@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130429095500) do
+ActiveRecord::Schema.define(:version => 20140402214024) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -945,9 +945,9 @@ ActiveRecord::Schema.define(:version => 20130429095500) do
   add_index "informed_consent_response_versions", ["informed_consent_response_id"], :name => "index_informed_consent_response_versions_on_informed_consent_re"
 
   create_table "informed_consent_responses", :force => true do |t|
-    t.integer  "twin",         :limit => 1
-    t.integer  "biopsy",       :limit => 1
-    t.integer  "recontact",    :limit => 1
+    t.integer  "twin",          :limit => 1
+    t.integer  "biopsy",        :limit => 1
+    t.integer  "recontact",     :limit => 1
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -955,6 +955,7 @@ ActiveRecord::Schema.define(:version => 20130429095500) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.text     "other_answers"
   end
 
   create_table "international_participant_versions", :force => true do |t|

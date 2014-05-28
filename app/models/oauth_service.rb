@@ -37,7 +37,7 @@ class OauthService < ActiveRecord::Base
     formdata['oauth_signature'] = sign('POST', base_uri, formdata)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new(uri.request_uri)
+    req = Net::HTTP::Post.new(uri.fullpath)
     req.set_form_data(formdata)
     resp = http.request(req)
     return nil if resp.code == '400'
@@ -65,14 +65,14 @@ class OauthService < ActiveRecord::Base
       'oauth_version' => '1.0'
     }
     if http_method == 'POST'
-      req = Net::HTTP::Post.new(uri.request_uri)
+      req = Net::HTTP::Post.new(uri.fullpath)
       req.set_form_data(formdata) if formdata.size > 0
     elsif http_method == 'GET'
       querystring = ''
       if !formdata.empty?
-        querystring = (uri.request_uri.index('?') ? '&' : '?') + formdata.collect { |k,v| "#{uriencode(k)}=#{uriencode(v.to_s)}" }.join('&')
+        querystring = (uri.fullpath.index('?') ? '&' : '?') + formdata.collect { |k,v| "#{uriencode(k)}=#{uriencode(v.to_s)}" }.join('&')
       end
-      req = Net::HTTP::Get.new(uri.request_uri + querystring)
+      req = Net::HTTP::Get.new(uri.fullpath + querystring)
     else
       raise "#{http_method} method not supported"
     end

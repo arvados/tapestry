@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class UserTest < Test::Unit::TestCase
+class UserTest < ActiveSupport::TestCase
   should have_many :enrollment_step_completions
   should have_many :completed_enrollment_steps
   should have_many :exam_responses
@@ -54,7 +54,7 @@ class UserTest < Test::Unit::TestCase
     should "require password validation on create" do
       user = User.new(:password => "blah", :password_confirmation => "boogidy")
       assert !user.save
-      assert user.errors.on(:password).any? { |e| e =~ /confirmation/i }
+      assert user.errors[:password].any? { |e| e =~ /confirmation/i }
     end
 
     # temporarily removed requirement
@@ -260,7 +260,7 @@ class UserTest < Test::Unit::TestCase
     assert_no_difference 'User.count' do
       u = Factory.build(:user, :password_confirmation => nil)
       assert !u.valid?
-      assert u.errors.on(:password_confirmation)
+      assert u.errors[:password_confirmation]
     end
   end
 

@@ -1,6 +1,6 @@
 class NamedProxiesController < ApplicationController
   skip_before_filter :ensure_enrolled
-  before_filter :set_named_proxy, :only => [:show, :edit, :update]
+  before_filter :set_named_proxy, :only => [:show, :edit, :update, :destroy]
 
   def done
      step = EnrollmentStep.find_by_keyword('named_proxies')
@@ -20,7 +20,6 @@ class NamedProxiesController < ApplicationController
   end
 
   def destroy
-    @named_proxy = NamedProxy.find(params[:id])
     @named_proxy.destroy
 
     redirect_to(named_proxies_url)

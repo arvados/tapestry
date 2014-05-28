@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MailingListTest < Test::Unit::TestCase
+class MailingListTest < ActiveSupport::TestCase
   context 'a mailing list' do
     setup do
       @mailing_list = Factory(:mailing_list)

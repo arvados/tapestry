@@ -4,60 +4,37 @@ class ParticipationConsentsController < ApplicationController
   skip_before_filter :ensure_latest_consent, :only => [:show, :create ]
   skip_before_filter :ensure_recent_safety_questionnaire, :only => [:show, :create ]
 
+  # PH: TODO: implement proper #show and #new and #edit, and deal the way the #show action is called by default
   def show
-    @informed_consent_response = InformedConsentResponse.new()
+    @informed_consent_response = InformedConsentResponse.new
   end
 
   def create
-    @informed_consent_response = InformedConsentResponse.new
-    if params[:informed_consent_response]
-      %w(twin recontact).each do |field|
-        @informed_consent_response.send(:"#{field}=", params[:informed_consent_response][field])
-      end
-    else
-      flash[:error] ||= ''
-      flash[:error] += 'Please indicate whether you have an identical twin.<br/><br/>Please indicate whether you are willing to be recontacted.<br/><br/>'
-    end
+    icr_params = params[:informed_consent_response]
+    icr_params ||= {}
+    # whitelist
+    new_attrs = icr_params.delete_if{|k,v| !%w(twin recontact).include?(k) }
+    # using virtual attributes and model validation to confirm the "consent signature"
+    new_attrs.merge!({
+      :name => params[:participation_consent][:name],
+      :name_confirmation => current_user.full_name,
+      :email => params[:participation_consent][:email],
+      :email_confirmation => current_user.email
+    })
 
-    if params[:informed_consent_response] then
-      if not params[:informed_consent_response][:twin] then
-        flash[:error] ||= ''
-        flash[:error] += 'Please indicate whether you have an identical twin.<br/><br/>'
-      end
-      if not params[:informed_consent_response][:recontact] then
-        flash[:error] ||= ''
-        flash[:error] += 'Please indicate whether you are willing to be recontacted.<br/><br/>'
-      end
-    end
+    @informed_consent_response = current_user.build_informed_consent_response( new_attrs )
+    @informed_consent_response.update_answers( params[:other_answers] )
+    @informed_consent_response.save
 
-    @informed_consent_response.user = current_user
-
-    if ! name_and_email_match
-      flash[:error] ||= ''
-      flash[:error] += 'Your name and email signature must match the name and email that you signed up with.<br/><br/>'
-    end
-
-    if ! @informed_consent_response.valid?
-      flash[:error] ||= ''
-      flash[:error]  += 'You must answer the questions within the Consent Form.<br/><br/>'
-    end
-
-    if name_and_email_match && @informed_consent_response.valid? && @informed_consent_response.save
+    if @informed_consent_response.valid?
       step = EnrollmentStep.find_by_keyword('participation_consent')
-      current_user.log('Signed full consent form version ' + LATEST_CONSENT_VERSION,step)
       current_user.complete_enrollment_step(step)
+      current_user.log('Signed full consent form version ' + LATEST_CONSENT_VERSION,step)
       redirect_to root_path
     else
-      #show
+      flash[:error] = @informed_consent_response.errors.collect{|field,msg| msg}.join('<br/><br/>')
       render :action => 'show'
-      flash[:error] = ''
     end
   end
 
-  private
-
-  def name_and_email_match
-    params[:participation_consent][:name]  == current_user.full_name &&
-    params[:participation_consent][:email] == current_user.email
-  end
 end

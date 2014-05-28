@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ScreeningSurveyResponseTest < Test::Unit::TestCase
+class ScreeningSurveyResponseTest < ActiveSupport::TestCase
   context "a user with residency_survey_response and privacy_survey_response surveys completed" do
     setup do
       @user = Factory(:user)

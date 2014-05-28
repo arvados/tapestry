@@ -3,9 +3,7 @@
 one:
   relation: MyString
   is_confirmed: false
-  Relative: 
 
 two:
   relation: MyString
   is_confirmed: false
-  Relative: 

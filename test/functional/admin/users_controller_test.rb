@@ -1,12 +1,8 @@
 require 'test_helper'
 
 class Admin::UsersControllerTest < ActionController::TestCase
-  context 'when logged in as a non-admin' do
-    setup do
-      @user = Factory(:user)
-      @user.activate!
-      login_as @user
-    end
+
+  logged_in_user_context do
 
     should 'not allow access to the admin/users controller' do
       get :index
@@ -15,12 +11,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
     end
   end
 
-  context 'when logged in as an admin' do
-    setup do
-      @admin = Factory(:admin_user)
-      @admin.activate!
-      login_as @admin
-    end
+  logged_in_as_admin do
 
     context 'on GET to edit for a user' do
       setup do
@@ -153,12 +144,12 @@ class Admin::UsersControllerTest < ActionController::TestCase
         get :index, :screening_eligibility_group => "1"
 
         assert_equal users, assigns(:users)
-        assert_select 'a[href=?]', formatted_admin_users_url(:format => 'csv', :screening_eligibility_group => "1")
+        assert_select 'a[href=?]', admin_users_url(:format => 'csv', :screening_eligibility_group => "1")
       end
 
       should 'link to the CSV download with the same filter when params[:completed] is specified' do
         get :index, :completed => 'some_step'
-        assert_select 'a[href=?]', formatted_admin_users_url(:format => 'csv', :completed => 'some_step')
+        assert_select 'a[href=?]', admin_users_url(:format => 'csv', :completed => 'some_step')
       end
     end
 
