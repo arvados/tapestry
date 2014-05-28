@@ -1,16 +1,21 @@
+default_config_filepath = File.join(Rails.root, 'config', 'config.defaults.yml')
+site_config_filepath = File.join(Rails.root, 'config', 'config.yml')
+
 # Load the configuration defaults first
-if not File.exists?("#{::Rails.root.to_s}/config/config.defaults.yml")
-  die("Could not find #{::Rails.root.to_s}/config/config.defaults.yml")
+if not File.exists?(default_config_filepath)
+  die("Could not find #{default_config_filepath}")
 end
 
-default_config_common = YAML.load_file("#{::Rails.root.to_s}/config/config.defaults.yml")['common']
-default_config_environment = YAML.load_file("#{::Rails.root.to_s}/config/config.defaults.yml")[::Rails.env.to_s]
+default_config = YAML::load(ERB.new(IO.read(default_config_filepath)).result)
+
+default_config_common = default_config['common']
+default_config_environment = default_config[::Rails.env.to_s]
 
 default_config_common ||= {}
 default_config_environment ||= {}
 
-if File.exists?("#{::Rails.root.to_s}/config/config.yml")
-  site_config_environment = YAML.load_file("#{::Rails.root.to_s}/config/config.yml")[::Rails.env.to_s]
+if File.exists?("#{Rails.root}/config/config.yml")
+  site_config_environment = YAML::load(ERB.new(IO.read(site_config_filepath)).result)[::Rails.env.to_s]
   site_config_environment ||= {}
   APP_CONFIG = default_config_common.merge(default_config_environment).merge(site_config_environment)
 else
