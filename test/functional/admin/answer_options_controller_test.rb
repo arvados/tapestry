@@ -20,15 +20,15 @@ class Admin::AnswerOptionsControllerTest < ActionController::TestCase
     context 'on GET to index' do
       setup { get :index, @context_hash }
 
-      should_respond_with :success
-      should_render_template :index
+      should respond_with :success
+      should render_template :index
     end
 
     context 'on GET to new' do
       setup { get :new, @context_hash }
 
-      should_respond_with :success
-      should_render_template :new
+      should respond_with :success
+      should render_template :new
     end
 
     context 'on POST to create' do
@@ -37,7 +37,10 @@ class Admin::AnswerOptionsControllerTest < ActionController::TestCase
         post :create, @context_hash.merge({ :answer_option => hash })
       end
 
-      should_redirect_to 'admin_content_area_exam_exam_version_exam_question_answer_options_url(@content_area, @exam, @exam_version, @exam_question)'
+      should 'do the redirection to the right page' do
+        assert_redirected_to admin_content_area_exam_exam_version_exam_question_answer_options_url(@content_area, @exam, @exam_version, @exam_question)
+      end
+
     end
 
     context 'with an answer option' do
@@ -51,15 +54,15 @@ class Admin::AnswerOptionsControllerTest < ActionController::TestCase
       context 'on GET to show' do
         setup { get :show, @context_hash }
 
-        should_respond_with :success
-        should_render_template :show
+        should respond_with :success
+        should render_template :show
       end
 
       context 'on GET to edit' do
         setup { get :edit, @context_hash }
 
-        should_respond_with :success
-        should_render_template :edit
+        should respond_with :success
+        should render_template :edit
       end
 
       context 'on PUT to update' do
@@ -74,13 +77,18 @@ class Admin::AnswerOptionsControllerTest < ActionController::TestCase
           assert flash[:notice] =~ /success/i
         end
 
-        should_redirect_to 'admin_content_area_exam_exam_version_exam_question_answer_options_url(@content_area, @exam, @exam_version, @exam_question)'
+        should 'do the redirection to the right page' do
+          assert_redirected_to admin_content_area_exam_exam_version_exam_question_answer_options_url(@content_area, @exam, @exam_version, @exam_question)
+        end
+
       end
 
       context 'on DELETE to destroy' do
         setup { delete :destroy, @context_hash }
 
-        should_redirect_to 'admin_content_area_exam_exam_version_exam_question_answer_options_url(@content_area, @exam, @exam_version, @exam_question)'
+        should 'do the redirection to the right page' do
+          assert_redirected_to admin_content_area_exam_exam_version_exam_question_answer_options_url(@content_area, @exam, @exam_version, @exam_question)
+        end
       end
     end
   end

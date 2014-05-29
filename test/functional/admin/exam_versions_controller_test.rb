@@ -28,10 +28,10 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
       context 'on GET to #index ' do
         setup { get :index, :content_area_id => @content_area, :exam_id => @exam }
 
-        should_respond_with :success
-        should_render_template :index
-        should_assign_to :exam
-        should_assign_to :exam_versions
+        should respond_with :success
+        should render_template :index
+        should assign_to :exam
+        should assign_to :exam_versions
 
         should 'have a link to each exam version' do
           @exam_versions.each do |version|
@@ -46,8 +46,8 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
           get :new, :content_area_id => @content_area, :exam_id => @exam
         end
 
-        should_respond_with :success
-        should_render_template :new
+        should respond_with :success
+        should render_template :new
       end
 
       context 'on POST to #create' do
@@ -57,7 +57,9 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
           post :create, :content_area_id => @content_area, :exam_id => @exam, :exam_version => exam_version_hash
         end
 
-        should_redirect_to 'admin_content_area_exam_exam_versions_path(@content_area, @exam)'
+        should 'do the redirection to the right page' do
+          assert_redirected_to admin_content_area_exam_exam_versions_path(@content_area, @exam)
+        end
 
         should 'create another exam version' do
           assert_equal @old_exam_version_count+1, @exam.versions.count
@@ -86,9 +88,9 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
           get :show, :content_area_id => @content_area, :exam_id => @exam, :id => @version1
         end
 
-        should_respond_with :success
-        should_render_template :show
-        should_assign_to :exam_version
+        should respond_with :success
+        should render_template :show
+        should assign_to :exam_version
       end
 
       context 'on GET to #edit' do
@@ -96,9 +98,9 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
           get :edit, :content_area_id => @content_area, :exam_id => @exam, :id => @version1
         end
 
-        should_respond_with :success
-        should_render_template :edit
-        should_assign_to :exam_version
+        should respond_with :success
+        should render_template :edit
+        should assign_to :exam_version
 
         should 'have a form that PUTs to #update' do
           assert_select 'form[action=?]', admin_content_area_exam_exam_version_path(@content_area, @exam, @version1)
@@ -111,7 +113,9 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
           put :update, :content_area_id => @content_area, :exam_id => @exam, :id => @version1, :exam_version => @exam_version_hash
         end
 
-        should_redirect_to 'admin_content_area_exam_exam_versions_path(@content_area, @exam)'
+        should 'do the redirection to the right page' do
+          assert_redirected_to admin_content_area_exam_exam_versions_path(@content_area, @exam)
+        end
 
         should 'update the attributes' do
           @version1.reload
@@ -131,7 +135,9 @@ class Admin::ExamVersionsControllerTest < ActionController::TestCase
           assert_equal @old_exam_version_count-1, @exam.versions.count
         end
 
-        should_redirect_to 'admin_content_area_exam_exam_versions_path(@content_area, @exam)'
+        should 'do the redirection to the right page' do
+          assert_redirected_to admin_content_area_exam_exam_versions_path(@content_area, @exam)
+        end
       end
     end
   end

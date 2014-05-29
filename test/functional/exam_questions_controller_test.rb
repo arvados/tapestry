@@ -32,7 +32,7 @@ class ExamQuestionsControllerTest < ActionController::TestCase
             assert_template 'show'
           end
 
-          should_render_with_layout 'exam'
+          should render_with_layout 'tapestry_default_exam'
           should 'assign to exam_question, exam_version, and content_area' do
             assert_equal @exam_question, assigns(:exam_question)
             assert_equal @exam_version,  assigns(:exam_version)
@@ -62,7 +62,7 @@ class ExamQuestionsControllerTest < ActionController::TestCase
                   :id              => @exam_question
             end
 
-            should_render_with_layout 'exam'
+            should render_with_layout 'tapestry_default_exam'
             should 'render radio buttons for the answer' do
               assert_select 'input[type=?]', 'radio', :count => @exam_question.answer_options.count
             end
@@ -111,6 +111,7 @@ class ExamQuestionsControllerTest < ActionController::TestCase
 
           context 'on POST to answer' do
             setup do
+              @question_response_count = @exam_response.question_responses.count
               post :answer,
                    :content_area_id => @content_area,
                    :exam_id         => @exam,
@@ -118,10 +119,13 @@ class ExamQuestionsControllerTest < ActionController::TestCase
                    :answer          => @correct_answer_string
             end
 
-            should_change '@exam_response.question_responses.count', :by => 1
+            should 'change @exam_response.question_responses.count by 1' do
+              assert @question_response_count + 1 == @exam_response.question_responses.count
+            end
 
             context 'when POSTing an answer to the same question' do
               setup do
+                @same_question_response_count = @exam_response.question_responses.count
                 post :answer,
                      :content_area_id => @content_area,
                      :exam_id         => @exam,
@@ -129,7 +133,10 @@ class ExamQuestionsControllerTest < ActionController::TestCase
                      :answer          => @correct_answer_string
               end
 
-              should_not_change '@exam_response.question_responses.count'
+              should 'not change @exam_response.question_responses.count' do
+                assert @same_question_response_count == @exam_response.question_responses.count
+              end
+
             end
           end
         end
