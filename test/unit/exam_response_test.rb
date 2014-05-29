@@ -6,15 +6,14 @@ class ExamResponseTest < ActiveSupport::TestCase
       @exam_response = Factory :exam_response
     end
 
-    should_belong_to :user
-    should_belong_to :original_user
-    should_belong_to :exam_version
-    should_have_many :question_responses
+    should belong_to :user
+    should belong_to :original_user
+    should belong_to :exam_version
+    should have_many :question_responses
 
     should 'move user to original_user when sent #discard_for_retake!' do
       assert original_user_id = @exam_response.user.id
       @exam_response.discard_for_retake!
-      @exam_response.reload
       assert_equal original_user_id, @exam_response.original_user_id
       assert_nil @exam_response.user
     end
