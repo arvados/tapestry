@@ -5,5 +5,6 @@ class EnrollmentStepCompletionTest < ActiveSupport::TestCase
     @enrollment_step_completion = Factory :enrollment_step_completion
   end
 
-  should_validate_presence_of :user, :enrollment_step
+  should validate_presence_of :user
+  should validate_presence_of :enrollment_step
 end
