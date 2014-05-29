@@ -28,7 +28,7 @@ class ExamVersion < ActiveRecord::Base
   end
 
   def completed_by?(user)
-    # PH: Should not this rather be "all" rather than any? Seems to me ALL the answers should be correct...
+    # Although this uses #select and #any? we only really expect one response set, since by retaking an exam the user attribute gets set to nil.
     exam_responses.for_user(user).select(&:correct?).any?
   end
 
