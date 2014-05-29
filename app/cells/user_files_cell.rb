@@ -1,4 +1,4 @@
-class UserFilesCell < Cell::Rails
+class UserFilesCell < TapestryBaseCell
 
   include ApplicationHelper
   helper_method :humanize_date

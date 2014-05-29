@@ -1,7 +1,4 @@
-class StudyCell < Cell::Rails
-
-  include ApplicationHelper
-  helper_method :are_n_things
+class StudyCell < TapestryBaseCell
 
   def dashboard_summary(options)
     @user = options[:user]

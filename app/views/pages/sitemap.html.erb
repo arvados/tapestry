@@ -1,133 +1,141 @@
 <div style="display:table" class="sitemap">
   <div style="display:table-row">
     <% if current_user and current_user.deactivated_at.nil? %>
-    <div style="display:table-cell; width: 30%">
-      <h2>Account</h2>
-      <p>
-	<%= link_to 'Email and password', edit_user_path(current_user) %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Shipping address', user_shipping_address_path %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Mailing lists', edit_user_path(current_user, :anchor => 'mailinglists') %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Withdraw', edit_user_path(current_user, :anchor => 'withdraw') %>
-<!--
-	<br />
-	<%= content_tag :span, 'Identity verification', :class => 'nolink' %>
--->
-      </p>
-      <h2>Consent</h2>
-      <p>
-	<%= link_to 'Consent documents', participation_consent_path %>
-	<br />
-	&rarr;&nbsp;<%= link_to 'submit new', participation_consent_path %>
-	<br />
-<!--
-	<%= content_tag :span, raw('&rarr;&nbsp;history'), :class => 'nolink' %>
-	<br />
--->
-	<%= link_to_if !current_user.hex.empty?, 'Safety questionnaires', safety_questionnaires_path %>
-	<br />
-	&rarr;&nbsp;<%= link_to_if !current_user.hex.empty?, 'submit new', new_safety_questionnaire_path %>
-	<br />
-	&rarr;&nbsp;<%= link_to_if !current_user.hex.empty?, 'history', safety_questionnaires_path %>
-	<br />
-	<%= link_to 'Designated proxies', named_proxies_path %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Enrollment letter', enrollment_application_results_path %>
-      </p>
-    </div>
-    <div style="display:table-cell; width: 5%">
-    </div>
-    <div style="display:table-cell; width: 30%">
-      <h2>Public profile</h2>
-      <p>
-	<%= link_to_if !current_user.hex.empty?, 'View and edit', current_user.hex.empty? ? '' : public_profile_path(current_user.hex) %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Upload and manage files', user_files_path %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Personal health records', phrccr_path %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Specimen tracking', current_user.hex.empty? ? '' : public_profile_path(current_user.hex, :anchor => 'samples') %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Specimen analysis results', specimen_analysis_data_index_path %>
-      </p>
-      <h2>Specimens</h2>
-      <p>
-	<%= link_to_if !current_user.hex.empty?, 'Donate specimens', page_path('collection_events') %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Claim a kit', study_claim_kit_path %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Specimen log', current_user.hex.empty? ? '' : public_profile_path(current_user.hex, :anchor => 'samples') %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Review and publish specimen analysis results', specimen_analysis_data_index_path %>
-      </p>
-      <h2>Contributing trait data</h2>
-      <p>
-	<%= link_to_if !current_user.hex.empty?, 'Personal health records', phrccr_path %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Trait surveys', trait_surveys_path %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Upload and manage files', user_files_path %>
-	<br />
-	<%= link_to_if !current_user.hex.empty?, 'Third party activities', third_party_index_path %>
-     </p>
-    </div>
+      <div style="display:table-cell; width: 30%">
+        <h2>Account</h2>
+        <p>
+          <%= link_to 'Email and password', edit_user_path(current_user) %>
+          <br />
+          <%= link_to_if !current_user.hex.empty?, 'Shipping address', user_shipping_address_path %>
+          <br />
+          <%= link_to_if !current_user.hex.empty?, 'Mailing lists', edit_user_path(current_user, :anchor => 'mailinglists') %>
+          <br />
+          <%= link_to_if !current_user.hex.empty?, 'Withdraw', edit_user_path(current_user, :anchor => 'withdraw') %>
+          <!--
+            <br />
+            <%= content_tag :span, 'Identity verification', :class => 'nolink' %>
+          -->
+        </p>
+        <h2>Consent</h2>
+        <p>
+          <%= link_to 'Consent documents', participation_consent_path %>
+          <br />
+          &rarr;&nbsp;<%= link_to 'submit new', participation_consent_path %>
+          <br />
+          <!--
+            <%= content_tag :span, raw('&rarr;&nbsp;history'), :class => 'nolink' %>
+            <br />
+          -->
+          <%= link_to_if !current_user.hex.empty?, 'Safety questionnaires', safety_questionnaires_path %>
+          <br />
+          &rarr;&nbsp;<%= link_to_if !current_user.hex.empty?, 'submit new', new_safety_questionnaire_path %>
+          <br />
+          &rarr;&nbsp;<%= link_to_if !current_user.hex.empty?, 'history', safety_questionnaires_path %>
+          <br />
+          <%= link_to 'Designated proxies', named_proxies_path %>
+          <br />
+          <%= link_to_if !current_user.hex.empty?, 'Enrollment letter', enrollment_application_results_path %>
+        </p>
+      </div>
+      <div style="display:table-cell; width: 5%">
+      </div>
+      <div style="display:table-cell; width: 30%">
+        <h2>Public profile</h2>
+        <p>
+          <% if include_section?(Section::PUBLIC_PROFILE) %>
+            <%= link_to_if !current_user.hex.empty?, 'View and edit', current_user.hex.empty? ? '' : public_profile_path(current_user.hex) %>
+            <br />
+          <% end %>
+          <%= link_to_if !current_user.hex.empty?, 'Upload and manage files', user_files_path %>
+          <br />
+          <% if include_section?(Section::CCR) %>
+            <%= link_to_if !current_user.hex.empty?, 'Personal health records', phrccr_path %>
+            <br />
+          <% end %>
+          <% if include_section?(Section::SAMPLES) %>
+            <%= link_to_if !current_user.hex.empty?, 'Specimen tracking', current_user.hex.empty? ? '' : public_profile_path(current_user.hex, :anchor => 'samples') %>
+            <br />
+          <% end %>
+          <%= link_to_if !current_user.hex.empty?, 'Specimen analysis results', specimen_analysis_data_index_path %>
+        </p>
+        <h2>Specimens</h2>
+        <p>
+          <%= link_to_if !current_user.hex.empty?, 'Donate specimens', page_path('collection_events') %>
+          <br />
+          <%= link_to_if !current_user.hex.empty?, 'Claim a kit', study_claim_kit_path %>
+          <br />
+          <%= link_to_if !current_user.hex.empty?, 'Specimen log', current_user.hex.empty? ? '' : public_profile_path(current_user.hex, :anchor => 'samples') %>
+          <br />
+          <%= link_to_if !current_user.hex.empty?, 'Review and publish specimen analysis results', specimen_analysis_data_index_path %>
+        </p>
+        <h2>Contributing trait data</h2>
+        <p>
+          <% if include_section?(Section::CCR) %>
+            <%= link_to_if !current_user.hex.empty?, 'Personal health records', phrccr_path %>
+            <br />
+          <% end %>
+          <%= link_to_if !current_user.hex.empty?, 'Trait surveys', trait_surveys_path %>
+          <br />
+          <%= link_to_if !current_user.hex.empty?, 'Upload and manage files', user_files_path %>
+          <br />
+          <%= link_to_if !current_user.hex.empty?, 'Third party activities', third_party_index_path %>
+       </p>
+      </div>
     <% end %>
     <div style="display:table-cell; width: 5%">
     </div>
     <div style="display:table-cell; width: 30%">
       <% if current_user %>
-      <h2>Help</h2>
-      <p>
-<!--
-	<%= content_tag :span, 'FAQ', :class => 'nolink' %>
-	<br />
--->
-	<%= link_to 'Site map', page_path('sitemap') %>
-	<br />
-	<%= link_to 'Contact us', new_message_path %>
-	<br />
-	<%= link_to 'Report a bug', new_message_path %>
-      </p>
+        <h2>Help</h2>
+        <p>
+          <!--
+            <%= content_tag :span, 'FAQ', :class => 'nolink' %>
+            <br />
+          -->
+          <%= link_to 'Site map', page_path('sitemap') %>
+          <br />
+          <%= link_to 'Contact us', new_message_path %>
+          <br />
+          <%= link_to 'Report a bug', new_message_path %>
+        </p>
       <% else %>
-      <h2>Account</h2>
-      <p>
-	      <%= link_to 'Log in', new_session_path %>
-	      <br />
+        <h2>Account</h2>
+        <p>
+          <%= link_to 'Log in', new_session_path %>
+          <br />
 
-        <% if include_section?(Section::SIGNUP) %>
-          <%= link_to 'Sign up', APP_CONFIG['signup_url'] %>
-        <% end %>
-      </p>
+          <% if include_section?(Section::SIGNUP) %>
+            <%= link_to 'Sign up', APP_CONFIG['signup_url'] %>
+          <% end %>
+        </p>
       <% end %>
       <h2>Community</h2>
       <p>
-	<%= link_to 'Learn more about the PGP', 'http://www.personalgenomes.org/', :title => 'www.personalgenomes.org' %>
-	<br />
-	<%= link_to 'PGP blog', 'http://blog.personalgenomes.org/', :title => 'blog.personalgenomes.org' %>
+        <%= link_to 'Learn more about the PGP', 'http://www.personalgenomes.org/', :title => 'www.personalgenomes.org' %>
+        <br />
+        <%= link_to 'PGP blog', 'http://blog.personalgenomes.org/', :title => 'blog.personalgenomes.org' %>
       </p>
       <% if include_section?(Section::PUBLIC_DATA) %>
         <h2>Public data</h2>
         <p>
-        	<%= link_to 'Participant directory', users_path %>
-	        <br />
+          <%= link_to 'Participant directory', users_path %>
+          <br />
           <% if include_section?(Section::SAMPLES) %>
-          	<%= link_to 'Specimens collected from participants', specimens_path %>
-  	        <br />
+            <%= link_to 'Specimens collected from participants', specimens_path %>
+            <br />
           <% end %>
-	        <%= link_to 'Public genetic data', public_genetic_data_path %>
-	        and
-	        <%= link_to 'statistics', url_for(:controller => :public_genetic_data, :action => :statistics) %>
-	        <br />
+          <%= link_to 'Public genetic data', public_genetic_data_path %>
+          and
+          <%= link_to 'statistics', url_for(:controller => :public_genetic_data, :action => :statistics) %>
+          <br />
           <% if include_section?(Section::GOOGLE_SURVEYS) %>
-  	        <%= link_to 'Participant surveys', google_surveys_path %>
-  	        <br />
+            <%= link_to 'Participant surveys', google_surveys_path %>
+            <br />
           <% end %>
-	        <%= link_to 'CAGI genomes', public_anonymous_genetic_data_path %>
+          <%= link_to 'CAGI genomes', public_anonymous_genetic_data_path %>
           <!--
-          	<br />
-          	<%= content_tag :span, 'Discussion forum', :class => 'nolink' %>
+            <br />
+            <%= content_tag :span, 'Discussion forum', :class => 'nolink' %>
           -->
         </p>
       <% end %>

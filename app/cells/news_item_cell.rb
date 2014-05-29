@@ -1,4 +1,4 @@
-class NewsItemCell < Cell::Rails
+class NewsItemCell < TapestryBaseCell
 
   def feed(options)
     show = (options && options[:show]) || [:blogs, :specimens]

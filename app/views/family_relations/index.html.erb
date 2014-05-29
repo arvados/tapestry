@@ -68,5 +68,7 @@ You have not added any family relationships.</p>
 </table>
 <% end %>
 <br />
-<%= link_to 'Back to public profile', public_profile_path(current_user.hex) %>
 
+<% if include_section?(Section::PUBLIC_PROFILE) %>
+  <%= link_to 'Back to public profile', public_profile_path(current_user.hex) %>
+<% end %>

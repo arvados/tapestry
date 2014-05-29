@@ -14,7 +14,7 @@ default_config_environment = default_config[::Rails.env.to_s]
 default_config_common ||= {}
 default_config_environment ||= {}
 
-if File.exists?("#{Rails.root}/config/config.yml")
+if File.exists?(site_config_filepath)
   site_config_environment = YAML::load(ERB.new(IO.read(site_config_filepath)).result)[::Rails.env.to_s]
   site_config_environment ||= {}
   APP_CONFIG = default_config_common.merge(default_config_environment).merge(site_config_environment)

@@ -1,4 +1,4 @@
-class ProfileCell < Cell::Rails
+class ProfileCell < TapestryBaseCell
 
   def dashboard_summary(options)
     @user = options[:user]

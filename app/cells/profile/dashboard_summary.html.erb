@@ -1,7 +1,10 @@
 <% if @user and @user.is_enrolled? %>
-<p>Your PGP ID is <b><%= @user.hex -%></b>.
-</p>
-<ul>
-  <li><%= link_to 'View or edit your public profile', public_profile_path(@user.hex) -%></li>
-</ul>
+  <p>
+    Your PGP ID is <b><%= @user.hex -%></b>.
+  </p>
+  <% if include_section?(Section::PUBLIC_PROFILE) %>
+    <ul>
+      <li><%= link_to 'View or edit your public profile', public_profile_path(@user.hex) -%></li>
+    </ul>
+  <% end %>
 <% end %>

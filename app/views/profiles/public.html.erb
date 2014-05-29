@@ -20,73 +20,86 @@
 </p>
 <% end -%>
 
-<h3>Personal Health Records<% if logged_in? and @user == current_user -%><%= link_to "[edit]", phrccr_path %><% end -%></h3>
-<% if @ccr != nil -%>
-<div class="admin_table">
-<%= render :partial => "phrccrs/ccr" %>
-</div>
-<% else -%>
-None added.
-<% end -%>
+<% if include_section?(Section::CCR) %>
+  <h3>
+    Personal Health Records
+    <% if logged_in? and @user == current_user %>
+      <%= link_to "[edit]", phrccr_path %>
+    <% end %>
+  </h3>
+  <% if @ccr != nil %>
+    <div class="admin_table">
+      <%= render :partial => "phrccrs/ccr" %>
+    </div>
+  <% else %>
+    None added.
+  <% end %>
+<% end %>
 
-<a name="samples"></a>
+<% if include_section?(Section::SAMPLES) %>
+  <a name="samples"></a>
 
-<h3>Samples</h3>
+  <h3>Samples</h3>
 
-<% if (@user.samples.size > 0) -%>
+  <% if (@user.samples.size > 0) %>
 
-<div class="profile-data">
-  <table>
-    <tbody>
-      <% last_study = nil -%>
-      <% @sample_groups.each do |sample_group| %>
-      <% show_group_heading = true %>
-      <% sample_group.each do |s| %>
-      <tr>
-	<% if show_group_heading %>
-	<th rowspan="<%= sample_group.size %>" style="width: 15%">
-	  <%= link_to s.study.name, collection_event_path(s.study) %>
-	</th>
-	<% show_group_heading = false %>
-	<% end %>
-	<td style="width: 85%">
-	  Sample
-	  <%= link_to_if(current_user && current_user.is_researcher?, s.crc_id.to_s, sample_path(s)) %>
-	  (<%= s.material.downcase -%>)
-	  <% if s.last_received.nil? or s.last_mailed > s.last_received %>
-	  mailed
-	  <%= s.last_mailed %>
-	  by
-	  <%= s.participant.hex -%>.
-	  <% else %>
-	  received
-	  <%= s.last_received %>
-	  <%= " by #{s.owner.is_researcher? ? s.owner.researcher_affiliation : s.owner.hex}" if s.owner -%>.
-	  <% end %>
-	  &nbsp; <a href="#" onclick="jQuery('.sample_log_<%= s.id %>').toggle(); jQuery(this).html(jQuery('.sample_log_<%= s.id %>').is(':visible') ? 'Hide log' : 'Show log'); return false;">Show log</a>
-	  <div class="sample_log_<%= s.id %> ui-helper-hidden">
-	    <table class="sample-logs">
-	      <tbody>
-		<% s.sample_logs.sort { |a,b| b.id <=> a.id }.each do |sl| %>
-		<tr>
-		  <td style="width: 30%"><%= sl.created_at -%></td>
-		  <td style="width: 20%"><%= sl.actor.is_researcher? ? sl.actor.researcher_affiliation : sl.actor.hex if sl.actor -%></td>
-		  <td style="width: 50%"><%= sl.comment -%></td>
-		</tr>
-		<% end %>
-	      </tbody>
-	    </table>
-	  </div>
-	</td>
-      </tr>
-      <% end %>
-      <% end %>
-    </tbody>
-  </table>
-</div>
-<% else -%>
-None available.
-<% end -%>
+    <div class="profile-data">
+      <table>
+        <tbody>
+          <% last_study = nil -%>
+          <% @sample_groups.each do |sample_group| %>
+            <% show_group_heading = true %>
+            <% sample_group.each do |s| %>
+              <tr>
+                <% if show_group_heading %>
+                  <th rowspan="<%= sample_group.size %>" style="width: 15%">
+                    <%= link_to s.study.name, collection_event_path(s.study) %>
+                  </th>
+                  <% show_group_heading = false %>
+                <% end %>
+                <td style="width: 85%">
+                  Sample
+                  <%= link_to_if(current_user && current_user.is_researcher?, s.crc_id.to_s, sample_path(s)) %>
+                  (<%= s.material.downcase -%>)
+                  <% if s.last_received.nil? or s.last_mailed > s.last_received %>
+                    mailed
+                    <%= s.last_mailed %>
+                    by
+                    <%= s.participant.hex -%>.
+                  <% else %>
+                    received
+                    <%= s.last_received %>
+                    <%= " by #{s.owner.is_researcher? ? s.owner.researcher_affiliation : s.owner.hex}" if s.owner -%>.
+                  <% end %>
+                  &nbsp;
+                  <a href="#" onclick="jQuery('.sample_log_<%= s.id %>').toggle(); jQuery(this).html(jQuery('.sample_log_<%= s.id %>').is(':visible') ? 'Hide log' : 'Show log'); return false;">
+                    Show log
+                  </a>
+                  <div class="sample_log_<%= s.id %> ui-helper-hidden">
+                    <table class="sample-logs">
+                      <tbody>
+                        <% s.sample_logs.sort { |a,b| b.id <=> a.id }.each do |sl| %>
+                          <tr>
+                            <td style="width: 30%"><%= sl.created_at -%></td>
+                            <td style="width: 20%"><%= sl.actor.is_researcher? ? sl.actor.researcher_affiliation : sl.actor.hex if sl.actor -%></td>
+                            <td style="width: 50%"><%= sl.comment -%></td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    None available.
+  <% end %>
+
+<% end %>
 
 <h3>Uploaded data <% if logged_in? and @user == current_user -%><%= link_to "[edit]", user_files_path() %><% end -%></h3>
 
@@ -129,42 +142,46 @@ Not added.
 None added.
 <% end %>
 
-<h3>Surveys</h3>
-<% unless @google_survey_results.empty? %>
-<div class="profile-data">
-<table>
-  <tbody>
-    <% @google_survey_results.each {|survey_result| %>
-    <tr>
-      <th>
-	<%= link_to_if((logged_in? and survey_result[:survey].is_listed), survey_result[:survey].name, survey_result[:survey]) %>
-      </th>
-      <td>
-	<% if survey_result[:timestamp] %>
-	Responses submitted <%= survey_result[:timestamp] %>.
-	<% else %>
-	Responses collected <%= survey_result[:collected_at] %>.
-	<% end %>
-	<a href="#" onclick="jQuery('.survey_result_<%= survey_result[:nonce] %>').toggle(); jQuery(this).html(jQuery('.survey_result_<%= survey_result[:nonce] %>').is(':visible') ? 'Hide responses' : 'Show responses'); return false;">Show responses</a>
-      </td>
-      <% if logged_in? and @user == current_user -%>
-      <td style="border: 0">
-        <%= button_to('Delete',delete_google_survey_answers_url(survey_result[:nonce]), :confirm => 'Are you sure? This set of survey answers will be deleted.', :method => :delete) %>
-      </td>
-      <% end -%>
-    </tr>
-    <% survey_result[:qa].each {|qa| %>
-    <tr class="survey_result_<%= survey_result[:nonce] %> ui-helper-hidden">
-      <td><%= qa[0] %></td>
-      <td class="hoverable"><%= qa[1] %></td>
-    </tr>
-    <% } %>
-    <% } %>
-  </tbody>
-</table>
-</div>
-<% else %>
-None completed.
+<% if include_section?(Section::GOOGLE_SURVEYS) %>
+  <h3>Surveys</h3>
+  <% unless @google_survey_results.empty? %>
+    <div class="profile-data">
+      <table>
+        <tbody>
+          <% @google_survey_results.each do |survey_result| %>
+            <tr>
+              <th>
+                <%= link_to_if((logged_in? and survey_result[:survey].is_listed), survey_result[:survey].name, survey_result[:survey]) %>
+              </th>
+              <td>
+                <% if survey_result[:timestamp] %>
+                  Responses submitted <%= survey_result[:timestamp] %>.
+                <% else %>
+                  Responses collected <%= survey_result[:collected_at] %>.
+                <% end %>
+                <a href="#" onclick="jQuery('.survey_result_<%= survey_result[:nonce] %>').toggle(); jQuery(this).html(jQuery('.survey_result_<%= survey_result[:nonce] %>').is(':visible') ? 'Hide responses' : 'Show responses'); return false;">
+                  Show responses
+                </a>
+              </td>
+              <% if logged_in? and @user == current_user %>
+                <td style="border: 0">
+                  <%= button_to('Delete', delete_google_survey_answers_url(survey_result[:nonce]), :confirm => 'Are you sure? This set of survey answers will be deleted.', :method => :delete) %>
+                </td>
+              <% end %>
+            </tr>
+            <% survey_result[:qa].each do |qa| %>
+              <tr class="survey_result_<%= survey_result[:nonce] %> ui-helper-hidden">
+                <td><%= qa[0] %></td>
+                <td class="hoverable"><%= qa[1] %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    None completed.
+  <% end %>
 <% end %>
 
 <h3>Absolute Pitch Survey
