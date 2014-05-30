@@ -42,5 +42,6 @@ end
 
 gem "gmaps4rails", "~> 1.3.0"
 gem 'RedCloth'
-gem 'cells'
+# using a specific version of cells (3.11.0, released yesterday, throws up a Syntax error)
+gem 'cells', "~> 3.10.1"
 
