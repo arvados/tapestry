@@ -175,7 +175,7 @@ form .submit input.long {
 
 #body {
 	position: relative;
-	background: #fff url(/images/pgp.gif) top center no-repeat;
+	background: #fff url(../images/pgp.gif) top center no-repeat;
 	color: #000;
 	width: 960px;
 	margin-top: 24px;
@@ -228,7 +228,7 @@ form .submit input.long {
 
 
 #body .menu {
-  height: 40px; 
+  height: 40px;
   float: left;
   background: #91a9d1;
   color: #fff;
@@ -486,7 +486,7 @@ ul.sublinks li a {
 }
 
 #body .bubble {
-	background: #809cca url(/images/bubble.gif) top center no-repeat;
+	background: #809cca url(../images/bubble.gif) top center no-repeat;
 	margin: 18px 0;
 }
 
@@ -499,7 +499,7 @@ ul.sublinks li a {
 }
 
 #body .bubble .text {
-	background: #dfe5f1 url(/images/bubble-text.gif) bottom center no-repeat;
+	background: #dfe5f1 url(../images/bubble-text.gif) bottom center no-repeat;
 	color: #5d7cbb;
 	padding: 6px 12px;
 }
@@ -517,7 +517,7 @@ ul.sublinks li a {
 }
 
 #foot {
-	background: #dfe5f1 url(/images/foot.gif) bottom center no-repeat;
+	background: #dfe5f1 url(../images/foot.gif) bottom center no-repeat;
 	color: #5d7cbb;
 	width: 960px;
 	margin-top: 0;
@@ -529,7 +529,7 @@ ul.sublinks li a {
 }
 
 #foot_big {
-	background: #dfe5f1 url(/images/foot.gif) bottom center no-repeat;
+	background: #dfe5f1 url(../images/foot.gif) bottom center no-repeat;
 	color: #5d7cbb;
 	width: 960px;
 	margin-top: 0;
@@ -714,7 +714,7 @@ form.signup {
 }
 
 #enrollment_steps li.completed {
-  background: #FFF url('/images/go.png') no-repeat right top;
+  background: #FFF url('../images/go.png') no-repeat right top;
   border-right: 2px solid #999;
   border-bottom: 2px solid #999;
   border-top: 1px solid #CCC;
@@ -726,7 +726,7 @@ form.signup {
 }
 
 #enrollment_steps li.locked {
-  background: #F2F2F2 url('/images/lock.png') no-repeat right top;
+  background: #F2F2F2 url('../images/lock.png') no-repeat right top;
   border-right: 1px solid #CCC;
   border-bottom: 1px solid #CCC;
   border-top: 1px solid #EEE;
@@ -964,7 +964,7 @@ div.formError {
   /* content area */
   width: 100%;
   color: #000;
-  background: #FFF url('/images/down.png') no-repeat right top;
+  background: #FFF url('../images/down.png') no-repeat right top;
   border-right: 2px solid #999;
   border-bottom: 2px solid #999;
   border-top: 1px solid #CCC;
@@ -984,7 +984,7 @@ div.formError {
 #exam_listing li.old_completed span {
   /* content area */
   color: #000;
-  background: #FFF url('/images/go.png') no-repeat right top;
+  background: #FFF url('../images/go.png') no-repeat right top;
   border-right: 2px solid #999;
   border-bottom: 2px solid #999;
   border-top: 1px solid #CCC;
@@ -995,7 +995,7 @@ div.formError {
   /* content area */
   width: 100%;
   color: #000;
-  background: #FFF url('/images/go.png') no-repeat right top;
+  background: #FFF url('../images/go.png') no-repeat right top;
   border-right: 2px solid #999;
   border-bottom: 2px solid #999;
   border-top: 1px solid #CCC;
@@ -1003,7 +1003,7 @@ div.formError {
 }
 
 #exam_listing li.completed a {
-  background: #FFF url('/images/go.png') no-repeat right top;
+  background: #FFF url('../images/go.png') no-repeat right top;
   color: #5D7CBB;
   border-right: 2px solid #999;
   border-bottom: 2px solid #999;
@@ -1017,7 +1017,7 @@ div.formError {
 }
 
 #exam_listing li.locked span {
-  background: #F2F2F2 url('/images/lock.png') no-repeat right top;
+  background: #F2F2F2 url('../images/lock.png') no-repeat right top;
   border-right: 1px solid #CCC;
   border-bottom: 1px solid #CCC;
   border-top: 1px solid #EEE;
@@ -1140,7 +1140,7 @@ pre {
 .profile-data th { background-color: #eee }
 .profile-data th { text-align: left; vertical-align: top}
 .profile-data td { text-align: left; vertical-align: top }
-.profile-data td.hoverable:hover { background-color: #C7D1E7 }    
+.profile-data td.hoverable:hover { background-color: #C7D1E7 }
 .profile-data table td, .profile-data table th {
     vertical-align: top;
 }

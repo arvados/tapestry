@@ -207,13 +207,13 @@ class UsersController < ApplicationController
     when (!params[:code].blank?) && user && !user.active?
       user.activate!
       flash[:notice] = "Your account is now activated. Please sign-in to continue."
-      redirect_to '/login'
+      redirect_to login_path
     when params[:code].blank?
       flash[:error] = "The activation code was missing.  Please follow the URL from your email."
-      redirect_back_or_default('/')
+      redirect_back_or_default(root_path)
     else
       flash[:error]  = "We couldn't find a user with that activation code -- check your email? Or maybe you've already activated -- try signing in."
-      redirect_back_or_default('/')
+      redirect_back_or_default(root_path)
     end
   end
 
@@ -293,7 +293,7 @@ class UsersController < ApplicationController
     @study = Study.approved.not_third_party.open_now.where('id = ?',params[:study_id]).first
     if @study.nil? then
       # Only open collection events should be available here
-      redirect_to('/pages/collection_events')
+      redirect_to "#{pages_path}/collection_events"
       return
     end
     if not @user.study_participants.empty? and not @user.study_participants.where('study_id = ?',@study.id).empty? then
@@ -346,7 +346,7 @@ class UsersController < ApplicationController
 
     if @sp.save
       flash[:notice] = 'Participation status updated.'
-      redirect_to('/pages/collection_events')
+      redirect_to "#{pages_path}/collection_events"
     else
       format.html { render :action => "edit_study" }
     end
@@ -410,7 +410,7 @@ class UsersController < ApplicationController
       return access_denied
     end
     flash[:notice] = "Switched to #{User.find(session[:user_id]).full_name}'s account (id=#{session[:user_id]})"
-    redirect_to '/'
+    redirect_to root_url
   end
 
   private

@@ -1,6 +1,6 @@
 <h2>Absolute Pitch Prelimary Screening Responses -- <%= @user.hex %></h2>
 <% if logged_in? %>
-<%= form_tag('/absolute_pitch_surveys') %>
+<%= form_tag( absolute_pitch_surveys_path ) %>
   <%= submit_tag('Retake Survey') %>
 </form>
 <% end %>
@@ -17,13 +17,13 @@
             <%= @answers[q.id] %>
             <% elsif @answers[q.id].length > 1 %>
             <%= @answers[q.id].join(', ') %>
-            <% else %>  
+            <% else %>
             <%= @answer_mapping[@answers[q.id].to_s] %>
             <% end %>
         </div>
       <% end %>
     </div>
-<% } %>  
+<% } %>
 <% elsif @survey_end_yes_absolute_pitch %>
 <% @survey.survey_sections.each {|s| %>
   <h3 style="font-size: 120%"><%= s.heading %></h3>
@@ -41,7 +41,7 @@
             <%= @answers[q.id].join(', ') %>
             <% elsif @answer_mapping[@answers[q.id].to_s].nil? %>
             <%= @answers[q.id] %>
-            <% else %>  
+            <% else %>
             <%= @answer_mapping[@answers[q.id].to_s] %>
             <% end %>
           <% end %>
@@ -56,7 +56,7 @@
         <th style="width: 80px; text-align: left;">Relation</th>
         <th style="width: 110px; text-align: left;">Plays instrument</th>
         <th style="width: 120px; text-align: left;">Has absolute pitch</th>
-        <th style="width: 220px; text-align: left;">Comments</th>       
+        <th style="width: 220px; text-align: left;">Comments</th>
       </tr>
       <% @family_history.each {|fh| %>
         <tr>

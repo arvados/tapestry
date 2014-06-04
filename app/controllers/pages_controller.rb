@@ -41,7 +41,7 @@ class PagesController < ApplicationController
         current_user and
         current_user.enrolled.nil? and
         current_user.researcher then
-      redirect_to "/pages/researcher_tools"
+      redirect_to "#{pages_path}/researcher_tools"
       return
     end
 

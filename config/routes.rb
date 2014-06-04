@@ -256,7 +256,7 @@ Tapestry::Application.routes.draw do
       match 'mail_preview/:action(/:a(/:b))' => 'user_mailer_previews#:action'
   end
 
-  resources :geographic_information
+  resource :geographic_information, :controller => :geographic_information, :only => [ :edit, :update ]
   match '/:controller(/:action(/:id))'
   resource :phrccr
   match '/phrccr/authsub' => 'phrccrs#authsub_update', :as => :authsub_phrccr
@@ -267,7 +267,7 @@ Tapestry::Application.routes.draw do
   match '/phrccr/unlink_googlehealth' => 'phrccrs#unlink_googlehealth', :as => :unlink_googlehealth
   match '/phrccr/google_health_note' => 'phrccrs#google_health_note', :as => :google_health_note
   match '/profile/:hex' => 'profiles#public', :as => :public_profile
-  match '/absolute_pitch_surveys/:id' => 'absolute_pitch_survey#index', :as => :absolute_pitch_surveys_section
+  get 'absolute_pitch_surveys' => 'absolute_pitch_surveys/index', :as => :absolute_pitch_surveys
   match '/absolute_pitch_surveys/save' => 'absolute_pitch_survey#save', :as => :save_absolute_pitch_surveys
   match '/absolute_pitch_surveys/review/:id' => 'absolute_pitch_survey#review', :as => :review_absolute_pitch_surveys
   match '/trait_surveys' => 'trait_survey#index', :as => :trait_surveys

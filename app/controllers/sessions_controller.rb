@@ -1,4 +1,4 @@
-# This controller handles the login/logout function of the site.  
+# This controller handles the login/logout function of the site.
 class SessionsController < ApplicationController
   include PhrccrsHelper
   skip_before_filter :login_required, :only => [:new, :create]
@@ -31,7 +31,7 @@ class SessionsController < ApplicationController
       current_user.log("Logged in")
       new_cookie_flag = (params[:remember_me] == "1")
       handle_remember_cookie! new_cookie_flag
-      redirect_back_or_default('/')
+      redirect_back_or_default(root_path)
       flash[:notice] = "Logged in successfully"
       # Google Health is dead, disable this for now.
       #update_ccr_if_exists

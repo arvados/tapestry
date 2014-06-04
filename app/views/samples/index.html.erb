@@ -20,7 +20,7 @@ jQuery(function() {
                   'fnRender': function(oObj) {
                       var r = '' + oObj.aData.crc_id;
                       if(oObj.aData.id)
-                          r = '<a href="/samples/'+oObj.aData.id+'">'+r+'</a>';
+                          r = '<a href="samples/'+oObj.aData.id+'">'+r+'</a>';
                       if (oObj.aData.url_code)
                           r += ' (' + oObj.aData.url_code + ')';
                       return r;
@@ -46,7 +46,7 @@ jQuery(function() {
                       if (!oObj.aData.participant ||
                           !oObj.aData.participant.hex)
                           return '';
-                      return '<a href="/profile/'+oObj.aData.participant.hex+'">'+oObj.aData.participant.hex+'</a>';
+                      return '<a href="profile/'+oObj.aData.participant.hex+'">'+oObj.aData.participant.hex+'</a>';
                   }
                 },
                 { 'mDataProp': 'qc_result.QC Status',
@@ -59,7 +59,7 @@ jQuery(function() {
                       if (!oObj.aData.owner)
                           return '';
                       if (oObj.aData.owner.hex)
-			  return '<a href="/profile/'+oObj.aData.owner.hex+'">'+oObj.aData.owner.hex+'</a>';
+			  return '<a href="profile/'+oObj.aData.owner.hex+'">'+oObj.aData.owner.hex+'</a>';
                       if (oObj.aData.owner.researcher_affiliation)
                           return oObj.aData.owner.researcher_affiliation;
                       else
@@ -72,7 +72,7 @@ jQuery(function() {
                   'fnRender': function(oObj) {
                       if(!oObj.aData.id)
                           return null;
-                      return '&nbsp;<a href="/samples/'+oObj.aData.id+'/log">log</a>&nbsp;';
+                      return '&nbsp;<a href="samples/'+oObj.aData.id+'/log">log</a>&nbsp;';
                   } },
                 { 'mDataProp': 'edit_url',
                   'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
@@ -80,7 +80,7 @@ jQuery(function() {
                   'fnRender': function(oObj) {
                       if(!oObj.aData.id)
                           return null;
-                      return '&nbsp;<a href="/samples/'+oObj.aData.id+'/edit">edit</a>&nbsp;';
+                      return '&nbsp;<a href="samples/'+oObj.aData.id+'/edit">edit</a>&nbsp;';
                   } },
                 { 'mDataProp': 'delete_url',
                   'bVisible': <%= (current_user and current_user.is_admin?) ? 'true' : 'false' %>,
@@ -88,7 +88,7 @@ jQuery(function() {
                   'fnRender': function(oObj) {
                       if(!oObj.aData.id || oObj.aData.last_mailed)
                           return null;
-                      return '&nbsp;<a href="/samples/'+oObj.aData.id+'/delete">delete</a>&nbsp;';
+                      return '&nbsp;<a href="samples/'+oObj.aData.id+'/delete">delete</a>&nbsp;';
                   } } ]
             } ).
             fnSetFilteringDelay().
