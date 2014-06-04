@@ -78,6 +78,10 @@ common:
   available_locales: [:en, :de]
   default_locale: :en
 
+  # "Zip Code" is the quaint term used by Americans for "Postal Code". Validation is decidedly country-specific.
+  # (Note the YAML type-casting used here to insist that this is a reg-ex.)
+  zip_validation: !ruby/regexp '/^(\d{3}[\dXx]{2}|)(-\d{4})?$/'
+
   # Layouts
   application_layout: 'tapestry_default'
   application_layout_exam: 'tapestry_default_exam'

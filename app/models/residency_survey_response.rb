@@ -45,8 +45,8 @@ class ResidencySurveyResponse < ActiveRecord::Base
   def residency_validation
     if (us_resident == true)
       require_attribute 'zip' do
-        unless zip =~ /\d{5}/
-          errors.add(:zip, 'must be 5 numeric digits')
+        unless zip =~ APP_CONFIG['zip_validation']
+          errors.add(:zip, I18n.t('activerecord.errors.models.user.attributes.zip.invalid'))
         end
         require_attribute 'can_travel_to_boston'
       end

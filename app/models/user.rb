@@ -97,8 +97,7 @@ class User < ActiveRecord::Base
 
   # We allow nil because we have lots of legacy records with value nil
   validates_format_of :zip,
-                      :with => %r{^(\d{3}[\dXx]{2}|)(-\d{4})?$},
-                      :message => "should be in 5 or 5 plus 4 digit format (e.g. 12345 or 12345-1234). When using 5 digit format, you may also obfuscate your postal code by replacing the last 2 digits with XX.",
+                      :with => APP_CONFIG['zip_validation'],
                       :allow_nil => true
 
   # temporarily removed requirement

@@ -21,6 +21,11 @@ en:
             email:
               confirmation:
                 Your email signature must match the email that you signed up with.
+        user:
+          attributes:
+            zip:
+              invalid:
+                should be in 5 or 5 plus 4 digit format (e.g. 12345 or 12345-1234). When using 5 digit format, you may also obfuscate your postal code by replacing the last 2 digits with XX.
   messages:
     report_changes:
       Please indicate if you would like to report changes to the PGP.
