@@ -6,6 +6,9 @@ common:
 
   root_url: 'your.tapestry.url'
   root_url_scheme: 'https://'
+  # 'signup_url' is the URL to a custom signup URL.
+  # Append the application's signup path ('/signup', as here in example) to use Tapestry's default signup
+  signup_url: 'https://your.tapestry.url/signup'
 
   admin_email: 'This Should Be You <you@example.com>'
   withdrawal_notification_email: 'This Should Be You <you@example.com>'
@@ -19,11 +22,6 @@ common:
   # Set this to your blog feedburner (or similar) address
   blog_email_subscription_url: ''
 
-  # This is the URL to a custom signup URL.
-  # Do not override to use the default signup page, but if external then be sure to use a complete URL reference.
-  # e.g.:
-  #  signup_url: 'http://www.personalgenomes.org/harvard/sign-up'
-  signup_url: 'signup'
 
   # These are the URLs to your privacy policy and your terms of service
   privacy_policy_url: 'http://your.domain/privacypolicy.html'
