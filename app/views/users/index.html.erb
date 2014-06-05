@@ -26,7 +26,7 @@ jQuery(function() {
                   'fnRender': function(oObj) {
                       var r = oObj.aData.hex;
                       if(r)
-                          r = '<a href="profile/'+r+'">'+r+'</a>';
+                          r = '<a href="<%= profile_public_path %>?hex=' + r + '">' + r + '</a>';
                       return r;
                   }
                 },
