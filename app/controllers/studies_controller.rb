@@ -41,13 +41,13 @@ class StudiesController < ApplicationController
       # brown: received by researcher
       # Kit is created / possibly shipped. We currently do not keep track of which addresses kits are shipped to so
       # we can not distinguish between these 2 states.
-      @picture = '../images/yellow.png'
+      @picture = view_context.image_path('yellow.png')
       # Claimed by participant
-      @picture = '../images/green.png' if claimed_kit_addrs.include?(shipping_address.id)
+      @picture = view_context.image_path('green.png') if claimed_kit_addrs.include?(shipping_address.id)
       # Returned to researcher
-      @picture = '../images/blue.png' if returned_kit_addrs.include?(shipping_address.id)
+      @picture = view_context.image_path('blue.png') if returned_kit_addrs.include?(shipping_address.id)
       # Received by researcher
-      @picture = '../images/brown.png' if received_kit_addrs.include?(shipping_address.id)
+      @picture = view_context.image_path('brown.png') if received_kit_addrs.include?(shipping_address.id)
       marker.picture({
                         :picture => @picture,
                         :width =>  23,
