@@ -8,8 +8,9 @@ Tapestry::Application.routes.draw do
 
   resources :withdrawal_comments
   resources :permissions
-  match '/permissions/update_subject_select/:subject_class', :controller=>'permissions', :action => 'update_subject_select'
-  match '/permissions/update_subject_select/:subject_class/:id', :controller=>'permissions', :action => 'update_subject_select'
+  get 'permissions/update_subject_select'
+  get 'permissions/update_subject_select/:subject_class' => 'permissions#update_subject_select'
+  get 'permissions/update_subject_select/:subject_class/:id' => 'permissions#update_subject_select'
 
   resources :plates
   match '/plates/m/:url_code' => 'plates#mobile', :as => :mobile_plate, :via => :get

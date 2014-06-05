@@ -17,7 +17,7 @@ function clearForm() {
 <% } %>
 <% end %>
 
-<%= form_tag('/admin/phr_reports', :method => :get) do %>
+<%= form_tag( admin_phr_reports_path, :method => :get) do %>
 <p><%= submit_tag('View Matches') %> <input type="button" value="Clear all filters" onclick="return clearForm()" /></p>
 <h3>Filter by Family Relationship</h3>
 <%= check_box_tag 'has_family_members_enrolled', 'has_family_members_enrolled', (params[:has_family_members_enrolled] || {}).include?('has_family_members_enrolled') %>

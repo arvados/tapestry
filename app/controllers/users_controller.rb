@@ -293,7 +293,7 @@ class UsersController < ApplicationController
     @study = Study.approved.not_third_party.open_now.where('id = ?',params[:study_id]).first
     if @study.nil? then
       # Only open collection events should be available here
-      redirect_to "#{pages_path}/collection_events"
+      redirect_to page_path( :collection_events )
       return
     end
     if not @user.study_participants.empty? and not @user.study_participants.where('study_id = ?',@study.id).empty? then
@@ -346,7 +346,7 @@ class UsersController < ApplicationController
 
     if @sp.save
       flash[:notice] = 'Participation status updated.'
-      redirect_to "#{pages_path}/collection_events"
+      redirect_to page_path( :collection_events )
     else
       format.html { render :action => "edit_study" }
     end

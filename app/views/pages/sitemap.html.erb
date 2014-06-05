@@ -60,7 +60,7 @@
         </p>
         <h2>Specimens</h2>
         <p>
-          <%= link_to_if !current_user.hex.empty?, 'Donate specimens', page_path('collection_events') %>
+          <%= link_to_if !current_user.hex.empty?, 'Donate specimens', page_path( :collection_events ) %>
           <br />
           <%= link_to_if !current_user.hex.empty?, 'Claim a kit', study_claim_kit_path %>
           <br />
@@ -92,7 +92,7 @@
             <%= content_tag :span, 'FAQ', :class => 'nolink' %>
             <br />
           -->
-          <%= link_to 'Site map', page_path('sitemap') %>
+          <%= link_to 'Site map', page_path( :sitemap ) %>
           <br />
           <%= link_to 'Contact us', new_message_path %>
           <br />

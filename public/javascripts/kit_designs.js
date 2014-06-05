@@ -5,7 +5,7 @@ jQuery(function(){
     $('.sample_type_autofill').live('change input', function() {
         var id_base = this.id.replace(/_nil$/,'');
         if (!$(this).attr('value')) return;
-        $.ajax('/sample_types/'+$(this).attr('value'), {
+        $.ajax('sample_types/'+$(this).attr('value'), {
                    'dataType': 'json',
                    'success': function(d,t,r) {
                        if(!d || !d.sample_type)

@@ -60,7 +60,7 @@
 
       <% if current_user and (current_user.is_researcher? or current_user.is_admin?) %>
         <li class="dropdown">
-          <%= link_to raw(t('.researcher')) + raw(' <b class="caret"></b>'), '/pages/researcher_tools', :id => 'dropdown-researcher', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
+          <%= link_to raw(t('.researcher')) + raw(' <b class="caret"></b>'), page_path( :researcher_tools ), :id => 'dropdown-researcher', :class => 'dropdown-toggle', :'data-toggle' => 'dropdown', :role => 'button' %>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-researcher">
             <%= nav_element t('.collection_events'), collection_events_path, {}, :role => 'menuitem' %>
             <%= nav_element t('.kits'), kits_path, {}, :role => 'menuitem' %>
@@ -92,20 +92,20 @@
             <%= nav_element t('.datasets'), admin_datasets_path %>
             <%= nav_element t('.exams'), admin_content_areas_path %>
             <%= nav_element t('.invited_email_addresses'), admin_invited_emails_path %>
-            <%= nav_element t('.phr_reports'), '/admin/phr_reports' %>
+            <%= nav_element t('.phr_reports'), admin_phr_reports_path %>
             <%= nav_element t('.removal_requests'), admin_removal_requests_path %>
             <%= nav_element t('.withdrawal_comments'), withdrawal_comments_path %>
             <li role="presentation" class="divider"></li>
             <%= nav_element t('.reports'), admin_reports_path %>
             <%= nav_element t('.mailing_lists'), admin_mailing_lists_path %>
-            <%= nav_element t('.international_users_scoreboard'), '/admin/scoreboards' %>
+            <%= nav_element t('.international_users_scoreboard'), admin_scoreboards_path %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element t('.collection_events'), '/admin/researchers' %>
+            <%= nav_element t('.collection_events'), admin_researchers_path %>
             <%= nav_element t('.tissue_types'), tissue_types_path %>
             <%= nav_element t('.device_types'), device_types_path %>
             <%= nav_element t('.units'), units_path %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element t('.oauth_services'), '/admin/oauth_services' %>
+            <%= nav_element t('.oauth_services'), admin_oauth_services_path %>
           </ul>
         </li>
       <% end %>
