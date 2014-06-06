@@ -19,7 +19,6 @@ class FamilyRelationsController < ApplicationController
       rescue
         flash[:error] = 'Could not save due to user validation error. Please contact admin.'
       end
-      redirect_to(family_relations_url)
     elsif has_family_members_enrolled == 'no'
       begin
         current_user.has_family_members_enrolled = has_family_members_enrolled
@@ -29,12 +28,8 @@ class FamilyRelationsController < ApplicationController
       rescue
         flash[:error] = 'Could not save due to user validation error. Please contact admin.'
       end
-      redirect_to public_profile_path(:hex => current_user.hex)
-    else
-      # Uh - we didn't get that form field? What? Let's just send them back where they came from.
-      # We've actually seen this happen once in the wild (redmine #566)
-      redirect_to(family_relations_url)
     end
+    redirect_to(family_relations_url)
   end
 
   def confirm
