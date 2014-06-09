@@ -42,7 +42,7 @@ jQuery(function(){
 	      <li>If the URL contains <code>?</code> and ends with <code>=</code> then we will append the bare alphanumeric string<sup>(2)</sup>.</li>
 	    </ul>
 	  </li>
-	  <li>You can get a list of valid codes that have been used by clicking the "manage participants" link for this study on <%= link_to 'your researcher home page', page_path('researcher_tools') %>.</li>
+	  <li>You can get a list of valid codes that have been used by clicking the "manage participants" link for this study on <%= link_to 'your researcher home page', page_path( :researcher_tools ) %>.</li>
 	  <li>Your web application can verify the authenticity of these codes in real time using our API<sup>(3)</sup> &mdash; look for <code>{"valid":true}</code> in the JSON response.
 	  </li>
 	  <li>
@@ -60,7 +60,7 @@ jQuery(function(){
 	  <br />
 	  <sup>(3)</sup>&nbsp;
 	  <% example_url = verify_third_party_participant_id_url(:id => (@study.id || 1234), :app_token => example_token) %>
-	  <code><%= example_url %></code> 
+	  <code><%= example_url %></code>
 	  <% if !@study.id %>
 	  <br />("1234" is a placeholder; the exact API URL will be shown here after the activity is created)
 	  <% end %>

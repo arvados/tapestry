@@ -4,11 +4,6 @@ class GeographicInformationController < ApplicationController
     "User"
   end
 
-  def show
-    @user = current_user
-    render :action => 'edit'
-  end
-
   def edit
     @user = current_user
   end
@@ -22,6 +17,5 @@ class GeographicInformationController < ApplicationController
       render :action => 'edit'
     end
   end
-
 
 end

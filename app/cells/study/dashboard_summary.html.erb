@@ -9,19 +9,24 @@
     waiting for you to indicate whether you are interested in participating.</span>&nbsp;
   <% end %>
 </p>
+
 <ul>
-<% @studies_pending.each do |study| %>
-<li><%= link_to_if @user, study.name, (@user ? user_edit_study_url(:study_id => study.id) : nil) %></li>
-<% end %>
-<li>Learn more about <%= link_to 'other current and past collection events', '/pages/collection_events' %></li>
+  <% @studies_pending.each do |study| %>
+    <li>
+      <%= link_to_if @user, study.name, (@user ? user_edit_study_url(:study_id => study.id) : nil) %>
+    </li>
+  <% end %>
+  <li>
+    Learn more about <%= link_to 'other current and past collection events', page_path( :collection_events ) %>
+  </li>
 </ul>
 
 <% if Study.approved.third_party.open_now.size > 0 %>
-<p>
-  There <%= are_n_things(Study.third_party.open_now.size, 'third party activity') %> currently seeking participants.
+  <p>
+    There <%= are_n_things(Study.third_party.open_now.size, 'third party activity') %> currently seeking participants.
 
-  <ul>
-  <li>Learn more about <%= link_to 'third party activities', third_party_index_url %></li>
-  </ul>
-</p>
+    <ul>
+      <li>Learn more about <%= link_to 'third party activities', third_party_index_url %></li>
+    </ul>
+  </p>
 <% end %>

@@ -3,8 +3,7 @@
 <head>
   <title>Personal Genome Project: <%= controller.page_title %></title>
   <% if bootstrap? %>
-    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <%= stylesheet_link_tag 'bootstrap.min', :media => 'screen' if false %>
+    <%= stylesheet_link_tag '../bootstrap/css/bootstrap.min', :media => 'screen' %>
     <%= stylesheet_link_tag 'bootstrap_datatables', :media => 'screen' %>
   <% end %>
   <%= stylesheet_link_tag 'redmond/jquery-ui-1.8.11.custom', 'ui.slider.extras', 'dataTables/css/demo_table_jui', 'tapestry_default', 'plate_layout', :media => 'all' %>
@@ -66,7 +65,9 @@
 
   <div id="foot">
     <div id="privacy_tos">
-      <span><%= link_to 'Site map', '/pages/sitemap' -%></span>
+      <span>
+        <%= link_to 'Site map', page_path( :sitemap ) %>
+      </span>
       &bull;
       <span><a href="<%= PRIVACY_POLICY_URL %>">Privacy Policy</a></span>
       &bull;
@@ -102,7 +103,7 @@
 
   <%= render :partial => 'layouts/google_analytics' %>
   <% if bootstrap? %>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <%= javascript_include_tag "../bootstrap/js/bootstrap" %>
   <% end %>
 
 </body>

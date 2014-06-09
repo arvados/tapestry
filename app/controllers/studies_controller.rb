@@ -15,7 +15,7 @@ class StudiesController < ApplicationController
 
   def index
     return index_third_party if request.env['PATH_INFO'].match(/third_party/)
-    redirect_to page_path(:id => 'collection_events', :anchor => 'kits') if current_user and !current_user.researcher
+    redirect_to page_path( :collection_events, :anchor => 'kits' ) if current_user and !current_user.researcher
     @studies = Study.all if current_user and current_user.is_admin?
     @studies = @studies.includes(:kits) if @studies.respond_to? :includes
   end
@@ -41,13 +41,13 @@ class StudiesController < ApplicationController
       # brown: received by researcher
       # Kit is created / possibly shipped. We currently do not keep track of which addresses kits are shipped to so
       # we can not distinguish between these 2 states.
-      @picture = '/images/yellow.png'
+      @picture = view_context.image_path('yellow.png')
       # Claimed by participant
-      @picture = '/images/green.png' if claimed_kit_addrs.include?(shipping_address.id)
+      @picture = view_context.image_path('green.png') if claimed_kit_addrs.include?(shipping_address.id)
       # Returned to researcher
-      @picture = '/images/blue.png' if returned_kit_addrs.include?(shipping_address.id)
+      @picture = view_context.image_path('blue.png') if returned_kit_addrs.include?(shipping_address.id)
       # Received by researcher
-      @picture = '/images/brown.png' if received_kit_addrs.include?(shipping_address.id)
+      @picture = view_context.image_path('brown.png') if received_kit_addrs.include?(shipping_address.id)
       marker.picture({
                         :picture => @picture,
                         :width =>  23,
@@ -126,7 +126,7 @@ class StudiesController < ApplicationController
 
     if not current_user.is_admin? and @study.approved == nil then
       # Only approved studies should be available here for ordinary users
-      redirect_to('/pages/collection_events')
+      redirect_to(page_path( :collection_events ))
       return
     end
 
@@ -370,7 +370,7 @@ class StudiesController < ApplicationController
         info[:address] = spec_table_row[address_column+1] if address_column
       end
 
-      if info[:kit_last_sent_at] and info[:kit_last_sent_at] < 14.days.ago 
+      if info[:kit_last_sent_at] and info[:kit_last_sent_at] < 14.days.ago
         info[:skip_notification] = true
       end
 

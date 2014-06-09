@@ -23,7 +23,7 @@
   <% if include_section?(Section::PUBLIC_PROFILE) %>
     <li><strong>PGP Public Profiles:</strong> The public profile pages
       for enrolled participants in the PGP can
-      be <a href="/users/">reviewed online</a>.
+      be <%= link_to "reviewed online", users_path %>.
     </li>
   <% end %>
   <li><strong>Family History:</strong> We encourage you to

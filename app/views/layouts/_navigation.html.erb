@@ -6,11 +6,11 @@
       <%= nav_element 'Home', root_url -%>
       <%= nav_element 'Account', edit_user_url if !current_user.deactivated_at -%>
       <%= nav_element 'Log out', logout_url -%>
-      <%= nav_element 'Researcher Tools', '/pages/researcher_tools' if current_user.is_researcher? or current_user.is_admin? -%>
+      <%= nav_element 'Researcher Tools', page_path( :researcher_tools ) if current_user.is_researcher? or current_user.is_admin? -%>
       <%= nav_element 'Admin', admin_root_path if current_user.is_admin? -%>
       <%= nav_element 'Contact Us', new_message_url -%>
     <% end %>
-    <%= nav_element 'Site map', '/pages/sitemap' -%>
+    <%= nav_element 'Site map', page_path( :sitemap ) %>
   </ul>
   <ul class="pgpid">
     <% if current_user and current_user.enrolled -%>

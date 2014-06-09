@@ -109,7 +109,12 @@
 None available.
 <% end -%>
 
-<h3>Geographic Information <% if logged_in? and @user == current_user -%><%= link_to "[edit]", edit_geographic_information_path(@user) %><% end -%></h3>
+<h3>
+  Geographic Information
+  <% if logged_in? and @user == current_user %>
+    <%= link_to "[edit]", edit_geographic_information_path %>
+  <% end %>
+</h3>
 
 <% if (@user.state != '' and not @user.state.nil?) or (@user.zip != '' and not @user.zip.nil?) -%>
 
@@ -185,23 +190,25 @@ None added.
 <% end %>
 
 <h3>Absolute Pitch Survey
-<% if @user.absolute_pitch_survey_completion.nil? && @user == current_user %>
-<%= link_to "[take survey]", "/absolute_pitch_surveys" %>
-<% elsif !@user.absolute_pitch_survey_completion.nil? && @user == current_user %>
-<%= link_to "[see all responses/retake survey]", review_absolute_pitch_surveys_path(@user.hex) %>
-<% elsif !@user.absolute_pitch_survey_completion.nil? %>
-<%= link_to "[see all responses]", review_absolute_pitch_surveys_path(@user.hex) %>
-<% end %>
-</h3>
-<% if @user.absolute_pitch_survey_completion.nil? %>
-Survey not taken.
-<% else %>
-<% @absolute_pitch_questions.each{ |q| %>
-  <% if q.question_type != 'end' %>
-    <div><%= q.text %> <span style="font-weight:bold"><%= @absolute_pitch_answers[q.id] %></span></div>
+  <% if @user.absolute_pitch_survey_completion.nil? && @user == current_user %>
+    <%= link_to "[take survey]", absolute_pitch_surveys_path %>
+  <% elsif !@user.absolute_pitch_survey_completion.nil? && @user == current_user %>
+    <%= link_to "[see all responses/retake survey]", review_absolute_pitch_surveys_path(:id => @user.hex) %>
+  <% elsif !@user.absolute_pitch_survey_completion.nil? %>
+    <%= link_to "[see all responses]", review_absolute_pitch_surveys_path(:id => @user.hex) %>
   <% end %>
-<% } %>
+</h3>
+
+<% if @user.absolute_pitch_survey_completion.nil? %>
+  Survey not taken.
+<% else %>
+  <% @absolute_pitch_questions.each{ |q| %>
+    <% if q.question_type != 'end' %>
+      <div><%= q.text %> <span style="font-weight:bold"><%= @absolute_pitch_answers[q.id] %></span></div>
+    <% end %>
+  <% } %>
 <% end %>
+
 <%= render :partial => 'enrollment_history' %>
 
 <% end -%>

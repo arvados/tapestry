@@ -4,10 +4,7 @@ jQuery(function($) {
     // make a POST call and replace the content
     var subject_class = $('select#permission_subject_class :selected').val();
     if(subject_class == "") subject_class="0";
-    jQuery.get('/permissions/update_subject_select/' + subject_class);
-/*, function(data){
-        $("div#objectId").html(data);
-    }) */
+    jQuery.get( '<%= permissions_update_subject_select_path %>/' + subject_class);
     return false;
   });
 })

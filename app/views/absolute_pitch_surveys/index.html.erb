@@ -1,16 +1,16 @@
 <h2>Absolute Pitch Preliminary Screening</h2>
 <% if @survey_end_no_absolute_pitch %>
 <h3>Thank You!</h3>
-<p><%= link_to "Review survey responses", '/absolute_pitch_surveys/review/' + current_user.hex %></p>
+<p><%= link_to "Review survey responses", review_absolute_pitch_surveys_path( :id => current_user.hex ) %></p>
 <p>
-To learn more about absolute pitch, please visit: 
+To learn more about absolute pitch, please visit:
 </p>
 <p><a href="http://www.absolutepitchstudy.com">www.absolutepitchstudy.com </a></p>
 <% elsif @survey_end_yes_absolute_pitch %>
 <h3>Thank You!</h3>
-<p><%= link_to "Review survey responses", '/absolute_pitch_surveys/review/' + current_user.hex %></p>
+<p><%= link_to "Review survey responses", review_absolute_pitch_surveys_path( :id => current_user.hex ) %></p>
 <p>
-To learn more about absolute pitch, please visit: 
+To learn more about absolute pitch, please visit:
 </p>
 <p><a href="http://www.absolutepitchstudy.com">www.absolutepitchstudy.com </a></p>
 <% else %>
@@ -68,7 +68,7 @@ To learn more about absolute pitch, please visit:
         <input type="checkbox" id="<%= 'user_survey_answers_' + i.to_s + '_text_' + a.value %>" name="<%= context_text %>[]" value="<%= a.value %>" <%if !@answers[q.id].nil? && @answers[q.id].include?(a.value) %>checked="checked"<%end%>/>
         <%= label_tag context_text + '_' + a.value, a.text %><br />
       <% end %>
-    <% elsif q.question_type == 'textarea' %>      
+    <% elsif q.question_type == 'textarea' %>
       <%= text_area_tag context_text, @answers[q.id], :rows => 8, :cols => 60 %>
     <% elsif q.question_type == 'text' %>
       <%= text_field_tag context_text, @answers[q.id], :size => 60, :maxlength => 255 %>
@@ -87,7 +87,7 @@ To learn more about absolute pitch, please visit:
   <% end %>
 
 <p>
-  <%= hidden_field_tag :id, @survey_section.id %> 
+  <%= hidden_field_tag :id, @survey_section.id %>
   <% if @survey_section.previous_section_id %>
   <%= submit_tag "Back" %>
   <% end %>

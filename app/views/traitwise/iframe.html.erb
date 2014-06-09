@@ -6,7 +6,7 @@
   <%= javascript_tag do %>
     <%= yield :js %>
   <% end %>
-  <link href="/stylesheets/traitwise.css" rel="stylesheet">
+  <%= stylesheet_link_tag 'traitwise' %>
   <script type="text/javascript">
     function traitwiseRequestResizeIframe(height) {
       window.top.$('#traitwiseIframe').css('height', height);

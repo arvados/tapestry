@@ -8,8 +8,9 @@ Tapestry::Application.routes.draw do
 
   resources :withdrawal_comments
   resources :permissions
-  match '/permissions/update_subject_select/:subject_class', :controller=>'permissions', :action => 'update_subject_select'
-  match '/permissions/update_subject_select/:subject_class/:id', :controller=>'permissions', :action => 'update_subject_select'
+  get 'permissions/update_subject_select'
+  get 'permissions/update_subject_select/:subject_class' => 'permissions#update_subject_select'
+  get 'permissions/update_subject_select/:subject_class/:id' => 'permissions#update_subject_select'
 
   resources :plates
   match '/plates/m/:url_code' => 'plates#mobile', :as => :mobile_plate, :via => :get
@@ -20,6 +21,10 @@ Tapestry::Application.routes.draw do
   match '/plates/:plate_id/destroy_sample/:plate_layout_position_id' => 'plates#destroy_sample', :as => :destroy_plate_sample, :via => :post
   match '/plates/:id/dup' => 'plates#dup', :as => :dup_plate, :via => :post
 
+  get 'sample_show' => 'samples#show'
+  get 'sample_log'  => 'samples#show_log'
+  get 'sample_edit' => 'samples#edit'
+  post 'sample_receive_by_crc_id' => 'samples#receive_by_crc_id'
   match '/samples/receive' => 'samples#receive', :as => :receive_sample
   match '/samples/receive_multiple/:url_codes' => 'samples#receive_multiple', :as => :receive_multiple_samples
   match '/samples/receive_multiple_confirm' => 'samples#receive_multiple_confirm', :as => :receive_multiple_samples_confirm, :via => :post
@@ -29,7 +34,6 @@ Tapestry::Application.routes.draw do
   match '/samples/:id/destroyed' => 'samples#mark_as_destroyed', :as => :sample_destroyed, :via => :post
   resources :samples
   match '/samples/:id/received' => 'samples#received', :as => :received_sample, :via => :post
-  match '/samples/:crc_id/receive_by_crc_id' => 'samples#receive_by_crc_id', :as => :receive_by_crc_id_sample, :via => :post
   match '/samples/m/:url_code/undo_reception' => 'samples#mobile_undo_reception', :as => :mobile_sample_undo_reception, :via => :get
   match '/samples/m/:url_code/receive' => 'samples#mobile_receive', :as => :mobile_sample_receive, :via => :get
   match '/samples/m/:url_code' => 'samples#mobile', :as => :mobile_sample, :via => :get
@@ -75,6 +79,7 @@ Tapestry::Application.routes.draw do
   resources :oauth_tokens
 
   resources :kit_design_samples
+  get 'sample_type_show' => 'sample_types#show'
   resources :sample_types
   resources :units
   resources :device_types
@@ -256,7 +261,7 @@ Tapestry::Application.routes.draw do
       match 'mail_preview/:action(/:a(/:b))' => 'user_mailer_previews#:action'
   end
 
-  resources :geographic_information
+  resource :geographic_information, :controller => :geographic_information, :only => [ :edit, :update ]
   match '/:controller(/:action(/:id))'
   resource :phrccr
   match '/phrccr/authsub' => 'phrccrs#authsub_update', :as => :authsub_phrccr
@@ -266,8 +271,9 @@ Tapestry::Application.routes.draw do
   match '/phrccr/upload' => 'phrccrs#upload', :as => :upload_phrccr
   match '/phrccr/unlink_googlehealth' => 'phrccrs#unlink_googlehealth', :as => :unlink_googlehealth
   match '/phrccr/google_health_note' => 'phrccrs#google_health_note', :as => :google_health_note
+  get 'profile_public' => 'profiles#public'
   match '/profile/:hex' => 'profiles#public', :as => :public_profile
-  match '/absolute_pitch_surveys/:id' => 'absolute_pitch_survey#index', :as => :absolute_pitch_surveys_section
+  get 'absolute_pitch_surveys' => 'absolute_pitch_surveys/index', :as => :absolute_pitch_surveys
   match '/absolute_pitch_surveys/save' => 'absolute_pitch_survey#save', :as => :save_absolute_pitch_surveys
   match '/absolute_pitch_surveys/review/:id' => 'absolute_pitch_survey#review', :as => :review_absolute_pitch_surveys
   match '/trait_surveys' => 'trait_survey#index', :as => :trait_surveys

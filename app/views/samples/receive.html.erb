@@ -10,7 +10,7 @@ jQuery(function(){
                 $('.response', thisform).html('[loading]');
                 $.ajax( { 'dataType': 'json',
                             'type': 'POST',
-                            'url': '/samples/'+crc_id+'/receive_by_crc_id',
+                            'url': '<%= sample_receive_by_crc_id_path %>?crc_id=' + crc_id,
                             'success': function(d,t,r) {
                             $('.response', thisform).html(crc_id + (d.ok ? ': ' : ': Error: ') + d.message);
                             if (d.redirect_to) {

@@ -4,13 +4,13 @@
       <div style="display:table-cell; width: 30%">
         <h2>Account</h2>
         <p>
-          <%= link_to 'Email and password', edit_user_path(current_user) %>
+          <%= link_to 'Email and password', edit_user_path %>
           <br />
           <%= link_to_if !current_user.hex.empty?, 'Shipping address', user_shipping_address_path %>
           <br />
-          <%= link_to_if !current_user.hex.empty?, 'Mailing lists', edit_user_path(current_user, :anchor => 'mailinglists') %>
+          <%= link_to_if !current_user.hex.empty?, 'Mailing lists', edit_user_path(:anchor => 'mailinglists') %>
           <br />
-          <%= link_to_if !current_user.hex.empty?, 'Withdraw', edit_user_path(current_user, :anchor => 'withdraw') %>
+          <%= link_to_if !current_user.hex.empty?, 'Withdraw', edit_user_path(:anchor => 'withdraw') %>
           <!--
             <br />
             <%= content_tag :span, 'Identity verification', :class => 'nolink' %>
@@ -60,7 +60,7 @@
         </p>
         <h2>Specimens</h2>
         <p>
-          <%= link_to_if !current_user.hex.empty?, 'Donate specimens', page_path('collection_events') %>
+          <%= link_to_if !current_user.hex.empty?, 'Donate specimens', page_path( :collection_events ) %>
           <br />
           <%= link_to_if !current_user.hex.empty?, 'Claim a kit', study_claim_kit_path %>
           <br />
@@ -92,7 +92,7 @@
             <%= content_tag :span, 'FAQ', :class => 'nolink' %>
             <br />
           -->
-          <%= link_to 'Site map', page_path('sitemap') %>
+          <%= link_to 'Site map', page_path( :sitemap ) %>
           <br />
           <%= link_to 'Contact us', new_message_path %>
           <br />

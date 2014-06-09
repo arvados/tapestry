@@ -96,10 +96,10 @@
   It is important that you are aware that <strong>you will have a limited ability to alter or remove any data once uploaded</strong>. Please remember to review all of your data, including file names, prior to upload to ensure that all unwanted identifying information (including names, email addresses and social security numbers) has been removed. You should remove or redact any information you do not feel comfortable sharing publicly. You may also wish to review the <a href="http://www.personalgenomes.org/consent">participant informed consent agreement</a>, particularly Section 7 which describes the risks of making data, including genetic, health, or trait data, publicly available, prior to uploading any data.
 </p>
 <p>
-  <strong>3. The Rest of PG.org’s Terms of Service Apply.</strong> Please review PG.org’s terms of use, which apply to all data uploaded to your participant profile. 
+  <strong>3. The Rest of PG.org’s Terms of Service Apply.</strong> Please review PG.org’s terms of use, which apply to all data uploaded to your participant profile.
 </p>
 <p>
-  <%= f.check_box :upload_tos_consent %><span style="color: red"> * </span>I have read and agree to the terms and conditions for uploading data to my PGP participant profile. 
+  <%= f.check_box :upload_tos_consent %><span style="color: red"> * </span>I have read and agree to the terms and conditions for uploading data to my PGP participant profile.
 </p>
 
 <% if @user_file.using_plain_upload %>
@@ -235,7 +235,7 @@ jQuery(function() {
                     $(this).attr('action', data.item_update_path);
                     $(this).attr('method', 'put');
                     if (0 == $('form.longuploadform :file').length) {
-                        window.location.href = '/user_files';
+                        window.location.href = '<%= user_files_path %>';
                         return true;
                     }
                     $('#longupload-progress').html('');

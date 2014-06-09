@@ -14,14 +14,14 @@
   <th>Download</th>
   <th>Delete</th>
 </tr>
-<% @ccr_history.each { |ccr| %>
-<tr>
-  <td><a href="/phrccr/review?version=<%= ccr.version %>">Review</a></td>
-  <td><%= ccr.version.gsub(/T.*$/,'') %></td>
-  <td><%= ccr.pretty_origin %></td>
-  <td><a href="/phrccr/download?id=<%= ccr.id %>">download raw CCR</a></td>
-  <td><a href="/phrccr/delete?id=<%= ccr.id %>" onClick="confirm('Are you sure?');">delete</a></td>
-<% } %>
+<% @ccr_history.each do |ccr| %>
+  <tr>
+    <td><%= link_to "Review", review_phrccr_path( :version => ccr.version ) %></td>
+    <td><%= ccr.version.gsub(/T.*$/,'') %></td>
+    <td><%= ccr.pretty_origin %></td>
+    <td><%= link_to "download raw CCR", download_phrccr_path( :id => ccr.id ) %></td>
+    <td><%= link_to "delete", delete_phrccr_path( :id => ccr.id ), :confirm => "Are you sure?" %></td>
+  <% end %>
 </table>
 <% end %>
 
@@ -34,7 +34,7 @@
 <h3>Integration with Personal Health Record Platforms</h3>
 
 <p>
-We are working on automatic integration with Personal Health Record platforms. 
+We are working on automatic integration with Personal Health Record platforms.
 </p>
 <p>
 In the meantime, you can use platforms such
