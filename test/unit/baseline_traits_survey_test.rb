@@ -9,7 +9,7 @@ class BaselineTraitsSurveyTest < ActiveSupport::TestCase
                               :maternal_grandfather_born_in,
                               :maternal_grandmother_born_in
 
-  %w(us_citizen health_insurance health_or_medical_conditions prescriptions_in_last_year allergies).each do |boolean_attr|
+  %w(citizen health_insurance health_or_medical_conditions prescriptions_in_last_year allergies).each do |boolean_attr|
     should_allow_values_for boolean_attr, true, false
     should_not_allow_values_for boolean_attr, nil, :message => "can't be blank"
   end

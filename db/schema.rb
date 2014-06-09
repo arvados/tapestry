@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140609185409) do
+ActiveRecord::Schema.define(:version => 20140609195957) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -145,7 +145,7 @@ ActiveRecord::Schema.define(:version => 20140609185409) do
     t.boolean  "pacific",                      :default => false
     t.boolean  "white",                        :default => false
     t.string   "birth_year"
-    t.boolean  "us_citizen",                   :default => false
+    t.boolean  "citizen",                      :default => false
     t.string   "birth_country"
     t.string   "paternal_grandfather_born_in"
     t.string   "paternal_grandmother_born_in"
@@ -174,7 +174,7 @@ ActiveRecord::Schema.define(:version => 20140609185409) do
     t.boolean  "pacific",                      :default => false, :null => false
     t.boolean  "white",                        :default => false, :null => false
     t.string   "birth_year"
-    t.boolean  "us_citizen",                   :default => false, :null => false
+    t.boolean  "citizen",                      :default => false, :null => false
     t.string   "birth_country"
     t.string   "paternal_grandfather_born_in"
     t.string   "paternal_grandmother_born_in"

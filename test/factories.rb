@@ -124,7 +124,7 @@ end
 
 Factory.define(:screening_survey_response) do |f|
   f.user { |u| u.association :user }
-  f.us_citizen true
+  f.citizen true
   f.age_majority true
   f.monozygotic_twin 'no'
   f.worrisome_information_comfort_level 'understand'
@@ -202,7 +202,7 @@ Factory.define :baseline_traits_survey do |f|
   f.sex "Male"
 
   ["health_insurance", "health_or_medical_conditions", "prescriptions_in_last_year", "allergies",
-   "asian", "black", "hispanic", "native", "pacific", "white", "us_citizen"].each do |boolean|
+   "asian", "black", "hispanic", "native", "pacific", "white", "citizen"].each do |boolean|
     f.send(boolean, true)
   end
 

@@ -4,7 +4,7 @@ class BaselineTraitsSurvey < ActiveRecord::Base
 
   belongs_to :user
 
-  validates_inclusion_of :us_citizen, :in => [true, false], :message => "can't be blank"
+  validates_inclusion_of :citizen, :in => [true, false], :message => "can't be blank"
   validates_inclusion_of :health_insurance, :in => [true, false], :message => "can't be blank"
   validates_inclusion_of :health_or_medical_conditions, :in => [true, false], :message => "can't be blank"
   validates_inclusion_of :prescriptions_in_last_year, :in => [true, false], :message => "can't be blank"
