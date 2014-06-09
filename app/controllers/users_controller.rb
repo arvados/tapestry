@@ -32,7 +32,7 @@ class UsersController < ApplicationController
   # If the "Signup" section of Tapestry is activated then it is okay to skip checking
   # that the current user is enrolled to access this controller.
   def okay_to_skip_ensure_enrolled
-    include_section?(Section::SIGNUP)
+    include_section?(Section::SIGNUP) || action_name = "unauthorized"
   end
 
   def initial
