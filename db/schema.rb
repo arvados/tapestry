@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140402214024) do
+ActiveRecord::Schema.define(:version => 20140609175313) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1993,7 +1993,7 @@ ActiveRecord::Schema.define(:version => 20140402214024) do
     t.integer  "lock_version"
     t.integer  "user_id"
     t.boolean  "us_citizen_or_resident"
-    t.boolean  "age_21"
+    t.boolean  "age_majority"
     t.string   "monozygotic_twin"
     t.string   "worrisome_information_comfort_level"
     t.string   "information_disclosure_comfort_level"
@@ -2010,7 +2010,7 @@ ActiveRecord::Schema.define(:version => 20140402214024) do
   create_table "screening_survey_responses", :force => true do |t|
     t.integer  "user_id"
     t.boolean  "us_citizen_or_resident"
-    t.boolean  "age_21"
+    t.boolean  "age_majority"
     t.string   "monozygotic_twin"
     t.string   "worrisome_information_comfort_level"
     t.string   "information_disclosure_comfort_level"

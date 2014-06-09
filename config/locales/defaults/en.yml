@@ -44,7 +44,7 @@ en:
     waitlist:
       family: >
         Thank you for your interest in participating in the PGP.
-        We can currently only enroll individuals 21 or older,
+        We can currently only enroll individuals %{age_of_majority} or older,
         and any monozygotic twins must be willing to participate.
       privacy: >
         Thank you for your interest in participating in the PGP.

@@ -125,7 +125,7 @@ end
 Factory.define(:screening_survey_response) do |f|
   f.user { |u| u.association :user }
   f.us_citizen true
-  f.age_21 true
+  f.age_majority true
   f.monozygotic_twin 'no'
   f.worrisome_information_comfort_level 'understand'
   f.information_disclosure_comfort_level 'understand'

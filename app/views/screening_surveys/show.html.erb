@@ -52,16 +52,16 @@ Permanent Resident Card (USCIS Form I-551) ?" %>
 
 <p class="question" id="question2">
   <span class="question">
-  <%= f.label :age_21, '2.) Are you currently 21 years of age or older?' %>
+    <%= f.label :age_majority, "2.) Are you currently #{APP_CONFIG['age_of_majority']} years of age or older?" %>
   </span>
   <br/>
 
-  <%= f.radio_button(:age_21, true) %>
-  <label for="screening_survey_response_age_21_true">Yes</label>
+  <%= f.radio_button(:age_majority, true) %>
+  <label for="screening_survey_response_age_majority_true">Yes</label>
   <br/>
 
-  <%= f.radio_button(:age_21, false) %>
-  <label for="screening_survey_response_age_21_false">No</label>
+  <%= f.radio_button(:age_majority, false) %>
+  <label for="screening_survey_response_age_majority_false">No</label>
 </p>
 
 <p class="question" id="question3">

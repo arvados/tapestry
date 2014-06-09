@@ -81,6 +81,9 @@ common:
   # (Note the YAML type-casting used here to insist that this is a reg-ex.)
   zip_validation: !ruby/regexp '/^(\d{3}[\dXx]{2}|)(-\d{4})?$/'
 
+  # Displayed, validated with, and referenced in a variety of contexts. Should be an integer value.
+  age_of_majority: 21
+
   # Layouts
   application_layout: 'tapestry_default'
   application_layout_exam: 'tapestry_default_exam'
