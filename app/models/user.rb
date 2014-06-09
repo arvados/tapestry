@@ -162,7 +162,7 @@ class User < ActiveRecord::Base
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
     conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and
         screening_survey_responses.monozygotic_twin = 'willing' and
-        screening_survey_responses.us_citizen_or_resident = 1 and
+        screening_survey_responses.citizen_or_resident = 1 and
         enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id} and users.id not in (select user_id from waitlists group by user_id)"
     {
       :conditions => conditions_sql,
@@ -176,7 +176,7 @@ class User < ActiveRecord::Base
     enrollment_application_step_id = EnrollmentStep.find_by_keyword('enrollment_application').id
     conditions_sql = "users.is_test = 'f' and users.enrolled IS NULL and
         screening_survey_responses.monozygotic_twin = 'no' and
-        screening_survey_responses.us_citizen_or_resident = 1 and
+        screening_survey_responses.citizen_or_resident = 1 and
         enrollment_step_completions.enrollment_step_id=#{enrollment_application_step_id} and users.id not in (select user_id from waitlists group by user_id)"
     {
       :conditions => conditions_sql,
@@ -512,16 +512,16 @@ class User < ActiveRecord::Base
     # They are already enrolled
     reasons.push('Already enrolled') if self.enrolled
     # They have not submitted an enrollment application
-    reasons.push('Enrollment application not submitted') if not self.has_completed?('enrollment_application') 
-    # Not a US resident
-    reasons.push('Not a US resident') if not self.residency_survey_response.nil? and not self.residency_survey_response.us_resident
+    reasons.push('Enrollment application not submitted') if not self.has_completed?('enrollment_application')
+    # Not a resident
+    reasons.push('Not a resident') if not self.residency_survey_response.nil? and not self.residency_survey_response.resident
     if not self.screening_survey_response.nil? then
-      if self.screening_survey_response.us_citizen_or_resident.nil?
+      if self.screening_survey_response.citizen_or_resident.nil?
         # Have not taken eligibility survey v2 or higher
-        reasons.push('Not taken eligibility survey v2 or higher') 
+        reasons.push('Not taken eligibility survey v2 or higher')
       else
-        # Not a US citizen or permanent resident
-        reasons.push('Not a US citizen or permanent resident') if not self.screening_survey_response.us_citizen_or_resident
+        # Not a citizen or permanent resident
+        reasons.push('Not a citizen or permanent resident') if not self.screening_survey_response.citizen_or_resident
       end
       # They have a twin or are unsure
       reasons.push('There may be a monozygotic twin') if not ['no','willing'].include?(self.screening_survey_response.monozygotic_twin)

@@ -39,7 +39,7 @@ module Admin::UsersHelper
       :family    => %w(birth_year relatives_interested_in_pgp monozygotic_twin
                        child_situation youngest_child_birth_year),
 
-      :residency => %w(us_resident country zip can_travel_to_boston)
+      :residency => %w(resident country zip can_travel_to_pgphq)
     }.freeze
 
     baseline_traits_survey_fields = %w(sex health_insurance health_or_medical_conditions

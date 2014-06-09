@@ -9,8 +9,8 @@ module UserEligibilityGroupings
   def self.eligibility_group_sql_array
     [
       "
-      residency_survey_responses.us_resident = 1 and
-      residency_survey_responses.can_travel_to_boston = 1 and
+      residency_survey_responses.resident = 1 and
+      residency_survey_responses.can_travel_to_pgphq = 1 and
       family_survey_responses.birth_year <= :birth_year and
       enrollment_step_completions.enrollment_step_id = :eligibility_step_id and
       (
@@ -34,8 +34,8 @@ module UserEligibilityGroupings
       ",
 
       "
-      residency_survey_responses.us_resident = 1 and
-      residency_survey_responses.can_travel_to_boston = 1 and
+      residency_survey_responses.resident = 1 and
+      residency_survey_responses.can_travel_to_pgphq = 1 and
       family_survey_responses.birth_year <= :birth_year and
       enrollment_step_completions.enrollment_step_id = :eligibility_step_id and
       (
@@ -61,8 +61,8 @@ module UserEligibilityGroupings
       "
        enrollment_step_completions.enrollment_step_id = :eligibility_step_id and
        (
-         residency_survey_responses.us_resident = 0 or
-         residency_survey_responses.can_travel_to_boston = 0 or
+         residency_survey_responses.resident = 0 or
+         residency_survey_responses.can_travel_to_pgphq = 0 or
          family_survey_responses.birth_year > :birth_year or
          family_survey_responses.monozygotic_twin = 'unwilling' or
          family_survey_responses.monozygotic_twin = 'unknown'

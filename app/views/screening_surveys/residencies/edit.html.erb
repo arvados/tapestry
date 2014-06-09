@@ -12,13 +12,13 @@
 
 <%= content_for :js do %>
 $(document).ready(function() {
-  $('#residency_survey_response_us_resident_true').click(toggleResidencyQuestions);
-  $('#residency_survey_response_us_resident_false').click(toggleResidencyQuestions);
+  $('#residency_survey_response_resident_true').click(toggleResidencyQuestions);
+  $('#residency_survey_response_resident_false').click(toggleResidencyQuestions);
   toggleResidencyQuestions();
 });
 
 function toggleResidencyQuestions() {
-  isUSResident = !$('#residency_survey_response_us_resident_false')[0].checked;
+  isUSResident = !$('#residency_survey_response_resident_false')[0].checked;
   if (isUSResident) {
     $('#question2').hide('fast');
     $('#question4').show('fast');
@@ -32,15 +32,15 @@ function toggleResidencyQuestions() {
 <% end -%>
 
 <p class="question" id="question1">
-  <%= f.label :us_resident, "1.) Are you a resident of the United States?" %>
+  <%= f.label :resident, "1.) Are you a resident of the United States?" %>
   <br/>
 
-  <%= f.radio_button(:us_resident, true) %>
-  <label for="residency_survey_response_us_resident_true">Yes</label>
+  <%= f.radio_button(:resident, true) %>
+  <label for="residency_survey_response_resident_true">Yes</label>
   <br/>
 
-  <%= f.radio_button(:us_resident, false) %>
-  <label for="residency_survey_response_us_resident_false">No</label>
+  <%= f.radio_button(:resident, false) %>
+  <label for="residency_survey_response_resident_false">No</label>
 </p>
 
 <p class="question" id="question2">
@@ -50,18 +50,18 @@ function toggleResidencyQuestions() {
 
 <p class="question" id="question4">
   <%= f.label :zip, "2.) What is your 5-digit ZIP code?" %><br/>
-  <%= f.text_field :zip, :size => 5 %>
+  <%= f.text_field :zip, :size => 7 %>
 </p>
 
 <p class="question" id="question5">
-  <%= f.label :can_travel_to_boston, "3.) The Personal Genome Project may request that you travel to a medical center in Boston as a part of the enrollment process. The possibility exists that during the visit to the medical center, either you or the study staff will decide against your enrollment in the project. Travel to Boston may be expensive, depending on the distance from your home. Are you able to travel to a medical center in Boston at your own expense?" %><br/>
+  <%= f.label :can_travel_to_pgphq, "3.) The Personal Genome Project may request that you travel to a medical center in Boston as a part of the enrollment process. The possibility exists that during the visit to the medical center, either you or the study staff will decide against your enrollment in the project. Travel to Boston may be expensive, depending on the distance from your home. Are you able to travel to a medical center in Boston at your own expense?" %><br/>
 
-  <%= f.radio_button(:can_travel_to_boston, true) %>
-  <label for="residency_survey_response_can_travel_to_boston_true">Yes</label>
+  <%= f.radio_button(:can_travel_to_pgphq, true) %>
+  <label for="residency_survey_response_can_travel_to_pgphq_true">Yes</label>
 
   <br/>
-  <%= f.radio_button(:can_travel_to_boston, false) %>
-  <label for="residency_survey_response_can_travel_to_boston_false">No</label>
+  <%= f.radio_button(:can_travel_to_pgphq, false) %>
+  <label for="residency_survey_response_can_travel_to_pgphq_false">No</label>
 </p>
 
 <p><%= submit_tag 'Save' %></p>

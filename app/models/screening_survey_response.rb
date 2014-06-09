@@ -11,19 +11,19 @@ class ScreeningSurveyResponse < ActiveRecord::Base
   scope :worrisome_ok, where("worrisome_information_comfort_level in ('always','understand')")
   scope :information_disclosure_ok, where("information_disclosure_comfort_level in ('comfortable','understand')")
   scope :past_genetic_test_ok, where("past_genetic_test_participation in ('no','public','unsure_public')")
-  scope :us_citizen_or_resident, where("us_citizen_or_resident is true")
+  scope :citizen_or_resident, where("citizen_or_resident is true")
   scope :age_majority, where("age_majority is true")
 
   validates :twin_name, :presence => true, :if => Proc.new {|ssr| ssr.monozygotic_twin == 'willing' }
   validates :twin_email, :presence => true, :format => { :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i }, :if => Proc.new {|ssr| ssr.monozygotic_twin == 'willing' }
 
-  scope :passed, monozygotic_ok.worrisome_ok.information_disclosure_ok.past_genetic_test_ok.us_citizen_or_resident.age_majority
+  scope :passed, monozygotic_ok.worrisome_ok.information_disclosure_ok.past_genetic_test_ok.citizen_or_resident.age_majority
 
   scope :failed, where("monozygotic_twin not in ('no','willing') or
                         worrisome_information_comfort_level not in ('always','understand') or
                         information_disclosure_comfort_level not in ('comfortable','understand') or
                         past_genetic_test_participation not in ('no','public','unsure_public') or
-                        us_citizen_or_resident is not true or
+                        citizen_or_resident is not true or
                         age_majority is not true")
 
   def passed?
@@ -39,7 +39,7 @@ class ScreeningSurveyResponse < ActiveRecord::Base
 
   def complete_enrollment_step
     user = self.user.reload
-    if not user.screening_survey_response.us_citizen_or_resident.nil? and
+    if not user.screening_survey_response.citizen_or_resident.nil? and
        not user.screening_survey_response.age_majority.nil? and
        not user.screening_survey_response.monozygotic_twin.nil? and
        not user.screening_survey_response.worrisome_information_comfort_level.nil? and
@@ -94,7 +94,7 @@ class ScreeningSurveyResponse < ActiveRecord::Base
 
 
   def eligible?
-    us_citizen_or_resident
+    citizen_or_resident
   end
 
   def waitlist_message

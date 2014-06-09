@@ -45,10 +45,10 @@ class Admin::UsersHelperTest < ActiveSupport::TestCase
         "Family Child situation" => @user.family_survey_response.child_situation,
         "Family Youngest child birth year" => @user.family_survey_response.youngest_child_birth_year,
 
-        "Residency Us resident" => @user.residency_survey_response.us_resident,
+        "Residency Us resident" => @user.residency_survey_response.resident,
         "Residency Country" => @user.residency_survey_response.country,
         "Residency Zip" => @user.residency_survey_response.zip,
-        "Residency Can travel to boston" => @user.residency_survey_response.can_travel_to_boston,
+        "Residency Can travel to boston" => @user.residency_survey_response.can_travel_to_pgphq,
 
         "Waitlist Count" => @user.waitlists.count,
 

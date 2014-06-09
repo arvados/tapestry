@@ -24,15 +24,15 @@ class ResidencySurveyResponse < ActiveRecord::Base
   end
 
   belongs_to :user
-  validates_inclusion_of :us_resident, :in => [true, false], :message => "can't be blank"
+  validates_inclusion_of :resident, :in => [true, false], :message => "can't be blank"
 
   def eligible?
-    us_resident && can_travel_to_boston
+    resident && can_travel_to_pgphq
   end
 
   def waitlist_message
-    if us_resident
-      if !can_travel_to_boston
+    if resident
+      if !can_travel_to_pgphq
         I18n.t 'messages.waitlist.residency'
       end
     else
@@ -43,14 +43,14 @@ class ResidencySurveyResponse < ActiveRecord::Base
   private
 
   def residency_validation
-    if (us_resident == true)
+    if (resident == true)
       require_attribute 'zip' do
         unless zip =~ APP_CONFIG['zip_validation']
           errors.add(:zip, I18n.t('activerecord.errors.models.user.attributes.zip.invalid'))
         end
-        require_attribute 'can_travel_to_boston'
+        require_attribute 'can_travel_to_pgphq'
       end
-    elsif (us_resident == false)
+    elsif (resident == false)
       require_attribute 'country'
     end
   end

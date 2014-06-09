@@ -134,9 +134,9 @@ end
 
 Factory.define(:residency_survey_response) do |f|
   f.user { |u| u.association :user }
-  f.us_resident true
+  f.resident true
   f.zip '12345'
-  f.can_travel_to_boston true
+  f.can_travel_to_pgphq true
 end
 
 Factory.define :family_survey_response do |f|
@@ -156,9 +156,9 @@ end
 
 Factory.define :ineligible_residency_survey_response, :class => ResidencySurveyResponse do |f|
   f.user { |u| u.association :user }
-  f.us_resident false
+  f.resident false
   f.country 'Canada'
-  f.can_travel_to_boston false
+  f.can_travel_to_pgphq false
 end
 
 Factory.define :ineligible_family_survey_response, :class => FamilySurveyResponse do |f|

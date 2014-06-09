@@ -37,17 +37,17 @@ jQuery(function(){
 
 <p class="question" id="question1">
   <span class="question">
-  <%= f.label :us_citizen_or_resident, "1.) Are you a United States citizen or permanent resident with a United States
+  <%= f.label :citizen_or_resident, "1.) Are you a United States citizen or permanent resident with a United States
 Permanent Resident Card (USCIS Form I-551) ?" %>
   </span>
   <br/>
 
-  <%= f.radio_button(:us_citizen_or_resident, true) %>
-  <label for="screening_survey_response_us_citizen_or_resident_true">Yes</label>
+  <%= f.radio_button(:citizen_or_resident, true) %>
+  <label for="screening_survey_response_citizen_or_resident_true">Yes</label>
   <br/>
 
-  <%= f.radio_button(:us_citizen_or_resident, false) %>
-  <label for="screening_survey_response_us_citizen_or_resident_false">No</label>
+  <%= f.radio_button(:citizen_or_resident, false) %>
+  <label for="screening_survey_response_citizen_or_resident_false">No</label>
 </p>
 
 <p class="question" id="question2">
