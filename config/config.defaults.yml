@@ -59,6 +59,11 @@ common:
   # It is strongly encouraged to list the enabled sections as embedded Ruby module references, as shown here.
   enabled_sections: [ <%= Section::SIGNUP %> ]
 
+  # Set "email_enrollment_submitted_notification" to true to send an email to the user when they have actually
+  # submitted a completed enrollment application (this is the EnrollmentStep with the keyword 'enrollment_application').
+  # The content of the email is in app/views/user_mailer/enrollment_submitted_notification.text.erb
+  email_enrollment_submitted_notification: false
+
   warehouse_web_root: '/warehouse' # Apache alias pointing to whmount target
   warehouse_fs_root: '/warehouse'  # whmount target
   #warehouse_proxy_script_path: '/whget.php' # alternative to using whmount
