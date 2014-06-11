@@ -124,8 +124,8 @@ end
 
 Factory.define(:screening_survey_response) do |f|
   f.user { |u| u.association :user }
-  f.us_citizen true
-  f.age_21 true
+  f.citizen true
+  f.age_majority true
   f.monozygotic_twin 'no'
   f.worrisome_information_comfort_level 'understand'
   f.information_disclosure_comfort_level 'understand'
@@ -134,9 +134,9 @@ end
 
 Factory.define(:residency_survey_response) do |f|
   f.user { |u| u.association :user }
-  f.us_resident true
+  f.resident true
   f.zip '12345'
-  f.can_travel_to_boston true
+  f.can_travel_to_pgphq true
 end
 
 Factory.define :family_survey_response do |f|
@@ -156,9 +156,9 @@ end
 
 Factory.define :ineligible_residency_survey_response, :class => ResidencySurveyResponse do |f|
   f.user { |u| u.association :user }
-  f.us_resident false
+  f.resident false
   f.country 'Canada'
-  f.can_travel_to_boston false
+  f.can_travel_to_pgphq false
 end
 
 Factory.define :ineligible_family_survey_response, :class => FamilySurveyResponse do |f|
@@ -202,7 +202,7 @@ Factory.define :baseline_traits_survey do |f|
   f.sex "Male"
 
   ["health_insurance", "health_or_medical_conditions", "prescriptions_in_last_year", "allergies",
-   "asian", "black", "hispanic", "native", "pacific", "white", "us_citizen"].each do |boolean|
+   "asian", "black", "hispanic", "native", "pacific", "white", "citizen"].each do |boolean|
     f.send(boolean, true)
   end
 

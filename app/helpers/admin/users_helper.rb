@@ -39,12 +39,12 @@ module Admin::UsersHelper
       :family    => %w(birth_year relatives_interested_in_pgp monozygotic_twin
                        child_situation youngest_child_birth_year),
 
-      :residency => %w(us_resident country zip can_travel_to_boston)
+      :residency => %w(resident country zip can_travel_to_pgphq)
     }.freeze
 
     baseline_traits_survey_fields = %w(sex health_insurance health_or_medical_conditions
       prescriptions_in_last_year allergies asian black
-      hispanic native pacific white birth_year us_citizen birth_country paternal_grandfather_born_in
+      hispanic native pacific white birth_year citizen birth_country paternal_grandfather_born_in
       paternal_grandmother_born_in maternal_grandfather_born_in maternal_grandmother_born_in)
 
     buf = ''

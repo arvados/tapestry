@@ -59,6 +59,11 @@ common:
   # It is strongly encouraged to list the enabled sections as embedded Ruby module references, as shown here.
   enabled_sections: [ <%= Section::SIGNUP %> ]
 
+  # Set "email_enrollment_submitted_notification" to true to send an email to the user when they have actually
+  # submitted a completed enrollment application (this is the EnrollmentStep with the keyword 'enrollment_application').
+  # The content of the email is in app/views/user_mailer/enrollment_submitted_notification.text.erb
+  email_enrollment_submitted_notification: false
+
   warehouse_web_root: '/warehouse' # Apache alias pointing to whmount target
   warehouse_fs_root: '/warehouse'  # whmount target
   #warehouse_proxy_script_path: '/whget.php' # alternative to using whmount
@@ -76,6 +81,13 @@ common:
   # Locales
   available_locales: [:en, :de]
   default_locale: :en
+
+  # "Zip Code" is the quaint term used by Americans for "Postal Code". Validation is decidedly country-specific.
+  # (Note the YAML type-casting used here to insist that this is a reg-ex.)
+  zip_validation: !ruby/regexp '/^(\d{3}[\dXx]{2}|)(-\d{4})?$/'
+
+  # Displayed, validated with, and referenced in a variety of contexts. Should be an integer value.
+  age_of_majority: 21
 
   # Layouts
   application_layout: 'tapestry_default'

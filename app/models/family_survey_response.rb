@@ -50,14 +50,14 @@ class FamilySurveyResponse < ActiveRecord::Base
 
   def eligible?
     maximum_age = Time.now.year - birth_year
-    possibly_under_21 = maximum_age < 21
+    possibly_under_majority = maximum_age < APP_CONFIG['age_of_majority'].to_i
     unwilling_monozygotic_twin = ( monozygotic_twin == 'unwilling' )
 
-    return !possibly_under_21 && !unwilling_monozygotic_twin
+    return !possibly_under_majority && !unwilling_monozygotic_twin
   end
 
   def waitlist_message
-    I18n.t 'messages.waitlist.family'
+    I18n.t 'messages.waitlist.family', :age_of_majority => APP_CONFIG['age_of_majority']
   end
 
   private

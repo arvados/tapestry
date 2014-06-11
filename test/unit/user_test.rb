@@ -25,7 +25,7 @@ class UserTest < ActiveSupport::TestCase
   should allow_mass_assignment_of :state
   should allow_mass_assignment_of :zip
   should allow_mass_assignment_of :phr_profile_name
-  
+
 # FIXME: this macro should be provided by paperclip, but for some reason it's not being picked up.
 #  should_have_attached_file :phr
 
@@ -306,28 +306,28 @@ class UserTest < ActiveSupport::TestCase
 
       @user1a = Factory(:user, :first_name => 'user1a')
       @user1a.complete_enrollment_step(eligibility_step)
-      Factory(:residency_survey_response, :user => @user1a, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @user1a, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @user1a, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @user1a, :worrisome_information_comfort_level => 'always',
                                                             :information_disclosure_comfort_level => 'comfortable',
                                                             :past_genetic_test_participation  => 'public')
       @user1b = Factory(:user, :first_name => 'user1b')
       @user1b.complete_enrollment_step(eligibility_step)
-      Factory(:residency_survey_response, :user => @user1b, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @user1b, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @user1b, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @user1b, :worrisome_information_comfort_level => 'understand',
                                                             :information_disclosure_comfort_level => 'understand',
                                                             :past_genetic_test_participation  => 'yes')
       @user1c = Factory(:user, :first_name => 'user1c')
       @user1c.complete_enrollment_step(eligibility_step)
-      Factory(:residency_survey_response, :user => @user1c, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @user1c, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @user1c, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @user1c, :worrisome_information_comfort_level => 'always',
                                                             :information_disclosure_comfort_level => 'comfortable',
                                                             :past_genetic_test_participation  => 'no')
       @user1d = Factory(:user, :first_name => 'user1d')
       @user1d.complete_enrollment_step(eligibility_step)
-      Factory(:residency_survey_response, :user => @user1d, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @user1d, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @user1d, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @user1d, :worrisome_information_comfort_level => 'always',
                                                             :information_disclosure_comfort_level => 'comfortable',
@@ -335,7 +335,7 @@ class UserTest < ActiveSupport::TestCase
 
       @user2a = Factory(:user, :first_name => 'user2a')
       @user2a.complete_enrollment_step(eligibility_step)
-      Factory(:residency_survey_response, :user => @user2a, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @user2a, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @user2a, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @user2a, :worrisome_information_comfort_level => 'depends',
                                                             :information_disclosure_comfort_level => 'depends',
@@ -343,7 +343,7 @@ class UserTest < ActiveSupport::TestCase
 
       @user2b = Factory(:user, :first_name => 'user2b')
       @user2b.complete_enrollment_step(eligibility_step)
-      Factory(:residency_survey_response, :user => @user2b, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @user2b, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @user2b, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @user2b, :worrisome_information_comfort_level => 'uncomfortable',
                                                             :information_disclosure_comfort_level => 'uncomfortable',
@@ -351,7 +351,7 @@ class UserTest < ActiveSupport::TestCase
 
       @user2c = Factory(:user, :first_name => 'user2c')
       @user2c.complete_enrollment_step(eligibility_step)
-      Factory(:residency_survey_response, :user => @user2c, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @user2c, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @user2c, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @user2c, :worrisome_information_comfort_level => 'uncomfortable',
                                                             :information_disclosure_comfort_level => 'unsure',
@@ -359,7 +359,7 @@ class UserTest < ActiveSupport::TestCase
 
       @user2d = Factory(:user, :first_name => 'user2d')
       @user2d.complete_enrollment_step(eligibility_step)
-      Factory(:residency_survey_response, :user => @user2d, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @user2d, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @user2d, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @user2d, :worrisome_information_comfort_level => 'depends',
                                                             :information_disclosure_comfort_level => 'comfortable',
@@ -367,13 +367,13 @@ class UserTest < ActiveSupport::TestCase
 
       @user3a = Factory(:user, :first_name => 'user3a')
       @user3a.complete_enrollment_step(eligibility_step)
-      Factory(:residency_survey_response, :user => @user3a, :us_resident => false, :country => "France")
+      Factory(:residency_survey_response, :user => @user3a, :resident => false, :country => "France")
       Factory(:family_survey_response, :user => @user3a)
       Factory(:privacy_survey_response, :user => @user3a)
 
       @user3b = Factory(:user, :first_name => 'user3b')
       @user3b.complete_enrollment_step(eligibility_step)
-      Factory(:residency_survey_response, :user => @user3b, :can_travel_to_boston => false)
+      Factory(:residency_survey_response, :user => @user3b, :can_travel_to_pgphq => false)
       Factory(:family_survey_response, :user => @user3b)
       Factory(:privacy_survey_response, :user => @user3b)
 
@@ -396,7 +396,7 @@ class UserTest < ActiveSupport::TestCase
       Factory(:privacy_survey_response, :user => @user3e)
 
       @no_entrance_exam = Factory(:user, :first_name => 'no_entrance_exam')
-      Factory(:residency_survey_response, :user => @no_entrance_exam, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @no_entrance_exam, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @no_entrance_exam, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @no_entrance_exam, :worrisome_information_comfort_level => 'depends',
                                                             :information_disclosure_comfort_level => 'comfortable',
@@ -405,7 +405,7 @@ class UserTest < ActiveSupport::TestCase
       @waitlisted_user = Factory(:user, :first_name => 'waitlisted_user')
       @waitlisted_user.complete_enrollment_step(eligibility_step)
       Factory(:waitlist, :user => @waitlisted_user)
-      Factory(:residency_survey_response, :user => @waitlisted_user, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @waitlisted_user, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @waitlisted_user, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @waitlisted_user, :worrisome_information_comfort_level => 'always',
                                                             :information_disclosure_comfort_level => 'comfortable',
@@ -414,7 +414,7 @@ class UserTest < ActiveSupport::TestCase
       @resubmitted_waitlisted_user = Factory(:user, :first_name => 'resubmitted_waitlisted_user')
       @resubmitted_waitlisted_user.complete_enrollment_step(eligibility_step)
       Factory(:waitlist, :user => @resubmitted_waitlisted_user, :resubmitted_at => Time.now)
-      Factory(:residency_survey_response, :user => @resubmitted_waitlisted_user, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @resubmitted_waitlisted_user, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @resubmitted_waitlisted_user, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @resubmitted_waitlisted_user, :worrisome_information_comfort_level => 'always',
                                                             :information_disclosure_comfort_level => 'comfortable',
@@ -423,7 +423,7 @@ class UserTest < ActiveSupport::TestCase
       @promoted_user = Factory(:user, :first_name => 'promoted_user')
       @promoted_user.complete_enrollment_step(eligibility_step)
       @promoted_user.complete_enrollment_step(promotion_step)
-      Factory(:residency_survey_response, :user => @promoted_user, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @promoted_user, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @promoted_user, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @promoted_user, :worrisome_information_comfort_level => 'always',
                                                             :information_disclosure_comfort_level => 'comfortable',
@@ -432,7 +432,7 @@ class UserTest < ActiveSupport::TestCase
       @waitlisted_user2 = Factory(:user, :first_name => 'waitlisted_user2')
       @waitlisted_user2.complete_enrollment_step(eligibility_step)
       Factory(:waitlist, :user => @waitlisted_user2)
-      Factory(:residency_survey_response, :user => @waitlisted_user2, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @waitlisted_user2, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @waitlisted_user2, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @waitlisted_user2, :worrisome_information_comfort_level => 'depends',
                                                             :information_disclosure_comfort_level => 'comfortable',
@@ -441,7 +441,7 @@ class UserTest < ActiveSupport::TestCase
       @resubmitted_waitlisted_user2 = Factory(:user, :first_name => 'resubmitted_waitlisted_user2')
       @resubmitted_waitlisted_user2.complete_enrollment_step(eligibility_step)
       Factory(:waitlist, :user => @resubmitted_waitlisted_user2, :resubmitted_at => Time.now)
-      Factory(:residency_survey_response, :user => @resubmitted_waitlisted_user2, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @resubmitted_waitlisted_user2, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @resubmitted_waitlisted_user2, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @resubmitted_waitlisted_user2, :worrisome_information_comfort_level => 'depends',
                                                             :information_disclosure_comfort_level => 'comfortable',
@@ -450,7 +450,7 @@ class UserTest < ActiveSupport::TestCase
       @promoted_user2 = Factory(:user, :first_name => 'promoted_user2')
       @promoted_user2.complete_enrollment_step(eligibility_step)
       @promoted_user2.complete_enrollment_step(promotion_step)
-      Factory(:residency_survey_response, :user => @promoted_user2, :us_resident => true, :can_travel_to_boston => true)
+      Factory(:residency_survey_response, :user => @promoted_user2, :resident => true, :can_travel_to_pgphq => true)
       Factory(:family_survey_response,    :user => @promoted_user2, :birth_year => Time.now.year - 25, :monozygotic_twin => 'no')
       Factory(:privacy_survey_response,   :user => @promoted_user2, :worrisome_information_comfort_level => 'depends',
                                                             :information_disclosure_comfort_level => 'comfortable',

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140402214024) do
+ActiveRecord::Schema.define(:version => 20140609195957) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -145,7 +145,7 @@ ActiveRecord::Schema.define(:version => 20140402214024) do
     t.boolean  "pacific",                      :default => false
     t.boolean  "white",                        :default => false
     t.string   "birth_year"
-    t.boolean  "us_citizen",                   :default => false
+    t.boolean  "citizen",                      :default => false
     t.string   "birth_country"
     t.string   "paternal_grandfather_born_in"
     t.string   "paternal_grandmother_born_in"
@@ -174,7 +174,7 @@ ActiveRecord::Schema.define(:version => 20140402214024) do
     t.boolean  "pacific",                      :default => false, :null => false
     t.boolean  "white",                        :default => false, :null => false
     t.string   "birth_year"
-    t.boolean  "us_citizen",                   :default => false, :null => false
+    t.boolean  "citizen",                      :default => false, :null => false
     t.string   "birth_country"
     t.string   "paternal_grandfather_born_in"
     t.string   "paternal_grandmother_born_in"
@@ -1769,10 +1769,10 @@ ActiveRecord::Schema.define(:version => 20140402214024) do
     t.integer  "residency_survey_response_id"
     t.integer  "lock_version"
     t.integer  "user_id"
-    t.boolean  "us_resident"
+    t.boolean  "resident"
     t.string   "country"
     t.string   "zip"
-    t.boolean  "can_travel_to_boston"
+    t.boolean  "can_travel_to_pgphq"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "creator_id"
@@ -1784,10 +1784,10 @@ ActiveRecord::Schema.define(:version => 20140402214024) do
 
   create_table "residency_survey_responses", :force => true do |t|
     t.integer  "user_id"
-    t.boolean  "us_resident"
+    t.boolean  "resident"
     t.string   "country"
     t.string   "zip"
-    t.boolean  "can_travel_to_boston"
+    t.boolean  "can_travel_to_pgphq"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "lock_version"
@@ -1992,8 +1992,8 @@ ActiveRecord::Schema.define(:version => 20140402214024) do
     t.integer  "screening_survey_response_id"
     t.integer  "lock_version"
     t.integer  "user_id"
-    t.boolean  "us_citizen_or_resident"
-    t.boolean  "age_21"
+    t.boolean  "citizen_or_resident"
+    t.boolean  "age_majority"
     t.string   "monozygotic_twin"
     t.string   "worrisome_information_comfort_level"
     t.string   "information_disclosure_comfort_level"
@@ -2009,8 +2009,8 @@ ActiveRecord::Schema.define(:version => 20140402214024) do
 
   create_table "screening_survey_responses", :force => true do |t|
     t.integer  "user_id"
-    t.boolean  "us_citizen_or_resident"
-    t.boolean  "age_21"
+    t.boolean  "citizen_or_resident"
+    t.boolean  "age_majority"
     t.string   "monozygotic_twin"
     t.string   "worrisome_information_comfort_level"
     t.string   "information_disclosure_comfort_level"

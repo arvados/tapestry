@@ -45,10 +45,10 @@ class Admin::UsersHelperTest < ActiveSupport::TestCase
         "Family Child situation" => @user.family_survey_response.child_situation,
         "Family Youngest child birth year" => @user.family_survey_response.youngest_child_birth_year,
 
-        "Residency Us resident" => @user.residency_survey_response.us_resident,
+        "Residency Resident" => @user.residency_survey_response.resident,
         "Residency Country" => @user.residency_survey_response.country,
         "Residency Zip" => @user.residency_survey_response.zip,
-        "Residency Can travel to boston" => @user.residency_survey_response.can_travel_to_boston,
+        "Residency Can travel to pgphq" => @user.residency_survey_response.can_travel_to_pgphq,
 
         "Waitlist Count" => @user.waitlists.count,
 
@@ -70,7 +70,7 @@ class Admin::UsersHelperTest < ActiveSupport::TestCase
         "Baseline traits survey Pacific" => @user.baseline_traits_survey.pacific,
         "Baseline traits survey White" => @user.baseline_traits_survey.white,
         "Baseline traits survey Birth year" => @user.baseline_traits_survey.birth_year,
-        "Baseline traits survey Us citizen" => @user.baseline_traits_survey.us_citizen,
+        "Baseline traits survey Citizen" => @user.baseline_traits_survey.citizen,
         "Baseline traits survey Birth country" => @user.baseline_traits_survey.birth_country,
         "Baseline traits survey Paternal grandfather born in" => @user.baseline_traits_survey.paternal_grandfather_born_in,
         "Baseline traits survey Paternal grandmother born in" => @user.baseline_traits_survey.paternal_grandmother_born_in,

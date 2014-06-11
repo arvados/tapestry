@@ -51,7 +51,7 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
             assert_select 'input[type=text][name=?]', 'residency_survey_response[zip]'
             assert_select 'select[name=?]', 'residency_survey_response[country]'
 
-            %w(us_resident can_travel_to_boston).each do |boolfield|
+            %w(resident can_travel_to_pgphq).each do |boolfield|
               assert_select 'input[type=radio][name=?]', "residency_survey_response[#{boolfield}]"
             end
           end
@@ -80,7 +80,7 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
       context 'on PUT to update with invalid options' do
         setup do
           @invalid_attr_hash = {
-             :us_resident => false,
+             :resident => false,
              :country => nil
           }
 

@@ -43,11 +43,11 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
     end
 
     should_be_eligible
-    should_validate_presence_of :us_resident
+    should_validate_presence_of :resident
     should_not_allow_mass_assignment_of :user_id
 
     context 'for a US resident' do
-      setup { @residency_survey_response.us_resident = true }
+      setup { @residency_survey_response.resident = true }
 
       should 'require the zip code to be 5 digits long' do
         @residency_survey_response.zip = '1234'
@@ -64,18 +64,18 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
       context 'with a zip code' do
         setup { @residency_survey_response.zip = '12345' }
 
-        should_validate_presence_of :can_travel_to_boston
+        should_validate_presence_of :can_travel_to_pgphq
 
-        context 'who can travel to boston' do
-          setup { @residency_survey_response.can_travel_to_boston = true }
+        context 'who can travel to PGP HQ' do
+          setup { @residency_survey_response.can_travel_to_pgphq = true }
 
           should_be_valid
           should_be_eligible
           should_not_have_waitlist_message
         end
 
-        context 'who cannot travel to boston' do
-          setup { @residency_survey_response.can_travel_to_boston = false }
+        context 'who cannot travel to PGP HQ' do
+          setup { @residency_survey_response.can_travel_to_pgphq = false }
 
           should_be_valid
           should_not_be_eligible
@@ -85,7 +85,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
     end
 
     context 'for a non-US resident' do
-      setup { @residency_survey_response.us_resident = false }
+      setup { @residency_survey_response.resident = false }
 
       should_not_be_eligible
       should_validate_presence_of :country
