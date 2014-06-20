@@ -32,7 +32,7 @@ class UserFile < ActiveRecord::Base
 
   belongs_to :user
 
-  attr_accessible :user, :user_id, :name, :date, :description, :data_type, :dataset, :upload_tos_consent, :longupload_size, :longupload_fingerprint, :longupload_file_name, :using_plain_upload, :index_in_manifest, :path_in_manifest, :locator
+  attr_accessible :user, :user_id, :name, :date, :description, :data_type, :dataset, :upload_tos_consent, :longupload_size, :longupload_fingerprint, :longupload_file_name, :using_plain_upload, :index_in_manifest, :path_in_manifest, :locator, :other_data_type
 
   attr_accessor :other_data_type
   attr_accessor :using_plain_upload
