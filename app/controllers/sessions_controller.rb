@@ -32,7 +32,6 @@ class SessionsController < ApplicationController
       new_cookie_flag = (params[:remember_me] == "1")
       handle_remember_cookie! new_cookie_flag
       redirect_back_or_default(root_path)
-      flash[:notice] = "Logged in successfully"
       # Google Health is dead, disable this for now.
       #update_ccr_if_exists
     else
@@ -46,7 +45,6 @@ class SessionsController < ApplicationController
   def destroy
     current_user.log("Logged out")
     logout_killing_session!
-    flash[:notice] = "You have been logged out."
     redirect_back_or_default page_url(:logged_out)
   end
 

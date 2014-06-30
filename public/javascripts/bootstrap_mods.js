@@ -7,6 +7,8 @@ jQuery(function(){
     // desktop applications, so it is less surprising to users.  It
     // also allows users to scan the menus quickly without a lot of
     // clicking.)
+    // PH: I think we should stick with default Bootstrap behaviour and let them decide
+    // what is less surprising to users...
     $('.dropdown-toggle').parent('.dropdown').on('hover', function(e) {
         if (!$(this).hasClass('open') &&
             $(this).parents('.nav').children('.dropdown.open').length > 0) {

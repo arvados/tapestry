@@ -1,6 +1,6 @@
 <h2>Editing exam question</h2>
 
-<%= form_for :exam_question, @exam_question,
+<%= form_for @exam_question, :as => :exam_question,
             :url => admin_content_area_exam_exam_version_exam_question_path(
               @content_area,
               @exam,

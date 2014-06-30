@@ -7,8 +7,9 @@ class ContentAreaTest < ActiveSupport::TestCase
       @content_area = Factory :content_area
     end
 
-    should_have_many :exams
-    should_validate_presence_of :title, :description
+    should have_many :exams
+    should validate_presence_of :title
+    should validate_presence_of :description
 
     context 'with many published exams and a user' do
       setup do

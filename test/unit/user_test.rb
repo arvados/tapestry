@@ -49,6 +49,10 @@ class UserTest < ActiveSupport::TestCase
     should_not_allow_values_for :email, 'aaa@bbb', 'aaa.com', 'a.b.com', 'aa@bb@cc', :message => /look like/
     should_not_allow_values_for :email, 'a@b.c', :message => /too short/
     should_not_allow_values_for :email, '', :message => /blank/
+    # should allow_value('a@b.cc', 'test@harvard.edu', 'jason.p.morrison@gmail.com').for(:email)
+    # should_not allow_value('aaa@bbb', 'aaa.com', 'a.b.com', 'aa@bb@cc').for(:email).with_message(/look like/)
+    # should_not allow_value('a@b.c').for(:email).with_message(/too short/)
+    # should_not allow_value('').for(:email).with_message(/blank/)
 
 
     should "require password validation on create" do

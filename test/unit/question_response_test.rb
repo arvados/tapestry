@@ -6,8 +6,8 @@ class QuestionResponseTest < ActiveSupport::TestCase
       @question_response = Factory :question_response
     end
 
-    should_belong_to :exam_response
-    should_belong_to :exam_question
+    should belong_to :exam_response
+    should belong_to :exam_question
   end
 
   context 'in response to a multiple choice question' do

@@ -14,15 +14,17 @@ class Admin::ExamsControllerTest < ActionController::TestCase
       context 'on GET to index' do
         setup { get :index, :content_area_id => @content_area }
 
-        should_respond_with :success
-        should_render_template :index
-        should_assign_to :exams
+        should respond_with :success
+        should render_template :index
+        should assign_to :exams
       end
 
       context 'on GET to show' do
         setup { get :show, :content_area_id => @content_area, :id => @exam }
 
-        should_redirect_to 'admin_content_area_exam_exam_versions_url(@content_area, @exam)'
+        should 'do the redirection to the right page' do
+          assert_redirected_to admin_content_area_exam_exam_versions_path(@content_area, @exam)
+        end
       end
 
       context 'on POST to create' do
@@ -33,9 +35,12 @@ class Admin::ExamsControllerTest < ActionController::TestCase
           @exam = Exam.last
         end
 
-        should_redirect_to 'admin_content_area_exams_path(@content_area)'
+        should 'do the redirection to the right page' do
+          assert_redirected_to admin_content_area_exams_path(@content_area)
+        end
+
         # PH: FIXME: really? What if the flash were "Sorry, the content area could not be created."
-        should_set_the_flash_to /created/i
+        should set_the_flash.to /created/i
 
         should 'increase the number of exams by 1' do
           assert_equal @count+1, Exam.count
@@ -48,7 +53,9 @@ class Admin::ExamsControllerTest < ActionController::TestCase
           delete :destroy, :content_area_id => @content_area, :id => @exam.id
         end
 
-        should_redirect_to 'admin_content_area_exams_path(@content_area)'
+        should 'do the redirection to the right page' do
+          assert_redirected_to admin_content_area_exams_path(@content_area)
+        end
 
         should 'change the count of exams by -1' do
           assert_equal @count-1, Exam.count

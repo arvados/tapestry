@@ -28,6 +28,7 @@ class ExamVersion < ActiveRecord::Base
   end
 
   def completed_by?(user)
+    # Although this uses #select and #any? we only really expect one response set, since by retaking an exam the user attribute gets set to nil.
     exam_responses.for_user(user).select(&:correct?).any?
   end
 
