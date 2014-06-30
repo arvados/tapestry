@@ -1,25 +1,33 @@
 require 'test_helper'
 
 class EnrollmentApplicationsControllerTest < ActionController::TestCase
-  should_route :get,  '/enrollment_application', :controller => 'enrollment_applications', :action => 'show'
-  should_route :post, '/enrollment_application', :controller => 'enrollment_applications', :action => 'create'
+  should route( :get,  '/enrollment_application' ).to( :action => 'show' )
+  should route( :post, '/enrollment_application' ).to( :action => 'create' )
 
-  context "on GET to show" do
-    setup { get :show }
-    should_redirect_to "login_url"
-  end
+  context "not logged in" do
+    context "on GET to show" do
+      setup { get :show }
 
-  context "on POST to create" do
-    setup { post :create }
-    should_redirect_to "login_url"
+      should 'do the redirection to the login page' do
+        assert_redirected_to login_url
+      end
+    end
+
+    context "on POST to create" do
+      setup { post :create }
+
+      should 'do the redirection to the login page' do
+        assert_redirected_to login_url
+      end
+    end
   end
 
   logged_in_user_context do
     context "on GET to show" do
       setup { get :show }
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "render a form to apply for enrollment" do
         assert_select 'form[method=?][action=?]', 'post', enrollment_application_path do
@@ -29,11 +37,20 @@ class EnrollmentApplicationsControllerTest < ActionController::TestCase
     end
 
     context "on POST to create" do
-      setup { post :create }
+      setup do
+        @count = EnrollmentStepCompletion.count
+        post :create
+      end
 
-      should_change 'EnrollmentStepCompletion.count', :by => 1
-      should_redirect_to 'root_path'
-      should_set_the_flash_to /thank you/i
+      should 'change EnrollmentStepCompletion.count by 1' do
+        @count + 1 == EnrollmentStepCompletion.count
+      end
+
+      should 'do the redirection to the right page' do
+        assert_redirected_to root_path
+      end
+
+      should set_the_flash.to /thank you/i
     end
 
   end
