@@ -19,6 +19,6 @@ class NamedProxyTest < ActiveSupport::TestCase
   test "validation" do
     proxy = NamedProxy.new
     assert !proxy.save
-    assert proxy.errors.on(:email).any? { |e| e =~ /is invalid/i }
+    assert proxy.errors[:email].any? { |e| e =~ /is invalid/i }
   end
 end

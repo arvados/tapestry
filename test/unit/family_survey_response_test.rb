@@ -77,7 +77,7 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
       should 'give an appropriate error message' do
         @family_survey_response.valid?
         assert_equal 'must be filled out if you have children.',
-                      @family_survey_response.errors[:youngest_child_birth_year]
+                      @family_survey_response.errors[:youngest_child_birth_year].first
       end
     end
 
