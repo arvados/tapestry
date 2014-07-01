@@ -43,14 +43,15 @@ class ResidencySurveyResponse < ActiveRecord::Base
   private
 
   def residency_validation
-    if (resident == true)
+    if resident
       require_attribute 'zip' do
         unless zip =~ APP_CONFIG['zip_validation']
           errors.add(:zip, I18n.t('activerecord.errors.models.user.attributes.zip.invalid'))
         end
         require_attribute 'can_travel_to_pgphq'
       end
-    elsif (resident == false)
+    else
+      # not a resident
       require_attribute 'country'
     end
   end
