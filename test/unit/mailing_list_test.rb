@@ -5,8 +5,8 @@ class MailingListTest < ActiveSupport::TestCase
     setup do
       @mailing_list = Factory(:mailing_list)
     end
-    should_have_and_belong_to_many :users
-    should_validate_uniqueness_of :name
+    should have_and_belong_to_many :users
+    should validate_uniqueness_of :name
 
     should "have a valid factory" do
       assert_valid Factory(:mailing_list)

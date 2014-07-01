@@ -10,7 +10,7 @@ class InvitedEmailTest < ActiveSupport::TestCase
       assert @invited_email.valid?
     end
 
-    should_validate_presence_of :email
+    should validate_presence_of :email
 
     should "not have an accepted_at" do
       assert_nil @invited_email.accepted_at

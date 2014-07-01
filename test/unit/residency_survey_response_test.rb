@@ -43,8 +43,8 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
     end
 
     should_be_eligible
-    should_validate_presence_of :resident
-    should_not_allow_mass_assignment_of :user_id
+    should validate_presence_of :resident
+    should_not allow_mass_assignment_of :user_id
 
     context 'for a US resident' do
       setup { @residency_survey_response.resident = true }
@@ -63,8 +63,6 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
 
       context 'with a zip code' do
         setup { @residency_survey_response.zip = '12345' }
-
-        should_validate_presence_of :can_travel_to_pgphq
 
         context 'who can travel to PGP HQ' do
           setup { @residency_survey_response.can_travel_to_pgphq = true }
@@ -88,7 +86,7 @@ class ResidencySurveyResponseTest < ActiveSupport::TestCase
       setup { @residency_survey_response.resident = false }
 
       should_not_be_eligible
-      should_validate_presence_of :country
+      should validate_presence_of :country
 
       context 'who specifies their country' do
         setup { @residency_survey_response.country = 'Canada' }

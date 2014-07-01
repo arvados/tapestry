@@ -6,6 +6,7 @@ class ScreeningSurveyResponseTest < ActiveSupport::TestCase
       @user = Factory(:user)
       Factory(:residency_survey_response, :user => @user)
       Factory(:privacy_survey_response, :user => @user)
+      @count = EnrollmentStepCompletion.count
     end
 
     context "who completes the family_survey_response survey" do
@@ -13,7 +14,9 @@ class ScreeningSurveyResponseTest < ActiveSupport::TestCase
         Factory(:family_survey_response, :user => @user)
       end
 
-      should_change "EnrollmentStepCompletion.count"
+      should 'change EnrollmentStepCompletion.count by 1' do
+        @count + 1 == EnrollmentStepCompletion.count
+      end
     end
   end
 
@@ -22,6 +25,7 @@ class ScreeningSurveyResponseTest < ActiveSupport::TestCase
       @user = Factory(:user)
       Factory(:residency_survey_response, :user => @user)
       Factory(:family_survey_response, :user => @user)
+      @count = EnrollmentStepCompletion.count
     end
 
     context "who completes the privacy_survey_response survey" do
@@ -29,7 +33,9 @@ class ScreeningSurveyResponseTest < ActiveSupport::TestCase
         Factory(:privacy_survey_response, :user => @user)
       end
 
-      should_change "EnrollmentStepCompletion.count"
+      should 'change EnrollmentStepCompletion.count by 1' do
+        @count + 1 == EnrollmentStepCompletion.count
+      end
     end
   end
 
@@ -38,6 +44,7 @@ class ScreeningSurveyResponseTest < ActiveSupport::TestCase
       @user = Factory(:user)
       Factory(:family_survey_response, :user => @user)
       Factory(:privacy_survey_response, :user => @user)
+      @count = EnrollmentStepCompletion.count
     end
 
     context "who completes the residency_survey_response survey" do
@@ -45,7 +52,9 @@ class ScreeningSurveyResponseTest < ActiveSupport::TestCase
         Factory(:residency_survey_response, :user => @user)
       end
 
-      should_change "EnrollmentStepCompletion.count"
+      should 'change EnrollmentStepCompletion.count by 1' do
+        @count + 1 == EnrollmentStepCompletion.count
+      end
     end
   end
 end

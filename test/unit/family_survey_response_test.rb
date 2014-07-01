@@ -26,16 +26,19 @@ class FamilySurveyResponseTest < ActiveSupport::TestCase
 
     should_be_eligible
 
-    should_belong_to :user
+    should belong_to :user
 
-    should_not_allow_mass_assignment_of :user_id
+    should_not allow_mass_assignment_of :user_id
 
-    should_validate_presence_of :birth_year, :relatives_interested_in_pgp, :monozygotic_twin, :child_situation
+    should validate_presence_of :birth_year
+    should validate_presence_of :relatives_interested_in_pgp
+    should validate_presence_of :monozygotic_twin
+    should validate_presence_of :child_situation
 
     should_allow_values_for     :birth_year, 1895, 1980, 1990, 2000, 2008, 2020
     should_not_allow_values_for :birth_year, -1, 1800, 1894, :message => 'must be answered'
 
-    should_allow_values_for     :relatives_interested_in_pgp, '0', '1', '2', '3+' 
+    should_allow_values_for     :relatives_interested_in_pgp, '0', '1', '2', '3+'
     should_not_allow_values_for :relatives_interested_in_pgp, '-1', 0, 1, 2, :message => 'must be answered'
 
     #TODO why did should_allow_values_for not work properly (didn't fail for new value)
