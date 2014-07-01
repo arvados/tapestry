@@ -259,7 +259,7 @@ class User < ActiveRecord::Base
   end
 
   def self.promoted_ids
-    step_id = EnrollmentStep.find_by_keyword('eligibility_screening_results').id
+    step_id = EnrollmentStep.find_by_keyword('screening_survey_results')[:id]
     connection.select_values("select users.id from users
         inner join enrollment_step_completions on enrollment_step_completions.user_id = users.id
         where enrollment_step_completions.enrollment_step_id = #{step_id}")

@@ -305,8 +305,8 @@ class UserTest < ActiveSupport::TestCase
   context "with users who fall into various screening eligibility groups" do
     setup do
       User.delete_all
-      assert eligibility_step = EnrollmentStep.find_by_keyword('screening_submission')
-      assert promotion_step     = EnrollmentStep.find_by_keyword('eligibility_screening_results')
+      assert eligibility_step = EnrollmentStep.find_by_keyword('screening_surveys')
+      assert promotion_step     = EnrollmentStep.find_by_keyword('screening_survey_results')
 
       @user1a = Factory(:user, :first_name => 'user1a')
       @user1a.complete_enrollment_step(eligibility_step)
