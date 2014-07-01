@@ -16,7 +16,7 @@ class UserMailerTest < ActiveSupport::TestCase
   should "set the right edit_password_url in password_reset email" do
     user = Factory(:user)
     email = UserMailer.password_reset(user)
-    assert email.body.include?(edit_password_url(:host => ROOT_URL, :id => user.id, :key => user.crypted_password)),
+    assert email.body.include?(edit_password_path(:id => user.id, :key => user.crypted_password)),
       "email body should include password reset url in:\n#{email.body}"
   end
 
