@@ -1,9 +1,9 @@
 class SystemMailer < ActionMailer::Base
-  
+
   def error_notification(subject,message)
     setup_email()
     @subject += 'ERROR: ' + subject
-    @body[:message] = message
+    @message = message
   end
 
   protected
