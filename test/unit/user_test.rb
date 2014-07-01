@@ -483,17 +483,6 @@ class UserTest < ActiveSupport::TestCase
       assert_equal [@waitlisted_user, @waitlisted_user2, @waitlisted_user3].map(&:id).map(&:to_s).sort, User.waitlisted_ids.sort
     end
 
-    should "returns users in eligibility group 1 when sent .in_screening_eligibility_group(1)" do
-      assert_equal [@user1a, @user1b, @user1c, @user1d, @resubmitted_waitlisted_user].map(&:first_name).sort, User.in_screening_eligibility_group(1).map(&:first_name).sort
-    end
-
-    should "returns users in eligibility group 2 when sent .in_screening_eligibility_group(2)" do
-      assert_equal [@user2a, @user2b, @user2c, @user2d, @resubmitted_waitlisted_user2].map(&:first_name).sort, User.in_screening_eligibility_group(2).map(&:first_name).sort
-    end
-
-    should "returns users in eligibility group 3 when sent .in_screening_eligibility_group(3)" do
-      assert_equal [@user3a, @user3b, @user3c, @user3d, @user3e, @resubmitted_waitlisted_user3].map(&:first_name).sort, User.in_screening_eligibility_group(3).map(&:first_name).sort
-    end
   end
 
   should "properly calculate last_waitlisted_at" do

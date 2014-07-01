@@ -24,10 +24,6 @@ class UserMailerTest < ActiveSupport::TestCase
       "email body should include password reset url in:\n#{email.body}"
   end
 
-  should "RENAME ME: test dummy test" do
-    #do nothing
-  end
-
   private
     def read_fixture(action)
       IO.readlines("#{FIXTURES_PATH}/user_mailer/#{action}")
