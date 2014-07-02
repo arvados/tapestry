@@ -53,10 +53,9 @@ class User < ActiveRecord::Base
   has_many  :named_proxies, :dependent => :destroy
   has_one  :informed_consent_response, :dependent => :destroy
   has_one  :baseline_traits_survey, :dependent => :destroy
-  # TODO: habtm does not take :dependent => :destroy. But we want that in the event a user is deleted.
-  # We should probably convert this to has_many, see http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_and_belongs_to_many
-  # see also #363. ward, 2010-10-13
-  has_and_belongs_to_many :mailing_lists, :join_table => :mailing_list_subscriptions
+  has_many :mailing_list_subscriptions, :dependent => :destroy
+  has_many :mailing_lists, :through => :mailing_list_subscriptions
+  accepts_nested_attributes_for :mailing_list_subscriptions
   has_many :user_logs, :dependent => :destroy
   has_many :safety_questionnaires, :dependent => :destroy
   has_many :ccrs, :dependent => :destroy
@@ -299,7 +298,8 @@ class User < ActiveRecord::Base
                   :first_name, :middle_name, :last_name, :pgp_id,
                   :security_question, :security_answer,
                   :address1, :address2, :city, :state, :zip,
-                  :phr_profile_name, :mailing_list_ids, :authsub_token, :researcher_affiliation
+                  :phr_profile_name, :mailing_list_ids, :authsub_token, :researcher_affiliation,
+                  :mailing_list_subscriptions_attributes
 
   # Activates the user in the database.
   def activate!

@@ -7,32 +7,31 @@ class Admin::UsersControllerTest < ActionController::TestCase
     should 'not allow access to the admin/users controller' do
       get :index
       assert_response :redirect
-      assert_redirected_to login_url
+      assert_redirected_to unauthorized_user_path
     end
   end
 
   logged_in_as_admin do
 
-    context 'on GET to edit for a user' do
+    context 'on GET to show a user' do
       setup do
         @user = Factory(:user)
         Factory(:waitlist, :user => @user, :reason => "Banana sundae")
         Factory(:enrollment_step)
-        get :edit, :id => @user.id
+        get :show, :id => @user.id
       end
 
       should respond_with :success
       should render_template :show
 
       should "link to #promote for each user" do
-        assert_select 'a[href=?]', promote_admin_user_url(@user)
+        assert_select 'a[href=?]', promote_admin_user_path(@user)
       end
 
       should "show that user's waitlists" do
         assert_match /Banana sundae/, @response.body
       end
 
-      should_eventually "render the edit form"
     end
 
     context "on PUT to update for a user" do
@@ -43,7 +42,9 @@ class Admin::UsersControllerTest < ActionController::TestCase
       end
 
       should respond_with :redirect
-      should_redirect_to "admin_users_url"
+      should 'redirect to the correct path' do
+        assert_redirected_to admin_users_path
+      end
 
       should "update the user" do
         assert @user.reload.is_admin?
@@ -57,6 +58,19 @@ class Admin::UsersControllerTest < ActionController::TestCase
         5.times { Factory(:user) }
       end
 
+      context 'on GET to index, requesting to list all users' do
+        setup do
+          get :index, :all => true
+        end
+
+        should 'show all users' do
+          User.all.each do |user|
+            assert_select 'td', user.email
+          end
+        end
+
+      end
+
       context 'on GET to index' do
         setup do
           get :index
@@ -64,12 +78,6 @@ class Admin::UsersControllerTest < ActionController::TestCase
 
         should respond_with :success
         should render_template :index
-
-        should 'show all users' do
-          User.all.each do |user|
-            assert_select 'td', user.email
-          end
-        end
 
         should "render a dropdown to filter users by completed enrollment step" do
           assert_select 'form[action=?][method=get]', admin_users_path do
@@ -80,18 +88,6 @@ class Admin::UsersControllerTest < ActionController::TestCase
 
         should "render a link to filter only inactive users" do
           assert_select 'li>a[href=?]', admin_users_path(:inactive => true)
-        end
-
-        should "render a link to show only users who are in group 1 (best match)" do
-          assert_select 'li>a[href=?]',admin_users_path(:screening_eligibility_group => 1)
-        end
-
-        should "render a link to show only users who are in group 2 (ok match)" do
-          assert_select 'li>a[href=?]', admin_users_path(:screening_eligibility_group => 2)
-        end
-
-        should "render a link to show only users who are in group 3 (ok match)" do
-          assert_select 'li>a[href=?]', admin_users_path(:screening_eligibility_group => 3)
         end
 
         should "render a link to the bulk-promote-user page" do
@@ -107,8 +103,8 @@ class Admin::UsersControllerTest < ActionController::TestCase
         end
       end
 
-      should 'show all users on GET to index as CSV' do
-        get :index, :format => 'csv'
+      should 'show as CSV on GET to index, requesting all users' do
+        get :index, :all => true, :format => 'csv'
         assert_response :success
 
         User.all.each do |user|
@@ -137,14 +133,14 @@ class Admin::UsersControllerTest < ActionController::TestCase
         assert_equal [completed_user], assigns(:users)
       end
 
-      should "filter users who are in a screening_eligibility_group when params[:screening_eligibility_group] is specified" do
+      should "show users who are enrolled when filter is specified" do
         users = [Factory(:user)]
-        User.expects(:in_screening_eligibility_group).with(1).once.returns(users)
+        User.expects(:enrolled).once.returns(users)
 
-        get :index, :screening_eligibility_group => "1"
+        get :index, :enrolled => true
 
         assert_equal users, assigns(:users)
-        assert_select 'a[href=?]', admin_users_url(:format => 'csv', :screening_eligibility_group => "1")
+        assert_select 'a[href=?]', admin_users_url(:format => 'csv', :enrolled => true)
       end
 
       should 'link to the CSV download with the same filter when params[:completed] is specified' do
