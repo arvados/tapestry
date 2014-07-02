@@ -18,8 +18,8 @@ class PledgesControllerTest < ActionController::TestCase
     context "on GET to show" do
       setup { get :show }
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "render a form to accept a pledge" do
         assert_select 'form[method=?][action=?]', 'post', pledge_path do
@@ -48,18 +48,18 @@ class PledgesControllerTest < ActionController::TestCase
       setup { post :create, :pledge => 'ASDF' }
 
       should_not_change 'EnrollmentStepCompletion.count'
-      should_respond_with :success
-      should_render_template :show
-      should_set_the_flash_to /pledge/i
+      should respond_with :success
+      should render_template :show
+      should set_the_flash.to /pledge/i
     end
 
     context "on POST to create with a negative pledge" do
       setup { post :create, :pledge => '-1' }
 
       should_not_change 'EnrollmentStepCompletion.count'
-      should_respond_with :success
-      should_render_template :show
-      should_set_the_flash_to /pledge/i
+      should respond_with :success
+      should render_template :show
+      should set_the_flash.to /pledge/i
     end
   end
 end

@@ -21,8 +21,8 @@ class Admin::UsersControllerTest < ActionController::TestCase
         get :edit, :id => @user.id
       end
 
-      should_respond_with :success
-      should_render_template :edit
+      should respond_with :success
+      should render_template :show
 
       should "link to #promote for each user" do
         assert_select 'a[href=?]', promote_admin_user_url(@user)
@@ -42,7 +42,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
         put :update, :id => @user.to_param, :user => { "is_admin" => "1", "email" => "newemail@example.com", "mailing_list_ids" => [ @mailing_list.id ] }
       end
 
-      should_respond_with :redirect
+      should respond_with :redirect
       should_redirect_to "admin_users_url"
 
       should "update the user" do
@@ -62,8 +62,8 @@ class Admin::UsersControllerTest < ActionController::TestCase
           get :index
         end
 
-        should_respond_with :success
-        should_render_template :index
+        should respond_with :success
+        should render_template :index
 
         should 'show all users' do
           User.all.each do |user|

@@ -18,8 +18,8 @@ class ScreeningSubmissionsControllerTest < ActionController::TestCase
     context "on GET to show" do
       setup { get :show }
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "render a form to create a screening submission" do
         assert_select 'form[method=?][action=?]', 'post', screening_submission_path
@@ -36,7 +36,7 @@ class ScreeningSubmissionsControllerTest < ActionController::TestCase
       end
 
       should_change "EnrollmentStepCompletion.count", :by => 1
-      should_set_the_flash_to /your eligibility application has been received/i
+      should set_the_flash.to /your eligibility application has been received/i
 
       should_redirect_to "root_path"
     end
@@ -81,7 +81,7 @@ class ScreeningSubmissionsControllerTest < ActionController::TestCase
 
     #   should_redirect_to "root_path"
 
-    #   should_set_the_flash_to /thank you for your interest/i
+    #   should set_the_flash.to /thank you for your interest/i
     # end
   end
 end

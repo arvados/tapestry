@@ -12,8 +12,8 @@ class PagesControllerTest < ActionController::TestCase
     context "on GET to /pages/#{page}" do
       setup { get :show, :id => page }
 
-      should_respond_with :success
-      should_render_template page
+      should respond_with :success
+      should render_template page
     end
   end
 

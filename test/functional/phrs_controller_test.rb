@@ -18,8 +18,8 @@ class PhrsControllerTest < ActionController::TestCase
     context "on GET to show" do
       setup { get :show }
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "render a form to acknowledge PHR" do
         assert_select 'form[method=?][action=?]', 'post', phr_path do
@@ -47,9 +47,9 @@ class PhrsControllerTest < ActionController::TestCase
         post :create
       end
 
-      should_respond_with :success
-      should_render_template :show
-      should_set_the_flash_to /phr profile name/i
+      should respond_with :success
+      should render_template :show
+      should set_the_flash.to /phr profile name/i
       should_not_change "EnrollmentStepCompletion.count"
     end
   end

@@ -18,8 +18,8 @@ class IdentityConfirmationsControllerTest < ActionController::TestCase
     context "on GET to show" do
       setup { get :show }
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "render a form to confirm identity" do
         assert_select 'form[method=?][action=?]', 'post', identity_confirmation_path do
@@ -36,10 +36,10 @@ class IdentityConfirmationsControllerTest < ActionController::TestCase
       setup { post :create }
 
       should_not_change 'EnrollmentStepCompletion.count'
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
-      should_set_the_flash_to /enter your mailing address/i
+      should set_the_flash.to /enter your mailing address/i
     end
 
     context "on POST to create with address fields" do

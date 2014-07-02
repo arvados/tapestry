@@ -12,7 +12,7 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
         get :edit
       end
 
-      should_respond_with :redirect
+      should respond_with :redirect
       should_redirect_to 'login_url'
     end
   end
@@ -26,9 +26,9 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
           get :edit
         end
 
-        should_respond_with :success
-        should_render_template :edit
-        should_assign_to :residency_survey_response
+        should respond_with :success
+        should render_template :edit
+        should assign_to :residency_survey_response
       end
     end
 
@@ -42,9 +42,9 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
           get :edit
         end
 
-        should_respond_with :success
-        should_render_template :edit
-        should_assign_to :residency_survey_response
+        should respond_with :success
+        should render_template :edit
+        should assign_to :residency_survey_response
 
         should 'render a form for the residency_survey_response' do
           assert_select 'form[action=?]', screening_surveys_residency_path do
@@ -71,10 +71,10 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
           end
         end
 
-        should_respond_with :redirect
+        should respond_with :redirect
         should_redirect_to 'screening_surveys_path'
 
-        should_set_the_flash_to /continue/i
+        should set_the_flash.to /continue/i
       end
 
       context 'on PUT to update with invalid options' do
@@ -87,8 +87,8 @@ class ScreeningSurveys::ResidenciesControllerTest < ActionController::TestCase
           put :update, :residency_survey_response => @invalid_attr_hash
         end
 
-        should_respond_with :success
-        should_render_template :edit
+        should respond_with :success
+        should render_template :edit
       end
     end
   end

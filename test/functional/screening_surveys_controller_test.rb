@@ -12,7 +12,7 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
         get :show
       end
 
-      should_respond_with :redirect
+      should respond_with :redirect
       should_redirect_to 'login_url'
     end
   end
@@ -23,8 +23,8 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
         get :show
       end
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
     end
 
     context "a user has completed all screening surveys" do
@@ -44,7 +44,7 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
       end
 
       should_redirect_to 'root_path'
-      should_set_the_flash_to /eligibility questionnaire/i
+      should set_the_flash.to /eligibility questionnaire/i
     end
   end
 

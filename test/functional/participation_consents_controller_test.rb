@@ -18,8 +18,8 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
     context "on GET to show" do
       setup { get :show }
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "render a form to create a participation consent" do
       end
@@ -48,8 +48,8 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
       end
 
       should_not_change 'EnrollmentStepCompletion.count'
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "render error messages about the questionnaire" do
         assert_match /Your name and email signature must match the name and email that you signed up with./, @response.body
@@ -70,8 +70,8 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
       end
 
       should_not_change 'EnrollmentStepCompletion.count'
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "render error messages about the questionnaire" do
         assert_match /You must answer the questions within the Consent Form/, @response.body

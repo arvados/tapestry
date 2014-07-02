@@ -12,8 +12,8 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
     context "on GET to show with no existing traits" do
       setup { get :show }
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "render a button to add a new trait" do
         assert_select 'form[method=post][action=?]', distinctive_traits_survey_path do
@@ -34,8 +34,8 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
         get :show
       end
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "render a button to add a new trait" do
         assert_select 'form[method=post][action=?]', distinctive_traits_survey_path do
@@ -67,7 +67,7 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
         assert_equal 0, @user.distinctive_traits.count
       end
 
-      should_set_the_flash_to /No distinctive traits/
+      should set_the_flash.to /No distinctive traits/
       should_change 'EnrollmentStepCompletion.count', :by => 1
       should_redirect_to 'root_path'
     end
@@ -89,7 +89,7 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
         assert_equal 5,          @user.distinctive_traits.second.rating
       end
 
-      should_set_the_flash_to /distinctive traits/
+      should set_the_flash.to /distinctive traits/
       should_change 'EnrollmentStepCompletion.count', :by => 1
       should_redirect_to 'root_path'
     end
@@ -112,7 +112,7 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
         assert_equal 5,          @user.distinctive_traits.second.rating
       end
 
-      should_set_the_flash_to /distinctive traits/
+      should set_the_flash.to /distinctive traits/
       should_change 'EnrollmentStepCompletion.count', :by => 1
       should_redirect_to 'root_path'
     end
@@ -132,7 +132,7 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
         assert_equal 1,          @user.distinctive_traits.first.rating
       end
 
-      should_set_the_flash_to /distinctive traits/
+      should set_the_flash.to /distinctive traits/
       should_change 'EnrollmentStepCompletion.count', :by => 1
       should_redirect_to 'root_path'
     end

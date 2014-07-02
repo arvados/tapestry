@@ -9,8 +9,8 @@ class PasswordsControllerTest < ActionController::TestCase
       get :new
     end
 
-    should_respond_with :success
-    should_render_template :new
+    should respond_with :success
+    should render_template :new
 
     should 'render a form that posts to create with email address' do
       assert_select 'form[action=?]', password_url do
@@ -60,8 +60,8 @@ class PasswordsControllerTest < ActionController::TestCase
       get :edit, :id => @user.id, :key => @user.crypted_password
     end
 
-    should_respond_with :success
-    should_render_template :edit
+    should respond_with :success
+    should render_template :edit
 
     should "render a form that PUTs to update that allows password update and contains key" do
       assert_select 'form[action=?]', password_url do

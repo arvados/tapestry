@@ -18,9 +18,9 @@ class TraitCollectionsControllerTest < ActionController::TestCase
     context "on GET to show" do
       setup { get :show }
 
-      should_respond_with :success
-      should_render_template :show
-      should_assign_to "baseline_traits_survey"
+      should respond_with :success
+      should render_template :show
+      should assign_to "baseline_traits_survey"
 
       should "render a form to upload traits" do
         assert_select 'form[method=?][action=?]', 'post', trait_collection_path
@@ -44,8 +44,8 @@ class TraitCollectionsControllerTest < ActionController::TestCase
       end
 
       should_not_change 'EnrollmentStepCompletion.count'
-      should_render_template :show
-      should_assign_to "baseline_traits_survey"
+      should render_template :show
+      should assign_to "baseline_traits_survey"
     end
   end
 end

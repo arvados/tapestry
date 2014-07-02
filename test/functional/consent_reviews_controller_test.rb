@@ -14,8 +14,8 @@ class ConsentReviewsControllerTest < ActionController::TestCase
         get :show
       end
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "link to the consent document" do
         assert_select 'a', :text => /download/i
@@ -33,9 +33,9 @@ class ConsentReviewsControllerTest < ActionController::TestCase
         post :create, :consent_review => { :agreement => "0" }
       end
 
-      should_set_the_flash_to /review/i
-      should_respond_with :success
-      should_render_template :show
+      should set_the_flash.to /review/i
+      should respond_with :success
+      should render_template :show
     end
 
     context "on POST to create with agreement" do

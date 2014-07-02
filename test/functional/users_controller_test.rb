@@ -42,8 +42,8 @@ class UsersControllerTest < ActionController::TestCase
         get :edit, :id => @user.to_param
       end
 
-      should_respond_with :success
-      should_render_template :edit
+      should respond_with :success
+      should render_template :edit
 
       should 'include a link to request account deletion' do
         assert_select 'form[action=?]', user_url(@user) do
