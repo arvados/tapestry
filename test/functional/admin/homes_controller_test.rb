@@ -7,7 +7,7 @@ class Admin::HomesControllerTest < ActionController::TestCase
     should 'not allow non-admin access to the admin/homes controller' do
       get :index
       assert_response :redirect
-      assert_redirected_to login_url
+      assert_redirected_to unauthorized_user_path
     end
   end
 

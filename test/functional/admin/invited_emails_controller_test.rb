@@ -8,7 +8,7 @@ class Admin::InvitedEmailsControllerTest < ActionController::TestCase
     should 'not allow access' do
       get :index
       assert_response :redirect
-      assert_redirected_to login_url
+      assert_redirected_to unauthorized_user_path
     end
   end
 

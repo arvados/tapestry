@@ -9,7 +9,7 @@ class Admin::BulkPromotionsControllerTest < ActionController::TestCase
       get :new
 
       assert_response :redirect
-      assert_redirected_to login_url
+      assert_redirected_to unauthorized_user_path
     end
   end
 
