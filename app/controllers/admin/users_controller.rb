@@ -103,7 +103,7 @@ class Admin::UsersController < Admin::AdminControllerBase
   end
 
   def show
-    if (params[:id].length == 40) then
+    if params[:id].to_s.length == 40 then
       # /admin/users/f65ea621688341215688354afc8321893a84cae5
       @user = User.locate_unenrolled_identifier(params[:id])
     else
