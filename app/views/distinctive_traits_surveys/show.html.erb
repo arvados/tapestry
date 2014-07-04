@@ -4,7 +4,7 @@
 <p>For each trait, rank on a scale of 1-5 your belief as to the likelihood of the trait being environmental or genetic (with 1 being more environmental and 5 being more genetic). Let's use swimming again as an example. If a person is an exceptional swimmer and grew up by the shore and was encouraged to swim at an early age, that may be a 1 on this scale. On the other hand, an exceptional swimmer that grew up without encouragement to swim and with limited access to bodies of water, may be a 5.</p>
 
 
-<%= form_tag distinctive_traits_survey_path, { :id => "distinctive_traits_form" } %>
+<%= form_tag distinctive_traits_survey_path, { :id => "distinctive_traits_form" } do %>
   <div id="distinctive_traits_fieldset">
     <% current_user.distinctive_traits.each do |trait| %>
       <div>
@@ -23,13 +23,6 @@
               <option <%= 'selected="selected"' if trait.rating.to_i == 4 %> value="4">4: Mostly Genetic</option>
               <option <%= 'selected="selected"' if trait.rating.to_i == 5 %> value="5">5: Genetic</option>
             </select>
-            <% content_for :js do %>
-              <%# Why doesn't a jq iterator on dom:ready in the bottom of the page just work? %>
-              $(document).ready(function () {
-                $('select#existing_trait_<%= trait.id %>').selectToUISlider();
-                $('select#existing_trait_<%= trait.id %>').hide();
-              });
-            <% end %>
           </p>
         </div>
       </div>
@@ -38,7 +31,7 @@
 
   <p><input type="button" value="Add another trait" id="add_new_trait_button" /></p>
   <p><%= submit_tag "I am finished entering traits. Submit my list of traits.", :confirm => "Are you sure you're done entering traits?  Press OK to finish and submit your traits, or press cancel if you'd like to continue entering traits." %></p>
-</form>
+<% end %>
 
 <div id="original_trait_fields" style="display: none;">
   <div class="distinctive_trait_entry">
@@ -59,17 +52,6 @@
   </div>
 </div>
 
-<%= javascript_include_tag 'jquery-ui-1.7.1.custom.min.js', 'selectToUISlider.jQuery.js' %>
-
-<style type="text/css">
-.ui-slider .ui-state-active .ui-slider-tooltip, .ui-slider .ui-state-focus .ui-slider-tooltip, .ui-slider .ui-state-hover .ui-slider-tooltip {
-	width: 14em;
-	margin-left: -6.7em;
-}
-
-.ui-slider {top: 1em; margin-bottom: 1em;}
-
-</style>
 <% content_for :js do %>
     $(document).ready(function () {
       var selectCount = 0;
@@ -81,8 +63,6 @@
         var select = newTraitFields.find("p select");
         select.attr("id", "trait_rating_select_" + selectCount);
         selectCount++;
-        select.selectToUISlider();
-        select.hide();
 
         return false;
       };

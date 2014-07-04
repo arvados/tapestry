@@ -46,20 +46,26 @@ baseline_trait_collection_notification:
   title: baseline_trait_collection_notification
   description: baseline_trait_collection_notification
 
-identity_verification_notification:
+distinctive_traits_survey:
   ordinal: 9
+  keyword: distinctive_traits_survey
+  title: distinctive_traits_survey
+  description: distinctive_traits_survey
+
+identity_verification_notification:
+  ordinal: 10
   keyword: identity_verification_notification
   title: identity_verification_notification
   description: identity_verification_notification
 
 enrollment_application:
-  ordinal: 10
+  ordinal: 11
   keyword: enrollment_application
   title: enrollment_application
   description: enrollment_application
 
 enrollment_application_results:
-  ordinal: 11
+  ordinal: 12
   keyword: enrollment_application_results
   title: enrollment_application_results
   description: enrollment_application_results

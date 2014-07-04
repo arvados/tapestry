@@ -1,14 +1,26 @@
 require 'test_helper'
 
 class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
-  should_route :get,  '/distinctive_traits_survey', :action => 'show'
+  should route( :get, '/distinctive_traits_survey' ).to( :action => 'show' )
 
-  context "on GET to show" do
+  context "on GET to show when not a logged in user" do
     setup { get :show }
-    should_redirect_to "login_url"
+    should "redirect appropriately" do
+      assert_redirected_to login_path
+    end
   end
 
   logged_in_user_context do
+    context "on GET to show when logged in but not enrolled" do
+      setup { get :show }
+
+      should 'redirect appropriately' do
+        assert_redirected_to unauthorized_user_path
+      end
+    end
+  end
+
+  logged_in_enrolled_user_context do
     context "on GET to show with no existing traits" do
       setup { get :show }
 
@@ -51,14 +63,18 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
 
       should "render the form for an existing trait" do
         assert_select 'input[type=text][name=?][value=?]', 'traits[][name]', 'Swimming'
-        assert_select 'select[name=?]',           'traits[][rating]' do
-          assert_select 'option[selected=selected][value=5]'
+      end
+
+      should_eventually "find the existing trait with the rating we set (still baffled why this doesn't work)" do
+        assert_select 'select[name=?]', 'traits[][rating]' do
+          assert_select 'option[selected=?][value=?]', 'selected', '5'
         end
       end
     end
 
     context "on POST to create with no traits" do
       setup do
+        @count = EnrollmentStepCompletion.count
         post :create
       end
 
@@ -68,12 +84,19 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
       end
 
       should set_the_flash.to /No distinctive traits/
-      should_change 'EnrollmentStepCompletion.count', :by => 1
-      should_redirect_to 'root_path'
+
+      should 'increase EnrollmentStepCompletion count by 1' do
+        assert_equal (@count + 1), EnrollmentStepCompletion.count
+      end
+
+      should 'redirect appropriately' do
+        assert_redirected_to root_path
+      end
     end
 
     context "on POST to create with several traits" do
       setup do
+        @count = EnrollmentStepCompletion.count
         post :create, :traits => [
           { :name => "Swimming", :rating => "1" },
           { :name => "Running",  :rating => "5" }
@@ -90,12 +113,19 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
       end
 
       should set_the_flash.to /distinctive traits/
-      should_change 'EnrollmentStepCompletion.count', :by => 1
-      should_redirect_to 'root_path'
+
+      should 'increase EnrollmentStepCompletion count by 1' do
+        assert_equal (@count + 1), EnrollmentStepCompletion.count
+      end
+
+      should 'redirect appropriately' do
+        assert_redirected_to root_path
+      end
     end
 
     context "on POST to create with several traits and some existing traits" do
       setup do
+        @count = EnrollmentStepCompletion.count
         Factory(:distinctive_trait, :user => @user, :rating => 5, :name => "Swimming")
         post :create, :traits => [
           { :name => "Swimming", :rating => "1" },
@@ -113,12 +143,19 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
       end
 
       should set_the_flash.to /distinctive traits/
-      should_change 'EnrollmentStepCompletion.count', :by => 1
-      should_redirect_to 'root_path'
+
+      should 'increase EnrollmentStepCompletion count by 1' do
+        assert_equal (@count + 1), EnrollmentStepCompletion.count
+      end
+
+      should 'redirect appropriately' do
+        assert_redirected_to root_path
+      end
     end
 
     context "on POST to create with some traits filled in, and some left blank" do
       setup do
+        @count = EnrollmentStepCompletion.count
         post :create, :traits => [
           { :name => "Swimming", :rating => "1" },
           { :name => "",  :rating => "5" }
@@ -133,8 +170,14 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
       end
 
       should set_the_flash.to /distinctive traits/
-      should_change 'EnrollmentStepCompletion.count', :by => 1
-      should_redirect_to 'root_path'
+
+      should 'increase EnrollmentStepCompletion count by 1' do
+        assert_equal (@count + 1), EnrollmentStepCompletion.count
+      end
+
+      should 'redirect appropriately' do
+        assert_redirected_to root_path
+      end
     end
   end
 end

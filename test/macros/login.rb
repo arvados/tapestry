@@ -15,6 +15,23 @@ class ActiveSupport::TestCase
     end
   end
 
+  def self.logged_in_enrolled_user_context(&blk)
+    context 'as an enrolled and logged in user' do
+      setup do
+        @user = Factory :user
+        @user.activate!
+        @user.accept_tos if APP_CONFIG['ensure_tos']
+        @user.enrolled = Time.now
+        @user.documents << Document.new(:keyword => 'consent', :version => APP_CONFIG['latest_consent_version'], :timestamp => Time.now())
+        @user.hex = Factory.next( :hex )
+        @user.save!
+        login_as @user
+      end
+
+      merge_block(&blk)
+    end
+  end
+
   def self.public_context(&blk)
     context 'as a public visitor' do
       setup do

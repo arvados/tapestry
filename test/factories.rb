@@ -39,6 +39,8 @@ Factory.sequence(:pgp_id) { |n| "#{n}" }
 
 Factory.sequence(:enrollment_step_ordinal) { |n| n }
 
+Factory.sequence(:hex) { |n| "hex#{n}"}
+
 %w(keyword title description).each do |attr|
   Factory.sequence("enrollment_step_#{attr}".to_sym) { |n| "#{attr.upcase} #{n}" }
 end
@@ -227,4 +229,7 @@ Factory.define(:named_proxy) do |f|
   f.email "test@example.com"
 end
 
-
+Factory.sequence(:device_type_name) {|n| "Device Type #{n}"}
+Factory.define(:device_type) do |f|
+  f.name { Factory.next :device_type_name }
+end

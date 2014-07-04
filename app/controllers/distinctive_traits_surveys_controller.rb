@@ -31,7 +31,7 @@ class DistinctiveTraitsSurveysController < ApplicationController
     if current_user.distinctive_traits.any?
       flash[:notice] = 'Your distinctive traits were recorded.'
     else
-      flash[:notice] = 'No distinctive traits were recorded.'
+      flash[:error] = 'No distinctive traits were recorded.'
     end
   end
 end
