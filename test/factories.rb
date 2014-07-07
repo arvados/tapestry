@@ -234,6 +234,51 @@ Factory.define(:device_type) do |f|
   f.name { Factory.next :device_type_name }
 end
 
+Factory.sequence(:tissue_type_name) {|n| "Device Type #{n}"}
+Factory.define(:tissue_type) do |f|
+  f.name { Factory.next :tissue_type_name }
+end
+
+Factory.sequence(:unit_name) {|n| "Device Type #{n}"}
+Factory.define(:unit) do |f|
+  f.name { Factory.next :unit_name }
+end
+
 Factory.define(:google_survey) do |f|
   f.description "My glorious description"
+  f.association :user
+  f.creator {|g| g.association :user}
+end
+
+Factory.sequence(:study_name) {|n| "Study #{n}"}
+Factory.define(:study) do |f|
+  f.name { Factory.next :study_name }
+  f.researcher { Factory(:user) }
+  f.participant_description "participant_description"
+  f.researcher_description "researcher_description"
+end
+
+Factory.sequence(:kit_design_name) {|n| "Kit design #{n}"}
+Factory.define(:kit_design) do |f|
+  f.name { Factory.next :kit_design_name }
+  f.study { Factory(:study) }
+  f.description "My glorious description"
+  f.owner {|k| k.association :user }
+  f.instructions_file_name 'filename'
+end
+
+Factory.sequence(:sample_type_name) {|n| "Sample type #{n}"}
+Factory.define(:sample_type) do |f|
+  f.name { Factory.next :sample_type_name }
+  f.description "Description"
+  f.target_amount 100
+  f.association :tissue_type
+  f.association :device_type
+  f.association :unit
+end
+
+Factory.define(:kit_design_sample) do |f|
+  f.name "My kit design sample name"
+  f.sort_order 1
+  f.association :kit_design
 end

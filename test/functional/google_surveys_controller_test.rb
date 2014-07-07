@@ -113,8 +113,7 @@ class GoogleSurveysControllerTest < ActionController::TestCase
 
       context "on GET to show" do
         setup do
-          user = Factory :user
-          survey = Factory :google_survey, :user => user
+          survey = Factory :google_survey
           get :show, :id => survey.to_param
         end
 
