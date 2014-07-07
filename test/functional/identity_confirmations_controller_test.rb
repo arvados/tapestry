@@ -1,22 +1,28 @@
 require 'test_helper'
 
 class IdentityConfirmationsControllerTest < ActionController::TestCase
-  should_route :get,  '/identity_confirmation', :controller => 'identity_confirmations', :action => 'show'
-  should_route :post, '/identity_confirmation', :controller => 'identity_confirmations', :action => 'create'
+  should route( :get,  '/identity_confirmation' ).to( :controller => 'identity_confirmations', :action => 'show' )
+  should route( :post, '/identity_confirmation' ).to( :controller => 'identity_confirmations', :action => 'create' )
 
   context "on GET to show" do
     setup { get :show }
-    should_redirect_to "login_url"
+    should 'redirect appropriately' do
+      assert_redirected_to login_path
+    end
   end
 
   context "on POST to create" do
     setup { post :create }
-    should_redirect_to "login_url"
+    should 'redirect appropriately' do
+      assert_redirected_to login_path
+    end
   end
 
   logged_in_user_context do
     context "on GET to show" do
-      setup { get :show }
+      setup do
+        get :show
+      end
 
       should respond_with :success
       should render_template :show
@@ -33,37 +39,52 @@ class IdentityConfirmationsControllerTest < ActionController::TestCase
     end
 
     context "on POST to create without address fields" do
-      setup { post :create }
+      setup do
+        @count = EnrollmentStepCompletion.count
+        post :create
+      end
 
-      should_not_change 'EnrollmentStepCompletion.count'
+      should 'not increase step completion count' do
+        assert_equal @count, EnrollmentStepCompletion.count
+      end
+
       should respond_with :success
       should render_template :show
 
-      should set_the_flash.to /enter your mailing address/i
+      should 'show an appropriate error' do
+        assert_select 'div.alert-error', /enter your mailing address/i
+      end
+
     end
 
     context "on POST to create with address fields" do
       setup do
+        Factory :enrollment_step, :keyword => 'identity_confirmation'
+        @count = EnrollmentStepCompletion.count
         post :create, :identity_confirmation => {
-          :address1 => "address1",
-          :address2 => "address2",
-          :city     => "city",
-          :state    => "state",
-          :zip      => "zip"
+          :address1 => "address1-xyz",
+          :address2 => "address2-xyz",
+          :city     => "city-xyz",
+          :state    => "state-xyz",
+          :zip      => "zip-xyz"
         }
       end
 
       should "update the user address" do
-        @user.reload
-        assert_equal "address1", @user.address1
-        assert_equal "address2", @user.address2
-        assert_equal "city",     @user.city
-        assert_equal "state",    @user.state
-        assert_equal "zip",      @user.zip
+        assert_equal "address1-xyz", @user.address1
+        assert_equal "address2-xyz", @user.address2
+        assert_equal "city-xyz",     @user.city
+        assert_equal "state-xyz",    @user.state
+        assert_equal "zip-xyz",      @user.zip
       end
 
-      should_change 'EnrollmentStepCompletion.count', :by => 1
-      should_redirect_to 'root_path'
+      should 'increase step completion count' do
+        assert_equal @count+1, EnrollmentStepCompletion.count
+      end
+
+      should 'redirect appropriately' do
+        assert_redirected_to root_path
+      end
     end
   end
 end

@@ -1,4 +1,6 @@
 class IdentityConfirmationsController < ApplicationController
+  skip_before_filter :ensure_enrolled
+
   def show
   end
 
@@ -9,7 +11,6 @@ class IdentityConfirmationsController < ApplicationController
        params[:identity_confirmation][:state].blank? ||
        params[:identity_confirmation][:zip].blank?
       flash[:error] = 'You must enter your mailing address to confirm your identity.'
-      show
       render :action => 'show'
     else
       current_user.update_attributes(params[:identity_confirmation])
