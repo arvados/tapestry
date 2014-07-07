@@ -72,111 +72,118 @@ class DistinctiveTraitsSurveysControllerTest < ActionController::TestCase
       end
     end
 
-    context "on POST to create with no traits" do
+    context 'where distinctive_traits_survey is an enrollment step' do
+
       setup do
-        @count = EnrollmentStepCompletion.count
-        post :create
+        Factory :enrollment_step, :keyword => 'distinctive_traits_survey'
       end
 
-      should "not create any traits" do
-        @user.reload
-        assert_equal 0, @user.distinctive_traits.count
+      context "on POST to create with no traits" do
+        setup do
+          @count = EnrollmentStepCompletion.count
+          post :create
+        end
+
+        should "not create any traits" do
+          @user.reload
+          assert_equal 0, @user.distinctive_traits.count
+        end
+
+        should set_the_flash.to /No distinctive traits/
+
+        should 'increase EnrollmentStepCompletion count by 1' do
+          assert_equal (@count + 1), EnrollmentStepCompletion.count
+        end
+
+        should 'redirect appropriately' do
+          assert_redirected_to root_path
+        end
       end
 
-      should set_the_flash.to /No distinctive traits/
+      context "on POST to create with several traits" do
+        setup do
+          @count = EnrollmentStepCompletion.count
+          post :create, :traits => [
+            { :name => "Swimming", :rating => "1" },
+            { :name => "Running",  :rating => "5" }
+          ]
+        end
 
-      should 'increase EnrollmentStepCompletion count by 1' do
-        assert_equal (@count + 1), EnrollmentStepCompletion.count
+        should "create those traits" do
+          @user.reload
+          assert_equal 2,          @user.distinctive_traits.count
+          assert_equal "Swimming", @user.distinctive_traits.first.name
+          assert_equal 1,          @user.distinctive_traits.first.rating
+          assert_equal "Running",  @user.distinctive_traits.second.name
+          assert_equal 5,          @user.distinctive_traits.second.rating
+        end
+
+        should set_the_flash.to /distinctive traits/
+
+        should 'increase EnrollmentStepCompletion count by 1' do
+          assert_equal (@count + 1), EnrollmentStepCompletion.count
+        end
+
+        should 'redirect appropriately' do
+          assert_redirected_to root_path
+        end
       end
 
-      should 'redirect appropriately' do
-        assert_redirected_to root_path
-      end
-    end
+      context "on POST to create with several traits and some existing traits" do
+        setup do
+          @count = EnrollmentStepCompletion.count
+          Factory(:distinctive_trait, :user => @user, :rating => 5, :name => "Swimming")
+          post :create, :traits => [
+            { :name => "Swimming", :rating => "1" },
+            { :name => "Running",  :rating => "5" }
+          ]
+        end
 
-    context "on POST to create with several traits" do
-      setup do
-        @count = EnrollmentStepCompletion.count
-        post :create, :traits => [
-          { :name => "Swimming", :rating => "1" },
-          { :name => "Running",  :rating => "5" }
-        ]
-      end
+        should "create only the new traits" do
+          @user.reload
+          assert_equal 2,          @user.distinctive_traits.count
+          assert_equal "Swimming", @user.distinctive_traits.first.name
+          assert_equal 1,          @user.distinctive_traits.first.rating
+          assert_equal "Running",  @user.distinctive_traits.second.name
+          assert_equal 5,          @user.distinctive_traits.second.rating
+        end
 
-      should "create those traits" do
-        @user.reload
-        assert_equal 2,          @user.distinctive_traits.count
-        assert_equal "Swimming", @user.distinctive_traits.first.name
-        assert_equal 1,          @user.distinctive_traits.first.rating
-        assert_equal "Running",  @user.distinctive_traits.second.name
-        assert_equal 5,          @user.distinctive_traits.second.rating
-      end
+        should set_the_flash.to /distinctive traits/
 
-      should set_the_flash.to /distinctive traits/
+        should 'increase EnrollmentStepCompletion count by 1' do
+          assert_equal (@count + 1), EnrollmentStepCompletion.count
+        end
 
-      should 'increase EnrollmentStepCompletion count by 1' do
-        assert_equal (@count + 1), EnrollmentStepCompletion.count
-      end
-
-      should 'redirect appropriately' do
-        assert_redirected_to root_path
-      end
-    end
-
-    context "on POST to create with several traits and some existing traits" do
-      setup do
-        @count = EnrollmentStepCompletion.count
-        Factory(:distinctive_trait, :user => @user, :rating => 5, :name => "Swimming")
-        post :create, :traits => [
-          { :name => "Swimming", :rating => "1" },
-          { :name => "Running",  :rating => "5" }
-        ]
+        should 'redirect appropriately' do
+          assert_redirected_to root_path
+        end
       end
 
-      should "create only the new traits" do
-        @user.reload
-        assert_equal 2,          @user.distinctive_traits.count
-        assert_equal "Swimming", @user.distinctive_traits.first.name
-        assert_equal 1,          @user.distinctive_traits.first.rating
-        assert_equal "Running",  @user.distinctive_traits.second.name
-        assert_equal 5,          @user.distinctive_traits.second.rating
-      end
+      context "on POST to create with some traits filled in, and some left blank" do
+        setup do
+          @count = EnrollmentStepCompletion.count
+          post :create, :traits => [
+            { :name => "Swimming", :rating => "1" },
+            { :name => "",  :rating => "5" }
+          ]
+        end
 
-      should set_the_flash.to /distinctive traits/
+        should "only create traits which were not left blank" do
+          @user.reload
+          assert_equal 1,          @user.distinctive_traits.count
+          assert_equal "Swimming", @user.distinctive_traits.first.name
+          assert_equal 1,          @user.distinctive_traits.first.rating
+        end
 
-      should 'increase EnrollmentStepCompletion count by 1' do
-        assert_equal (@count + 1), EnrollmentStepCompletion.count
-      end
+        should set_the_flash.to /distinctive traits/
 
-      should 'redirect appropriately' do
-        assert_redirected_to root_path
-      end
-    end
+        should 'increase EnrollmentStepCompletion count by 1' do
+          assert_equal (@count + 1), EnrollmentStepCompletion.count
+        end
 
-    context "on POST to create with some traits filled in, and some left blank" do
-      setup do
-        @count = EnrollmentStepCompletion.count
-        post :create, :traits => [
-          { :name => "Swimming", :rating => "1" },
-          { :name => "",  :rating => "5" }
-        ]
-      end
-
-      should "only create traits which were not left blank" do
-        @user.reload
-        assert_equal 1,          @user.distinctive_traits.count
-        assert_equal "Swimming", @user.distinctive_traits.first.name
-        assert_equal 1,          @user.distinctive_traits.first.rating
-      end
-
-      should set_the_flash.to /distinctive traits/
-
-      should 'increase EnrollmentStepCompletion count by 1' do
-        assert_equal (@count + 1), EnrollmentStepCompletion.count
-      end
-
-      should 'redirect appropriately' do
-        assert_redirected_to root_path
+        should 'redirect appropriately' do
+          assert_redirected_to root_path
+        end
       end
     end
   end

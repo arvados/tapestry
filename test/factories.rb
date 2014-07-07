@@ -233,3 +233,7 @@ Factory.sequence(:device_type_name) {|n| "Device Type #{n}"}
 Factory.define(:device_type) do |f|
   f.name { Factory.next :device_type_name }
 end
+
+Factory.define(:google_survey) do |f|
+  f.description "My glorious description"
+end

@@ -1,11 +1,13 @@
 require 'test_helper'
 
 class EligibilityScreeningResultsControllerTest < ActionController::TestCase
-  should_route 'GET', 'eligibility_screening_results', :action => 'index'
+  should route('GET', 'eligibility_screening_results').to(:action => 'index')
 
-  context "on GET to index" do
+  context "on GET to index with no logged in user" do
     setup { get :index }
-    should_redirect_to "login_url"
+    should 'redirect appropriately' do
+      assert_redirected_to login_path
+    end
   end
 
   logged_in_user_context do
