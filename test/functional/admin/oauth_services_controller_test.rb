@@ -5,7 +5,7 @@ class Admin::OauthServicesControllerTest < ActionController::TestCase
   logged_in_as_admin do
 
     setup do
-      @admin_oauth_service = oauth_services(:one)
+      @admin_oauth_service = Factory(:oauth_service)
     end
 
     should "get index" do

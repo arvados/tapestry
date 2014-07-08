@@ -8,42 +8,78 @@ class PagesControllerTest < ActionController::TestCase
     assert_recognizes({ :controller => 'pages', :action => 'show', :id => 'home' }, '/')
   end
 
-  %w(home logged_out introduction).each do |page|
-    context "on GET to /pages/#{page}" do
-      setup { get :show, :id => page }
-
-      should respond_with :success
-      should render_template page
-    end
-  end
-
-  context 'on GET to /pages/non-existant-page' do
+  # This is a user that is not logged in, but the way Tapestry works will send us to a "create admin user" page
+  # if there is not at least one user existant in the database.
+  context 'not logged in' do
     setup do
-      trap_exception { get :show, :id => 'non-existant-page' }
+      Factory :user
     end
 
-    should_raise_exception ActionController::RoutingError
-  end
+    %w(home logged_out 23andme sitemap introduction withdrawal_menu).each do |page|
+      context "on GET to /pages/#{page}" do
+        setup do
+          get :show, :id => page
+        end
 
-  context 'on GET to /pages/home for a not-logged-in user' do
-    setup do
-      get :show, :id => 'home'
-    end
-
-    should "render a form that POSTs to /session" do
-      assert_select 'form[method=post][action=?]', session_path do
-        assert_select 'input[type=text][name=?]', 'email'
-        assert_select 'input[type=password][name=?]', 'password'
-        assert_select 'input[type=submit]'
+        should respond_with :success
+        should render_template page
       end
     end
 
-    should "not show the 'Did you know?' box" do
-      assert_no_match /did you know/i, @response.body
+    %w(researcher_tools dashboard collection_events).each do |page|
+      context "on GET to /pages/#{page}" do
+        setup do
+          get :show, :id => page
+        end
+
+        should "redirect appropriately for page='#{page}'" do
+          case page
+          when 'researcher_tools'
+            assert_redirected_to unauthorized_user_path
+          else
+            assert_redirected_to login_path
+          end
+        end
+      end
     end
+
+    context 'on GET to /pages/non-existant-page' do
+      setup do
+        trap_exception { get :show, :id => 'non-existant-page' }
+      end
+
+      should_raise_exception ActionController::RoutingError
+    end
+
   end
 
+
   logged_in_user_context do
+
+    REDIRECTED_TO_ROOT = %w(collection_events)
+
+    PagesController::PAGE_KEYWORDS.delete_if{|k| REDIRECTED_TO_ROOT.include? k }.each do |page|
+      context "on GET to /pages/#{page}" do
+        setup { get :show, :id => page }
+
+        should respond_with :success
+        should render_template page
+      end
+    end
+
+    REDIRECTED_TO_ROOT.each do |page|
+      context "on GET to /pages/#{page}" do
+        setup do
+          get :show, :id => page
+        end
+
+        should "redirect appropriately" do
+          assert_redirected_to root_path
+        end
+      end
+    end
+
+
     context 'on GET to /pages/home' do
       setup do
         get :show, :id => 'home'
@@ -53,13 +89,12 @@ class PagesControllerTest < ActionController::TestCase
         assert_equal EnrollmentStep.ordered, assigns(:steps)
       end
 
-      should "not render a form to accept an invite" do
-        assert_select 'form[method=post][action=?]', accepted_invites_path, :count => 0
+      should "show enrollment steps" do
+        EnrollmentStep.all.collect{|es|es.title}.each do |title|
+          assert_select 'span.title', /#{title}/
+        end
       end
 
-      should "show the 'Did you know?' box" do
-        assert_match /did you know/i, @response.body
-      end
     end
   end
 

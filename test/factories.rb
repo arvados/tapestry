@@ -282,3 +282,22 @@ Factory.define(:kit_design_sample) do |f|
   f.sort_order 1
   f.association :kit_design
 end
+
+Factory.sequence(:kit_name) {|n| "Kit #{n}"}
+Factory.sequence(:crc_id) {|n| "CRC #{n}"}
+Factory.sequence(:url_code) {|n| "URL code #{n}"}
+Factory.define(:kit) do |f|
+  f.name { Factory.next :kit_name }
+  f.crc_id { Factory.next :crc_id }
+  f.url_code { Factory.next :url_code }
+  f.study        { Factory(:study) }
+  f.kit_design   { Factory(:kit_design) }
+#  f.owner
+end
+
+Factory.define(:oauth_service) do |f|
+  f.name "My name"
+  f.scope "A scope"
+  f.consumerkey "A consumer key"
+  f.privatekey "A private key"
+end
