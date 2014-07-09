@@ -9,8 +9,10 @@
       </td><td>
         <%= @admin_removal_request.user.full_name %>
       </td><td>
-        <%= link_to "public profile #{@admin_removal_request.user.hex}", public_profile_path(@admin_removal_request.user.hex) %>
-        /
+        <% unless @admin_removal_request.user.hex.blank? %>
+          <%= link_to "public profile #{@admin_removal_request.user.hex}", public_profile_path(@admin_removal_request.user.hex) %>
+          /
+        <% end %>
         <%= link_to 'show', admin_user_path(@admin_removal_request.user) %>
         /
         <%= link_to 'edit', edit_admin_user_path(@admin_removal_request.user) %>
@@ -49,7 +51,7 @@
 <%= form_for @admin_removal_request, :url => admin_removal_request_path(@admin_removal_request), :method => :post do |f| %>
 
 <% unless @admin_removal_request.fulfilled_at %>
-<%= f.submit 'Mark this request as fulfilled', :confirm => 'Mark this request as fulfilled?' %>
+  <%= f.submit 'Mark this request as fulfilled', :name => 'close', :confirm => 'Mark this request as fulfilled?' %>
 <% end %>
 
 <p>

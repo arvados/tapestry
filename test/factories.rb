@@ -309,3 +309,7 @@ Factory.define(:plate) do |f|
   f.url_code { Factory.next :url_code }
   f.plate_layout { Factory(:plate_layout) }
 end
+
+Factory.define(:removal_request) do |f|
+  f.user { Factory(:user) }
+end
