@@ -1,4 +1,6 @@
 class PledgesController < ApplicationController
+  skip_before_filter :ensure_enrolled
+
   def show
   end
 
