@@ -272,9 +272,18 @@ Factory.define(:sample_type) do |f|
   f.name { Factory.next :sample_type_name }
   f.description "Description"
   f.target_amount 100
-  f.association :tissue_type
-  f.association :device_type
-  f.association :unit
+  f.tissue_type { Factory(:tissue_type) }
+  f.device_type { Factory(:device_type) }
+  f.unit        { Factory(:unit) }
+end
+
+Factory.sequence(:crc_id) {|n| "CRC #{n}"}
+Factory.sequence(:url_code) {|n| "URL code #{n}"}
+
+Factory.define(:sample) do |f|
+  f.crc_id   { Factory.next :crc_id }
+  f.url_code { Factory.next :url_code }
+  f.study    { Factory(:study) }
 end
 
 Factory.define(:kit_design_sample) do |f|
@@ -284,8 +293,6 @@ Factory.define(:kit_design_sample) do |f|
 end
 
 Factory.sequence(:kit_name) {|n| "Kit #{n}"}
-Factory.sequence(:crc_id) {|n| "CRC #{n}"}
-Factory.sequence(:url_code) {|n| "URL code #{n}"}
 Factory.define(:kit) do |f|
   f.name { Factory.next :kit_name }
   f.crc_id { Factory.next :crc_id }
