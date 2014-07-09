@@ -301,3 +301,11 @@ Factory.define(:oauth_service) do |f|
   f.consumerkey "A consumer key"
   f.privatekey "A private key"
 end
+
+Factory.define(:plate_layout) {}
+
+Factory.define(:plate) do |f|
+  f.crc_id { Factory.next :crc_id }
+  f.url_code { Factory.next :url_code }
+  f.plate_layout { Factory(:plate_layout) }
+end
