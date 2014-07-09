@@ -2,8 +2,9 @@ require 'test_helper'
 
 class PasswordsControllerTest < ActionController::TestCase
 
-  should_route :get, "/password/new", :controller => 'passwords',
-                                      :action => 'new'
+  should route(:get, "/password/new").to(:controller => 'passwords',
+                                         :action => 'new')
+
   context 'GET to new' do
     setup do
       get :new
@@ -20,18 +21,26 @@ class PasswordsControllerTest < ActionController::TestCase
     end
   end
 
-  should 'send an email on POST to create where the user exists' do
-    @user = Factory(:activated_user)
-    ActionMailer::Base.deliveries = []
-    User.stubs(:find_by_email).returns(@user)
-    post :create, :password => { :email => 'email@address.com' }
+  context 'POST to create when user exists' do
+    setup do
+      @user = Factory(:activated_user)
+      ActionMailer::Base.deliveries = []
+      User.stubs(:find_by_email).returns(@user)
+      post :create, :password => { :email => 'email@address.com' }
+    end
 
-    assert_equal 1, ActionMailer::Base.deliveries.size
-    email = ActionMailer::Base.deliveries.first
-    assert_equal [@user.email], email.to
+    should 'send an email' do
+      assert_equal 1, ActionMailer::Base.deliveries.size
+      email = ActionMailer::Base.deliveries.first
+      assert_equal [@user.email], email.to
+    end
 
-    assert_redirected_to(root_url)
-    assert_match /an email has been sent to email@address.com/i, flash[:notice]
+    should 'redirect appropriately' do
+      assert_redirected_to root_path
+    end
+
+    should set_the_flash.to /an email has been sent to email@address.com/i
+
   end
 
   should 'say no such account exists on POST to create where the user does not exist' do
@@ -82,18 +91,23 @@ class PasswordsControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
 
-  should "update the user and redirect on PUT to update with valid key and bad password confirmation" do
-    user = Factory(:activated_user)
-    User.stubs(:find_by_id_and_crypted_password).with('1', 'asdf').returns(user)
+  context 'on PUT to update with valid key but bad password confirmation' do
+    setup do
+      @user = Factory(:activated_user)
+      #User.stubs(:find_by_id_and_crypted_password).with(user[:id], user[:crypted_password]).returns(user)
 
-    put :update, :password => { :id => '1',
-                                :key => 'asdf',
-                                :password => 'newpassword',
-                                :password_confirmation => 'xxx' }
+      put :update, :password => { :id => @user[:id],
+                                  :key => @user[:crypted_password],
+                                  :password => 'newpassword',
+                                  :password_confirmation => 'xxx' }
+    end
 
-    assert_response :success
-    assert_template 'edit'
-    assert_select "li", :text => /doesn't match confirmation/
+    should set_the_flash.to /Your password could not be reset/i
+
+    should 'redirect appropriately' do
+      assert_redirected_to edit_password_path(:id => @user[:id], :key => @user[:crypted_password])
+    end
+
   end
 
   should "update the user and redirect on PUT to update with valid key and good password confirmation" do

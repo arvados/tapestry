@@ -50,7 +50,8 @@ class PasswordsController < ApplicationController
         end
         redirect_to login_url
       else
-        render :action => 'edit'
+        flash[:error] = 'Your password could not be reset. Check that you typed the same password twice.'
+        redirect_to edit_password_path( :id => @user[:id], :key => @user[:crypted_password])
       end
     else
       flash[:warning] = "That is an invalid password reset link.

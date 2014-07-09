@@ -115,8 +115,8 @@ class UsersController < ApplicationController
       flash[:notice] = 'Account information updated.'
       redirect_to(params[:return_to] || root_url)
     else
-      @mailing_lists = MailingList.all
-      render :action => 'edit'
+      flash[:error] = @user.errors.full_messages
+      redirect_to edit_user_path
     end
   end
 
