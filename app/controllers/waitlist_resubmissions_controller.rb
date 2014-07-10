@@ -1,4 +1,6 @@
 class WaitlistResubmissionsController < ApplicationController
+  skip_before_filter :ensure_enrolled
+
   def create
     waitlist = Waitlist.find(params[:waitlist_id])
     waitlist.update_attribute(:resubmitted_at, Time.now)
