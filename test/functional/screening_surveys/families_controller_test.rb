@@ -12,8 +12,9 @@ class ScreeningSurveys::FamiliesControllerTest < ActionController::TestCase
         get :edit
       end
 
-      should respond_with :redirect
-      should_redirect_to 'login_url'
+      should 'redirect appropriately' do
+        assert_redirected_to login_path
+      end
     end
   end
 
@@ -93,8 +94,9 @@ class ScreeningSurveys::FamiliesControllerTest < ActionController::TestCase
           end
         end
 
-        should respond_with :redirect
-        should_redirect_to 'screening_surveys_path'
+        should 'redirect appropriately' do
+          assert_redirected_to screening_surveys_path
+        end
 
         should set_the_flash.to /continue/i
       end

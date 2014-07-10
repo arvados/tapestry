@@ -12,8 +12,9 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
         get :show
       end
 
-      should respond_with :redirect
-      should_redirect_to 'login_url'
+      should 'redirect appropriately' do
+        assert_redirected_to login_path
+      end
     end
   end
 
@@ -43,7 +44,10 @@ class ScreeningSurveysControllerTest < ActionController::TestCase
         post :update
       end
 
-      should_redirect_to 'root_path'
+      should 'redirect appropriately' do
+        assert_redirected_to root_path
+      end
+
       should set_the_flash.to /eligibility questionnaire/i
     end
   end
