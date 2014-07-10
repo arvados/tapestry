@@ -55,7 +55,7 @@ class SessionsControllerTest < ActionController::TestCase
 
   should "login with cookie" do
     @user.remember_me
-    @request.cookies["auth_token"] = cookie_for(@user)
+    @request.cookies["auth_token"] = @user.remember_token
     get :new
     assert @controller.send(:logged_in?)
   end
@@ -63,24 +63,16 @@ class SessionsControllerTest < ActionController::TestCase
   should "fail expired cookie login" do
     @user.remember_me
     @user.update_attribute :remember_token_expires_at, 5.minutes.ago
-    @request.cookies["auth_token"] = cookie_for(@user)
+    @request.cookies["auth_token"] = @user.remember_token
     get :new
     assert !@controller.send(:logged_in?)
   end
 
   should "fail cookie login" do
     @user.remember_me
-    @request.cookies["auth_token"] = auth_token('invalid_auth_token')
+    @request.cookies["auth_token"] = 'invalid_auth_token'
     get :new
     assert !@controller.send(:logged_in?)
   end
 
-  protected
-    def auth_token(token)
-      CGI::Cookie.new('name' => 'auth_token', 'value' => token)
-    end
-
-    def cookie_for(user)
-      auth_token user.remember_token
-    end
 end
