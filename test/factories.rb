@@ -340,3 +340,6 @@ Factory.define(:document) do |f|
   f.timestamp { Time.now }
   f.association :user
 end
+
+Factory.define(:withdrawal_comment) do |f|
+end
