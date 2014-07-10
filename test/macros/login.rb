@@ -22,7 +22,8 @@ class ActiveSupport::TestCase
         @user.activate!
         @user.accept_tos if APP_CONFIG['ensure_tos']
         @user.enrolled = Time.now
-        @user.documents << Document.new(:keyword => 'consent', :version => APP_CONFIG['latest_consent_version'], :timestamp => Time.now())
+        @user.documents << Factory(:document, :user => @user, :keyword => 'consent', :version => APP_CONFIG['latest_consent_version'])
+        @user.safety_questionnaires << Factory(:safety_questionnaire, :user => @user)
         @user.hex = Factory.next( :hex )
         @user.save!
         login_as @user

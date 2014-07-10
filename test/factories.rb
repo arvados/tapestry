@@ -320,3 +320,13 @@ end
 Factory.define(:removal_request) do |f|
   f.user { Factory(:user) }
 end
+Factory.define(:safety_questionnaire) do |f|
+  f.datetime { Time.now }
+  f.has_changes 1
+  f.association :user
+end
+
+Factory.define(:document) do |f|
+  f.timestamp { Time.now }
+  f.association :user
+end
