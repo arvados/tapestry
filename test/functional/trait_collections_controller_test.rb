@@ -1,51 +1,72 @@
 require 'test_helper'
 
 class TraitCollectionsControllerTest < ActionController::TestCase
-  should_route :get,  '/trait_collection', :controller => 'trait_collections', :action => 'show'
-  should_route :post, '/trait_collection', :controller => 'trait_collections', :action => 'create'
+  should route(:get,  '/trait_collection').to(:controller => 'trait_collections', :action => 'show')
+  should route(:post, '/trait_collection').to(:controller => 'trait_collections', :action => 'create')
 
   context "on GET to show" do
     setup { get :show }
-    should_redirect_to "login_url"
+    should 'redirect appropriately' do
+      assert_redirected_to login_path
+    end
   end
 
   context "on POST to create" do
     setup { post :create }
-    should_redirect_to "login_url"
+    should 'redirect appropriately' do
+      assert_redirected_to login_path
+    end
   end
 
-  logged_in_user_context do
-    context "on GET to show" do
-      setup { get :show }
+  logged_in_enrolled_user_context do
+    context 'where trait_collection is an enrollment step' do
 
-      should respond_with :success
-      should render_template :show
-      should assign_to "baseline_traits_survey"
-
-      should "render a form to upload traits" do
-        assert_select 'form[method=?][action=?]', 'post', trait_collection_path
-      end
-    end
-
-    context "on POST to create with valid traits" do
       setup do
-        BaselineTraitsSurvey.any_instance.stubs(:save).returns(true)
-        post :create
+        Factory :enrollment_step, :keyword => 'trait_collection'
       end
 
-      should_change 'EnrollmentStepCompletion.count', :by => 1
-      should_redirect_to 'root_path'
-    end
+      context "on GET to show" do
+        setup { get :show }
 
-    context "on POST to create with invalid traits" do
-      setup do
-        BaselineTraitsSurvey.any_instance.stubs(:save).returns(false)
-        post :create
+        should respond_with :success
+        should render_template :show
+        should assign_to "baseline_traits_survey"
+
+        should "render a form to upload traits" do
+          assert_select 'form[method=?][action=?]', 'post', trait_collection_path
+        end
       end
 
-      should_not_change 'EnrollmentStepCompletion.count'
-      should render_template :show
-      should assign_to "baseline_traits_survey"
+      context "on POST to create with valid traits" do
+        setup do
+          @count = EnrollmentStepCompletion.count
+          BaselineTraitsSurvey.any_instance.stubs(:save).returns(true)
+          post :create
+        end
+
+        should 'increase step completion count' do
+          assert_equal @count+1, EnrollmentStepCompletion.count
+        end
+
+        should 'redirect appropriately' do
+          assert_redirected_to root_path
+        end
+      end
+
+      context "on POST to create with invalid traits" do
+        setup do
+          @count = EnrollmentStepCompletion.count
+          BaselineTraitsSurvey.any_instance.stubs(:save).returns(false)
+          post :create
+        end
+
+        should 'not increase step completion count' do
+          assert_equal @count, EnrollmentStepCompletion.count
+        end
+
+        should render_template :show
+        should assign_to "baseline_traits_survey"
+      end
     end
   end
 end
