@@ -194,7 +194,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    UserMailer.deliver_delete_request(@user)
+    UserMailer.delete_request(@user).deliver
     logout_killing_session!
     flash[:notice] = "A request to delete your account has been sent."
     redirect_back_or_default page_url(:logged_out)
