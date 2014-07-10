@@ -341,5 +341,8 @@ Factory.define(:document) do |f|
   f.association :user
 end
 
+Factory.define(:unused_kit_name) do |f|
+end
+
 Factory.define(:withdrawal_comment) do |f|
 end
