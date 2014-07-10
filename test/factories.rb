@@ -320,6 +320,16 @@ end
 Factory.define(:removal_request) do |f|
   f.user { Factory(:user) }
 end
+
+Factory.define(:shipping_address) do |f|
+  f.address_line_1 "My address"
+  f.city "My city"
+  f.state "My state"
+  f.zip "12345"
+  f.phone "(111) 555-3333"
+  f.association :user
+end
+
 Factory.define(:safety_questionnaire) do |f|
   f.datetime { Time.now }
   f.has_changes 1

@@ -2,8 +2,11 @@ class ShippingAddress < ActiveRecord::Base
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version
 
-  # Setting :check_process to false forces an update to the geocoordinates on every save/update
-  acts_as_gmappable :check_process => false
+  # PH: I realize this is heavy handed but I could not get stubbing to work, though I'm still sure there is a simple way to do it without resorting to this kind of model-side intervention!
+  unless Rails.env == 'test'
+    # Setting :check_process to false forces an update to the geocoordinates on every save/update
+    acts_as_gmappable :check_process => false
+  end
 
   def gmaps4rails_address
     @address = address_line_1
@@ -34,4 +37,5 @@ class ShippingAddress < ActiveRecord::Base
     @a << "\n" << city << ', ' << state << '  ' << zip
     @a
   end
+
 end
