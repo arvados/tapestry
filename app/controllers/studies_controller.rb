@@ -211,7 +211,7 @@ class StudiesController < ApplicationController
     @study.destroy
 
     respond_to do |format|
-      format.html { redirect_to(studies_url) }
+      format.html { redirect_to(collection_events_path) }
       format.xml  { head :ok }
     end
   end
