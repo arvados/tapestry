@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Admin::BulkWaitlistsControllerTest < ActionController::TestCase
-  should_route :get, '/admin/bulk_waitlists/new', { :action => 'new' }
+  should route(:get, '/admin/bulk_waitlists/new').to(:action => 'new')
 
   logged_in_user_context do
 

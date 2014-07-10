@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Admin::BulkPromotionsControllerTest < ActionController::TestCase
-  should_route :get, '/admin/bulk_promotions/new', { :action => 'new' }
+  should route(:get, '/admin/bulk_promotions/new').to(:action => 'new')
 
   logged_in_user_context do
 
