@@ -25,14 +25,14 @@
     <h3>
       Real Name
       <% if logged_in? and @user == current_user %>
-        <%= link_to "[Remove real name]", remove_real_name_path -%>
+        <%= link_to "[Remove real name]", remove_real_names_path -%>
       <% end -%>
     </h3>
     <strong><%= @user.full_name -%></strong>
   <% elsif logged_in? and @user == current_user %>
     <h3>
       Real Name
-      <%= link_to "[Add real name]", add_real_name_path -%>
+      <%= link_to "[Add real name]", add_real_names_path -%>
     </h3>
   <% end -%>
 <% end -%>

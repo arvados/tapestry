@@ -6,7 +6,7 @@ Warning: If you select 'Yes' below, you will be releasing your real name <strong
 
 <p>Your name will be associated with other data, including genome or health data you have shared. Remember that even if you decide to remove it from your PGP public profile later, others may have created copies of your data outside the PGP.</p>
 
-<p>Even if you do not release your real name, genome and health data is highly identifiable. The PGP is "non-anonymous", anonymity cannot be guaranteed.</p>
+<p>Even if you do not release your real name, genome and health data is highly identifiable. Participation in the PGP should <i>never</i> be considered anonymous or private.</p>
 
 <%= form_for :user, :url => real_names_path, :html => { :method => :put } do |f| -%>
   <p><center><%= submit_tag 'Yes, add my name to my public profile' %> <%= submit_tag 'Cancel' %></center></p>

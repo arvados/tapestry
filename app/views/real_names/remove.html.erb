@@ -1,8 +1,8 @@
 <h2>Remove your real name from your public profile</h2>
 
-<p>You've asked to remove your real name from your public profile.</p>
+<p>You are about to remove your real name from your public profile.</p>
 
-<p>Your name will be removed from the PGP profile, but remember that others may have created copies of your data outside the PGP.</p>
+<p>Your name will be removed from the PGP profile, but researchers and search engines will have already downloaded and stored copies of it, and this cannot be reversed.</p>
 
 <%= form_for :user, :url => real_names_path, :html => { :method => :put } do |f| -%>
   <p><center><%= submit_tag 'Yes, remove my name from my public profile' %> <%= submit_tag 'Cancel' %></center></p>
