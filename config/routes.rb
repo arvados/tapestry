@@ -262,6 +262,10 @@ Tapestry::Application.routes.draw do
   end
 
   resource :geographic_information, :controller => :geographic_information, :only => [ :edit, :update ]
+  resource :real_names, :controller => :real_names, :only => [ :update ] do
+    get 'add'
+    get 'remove'
+  end
   match '/:controller(/:action(/:id))'
   resource :phrccr
   match '/phrccr/authsub' => 'phrccrs#authsub_update', :as => :authsub_phrccr

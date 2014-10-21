@@ -20,6 +20,23 @@
 </p>
 <% end -%>
 
+<% if include_section?(Section::REAL_NAMES) %>
+  <% if @user.real_name_public then -%>
+    <h3>
+      Real Name
+      <% if logged_in? and @user == current_user %>
+        <%= link_to "[Remove real name]", remove_real_names_path -%>
+      <% end -%>
+    </h3>
+    <strong><%= @user.full_name -%></strong>
+  <% elsif logged_in? and @user == current_user %>
+    <h3>
+      Real Name
+      <%= link_to "[Add real name]", add_real_names_path -%>
+    </h3>
+  <% end -%>
+<% end -%>
+
 <% if include_section?(Section::CCR) %>
   <h3>
     Personal Health Records
