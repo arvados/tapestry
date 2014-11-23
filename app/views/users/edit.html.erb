@@ -5,7 +5,7 @@
 <% if @user.enrolled then %>
 This information is private and not part of your public profile.
 <% end %>
-  
+
 <%= error_messages_for :user, :header_message => 'Error: data could not be saved.', :message => nil %>
 
 <%= form_for :user, :url => update_user_url, :html => { :method => :put } do |f| -%>
@@ -51,8 +51,10 @@ This information is private and not part of your public profile.
 
 <% if @user.enrolled then %>
 
-<h2>Shipping address</h2>
-<%= link_to 'Update shipping address', user_shipping_address_url %>
+<% if include_section?(Section::SHIPPING_ADDRESS) %>
+  <h2>Shipping address</h2>
+  <%= link_to 'Update shipping address', user_shipping_address_url %>
+<% end %>
 
 <a name="mailinglists"></a>
 

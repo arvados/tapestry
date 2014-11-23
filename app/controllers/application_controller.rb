@@ -4,7 +4,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   include AuthenticatedSystem
-  include Userstamp  
+  include Userstamp
 
   layout APP_CONFIG['application_layout']
 
@@ -269,7 +269,7 @@ class ApplicationController < ActionController::Base
         row.push u.user.full_name
         row.push u.user.ccrs.size > 0 ? 'y' : 'n'
         row.push u.user.user_files.size > 0 ? 'y' : 'n'
-        if u.user.shipping_address then
+        if include_section?(Section::SHIPPING_ADDRESS) && u.user.shipping_address then
           row.push u.user.shipping_address.address_line_1
           row.push u.user.shipping_address.address_line_2
           row.push u.user.shipping_address.address_line_3

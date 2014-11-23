@@ -367,7 +367,7 @@ class StudiesController < ApplicationController
         info[:tracking_id] = spec_table_row[tracking_id_column+1] if tracking_id_column
 
         # Shipping address used
-        info[:address] = spec_table_row[address_column+1] if address_column
+        info[:address] = spec_table_row[address_column+1] if include_section?(Section::SHIPPING_ADDRESS) && address_column
       end
 
       if info[:kit_last_sent_at] and info[:kit_last_sent_at] < 14.days.ago
