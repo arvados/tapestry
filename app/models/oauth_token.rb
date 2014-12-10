@@ -35,7 +35,7 @@ class OauthToken < ActiveRecord::Base
     formdata['oauth_signature'] = oauth_service.sign('POST', base_uri, formdata)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new(uri.fullpath)
+    req = Net::HTTP::Post.new(uri.scheme + '://' + uri.host + uri.request_uri)
     req.set_form_data(formdata)
     resp = http.request(req)
     oauth_token_scan = resp.body.scan(/oauth_token=([^&]*)/)
