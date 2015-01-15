@@ -14,15 +14,9 @@ class StudiesController < ApplicationController
   skip_before_filter :ensure_researcher, :only => :clickthrough_to
 
   def index
-    return index_third_party if request.env['PATH_INFO'].match(/third_party/)
     redirect_to page_path( :collection_events, :anchor => 'kits' ) if current_user and !current_user.researcher
     @studies = Study.all if current_user and current_user.is_admin?
     @studies = @studies.includes(:kits) if @studies.respond_to? :includes
-  end
-
-  def index_third_party
-    @studies = Study.approved.third_party.open_now
-    render :action => :index_third_party
   end
 
   # GET /studies/1/map
@@ -122,7 +116,6 @@ class StudiesController < ApplicationController
   # in guarding access to it.
   def show
     @study = Study.find(params[:id])
-    return show_third_party if request.env['PATH_INFO'].match(/third_party/)
 
     if not current_user.is_admin? and @study.approved == nil then
       # Only approved studies should be available here for ordinary users
@@ -137,7 +130,7 @@ class StudiesController < ApplicationController
   end
 
   def show_third_party
-    render :action => :show_third_party
+    @study = Study.find(params[:id])
   end
 
   def new
