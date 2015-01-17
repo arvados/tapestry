@@ -8,6 +8,8 @@ class OauthToken < ActiveRecord::Base
   belongs_to :oauth_service
   validates_uniqueness_of :user_id, :scope => :oauth_service_id
 
+  serialize :oauth2_token_hash, Hash
+
   attr_protected :requesttoken
   attr_protected :accesstoken
 

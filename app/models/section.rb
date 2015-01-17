@@ -10,6 +10,7 @@ module Section
   CCR = :ccr
   REAL_NAMES = :real_names
   SHIPPING_ADDRESS = :shipping_address
+  OPEN_HUMANS = :open_humans
 
   def self.include_section?(section)
     APP_CONFIG[Section::CONFIG_KEY].include?( section.to_s ) ||

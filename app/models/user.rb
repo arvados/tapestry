@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
   has_many :datasets, :foreign_key => 'participant_id'
   has_many :published_datasets, :class_name => 'Dataset', :foreign_key => 'participant_id', :conditions => 'published_at IS NOT NULL'
   has_many :spreadsheet_rows, :as => :row_target
+  has_many :oauth_tokens
 
   has_many :ccrs, :order => 'id ASC'
 
@@ -327,10 +328,10 @@ class User < ActiveRecord::Base
   end
 
   def log(comment,step=nil,origin=nil,user_comment=nil)
-    self.user_logs.create!(:comment => comment, 
-                           :user_comment => user_comment, 
-                           :enrollment_step => step, 
-                           :origin => origin, 
+    self.user_logs.create!(:comment => comment,
+                           :user_comment => user_comment,
+                           :enrollment_step => step,
+                           :origin => origin,
                            :controlling_user => self.controlling_user)
   end
 
@@ -429,7 +430,7 @@ class User < ActiveRecord::Base
 
   def eligibility_screening_passed
     # In v1 of the enrollment application, the eligibility questionnaire results step right after taking the eligibility questionnaire did not exist
-    # So, we just take the timestamp of the questionnaire itself, which will hold the date it was last taken. 
+    # So, we just take the timestamp of the questionnaire itself, which will hold the date it was last taken.
     @step_v1 = self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_surveys') }
     @step_v2 = self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_survey_results') }
     if self.screening_survey_response.nil? or not self.screening_survey_response.passed?

@@ -47,3 +47,4 @@ gem 'cells', "~> 3.10.1"
 # dependency of cells which throws up a syntax error on 0.0.11 and 0.0.12
 gem 'uber', "0.0.10"
 
+gem 'oauth2'

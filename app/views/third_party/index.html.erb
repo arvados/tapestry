@@ -9,6 +9,37 @@ the Harvard Medical School Institutional Review Board.</i></p>
 
 <ul>
   <% @studies.each do |study| %>
-  <li><%= link_to study.name, third_party_study_path(study) %> (<%= study.researcher.full_name %>, <%= study.researcher.researcher_affiliation %>)</li>
+    <li><%= link_to study.name, third_party_study_path(study) %> (<%= study.researcher.full_name %>, <%= study.researcher.researcher_affiliation %>)</li>
   <% end %>
 </ul>
+
+<% if defined? @open_humans_tokens %>
+  <h3>Open Humans Project</h3>
+
+  <ul>
+    <% @open_humans_tokens.each do |token| %>
+      <% expiry = Time.at( token.oauth2_token_hash[:expires_at] ) %>
+      <% if expiry > Time.now || token.oauth2_token_hash[:refresh_token].present? %>
+        <li>
+          <%= "#{token.oauth_service.name} token" %>
+          (<%= token.oauth2_token_hash['scope'] %>
+           <%= token.oauth2_token_hash['bearer'] %>)
+          <%#= expiry <= Time.now ? 'has expired' : "expires in #{distance_of_time_in_words(Time.now, expiry)}"  %>
+          <%= link_to 'Send huID to Open Humans',
+                      open_humans_huids_path( :token_id => token.id),
+                      :class => 'btn btn-small',
+                      :method => :post %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+
+  <%= form_tag open_humans_tokens_path do %>
+    <%= select_tag :oauth2_service_type,
+                   options_from_collection_for_select( @open_humans_services, 'oauth2_service_type', 'name' ) %>
+    <%= submit_tag 'Add Open Humans Authorization',
+                   :name => 'create_token',
+                   :class => 'btn btn-small' %>
+  <% end %>
+
+<% end %>
