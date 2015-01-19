@@ -39,6 +39,8 @@ Factory.sequence(:pgp_id) { |n| "#{n}" }
 
 Factory.sequence(:enrollment_step_ordinal) { |n| n }
 
+Factory.sequence(:hex) { |n| "hex#{n}"}
+
 %w(keyword title description).each do |attr|
   Factory.sequence("enrollment_step_#{attr}".to_sym) { |n| "#{attr.upcase} #{n}" }
 end
@@ -227,4 +229,120 @@ Factory.define(:named_proxy) do |f|
   f.email "test@example.com"
 end
 
+Factory.sequence(:device_type_name) {|n| "Device Type #{n}"}
+Factory.define(:device_type) do |f|
+  f.name { Factory.next :device_type_name }
+end
 
+Factory.sequence(:tissue_type_name) {|n| "Device Type #{n}"}
+Factory.define(:tissue_type) do |f|
+  f.name { Factory.next :tissue_type_name }
+end
+
+Factory.sequence(:unit_name) {|n| "Device Type #{n}"}
+Factory.define(:unit) do |f|
+  f.name { Factory.next :unit_name }
+end
+
+Factory.define(:google_survey) do |f|
+  f.description "My glorious description"
+  f.association :user
+  f.creator {|g| g.association :user}
+end
+
+Factory.sequence(:study_name) {|n| "Study #{n}"}
+Factory.define(:study) do |f|
+  f.name { Factory.next :study_name }
+  f.researcher { Factory(:user) }
+  f.participant_description "participant_description"
+  f.researcher_description "researcher_description"
+end
+
+Factory.sequence(:kit_design_name) {|n| "Kit design #{n}"}
+Factory.define(:kit_design) do |f|
+  f.name { Factory.next :kit_design_name }
+  f.study { Factory(:study) }
+  f.description "My glorious description"
+  f.owner {|k| k.association :user }
+  f.instructions_file_name 'filename'
+end
+
+Factory.sequence(:sample_type_name) {|n| "Sample type #{n}"}
+Factory.define(:sample_type) do |f|
+  f.name { Factory.next :sample_type_name }
+  f.description "Description"
+  f.target_amount 100
+  f.tissue_type { Factory(:tissue_type) }
+  f.device_type { Factory(:device_type) }
+  f.unit        { Factory(:unit) }
+end
+
+Factory.sequence(:crc_id) {|n| "CRC #{n}"}
+Factory.sequence(:url_code) {|n| "URL code #{n}"}
+
+Factory.define(:sample) do |f|
+  f.crc_id   { Factory.next :crc_id }
+  f.url_code { Factory.next :url_code }
+  f.study    { Factory(:study) }
+end
+
+Factory.define(:kit_design_sample) do |f|
+  f.name "My kit design sample name"
+  f.sort_order 1
+  f.association :kit_design
+end
+
+Factory.sequence(:kit_name) {|n| "Kit #{n}"}
+Factory.define(:kit) do |f|
+  f.name { Factory.next :kit_name }
+  f.crc_id { Factory.next :crc_id }
+  f.url_code { Factory.next :url_code }
+  f.study        { Factory(:study) }
+  f.kit_design   { Factory(:kit_design) }
+#  f.owner
+end
+
+Factory.define(:oauth_service) do |f|
+  f.name "My name"
+  f.scope "A scope"
+  f.consumerkey "A consumer key"
+  f.privatekey "A private key"
+end
+
+Factory.define(:plate_layout) {}
+
+Factory.define(:plate) do |f|
+  f.crc_id { Factory.next :crc_id }
+  f.url_code { Factory.next :url_code }
+  f.plate_layout { Factory(:plate_layout) }
+end
+
+Factory.define(:removal_request) do |f|
+  f.user { Factory(:user) }
+end
+
+Factory.define(:shipping_address) do |f|
+  f.address_line_1 "My address"
+  f.city "My city"
+  f.state "My state"
+  f.zip "12345"
+  f.phone "(111) 555-3333"
+  f.association :user
+end
+
+Factory.define(:safety_questionnaire) do |f|
+  f.datetime { Time.now }
+  f.has_changes 1
+  f.association :user
+end
+
+Factory.define(:document) do |f|
+  f.timestamp { Time.now }
+  f.association :user
+end
+
+Factory.define(:unused_kit_name) do |f|
+end
+
+Factory.define(:withdrawal_comment) do |f|
+end
