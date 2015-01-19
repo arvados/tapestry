@@ -102,8 +102,8 @@ Tapestry::Application.routes.draw do
   match '/third_party/study/:id/clickthrough_to' => 'studies#clickthrough_to', :via => [:post], :as => :clickthrough_to_third_party
   match '/3p/*x', :to => redirect('/third_party/%{x}')
 
-  get 'open_humans/token'
   post 'open_humans/tokens', :to => 'open_humans#create_token'
+  delete 'open_humans/huids', :to => 'open_humans#delete_huids'
   post 'open_humans/huids', :to => 'open_humans#create_huid'
   get 'open_humans/huids'
   # This callback URL is set on the Open Humans API server

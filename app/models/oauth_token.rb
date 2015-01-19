@@ -63,4 +63,11 @@ class OauthToken < ActiveRecord::Base
   def oauth_request(method, uri, formdata)
     return self.oauth_service.oauth_request(self, method, uri, formdata)
   end
+
+  def oauth2_expired?
+    if self.oauth2_token_hash
+      expires_at = Time.at(self.oauth2_token_hash[:expires_at])
+      expires_at <= Time.now
+    end
+  end
 end
