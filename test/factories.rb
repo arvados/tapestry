@@ -346,3 +346,14 @@ end
 
 Factory.define(:withdrawal_comment) do |f|
 end
+
+Factory.define(:open_humans_oauth_service, :class => OauthService) do |f|
+  f.oauth2_key 'key'
+  f.oauth2_secret 'secret'
+  f.scope "read write pgp"
+  f.oauth2_service_type OauthService::OPEN_HUMANS
+end
+
+Factory.define(:open_humans_token, :class => OauthToken) do |f|
+  f.oauth_service { |s| s.association :open_humans_oauth_service  }
+end
