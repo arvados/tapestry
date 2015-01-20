@@ -29,6 +29,14 @@
         :include_blank => true %>
   </div>
   <div class="field">
+    <%= f.label :endpoint_url, 'Endpoint URL' %><br />
+    <%= f.text_field :endpoint_url %>
+  </div>
+  <div class="field">
+    <%= f.label :callback_url, 'Callback URL' %><br />
+    <%= f.text_field :callback_url %>
+  </div>
+  <div class="field">
     <%= f.label :oauth2_key, 'Key' %><br />
     <%= f.text_field :oauth2_key %>
   </div>

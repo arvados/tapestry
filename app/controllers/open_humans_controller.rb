@@ -1,9 +1,6 @@
 class OpenHumansController < ApplicationController
   before_filter {|c| c.check_section_disabled(Section::OPEN_HUMANS) }
 
-  CALLBACK_URL = 'http://localhost:8000/auth/open-humans/callback'
-  SCOPE = 'read write pgp'
-  ENDPOINT_URL = "http://open-humans-staging.herokuapp.com"
   AUTHORIZE_URL = '/oauth2/authorize/'
   TOKEN_URL = '/oauth2/token/'
   POST_HUIDS_URL = '/api/pgp/huids/'
@@ -11,7 +8,7 @@ class OpenHumansController < ApplicationController
 
   def create_token
     oh_service = OauthService.open_humans.find(params[:service_id])
-    redirect_to client(oh_service).auth_code.authorize_url( :redirect_uri => CALLBACK_URL, :scope => SCOPE )
+    redirect_to client(oh_service).auth_code.authorize_url( :redirect_uri => oh_service.callback_url, :scope => oh_service.scope )
   end
 
   def delete_huids
@@ -51,7 +48,7 @@ class OpenHumansController < ApplicationController
 
   def callback
     oh_service = OauthService.find_by_oauth2_service_type( OauthService::OPEN_HUMANS )
-    token = client(oh_service).auth_code.get_token( params['code'], :redirect_uri => CALLBACK_URL, :scope => SCOPE )
+    token = client(oh_service).auth_code.get_token( params['code'], :redirect_uri => oh_service.callback_url, :scope => oh_service.scope )
     if token
       oauth_token = current_user.oauth_tokens.find_or_create_by_oauth_service_id( oh_service.id )
       oauth_token.oauth2_token_hash = token.to_hash
@@ -68,7 +65,7 @@ private
       service.oauth2_secret,
       :authorize_url => AUTHORIZE_URL,
       :token_url => TOKEN_URL,
-      :site => ENDPOINT_URL
+      :site => service.endpoint_url
     )
   end
 

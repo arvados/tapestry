@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150115171755) do
+ActiveRecord::Schema.define(:version => 20150120145538) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -1411,6 +1411,8 @@ ActiveRecord::Schema.define(:version => 20150115171755) do
     t.string   "oauth2_service_type"
     t.string   "oauth2_key"
     t.text     "oauth2_secret"
+    t.string   "endpoint_url"
+    t.string   "callback_url"
   end
 
   create_table "oauth_tokens", :force => true do |t|
