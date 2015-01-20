@@ -356,4 +356,5 @@ end
 
 Factory.define(:open_humans_token, :class => OauthToken) do |f|
   f.oauth_service { |s| s.association :open_humans_oauth_service  }
+  f.oauth2_token_hash( { :expires_at => (Time.now + 1.hour).to_i }.to_yaml )
 end

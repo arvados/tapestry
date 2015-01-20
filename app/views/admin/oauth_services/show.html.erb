@@ -8,18 +8,23 @@
 </p>
 
 <p>
+  <b>Type:</b>
+  <%= @admin_oauth_service.oauth2_service_type %>
+</p>
+
+<p>
   <b>Scope:</b>
   <%= @admin_oauth_service.scope %>
 </p>
 
 <p>
-  <b>Consumerkey:</b>
-  <%= @admin_oauth_service.consumerkey %>
+  <b>Key:</b>
+  <%= @admin_oauth_service.oauth2_key %>
 </p>
 
 <p>
-  <b>Private key:</b>
-  <%= @admin_oauth_service[:privatekey_ok] %>
+  <b>Secret:</b>
+  <%= @admin_oauth_service.oauth2_secret %>
 </p>
 
 
