@@ -17,9 +17,10 @@ class OpenHumansController < ApplicationController
   def delete_huids
     token = token_object( params[:token_id] )
     api_response = api_call token, :delete, POST_HUIDS_URL + params[:profile_id]
+    success = api_response.status == 204
     respond_to do |format|
       format.json do
-        render :json => (api_response.status == 204 ? 'success' : 'error')
+        render :json => (success ? 'success' : 'error'), :status => (success ? 200 : 500)
       end
     end
   end
@@ -40,9 +41,10 @@ class OpenHumansController < ApplicationController
   def create_huid
     token = token_object( params[:token_id] )
     api_response = api_call token, :post, POST_HUIDS_URL, { 'value' => current_user.hex }
+    success = api_response.status == 201
     respond_to do |format|
       format.json do
-        render :json => (api_response.status == 201 ? 'success' : 'error')
+        render :json => (success ? 'success' : 'error'), :status => (success ? 200 : 500)
       end
     end
   end
