@@ -1,12 +1,12 @@
 class StudiesController < ApplicationController
-  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show, :verify_participant_id, :clickthrough_to]
+  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show, :verify_participant_id, :clickthrough_to, :show_third_party]
 
-  skip_before_filter :ensure_enrolled, :except => [:show, :claim]
-  skip_before_filter :ensure_latest_consent, :except => [:show, :claim]
-  skip_before_filter :ensure_recent_safety_questionnaire, :except => [:show, :claim]
+  skip_before_filter :ensure_enrolled, :except => [:show, :claim, :show_third_party]
+  skip_before_filter :ensure_latest_consent, :except => [:show, :claim, :show_third_party]
+  skip_before_filter :ensure_recent_safety_questionnaire, :except => [:show, :claim, :show_third_party]
 
   before_filter :ensure_researcher
-  skip_before_filter :ensure_researcher, :only => [:show, :claim, :index]
+  skip_before_filter :ensure_researcher, :only => [:show, :claim, :index, :show_third_party]
 
   skip_before_filter :login_required, :only => [:verify_participant_id]
   skip_before_filter :ensure_tos_agreement, :only => [:verify_participant_id]
