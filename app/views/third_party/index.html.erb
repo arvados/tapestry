@@ -17,7 +17,7 @@ the Harvard Medical School Institutional Review Board.</i></p>
   <% end %>
 </ul>
 
-<% if defined? @open_humans_services && @open_humans_services.any? %>
+<% if include_section?( Section::OPEN_HUMANS ) && @open_humans_services && @open_humans_services.any? %>
   <h3>Open Humans Project</h3>
 
   <ul>

@@ -4,13 +4,13 @@ class OpenHumansControllerTest < ActionController::TestCase
 
   logged_in_enrolled_user_context do
 
-    context 'existing service' do
+    context 'open humans section enabled' do
 
       setup do
         ApplicationController.any_instance.stubs('include_section?').with(Section::OPEN_HUMANS).returns(true)
       end
 
-      context 'but no existing token' do
+      context 'existing service but no existing token' do
 
         setup do
           @oauth_service = Factory(:open_humans_oauth_service)
@@ -34,7 +34,7 @@ class OpenHumansControllerTest < ActionController::TestCase
 
       end
 
-      context 'with existing token but no registered huids' do
+      context 'existing service with existing token but no registered huids' do
         setup do
           @oauth_token = Factory(:open_humans_token)
           @user.oauth_tokens << @oauth_token
@@ -49,7 +49,7 @@ class OpenHumansControllerTest < ActionController::TestCase
         end
       end
 
-      context 'with existing token and registered huids' do
+      context 'existing service with existing token and registered huids' do
 
         setup do
           @huids = [ @user.hex ]
