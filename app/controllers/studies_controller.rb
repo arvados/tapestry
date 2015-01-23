@@ -1,12 +1,12 @@
 class StudiesController < ApplicationController
-  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show, :verify_participant_id, :clickthrough_to]
+  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show, :verify_participant_id, :clickthrough_to, :show_third_party]
 
-  skip_before_filter :ensure_enrolled, :except => [:show, :claim]
-  skip_before_filter :ensure_latest_consent, :except => [:show, :claim]
-  skip_before_filter :ensure_recent_safety_questionnaire, :except => [:show, :claim]
+  skip_before_filter :ensure_enrolled, :except => [:show, :claim, :show_third_party]
+  skip_before_filter :ensure_latest_consent, :except => [:show, :claim, :show_third_party]
+  skip_before_filter :ensure_recent_safety_questionnaire, :except => [:show, :claim, :show_third_party]
 
   before_filter :ensure_researcher
-  skip_before_filter :ensure_researcher, :only => [:show, :claim, :index]
+  skip_before_filter :ensure_researcher, :only => [:show, :claim, :index, :show_third_party]
 
   skip_before_filter :login_required, :only => [:verify_participant_id]
   skip_before_filter :ensure_tos_agreement, :only => [:verify_participant_id]
@@ -14,15 +14,9 @@ class StudiesController < ApplicationController
   skip_before_filter :ensure_researcher, :only => :clickthrough_to
 
   def index
-    return index_third_party if request.env['PATH_INFO'].match(/third_party/)
     redirect_to page_path( :collection_events, :anchor => 'kits' ) if current_user and !current_user.researcher
     @studies = Study.all if current_user and current_user.is_admin?
     @studies = @studies.includes(:kits) if @studies.respond_to? :includes
-  end
-
-  def index_third_party
-    @studies = Study.approved.third_party.open_now
-    render :action => :index_third_party
   end
 
   # GET /studies/1/map
@@ -122,7 +116,6 @@ class StudiesController < ApplicationController
   # in guarding access to it.
   def show
     @study = Study.find(params[:id])
-    return show_third_party if request.env['PATH_INFO'].match(/third_party/)
 
     if not current_user.is_admin? and @study.approved == nil then
       # Only approved studies should be available here for ordinary users
@@ -137,7 +130,7 @@ class StudiesController < ApplicationController
   end
 
   def show_third_party
-    render :action => :show_third_party
+    @study = Study.find(params[:id])
   end
 
   def new

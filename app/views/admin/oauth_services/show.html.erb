@@ -8,18 +8,33 @@
 </p>
 
 <p>
+  <b>Type:</b>
+  <%= @admin_oauth_service.oauth2_service_type %>
+</p>
+
+<p>
   <b>Scope:</b>
   <%= @admin_oauth_service.scope %>
 </p>
 
 <p>
-  <b>Consumerkey:</b>
-  <%= @admin_oauth_service.consumerkey %>
+  <b>Endpoint URL:</b>
+  <%= @admin_oauth_service.endpoint_url %>
 </p>
 
 <p>
-  <b>Private key:</b>
-  <%= @admin_oauth_service[:privatekey_ok] %>
+  <b>Callback URL:</b>
+  <%= @admin_oauth_service.callback_url %>
+</p>
+
+<p>
+  <b>Key:</b>
+  <%= @admin_oauth_service.oauth2_key %>
+</p>
+
+<p>
+  <b>Secret:</b>
+  <%= @admin_oauth_service.oauth2_secret %>
 </p>
 
 

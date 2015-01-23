@@ -11,6 +11,10 @@ class OauthService < ActiveRecord::Base
 
   has_many :oauth_tokens
 
+  OPEN_HUMANS = :open_humans
+
+  scope :open_humans, where( :oauth2_service_type => OPEN_HUMANS )
+
   ACCESS_TOKEN_URI = 'https://www.google.com/accounts/OAuthGetAccessToken'
   REVOKE_TOKEN_URI = 'https://www.google.com/accounts/AuthSubRevokeToken'
 

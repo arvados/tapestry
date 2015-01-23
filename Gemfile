@@ -12,7 +12,7 @@ gem 'cancan'
 # Paperclip: file attachments
 gem "paperclip", "~> 2.3.16"
 gem 'gchart'
-gem 'nokogiri', '~> 1.5.6'
+gem 'nokogiri', '~> 1.5.11'
 gem 'gdata', :require => 'gdata'
 # Carmen: A repository of geographic regions
 gem 'carmen', '~> 0.2.13'
@@ -44,4 +44,7 @@ gem "gmaps4rails", "~> 1.3.0"
 gem 'RedCloth'
 # using a specific version of cells (3.11.0, released yesterday, throws up a Syntax error)
 gem 'cells', "~> 3.10.1"
+# dependency of cells which throws up a syntax error on 0.0.11 and 0.0.12
+gem 'uber', "0.0.10"
 
+gem 'oauth2'

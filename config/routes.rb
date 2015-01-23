@@ -76,7 +76,7 @@ Tapestry::Application.routes.draw do
   get "oauth_tokens/authorize"
   get "oauth_tokens/revoke"
   match "oauth_tokens/get_access_token" => 'oauth_tokens#get_access_token', :as => :get_oauth_access_token, :via => :get
-  resources :oauth_tokens
+  resources :oauth_tokens, :only => :index
 
   resources :kit_design_samples
   get 'sample_type_show' => 'sample_types#show'
@@ -96,10 +96,18 @@ Tapestry::Application.routes.draw do
   match '/pages/studies', :to => redirect('/pages/collection_events')
   match '/studies/*x', :to => redirect('/collection_events/%{x}')
 
-  resources :third_party, :controller => 'studies'
-  match '/third_party/:id/verify_participant_id/:app_token' => 'studies#verify_participant_id', :via => [:get], :as => :verify_third_party_participant_id
-  match '/third_party/:id/clickthrough_to' => 'studies#clickthrough_to', :via => [:post], :as => :clickthrough_to_third_party
+  get 'third_party/index'
+  get 'third_party/study/:id' => 'studies#show_third_party', :as => :third_party_study
+  match '/third_party/study/:id/verify_participant_id/:app_token' => 'studies#verify_participant_id', :via => [:get], :as => :verify_third_party_participant_id
+  match '/third_party/study/:id/clickthrough_to' => 'studies#clickthrough_to', :via => [:post], :as => :clickthrough_to_third_party
   match '/3p/*x', :to => redirect('/third_party/%{x}')
+
+  post 'open_humans/tokens', :to => 'open_humans#create_token'
+  delete 'open_humans/huids', :to => 'open_humans#delete_huids'
+  post 'open_humans/huids', :to => 'open_humans#create_huid'
+  get 'open_humans/huids'
+  # This callback URL is set on the Open Humans API server
+  get 'auth/open-humans/callback' => 'open_humans#callback'
 
   match '/filters/upload' => 'filters#upload', :as => :upload_filter, :via => :post
 

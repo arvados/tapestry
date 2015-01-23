@@ -20,12 +20,29 @@
     <%= f.text_field :scope, :size => 100 %>
   </div>
   <div class="field">
-    <%= f.label :consumerkey, 'Consumer key' %><br />
-    <%= f.text_field :consumerkey %>
+    <% options = [] %>
+    <% options << [ 'Open Humans', OauthService::OPEN_HUMANS ] if include_section?( Section::OPEN_HUMANS ) %>
+    <%= f.label :oauth2_service_type %><br />
+    <%= f.select :oauth2_service_type,
+        options_for_select( options,
+                            @admin_oauth_service.oauth2_service_type),
+        :include_blank => true %>
   </div>
   <div class="field">
-    <%= f.label :privatekey, 'Private key' %><br />
-    <%= f.text_area :privatekey, :rows => 16, :cols => 100 %>
+    <%= f.label :endpoint_url, 'Endpoint URL' %><br />
+    <%= f.text_field :endpoint_url %>
+  </div>
+  <div class="field">
+    <%= f.label :callback_url, 'Callback URL' %><br />
+    <%= f.text_field :callback_url %>
+  </div>
+  <div class="field">
+    <%= f.label :oauth2_key, 'Key' %><br />
+    <%= f.text_field :oauth2_key %>
+  </div>
+  <div class="field">
+    <%= f.label :oauth2_secret, 'Secret' %><br />
+    <%= f.text_field :oauth2_secret %>
   </div>
   <div class="actions">
     <%= f.submit %>
