@@ -121,7 +121,7 @@
 <h3>Uploaded data <% if logged_in? and @user == current_user -%><%= link_to "[edit]", user_files_path() %><% end -%></h3>
 
 <% if (@user_files_and_datasets.size > 0) -%>
-<%= render_cell :public_genetic_data, :list, :datasets => @user_files_and_datasets, :show_participant_column => false, :show_date_column => true, :current_user => current_user %>
+<%= render_cell :public_genetic_data, :list, :datasets => @user_files_and_datasets, :show_participant_column => false, :show_date_column => true, :show_source => true, :current_user => current_user %>
 <% else -%>
 None available.
 <% end -%>

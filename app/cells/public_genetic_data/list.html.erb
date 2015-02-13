@@ -13,6 +13,9 @@
 	<th style="width:auto">Date</th>
 	<% end %>
 	<th style="width:auto">Data type</th>
+	<% if @options[:show_source] %>
+	<th style="width:auto">Source</th>
+	<% end %>
 	<th>Name</th>
 	<th>Download</th>
 	<th>Report</th>
@@ -45,6 +48,10 @@
       <% end %>
 
       <td style="width:auto" data-summarize-as="list-distinct"><%= dataset.data_type %></td>
+      <% if @options[:show_source] %>
+      <td style="width:auto" data-summarize-as="file-source"><%= dataset.class.name %></td>
+      <% end %>
+
       <td data-summarize-as="name"><%= dataset.name %></td>
       <td data-summarize-as="size">
 	<% if dataset.class == UserFile %>
