@@ -6,6 +6,10 @@ class OpenHumansController < ApplicationController
   POST_HUIDS_URL = '/api/pgp/huids/'
   USER_DATA_URL = '/api/pgp/user-data/'
 
+  def participate
+    @open_humans_service = OauthService.where( :oauth2_service_type => OauthService::OPEN_HUMANS ).first
+  end
+
   def create_token
     oh_service = OauthService.open_humans.find(params[:service_id])
     redirect_to client(oh_service).auth_code.authorize_url( :redirect_uri => oh_service.callback_url, :scope => oh_service.scope )
@@ -54,7 +58,7 @@ class OpenHumansController < ApplicationController
       oauth_token.oauth2_token_hash = token.to_hash
       oauth_token.save!
     end
-    redirect_to third_party_index_path
+    redirect_to open_humans_participate_path
   end
 
 private
