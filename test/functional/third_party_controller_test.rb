@@ -26,7 +26,7 @@ class ThirdPartyControllerTest < ActionController::TestCase
         should 'display index' do
           get :index
           assert_response :success
-          assert_not_nil assigns(:open_humans_services)
+          assert_not_nil assigns(:open_humans_service)
         end
       end
 
