@@ -13,6 +13,8 @@
 
 <p>Open Humans is a project of PersonalGenomes.org, co-founded by Jason Bobe and Madeleine Ball. The Open Humans website is not itself a study, but does contain an IRB-approved study (PI: Madeleine Ball) for members that wish to publicly share data.</p>
 
+<p>Additional information about Open Humans can be found at its website: <%= link_to 'http://openhumans.org', 'http://openhumans.org' %></p>
+
 <div class="authorization-instructions">
   <% user_token = @open_humans_service.oauth_tokens.find_by_user_id( current_user.id ) %>
   <% if user_token %>
@@ -32,7 +34,7 @@
   <% else %>
     <div>
       <p>
-        The link below establishes a link to Open Humans. They will return you to this page. After this, you must approve export of your participant ID (huID) to Open Humans to connect your data.
+        The link below will take you to the Open Humans website where you will be able to create an account. Once you have an account, you'll be returned to the PGP website, where you must approve the export of huID to your Open Humans account.
       </p>
       <div class="authorization-button">
         <%= link_to 'Add Authorization',

@@ -11,7 +11,4 @@ the Harvard Medical School Institutional Review Board.</i></p>
   <% @studies.each do |study| %>
     <li><%= link_to study.name, third_party_study_path(study) %> (<%= study.researcher.full_name %>, <%= study.researcher.researcher_affiliation %>)</li>
   <% end %>
-  <% if include_section?( Section::OPEN_HUMANS ) && @open_humans_service %>
-    <li><%= link_to @open_humans_service.name, open_humans_participate_path %></li>
-  <% end %>
 </ul>
