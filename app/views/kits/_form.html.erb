@@ -33,11 +33,11 @@ jQuery(function(){
   </div>
   <div class="field">
     <%= f.label :study_id %><br />
-    <%= f.select :study_id, Study.where('researcher_id = ?',current_user.id).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+    <%= f.select :study_id, @studies.collect {|r| [ r.name, r.id ] }, :include_blank => true %>
   </div>
   <div class="field">
     <%= f.label :kit_design_id %><br />
-    <%= f.select :kit_design_id, KitDesign.where('owner_id = ?',current_user.id).collect {|r| [ r.name, r.id ] }, :include_blank => true %>
+    <%= f.select :kit_design_id, @kit_designs.collect {|r| [ r.name, r.id ] }, :include_blank => true %>
   </div>
   <% if @kit.participant then %>
   <div class="field">
