@@ -233,6 +233,14 @@ class KitsController < ApplicationController
   def new
     @kit = Kit.new
 
+    unless current_user.is_admin?
+      @kit_designs = KitDesign.where('owner_id = ?',current_user.id)
+      @studies = Study.where('researcher_id = ?',current_user.id)
+    else
+      @kit_designs = KitDesign.all
+      @studies = Study.all
+    end
+
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @kit }

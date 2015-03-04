@@ -1313,3 +1313,14 @@ input[type="radio"], input[type="checkbox"] { margin: auto; }
 .pull-right {
     float: right;
 }
+
+.authorization-instructions {
+    width:   300px;
+    padding: 1em;
+    border:  1px dashed #866;
+}
+
+.authorization-button {
+    text-align: center;;
+}
+
