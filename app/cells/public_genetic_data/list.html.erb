@@ -49,7 +49,7 @@
 
       <td style="width:auto" data-summarize-as="list-distinct"><%= dataset.data_type %></td>
       <% if @options[:show_source] %>
-      <td style="width:auto" data-summarize-as="file-source"><%= dataset.class.name %></td>
+      <td style="width:auto" data-summarize-as="file-source"><%= dataset.class.name == 'UserFile' ? 'Participant' : 'PGP' %></td>
       <% end %>
 
       <td data-summarize-as="name"><%= dataset.name %></td>
