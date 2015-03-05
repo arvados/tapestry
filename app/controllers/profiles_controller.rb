@@ -120,10 +120,18 @@ class ProfilesController < ApplicationController
                             !['hex', 'deceased', 'state', 'zip'].include?(k)
                           }
         files = @user_files_and_datasets.collect { |user_file_or_dataset|
+                            if user_file_or_dataset.class == UserFile
+                              download_url = user_file_download_url(user_file_or_dataset)
+                            elsif user_file_or_dataset.download_url
+                              download_url = user_file_or_dataset.download_url
+                            else
+                              download_url = nil
+                            end
                             user_file_or_dataset.attributes.delete_if { |k,v|
                                not ['data_type', 'name', 'date', 'description', 'report_url'].include?(k)
                             }.merge({
-                              'file_source' => (user_file_or_dataset.class.name == 'UserFile' ? 'Participant' : 'PGP')
+                              'file_source' => user_file_or_dataset.class.name == 'UserFile' ? 'Participant' : 'PGP',
+                              'download_url' => download_url
                             })
                           }
         confirmed_family_relations = @confirmed_family_relations.collect{ |fr|
