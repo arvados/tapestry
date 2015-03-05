@@ -123,7 +123,7 @@ class ProfilesController < ApplicationController
                             user_file_or_dataset.attributes.delete_if { |k,v|
                                not ['data_type', 'name', 'date', 'description', 'report_url'].include?(k)
                             }.merge({
-                              'file_source' => user_file_or_dataset.class.name
+                              'file_source' => (user_file_or_dataset.class.name == 'UserFile' ? 'Participant' : 'PGP')
                             })
                           }
         confirmed_family_relations = @confirmed_family_relations.collect{ |fr|
