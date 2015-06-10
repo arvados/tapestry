@@ -45,6 +45,7 @@ gem 'RedCloth'
 # using a specific version of cells (3.11.0, released yesterday, throws up a Syntax error)
 gem 'cells', "~> 3.10.1"
 # dependency of cells which throws up a syntax error on 0.0.11 and 0.0.12
-gem 'uber', "0.0.10"
+# 2015-06-10 nico .. bundler complains about any version > 0.0.6 
+gem 'uber', "0.0.6"
 
 gem 'oauth2'
