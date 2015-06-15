@@ -1,0 +1,54 @@
+pgp1:
+  suspended_at:
+  pgp_id: "1"
+  city:
+  pledge:
+  phr_updated_at:
+  remember_token_expires_at:
+  creator_id:
+  has_sequence: "0"
+  activated_at: 2010-03-06 00:39:11
+  activation_code:
+  researcher_affiliation: ""
+  phr_file_size:
+  middle_name: m
+  deceased:
+  phone_number:
+  deactivated_at:
+  researcher_onirb: "0"
+  phr_content_type:
+  crypted_password: da39a3ee5e6b4b0d3255bfef95601890afd80709
+  consent_version: v20140218
+  security_answer:
+  security_question:
+  state: MA
+  first_name: george
+  salt: da39a3ee5e6b4b0d3255bfef95601890afd80709
+  deleted_at:
+  authsub_token: da39a3ee5e6b4b0d3255bfef95601890afd80709
+  family_members_passed_exam:
+  zip: "02446"
+  address2:
+  address1:
+  is_admin: "1"
+  remember_token:
+  email: pgp1@example.com
+  lock_version: "9"
+  hex: zz43860C
+  phr_profile_name:
+  enrollment_essay:
+  researcher: "0"
+  has_family_members_enrolled: "yes"
+  exam_version:
+  real_name_public: "1"
+  absolute_pitch_survey_completion: 2011-01-15 02:16:26
+  enrollment_accepted: 2010-11-21 12:06:08
+  enrolled: 2010-11-20 19:58:47
+  eligibility_survey_version: v1
+  has_sequence_explanation:
+  updated_at: 2014-12-19 15:20:47
+  created_at: 2010-03-06 00:15:12
+  can_reactivate_self:
+  is_test: "0"
+  phr_file_name:
+  last_name: church
