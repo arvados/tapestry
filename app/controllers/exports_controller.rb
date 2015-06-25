@@ -5,6 +5,28 @@ class ExportsController < ApplicationController
   skip_before_filter :ensure_latest_consent
   skip_before_filter :ensure_recent_safety_questionnaire
 
+  def users
+    export_rows 'users' do |&block|
+      block.call %w(human_id sha1 download_url get_evidence_genome_id report_url location  name created_at updated_at locator published_at status_url  download_url report_metadata)
+      User.publishable.each do |u|
+        block.call [u.hex, u.real_name_public]
+      end
+    end
+  end
+
+  def datasets
+    export_rows 'datasets' do |&block|
+      block.call %w(human_id sha1 download_url get_evidence_genome_id report_url location  name created_at updated_at locator published_at status_url  download_url report_metadata)
+      User.publishable.eager_load(:datasets).each do |u|
+        u.datasets.published_or_published_anonymously.each do |d|
+          hex = d.published_at ? u.hex : ''
+          published_at = d.published_anonymously_at || d.published_at
+          block.call [hex, d.sha1, d.download_url, d.get_evidence_genome_id, d.report_url, d.location, d.name, d.created_at, d.updated_at, d.locator, published_at, d.status_url, d.download_url, d.report_metadata]
+        end
+      end
+    end
+  end
+
   def phrccr_lab_test_results
     export_rows 'phrccr_lab_test_results' do |&block|
       block.call %w(human_id start_date codes value units created_at updated_at origin description)
