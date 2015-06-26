@@ -1,0 +1,134 @@
+published:
+  longupload_size:
+  updated_at: 2012-08-30 20:41:30
+  data_type: 23andMe
+  dataset_file_name: PGP1_23andme.zip
+  updater: pgp1
+  longupload_file_name:
+  longupload_fingerprint:
+  upload_tos_consent: "1"
+  creator_id:
+  dataset_updated_at: 2011-01-15 04:42:31
+  warehouse_blocks:
+  report_metadata: "--- \n\
+    :called_frac_nogap: 0.000199166926578\n\
+    :ref_nogap_num: 2858034764\n\
+    :ref_all_num: 3080436051\n\
+    :match_num: 569226\n\
+    :ref_coding_n: 32816496\n\
+    :called_coding_clintest_n: 2241\n\
+    :called_coding_n: 12502\n\
+    :chromosomes: \n\
+    - chr1\n\
+    - chr10\n\
+    - chr11\n\
+    - chr12\n\
+    - chr13\n\
+    - chr14\n\
+    - chr15\n\
+    - chr16\n\
+    - chr17\n\
+    - chr18\n\
+    - chr19\n\
+    - chr2\n\
+    - chr20\n\
+    - chr21\n\
+    - chr22\n\
+    - chr3\n\
+    - chr4\n\
+    - chr5\n\
+    - chr6\n\
+    - chr7\n\
+    - chr8\n\
+    - chr9\n\
+    - chrM\n\
+    - chrX\n\
+    - chrY\n\
+    :ref_coding_clintest_n: 3796080\n\
+    :called_frac_all: 0.000184787475077\n\
+    :input_type: 23ANDME\n\
+    :genome_build: b36\n\
+    :called_num: 569226\n"
+  lock_version: "6"
+  dataset_file_size: "4993512"
+  longupload_bytes_received:
+  report_url: http://evidence.personalgenomes.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  processing_stopped: "1"
+  status_url: http://evidence.personalgenomes.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  name: Saliva SNPs 2008
+  index_in_manifest:
+  path_in_manifest:
+  locator: 58f33561f538c0100c9d7cf294751165+76+K@ant
+  processing_status: "--- \n\
+    :status: finished\n\
+    :logfilename: false\n\
+    :progress: 1\n\
+    :result_url: http://evidence.personalgenomes.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5\n\
+    :updated_at: 2012-08-07 19:40:37.564841 -04:00\n"
+  deleted_at:
+  created_at: 2011-01-15 04:42:31
+  dataset_content_type: application/x-zip-compressed
+  date: "2008-01-01"
+  description: ""
+  user: pgp1
+
+incomplete:
+  dataset_file_size:
+  locator:
+  updated_at: 2012-08-30 20:41:30
+  data_type: 23andMe
+  dataset_file_name: PGP1_23andme_incomplete.zip
+  updater: pgp1
+  upload_tos_consent: "1"
+  creator: pgp1
+  dataset_updated_at: 2011-01-15 04:42:31
+  report_url: http://evidence.personalgenomes.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  processing_stopped: "1"
+  status_url: http://evidence.personalgenomes.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  name: Saliva SNPs 2008
+  created_at: 2011-01-15 04:42:31
+  dataset_content_type: application/x-zip-compressed
+  date: "2008-01-01"
+  description: ""
+  user: pgp1
+
+deleted:
+  deleted_at: 2015-06-25 15:41:31.426059 Z
+  dataset_file_size: "4993512"
+  locator: 58f33561f538c0100c9d7cf294751165+76+K@ant
+  updated_at: 2012-08-30 20:41:30
+  data_type: 23andMe
+  dataset_file_name: PGP1_23andme.zip
+  updater: pgp1
+  upload_tos_consent: "1"
+  creator: pgp1
+  dataset_updated_at: 2011-01-15 04:42:31
+  report_url: http://evidence.personalgenomes.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  processing_stopped: "1"
+  status_url: http://evidence.personalgenomes.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  name: Saliva SNPs 2008
+  created_at: 2011-01-15 04:42:31
+  dataset_content_type: application/x-zip-compressed
+  date: "2008-01-01"
+  description: ""
+  user: pgp1
+
+for_suspended_user:
+  dataset_file_size: "4993512"
+  locator: 58f33561f538c0100c9d7cf294751165+76+K@ant
+  updated_at: 2012-08-30 20:41:30
+  data_type: 23andMe
+  dataset_file_name: PGP1_23andme.zip
+  updater: suspended
+  upload_tos_consent: "1"
+  creator: suspended
+  dataset_updated_at: 2011-01-15 04:42:31
+  report_url: http://evidence.personalgenomes.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  processing_stopped: "1"
+  status_url: http://evidence.personalgenomes.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  name: Saliva SNPs 2008
+  created_at: 2011-01-15 04:42:31
+  dataset_content_type: application/x-zip-compressed
+  date: "2008-01-01"
+  description: ""
+  user: suspended
