@@ -4,7 +4,7 @@ class OauthTokensController < ApplicationController
 
   def index
     @services = OauthService.all
-    @mytokens = OauthToken.where(:user_id => current_user.id)
+    @mytokens = current_user.oauth_tokens
     @authorized = {}
     @services.each { |s|
       t = @mytokens.where(:oauth_service_id => s.id)
@@ -12,25 +12,44 @@ class OauthTokensController < ApplicationController
     }
   end
 
+  # Obtain OAuth1 or OAuth2 authorization to use a service on behalf
+  # of the current user.
   def authorize
-    token = OauthToken.find_by_user_id_and_oauth_service_id(current_user.id, params[:id])
-    if !token
-      token = OauthToken.new(:user => current_user,
-                             :oauth_service => OauthService.find(params[:id]))
-    end
+    token = current_user.oauth_tokens.find_or_create_by_oauth_service_id(params[:id])
     if token.authorized? then
       flash[:notice] = 'You have already authorized this service.'
       redirect_to oauth_tokens_path
       return
+    elsif token.oauth_service.oauth2_service_type
+      # OAuth2
+      return redirect_to token.oauth2_authorize_url(oauth2callback_url)
+    else
+      # OAuth1
+      callback_uri = get_oauth_access_token_url + '?next_page=' + uriencode(oauth_tokens_path)
+      (status,destination) = token.authorize! callback_uri
+      if not status.nil?
+        redirect_to destination
+      else
+        flash[:error] = "Unable to authorize: #{destination}. Please try again later."
+        redirect_to request.env['HTTP_REFERER']
+      end
+    end
+  end
+
+  def oauth2callback
+    nextpage = params[:next_page] || oauth_tokens_path
+    token = OauthToken.where(:id => params[:state].to_i,
+                             :user_id => current_user.id).first
+    if token and token.oauth2_callback params[:code], oauth2callback_url
+      flash[:notice] = "Authorization for #{token.oauth_service.name} was successful."
+    else
+      flash[:error] = "Authorization for #{token.oauth_service.name} failed (or perhaps you cancelled it)."
     end
 
-    callback_uri = get_oauth_access_token_url + '?next_page=' + uriencode(oauth_tokens_path)
-    (status,destination) = token.authorize!(callback_uri)
-    if not status.nil?
-      redirect_to destination
+    if params[:next_page]
+      redirect_to params[:next_page]
     else
-      flash[:error] = "Unable to authorize: #{destination}. Please try again later."
-      redirect_to request.env['HTTP_REFERER']
+      redirect_to oauth_tokens_path
     end
   end
 

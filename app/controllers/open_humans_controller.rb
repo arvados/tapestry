@@ -1,8 +1,6 @@
 class OpenHumansController < ApplicationController
   before_filter {|c| c.check_section_disabled(Section::OPEN_HUMANS) }
 
-  AUTHORIZE_URL = '/oauth2/authorize/'
-  TOKEN_URL = '/oauth2/token/'
   POST_HUIDS_URL = '/api/pgp/huids/'
   USER_DATA_URL = '/api/pgp/user-data/'
 
@@ -12,7 +10,7 @@ class OpenHumansController < ApplicationController
 
   def create_token
     oh_service = OauthService.open_humans.find(params[:service_id])
-    redirect_to client(oh_service).auth_code.authorize_url( :redirect_uri => oh_service.callback_url, :scope => oh_service.scope )
+    redirect_to oh_service.oauth2_client.auth_code.authorize_url( :redirect_uri => oh_service.callback_url, :scope => oh_service.scope )
   end
 
   def delete_huids
@@ -52,7 +50,10 @@ class OpenHumansController < ApplicationController
 
   def callback
     oh_service = OauthService.find_by_oauth2_service_type( OauthService::OPEN_HUMANS )
-    token = client(oh_service).auth_code.get_token( params['code'], :redirect_uri => oh_service.callback_url, :scope => oh_service.scope )
+    token = oh_service.oauth2_client.auth_code.
+      get_token(params['code'],
+                :redirect_uri => oh_service.callback_url,
+                :scope => oh_service.scope)
     if token
       oauth_token = current_user.oauth_tokens.find_or_create_by_oauth_service_id( oh_service.id )
       oauth_token.oauth2_token_hash = token.to_hash
@@ -63,23 +64,13 @@ class OpenHumansController < ApplicationController
 
 private
 
-  def client(service)
-    OAuth2::Client.new(
-      service.oauth2_key,
-      service.oauth2_secret,
-      :authorize_url => AUTHORIZE_URL,
-      :token_url => TOKEN_URL,
-      :site => service.endpoint_url
-    )
-  end
-
   def token_record(oauth_token_id)
     current_user.oauth_tokens.joins(:oauth_service).where( :oauth_services => { :oauth2_service_type => OauthService::OPEN_HUMANS } ).find( oauth_token_id )
   end
 
   def token_object(oauth_token_id)
     token_record = token_record(oauth_token_id)
-    client = client( token_record(params[:token_id]).oauth_service )
+    client = token_record(params[:token_id]).oauth_service.oauth2_client
     token = OAuth2::AccessToken.from_hash( client, token_record.oauth2_token_hash )
     raise "Token expired" if token.expired?
     token

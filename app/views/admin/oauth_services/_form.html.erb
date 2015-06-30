@@ -22,6 +22,7 @@
   <div class="field">
     <% options = [] %>
     <% options << [ 'Open Humans', OauthService::OPEN_HUMANS ] if include_section?( Section::OPEN_HUMANS ) %>
+    <% options << [ 'Google', OauthService::GOOGLE ] if include_section?( Section::GOOGLE_SURVEYS ) %>
     <%= f.label :oauth2_service_type %><br />
     <%= f.select :oauth2_service_type,
         options_for_select( options,
@@ -31,10 +32,18 @@
   <div class="field">
     <%= f.label :endpoint_url, 'Endpoint URL' %><br />
     <%= f.text_field :endpoint_url %>
+    <blockquote>
+      Example: <code>https://www.openhumans.org</code>.
+      (Leave blank for Google.)
+    </blockquote>
   </div>
   <div class="field">
     <%= f.label :callback_url, 'Callback URL' %><br />
     <%= f.text_field :callback_url %>
+    <blockquote>
+       Example: <code><%= url_for(:action => :oauth2callback, :only_path => false) %></code>.
+       (Leave blank for Google.)
+    </blockquote>
   </div>
   <div class="field">
     <%= f.label :oauth2_key, 'Key' %><br />
