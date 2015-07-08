@@ -75,7 +75,8 @@ class OauthToken < ActiveRecord::Base
   # Use this token to authorize an HTTP request. Get a new access
   # token first if the one on hand has expired (or will expires soon).
   def oauth2_request method, uri, params={}
-    if not oauth2_token_hash
+    raise "token is not authorized" if not authorized?
+    if accesstoken and not oauth2_token_hash
       migrate_from_oauth1!
     end
     if (oauth2_token.expires? and
