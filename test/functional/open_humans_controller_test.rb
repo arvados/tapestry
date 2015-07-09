@@ -103,7 +103,7 @@ private
     get_token_stub.stubs('expired?').returns(false)
     auth_code_stub = stub( :get_token => get_token_stub )
     client_stub = stub( :auth_code => auth_code_stub )
-    OpenHumansController.any_instance.stubs(:client).with(@oauth_service).returns(client_stub)
+    OauthService.any_instance.stubs(:oauth2_client).returns client_stub
     OAuth2::AccessToken.stubs( :from_hash ).with( client_stub, token_hash ).returns(get_token_stub)
   end
 

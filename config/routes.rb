@@ -76,6 +76,7 @@ Tapestry::Application.routes.draw do
   get "oauth_tokens/authorize"
   get "oauth_tokens/revoke"
   match "oauth_tokens/get_access_token" => 'oauth_tokens#get_access_token', :as => :get_oauth_access_token, :via => :get
+  get 'oauth2callback' => 'oauth_tokens#oauth2callback', :as => :oauth2callback
   resources :oauth_tokens, :only => :index
 
   resources :kit_design_samples

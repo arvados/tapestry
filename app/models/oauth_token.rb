@@ -4,6 +4,10 @@ class OauthToken < ActiveRecord::Base
   require 'uri'
   include ApplicationHelper
 
+  # If an existing access token has this many seconds left before it
+  # expires, don't bother getting a new one.
+  MIN_TTL_BEFORE_REFRESH = 120
+
   belongs_to :user
   belongs_to :oauth_service
   validates_uniqueness_of :user_id, :scope => :oauth_service_id
@@ -14,7 +18,7 @@ class OauthToken < ActiveRecord::Base
   attr_protected :accesstoken
 
   def authorized?
-    self.accesstoken
+    accesstoken or oauth2_token_hash
   end
 
   def revoke!
@@ -22,6 +26,76 @@ class OauthToken < ActiveRecord::Base
     self.destroy if self.oauth_service.revoke_token(self)
   end
 
+  ### OAuth2 ###
+
+  # Exchange a code (received from the oauth2callback sequence) for a
+  # refresh token and an access token.
+  def oauth2_callback code, callback_url
+    token = oauth_service.oauth2_client.auth_code.
+      get_token(code,
+                :redirect_uri => callback_url,
+                :scope => oauth_service.scope)
+    self.oauth2_token_hash = token.to_hash
+    save!
+  end
+
+  # Return the provider URL where the user should be redirected in
+  # order to initiate the authorization process.
+  def oauth2_authorize_url callback_url
+    params = {
+      :state => id,
+      :redirect_uri => callback_url,
+      :scope => oauth_service.scope,
+      :response_type => 'code',
+    }
+    oauth_service.
+      oauth2_client.
+      auth_code.
+      authorize_url params.merge(oauth_service.authorize_params)
+  end
+
+  def oauth2_expired?
+    oauth2_token_hash and oauth2_token.expired?
+  end
+
+  # Deserialize an access token object (cf. 'oauth2' gem) from
+  # oauth2_token_hash.
+  def oauth2_token
+    @oauth2_token ||= OAuth2::AccessToken.from_hash(oauth_service.oauth2_client,
+                                                    oauth2_token_hash.dup)
+  end
+
+  # Serialize the access token object (cf. 'oauth2' gem) to
+  # oauth2_token_hash before saving.
+  def save *args
+    oauth2_token_hash = @oauth2_token if @oauth2_token
+    super
+  end
+
+  # Use this token to authorize an HTTP request. Get a new access
+  # token first if the one on hand has expired (or will expires soon).
+  def oauth2_request method, uri, params={}
+    raise "token is not authorized" if not authorized?
+    if accesstoken and not oauth2_token_hash
+      migrate_from_oauth1!
+    end
+    if (oauth2_token.expires? and
+        oauth2_token.expires_at < Time.now.to_i + MIN_TTL_BEFORE_REFRESH)
+      oauth2_token.refresh!
+      save
+    end
+    return oauth2_token.send method.to_s.downcase, uri, :params => params
+  end
+
+  ### OAuth1 ###
+
+  # Get a request token (token+secret) from the OAuth1 provider. Store
+  # the token+secret in the token record, and return an authorization
+  # URL. (A user who visits this authorization URL and completes the
+  # ensuring auth process will land on callback_uri with the new token
+  # in params[:oauth_token] and a verifier in params[:oauth_verifier],
+  # which should be passed to get_access_token() in order to trade the
+  # request token for an access token.
   def authorize!(callback_uri)
     formdata = {
       'oauth_callback' => callback_uri,
@@ -37,7 +111,7 @@ class OauthToken < ActiveRecord::Base
     formdata['oauth_signature'] = oauth_service.sign('POST', base_uri, formdata)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new(uri.scheme + '://' + uri.host + uri.request_uri)
+    req = Net::HTTP::Post.new(uri.request_uri)
     req.set_form_data(formdata)
     resp = http.request(req)
     oauth_token_scan = resp.body.scan(/oauth_token=([^&]*)/)
@@ -64,10 +138,9 @@ class OauthToken < ActiveRecord::Base
     return self.oauth_service.oauth_request(self, method, uri, formdata)
   end
 
-  def oauth2_expired?
-    if self.oauth2_token_hash
-      expires_at = Time.at(self.oauth2_token_hash[:expires_at])
-      expires_at <= Time.now
-    end
+protected
+
+  def migrate_from_oauth1!
+    raise "Migration from OAuth1 is not implemented. Re-authorize using OAuth2."
   end
 end

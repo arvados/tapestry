@@ -52,10 +52,12 @@ class GoogleSurvey < ActiveRecord::Base
       return nil, "Could not parse spreadsheet URL"
     end
 
-    uri = URI.parse("https://spreadsheets.google.com/feeds/download/spreadsheets/Export?key=#{skey}")
-    resp = token.oauth_request('GET', uri, {'format' => 'csv', 'exportFormat' => 'csv' })
-    if resp.code != '200' or resp.body.nil?
-      return nil, "Unexpected response from #{uri.to_s} -- #{resp.code} #{resp.message} #{resp.body}"
+    uri = 'https://spreadsheets.google.com/feeds/download/spreadsheets/Export'
+    resp = token.oauth2_request('GET', uri,
+                                'key' => skey,
+                                'exportFormat' => 'csv')
+    if resp.status != 200 or resp.body.nil?
+      return nil, "Unexpected response from #{uri} -- #{resp.status} #{resp.body}"
     end
 
     cache_file = "#{CACHE_DIR}/#{self.id}.csv"
