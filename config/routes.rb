@@ -296,4 +296,17 @@ Tapestry::Application.routes.draw do
 
   resource :public_genetic_data
   match '/public_genetic_data/anonymous' => 'public_genetic_data#anonymous', :as => :public_anonymous_genetic_data
+
+  ['users',
+   'datasets',
+   'user_files',
+   'phrccr_lab_test_allergies',
+   'phrccr_lab_test_conditions',
+   'phrccr_lab_test_demographics',
+   'phrccr_lab_test_immunizations',
+   'phrccr_lab_test_results',
+   'phrccr_medications',
+   'phrccr_procedures'].each do |x|
+    match '/exports/'+x => 'exports#'+x
+  end
 end

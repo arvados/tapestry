@@ -1,7 +1,8 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-# one:
-#   column: value
-#
-# two:
-#   column: value
+pgp1_ccr0:
+  race: White
+  ccr: pgp1_ccr0
+  blood_type: O+
+  weight_oz: "3936"
+  dob: "1954-08-28"
+  height_in: "77"
+  gender: Male

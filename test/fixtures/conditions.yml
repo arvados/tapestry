@@ -1,7 +1,7 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-# one:
-#   column: value
-#
-# two:
-#   column: value
+pgp1_ccr0_hypersomnolence:
+  codes: ""
+  ccr: pgp1_ccr0
+  status: Active
+  start_date: "2003-09-02"
+  condition_description: hypersomnolescence
+  end_date:
