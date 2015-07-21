@@ -68,7 +68,7 @@ class OauthToken < ActiveRecord::Base
   # Serialize the access token object (cf. 'oauth2' gem) to
   # oauth2_token_hash before saving.
   def save *args
-    oauth2_token_hash = @oauth2_token if @oauth2_token
+    oauth2_token_hash = @oauth2_token.to_hash if @oauth2_token
     super
   end
 
@@ -81,7 +81,7 @@ class OauthToken < ActiveRecord::Base
     end
     if (oauth2_token.expires? and
         oauth2_token.expires_at < Time.now.to_i + MIN_TTL_BEFORE_REFRESH)
-      oauth2_token.refresh!
+      @oauth2_token = oauth2_token.refresh!
       save
     end
     return oauth2_token.send method.to_s.downcase, uri, :params => params
