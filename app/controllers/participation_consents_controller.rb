@@ -7,6 +7,13 @@ class ParticipationConsentsController < ApplicationController
   # PH: TODO: implement proper #show and #new and #edit, and deal the way the #show action is called by default
   def show
     @informed_consent_response = InformedConsentResponse.new
+    # If this is a re-consent, prepopulate the twin/recontact questions.
+    # Do not prepopulate e-mail and full name, because filling those fields out
+    # is the explicit signature action we ask people to take.
+    if not current_user.informed_consent_responses.empty?
+      @informed_consent_response.twin = current_user.informed_consent_responses.last.twin
+      @informed_consent_response.recontact = current_user.informed_consent_responses.last.recontact
+    end
   end
 
   def create
@@ -24,7 +31,7 @@ class ParticipationConsentsController < ApplicationController
 
     @informed_consent_response = current_user.build_informed_consent_response( new_attrs )
     @informed_consent_response.update_answers( params[:other_answers] )
-    @informed_consent_response.save
+    @informed_consent_response.save!
 
     if @informed_consent_response.valid?
       step = EnrollmentStep.find_by_keyword('participation_consent')

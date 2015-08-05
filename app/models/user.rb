@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
   has_one  :privacy_survey_response, :dependent => :destroy
   # /legacy
   has_many  :named_proxies, :dependent => :destroy
-  has_one  :informed_consent_response, :dependent => :destroy
+  has_many  :informed_consent_responses, :dependent => :destroy
   has_one  :baseline_traits_survey, :dependent => :destroy
   # TODO: habtm does not take :dependent => :destroy. But we want that in the event a user is deleted.
   # We should probably convert this to has_many, see http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_and_belongs_to_many
