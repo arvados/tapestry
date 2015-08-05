@@ -267,7 +267,7 @@ class UsersController < ApplicationController
     if current_user.accept_tos(tos_version)
       flash[:notice] = 'Thank you for agreeing with our Terms of Service.'
     end
-    redirect_to root_url
+    redirect_back_or_default(root_url)
   end
 
   def participant_survey

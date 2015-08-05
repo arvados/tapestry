@@ -51,7 +51,7 @@ class SpecimenAnalysisDataController < ApplicationController
       flash[:error] = 'There was an error publishing your dataset. The site administrators have been notified, and we will fix this problem as soon as possible. Please come back in a little bit to try again.'
       current_user.log("Participant tried to publish dataset #{@dataset.name} (#{@dataset.id}) but the call to GET-Evidence failed. Dataset not made public yet, user informed of error and asked to come back later to try again.")
     end 
-    redirect_to specimen_analysis_data_index_url
+    redirect_back_or_default(specimen_analysis_data_index_url)
   end
 
 private

@@ -30,7 +30,7 @@ class ParticipationConsentsController < ApplicationController
       step = EnrollmentStep.find_by_keyword('participation_consent')
       current_user.complete_enrollment_step(step)
       current_user.log('Signed full consent form version ' + LATEST_CONSENT_VERSION,step)
-      redirect_to root_path
+      redirect_back_or_default(root_url)
     else
       flash[:error] = @informed_consent_response.errors.collect{|field,msg| msg}.join('<br/><br/>')
       render :action => 'show'
