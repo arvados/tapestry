@@ -29,11 +29,10 @@ class ParticipationConsentsController < ApplicationController
       :email_confirmation => current_user.email
     })
 
-    @informed_consent_response = current_user.build_informed_consent_response( new_attrs )
+    @informed_consent_response = current_user.informed_consent_responses.build( new_attrs )
     @informed_consent_response.update_answers( params[:other_answers] )
-    @informed_consent_response.save!
 
-    if @informed_consent_response.valid?
+    if @informed_consent_response.save
       step = EnrollmentStep.find_by_keyword('participation_consent')
       current_user.complete_enrollment_step(step)
       current_user.log('Signed full consent form version ' + LATEST_CONSENT_VERSION,step)

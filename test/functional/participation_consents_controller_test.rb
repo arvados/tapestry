@@ -30,10 +30,13 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
 
       should "render form elements for the informed_consent_response" do
         assert_select 'form[method=?][action=?]', 'post', participation_consent_path do
-          %w(recontact).each do |radio_name|
-            assert_select 'input[type=radio][name=?]', "informed_consent_response[#{radio_name}]", :count => 2
+          assert_select 'input[type=radio][name=?][value=0]', "informed_consent_response[recontact]", :count => 1
+          assert_select 'input[type=radio][name=?][value=1]', "informed_consent_response[recontact]", :count => 1
+          [InformedConsentResponse::TWIN_NO,
+           InformedConsentResponse::TWIN_YES,
+           InformedConsentResponse::TWIN_UNSURE].each do |v|
+            assert_select 'input[type=radio][name=?][value=?]', "informed_consent_response[twin]", v, :count => 1
           end
-          assert_select 'input[type=radio][name=?]', "informed_consent_response[twin]", :count => 3
         end
       end
     end
@@ -117,6 +120,23 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
         assert_equal @user, InformedConsentResponse.last.user
       end
     end
+  end
 
+  logged_in_enrolled_user_context do
+    context "on GET to show" do
+      setup { get :show }
+      should_respond_with :success
+      should_render_template :show
+
+      should "render form elements with defaults from latest informed_consent_response" do
+        assert_select 'form[method=?][action=?]', 'post', participation_consent_path do
+          assert_select "input[type=radio][name='informed_consent_response[recontact]'][value=0]:not([checked])", :count => 1
+          assert_select "input[type=radio][name='informed_consent_response[recontact]'][value=1][checked]", :count => 1
+          assert_select "input[type=radio][name='informed_consent_response[twin]'][value=?]:not([checked])", InformedConsentResponse::TWIN_NO, :count => 1
+          assert_select "input[type=radio][name='informed_consent_response[twin]'][value=?]:not([checked])", InformedConsentResponse::TWIN_YES, :count => 1
+          assert_select "input[type=radio][name='informed_consent_response[twin]'][value=?][checked]", InformedConsentResponse::TWIN_UNSURE, :count => 1
+        end
+      end
+    end
   end
 end
