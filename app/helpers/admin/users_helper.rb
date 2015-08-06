@@ -26,7 +26,7 @@ module Admin::UsersHelper
           :family_survey_response,
           :privacy_survey_response,
           :baseline_traits_survey,
-          :informed_consent_response,
+          :informed_consent_responses,
           :waitlists])
 
     user_fields = %w(first_name last_name email hex activated_at phr_profile_name).freeze
@@ -98,10 +98,10 @@ module Admin::UsersHelper
 
       row.push user.waitlists.count
 
-      if user.informed_consent_response
-        row.push user.informed_consent_response.twin
-        row.push user.informed_consent_response.biopsy
-        row.push user.informed_consent_response.recontact
+      if not user.informed_consent_responses.empty?
+        row.push user.informed_consent_responses.last.twin
+        row.push user.informed_consent_responses.last.biopsy
+        row.push user.informed_consent_responses.last.recontact
       else
         3.times { row.push nil }
       end
