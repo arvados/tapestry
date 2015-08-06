@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class GoogleSurveysControllerTest < ActionController::TestCase
+  setup do
+    APP_CONFIG[Section::CONFIG_KEY] |= [Section::GOOGLE_SURVEYS]
+  end
+
+  teardown do
+    APP_CONFIG[Section::CONFIG_KEY] -= [Section::GOOGLE_SURVEYS]
+  end
 
   context "without a logged in user" do
     context "on GET to index" do
@@ -98,6 +105,24 @@ class GoogleSurveysControllerTest < ActionController::TestCase
       end
     end
 
+  end
+
+  logged_in_enrolled_user_context do
+    context "on participate" do
+      setup do
+        survey = Factory(:google_survey,
+                         :open => true,
+                         :form_url => 'https://google.example.com/example-form-url',
+                         :userid_populate_entry => 10)
+        post :participate, :id => survey.to_param
+      end
+
+      should 'redirect' do
+        assert_response :redirect
+        assert_redirected_to 'https://google.example.com/example-form-url?&entry.1000010=' + assigns(:nonce).nonce
+        assert_equal false, assigns(:nonce).nonce.strip.empty?, "nonce is empty"
+      end
+    end
   end
 
   logged_in_user_context do
