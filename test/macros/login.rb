@@ -41,6 +41,19 @@ class ActiveSupport::TestCase
     end
   end
 
+  def self.logged_in_researcher_context(&blk)
+    context 'as an activated and logged in researcher' do
+      setup do
+        @user = Factory :user, :researcher => true, :researcher_affiliation => 'abcdef'
+        @user.activate!
+        @user.accept_tos if APP_CONFIG['ensure_tos']
+        login_as @user
+      end
+
+      merge_block(&blk)
+    end
+  end
+
   def self.public_context(&blk)
     context 'as a public visitor' do
       setup do

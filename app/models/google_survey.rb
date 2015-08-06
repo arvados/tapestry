@@ -17,6 +17,15 @@ class GoogleSurvey < ActiveRecord::Base
                      'User', self.class.to_s, self.id)
   end
 
+  def userid_populate_entry
+    # Google changed the field IDs on existing forms/results. Old
+    # field IDs were small multiples of 10, and were changed from N to
+    # 1000000+N; new ones are big numbers and should be used verbatim.
+    field = super
+    field += 1000000 if field and field < 1000000
+    field
+  end
+
   def self.create_legacy_nonces!
     added = 0
     default_survey = GoogleSurvey.where(:open => true)[0] rescue return

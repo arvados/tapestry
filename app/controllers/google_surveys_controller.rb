@@ -21,14 +21,15 @@ class GoogleSurveysController < ApplicationController
       flash[:error] = "This survey is not open for participation now."
       return redirect_to google_survey_path(@google_survey)
     end
-    qappend = ''
+    url = @google_survey.form_url
+    url += '?' unless url.include? '?'
     if !@google_survey.userid_populate_entry.nil?
       @nonce = Nonce.new(:owner_class => 'User', :owner_id => current_user.id,
                          :target_class => 'GoogleSurvey', :target_id => @google_survey.id)
-      qappend = '&entry.' + (@google_survey.userid_populate_entry + 1000000).to_s + '=' + @nonce.nonce
+      url += '&entry.' + @google_survey.userid_populate_entry.to_s + '=' + @nonce.nonce
     end
     current_user.log("Clicked through to GoogleSurvey #{@google_survey.id} (#{@google_survey.name}) with nonce #{@nonce.nonce}", nil, request.remote_ip, "Clicked through to survey: #{@google_survey.name}")
-    redirect_to @google_survey.form_url + qappend
+    redirect_to url
   end
 
   def get_object

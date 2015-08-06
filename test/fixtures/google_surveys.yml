@@ -1,13 +1,1 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-one:
-  user: 
-  oauth_service: 
-  spreadsheet_key: MyString
-  last_downloaded_at: 2011-07-22 16:37:02
-
-two:
-  user: 
-  oauth_service: 
-  spreadsheet_key: MyString
-  last_downloaded_at: 2011-07-22 16:37:02
