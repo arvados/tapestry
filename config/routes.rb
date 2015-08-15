@@ -104,8 +104,8 @@ Tapestry::Application.routes.draw do
   match '/3p/*x', :to => redirect('/third_party/%{x}')
 
   get 'open_humans/participate'
+  post 'open_humans/disconnect'
   post 'open_humans/tokens', :to => 'open_humans#create_token'
-  delete 'open_humans/huids', :to => 'open_humans#delete_huids'
   post 'open_humans/huids', :to => 'open_humans#create_huid'
   get 'open_humans/huids'
   # This callback URL is set on the Open Humans API server

@@ -6,6 +6,12 @@ class OpenHumansController < ApplicationController
 
   def participate
     @open_humans_service = OauthService.where( :oauth2_service_type => OauthService::OPEN_HUMANS ).first
+    # When OH links to this page, they send an origin parameter with value 'open-humans'.
+    # We need to send that origin parameter back to them on the link request.
+    # If there is no origin parameter, it means the user originated from Tapestry,
+    # and we set it to 'external'.
+    @origin = params[:origin]
+    @origin ||= 'external'
   end
 
   def create_token
@@ -13,10 +19,26 @@ class OpenHumansController < ApplicationController
     redirect_to oh_service.oauth2_client.auth_code.authorize_url( :redirect_uri => oh_service.callback_url, :scope => oh_service.scope )
   end
 
-  def delete_huids
+  def disconnect
+    success = false
+    oh_service = OauthService.find_by_oauth2_service_type( OauthService::OPEN_HUMANS )
+    oauth_token = current_user.oauth_tokens.find_by_oauth_service_id( oh_service.id )
+    # Remove our HuID from Open Humans
     token = token_object( params[:token_id] )
-    api_response = api_call token, :delete, POST_HUIDS_URL + params[:profile_id]
+    api_response = api_call token, :delete, POST_HUIDS_URL + current_user.hex + '/'
     success = api_response.status == 204
+    if not success
+      require 'pp'
+      STDERR.puts "Error unlinking huID from Open Humans"
+      STDERR.puts api_response.pretty_inspect()
+      current_user.log("failure unlinking huID from Open Humans")
+    else
+      current_user.log("huID unlinked from Open Humans")
+    end
+    if oauth_token.revoke!
+      success = true
+      current_user.log("Account disconnected from Open Humans",nil,nil,"Account disconnected from Open Humans")
+    end
     respond_to do |format|
       format.json do
         render :json => (success ? 'success' : 'error'), :status => (success ? 200 : 500)
@@ -50,16 +72,35 @@ class OpenHumansController < ApplicationController
 
   def callback
     oh_service = OauthService.find_by_oauth2_service_type( OauthService::OPEN_HUMANS )
+    @origin = params[:origin]
+    @origin ||= 'external'
     token = oh_service.oauth2_client.auth_code.
-      get_token(params['code'],
+      get_token(params[:code],
                 :redirect_uri => oh_service.callback_url,
                 :scope => oh_service.scope)
     if token
       oauth_token = current_user.oauth_tokens.find_or_create_by_oauth_service_id( oh_service.id )
       oauth_token.oauth2_token_hash = token.to_hash
       oauth_token.save!
+      current_user.log("Account linked with Open Humans",nil,nil,"Account linked with Open Humans")
+      # Now send the huID immediately.
+      api_response = api_call token, :post, POST_HUIDS_URL, { 'value' => current_user.hex }
+      success = api_response.status == 201
+      if not success
+        require 'pp'
+        STDERR.puts "Error sending huID to Open Humans"
+        STDERR.puts api_response.pretty_inspect()
+        current_user.log("failure sending huID to Open Humans")
+      else
+        current_user.log("huID sent to Open Humans")
+      end
     end
-    redirect_to open_humans_participate_path
+    if @origin == 'open-humans'
+      uri = URI(oh_service.endpoint)
+      redirect_to "https://#{uri.host}/member/me/research-data/"
+    else
+      redirect_to open_humans_participate_path
+    end
   end
 
 private
