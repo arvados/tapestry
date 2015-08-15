@@ -22,7 +22,7 @@
       <div class="authorization-button">
         Authorization has expired
         <%= link_to 'Refresh',
-                    open_humans_tokens_path( :service_id => @open_humans_service.id ),
+                    open_humans_tokens_path( :service_id => @open_humans_service.id, :origin => @origin ),
                     :class => 'btn btn-small',
                     :method => :post %>
       </div>
@@ -34,11 +34,11 @@
   <% else %>
     <div>
       <p>
-        The link below will take you to the Open Humans website where you will be able to create an account. Once you have an account, you'll be returned to the PGP website, where you must approve the export of huID to your Open Humans account.
+        The link below will take you to the Open Humans website. You'll be able to create an account there. We will send Open Humans your participant identifier (<strong><%= current_user.hex -%></strong>), enabling transfer of your public data, once you finalize this data transfer on the Open Humans website.
       </p>
       <div class="authorization-button">
-        <%= link_to 'Add Authorization',
-                    open_humans_tokens_path( :service_id => @open_humans_service.id ),
+        <%= link_to 'Share my data with Open Humans',
+                    open_humans_tokens_path( :service_id => @open_humans_service.id, :origin => @origin ),
                     :class => 'btn btn-small',
                     :method => :post %>
       </div>
