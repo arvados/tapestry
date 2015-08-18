@@ -40,7 +40,7 @@ first confirmed by a licensed healthcare professional. </p>
 if not dataset.seen_by_participant_at.nil? then
   if dataset.published_at.nil? and dataset.published_anonymously_at.nil? then
     publication_date = "<strong>" + (dataset.seen_by_participant_at + 30.days).strftime("%b %e, %Y").to_s + "</strong>"
-    if defined?(ANONYMOUS_PUBLICATION_OPTION) and ANONYMOUS_PUBLICATION_OPTION
+    if defined?(APP_CONFIG['anonymous_publication_option']) and APP_CONFIG['anonymous_publication_option']
       publication_date << "<br /> or " + link_to(raw('Release&nbsp;as&nbsp;CAGI&nbsp;genome'), publish_specimen_analysis_data_path(dataset,:anonymous => true), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available as a CAGI genome right now?') + raw('&nbsp;(see&nbsp;below)<br />')
     end
     publication_date << " or " + link_to(raw('Publish&nbsp;now'), publish_specimen_analysis_data_path(dataset), :confirm => 'This cannot be undone.  Are you sure you want to make this dataset publicly available right now?')
@@ -59,7 +59,7 @@ end
   <% end %>
 </table>
 
-<% if (defined?(ANONYMOUS_PUBLICATION_OPTION) and ANONYMOUS_PUBLICATION_OPTION and current_user.datasets.released_to_participant.unpublished.size > 0) or current_user.datasets.published_anonymously.size > 0 %>
+<% if (defined?(APP_CONFIG['anonymous_publication_option']) and APP_CONFIG['anonymous_publication_option'] and current_user.datasets.released_to_participant.unpublished.size > 0) or current_user.datasets.published_anonymously.size > 0 %>
 
 <div style="height: 2em"></div>
 
