@@ -5,7 +5,7 @@ $(document).ready(function(){
       if( data['huids'].length == 0 ) {
         htmlToShow = "Your huID is not currently shared with Open Humans. Adding it will trigger an import of your public PGP Harvard data into your Open Humans account. <a href='#' data-token-id='" + data['token_id'] + "' class='send-huid-link btn btn-small'>Send huID to Open Humans</a>";
       } else {
-        htmlToShow = "You've connected Open Humans to your PGP account and we've shared your participant ID. <p/>You can use the button below to stop sharing your data with Open Human. This will NOT remove data sets imported by Open Humans; you'll need to do so within your account on <a href=\"https://www.openhumans.org/member/me/connections/\">Open Humans</a>.<p/>"
+        htmlToShow = "You've connected Open Humans to your PGP account and we've shared your participant ID. <p/>You can use the button below to stop sharing your data with Open Humans. This will NOT remove data sets imported by Open Humans; you'll need to do so within your account on <a href=\"https://www.openhumans.org/member/me/connections/\">Open Humans</a>.<p/>"
         htmlToShow += " <a href='#' data-token-id='" + data['token_id'] + "' data-profile-id='" + data['profile_id'] + "' class='disconnect-link btn btn-small' >Stop sharing my data with Open Humans</a>";
       }
       $('.open-humans-token[data-token-id=' + data['token_id'] + ']').html( htmlToShow );
