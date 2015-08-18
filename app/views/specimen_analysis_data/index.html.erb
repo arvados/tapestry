@@ -72,18 +72,8 @@ with CAGI (Critical Assessment of Genome Interpretation) on their <a
 href="https://genomeinterpretation.org/content/overview">annual
 challenge</a>. If you are interested in having your genome used in CAGI's
 interpretation challenge, select "Release as CAGI genome" in the specimen
-analysis history table above and make sure to complete the following PGP trait
-surveys: </p>
-
-<ul>
-<% @trait_surveys.each do |ts| %>
-<li>
-  <% ticked = @trait_surveys_completed.index(ts.id) %>
-  <%= image_tag('tick.png', ticked ? {} : { :class => 'transparent' }) %>
-  <%= link_to ts.name, google_survey_path(ts.id), { :style => ticked ? 'font-weight: normal' : 'font-weight: bold' } %>
-</li>
-<% end %>
-</ul>
+analysis history table above.
+</p>
 
 <p>
 If you select the "Release as CAGI genome" option, your genome data will be
@@ -91,7 +81,7 @@ made public immediately but it will <i>not</i> be immediately linked to your
 public profile. Which participant the genome belongs to is kept secret for
 the duration of the competition. Researchers will try to predict your
 traits based on your genome data. The end of CAGI is currently scheduled
-to be December, 2015. Once the challenge has ended, your genome will be publicly
+to be December 2015. Once the challenge has ended, your genome will be publicly
 associated with your public profile.
 </p>
 
