@@ -16,9 +16,8 @@
 <p>Additional information about Open Humans can be found at its website: <%= link_to 'http://openhumans.org', 'http://openhumans.org' %></p>
 
 <div class="authorization-instructions">
-  <% user_token = @open_humans_service.oauth_tokens.find_by_user_id( current_user.id ) %>
-  <% if user_token %>
-    <% if user_token.oauth2_expired? %>
+  <% if @user_token %>
+    <% if @user_token.oauth2_expired? %>
       <div class="authorization-button">
         Authorization has expired
         <%= link_to 'Refresh',
@@ -27,7 +26,7 @@
                     :method => :post %>
       </div>
     <% else %>
-      <div class="open-humans-token authorization-button" data-token-id="<%= user_token.id %>">
+      <div class="open-humans-token authorization-button" data-token-id="<%= @user_token.id %>">
         Authorization is current... loading your registered huIDs
       </div>
     <% end %>
