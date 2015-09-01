@@ -150,9 +150,11 @@ private
       current_user.log("Invalidated access and refresh tokens at Open Humans")
     end
 
-    if oauth_token.revoke!
+    if oauth_token.destroy
       success = true
       current_user.log("Account disconnected from Open Humans",nil,nil,"Account disconnected from Open Humans")
+    else
+      success = false
     end
     # We deliberately return success based on the outcome of the local token revocation, only.
     # That's the only thing we can control anyway, and also what drives all logic on our end.
