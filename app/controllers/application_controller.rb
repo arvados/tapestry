@@ -253,7 +253,11 @@ class ApplicationController < ActionController::Base
 
   def csv_for_study_worker(study,participants)
 
-    user_fields = %w(hex token e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip phone_number kit_last_sent_at kit_name kit_status kit_status_changed other_kits).freeze
+    if not @study.is_third_party or current_user.is_admin? or current_user.researcher_onirb
+      user_fields = %w(hex token e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip phone_number kit_last_sent_at kit_name kit_status kit_status_changed other_kits).freeze
+    else
+      user_fields = %w(token).freeze
+    end
 
     FasterCSV.generate(String.new, :force_quotes => true) do |csv|
 
@@ -262,7 +266,7 @@ class ApplicationController < ActionController::Base
       participants.each do |u|
         row = []
 
-        if study.is_third_party
+        if study.is_third_party and not current_user.is_admin? and not current_user.researcher_onirb
           csv << [u.user.app_token("Study##{study.id}")]
           next
         end
