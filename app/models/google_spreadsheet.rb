@@ -18,8 +18,8 @@ class GoogleSpreadsheet < ActiveRecord::Base
   end
 
   def get_datarows
-    return @datarows if @datarows
-    return nil if !oauth_service
+    return @datarows, nil if @datarows
+    return nil, "no matching oauth_service" unless oauth_service
 
     token = get_token
     if token.nil? or !token.authorized?
@@ -29,22 +29,26 @@ class GoogleSpreadsheet < ActiveRecord::Base
 
     parse_sheet_url rescue return nil, "Could not parse spreadsheet URL"
 
-    uri = URI.parse("https://spreadsheets.google.com/feeds/download/" +
-                    "spreadsheets/Export?key=#{@skey}&gid=#{@gid}")
-    resp = token.oauth_request('GET', uri, {
-                                 'format' => 'csv',
-                                 'exportFormat' => 'csv'
-                               })
-    if resp.code != '200' or resp.body.nil?
-      return nil, "Unexpected response from #{uri.to_s}" +
-        " -- #{resp.code} #{resp.message} #{resp.body}"
+    uri = 'https://spreadsheets.google.com/feeds/download/spreadsheets/Export'
+    begin
+      resp = token.oauth2_request('GET', uri,
+                                  'key' => @skey,
+                                  'gid' => @gid,
+                                  'exportFormat' => 'csv')
+    rescue => e
+      return nil, "Request failed (#{uri}): #{e.inspect}"
+    end
+    if resp.status != 200 or resp.body.nil?
+      return nil, "Unexpected response (#{uri}): " +
+        "#{resp.status} #{resp.message} #{resp.body}"
     end
     @datarows = CSV.parse(resp.body)
+    return @datarows, nil
   end
 
   def parse_sheet_url
     @skey = Regexp.
-      new('^(.*key=)?([-_a-zA-Z0-9]+)([\&\#].*)?$').
+      new('^(.*key=|.*/spreadsheets/d/)?([-_a-zA-Z0-9]+)(/edit)?([\&\#].*)?$').
       match(gdocs_url)[2]
     @gid = Regexp.
       new('[\&\#]gid=([0-9]+)(\&.*)?$').
@@ -59,18 +63,21 @@ class GoogleSpreadsheet < ActiveRecord::Base
   def guess_name
     return true if name and name.length > 0
     parse_sheet_url rescue return nil
-    uri = URI.parse("https://spreadsheets.google.com/feeds/worksheets/" +
-                    "#{@skey}/private/full")
+    uri = "https://spreadsheets.google.com/feeds/worksheets/" +
+      @skey + "/private/full"
 
     token = get_token
     return nil if !token or !token.authorized?
 
-    resp = token.oauth_request('GET', uri, {})
-    if resp.code != '200' or resp.body.nil?
-      return nil, "Unexpected response from #{uri.to_s}" +
-        " -- #{resp.code} #{resp.message} #{resp.body}"
+    begin
+      resp = token.oauth2_request('GET', uri, {})
+    rescue => e
+      return nil, "Request failed (#{uri}): #{e.inspect}"
     end
-    p resp.body
+    if resp.status != 200 or resp.body.nil?
+      return nil, "Unexpected response (#{uri}): " +
+        "#{resp.status} #{resp.message} #{resp.body}"
+    end
     begin
       title = Regexp.
         new('<title[^>]*>([^<]+)</title>').
@@ -85,8 +92,8 @@ class GoogleSpreadsheet < ActiveRecord::Base
   def guess_id_column
     return true if row_id_column
 
-    rows = get_datarows
-    return nil unless rows.length > 1 and rowtarget_type
+    rows, err = get_datarows
+    return nil, err unless rows.length > 1 and rowtarget_type
 
     target_class = rowtarget_type.constantize or return nil
 
@@ -123,8 +130,8 @@ class GoogleSpreadsheet < ActiveRecord::Base
   def synchronize!
     guess_id_column unless row_id_column
 
-    datarows = get_datarows
-    return nil unless
+    datarows, err = get_datarows
+    return 0, 0, err unless
       datarows and
       datarows.length > 0 and
       datarows[0] and
@@ -168,7 +175,7 @@ class GoogleSpreadsheet < ActiveRecord::Base
       delete_all
     self.last_downloaded_at = Time.now
     save
-    return success_count, attempt_count
+    return success_count, attempt_count, nil
   end
 
   def find_target_by_id(id_from_row)
