@@ -33,6 +33,18 @@ Factory.define(:admin_user, :class => User) do |f|
   f.is_admin              true
 end
 
+Factory.define(:researcher, :class => User) do |f|
+  f.first_name             'Rosalind'
+  f.last_name              'Franklin'
+  f.email                  { Factory.next :email }
+  f.security_question      'security_question'
+  f.security_answer        'security_answer'
+  f.password               'password'
+  f.password_confirmation  'password'
+  f.researcher             true
+  f.researcher_affiliation "King's College"
+end
+
 Factory.sequence(:email) { |n| "person#{n}@example.org" }
 
 Factory.sequence(:pgp_id, 1000) { |n| "#{n}" }
@@ -277,11 +289,11 @@ Factory.define(:sample_type) do |f|
   f.unit        { Factory(:unit) }
 end
 
-Factory.sequence(:crc_id) {|n| "CRC #{n}"}
+Factory.sequence(:sample_crc_id) {|n| Kit.generate_verhoeff_number Sample.new }
 Factory.sequence(:url_code) {|n| "URL code #{n}"}
 
 Factory.define(:sample) do |f|
-  f.crc_id   { Factory.next :crc_id }
+  f.crc_id   { Factory.next :sample_crc_id }
   f.url_code { Factory.next :url_code }
   f.study    { Factory(:study) }
 end
@@ -293,9 +305,11 @@ Factory.define(:kit_design_sample) do |f|
 end
 
 Factory.sequence(:kit_name) {|n| "Kit #{n}"}
+Factory.sequence(:kit_crc_id) {|n| Kit.generate_verhoeff_number Kit.new }
+
 Factory.define(:kit) do |f|
   f.name { Factory.next :kit_name }
-  f.crc_id { Factory.next :crc_id }
+  f.crc_id { Factory.next :kit_crc_id }
   f.url_code { Factory.next :url_code }
   f.study        { Factory(:study) }
   f.kit_design   { Factory(:kit_design) }
@@ -354,4 +368,15 @@ end
 Factory.define(:open_humans_token, :class => OauthToken) do |f|
   f.oauth_service { |s| s.association :open_humans_oauth_service  }
   f.oauth2_token_hash( { :expires_at => (Time.now + 1.hour).to_i }.to_yaml )
+end
+
+Factory.define(:google_oauth_service, :class => OauthService) do |f|
+  f.name 'Google Docs'
+  f.oauth2_service_type OauthService::GOOGLE
+end
+
+Factory.define(:google_oauth_token, :class => OauthToken) do |f|
+  f.oauth_service { |s| s.association :google_oauth_service  }
+  f.oauth2_token_hash( { :expires_at => (Time.now + 1.hour).to_i }.to_yaml )
+  f.user { Factory(:researcher) }
 end

@@ -81,11 +81,11 @@ class GoogleSpreadsheetsController < ApplicationController
 
   def synchronize
     find_mine
-    ok, error_message = @google_spreadsheet.synchronize!
-    if ok
-      flash[:notice] = 'Spreadsheet data downloaded at ' + @google_spreadsheet.last_downloaded_at.to_s
+    ok, attempts, err = @google_spreadsheet.synchronize!
+    if err
+      flash[:error] = err
     else
-      flash[:error] = error_message
+      flash[:notice] = "Spreadsheet data downloaded: #{attempts} rows, #{ok} matched with target IDs"
     end
     redirect_to google_spreadsheet_path(@google_spreadsheet)
   end
