@@ -131,7 +131,7 @@ class GoogleSpreadsheet < ActiveRecord::Base
     guess_id_column unless row_id_column
 
     datarows, err = get_datarows
-    return nil, err unless
+    return 0, 0, err unless
       datarows and
       datarows.length > 0 and
       datarows[0] and
@@ -175,7 +175,7 @@ class GoogleSpreadsheet < ActiveRecord::Base
       delete_all
     self.last_downloaded_at = Time.now
     save
-    return success_count, attempt_count
+    return success_count, attempt_count, nil
   end
 
   def find_target_by_id(id_from_row)
