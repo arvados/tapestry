@@ -172,7 +172,14 @@ class UserFilesController < ApplicationController
   def download
     @user_file = UserFile.find(params[:id])
 
-    filename = @user_file.user.hex + '_' + @user_file.created_at.strftime('%Y%m%d%H%M%S') + '.' + (@user_file.dataset.path || @user_file.longupload_file_name).sub(/^.*\./,'')
+    @path = @user_file.dataset.path || @user_file.longupload_file_name
+
+    if @path.nil?
+      flash[:error] = "Sorry, this file is unavailable."
+      return redirect_to url_for(@user_file)
+    end
+
+    filename = @user_file.user.hex + '_' + @user_file.created_at.strftime('%Y%m%d%H%M%S') + '.' + @path.sub(/^.*\./,'')
 
     if !File.exists? @user_file.dataset.path
       if (x = @user_file.download_url)
