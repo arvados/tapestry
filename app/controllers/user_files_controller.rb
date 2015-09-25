@@ -181,7 +181,7 @@ class UserFilesController < ApplicationController
 
     filename = @user_file.user.hex + '_' + @user_file.created_at.strftime('%Y%m%d%H%M%S') + '.' + @path.sub(/^.*\./,'')
 
-    if !File.exists? @user_file.dataset.path
+    if @user_file.dataset.path.nil? or !File.exists? @user_file.dataset.path
       if (x = @user_file.download_url)
         return redirect_to x
       else
