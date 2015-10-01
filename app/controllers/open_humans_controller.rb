@@ -42,9 +42,13 @@ class OpenHumansController < ApplicationController
     api_response = huids_worker
     respond_to do |format|
       format.json do
-        render :json => { :token_id => params[:token_id],
-                          :profile_id => api_response.parsed['id'],
-                          :huids => api_response.parsed['huids'] }
+        if not api_response.nil?
+          render :json => { :token_id => params[:token_id],
+                            :profile_id => api_response.parsed['id'],
+                            :huids => api_response.parsed['huids'] }
+        else
+          render :json => { }
+        end
       end
     end
   end
@@ -107,7 +111,12 @@ private
   def huids_worker(token_id = nil)
     token_id = params[:token_id] if token_id.nil?
 
-    token = token_object( token_id )
+    begin
+      token = token_object( token_id )
+    rescue
+      # No valid token. No point in going further
+      return nil
+    end
     api_response = api_call token, :get, USER_DATA_URL
     success = api_response.status == 200
     if not success
@@ -125,29 +134,34 @@ private
     success = false
     oh_service = OauthService.find_by_oauth2_service_type( OauthService::OPEN_HUMANS )
     oauth_token = current_user.oauth_tokens.find_by_oauth_service_id( oh_service.id )
-    token = token_object( token_id )
-    # Remove our HuID from Open Humans
-    api_response = api_call token, :delete, POST_HUIDS_URL + current_user.hex + '/'
-    success = api_response.status == 204
-    if not success
-      require 'pp'
-      STDERR.puts "Error unlinking huID from Open Humans"
-      STDERR.puts api_response.pretty_inspect()
-      current_user.log("Failed to unlink huID from Open Humans")
-    else
-      current_user.log("Unlinked huID from Open Humans")
-    end
-    # Invalidate access and refresh tokens on the Open Humans side
-    require 'cgi'
-    api_response = api_call token, :post, TOKEN_REVOCATION_URL, "token=#{CGI::escape(token.token)}&client_id=#{CGI::escape(token.client.id)}&client_secret=#{CGI::escape(token.client.secret)}", 'application/x-www-form-urlencoded'
-    success = api_response.status == 200
-    if not success
-      require 'pp'
-      STDERR.puts "Error invalidating access and refresh tokens at Open Humans"
-      STDERR.puts api_response.pretty_inspect()
-      current_user.log("Failed to invalidate access and refresh tokens at Open Humans")
-    else
-      current_user.log("Invalidated access and refresh tokens at Open Humans")
+    begin
+      token = token_object( token_id )
+      # Remove our HuID from Open Humans
+      api_response = api_call token, :delete, POST_HUIDS_URL + current_user.hex + '/'
+      success = api_response.status == 204
+      if not success
+        require 'pp'
+        STDERR.puts "Error unlinking huID from Open Humans"
+        STDERR.puts api_response.pretty_inspect()
+        current_user.log("Failed to unlink huID from Open Humans")
+      else
+        current_user.log("Unlinked huID from Open Humans")
+      end
+      # Invalidate access and refresh tokens on the Open Humans side
+      require 'cgi'
+      api_response = api_call token, :post, TOKEN_REVOCATION_URL, "token=#{CGI::escape(token.token)}&client_id=#{CGI::escape(token.client.id)}&client_secret=#{CGI::escape(token.client.secret)}", 'application/x-www-form-urlencoded'
+      success = api_response.status == 200
+      if not success
+        require 'pp'
+        STDERR.puts "Error invalidating access and refresh tokens at Open Humans"
+        STDERR.puts api_response.pretty_inspect()
+        current_user.log("Failed to invalidate access and refresh tokens at Open Humans")
+      else
+        current_user.log("Invalidated access and refresh tokens at Open Humans")
+      end
+    rescue
+      # No valid token
+      current_user.log("Oauth2 token for Open Humans not valid")
     end
 
     if oauth_token.destroy
@@ -169,7 +183,10 @@ private
     token_record = token_record(oauth_token_id)
     client = token_record(oauth_token_id).oauth_service.oauth2_client
     token = OAuth2::AccessToken.from_hash( client, token_record.oauth2_token_hash )
-    raise "Token expired" if token.expired?
+    if token.expired?
+      # Try refreshing, just in case...
+      token = token.refresh!
+    end
     token
   end
 
