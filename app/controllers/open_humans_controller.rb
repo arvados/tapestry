@@ -25,8 +25,10 @@ class OpenHumansController < ApplicationController
   end
 
   def create_token
+    @origin = params[:origin]
+    @origin ||= 'external'
     oh_service = OauthService.open_humans.find(params[:service_id])
-    redirect_to oh_service.oauth2_client.auth_code.authorize_url( :redirect_uri => oh_service.callback_url, :scope => oh_service.scope )
+    redirect_to oh_service.oauth2_client.auth_code.authorize_url( :redirect_uri => oh_service.callback_url, :origin => @origin, :scope => oh_service.scope )
   end
 
   def disconnect
@@ -79,7 +81,7 @@ class OpenHumansController < ApplicationController
     @origin ||= 'external'
     token = oh_service.oauth2_client.auth_code.
       get_token(params[:code],
-                :redirect_uri => oh_service.callback_url,
+                :redirect_uri => oh_service.callback_url, :origin => @origin,
                 :scope => oh_service.scope)
     if token
       oauth_token = current_user.oauth_tokens.find_or_create_by_oauth_service_id( oh_service.id )
@@ -99,7 +101,7 @@ class OpenHumansController < ApplicationController
       end
     end
     if @origin == 'open-humans'
-      uri = URI(oh_service.endpoint)
+      uri = URI(oh_service.endpoint_url)
       redirect_to "https://#{uri.host}/member/me/research-data/"
     else
       redirect_to open_humans_participate_path
