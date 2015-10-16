@@ -7,9 +7,13 @@ class ExportsController < ApplicationController
 
   def users
     export_rows 'users' do |&block|
-      block.call %w(human_id sha1 download_url get_evidence_genome_id report_url location  name created_at updated_at locator published_at status_url  download_url report_metadata)
+      block.call %w(human_id real_name enrolled)
       User.publishable.each do |u|
-        block.call [u.hex, u.real_name_public]
+        real_name =
+          if include_section?(Section::REAL_NAMES) and u.real_name_public
+            u.full_name
+          end
+        block.call [u.hex, real_name, u.enrolled]
       end
     end
   end
