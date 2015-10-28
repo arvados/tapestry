@@ -79,10 +79,16 @@ class OpenHumansController < ApplicationController
     oh_service = OauthService.find_by_oauth2_service_type( OauthService::OPEN_HUMANS )
     @origin = params[:origin]
     @origin ||= 'external'
-    token = oh_service.oauth2_client.auth_code.
-      get_token(params[:code],
-                :redirect_uri => oh_service.callback_url, :origin => @origin,
-                :scope => oh_service.scope)
+    begin
+      token = oh_service.oauth2_client.auth_code.
+        get_token(params[:code],
+                  :redirect_uri => oh_service.callback_url, :origin => @origin,
+                  :scope => oh_service.scope)
+    rescue Exception => e
+      current_user.log("Error during callback from Open Humans: #{e.message}")
+      redirect_to open_humans_participate_path
+      return
+    end
     if token
       oauth_token = current_user.oauth_tokens.find_or_create_by_oauth_service_id( oh_service.id )
       oauth_token.oauth2_token_hash = token.to_hash
@@ -100,12 +106,8 @@ class OpenHumansController < ApplicationController
         current_user.log("Sent huID to Open Humans")
       end
     end
-    if @origin == 'open-humans'
-      uri = URI(oh_service.endpoint_url)
-      redirect_to "https://#{uri.host}/member/me/research-data/"
-    else
-      redirect_to open_humans_participate_path
-    end
+    uri = URI(oh_service.endpoint_url)
+    redirect_to "https://#{uri.host}/study/pgp/return/"
   end
 
 private
