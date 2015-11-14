@@ -49,4 +49,7 @@ gem 'cells', "~> 3.10.1"
 gem 'uber', "0.0.6"
 
 gem 'oauth2'
+gem 'jwt', "1.5.1"
+gem 'highline', "1.6.21"
+gem 'net-ssh', "2.9.2"
 gem 'system_timer'
