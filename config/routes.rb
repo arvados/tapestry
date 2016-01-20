@@ -293,6 +293,7 @@ Tapestry::Application.routes.draw do
   match '/trait_surveys' => 'trait_survey#index', :as => :trait_surveys
 
   resource :message
+  resource :faq
 
   resource :public_genetic_data
   match '/public_genetic_data/anonymous' => 'public_genetic_data#anonymous', :as => :public_anonymous_genetic_data
