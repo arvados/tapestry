@@ -27,7 +27,10 @@ gem 'userstamp'
 gem 'factory_girl_rails', "~> 1.3.0"
 # Mocha: Mocking and stubbing library
 gem 'mocha', :require => false
-gem 'recaptcha', '~> 0.4.0', :require => "recaptcha/rails"
+# Once we move to ruby 2.x, revert to the latest version of the recaptcha gem
+# the cure-recaptcha gem works around a bug in recaptcha 0.4.0, which is the last
+# version that supports ree 1.8.7
+gem 'cure-recaptcha', '~> 0.4.1', :require => "recaptcha/rails"
 # Limerick_rake: Long-since deprecated. Still apparently a little useful because of the rake db:bootstrap(:load) task which can quickly give us some sample content areas and exam questions.
 gem 'limerick_rake'
 # Verhoeff: checksums used by Kit model
