@@ -45,6 +45,29 @@ Factory.define(:researcher, :class => User) do |f|
   f.researcher_affiliation "King's College"
 end
 
+FactoryGirl.define do
+  factory :enrolled_user, :class => User do |f|
+    f.first_name             'George'
+    f.last_name              'Church'
+    f.email                  { Factory.next :email }
+    f.security_question      'security_question'
+    f.security_answer        'security_answer'
+    f.password               'password'
+    f.password_confirmation  'password'
+    f.researcher             false
+    f.is_admin               false
+    after_create do |u|
+      u.activate!
+      u.accept_tos if APP_CONFIG['ensure_tos']
+      u.enrolled = Time.now
+      u.documents << Document.new(:keyword => 'consent',
+                                  :version => APP_CONFIG['latest_consent_version'],
+                                  :timestamp => Time.now())
+      u.hex = Factory.next(:hex)
+    end
+  end
+end
+
 Factory.sequence(:email) { |n| "person#{n}@example.org" }
 
 Factory.sequence(:pgp_id, 1000) { |n| "#{n}" }

@@ -105,18 +105,25 @@ class StudiesControllerTest < ActionController::TestCase
         end
       end
 
-      context "without signing up" do
-        setup do
-          @user = Factory(:activated_user)
-          @token = @user.app_token("Study##{@study.id}")
-        end
-        should "reject valid token for non-participating user" do
-          get :verify_participant_id, {
-            :id => @study.id,
-            :app_token => @token,
-          }
-          assert_response 404
-          assert_equal false, JSON.parse(response.body)["valid"]
+      [["without signup", false, 404],
+       ["with signup", true, 200]].each do |ctx, signed_up, resp_status|
+        context ctx do
+          setup do
+            @user = Factory(:enrolled_user)
+            @token = @user.app_token("Study##{@study.id}")
+          end
+          should "#{signed_up ? "accept" : "reject"} valid token" do
+            if signed_up
+              StudyParticipant.create!(:study => @study, :user => @user,
+                                       :status => StudyParticipant::STATUSES['interested'])
+            end
+            get :verify_participant_id, {
+              :id => @study.id,
+              :app_token => @token,
+            }
+            assert_response resp_status
+            assert_equal signed_up, JSON.parse(response.body)["valid"]
+          end
         end
       end
     end
