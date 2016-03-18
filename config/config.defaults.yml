@@ -105,3 +105,5 @@ development:
 production:
   google_health_url: 'https://www.google.com/health'
 
+test:
+  secret_token: <%= rand(2**256).to_s(36) %>

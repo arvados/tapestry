@@ -380,3 +380,15 @@ Factory.define(:google_oauth_token, :class => OauthToken) do |f|
   f.oauth2_token_hash( { :expires_at => (Time.now + 1.hour).to_i }.to_yaml )
   f.user { Factory(:researcher) }
 end
+
+Factory.define(:active_third_party_study, :class => Study) do |f|
+  f.name "An active third-party study"
+  f.requested true
+  f.approved true
+  f.open true
+  f.participation_url "http://third-party-study.example/pgp_landing_page"
+  f.participant_description "You can sign up for this study and be studied."
+  f.researcher_description "This study studies stuff about participants."
+  f.researcher { Factory(:researcher) }
+  f.irb_associate { Factory(:researcher) }
+end

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class StudiesControllerTest < ActionController::TestCase
 
-  should_eventually 'test the other actions: verify_participant_id, map, index_third_party, claim, users, etc.'
+  should_eventually 'test the other actions: map, index_third_party, claim, users, etc.'
 
   context "without a logged in user" do
 
@@ -78,6 +78,46 @@ class StudiesControllerTest < ActionController::TestCase
 
       should 'redirect appropriately' do
         assert_redirected_to login_path
+      end
+    end
+
+    should "route verify_participant_id url" do
+      assert_routing("/third_party/study/12345/verify_participant_id/abcdef0123456789",
+                     :controller => "studies",
+                     :action => "verify_participant_id",
+                     :id => "12345",
+                     :app_token => "abcdef0123456789")
+    end
+
+    context "with an active third party study" do
+      setup do
+        @study = Factory(:active_third_party_study)
+      end
+      [["00000000000000000000000000000000", true],
+       ["eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", false]].each do |token, valid|
+        should "verify token #{token} => #{valid}" do
+          get :verify_participant_id, {
+            :id => @study.id,
+            :app_token => token,
+          }
+          assert_response (valid ? :success : 404)
+          assert_equal valid, JSON.parse(response.body)["valid"]
+        end
+      end
+
+      context "without signing up" do
+        setup do
+          @user = Factory(:activated_user)
+          @token = @user.app_token("Study##{@study.id}")
+        end
+        should "reject valid token for non-participating user" do
+          get :verify_participant_id, {
+            :id => @study.id,
+            :app_token => @token,
+          }
+          assert_response 404
+          assert_equal false, JSON.parse(response.body)["valid"]
+        end
       end
     end
 

@@ -592,7 +592,7 @@ class User < ActiveRecord::Base
       return 'PGP_' + Digest::SHA1.hexdigest(self.hex + GET_2013_SECRET)[0,6].upcase
     end
     secret = Tapestry::Application.config.secret_token
-    raise "Installation problem: Application.config.secret_token not properly defined" if secret.length < 16
+    raise "Installation problem: Application.config.secret_token not properly defined" if secret.nil? or secret.length < 16
     @cached_app_identifier = app_identifier
     @cached_app_token =
       OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('SHA1'),
