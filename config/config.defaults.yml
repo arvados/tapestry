@@ -95,6 +95,9 @@ common:
   application_layout_gmaps: 'tapestry_default_gmaps'
   application_layout_mobile: 'tapestry_default_mobile'
 
+  # Command line preamble for running ruby programs that need ruby >1.8.7
+  ruby19_shell_args: ['rvm-exec', '1.9.3']
+
 development:
   google_health_url: 'https://www.google.com/h9'
 
