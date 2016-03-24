@@ -39,7 +39,7 @@ class ArvadosJob < ActiveRecord::Base
       uuid = io.read.strip
     end
     if $?.exitstatus != 0
-      raise ArvadosAPIError, $?.to_s
+      raise ArvadosAPIError, $?.inspect
     end
     create!(:uuid => uuid,
             :oncomplete => opts[:oncomplete],

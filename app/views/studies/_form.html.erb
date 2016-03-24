@@ -67,6 +67,10 @@ jQuery(function(){
 	</blockquote>
       </div>
     </div>
+    <div class="field iff-is-third-party">
+      <%= f.label :api_key, 'API key' %><br />
+      <code><%= @study.id ? @study.api_key : 'unassigned' %></code>
+    </div>
   </div>
   <div class="field">
     <%= f.label :participant_description, "Description of #{@study.study_type}, to be seen by participants (displayed on recruitment page)" %><br />
