@@ -45,4 +45,34 @@ class ArvadosJob < ActiveRecord::Base
             :oncomplete => opts[:oncomplete],
             :onerror => opts[:onerror])
   end
+
+  def resolve
+    process_callback :oncomplete
+    destroy
+  end
+
+  def reject
+    process_callback :onerror
+    destroy
+  end
+
+  ##
+  # Return a generic callback that notifies admin about errors.
+  def self.generic_error_callback
+    return 'proc { |job| UserMailer.arvados_job_failure(job).deliver }'
+  end
+
+  protected
+
+  ##
+  # Process callback +callback_type+ (either :oncomplete or :onerror).
+  def process_callback callback_type
+    callback_string = send callback_type
+    return true if callback_string.nil?
+    callback = eval callback_string
+    while callback.is_a? Proc
+      callback = callback.call self
+    end
+    callback
+  end
 end

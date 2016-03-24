@@ -1,0 +1,9 @@
+ArvadosJob failed.
+
+ArvadosJob ID: <%= @job.id %>
+
+Job/pipeline: https://curover.se/<%= @job.uuid %>
+
+Oncomplete callback:
+
+<%= raw @job.oncomplete %>

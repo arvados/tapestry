@@ -162,6 +162,14 @@ class UserMailer < ActionMailer::Base
     @subject += "Reminder: specimen collection kit"
   end
 
+  def arvados_job_failure(job)
+    @recipients = ADMIN_EMAIL
+    @from       = ADMIN_EMAIL
+    @subject    = "[#{ROOT_URL}] Arvados job failed"
+    @sent_on    = Time.now
+    @job        = job
+  end
+
   protected
 
   def setup_email(user)

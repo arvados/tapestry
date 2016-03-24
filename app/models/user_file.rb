@@ -184,6 +184,27 @@ class UserFile < ActiveRecord::Base
     created_at
   end
 
+  ##
+  # return an ArvadosJob callback that adds UserFile records for
+  # +opts[:user_id]+ for files that were downloaded in a batch
+  # provided by study +opts[:study_id]+.
+  def self.create_from_download_job_callback opts
+    "proc { |job| UserFile.create_from_download_job({:job => job, :user_id => #{opts[:user_id]+0}, :study_id => #{opts[:study_id]+0}) }"
+  end
+
+  def self.create_from_download_job opts
+    study = Study.find opts[:study_id]
+    arv = Arvados.new(:apiVersion => 'v1')
+    p_i = arv.pipeline_instance.get opts[:job].uuid
+    pdh = p_i[:components][:download][:job][:output]
+    create!(:user_id => opts[:user_id],
+            :date => Time.now,
+            :description => "Provided by #{study.name}",
+            :locator => pdh,
+            :path_in_manifest => "FIXME",
+            :index_in_manifest => 0)
+  end
+
   api_accessible :public do |t|
     t.add :id
     t.add :name
