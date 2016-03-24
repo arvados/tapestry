@@ -1,8 +1,20 @@
-help:
+help: note-prerequisites
 	@echo >&2 "There is no default make target. Try 'make docker-test'"
 	@false
 
-docker-test:
+note-prerequisites:
+	@echo >&2
+	@echo >&2 "*** Prerequisites for 'make docker-test' ***"
+	@echo >&2
+	@echo >&2 "In docker host                     => install mysql"
+	@echo >&2 "In docker host's mysql             => create a tapestry user"
+	@echo >&2 "In config/database.yml             => host: your.docker.host.name"
+	@echo >&2 "In docker host's /etc/mysql/my.cnf => bind-address = 0.0.0.0"
+	@echo >&2
+	@echo >&2 "*** See https://dev.arvados.org/projects/tapestry/wiki ***"
+	@echo >&2
+
+docker-test: note-prerequisites
 	git submodule init
 	git submodule update
 	docker build -t tapestry-test build
