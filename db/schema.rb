@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150120145538) do
+ActiveRecord::Schema.define(:version => 20160322144855) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -128,6 +128,27 @@ ActiveRecord::Schema.define(:version => 20150120145538) do
   end
 
   add_index "answer_options", ["exam_question_id"], :name => "index_answer_options_on_exam_question_id"
+
+  create_table "arvados_job_versions", :force => true do |t|
+    t.integer  "arvados_job_id"
+    t.integer  "version"
+    t.string   "uuid"
+    t.text     "oncomplete"
+    t.text     "onerror"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "arvados_job_versions", ["arvados_job_id"], :name => "index_arvados_job_versions_on_arvados_job_id"
+
+  create_table "arvados_jobs", :force => true do |t|
+    t.string   "uuid"
+    t.text     "oncomplete"
+    t.text     "onerror"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "version"
+  end
 
   create_table "baseline_traits_survey_versions", :force => true do |t|
     t.integer  "baseline_traits_survey_id"

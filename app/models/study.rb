@@ -119,4 +119,31 @@ class Study < ActiveRecord::Base
   api_accessible :privileged, :extend => :public do |t|
   end
 
+  def api_key
+    self.class.generate_api_key id
+  end
+
+  def self.find_by_api_key token
+    id_s, hmac = token.split '/'
+    if token != generate_api_key(id_s)
+      raise ActiveRecord::RecordNotFound
+    end
+    study = approved.third_party.where(:id => id_s.to_i).first
+    if !study
+      raise ActiveRecord::RecordNotFound
+    end
+    return study
+  end
+
+  private
+
+  def self.generate_api_key id
+    secret = Tapestry::Application.config.secret_token
+    if secret.nil? or secret.length < 16
+      raise "Installation problem: Application.config.secret_token not properly defined"
+    end
+    hmac = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('SHA1'),
+                                   secret, "#{self.class}--#{id}")
+    "#{id}/#{hmac}"
+  end
 end

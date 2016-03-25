@@ -1,0 +1,24 @@
+{
+    "components": {
+        "foo": {
+            "repository": "https://github.com/curoverse/arvados.git",
+            "script": "hash",
+            "script_version": "master",
+            "script_parameters" {
+                "input": {
+                    "default": "foo"
+                }
+            }
+        },
+        "bar": {
+            "repository": "https://github.com/curoverse/arvados.git",
+            "script": "hash",
+            "script_version": "master",
+            "script_parameters" {
+                "input": {
+                    "output_of": "foo"
+                }
+            }
+        }
+    }
+}

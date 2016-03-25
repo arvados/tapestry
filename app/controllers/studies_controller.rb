@@ -1,17 +1,19 @@
 class StudiesController < ApplicationController
-  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show, :verify_participant_id, :clickthrough_to, :show_third_party]
+  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show, :verify_participant_id, :clickthrough_to, :add_dataset, :show_third_party]
 
   skip_before_filter :ensure_enrolled, :except => [:show, :claim, :show_third_party]
   skip_before_filter :ensure_latest_consent, :except => [:show, :claim, :show_third_party]
   skip_before_filter :ensure_recent_safety_questionnaire, :except => [:show, :claim, :show_third_party]
 
   before_filter :ensure_researcher
-  skip_before_filter :ensure_researcher, :only => [:show, :claim, :index, :show_third_party]
+  skip_before_filter :ensure_researcher, :only => [:show, :claim, :index, :show_third_party, :add_dataset]
 
-  skip_before_filter :login_required, :only => [:verify_participant_id]
-  skip_before_filter :ensure_tos_agreement, :only => [:verify_participant_id]
+  skip_before_filter :login_required, :only => [:verify_participant_id, :add_dataset]
+  skip_before_filter :ensure_tos_agreement, :only => [:verify_participant_id, :add_dataset]
   skip_before_filter :ensure_researcher, :only => [:verify_participant_id]
   skip_before_filter :ensure_researcher, :only => :clickthrough_to
+
+  protect_from_forgery :except => :add_dataset
 
   def index
     redirect_to page_path( :collection_events, :anchor => 'kits' ) if current_user and !current_user.researcher
@@ -204,7 +206,7 @@ class StudiesController < ApplicationController
     @study.destroy
 
     respond_to do |format|
-      format.html { redirect_to(studies_url) }
+      format.html { redirect_to(collection_events_path) }
       format.xml  { head :ok }
     end
   end
@@ -295,6 +297,39 @@ class StudiesController < ApplicationController
     redirect_to @study.personalized_participation_url(current_user)
   end
 
+  def add_dataset
+    @tsv = params[:data_sources_tsv].to_s
+    unless /^([0-9a-f]{32}\t[0-9]+\t[a-z0-9]+:\/\/\S+\r?\n)+$/.match(@tsv)
+      return render :json => { :errors => ['invalid data_sources_tsv parameter: each line must be "hex-md5 <tab> decimal-size <tab> url [<cr>] <lf>"}'] }, :status => 400
+    end
+    begin
+      @study = Study.find_by_api_key(params[:api_key].to_s)
+    rescue ActiveRecord::RecordNotFound
+      return render :json => { :errors => ['invalid api_key parameter'] }, :status => 400
+    end
+    @user = StudyParticipant.
+      where(:study_id => @study.id).
+      includes(:user).
+      map(&:user).
+      select do |user|
+      user.app_token("Study##{@study.id}") == params[:participant_code]
+    end.first
+    if !@user
+      return render :json => { :errors => ['invalid participant_code parameter'] }, :status => 400
+    end
+    begin
+      ArvadosJob.run_pipeline(:pipeline_template_file => dataset_download_tmpl,
+                              :inputs => {
+                                'data_sources_tsv' => @tsv,
+                              },
+                              :oncomplete => UserFile.create_from_download_job_callback(:user_id => @user.id, :study_id => @study.id),
+                              :onerror => ArvadosJob.generic_error_callback)
+    rescue ArvadosJob::ArvadosAPIError => e
+      return render :json => { :errors => [e.to_s] }, :status => 400
+    end
+    render :json => { :success => true }
+  end
+
   protected
 
   def load_selection
@@ -372,4 +407,7 @@ class StudiesController < ApplicationController
     @study_participant_info
   end
 
+  def dataset_download_tmpl
+    Rails.root.join 'crunch_scripts', 'download.json'
+  end
 end

@@ -101,6 +101,7 @@ Tapestry::Application.routes.draw do
   get 'third_party/study/:id' => 'studies#show_third_party', :as => :third_party_study
   match '/third_party/study/:id/verify_participant_id/:app_token' => 'studies#verify_participant_id', :via => [:get], :as => :verify_third_party_participant_id
   match '/third_party/study/:id/clickthrough_to' => 'studies#clickthrough_to', :via => [:post], :as => :clickthrough_to_third_party
+  post '/third_party/add_dataset' => 'studies#add_dataset'
   match '/3p/*x', :to => redirect('/third_party/%{x}')
 
   get 'open_humans/participate'
