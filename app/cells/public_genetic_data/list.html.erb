@@ -43,7 +43,7 @@
 
       <% if @options[:show_date_column] %>
       <td style="width:auto;white-space:nowrap" data-summarize-as="list-distinct">
-	<%= Time.parse(dataset.date.to_s).strftime('%Y-%m-%d') if dataset.respond_to?(:date) %>
+	<%= Time.parse(dataset.date.to_s).strftime('%Y-%m-%d') if dataset.respond_to?(:date) && dataset.date %>
       </td>
       <% end %>
 
