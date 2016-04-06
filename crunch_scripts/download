@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+
+import arvados
+import arvados.crunch
+import csv
+import hashlib
+import os
+import cStringIO as StringIO
+import sys
+import urllib2
+import urlparse
+
+BUFFER_SIZE = 1048576
+
+
+def queue_tasks(tsv_data, task_sequence):
+    api_client = arvados.api('v1')
+    for row in csv.reader(StringIO.StringIO(tsv_data),
+                          delimiter='\t',
+                          quotechar='"'):
+        md5, size, url = row
+        new_task_attrs = {
+            'job_uuid': arvados.current_job()['uuid'],
+            'created_by_job_task_uuid': arvados.current_task()['uuid'],
+            'sequence': task_sequence,
+            'parameters': {
+                'md5': md5,
+                'size': int(size),
+                'url': url,
+            },
+        }
+        api_client.job_tasks().create(body=new_task_attrs).execute()
+    arvados.current_task().set_output('')
+    sys.exit()
+
+
+def do_download(md5, size, url):
+    out = arvados.crunch.TaskOutputDir()
+
+    parsed_url = urlparse.urlparse(url)
+    if parsed_url.scheme not in ('http', 'https', 'ftp'):
+        raise ValueError('URL is not http, https, or ftp: {}'.format(url))
+    basename = parsed_url.path.split('/')[-1]
+    if len(basename) == 0:
+        basename = 'index.html'
+    outpath = os.path.join(out.path, basename)
+
+    httpresp = urllib2.urlopen(url)
+
+    with open(outpath, 'w') as outfile:
+        got_md5 = hashlib.md5()
+        for chunk in iter(lambda: httpresp.read(BUFFER_SIZE), ''):
+            outfile.write(chunk)
+            got_md5.update(chunk)
+        got_size = outfile.tell()
+        got_md5_hex = got_md5.hexdigest()
+
+    if got_size != size:
+        raise ValueError("Size mismatch: got {}, expected {}".format(
+            got_size, size))
+    if got_md5_hex != md5:
+        raise ValueError("Hash mismatch: got md5 {}, expected {}".format(
+            got_md5_hex, md5))
+
+    arvados.current_task().set_output(out.manifest_text())
+
+
+if arvados.current_task()['sequence'] == 0:
+    tsv_data = arvados.current_job()['script_parameters']['data_sources_tsv']
+    queue_tasks(tsv_data=tsv_data, task_sequence=1)
+else:
+    do_download(**arvados.current_task()['parameters'])
