@@ -35,8 +35,10 @@ class ArvadosJob < ActiveRecord::Base
     cmd = (APP_CONFIG['ruby19_shell_args'] || []) + cmd
 
     uuid = nil
-    IO.popen(cmd.map(&:shellescape).join(' ')) do |io|
-      uuid = io.read.strip
+    Bundler.with_clean_env do
+      IO.popen(cmd.map(&:shellescape).join(' ')) do |io|
+        uuid = io.read.strip
+      end
     end
     if $?.exitstatus != 0
       raise ArvadosAPIError, $?.inspect
