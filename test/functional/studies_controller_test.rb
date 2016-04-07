@@ -143,7 +143,7 @@ class StudiesControllerTest < ActionController::TestCase
         setup do
           @goodparams = {
             :api_key => @study.api_key,
-            :participant_code => @goodtoken_interested,
+            :participant_id => @goodtoken_interested,
             :data_sources_tsv => "d41d8cd98f00b204e9800998ecf8427e\t0\thttp://example./empty.txt\r\n",
           }
         end
@@ -169,7 +169,7 @@ class StudiesControllerTest < ActionController::TestCase
             ArvadosJob.expects(:run_pipeline).never
           end
 
-          [:participant_code, :api_key, :data_sources_tsv].each do |param|
+          [:participant_id, :api_key, :data_sources_tsv].each do |param|
             should "reject missing #{param}" do
               post :add_dataset, @goodparams.reject { |k,v| k == param }
               assert_response 400

@@ -312,10 +312,10 @@ class StudiesController < ApplicationController
       includes(:user).
       map(&:user).
       select do |user|
-      user.app_token("Study##{@study.id}") == params[:participant_code]
+      user.app_token("Study##{@study.id}") == params[:participant_id]
     end.first
     if !@user
-      return render :json => { :errors => ['invalid participant_code parameter'] }, :status => 400
+      return render :json => { :errors => ['invalid participant_id parameter'] }, :status => 400
     end
     begin
       ArvadosJob.run_pipeline(:pipeline_template_file => dataset_download_tmpl,
