@@ -14,6 +14,8 @@ class ApplicationController < ActionController::Base
     redirect_to unauthorized_user_url, :alert => exception.message
   end
 
+  rescue_from ActionController::RoutingError, :with => :not_found
+
   before_filter :login_required
   before_filter :ensure_tos_agreement
   before_filter :ensure_latest_consent
@@ -321,7 +323,17 @@ class ApplicationController < ActionController::Base
   end
 
   def not_found
-    raise ActionController::RoutingError.new('Not Found')
+    respond_to do |f|
+      f.json do
+        render(:status => 404,
+               :json => {:errors => ['Page not found']})
+      end
+      f.html do
+        render(:status => 404,
+               :layout => false,
+               :file => Rails.root.join('public', '404.html'))
+      end
+    end
   end
 
   def load_selection

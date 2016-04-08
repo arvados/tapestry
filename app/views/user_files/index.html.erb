@@ -15,6 +15,7 @@
     <th>&nbsp;</th>
     <th>&nbsp;</th>
     <th>&nbsp;</th>
+    <th>&nbsp;</th>
   </tr>
   <% @user_files.each do |g| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
@@ -30,6 +31,14 @@
         <% end %>
         </td>
       <td><%= number_to_human_size(g.data_size) or raw('&mdash;') %></td>
+      <td>
+        <% if g.report_url %>
+          <%= link_to('View report', g.report_url) %><br />
+        <% end %>
+        <% g.dataset_reports.select(&:display_url).each do |r| %>
+          <%= link_to("View #{r.title}", dataset_report_path(r.id)) %><br />
+        <% end %>
+      </td>
       <td><%= link_to 'Download', user_file_download_path(g.id), :rel => 'nofollow' unless g.is_incomplete? %></td>
       <td><%= link_to (g.is_incomplete? ? 'Edit/resume' : 'Edit'), edit_user_file_path(g) %></td>
       <td><%= link_to 'Remove', user_file_path(g.id), :confirm => 'Are you sure?', :method => :delete %></td>

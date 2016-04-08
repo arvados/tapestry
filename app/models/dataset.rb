@@ -10,6 +10,7 @@ class Dataset < ActiveRecord::Base
 
   belongs_to :participant, :class_name => 'User'
   belongs_to :sample
+  has_many :dataset_reports
 
   validates :name, :uniqueness => { :scope => 'participant_id' }
   validates :participant, :presence => true

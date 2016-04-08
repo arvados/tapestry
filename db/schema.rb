@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160322144855) do
+ActiveRecord::Schema.define(:version => 20160408134608) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -148,6 +148,9 @@ ActiveRecord::Schema.define(:version => 20160322144855) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "version"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
   end
 
   create_table "baseline_traits_survey_versions", :force => true do |t|
@@ -373,6 +376,35 @@ ActiveRecord::Schema.define(:version => 20160322144855) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "dataset_report_versions", :force => true do |t|
+    t.integer  "dataset_report_id"
+    t.integer  "lock_version"
+    t.integer  "dataset_id"
+    t.integer  "user_file_id"
+    t.string   "title"
+    t.string   "display_url"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "dataset_report_versions", ["dataset_report_id"], :name => "index_dataset_report_versions_on_dataset_report_id"
+
+  create_table "dataset_reports", :force => true do |t|
+    t.integer  "dataset_id"
+    t.integer  "user_file_id"
+    t.string   "title"
+    t.string   "display_url"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "lock_version"
   end
 

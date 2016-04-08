@@ -25,9 +25,14 @@ gem 'rails3_acts_as_paranoid', "~> 0.0.9"
 gem 'cure_acts_as_versioned', :require => 'acts_as_versioned'
 gem 'userstamp'
 
-gem 'factory_girl_rails', "~> 1.3.0"
-# Mocha: Mocking and stubbing library
-gem 'mocha', :require => false
+group :test, :development do
+  gem 'factory_girl_rails'
+  # factory_girl >= 3 requires ruby >= 1.9.2, so for now we pin to <3
+  gem 'factory_girl', '< 3.0.0'
+  # Mocha: Mocking and stubbing library
+  gem 'mocha', :require => false
+end
+
 # Once we move to ruby 2.x, revert to the latest version of the recaptcha gem
 # the cure-recaptcha gem works around a bug in recaptcha 0.4.0, which is the last
 # version that supports ree 1.8.7

@@ -31,6 +31,7 @@ class UserFile < ActiveRecord::Base
   has_attached_file :dataset, :path => "/data/#{ROOT_URL}/genetic_data/:user_id/:id/:style/:filename.:extension"
 
   belongs_to :user
+  has_many :dataset_reports
 
   attr_accessible :user, :user_id, :name, :date, :description, :data_type, :dataset, :upload_tos_consent, :longupload_size, :longupload_fingerprint, :longupload_file_name, :using_plain_upload, :index_in_manifest, :path_in_manifest, :locator, :other_data_type
 
@@ -182,6 +183,15 @@ class UserFile < ActiveRecord::Base
   # to match Dataset interface
   def published_at
     created_at
+  end
+  def published_anonymously_at
+    created_at
+  end
+  def participant_id
+    user_id
+  end
+  def released_to_participant
+    true
   end
 
   ##

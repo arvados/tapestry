@@ -193,6 +193,7 @@ Tapestry::Application.routes.draw do
   match '/user_files/:id/reprocess' => 'user_files#reprocess', :as => :reprocess_user_file
   match '/user_files/:id/longupload' => 'user_files#longupload', :as => :longupload_user_file, :via => :post
   match '/datasets/:id/download' => 'datasets#download', :as => :dataset_download
+  get '/dataset_reports/:id' => 'dataset_reports#show', :as => :dataset_report
 
 
   resources :specimen_analysis_data
