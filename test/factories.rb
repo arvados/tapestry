@@ -113,6 +113,48 @@ Factory.define(:content_area) do |f|
   f.ordinal { Factory.next :content_area_ordinal }
 end
 
+FactoryGirl.define do
+  factory :dataset do
+    initialize_with do
+      u = Factory(:enrolled_user)
+      u.save!
+      Dataset.create!(:released_to_participant => true,
+                      :published_at => nil,
+                      :published_anonymously_at => nil,
+                      :participant => u,
+                      :human_id => u.hex)
+    end
+  end
+  trait :published do
+    released_to_participant true
+    published_at            Time.now
+  end
+end
+
+Factory.define(:user_file) do |f|
+  f.name              'test user_file'
+  f.data_type         'other'
+  f.other_data_type   'just for testing'
+  f.dataset_file_size 1234
+  f.locator           'acbd18db4cc2f85cedef654fccc4a4d8+3'
+  f.association       :user
+end
+
+FactoryGirl.define do
+  factory :dataset_report do
+    display_url 'https://example.org/dataset_report/1234'
+  end
+  trait :for_user_file do
+    user_file { Factory(:user_file) }
+  end
+  trait :for_published_dataset do
+    dataset   { FactoryGirl.create(:dataset, :published) }
+  end
+  trait :for_unpublished_dataset do
+    dataset   { FactoryGirl.create(:dataset) }
+  end
+end
+
 Factory.define(:exam) do |f|
   f.content_area { |e| e.association :content_area }
 end
