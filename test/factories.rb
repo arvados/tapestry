@@ -74,7 +74,7 @@ Factory.sequence(:pgp_id, 1000) { |n| "#{n}" }
 
 Factory.sequence(:enrollment_step_ordinal) { |n| n }
 
-Factory.sequence(:hex) { |n| "hex#{n}"}
+Factory.sequence(:hex) { |n| sprintf "zz%06x", n }
 
 %w(keyword title description).each do |attr|
   Factory.sequence("enrollment_step_#{attr}".to_sym) { |n| "#{attr.upcase} #{n}" }
@@ -137,11 +137,13 @@ Factory.define(:user_file) do |f|
   f.other_data_type   'just for testing'
   f.dataset_file_size 1234
   f.locator           'acbd18db4cc2f85cedef654fccc4a4d8+3'
+  f.path_in_manifest  'foo.txt'
   f.association       :user
 end
 
 FactoryGirl.define do
   factory :dataset_report do
+    title       'test report'
     display_url 'https://example.org/dataset_report/1234'
   end
   trait :for_user_file do
