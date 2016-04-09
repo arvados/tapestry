@@ -65,27 +65,32 @@
 	<% end %>
       </td>
       <td data-summarize-as="none">
-	<% if dataset.report_ready? %>
-	<%= link_to raw('View&nbsp;report'), dataset.report_url %>
+        <%# Show DatasetReports %>
+        <% dataset.dataset_reports.select(&:display_url).each do |dr| %>
+          <%= link_to("View #{dr.title}", dr) %><br />
+        <% end %>
 
-	<% if (m=dataset.report_metadata) %>
-	<% if (chr = m[:chromosomes]).respond_to? :index %>
-	<% if chr.index('chrX') && !chr.index('chrY') %>
-	<br />&bull;&nbsp;female
-	<% elsif chr.index('chrX') && chr.index('chrY') %>
-	<br />&bull;&nbsp;male
-	<% end %>
-	<% if m[:called_num] %>
-	<br />&bull;&nbsp;<%= number_with_delimiter(m[:called_num]) %> positions&nbsp;covered
-	<% end %>
+        <%# Show special-case report generated with GET-Evidence integration %>
+        <% if dataset.report_ready? %>
+          <%= link_to raw('View&nbsp;report'), dataset.report_url %>
 
-	<% end %>
-	<%= raw "<br />&bull;&nbsp;ref.&nbsp;#{dataset.report_metadata[:genome_build]}" rescue nil %>
-	<% end %>
+          <% if (m=dataset.report_metadata) %>
+            <% if (chr = m[:chromosomes]).respond_to? :index %>
+              <% if chr.index('chrX') && !chr.index('chrY') %>
+                <br />&bull;&nbsp;female
+              <% elsif chr.index('chrX') && chr.index('chrY') %>
+                <br />&bull;&nbsp;male
+              <% end %>
+              <% if m[:called_num] %>
+                <br />&bull;&nbsp;<%= number_with_delimiter(m[:called_num]) %> positions&nbsp;covered
+              <% end %>
+            <% end %>
+            <%= raw "<br />&bull;&nbsp;ref.&nbsp;#{dataset.report_metadata[:genome_build]}" rescue nil %>
+          <% end %>
 
-	<% elsif @current_user and @current_user.is_admin? and dataset.processing_status %>
-	<%= dataset.processing_status[:status] %>
-	<% end %>
+        <% elsif @current_user and @current_user.is_admin? and dataset.processing_status %>
+          <%= dataset.processing_status[:status] %>
+        <% end %>
       </td>
       <% if @options[:show_admin_column] and @current_user and @current_user.is_admin? %>
       <td style="text-align:center">
