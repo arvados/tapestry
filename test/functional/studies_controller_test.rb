@@ -149,6 +149,12 @@ class StudiesControllerTest < ActionController::TestCase
         end
 
         context "with valid params" do
+          setup do
+            User.any_instance.
+              stubs(:arvados_project_uuid_for).
+              returns('zzzzz-j7d0g-zzzzzzzzzzzzzzz')
+          end
+
           should "accept valid req and queue download" do
             ArvadosJob.expects(:run_pipeline).once
             post :add_dataset, @goodparams

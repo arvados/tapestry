@@ -98,6 +98,16 @@ common:
   # Command line preamble for running ruby programs that need ruby >1.8.7
   ruby19_shell_args: ['rvm-exec', '1.9.3']
 
+  # UUID of a publicly shared Arvados project where participant
+  # data files and reports should be stored.
+  #
+  # If false, Tapestry will look for (and create when needed)
+  # participant data directories in the home project of the user
+  # ARVADOS_API_TOKEN belongs to. This means newly created data
+  # directories will not be publicly shared, so downloading/viewing
+  # reports won't work.
+  arvados_project_for_participant_data: false
+
 development:
   google_health_url: 'https://www.google.com/h9'
 

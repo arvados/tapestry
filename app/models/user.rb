@@ -650,7 +650,44 @@ class User < ActiveRecord::Base
     return true
   end
 
+  # Return uuid of a project suitable for storing the given type of
+  # data. E.g.,
+  #
+  # uuid = arvados_project_uuid_for("datasets")
+  # uuid = arvados_project_uuid_for("reports")
+  def arvados_project_uuid_for storage_type
+    if !hex
+      raise "cannot store data for user without hex ID"
+    end
+    user_project_spec = { :name => hex }
+    toplevel_uuid = APP_CONFIG['arvados_project_for_participant_data']
+    if toplevel_uuid
+      user_project_spec[:owner_uuid] = toplevel_uuid
+    end
+    user_project = make_project(user_project_spec)
+    subproject = make_project(:owner_uuid => user_project[:uuid],
+                              :name => "#{hex} #{storage_type}")
+    return subproject[:uuid]
+  end
+
   protected
+
+  def make_project project_spec
+    @arv ||= Arvados.new(:apiVersion => 'v1')
+    group_spec = project_spec.merge(:group_class => 'project')
+    p = @arv.group.list(group_spec)[:items].first
+    return p if p
+
+    # Project doesn't exist -> create it
+    begin
+      return @arv.group.create(:group => group_spec)
+    rescue => e
+      # Handle race between two threads creating the same project
+      p = @arv.group.list(group_spec)[:items].first
+      return p if p
+      raise
+    end
+  end
 
   def make_hex_code
     n = NextHex.first
