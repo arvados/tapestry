@@ -65,6 +65,6 @@ gem 'system_timer'
 gem 'faraday', '~> 0.9' # because google-api-client
 
 gem 'addressable', '2.3.8' # because newer versions require ruby 1.9
-gem 'arvados', '>= 0.1.20160323062030'
+gem 'arvados', '>= 0.1.20160413142414'
 gem 'google-api-client', '0.7.1' # because retriable because ruby 1.9
 gem 'retriable', '< 2' # because ruby 1.9

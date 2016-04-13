@@ -1,3 +1,5 @@
+require 'arvados/keep'
+
 class UserFile < ActiveRecord::Base
   acts_as_api
   stampable
@@ -207,12 +209,24 @@ class UserFile < ActiveRecord::Base
     arv = Arvados.new(:apiVersion => 'v1')
     p_i = arv.pipeline_instance.get opts[:job].uuid
     pdh = p_i[:components][:download][:job][:output]
-    create!(:user_id => opts[:user_id],
-            :date => Time.now,
-            :description => "Provided by #{study.name}",
-            :locator => pdh,
-            :path_in_manifest => "FIXME",
-            :index_in_manifest => 0)
+    collection = arv.collection.get(:uuid => pdh)
+    manifest = Keep::Manifest.new(collection[:manifest_text])
+    created = []
+    i = 0
+    manifest.each_file_spec do |path, pos, size, filename|
+      uf = create(:user_id => opts[:user_id],
+                  :date => Time.now,
+                  :description => "Provided by #{study.name}",
+                  :locator => pdh,
+                  :path_in_manifest => "#{path}/#{filename}",
+                  :index_in_manifest => i)
+      uf.dataset_file_size = size
+      uf.dataset_file_name = filename
+      uf.save!
+      created << uf
+      i += 1
+    end
+    created
   end
 
   api_accessible :public do |t|
