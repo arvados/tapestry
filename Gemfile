@@ -57,8 +57,14 @@ gem 'cells', "~> 3.10.1"
 gem 'uber', "0.0.6"
 gem 'cocaine', '0.5.7'
 
-gem 'oauth2'
-gem 'jwt', "1.5.1"
+gem 'oauth2', '<= 0.9.3' # because jwt because google-api-client because arvados
+gem 'jwt', '< 1.0.0' # because arvados because google-api-client
 gem 'highline', "1.6.21"
 gem 'net-ssh', "2.9.2"
 gem 'system_timer'
+gem 'faraday', '~> 0.9' # because google-api-client
+
+gem 'addressable', '2.3.8' # because newer versions require ruby 1.9
+gem 'arvados', '>= 0.1.20160323062030'
+gem 'google-api-client', '0.7.1' # because retriable because ruby 1.9
+gem 'retriable', '< 2' # because ruby 1.9

@@ -322,6 +322,7 @@ class StudiesController < ApplicationController
                               :inputs => {
                                 'data_sources_tsv' => @tsv,
                               },
+                              :project_uuid => @user.arvados_project_uuid_for("datasets"),
                               :oncomplete => UserFile.create_from_download_job_callback(:user_id => @user.id, :study_id => @study.id),
                               :onerror => ArvadosJob.generic_error_callback)
     rescue ArvadosJob::ArvadosAPIError => e
