@@ -11,6 +11,7 @@ common:
   signup_url: 'https://your.tapestry.url/signup'
 
   admin_email: 'This Should Be You <you@example.com>'
+  dataset_notification_message_subject: 'Please review your new genome data'
   withdrawal_notification_email: 'This Should Be You <you@example.com>'
   system_email: 'sysadmin@example.com'
   support_email: 'support@example.com'
