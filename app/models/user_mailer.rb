@@ -2,7 +2,7 @@ class UserMailer < ActionMailer::Base
 
   def dataset_notification_message(url,user,dataset)
     setup_email(user)
-    @subject += 'Please review your new specimen analysis data'
+    @subject += 'Please review your new genome data'
     @body[:url] = url
     @body[:dataset] = dataset
   end
