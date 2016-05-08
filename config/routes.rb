@@ -299,6 +299,7 @@ Tapestry::Application.routes.draw do
 
   resource :public_genetic_data
   match '/public_genetic_data/anonymous' => 'public_genetic_data#anonymous', :as => :public_anonymous_genetic_data
+  match '/public_genetic_data/statistics' => 'public_genetic_data#statistics', :as => :public_genetic_data_statistics
 
   ['users',
    'datasets',
