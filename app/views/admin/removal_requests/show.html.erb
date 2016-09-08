@@ -9,7 +9,7 @@
       </td><td>
         <%= @admin_removal_request.user.full_name %>
       </td><td>
-        <%= link_to "public profile #{@admin_removal_request.user.hex}", public_profile_path(@admin_removal_request.user.hex) %>
+        <%= @admin_removal_request.user.hex.empty? ? '' : link_to("public profile #{@admin_removal_request.user.hex}", public_profile_path(@admin_removal_request.user.hex)) %>
         /
         <%= link_to 'show', admin_user_path(@admin_removal_request.user) %>
         /
@@ -27,7 +27,7 @@
       </td><td>
         <%= @admin_removal_request.destroy_samples %>
       </td><td>
-        <%= link_to "#{@admin_removal_request.user.samples.count} samples associated with this participant", specimens_path(:q => @admin_removal_request.user.hex, :include_derived_samples => true) %>
+        <%= @admin_removal_request.user.hex.empty? ? '' : link_to("#{@admin_removal_request.user.samples.count} samples associated with this participant", specimens_path(:q => @admin_removal_request.user.hex, :include_derived_samples => true)) %>
       </td>
     </tr><tr>
       <td>
