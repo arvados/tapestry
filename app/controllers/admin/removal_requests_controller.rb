@@ -1,4 +1,4 @@
-class Admin::RemovalRequestsController < ApplicationController
+class Admin::RemovalRequestsController < Admin::AdminControllerBase
   # GET /admin/removal_requests
   # GET /admin/removal_requests.xml
   def index
