@@ -52,9 +52,9 @@ published:
   lock_version: "6"
   dataset_file_size: "4993512"
   longupload_bytes_received:
-  report_url: http://evidence.personalgenomes.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  report_url: http://evidence.pgp-hms.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
   processing_stopped: "1"
-  status_url: http://evidence.personalgenomes.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  status_url: http://evidence.pgp-hms.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
   name: Saliva SNPs 2008
   index_in_manifest:
   path_in_manifest:
@@ -63,7 +63,7 @@ published:
     :status: finished\n\
     :logfilename: false\n\
     :progress: 1\n\
-    :result_url: http://evidence.personalgenomes.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5\n\
+    :result_url: http://evidence.pgp-hms.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5\n\
     :updated_at: 2012-08-07 19:40:37.564841 -04:00\n"
   deleted_at:
   created_at: 2011-01-15 04:42:31
@@ -82,9 +82,9 @@ incomplete:
   upload_tos_consent: "1"
   creator: pgp1
   dataset_updated_at: 2011-01-15 04:42:31
-  report_url: http://evidence.personalgenomes.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  report_url: http://evidence.pgp-hms.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
   processing_stopped: "1"
-  status_url: http://evidence.personalgenomes.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  status_url: http://evidence.pgp-hms.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
   name: Saliva SNPs 2008
   created_at: 2011-01-15 04:42:31
   dataset_content_type: application/x-zip-compressed
@@ -103,9 +103,9 @@ deleted:
   upload_tos_consent: "1"
   creator: pgp1
   dataset_updated_at: 2011-01-15 04:42:31
-  report_url: http://evidence.personalgenomes.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  report_url: http://evidence.pgp-hms.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
   processing_stopped: "1"
-  status_url: http://evidence.personalgenomes.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  status_url: http://evidence.pgp-hms.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
   name: Saliva SNPs 2008
   created_at: 2011-01-15 04:42:31
   dataset_content_type: application/x-zip-compressed
@@ -123,9 +123,9 @@ for_suspended_user:
   upload_tos_consent: "1"
   creator: suspended
   dataset_updated_at: 2011-01-15 04:42:31
-  report_url: http://evidence.personalgenomes.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  report_url: http://evidence.pgp-hms.org/genomes?display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
   processing_stopped: "1"
-  status_url: http://evidence.personalgenomes.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
+  status_url: http://evidence.pgp-hms.org/genomes?format=json&content=status&display_genome_id=2e9b86bd7e2fb5b6770c2a9e9a336ba90677f83d&access_token=d6b5dbac12e8ab3afa1f25eef1ad0df5
   name: Saliva SNPs 2008
   created_at: 2011-01-15 04:42:31
   dataset_content_type: application/x-zip-compressed

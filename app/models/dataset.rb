@@ -73,7 +73,7 @@ class Dataset < ActiveRecord::Base
   def download_url
     url = self.read_attribute(:download_url)
     if !url and self.location and self.location.match(/evidence\.(personalgenomes|pgp-hms)\.org\/hu[0-9A-F]+$/)
-      "http://evidence.personalgenomes.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}"
+      "http://evidence.pgp-hms.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}"
     elsif published_anonymously_at then
       return '' if url.nil?
       # Do not leak the dataset name!

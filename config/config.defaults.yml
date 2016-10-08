@@ -47,7 +47,7 @@ common:
   get_2013_secret: 'your_get_2013_secret'
   get_2013_app_identifier: 'your_get_2013_app_identifier'
 
-  get_evidence_base_url: 'http://evidence.personalgenomes.org'
+  get_evidence_base_url: 'http://evidence.pgp-hms.org'
   get_evidence_api_key: 'your-get-evidence-api-key'
   get_evidence_api_secret: 'your-get-evidence-api-secret'
 

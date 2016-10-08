@@ -14,8 +14,8 @@ Before we continue, we ask that you carefully consider the following information
 <p>
 <strong>(1) Public Nature of the PGP: </strong>As stated in the consent form, the entrance exam and on our website, the PGP is a public genomics research study. As such, you should understand that the intention of this study is to create a public repository of genomic, health and other trait information. Continued participation in the PGP will mean making your health, trait, and genomic data publicly available.  So you can better visualize what this looks like in practice, please take a moment and review two different public websites that contain data from PGP participant #1:
 </p>
-<%= link_to 'https://my.personalgenomes.org/profile/hu43860C', 'https://my.personalgenomes.org/profile/hu43860C' %><br/>
-<%= link_to 'http://evidence.personalgenomes.org/hu43860C', 'http://evidence.personalgenomes.org/hu43860C' %>
+<%= link_to 'https://my.pgp-hms.org/profile/hu43860C', 'https://my.pgp-hms.org/profile/hu43860C' %><br/>
+<%= link_to 'http://evidence.pgp-hms.org/hu43860C', 'http://evidence.pgp-hms.org/hu43860C' %>
 <p>
 You may have noticed that the full name of PGP participant #1 is publicly available. We intentionally published the names of the first ten PGP participants in order to improve our understanding of the impact of fully identified data. To be sure, the PGP will not intentionally publish your name without your permission. However, we want to remind you that even if your name is not made public, it may be possible for others to discover your identity based on other data that is publicly available. The chance will also always exist that your name may be revealed by accident, due to hacking, software glitches, or other means. As you know, this poses potential risks to you, as outlined in the consent form which you are encouraged to review again prior to making a decision about continuing.
 </p>
@@ -53,13 +53,13 @@ You submitted your enrollment application on <%= current_user.enrollment_step_co
 be enrolled at the same time by a staff member. This will happen when you both
 have submitted your enrollment application.</p>
 
-<p>Please contact <a href="mailto:support@personalgenomes.org">support@personalgenomes.org</a> with any questions.</p>
+<p>Please contact <a href="mailto:support@pgp-hms.org">support@pgp-hms.org</a> with any questions.</p>
 
 <% elsif current_user.has_completed?('enrollment_application') then %>
 <p>Thanks for submitting your enrollment application.</p>
 
 You submitted your enrollment application on <%= current_user.enrollment_step_completions.find_by_enrollment_step_id(EnrollmentStep.find_by_keyword('enrollment_application')).created_at %>
 
-<p>Unfortunately, you are currently not eligible for enrollment in the PGP study. Please contact <a href="mailto:support@personalgenomes.org">support@personalgenomes.org</a> with any questions.</p>
+<p>Unfortunately, you are currently not eligible for enrollment in the PGP study. Please contact <a href="mailto:support@pgp-hms.org">support@pgp-hms.org</a> with any questions.</p>
 
 <% end %>
