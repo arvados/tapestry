@@ -134,7 +134,7 @@ protected
         # Note that if you call Dataset.new() from the rails console, you need to make sure the
         # Arvados environment variables (ARVADOS_API_HOST and ARVADOS_API_TOKEN) are set!
         # For Passenger, we set them via the Apache config.
-        manifest = `arv-get '#{locator.gsub("'","'\\''")}'`
+        manifest = `arv-get '#{locator.gsub("'","'\\''").sub(/\/.*$/,'')}'`
         if (m = manifest.match /^[^\n]+ 0:(\d+):\S+\n?$/)
           self.data_size = m[1].to_i
         end
