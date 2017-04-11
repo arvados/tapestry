@@ -13,6 +13,10 @@ class DatasetReportsController < ApplicationController
 
     @dataset = @report.dataset || @report.user_file
 
+    if @dataset.nil?
+      return not_found
+    end
+
     unless @dataset.published_at or
         @dataset.published_anonymously_at or
         (current_user and
