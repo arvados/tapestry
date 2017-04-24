@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_filter( :only => :index ) {|c| c.check_section_disabled(Section::PUBLIC_DATA) }
+  before_filter( :only => :shipping_address ) {|c| c.check_section_disabled(Section::SHIPPING_ADDRESS) }
   skip_before_filter :ensure_enrolled, :if => :okay_to_skip_ensure_enrolled
   skip_before_filter :ensure_active, :only => [ :deactivated, :switch_to, :tos, :accept_tos, :consent ]
   before_filter :load_current_user
@@ -266,7 +267,7 @@ class UsersController < ApplicationController
     if current_user.accept_tos(tos_version)
       flash[:notice] = 'Thank you for agreeing with our Terms of Service.'
     end
-    redirect_to root_url
+    redirect_back_or_default(root_url)
   end
 
   def participant_survey

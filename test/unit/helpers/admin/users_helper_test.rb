@@ -52,9 +52,9 @@ class Admin::UsersHelperTest < ActiveSupport::TestCase
 
         "Waitlist Count" => @user.waitlists.count,
 
-        "Informed Consent Twin" => @user.informed_consent_response.twin,
-        "Informed Consent Biopsy" => @user.informed_consent_response.biopsy,
-        "Informed Consent Recontact" => @user.informed_consent_response.recontact,
+        "Informed Consent Twin" => @user.informed_consent_responses.last.twin,
+        "Informed Consent Biopsy" => @user.informed_consent_responses.last.biopsy,
+        "Informed Consent Recontact" => @user.informed_consent_responses.last.recontact,
 
         "Phr profile name" => @user.phr_profile_name,
 

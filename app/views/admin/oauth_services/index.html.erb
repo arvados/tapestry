@@ -6,9 +6,8 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Type</th>
       <th>Scope</th>
-      <th>Consumer key</th>
-      <th>Private key</th>
       <th></th>
       <th></th>
       <th></th>
@@ -19,9 +18,8 @@
 <% @admin_oauth_services.each do |admin_oauth_service| %>
   <tr>
     <td><%= admin_oauth_service.name %></td>
+    <td><%= admin_oauth_service.oauth2_service_type %></td>
     <td><%= admin_oauth_service.scope %></td>
-    <td><%= admin_oauth_service.consumerkey %></td>
-    <td><%= admin_oauth_service[:privatekey_ok] %></td>
     <td><%= link_to 'Show', [:admin, admin_oauth_service] %></td>
     <td><%= link_to 'Edit', edit_admin_oauth_service_path(admin_oauth_service) %></td>
     <td><%= button_to 'Destroy', admin_oauth_service_path(admin_oauth_service), :confirm => 'Are you sure?', :method => :delete unless !admin_oauth_service.oauth_tokens.empty? %></td>

@@ -8,8 +8,14 @@ class ProfilesController < ApplicationController
   def public
     @user = User.publishable.find_by_hex(params[:hex])
 
-    # Invalid hex code
-    return if @user.nil?
+    if @user.nil?
+      # Invalid hex code
+      respond_to do |format|
+        format.html { render :status => 404 }
+        format.json { render :json => nil, :status => 404 }
+      end
+      return
+    end
 
     @page_title = @user.hex
 
@@ -105,6 +111,62 @@ class ProfilesController < ApplicationController
       a_date = (a.respond_to?(:date) && a.date) ? Time.parse(a.date.to_s) : a.published_at
       b_date = (b.respond_to?(:date) && b.date) ? Time.parse(b.date.to_s) : b.published_at
       b_date <=> a_date
+    end
+
+    respond_to do |format|
+      format.html
+      format.json  do
+        json_render = @user.attributes.delete_if { |k,v|
+                            !['hex', 'deceased', 'state', 'zip'].include?(k)
+                          }
+        files = @user_files_and_datasets.collect { |user_file_or_dataset|
+                            if user_file_or_dataset.class == UserFile
+                              download_url = user_file_download_url(user_file_or_dataset)
+                            elsif user_file_or_dataset.download_url
+                              download_url = user_file_or_dataset.download_url
+                            else
+                              download_url = nil
+                            end
+                            user_file_or_dataset.attributes.delete_if { |k,v|
+                               not ['data_type', 'name', 'date', 'description', 'report_url'].include?(k)
+                            }.merge({
+                              'file_source' => user_file_or_dataset.class.name == 'UserFile' ? 'Participant' : 'PGP',
+                              'download_url' => download_url
+                            })
+                          }
+        confirmed_family_relations = @confirmed_family_relations.collect{ |fr|
+                            {
+                              'relation' => fr.relation,
+                              'public_profile_url' => public_profile_path(fr.relative.hex),
+                              'linked' => fr.updated_at
+                            }
+                         }
+        json_render.merge!({
+                          'public_profile_url' => public_profile_url(:hex => @user.hex),
+                          'files' => files,
+                          'confirmed_family_relations' => confirmed_family_relations
+                        })
+        # real names
+        if include_section?(Section::REAL_NAMES) && @user.real_name_public
+          json_render.merge!({
+            'real_name', @user.full_name
+          })
+        end
+        if include_section?(Section::CCR)
+          # TODO: ccr
+        end
+        if include_section?(Section::SAMPLES)
+          # TODO: samples
+        end
+        if include_section?(Section::GOOGLE_SURVEYS)
+          json_render.merge!({
+            'google_survey_results' => @google_survey_results.collect { |survey_result|
+                                          survey_result[:qa].collect{ |qa| [ qa[0], qa[1] ] }
+                                        }
+          })
+        end
+        render :json => json_render
+      end
     end
   end
 end

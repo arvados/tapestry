@@ -1,0 +1,15 @@
+{
+    "name": "Tapestry batch download",
+    "components": {
+        "download": {
+            "repository": "https://github.com/curoverse/tapestry.git",
+            "script": "download",
+            "script_version": "master",
+            "script_parameters": {
+                "data_sources_tsv": {
+                    "required": true
+                }
+            }
+        }
+    }
+}

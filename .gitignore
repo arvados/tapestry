@@ -1,5 +1,4 @@
 .bundle
-Gemfile.lock
 db/*.sqlite3
 log/*.log
 tmp/
@@ -7,6 +6,7 @@ log
 config/initializers/secret_token.rb
 drb/MyPG.yml
 vendor/plugins/rails_upgrade/
+vendor/cache
 config/environments/*.rb
 git-commit.version
 *~

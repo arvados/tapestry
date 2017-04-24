@@ -17,6 +17,15 @@ class GoogleSurvey < ActiveRecord::Base
                      'User', self.class.to_s, self.id)
   end
 
+  def userid_populate_entry
+    # Google changed the field IDs on existing forms/results. Old
+    # field IDs were small multiples of 10, and were changed from N to
+    # 1000000+N; new ones are big numbers and should be used verbatim.
+    field = super
+    field += 1000000 if field and field < 1000000
+    field
+  end
+
   def self.create_legacy_nonces!
     added = 0
     default_survey = GoogleSurvey.where(:open => true)[0] rescue return
@@ -52,10 +61,16 @@ class GoogleSurvey < ActiveRecord::Base
       return nil, "Could not parse spreadsheet URL"
     end
 
-    uri = URI.parse("https://spreadsheets.google.com/feeds/download/spreadsheets/Export?key=#{skey}")
-    resp = token.oauth_request('GET', uri, {'format' => 'csv', 'exportFormat' => 'csv' })
-    if resp.code != '200' or resp.body.nil?
-      return nil, "Unexpected response from #{uri.to_s} -- #{resp.code} #{resp.message} #{resp.body}"
+    uri = 'https://spreadsheets.google.com/feeds/download/spreadsheets/Export'
+    begin
+      resp = token.oauth2_request('GET', uri,
+                                  'key' => skey,
+                                  'exportFormat' => 'csv')
+      if resp.status != 200 or resp.body.nil?
+        return nil, "Unexpected response from #{uri} -- #{resp.status} #{resp.body}"
+      end
+    rescue => e
+      return nil, "Request failed (#{uri}): #{e.inspect}"
     end
 
     cache_file = "#{CACHE_DIR}/#{self.id}.csv"

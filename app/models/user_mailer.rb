@@ -2,9 +2,9 @@ class UserMailer < ActionMailer::Base
 
   def dataset_notification_message(url,user,dataset)
     setup_email(user)
-    @subject += 'Please review your new specimen analysis data'
-    @url = url
-    @dataset = dataset
+    @subject += APP_CONFIG['dataset_notification_message_subject']
+    @body[:url] = url
+    @body[:dataset] = dataset
   end
 
   def support_message(message,user)
@@ -160,6 +160,14 @@ class UserMailer < ActionMailer::Base
     @study = study_participant.study
     @kit = kit
     @subject += "Reminder: specimen collection kit"
+  end
+
+  def arvados_job_failure(job)
+    @recipients = ADMIN_EMAIL
+    @from       = ADMIN_EMAIL
+    @subject    = "[#{ROOT_URL}] Arvados job failed"
+    @sent_on    = Time.now
+    @job        = job
   end
 
   protected

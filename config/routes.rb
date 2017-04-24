@@ -76,7 +76,8 @@ Tapestry::Application.routes.draw do
   get "oauth_tokens/authorize"
   get "oauth_tokens/revoke"
   match "oauth_tokens/get_access_token" => 'oauth_tokens#get_access_token', :as => :get_oauth_access_token, :via => :get
-  resources :oauth_tokens
+  get 'oauth2callback' => 'oauth_tokens#oauth2callback', :as => :oauth2callback
+  resources :oauth_tokens, :only => :index
 
   resources :kit_design_samples
   get 'sample_type_show' => 'sample_types#show'
@@ -96,10 +97,20 @@ Tapestry::Application.routes.draw do
   match '/pages/studies', :to => redirect('/pages/collection_events')
   match '/studies/*x', :to => redirect('/collection_events/%{x}')
 
-  resources :third_party, :controller => 'studies'
-  match '/third_party/:id/verify_participant_id/:app_token' => 'studies#verify_participant_id', :via => [:get], :as => :verify_third_party_participant_id
-  match '/third_party/:id/clickthrough_to' => 'studies#clickthrough_to', :via => [:post], :as => :clickthrough_to_third_party
+  get 'third_party/index'
+  get 'third_party/study/:id' => 'studies#show_third_party', :as => :third_party_study
+  match '/third_party/study/:id/verify_participant_id/:app_token' => 'studies#verify_participant_id', :via => [:get], :as => :verify_third_party_participant_id
+  match '/third_party/study/:id/clickthrough_to' => 'studies#clickthrough_to', :via => [:post], :as => :clickthrough_to_third_party
+  post '/third_party/add_dataset' => 'studies#add_dataset'
   match '/3p/*x', :to => redirect('/third_party/%{x}')
+
+  get 'open_humans/participate'
+  post 'open_humans/disconnect'
+  post 'open_humans/tokens', :to => 'open_humans#create_token'
+  post 'open_humans/huids', :to => 'open_humans#create_huid'
+  get 'open_humans/huids'
+  # This callback URL is set on the Open Humans API server
+  get 'auth/open-humans/callback' => 'open_humans#callback'
 
   match '/filters/upload' => 'filters#upload', :as => :upload_filter, :via => :post
 
@@ -182,6 +193,7 @@ Tapestry::Application.routes.draw do
   match '/user_files/:id/reprocess' => 'user_files#reprocess', :as => :reprocess_user_file
   match '/user_files/:id/longupload' => 'user_files#longupload', :as => :longupload_user_file, :via => :post
   match '/datasets/:id/download' => 'datasets#download', :as => :dataset_download
+  get '/dataset_reports/:id' => 'dataset_reports#show', :as => :dataset_report
 
 
   resources :specimen_analysis_data
@@ -262,6 +274,10 @@ Tapestry::Application.routes.draw do
   end
 
   resource :geographic_information, :controller => :geographic_information, :only => [ :edit, :update ]
+  resource :real_names, :controller => :real_names, :only => [ :update ] do
+    get 'add'
+    get 'remove'
+  end
   match '/:controller(/:action(/:id))'
   resource :phrccr
   match '/phrccr/authsub' => 'phrccrs#authsub_update', :as => :authsub_phrccr
@@ -279,7 +295,22 @@ Tapestry::Application.routes.draw do
   match '/trait_surveys' => 'trait_survey#index', :as => :trait_surveys
 
   resource :message
+  resource :faq
 
   resource :public_genetic_data
   match '/public_genetic_data/anonymous' => 'public_genetic_data#anonymous', :as => :public_anonymous_genetic_data
+  match '/public_genetic_data/statistics' => 'public_genetic_data#statistics', :as => :public_genetic_data_statistics
+
+  ['users',
+   'datasets',
+   'user_files',
+   'phrccr_lab_test_allergies',
+   'phrccr_lab_test_conditions',
+   'phrccr_lab_test_demographics',
+   'phrccr_lab_test_immunizations',
+   'phrccr_lab_test_results',
+   'phrccr_medications',
+   'phrccr_procedures'].each do |x|
+    match '/exports/'+x => 'exports#'+x
+  end
 end

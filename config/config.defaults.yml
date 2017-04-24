@@ -11,6 +11,7 @@ common:
   signup_url: 'https://your.tapestry.url/signup'
 
   admin_email: 'This Should Be You <you@example.com>'
+  dataset_notification_message_subject: 'Please review your new genome data'
   withdrawal_notification_email: 'This Should Be You <you@example.com>'
   system_email: 'sysadmin@example.com'
   support_email: 'support@example.com'
@@ -46,7 +47,7 @@ common:
   get_2013_secret: 'your_get_2013_secret'
   get_2013_app_identifier: 'your_get_2013_app_identifier'
 
-  get_evidence_base_url: 'http://evidence.personalgenomes.org'
+  get_evidence_base_url: 'http://evidence.pgp-hms.org'
   get_evidence_api_key: 'your-get-evidence-api-key'
   get_evidence_api_secret: 'your-get-evidence-api-secret'
 
@@ -95,6 +96,19 @@ common:
   application_layout_gmaps: 'tapestry_default_gmaps'
   application_layout_mobile: 'tapestry_default_mobile'
 
+  # Command line preamble for running ruby programs that need ruby >1.8.7
+  ruby19_shell_args: ['rvm-exec', '1.9.3']
+
+  # UUID of a publicly shared Arvados project where participant
+  # data files and reports should be stored.
+  #
+  # If false, Tapestry will look for (and create when needed)
+  # participant data directories in the home project of the user
+  # ARVADOS_API_TOKEN belongs to. This means newly created data
+  # directories will not be publicly shared, so downloading/viewing
+  # reports won't work.
+  arvados_project_for_participant_data: false
+
 development:
   google_health_url: 'https://www.google.com/h9'
 
@@ -105,3 +119,5 @@ development:
 production:
   google_health_url: 'https://www.google.com/health'
 
+test:
+  secret_token: <%= rand(2**256).to_s(36) %>

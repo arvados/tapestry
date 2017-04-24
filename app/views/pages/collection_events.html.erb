@@ -36,11 +36,13 @@ specimens, while others may arrange for collection of specimens by a
 trained professional. To arrange these, your shipping address and/or
 phone number may be needed.</p>
 
-<% if ShippingAddress.find_by_user_id(current_user.id).nil? %>
-  <p>Please <%= link_to 'add a shipping address', user_shipping_address_url %>.</p>
-<% else %>
-  <p>Please make sure that <%= link_to 'your shipping address', user_shipping_address_url %> is up to date.</p>
-  <p>You last updated your shipping address <%= distance_of_time_in_words(Time.now(),ShippingAddress.find_by_user_id(current_user.id).updated_at) %> ago.</p>
+<% if include_section?(Section::SHIPPING_ADDRESS) %>
+  <% if ShippingAddress.find_by_user_id(current_user.id).nil? %>
+    <p>Please <%= link_to 'add a shipping address', user_shipping_address_url %>.</p>
+  <% else %>
+    <p>Please make sure that <%= link_to 'your shipping address', user_shipping_address_url %> is up to date.</p>
+    <p>You last updated your shipping address <%= distance_of_time_in_words(Time.now(),ShippingAddress.find_by_user_id(current_user.id).updated_at) %> ago.</p>
+  <% end %>
 <% end %>
 
 <% if @open_collection_events.size > 0 %>
@@ -85,10 +87,10 @@ phone number may be needed.</p>
   <% @closed_collection_events.sort { |a,b| b.date_approved <=> a.date_approved }.each do |s| %>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=
-	     sp = s.study_participants.where('user_id = ?',current_user.id)
-	     sp = sp.empty? ? nil : sp.first
-	     (sp.nil? or sp.is_undecided? || sp.is_not_interested?) ? 'Did not participate' : sp.pretty_status
-	     %></td>
+       sp = s.study_participants.where('user_id = ?',current_user.id)
+       sp = sp.empty? ? nil : sp.first
+       (sp.nil? or sp.is_undecided? || sp.is_not_interested?) ? 'Did not participate' : sp.pretty_status
+       %></td>
       <td><%= link_to s.name, collection_event_url(:id => s.id) %></td>
       <td><%= s.researcher.full_name %></td>
       <td><%= s.researcher.researcher_affiliation %></td>

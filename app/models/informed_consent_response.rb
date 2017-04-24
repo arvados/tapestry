@@ -9,9 +9,13 @@ class InformedConsentResponse < ActiveRecord::Base
 
   attr_accessor :name, :name_confirmation, :email, :email_confirmation
 
+  TWIN_NO = 0
+  TWIN_YES = 1
+  TWIN_UNSURE = 2
+
   attr_protected :user_id
   validates :user_id, :presence => true
-  validates :twin, :inclusion => { :in => [0, 1, 2] }
+  validates :twin, :inclusion => { :in => [TWIN_NO, TWIN_YES, TWIN_UNSURE] }
   validates :recontact, :inclusion => { :in => [0, 1] }
   validates :name, :confirmation => true
   validates :email, :confirmation => true

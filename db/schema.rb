@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140609195957) do
+ActiveRecord::Schema.define(:version => 20160408134608) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -128,6 +128,30 @@ ActiveRecord::Schema.define(:version => 20140609195957) do
   end
 
   add_index "answer_options", ["exam_question_id"], :name => "index_answer_options_on_exam_question_id"
+
+  create_table "arvados_job_versions", :force => true do |t|
+    t.integer  "arvados_job_id"
+    t.integer  "version"
+    t.string   "uuid"
+    t.text     "oncomplete"
+    t.text     "onerror"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "arvados_job_versions", ["arvados_job_id"], :name => "index_arvados_job_versions_on_arvados_job_id"
+
+  create_table "arvados_jobs", :force => true do |t|
+    t.string   "uuid"
+    t.text     "oncomplete"
+    t.text     "onerror"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "version"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+  end
 
   create_table "baseline_traits_survey_versions", :force => true do |t|
     t.integer  "baseline_traits_survey_id"
@@ -352,6 +376,35 @@ ActiveRecord::Schema.define(:version => 20140609195957) do
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
+  end
+
+  create_table "dataset_report_versions", :force => true do |t|
+    t.integer  "dataset_report_id"
+    t.integer  "lock_version"
+    t.integer  "dataset_id"
+    t.integer  "user_file_id"
+    t.string   "title"
+    t.string   "display_url"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "dataset_report_versions", ["dataset_report_id"], :name => "index_dataset_report_versions_on_dataset_report_id"
+
+  create_table "dataset_reports", :force => true do |t|
+    t.integer  "dataset_id"
+    t.integer  "user_file_id"
+    t.string   "title"
+    t.string   "display_url"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "lock_version"
   end
 
@@ -1408,6 +1461,11 @@ ActiveRecord::Schema.define(:version => 20140609195957) do
     t.text     "privatekey"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "oauth2_service_type"
+    t.string   "oauth2_key"
+    t.text     "oauth2_secret"
+    t.string   "endpoint_url"
+    t.string   "callback_url"
   end
 
   create_table "oauth_tokens", :force => true do |t|
@@ -1418,6 +1476,7 @@ ActiveRecord::Schema.define(:version => 20140609195957) do
     t.string   "nonce"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "oauth2_token_hash"
   end
 
   create_table "permission_versions", :force => true do |t|
@@ -2657,10 +2716,10 @@ ActiveRecord::Schema.define(:version => 20140609195957) do
     t.datetime "updated_at"
     t.string   "origin"
     t.string   "user_comment"
-    t.integer  "lock_version"
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.integer  "lock_version"
     t.integer  "controlling_user_id"
     t.text     "info"
   end
@@ -2720,6 +2779,7 @@ ActiveRecord::Schema.define(:version => 20140609195957) do
     t.boolean  "can_reactivate_self"
     t.string   "phone_number"
     t.boolean  "deceased"
+    t.boolean  "real_name_public"
   end
 
   add_index "user_versions", ["user_id"], :name => "index_user_versions_on_user_id"
@@ -2778,6 +2838,7 @@ ActiveRecord::Schema.define(:version => 20140609195957) do
     t.boolean  "can_reactivate_self"
     t.string   "phone_number",                                    :default => ""
     t.boolean  "deceased"
+    t.boolean  "real_name_public",                                :default => false
   end
 
   create_table "waitlist_versions", :force => true do |t|

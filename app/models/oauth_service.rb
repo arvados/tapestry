@@ -11,6 +11,53 @@ class OauthService < ActiveRecord::Base
 
   has_many :oauth_tokens
 
+  OPEN_HUMANS = :open_humans
+  GOOGLE = :google
+
+  scope :open_humans, where(:oauth2_service_type => OPEN_HUMANS)
+  scope :google, where(:oauth2_service_type => GOOGLE)
+
+  SERVICE_CONFIG = {
+    OPEN_HUMANS => {
+      :authorize_url => '/oauth2/authorize/',
+      :token_url => '/oauth2/token/',
+    },
+    GOOGLE => {
+      :authorize_url => 'https://accounts.google.com/o/oauth2/auth',
+      :token_url => 'https://www.googleapis.com/oauth2/v3/token',
+      :authorize_params => {
+        :access_type => 'offline',
+        :approval_prompt => 'force',
+      },
+    },
+  }
+
+  def revoke_token token
+    if oauth2_service_type
+      #revoke_oauth2 token
+      true
+    else
+      revoke_oauth1 token
+    end
+  end
+
+  def authorize_params
+    SERVICE_CONFIG[oauth2_service_type.to_sym][:authorize_params] || {}
+  end
+
+  ### OAuth2 ###
+
+  def oauth2_client
+    cfg = SERVICE_CONFIG[oauth2_service_type.to_sym]
+    OAuth2::Client.new(oauth2_key,
+                       oauth2_secret,
+                       :authorize_url => cfg[:authorize_url],
+                       :token_url => cfg[:token_url],
+                       :site => endpoint_url)
+  end
+
+  ### OAuth1 ###
+
   ACCESS_TOKEN_URI = 'https://www.google.com/accounts/OAuthGetAccessToken'
   REVOKE_TOKEN_URI = 'https://www.google.com/accounts/AuthSubRevokeToken'
 
@@ -37,7 +84,7 @@ class OauthService < ActiveRecord::Base
     formdata['oauth_signature'] = sign('POST', base_uri, formdata)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true if uri.scheme == 'https'
-    req = Net::HTTP::Post.new(uri.fullpath)
+    req = Net::HTTP::Post.new(uri.scheme + '://' + uri.host + uri.request_uri)
     req.set_form_data(formdata)
     resp = http.request(req)
     return nil if resp.code == '400'
@@ -47,7 +94,7 @@ class OauthService < ActiveRecord::Base
     return @oauth_token + ' ' + @oauth_token_secret
   end
 
-  def revoke_token(token)
+  def revoke_oauth1 token
     resp = self.oauth_request(token, 'GET', URI.parse(REVOKE_TOKEN_URI), {})
     resp.code == '200'
     return resp
@@ -65,14 +112,14 @@ class OauthService < ActiveRecord::Base
       'oauth_version' => '1.0'
     }
     if http_method == 'POST'
-      req = Net::HTTP::Post.new(uri.fullpath)
+      req = Net::HTTP::Post.new(uri.request_uri)
       req.set_form_data(formdata) if formdata.size > 0
     elsif http_method == 'GET'
       querystring = ''
       if !formdata.empty?
-        querystring = (uri.fullpath.index('?') ? '&' : '?') + formdata.collect { |k,v| "#{uriencode(k)}=#{uriencode(v.to_s)}" }.join('&')
+        querystring = (uri.request_uri.index('?') ? '&' : '?') + formdata.collect { |k,v| "#{uriencode(k)}=#{uriencode(v.to_s)}" }.join('&')
       end
-      req = Net::HTTP::Get.new(uri.fullpath + querystring)
+      req = Net::HTTP::Get.new(uri.request_uri + querystring)
     else
       raise "#{http_method} method not supported"
     end

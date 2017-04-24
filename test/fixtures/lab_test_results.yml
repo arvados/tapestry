@@ -1,7 +1,23 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+pgp1_ccr0_ltr0:
+    creator_id:
+    units: inches
+    updater_id:
+    value: "77"
+    ccr: pgp1_ccr0
+    deleted_at:
+    lab_test_result_description: height
+    codes: 50373000:SNOMED;
+    lock_version: "1"
+    start_date: "2009-07-01"
 
-# one:
-#   column: value
-#
-# two:
-#   column: value
+pgp1_ccr0_ltr1:
+    creator_id:
+    units: ounces
+    updater_id:
+    value: "3936"
+    ccr: pgp1_ccr0
+    deleted_at:
+    lab_test_result_description: weight
+    codes: 363808001:SNOMED;
+    lock_version: "1"
+    start_date: "2009-07-01"

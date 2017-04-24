@@ -1,3 +1,5 @@
+require 'arvados/keep'
+
 class UserFile < ActiveRecord::Base
   acts_as_api
   stampable
@@ -31,6 +33,7 @@ class UserFile < ActiveRecord::Base
   has_attached_file :dataset, :path => "/data/#{ROOT_URL}/genetic_data/:user_id/:id/:style/:filename.:extension"
 
   belongs_to :user
+  has_many :dataset_reports
 
   attr_accessible :user, :user_id, :name, :date, :description, :data_type, :dataset, :upload_tos_consent, :longupload_size, :longupload_fingerprint, :longupload_file_name, :using_plain_upload, :index_in_manifest, :path_in_manifest, :locator, :other_data_type
 
@@ -47,15 +50,16 @@ class UserFile < ActiveRecord::Base
 
   validates_presence_of :other_data_type, :if => 'data_type == "other"'
 
-  DATA_TYPES = { 'genetic data - 23andMe (e.g., exome or genotyping data)' => '23andMe', 
-                 'genetic data - Complete Genomics' => 'Complete Genomics', 
-                 'genetic data - Pathway Genomics' => 'Pathway genomics', 
-                 'genetic data - Counsyl' => 'Counsyl', 
-                 'genetic data - DeCode' => 'DeCode', 
-                 'genetic data - Knome' => 'Knome', 
-                 'genetic data - Illumina (e.g., EveryGenome data)' => 'Illumina', 
-                 'genetic data - Navigenics' => 'Navigenics', 
+  DATA_TYPES = { 'genetic data - 23andMe (e.g., exome or genotyping data)' => '23andMe',
+                 'genetic data - Complete Genomics' => 'Complete Genomics',
+                 'genetic data - Counsyl' => 'Counsyl',
+                 'genetic data - DeCode' => 'DeCode',
                  'genetic data - Family Tree DNA' => 'Family Tree DNA',
+                 'genetic data - Illumina (e.g., Understand Your Genome data)' => 'Illumina',
+                 'genetic data - Knome' => 'Knome',
+                 'genetic data - Navigenics' => 'Navigenics',
+                 'genetic data - Pathway Genomics' => 'Pathway genomics',
+                 'genetic data - Veritas Genetics' => 'Veritas Genetics',
                  'health records - PDF or text' => 'health records - PDF or text',
                  'health records - CCR XML' => 'health records - CCR XML',
                  'biometric data - CSV or similar' => 'biometric data - CSV or similar',
@@ -182,6 +186,48 @@ class UserFile < ActiveRecord::Base
   # to match Dataset interface
   def published_at
     created_at
+  end
+  def published_anonymously_at
+    created_at
+  end
+  def participant_id
+    user_id
+  end
+  def released_to_participant
+    true
+  end
+
+  ##
+  # return an ArvadosJob callback that adds UserFile records for
+  # +opts[:user_id]+ for files that were downloaded in a batch
+  # provided by study +opts[:study_id]+.
+  def self.create_from_download_job_callback opts
+    "proc { |job| UserFile.create_from_download_job({:job => job, :user_id => #{opts[:user_id]+0}, :study_id => #{opts[:study_id]+0}) }"
+  end
+
+  def self.create_from_download_job opts
+    study = Study.find opts[:study_id]
+    arv = Arvados.new(:apiVersion => 'v1')
+    p_i = arv.pipeline_instance.get opts[:job].uuid
+    pdh = p_i[:components][:download][:job][:output]
+    collection = arv.collection.get(:uuid => pdh)
+    manifest = Keep::Manifest.new(collection[:manifest_text])
+    created = []
+    i = 0
+    manifest.each_file_spec do |path, pos, size, filename|
+      uf = create(:user_id => opts[:user_id],
+                  :date => Time.now,
+                  :description => "Provided by #{study.name}",
+                  :locator => pdh,
+                  :path_in_manifest => "#{path}/#{filename}",
+                  :index_in_manifest => i)
+      uf.dataset_file_size = size
+      uf.dataset_file_name = filename
+      uf.save!
+      created << uf
+      i += 1
+    end
+    created
   end
 
   api_accessible :public do |t|

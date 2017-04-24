@@ -6,8 +6,10 @@
         <p>
           <%= link_to 'Email and password', edit_user_path %>
           <br />
-          <%= link_to_if !current_user.hex.empty?, 'Shipping address', user_shipping_address_path %>
-          <br />
+          <% if include_section?(Section::SHIPPING_ADDRESS) %>
+            <%= link_to_if !current_user.hex.empty?, 'Shipping address', user_shipping_address_path %>
+            <br />
+          <% end %>
           <%= link_to_if !current_user.hex.empty?, 'Mailing lists', edit_user_path(:anchor => 'mailinglists') %>
           <br />
           <%= link_to_if !current_user.hex.empty?, 'Withdraw', edit_user_path(:anchor => 'withdraw') %>

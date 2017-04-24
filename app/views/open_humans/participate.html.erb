@@ -1,0 +1,46 @@
+<% content_for :head do %>
+  <%= javascript_include_tag 'open_humans' %>
+<% end %>
+
+
+<h2>Open Humans Project</h2>
+
+<p>Connect your data for research, and connect to researchers that want to build on your genome data!</p>
+
+<p>Open Humans enables members to automatically import data from diverse studies and activities. We want our members to have opportunities to connect to new studies, and we allow members to publicly share their data sets. (This is redundant for PGP data, but there are many other data sources!)</p>
+
+<p>By becoming an Open Humans member, you'll be able to import data from PGP Harvard and connect it to data from other sources. You'll also be able to participate in additional studies, which will create new exportable data that builds your Open Humans profile.</p>
+
+<p>Open Humans is a project of PersonalGenomes.org, co-founded by Jason Bobe and Madeleine Ball. The Open Humans website is not itself a study, but does contain an IRB-approved study (PI: Madeleine Ball) for members that wish to publicly share data.</p>
+
+<p>Additional information about Open Humans can be found at its website: <%= link_to 'http://openhumans.org', 'http://openhumans.org' %></p>
+
+<div class="authorization-instructions">
+  <% if @user_token %>
+    <% if @user_token.oauth2_expired? %>
+      <div class="authorization-button">
+        Authorization has expired
+        <%= link_to 'Refresh',
+                    open_humans_tokens_path( :service_id => @open_humans_service.id, :origin => @origin ),
+                    :class => 'btn btn-small',
+                    :method => :post %>
+      </div>
+    <% else %>
+      <div class="open-humans-token authorization-button" data-token-id="<%= @user_token.id %>">
+        Authorization is current... loading your registered huIDs
+      </div>
+    <% end %>
+  <% else %>
+    <div>
+      <p>
+        The link below will take you to the Open Humans website. You'll be able to create an account there. We will send Open Humans your participant identifier (<strong><%= current_user.hex -%></strong>), enabling transfer of your public data, once you finalize this data transfer on the Open Humans website.
+      </p>
+      <div class="authorization-button">
+        <%= link_to 'Share my data with Open Humans',
+                    open_humans_tokens_path( :service_id => @open_humans_service.id, :origin => @origin ),
+                    :class => 'btn btn-small',
+                    :method => :post %>
+      </div>
+    </div>
+  <% end %>
+</div>

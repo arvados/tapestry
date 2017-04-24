@@ -4,7 +4,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   include AuthenticatedSystem
-  include Userstamp  
+  include Userstamp
 
   layout APP_CONFIG['application_layout']
 
@@ -13,6 +13,8 @@ class ApplicationController < ActionController::Base
     Rails.logger.info "Access denied on action #{exception.action} : #{exception.subject.inspect}"
     redirect_to unauthorized_user_url, :alert => exception.message
   end
+
+  rescue_from ActionController::RoutingError, :with => :not_found
 
   before_filter :login_required
   before_filter :ensure_tos_agreement
@@ -180,12 +182,14 @@ class ApplicationController < ActionController::Base
   def ensure_recent_safety_questionnaire
     if logged_in? and current_user and current_user.enrolled and not current_user.has_recent_safety_questionnaire and (not session[:real_uid] or not session[:switch_back_to])
       flash[:warning] = 'You have been redirected to this page because you are due to complete a quarterly safety questionnaire. You will need to complete this before interacting with your PGP account. Thanks!'
+      session[:return_to] = request.protocol + request.host_with_port + request.fullpath
       redirect_to require_safety_questionnaire_url
     end
   end
 
   def ensure_tos_agreement
     if APP_CONFIG['ensure_tos'] && logged_in? and current_user and current_user.documents.kind(Document::TOS, LATEST_TOS_VERSION).empty? and (not session[:real_uid] or not session[:switch_back_to])
+      session[:return_to] = request.protocol + request.host_with_port + request.fullpath
       redirect_to tos_user_url
     end
   end
@@ -194,6 +198,7 @@ class ApplicationController < ActionController::Base
     if logged_in? and current_user and (not session[:real_uid] or not session[:switch_back_to])
       if current_user.datasets.released_to_participant.size != current_user.datasets.seen_by_participant.size
         flash[:warning] = 'You have been redirected to this page because you have new raw genomic data and a preliminary genome analysis to review. Please do so below. Thanks!'
+        session[:return_to] = request.protocol + request.host_with_port + request.fullpath
         redirect_to specimen_analysis_data_index_url
       end
     end
@@ -201,6 +206,7 @@ class ApplicationController < ActionController::Base
 
   def ensure_latest_consent
     if logged_in? and current_user and current_user.enrolled and current_user.documents.kind('consent', LATEST_CONSENT_VERSION).empty? and (not session[:real_uid] or not session[:switch_back_to])
+      session[:return_to] = request.protocol + request.host_with_port + request.fullpath
       redirect_to consent_user_url
     end
   end
@@ -249,7 +255,11 @@ class ApplicationController < ActionController::Base
 
   def csv_for_study_worker(study,participants)
 
-    user_fields = %w(hex token e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip phone_number kit_last_sent_at kit_name kit_status kit_status_changed other_kits).freeze
+    if not @study.is_third_party or current_user.is_admin? or current_user.researcher_onirb
+      user_fields = %w(hex token e-mail name gh_profile genotype_uploaded address_line_1 address_line_2 address_line_3 city state zip phone_number kit_last_sent_at kit_name kit_status kit_status_changed other_kits).freeze
+    else
+      user_fields = %w(token).freeze
+    end
 
     FasterCSV.generate(String.new, :force_quotes => true) do |csv|
 
@@ -258,7 +268,7 @@ class ApplicationController < ActionController::Base
       participants.each do |u|
         row = []
 
-        if study.is_third_party
+        if study.is_third_party and not current_user.is_admin? and not current_user.researcher_onirb
           csv << [u.user.app_token("Study##{study.id}")]
           next
         end
@@ -269,7 +279,7 @@ class ApplicationController < ActionController::Base
         row.push u.user.full_name
         row.push u.user.ccrs.size > 0 ? 'y' : 'n'
         row.push u.user.user_files.size > 0 ? 'y' : 'n'
-        if u.user.shipping_address then
+        if include_section?(Section::SHIPPING_ADDRESS) && u.user.shipping_address then
           row.push u.user.shipping_address.address_line_1
           row.push u.user.shipping_address.address_line_2
           row.push u.user.shipping_address.address_line_3
@@ -313,7 +323,17 @@ class ApplicationController < ActionController::Base
   end
 
   def not_found
-    raise ActionController::RoutingError.new('Not Found')
+    respond_to do |f|
+      f.json do
+        render(:status => 404,
+               :json => {:errors => ['Page not found']})
+      end
+      f.html do
+        render(:status => 404,
+               :layout => false,
+               :file => Rails.root.join('public', '404.html'))
+      end
+    end
   end
 
   def load_selection

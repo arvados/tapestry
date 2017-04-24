@@ -1,7 +1,12 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-# one:
-#   column: value
-#
-# two:
-#   column: value
+pgp1_ccr0_flonase:
+  medication_name: flonase
+  strength: 50 mcg/Actuation Spray, Suspension
+  ccr: pgp1_ccr0
+  route_codes: ""
+  frequency: at bedtime
+  dose: "1"
+  start_date: "2008-04-15"
+  status:
+  is_refill: "0"
+  codes: 54569412000:NDC;310403:RxNorm;21.87686:Google;58016653301:NDC;197368:FDB_dispensable;1474:FDB_routed;20.47638:Google;1462:FDB;19.17499:Google;
+  author_name:

@@ -33,9 +33,44 @@ Factory.define(:admin_user, :class => User) do |f|
   f.is_admin              true
 end
 
+Factory.define(:researcher, :class => User) do |f|
+  f.first_name             'Rosalind'
+  f.last_name              'Franklin'
+  f.email                  { Factory.next :email }
+  f.security_question      'security_question'
+  f.security_answer        'security_answer'
+  f.password               'password'
+  f.password_confirmation  'password'
+  f.researcher             true
+  f.researcher_affiliation "King's College"
+end
+
+FactoryGirl.define do
+  factory :enrolled_user, :class => User do |f|
+    f.first_name             'George'
+    f.last_name              'Church'
+    f.email                  { Factory.next :email }
+    f.security_question      'security_question'
+    f.security_answer        'security_answer'
+    f.password               'password'
+    f.password_confirmation  'password'
+    f.researcher             false
+    f.is_admin               false
+    after_create do |u|
+      u.activate!
+      u.accept_tos if APP_CONFIG['ensure_tos']
+      u.enrolled = Time.now
+      u.documents << Document.new(:keyword => 'consent',
+                                  :version => APP_CONFIG['latest_consent_version'],
+                                  :timestamp => Time.now())
+      u.hex = Factory.next(:hex)
+    end
+  end
+end
+
 Factory.sequence(:email) { |n| "person#{n}@example.org" }
 
-Factory.sequence(:pgp_id) { |n| "#{n}" }
+Factory.sequence(:pgp_id, 1000) { |n| "#{n}" }
 
 Factory.sequence(:enrollment_step_ordinal) { |n| n }
 
@@ -76,6 +111,50 @@ Factory.define(:content_area) do |f|
   f.title       'Content Area Title'
   f.description 'Content Area Description'
   f.ordinal { Factory.next :content_area_ordinal }
+end
+
+FactoryGirl.define do
+  factory :dataset do
+    initialize_with do
+      u = Factory(:enrolled_user)
+      u.save!
+      Dataset.create!(:released_to_participant => true,
+                      :published_at => nil,
+                      :published_anonymously_at => nil,
+                      :participant => u,
+                      :human_id => u.hex)
+    end
+  end
+  trait :published do
+    released_to_participant true
+    published_at            Time.now
+  end
+end
+
+Factory.define(:user_file) do |f|
+  f.name              'test user_file'
+  f.data_type         'other'
+  f.other_data_type   'just for testing'
+  f.dataset_file_size 1234
+  f.locator           'acbd18db4cc2f85cedef654fccc4a4d8+3'
+  f.path_in_manifest  'foo.txt'
+  f.association       :user
+end
+
+FactoryGirl.define do
+  factory :dataset_report do
+    title       'test report'
+    display_url 'https://example.org/dataset_report/1234'
+  end
+  trait :for_user_file do
+    user_file { Factory(:user_file) }
+  end
+  trait :for_published_dataset do
+    dataset   { FactoryGirl.create(:dataset, :published) }
+  end
+  trait :for_unpublished_dataset do
+    dataset   { FactoryGirl.create(:dataset) }
+  end
 end
 
 Factory.define(:exam) do |f|
@@ -277,11 +356,11 @@ Factory.define(:sample_type) do |f|
   f.unit        { Factory(:unit) }
 end
 
-Factory.sequence(:crc_id) {|n| "CRC #{n}"}
+Factory.sequence(:sample_crc_id) {|n| Kit.generate_verhoeff_number Sample.new }
 Factory.sequence(:url_code) {|n| "URL code #{n}"}
 
 Factory.define(:sample) do |f|
-  f.crc_id   { Factory.next :crc_id }
+  f.crc_id   { Factory.next :sample_crc_id }
   f.url_code { Factory.next :url_code }
   f.study    { Factory(:study) }
 end
@@ -345,4 +424,36 @@ Factory.define(:unused_kit_name) do |f|
 end
 
 Factory.define(:withdrawal_comment) do |f|
+end
+
+Factory.define(:open_humans_oauth_service, :class => OauthService) do |f|
+  f.oauth2_service_type OauthService::OPEN_HUMANS
+end
+
+Factory.define(:open_humans_token, :class => OauthToken) do |f|
+  f.oauth_service { |s| s.association :open_humans_oauth_service  }
+  f.oauth2_token_hash( { :expires_at => (Time.now + 1.hour).to_i }.to_yaml )
+end
+
+Factory.define(:google_oauth_service, :class => OauthService) do |f|
+  f.name 'Google Docs'
+  f.oauth2_service_type OauthService::GOOGLE
+end
+
+Factory.define(:google_oauth_token, :class => OauthToken) do |f|
+  f.oauth_service { |s| s.association :google_oauth_service  }
+  f.oauth2_token_hash( { :expires_at => (Time.now + 1.hour).to_i }.to_yaml )
+  f.user { Factory(:researcher) }
+end
+
+Factory.define(:active_third_party_study, :class => Study) do |f|
+  f.name "An active third-party study"
+  f.requested true
+  f.approved true
+  f.open true
+  f.participation_url "http://third-party-study.example/pgp_landing_page"
+  f.participant_description "You can sign up for this study and be studied."
+  f.researcher_description "This study studies stuff about participants."
+  f.researcher { Factory(:researcher) }
+  f.irb_associate { Factory(:researcher) }
 end

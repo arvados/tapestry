@@ -43,7 +43,9 @@
             <%= nav_element t('.home'), root_path unless current_user.enrolled %><%# ergo no Participate menu %>
             <%= nav_element t('_email_phone_and password'), edit_user_path %>
             <%= nav_element t('.named_proxies'), named_proxies_path %>
-            <%= nav_element t('.shipping_address'), user_shipping_address_path %>
+            <% if include_section?(Section::SHIPPING_ADDRESS) %>
+              <%= nav_element t('.shipping_address'), user_shipping_address_path %>
+            <% end %>
             <%= nav_element t('.mailing_list_subscriptions'), edit_user_path(:anchor => 'mailinglists') %>
             <%= nav_element t('.user_log'), url_for(:controller => 'users', :action => 'show_log') %>
 
@@ -116,17 +118,17 @@
           <ul class="dropdown-menu" role="menu" aria-labelledby="dropdown-public-data">
             <%= nav_element t('.participants'), users_path, {}, :title => t('.participant_profiles', :count => public_data_stats[:publishable_user_count]) %>
             <% if include_section?(Section::GOOGLE_SURVEYS) %>
-  	          <%= nav_element t('.participant_surveys'), google_surveys_path, {}, :title => t('.participant_surveys_taken_1',:count => public_data_stats[:google_survey_count]) + t('.participant_surveys_taken_2', :count => public_data_stats[:google_survey_respondent_count]) %>
+              <%= nav_element t('.participant_surveys'), google_surveys_path, {}, :title => t('.participant_surveys_taken_1',:count => public_data_stats[:google_survey_count]) + t('.participant_surveys_taken_2', :count => public_data_stats[:google_survey_respondent_count]) %>
             <% end %>
             <% if include_section?(Section::SAMPLES) %>
               <%= nav_element t('.tissue_samples'), specimens_path, {}, :title => t('.tissue_samples_collected', :count => public_data_stats[:sample_count]) %>
             <% end %>
             <%= nav_element t('.whole_genome_sequences_and_other_data'), public_genetic_data_path, {}, :title => t('.whole_genome_sequences_and_other_data_collected_1', :count => public_data_stats[:published_dataset_count]) + t('.whole_genome_sequences_and_other_data_collected_2', :count => public_data_stats[:user_file_count]) %>
             <% if public_data_stats[:anonymous_dataset_count] > 0 %>
-	            <%= nav_element 'CAGI genomes', public_anonymous_genetic_data_path, {}, :title => 'Temporarily unlinked to participant profiles' %>
+              <%= nav_element 'CAGI genomes', public_anonymous_genetic_data_path, {}, :title => 'Temporarily unlinked to participant profiles' %>
             <% end %>
             <li role="presentation" class="divider"></li>
-            <%= nav_element t('.genetic_data_publication_statistics'), url_for(:controller => :public_genetic_data, :action => :statistics) %>
+            <%= nav_element t('.genetic_data_publication_statistics'), public_genetic_data_statistics_path, {} %>
           </ul>
         </li>
       <% end %>
@@ -137,6 +139,7 @@
           <%= nav_element raw('<u>PersonalGenomes.org ') + raw(t('.website')) + raw('</u>'), 'http://personalgenomes.org' %>
           <%= nav_element raw('<u>PGP ') + raw(t('.blog')) + raw('</u>'), 'http://blog.personalgenomes.org' %>
           <%= nav_element raw('<u>@PGorg ') + raw(t('.on_twitter')) + raw('</u>'), 'https://twitter.com/@PGorg' %>
+          <%= nav_element t('.FAQ'), faq_path %>
         </ul>
       </li>
 

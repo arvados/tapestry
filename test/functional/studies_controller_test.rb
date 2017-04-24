@@ -81,6 +81,121 @@ class StudiesControllerTest < ActionController::TestCase
       end
     end
 
+    should "route verify_participant_id url" do
+      assert_routing("/third_party/study/12345/verify_participant_id/abcdef0123456789",
+                     :controller => "studies",
+                     :action => "verify_participant_id",
+                     :id => "12345",
+                     :app_token => "abcdef0123456789")
+    end
+
+    context "with an active third party study" do
+      setup do
+        @user_interested = Factory(:enrolled_user)
+        @user_uninterested = Factory(:enrolled_user)
+        @study = Factory(:active_third_party_study)
+        @goodtoken_interested = @user_interested.app_token("Study##{@study.id}")
+        @goodtoken_uninterested = @user_uninterested.app_token("Study##{@study.id}")
+        StudyParticipant.create!(:study => @study,
+                                 :user => @user_interested,
+                                 :status => StudyParticipant::STATUSES['interested'])
+      end
+
+      [["00000000000000000000000000000000", true],
+       ["eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", false]].each do |token, valid|
+        should "verify token #{token} => #{valid}" do
+          get :verify_participant_id, {
+            :id => @study.id,
+            :app_token => token,
+          }
+          assert_response (valid ? :success : 404)
+          assert_equal valid, JSON.parse(response.body)["valid"]
+        end
+      end
+
+      should "reject token for uninterested participant" do
+        get :verify_participant_id, {
+          :id => @study.id,
+          :app_token => @goodtoken_uninterested,
+        }
+        assert_response 404
+        assert_equal false, JSON.parse(response.body)["valid"]
+      end
+
+      should "accept token for interested participant" do
+        get :verify_participant_id, {
+          :id => @study.id,
+          :app_token => @goodtoken_interested,
+        }
+        assert_response :success
+        assert_equal true, JSON.parse(response.body)["valid"]
+      end
+
+      context "adding new dataset" do
+
+        should "have routing" do
+          assert_routing({ :path => "/third_party/add_dataset",
+                           :method => "post" },
+                         { :controller => "studies",
+                           :action => "add_dataset" })
+        end
+
+        setup do
+          @goodparams = {
+            :api_key => @study.api_key,
+            :participant_id => @goodtoken_interested,
+            :data_sources_tsv => "d41d8cd98f00b204e9800998ecf8427e\t0\thttp://example./empty.txt\r\n",
+          }
+        end
+
+        context "with valid params" do
+          setup do
+            User.any_instance.
+              stubs(:arvados_project_uuid_for).
+              returns('zzzzz-j7d0g-zzzzzzzzzzzzzzz')
+          end
+
+          should "accept valid req and queue download" do
+            ArvadosJob.expects(:run_pipeline).once
+            post :add_dataset, @goodparams
+            assert_response :success
+          end
+
+          should "return error if arv-run-pipeline-instance fails" do
+            @controller.stubs(:dataset_download_tmpl).
+              returns '/nonexistent/test/template.json'
+            post :add_dataset, @goodparams
+            assert_response 400
+            assert_match /Process.*exited/, JSON.parse(response.body)["errors"][0]
+          end
+        end
+
+        context "with invalid params" do
+          setup do
+            ArvadosJob.expects(:run_pipeline).never
+          end
+
+          [:participant_id, :api_key, :data_sources_tsv].each do |param|
+            should "reject missing #{param}" do
+              post :add_dataset, @goodparams.reject { |k,v| k == param }
+              assert_response 400
+            end
+
+            should "reject invalid #{param}" do
+              post :add_dataset, @goodparams.merge(param => '1/2345')
+              assert_response 400
+            end
+          end
+
+          should "reject api_key for non-approved study" do
+            @study.update_attributes(:approved => false)
+            post :add_dataset, @goodparams
+            assert_response 400
+          end
+        end
+      end
+    end
+
   end
 
   logged_in_researcher_context do

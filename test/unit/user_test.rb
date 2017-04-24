@@ -9,7 +9,7 @@ class UserTest < ActiveSupport::TestCase
   should have_one  :residency_survey_response
   should have_one  :family_survey_response
   should have_one  :privacy_survey_response
-  should have_one  :informed_consent_response
+  should have_many :informed_consent_responses
   should have_one  :baseline_traits_survey
 
   should allow_mass_assignment_of :email
@@ -495,4 +495,34 @@ class UserTest < ActiveSupport::TestCase
     assert_equal later.created_at.day, user.reload.last_waitlisted_at.day
   end
 
+  should "create new projects if needed" do
+    user = Factory(:enrolled_user)
+    fake_uuid_outer = 'zzzzz-j7d0g-abcdefghijklmno'
+    fake_uuid_inner = 'zzzzz-j7d0g-pqrstuvwxyz0123'
+    gstub = stub
+    gstub.stubs(:list).returns({:items => []})
+    gstub.stubs(:create).with { |params|
+      [{ :group => { :group_class => 'project',
+           :name => user.hex } },
+       { :group => { :owner_uuid => fake_uuid_outer,
+           :group_class => 'project',
+           :name => "#{user.hex} datasets" } }].index(params)
+    }.returns({:uuid => fake_uuid_outer}).
+      send(:then).returns({:uuid => fake_uuid_inner})
+    arv = stub
+    arv.stubs(:group).returns(gstub)
+    Arvados.stubs(:new).returns(arv)
+    assert_equal fake_uuid_inner, user.arvados_project_uuid_for("datasets")
+  end
+
+  should "use existing project if possible" do
+    fake_uuid = 'zzzzz-j7d0g-abcdefghijklmno'
+    gstub = stub
+    gstub.stubs(:list).returns({:items => [{:uuid => fake_uuid}]})
+    arv = stub
+    arv.stubs(:group).returns(gstub)
+    Arvados.stubs(:new).returns(arv)
+    user = Factory(:enrolled_user)
+    assert_equal fake_uuid, user.arvados_project_uuid_for("datasets")
+  end
 end

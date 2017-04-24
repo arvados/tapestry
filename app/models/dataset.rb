@@ -10,6 +10,7 @@ class Dataset < ActiveRecord::Base
 
   belongs_to :participant, :class_name => 'User'
   belongs_to :sample
+  has_many :dataset_reports
 
   validates :name, :uniqueness => { :scope => 'participant_id' }
   validates :participant, :presence => true
@@ -70,14 +71,15 @@ class Dataset < ActiveRecord::Base
   end
 
   def download_url
-    if !super and self.location and self.location.match(/evidence\.personalgenomes\.org\/hu[0-9A-F]+$/)
-      "http://evidence.personalgenomes.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}"
+    url = self.read_attribute(:download_url)
+    if !url and self.location and self.location.match(/evidence\.(personalgenomes|pgp-hms)\.org\/hu[0-9A-F]+$/)
+      "http://evidence.pgp-hms.org/genome_download.php?download_genome_id=#{sha1}&download_nickname=#{CGI::escape(name)}"
     elsif published_anonymously_at then
-      return '' if super.nil?
+      return '' if url.nil?
       # Do not leak the dataset name!
-      super.sub(/download_genome_id=(.*?)&download_nickname=.*access_token/,'download_genome_id=\1&download_nickname=\1&access_token')
+      url.sub(/download_genome_id=(.*?)&download_nickname=.*access_token/,'download_genome_id=\1&download_nickname=\1&access_token')
     else
-      super
+      url
     end
   end
 
@@ -129,7 +131,10 @@ protected
     if locator_changed? and index_in_manifest.nil? then
       self.data_size = nil
       if locator and locator.match /^[\da-f]{32}/
-        manifest = `whget '#{locator.gsub("'","'\\''")}'`
+        # Note that if you call Dataset.new() from the rails console, you need to make sure the
+        # Arvados environment variables (ARVADOS_API_HOST and ARVADOS_API_TOKEN) are set!
+        # For Passenger, we set them via the Apache config.
+        manifest = `arv-get '#{locator.gsub("'","'\\''").sub(/\/.*$/,'')}'`
         if (m = manifest.match /^[^\n]+ 0:(\d+):\S+\n?$/)
           self.data_size = m[1].to_i
         end

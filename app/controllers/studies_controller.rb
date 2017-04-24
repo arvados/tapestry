@@ -1,28 +1,24 @@
 class StudiesController < ApplicationController
-  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show, :verify_participant_id, :clickthrough_to]
+  load_and_authorize_resource :except => [:map, :users, :update_user_status, :show, :verify_participant_id, :clickthrough_to, :add_dataset, :show_third_party]
 
-  skip_before_filter :ensure_enrolled, :except => [:show, :claim]
-  skip_before_filter :ensure_latest_consent, :except => [:show, :claim]
-  skip_before_filter :ensure_recent_safety_questionnaire, :except => [:show, :claim]
+  skip_before_filter :ensure_enrolled, :except => [:show, :claim, :show_third_party]
+  skip_before_filter :ensure_latest_consent, :except => [:show, :claim, :show_third_party]
+  skip_before_filter :ensure_recent_safety_questionnaire, :except => [:show, :claim, :show_third_party]
 
   before_filter :ensure_researcher
-  skip_before_filter :ensure_researcher, :only => [:show, :claim, :index]
+  skip_before_filter :ensure_researcher, :only => [:show, :claim, :index, :show_third_party, :add_dataset]
 
-  skip_before_filter :login_required, :only => [:verify_participant_id]
-  skip_before_filter :ensure_tos_agreement, :only => [:verify_participant_id]
+  skip_before_filter :login_required, :only => [:verify_participant_id, :add_dataset]
+  skip_before_filter :ensure_tos_agreement, :only => [:verify_participant_id, :add_dataset]
   skip_before_filter :ensure_researcher, :only => [:verify_participant_id]
   skip_before_filter :ensure_researcher, :only => :clickthrough_to
 
+  protect_from_forgery :except => :add_dataset
+
   def index
-    return index_third_party if request.env['PATH_INFO'].match(/third_party/)
     redirect_to page_path( :collection_events, :anchor => 'kits' ) if current_user and !current_user.researcher
     @studies = Study.all if current_user and current_user.is_admin?
     @studies = @studies.includes(:kits) if @studies.respond_to? :includes
-  end
-
-  def index_third_party
-    @studies = Study.approved.third_party.open_now
-    render :action => :index_third_party
   end
 
   # GET /studies/1/map
@@ -122,7 +118,6 @@ class StudiesController < ApplicationController
   # in guarding access to it.
   def show
     @study = Study.find(params[:id])
-    return show_third_party if request.env['PATH_INFO'].match(/third_party/)
 
     if not current_user.is_admin? and @study.approved == nil then
       # Only approved studies should be available here for ordinary users
@@ -137,7 +132,7 @@ class StudiesController < ApplicationController
   end
 
   def show_third_party
-    render :action => :show_third_party
+    @study = Study.find(params[:id])
   end
 
   def new
@@ -302,6 +297,40 @@ class StudiesController < ApplicationController
     redirect_to @study.personalized_participation_url(current_user)
   end
 
+  def add_dataset
+    @tsv = params[:data_sources_tsv].to_s
+    unless /^([0-9a-f]{32}\t[0-9]+\t[a-z0-9]+:\/\/\S+\r?\n)+$/.match(@tsv)
+      return render :json => { :errors => ['invalid data_sources_tsv parameter: each line must be "hex-md5 <tab> decimal-size <tab> url [<cr>] <lf>"}'] }, :status => 400
+    end
+    begin
+      @study = Study.find_by_api_key(params[:api_key].to_s)
+    rescue ActiveRecord::RecordNotFound
+      return render :json => { :errors => ['invalid api_key parameter'] }, :status => 400
+    end
+    @user = StudyParticipant.
+      where(:study_id => @study.id).
+      includes(:user).
+      map(&:user).
+      select do |user|
+      user.app_token("Study##{@study.id}") == params[:participant_id]
+    end.first
+    if !@user
+      return render :json => { :errors => ['invalid participant_id parameter'] }, :status => 400
+    end
+    begin
+      ArvadosJob.run_pipeline(:pipeline_template_file => dataset_download_tmpl,
+                              :inputs => {
+                                'data_sources_tsv' => @tsv,
+                              },
+                              :project_uuid => @user.arvados_project_uuid_for("datasets"),
+                              :oncomplete => UserFile.create_from_download_job_callback(:user_id => @user.id, :study_id => @study.id),
+                              :onerror => ArvadosJob.generic_error_callback)
+    rescue ArvadosJob::ArvadosAPIError => e
+      return render :json => { :errors => [e.to_s] }, :status => 400
+    end
+    render :json => { :success => true }
+  end
+
   protected
 
   def load_selection
@@ -367,7 +396,7 @@ class StudiesController < ApplicationController
         info[:tracking_id] = spec_table_row[tracking_id_column+1] if tracking_id_column
 
         # Shipping address used
-        info[:address] = spec_table_row[address_column+1] if address_column
+        info[:address] = spec_table_row[address_column+1] if include_section?(Section::SHIPPING_ADDRESS) && address_column
       end
 
       if info[:kit_last_sent_at] and info[:kit_last_sent_at] < 14.days.ago
@@ -379,4 +408,7 @@ class StudiesController < ApplicationController
     @study_participant_info
   end
 
+  def dataset_download_tmpl
+    Rails.root.join 'crunch_scripts', 'download.json'
+  end
 end

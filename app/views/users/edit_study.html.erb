@@ -27,7 +27,9 @@
       <% else %>
         <% verb = 'confirm or update' %>
       <% end %>
-      Please take a moment to <%= link_to "#{verb} your shipping address", user_shipping_address_url(:return_to => request.path) -%> before expressing interest in this study.
+      <% if include_section?(Section::SHIPPING_ADDRESS) %>
+          Please take a moment to <%= link_to "#{verb} your shipping address", user_shipping_address_url(:return_to => request.path) -%> before expressing interest in this study.
+      <% end %>
     </p>
     <% elsif @study.phone_number_required %>
     <%# shipping address has mandatory phone number; no need to demand both. %>
@@ -44,7 +46,7 @@
     <% end %>
 
     <%= form_for :study_participant, :url => user_update_study_url, :html => { :method => :post, :class => 'study_participant', :id => 'create' } do |f| -%>
-    <%= f.radio_button :status, 'undecided', :checked => (@study_participant.nil? or @study_participant.is_undecided? ? true : false) %> 
+    <%= f.radio_button :status, 'undecided', :checked => (@study_participant.nil? or @study_participant.is_undecided? ? true : false) %>
     <%= label :status, 'undecided' %>
     <%= f.radio_button :status, 'interested', :checked => (not @study_participant.nil? and @study_participant.is_interested? ? true : false) %>
     <%= label :status, 'interested' %>

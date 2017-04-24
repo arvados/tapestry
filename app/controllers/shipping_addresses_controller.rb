@@ -1,5 +1,7 @@
 class ShippingAddressesController < ApplicationController
 
+  before_filter {|c| c.check_section_disabled(Section::SHIPPING_ADDRESS) }
+
   # GET /shipping_addresses/new
   # GET /shipping_addresses/new.xml
   def new

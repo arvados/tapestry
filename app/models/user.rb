@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
   has_many :datasets, :foreign_key => 'participant_id'
   has_many :published_datasets, :class_name => 'Dataset', :foreign_key => 'participant_id', :conditions => 'published_at IS NOT NULL'
   has_many :spreadsheet_rows, :as => :row_target
+  has_many :oauth_tokens
 
   has_many :ccrs, :order => 'id ASC'
 
@@ -51,7 +52,7 @@ class User < ActiveRecord::Base
   has_one  :privacy_survey_response, :dependent => :destroy
   # /legacy
   has_many  :named_proxies, :dependent => :destroy
-  has_one  :informed_consent_response, :dependent => :destroy
+  has_many  :informed_consent_responses, :dependent => :destroy, :order => 'created_at ASC'
   has_one  :baseline_traits_survey, :dependent => :destroy
   has_many :mailing_list_subscriptions, :dependent => :destroy
   has_many :mailing_lists, :through => :mailing_list_subscriptions
@@ -327,10 +328,10 @@ class User < ActiveRecord::Base
   end
 
   def log(comment,step=nil,origin=nil,user_comment=nil)
-    self.user_logs.create!(:comment => comment, 
-                           :user_comment => user_comment, 
-                           :enrollment_step => step, 
-                           :origin => origin, 
+    self.user_logs.create!(:comment => comment,
+                           :user_comment => user_comment,
+                           :enrollment_step => step,
+                           :origin => origin,
                            :controlling_user => self.controlling_user)
   end
 
@@ -429,7 +430,7 @@ class User < ActiveRecord::Base
 
   def eligibility_screening_passed
     # In v1 of the enrollment application, the eligibility questionnaire results step right after taking the eligibility questionnaire did not exist
-    # So, we just take the timestamp of the questionnaire itself, which will hold the date it was last taken. 
+    # So, we just take the timestamp of the questionnaire itself, which will hold the date it was last taken.
     @step_v1 = self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_surveys') }
     @step_v2 = self.enrollment_step_completions.detect {|c| c.enrollment_step == EnrollmentStep.find_by_keyword('screening_survey_results') }
     if self.screening_survey_response.nil? or not self.screening_survey_response.passed?
@@ -591,7 +592,7 @@ class User < ActiveRecord::Base
       return 'PGP_' + Digest::SHA1.hexdigest(self.hex + GET_2013_SECRET)[0,6].upcase
     end
     secret = Tapestry::Application.config.secret_token
-    raise "Installation problem: Application.config.secret_token not properly defined" if secret.length < 16
+    raise "Installation problem: Application.config.secret_token not properly defined" if secret.nil? or secret.length < 16
     @cached_app_identifier = app_identifier
     @cached_app_token =
       OpenSSL::HMAC.hexdigest(OpenSSL::Digest::Digest.new('SHA1'),
@@ -649,7 +650,44 @@ class User < ActiveRecord::Base
     return true
   end
 
+  # Return uuid of a project suitable for storing the given type of
+  # data. E.g.,
+  #
+  # uuid = arvados_project_uuid_for("datasets")
+  # uuid = arvados_project_uuid_for("reports")
+  def arvados_project_uuid_for storage_type
+    if !hex
+      raise "cannot store data for user without hex ID"
+    end
+    user_project_spec = { :name => hex }
+    toplevel_uuid = APP_CONFIG['arvados_project_for_participant_data']
+    if toplevel_uuid
+      user_project_spec[:owner_uuid] = toplevel_uuid
+    end
+    user_project = make_project(user_project_spec)
+    subproject = make_project(:owner_uuid => user_project[:uuid],
+                              :name => "#{hex} #{storage_type}")
+    return subproject[:uuid]
+  end
+
   protected
+
+  def make_project project_spec
+    @arv ||= Arvados.new(:apiVersion => 'v1')
+    group_spec = project_spec.merge(:group_class => 'project')
+    p = @arv.group.list(group_spec)[:items].first
+    return p if p
+
+    # Project doesn't exist -> create it
+    begin
+      return @arv.group.create(:group => group_spec)
+    rescue => e
+      # Handle race between two threads creating the same project
+      p = @arv.group.list(group_spec)[:items].first
+      return p if p
+      raise
+    end
+  end
 
   def make_hex_code
     n = NextHex.first
