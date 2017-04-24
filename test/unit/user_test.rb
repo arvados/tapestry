@@ -9,7 +9,7 @@ class UserTest < ActiveSupport::TestCase
   should have_one  :residency_survey_response
   should have_one  :family_survey_response
   should have_one  :privacy_survey_response
-  should have_one  :informed_consent_response
+  should have_many :informed_consent_responses
   should have_one  :baseline_traits_survey
 
   should allow_mass_assignment_of :email
