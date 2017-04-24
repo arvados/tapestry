@@ -83,6 +83,7 @@ class ContentAreaTest < ActiveSupport::TestCase
 
   context 'with three content_areas with ordinals' do
     setup do
+      ContentArea.delete_all
       @c3 = Factory(:content_area, :ordinal => 3)
       @c2 = Factory(:content_area, :ordinal => 2)
       @c1 = Factory(:content_area, :ordinal => 1)
