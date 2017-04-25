@@ -372,9 +372,11 @@ Factory.define(:kit_design_sample) do |f|
 end
 
 Factory.sequence(:kit_name) {|n| "Kit #{n}"}
+Factory.sequence(:kit_crc_id) {|n| Kit.generate_verhoeff_number Kit.new }
+
 Factory.define(:kit) do |f|
   f.name { Factory.next :kit_name }
-  f.crc_id { Factory.next :crc_id }
+  f.crc_id { Factory.next :kit_crc_id }
   f.url_code { Factory.next :url_code }
   f.study        { Factory(:study) }
   f.kit_design   { Factory(:kit_design) }
@@ -390,8 +392,10 @@ end
 
 Factory.define(:plate_layout) {}
 
+Factory.sequence(:plate_crc_id) {|n| Kit.generate_verhoeff_number Plate.new }
+
 Factory.define(:plate) do |f|
-  f.crc_id { Factory.next :crc_id }
+  f.crc_id { Factory.next :plate_crc_id }
   f.url_code { Factory.next :url_code }
   f.plate_layout { Factory(:plate_layout) }
 end
@@ -428,6 +432,7 @@ end
 
 Factory.define(:open_humans_oauth_service, :class => OauthService) do |f|
   f.oauth2_service_type OauthService::OPEN_HUMANS
+  f.endpoint_url "http://localhost/oauth2/authorize/"
 end
 
 Factory.define(:open_humans_token, :class => OauthToken) do |f|

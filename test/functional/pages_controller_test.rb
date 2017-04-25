@@ -48,7 +48,7 @@ class PagesControllerTest < ActionController::TestCase
         trap_exception { get :show, :id => 'non-existant-page' }
       end
 
-      should_raise_exception ActionController::RoutingError
+      should respond_with(404)
     end
 
   end

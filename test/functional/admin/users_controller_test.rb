@@ -103,11 +103,10 @@ class Admin::UsersControllerTest < ActionController::TestCase
         end
       end
 
-      should 'show as CSV on GET to index, requesting all users' do
+      should 'show as CSV on GET to index, requesting all publishable users' do
         get :index, :all => true, :format => 'csv'
         assert_response :success
-
-        User.all.each do |user|
+        User.publishable.each do |user|
           assert_match user.email, @response.body
         end
       end

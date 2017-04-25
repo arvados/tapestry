@@ -42,7 +42,7 @@ class ContentAreasControllerTest < ActionController::TestCase
 
       context 'when some exams do not have versions for the current user' do
         setup do
-          Exam.any_instance.expects(:version_for).returns(nil)
+          Exam.any_instance.expects(:version_for).at_least_once.returns(nil)
         end
 
         context 'on GET to show' do
@@ -81,9 +81,10 @@ class ContentAreasControllerTest < ActionController::TestCase
 
         should 'show, for each exam, the version for the current_user' do
           assigns(:exams).each do |exam|
+            next if exam.versions.where('published = ?', true).empty?
             assert_select 'a[href=?]',
                           content_area_exam_path(@content_area, exam),
-                          :text => /#{exam.version_for(@user).title}/
+                          :text => /#{exam.version_for(@user).title.gsub!(/&amp;/,'&')}/
           end
         end
       end
