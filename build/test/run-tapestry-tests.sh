@@ -34,12 +34,14 @@ git submodule init && git submodule update
 # --full-index to work around bundler issues 5378 and 5339
 bundle install --full-index
 
-rm -f config/database.yml
-rm -f config/environments/test.rb
-cp -f build/test/test.rb config/environments/
-cp -f build/test/database.yml config/
+sudo chmod 666 Gemfile.lock
+sudo chmod 666 log/test.log
+sudo rm -f config/database.yml
+sudo rm -f config/environments/test.rb
+sudo cp -f build/test/test.rb config/environments/
+sudo cp -f build/test/database.yml config/
 if [[ ! -f config/initializers/secret_token.rb ]]; then
-  cp -f config/initializers/secret_token.rb.example config/initializers/secret_token.rb
+  sudo cp -f config/initializers/secret_token.rb.example config/initializers/secret_token.rb
 fi
 
 export RAILS_ENV=test
