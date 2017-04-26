@@ -12,8 +12,6 @@ title () {
   printf "\n%*s\n\n" $(((${#title}+$COLUMNS)/2)) "********** $1 **********"
 }
 
-#source /etc/profile.d/rvm.sh
-
 source $HOME/.rvm/scripts/rvm
 
 # This shouldn't really be necessary... but the jenkins/rvm integration seems a
