@@ -111,7 +111,7 @@ class User < ActiveRecord::Base
     where('users.id not in (' + EnrollmentStepCompletion.joins(:enrollment_step).where('enrollment_steps.keyword = ?',keyword).group(:user_id).select(:user_id).to_sql + ')')
   }
 
-  scope :real, where("NOT (is_test <=> 1)")
+  scope :real, where("is_test = 0")
   scope :not_suspended, where("suspended_at IS NULL").real
   scope :not_deactivated, where("deactivated_at IS NULL").real
   scope :inactive, where("activated_at IS NULL").real
