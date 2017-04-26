@@ -6,10 +6,12 @@ class ExamVersionTest < ActiveSupport::TestCase
       @exam_version = Factory :exam_version
     end
 
-    should_belong_to :exam
-    should_validate_presence_of :title, :description, :ordinal
-    should_have_many :exam_questions
-    should_have_many :exam_responses
+    should belong_to :exam
+    should validate_presence_of :title
+    should validate_presence_of :description
+    should validate_presence_of :ordinal
+    should have_many :exam_questions
+    should have_many :exam_responses
 
     context 'that is completed by a user' do
       setup do

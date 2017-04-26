@@ -1,6 +1,6 @@
 <h2>New answer option</h2>
 
-<%= form_for :answer_option, @answer_option,
+<%= form_for @answer_option, :as => :answer_option,
             :url => admin_content_area_exam_exam_version_exam_question_answer_options_path(
               @content_area,
               @exam,

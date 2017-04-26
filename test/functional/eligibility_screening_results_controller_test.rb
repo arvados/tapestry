@@ -1,11 +1,13 @@
 require 'test_helper'
 
 class EligibilityScreeningResultsControllerTest < ActionController::TestCase
-  should_route 'GET', 'eligibility_screening_results', :action => 'index'
+  should route('GET', 'eligibility_screening_results').to(:action => 'index')
 
-  context "on GET to index" do
+  context "on GET to index with no logged in user" do
     setup { get :index }
-    should_redirect_to "login_url"
+    should 'redirect appropriately' do
+      assert_redirected_to login_path
+    end
   end
 
   logged_in_user_context do
@@ -14,8 +16,8 @@ class EligibilityScreeningResultsControllerTest < ActionController::TestCase
         get :index
       end
 
-      should_respond_with :success
-      should_render_template :index
+      should respond_with :success
+      should render_template :index
     end
 
     context 'on GET to index for a user who has been waitlisted' do
@@ -25,8 +27,8 @@ class EligibilityScreeningResultsControllerTest < ActionController::TestCase
         get :index
       end
 
-      should_respond_with :success
-      should_render_template :index
+      should respond_with :success
+      should render_template :index
 
       should "render a button to allow the user to re-take the screening surveys" do
         assert_select 'form[action=?][method=post]', waitlist_resubmissions_path(:waitlist_id => @waitlist.id) do

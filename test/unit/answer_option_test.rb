@@ -6,6 +6,6 @@ class AnswerOptionTest < ActiveSupport::TestCase
       @answer_option = Factory :answer_option
     end
 
-    should_belong_to :exam_question
+    should belong_to :exam_question
   end
 end

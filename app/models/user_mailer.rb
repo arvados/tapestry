@@ -55,22 +55,22 @@ class UserMailer < ActionMailer::Base
       @recipients = "#{ADMIN_EMAIL}"
     end
     @subject     = "PGP account deletion request"
-    @body[:url]  = "#{ROOT_URL_SCHEME}#{ROOT_URL}/admin/users"
+    @url  = "#{ROOT_URL_SCHEME}#{ROOT_URL}/admin/users"
     user.log("PGP account deletion request")
   end
 
   def password_reset(user)
     setup_email(user)
     @subject    += 'Reset your password'
-    @body[:url]  = "#{ROOT_URL_SCHEME}#{ROOT_URL}/password/edit?id=#{user.id}&key=#{user.crypted_password}"
-    user.log("Sent password reset link: #{@body[:url]}")
+    @url  = "#{ROOT_URL_SCHEME}#{ROOT_URL}/password/edit?id=#{user.id}&key=#{user.crypted_password}"
+    user.log("Sent password reset link: #{@url}")
   end
 
   def email_change_notification(user, old_email)
     setup_email(user)
     @subject += 'Email address changed'
     @recipients = old_email unless defined? SEND_ALL_USER_EMAIL_TO
-    @body[:old_email] = old_email
+    @old_email = old_email
     user.log("Sent email change notification") unless user.id.nil? # (preview)
   end
 
@@ -78,22 +78,22 @@ class UserMailer < ActionMailer::Base
     setup_email(family_relation.relative)
     @subject += 'You have been added as a family member'
     @family_relation = family_relation
-    @body[:url] = "#{ROOT_URL_SCHEME}#{ROOT_URL}/family_relations"
-    @body[:login_url]  = "#{ROOT_URL_SCHEME}#{ROOT_URL}/login"
+    @url = "#{ROOT_URL_SCHEME}#{ROOT_URL}/family_relations"
+    @login_url  = "#{ROOT_URL_SCHEME}#{ROOT_URL}/login"
     family_relation.relative.log("Sent family relation notification: added as a family member (#{@family_relation.relation}) by #{@family_relation.user.hex}")
   end
 
   def family_relation_rejection(family_relation)
     setup_email(family_relation.user)
     @subject += 'Your family relation request was rejected'
-    @body[:user] = family_relation.relative
+    @user = family_relation.relative
     family_relation.user.log("Sent family relation notification: family relation request was rejected by #{family_relation.relative.hex}")
   end
 
   def family_relation_deletion(family_relation)
     setup_email(family_relation.user)
     @subject += 'Your family relation was deleted'
-    @body[:user] = family_relation.relative
+    @user = family_relation.relative
     family_relation.user.log("Sent family relation notification: family relation was deleted by #{family_relation.relative.hex} (#{FamilyRelation::relations[family_relation.relation]})")
   end
 
@@ -177,7 +177,7 @@ class UserMailer < ActionMailer::Base
     @from        = "#{ADMIN_EMAIL}"
     @subject     = "[#{ROOT_URL}] "
     @sent_on     = Time.now
-    @body[:user] = user
+    @user        = user
     @recipients = SEND_ALL_USER_EMAIL_TO if defined? SEND_ALL_USER_EMAIL_TO
   end
 end

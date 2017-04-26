@@ -3,6 +3,7 @@ require 'test_helper'
 class ExportsControllerTest < ActionController::TestCase
   setup do
     ApplicationController.any_instance.stubs('include_section?').with(Section::PUBLIC_DATA).returns(true)
+    ApplicationController.any_instance.stubs('include_section?').with(Section::REAL_NAMES).returns(true)
   end
 
   test 'exports/users.csv' do

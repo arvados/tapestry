@@ -49,7 +49,7 @@
 <%= form_for @admin_removal_request, :url => admin_removal_request_path(@admin_removal_request), :method => :post do |f| %>
 
 <% unless @admin_removal_request.fulfilled_at %>
-<%= f.submit 'Mark this request as fulfilled', :confirm => 'Mark this request as fulfilled?' %>
+  <%= f.submit 'Mark this request as fulfilled', :name => 'close', :confirm => 'Mark this request as fulfilled?' %>
 <% end %>
 
 <p>

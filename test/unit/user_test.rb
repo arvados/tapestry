@@ -49,6 +49,10 @@ class UserTest < ActiveSupport::TestCase
     should_not_allow_values_for :email, 'aaa@bbb', 'aaa.com', 'a.b.com', 'aa@bb@cc', :message => /look like/
     should_not_allow_values_for :email, 'a@b.c', :message => /too short/
     should_not_allow_values_for :email, '', :message => /blank/
+    # should allow_value('a@b.cc', 'test@harvard.edu', 'jason.p.morrison@gmail.com').for(:email)
+    # should_not allow_value('aaa@bbb', 'aaa.com', 'a.b.com', 'aa@bb@cc').for(:email).with_message(/look like/)
+    # should_not allow_value('a@b.c').for(:email).with_message(/too short/)
+    # should_not allow_value('').for(:email).with_message(/blank/)
 
 
     should "require password validation on create" do
@@ -301,8 +305,8 @@ class UserTest < ActiveSupport::TestCase
   context "with users who fall into various screening eligibility groups" do
     setup do
       User.delete_all
-      assert eligibility_step = EnrollmentStep.find_by_keyword('screening_submission')
-      assert promotion_step     = EnrollmentStep.find_by_keyword('eligibility_screening_results')
+      assert eligibility_step = EnrollmentStep.find_by_keyword('screening_surveys')
+      assert promotion_step     = EnrollmentStep.find_by_keyword('screening_survey_results')
 
       @user1a = Factory(:user, :first_name => 'user1a')
       @user1a.complete_enrollment_step(eligibility_step)
@@ -479,17 +483,6 @@ class UserTest < ActiveSupport::TestCase
       assert_equal [@waitlisted_user, @waitlisted_user2, @waitlisted_user3].map(&:id).map(&:to_s).sort, User.waitlisted_ids.sort
     end
 
-    should "returns users in eligibility group 1 when sent .in_screening_eligibility_group(1)" do
-      assert_equal [@user1a, @user1b, @user1c, @user1d, @resubmitted_waitlisted_user].map(&:first_name).sort, User.in_screening_eligibility_group(1).map(&:first_name).sort
-    end
-
-    should "returns users in eligibility group 2 when sent .in_screening_eligibility_group(2)" do
-      assert_equal [@user2a, @user2b, @user2c, @user2d, @resubmitted_waitlisted_user2].map(&:first_name).sort, User.in_screening_eligibility_group(2).map(&:first_name).sort
-    end
-
-    should "returns users in eligibility group 3 when sent .in_screening_eligibility_group(3)" do
-      assert_equal [@user3a, @user3b, @user3c, @user3d, @user3e, @resubmitted_waitlisted_user3].map(&:first_name).sort, User.in_screening_eligibility_group(3).map(&:first_name).sort
-    end
   end
 
   should "properly calculate last_waitlisted_at" do

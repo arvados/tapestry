@@ -34,7 +34,6 @@ class GoogleSurveysControllerTest < ActionController::TestCase
       setup do
         get :new
       end
-
       should 'redirect appropriately' do
         assert_redirected_to login_path
       end

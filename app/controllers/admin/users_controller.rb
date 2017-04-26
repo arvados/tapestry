@@ -103,7 +103,7 @@ class Admin::UsersController < Admin::AdminControllerBase
   end
 
   def show
-    if (params[:id].length == 40) then
+    if params[:id].to_s.length == 40 then
       # /admin/users/f65ea621688341215688354afc8321893a84cae5
       @user = User.locate_unenrolled_identifier(params[:id])
     else
@@ -207,6 +207,12 @@ class Admin::UsersController < Admin::AdminControllerBase
       @log_messages << "Admin unsuspended account"
     end
     params[:user].delete :is_suspended
+    # we will take the mailing_list_ids and convert them to nested attributes for a User has_many :mailing_lists, :through => :mailing_list_subscriptions association
+    if params[:user][:mailing_list_ids] && params[:user][:mailing_list_ids].any?
+      subscription_attributes = params[:user].delete( :mailing_list_ids ).collect{|m| { :mailing_list_id => m }}
+      # also see User for the added accepts_nested_attributes_for directive and attr_accessible directive
+      params[:user][:mailing_list_subscriptions_attributes] = subscription_attributes
+    end
 
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'

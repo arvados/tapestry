@@ -2,7 +2,7 @@ require 'test_helper'
 
 class StudiesControllerTest < ActionController::TestCase
 
-  should_eventually 'test the other actions: map, index_third_party, claim, users, etc.'
+  should_eventually 'test the other actions: verify_participant_id, map, index_third_party, claim, users, etc.'
 
   context "without a logged in user" do
 

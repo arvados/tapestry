@@ -42,36 +42,39 @@ class UsersControllerTest < ActionController::TestCase
         get :edit, :id => @user.to_param
       end
 
-      should_respond_with :success
-      should_render_template :edit
-
-      should 'include a link to request account deletion' do
-        assert_select 'form[action=?]', user_url(@user) do
-          assert_select 'input[type=submit]'
-        end
-      end
+      should respond_with :success
+      should render_template :edit
     end
 
     context 'on DELETE to destroy' do
       setup do
+        ActionMailer::Base.deliveries = []
         delete :destroy, :id => @user.to_param
       end
 
-      should_redirect_to 'page_url(:logged_out)'
-
-      should 'send the email' do
-        assert_sent_email do |email|
-          email.subject =~ /delete/ &&
-          email.to      == ['delete-account@personalgenomes.org'] &&
-          email.body    =~ /#{@user.full_name}/
-        end
+      should 'redirect appropriately' do
+        assert_redirected_to page_path(:logged_out)
       end
+
+      should 'send an email' do
+        assert_equal 1, ActionMailer::Base.deliveries.size
+        email = ActionMailer::Base.deliveries.first
+        if defined? APP_CONFIG['withdrawal_notification_email']
+          recipients = [extract_email(APP_CONFIG['withdrawal_notification_email'])]
+        else
+          recipients = [extract_email(APP_CONFIG['admin_email'])]
+        end
+        assert_equal recipients, email.to
+        assert_match /deletion/i, email.subject
+        assert_match /#{@user.full_name}/i, email.body
+      end
+
     end
 
     context 'on PUT to update with good values' do
       setup do
         @mailing_list = Factory :mailing_list
-        put :update, :id => @user.to_param, :user => { 
+        put :update, :id => @user.to_param, :user => {
                                 :email => @user.email,
                                 :password => 'newpassword',
                                 :password_confirmation => 'newpassword',
@@ -79,7 +82,9 @@ class UsersControllerTest < ActionController::TestCase
                               }
       end
 
-      should_redirect_to("root_url")
+      should 'redirect appropriately' do
+        assert_redirected_to root_path
+      end
 
       should "update user password and mailing list subscriptions" do
         assert_equal @user, User.authenticate(@user.email, 'newpassword')
@@ -93,5 +98,9 @@ class UsersControllerTest < ActionController::TestCase
 
   def create_invited_user(options = {})
     post :create, { :user => Factory.attributes_for(:user).merge(options) }, { :invited => true }
+  end
+
+  def extract_email(s)
+    /(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/.match(s)[2]
   end
 end

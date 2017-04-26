@@ -5,12 +5,11 @@ class NamedProxyTest < ActiveSupport::TestCase
     setup do
       @proxy = Factory(:named_proxy)
     end
-    should_belong_to :user
+    should belong_to :user
 
-    should_ensure_length_in_range :name, (3..100)
-
-    should_ensure_length_in_range :email, (6..100)
-    should_validate_uniqueness_of :email, :scoped_to => :user_id
+    should ensure_length_of(:name).is_at_least(3).is_at_most(100)
+    should ensure_length_of(:email).is_at_least(6).is_at_most(100)
+    should validate_uniqueness_of(:email).scoped_to(:user_id)
 
     should "have a valid factory" do
       assert_valid Factory(:named_proxy)
@@ -20,6 +19,6 @@ class NamedProxyTest < ActiveSupport::TestCase
   test "validation" do
     proxy = NamedProxy.new
     assert !proxy.save
-    assert proxy.errors.on(:email).any? { |e| e =~ /is invalid/i }
+    assert proxy.errors[:email].any? { |e| e =~ /is invalid/i }
   end
 end

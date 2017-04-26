@@ -1,0 +1,2 @@
+# User rules for tapestry - need to be able to start mysql
+tapestry ALL=(ALL) NOPASSWD:ALL

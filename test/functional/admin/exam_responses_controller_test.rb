@@ -31,9 +31,9 @@ class Admin::ExamResponsesControllerTest < ActionController::TestCase
           get :index, :user_id => @user
         end
 
-        should_respond_with :success
-        should_render_template :index
-        should_assign_to :exam_responses
+        should respond_with :success
+        should render_template :index
+        should assign_to :exam_responses
       end
 
       context 'on GET to show' do
@@ -42,15 +42,15 @@ class Admin::ExamResponsesControllerTest < ActionController::TestCase
           get :show, :user_id => @user, :id => @exam_response
         end
 
-        should_respond_with :success
-        should_render_template :show
+        should respond_with :success
+        should render_template :show
 
-        should_assign_to :content_area
-        should_assign_to :exam
-        should_assign_to :exam_version
+        should assign_to :content_area
+        should assign_to :exam
+        should assign_to :exam_version
 
-        should_assign_to :exam_response
-        should_assign_to :question_responses
+        should assign_to :exam_response
+        should assign_to :question_responses
       end
     end
   end

@@ -54,10 +54,9 @@ class User < ActiveRecord::Base
   has_many  :named_proxies, :dependent => :destroy
   has_many  :informed_consent_responses, :dependent => :destroy, :order => 'created_at ASC'
   has_one  :baseline_traits_survey, :dependent => :destroy
-  # TODO: habtm does not take :dependent => :destroy. But we want that in the event a user is deleted.
-  # We should probably convert this to has_many, see http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_and_belongs_to_many
-  # see also #363. ward, 2010-10-13
-  has_and_belongs_to_many :mailing_lists, :join_table => :mailing_list_subscriptions
+  has_many :mailing_list_subscriptions, :dependent => :destroy
+  has_many :mailing_lists, :through => :mailing_list_subscriptions
+  accepts_nested_attributes_for :mailing_list_subscriptions
   has_many :user_logs, :dependent => :destroy
   has_many :safety_questionnaires, :dependent => :destroy
   has_many :ccrs, :dependent => :destroy
@@ -112,7 +111,7 @@ class User < ActiveRecord::Base
     where('users.id not in (' + EnrollmentStepCompletion.joins(:enrollment_step).where('enrollment_steps.keyword = ?',keyword).group(:user_id).select(:user_id).to_sql + ')')
   }
 
-  scope :real, where("NOT (is_test <=> 1)")
+  scope :real, where("is_test = 0")
   scope :not_suspended, where("suspended_at IS NULL").real
   scope :not_deactivated, where("deactivated_at IS NULL").real
   scope :inactive, where("activated_at IS NULL").real
@@ -260,7 +259,7 @@ class User < ActiveRecord::Base
   end
 
   def self.promoted_ids
-    step_id = EnrollmentStep.find_by_keyword('eligibility_screening_results').id
+    step_id = EnrollmentStep.find_by_keyword('screening_survey_results')[:id]
     connection.select_values("select users.id from users
         inner join enrollment_step_completions on enrollment_step_completions.user_id = users.id
         where enrollment_step_completions.enrollment_step_id = #{step_id}")
@@ -300,7 +299,8 @@ class User < ActiveRecord::Base
                   :first_name, :middle_name, :last_name, :pgp_id,
                   :security_question, :security_answer,
                   :address1, :address2, :city, :state, :zip,
-                  :phr_profile_name, :mailing_list_ids, :authsub_token, :researcher_affiliation
+                  :phr_profile_name, :mailing_list_ids, :authsub_token, :researcher_affiliation,
+                  :mailing_list_subscriptions_attributes
 
   # Activates the user in the database.
   def activate!

@@ -1,3 +1,5 @@
+# user_id:: the user to whom this log entry pertains
+# controller_user_id:: the user who performed the action, if any (null if it was "the system")
 class UserLog < ActiveRecord::Base
   stampable
   acts_as_paranoid_versioned :version_column => :lock_version

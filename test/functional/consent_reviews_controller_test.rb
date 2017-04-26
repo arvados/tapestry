@@ -1,11 +1,15 @@
 require 'test_helper'
 
 class ConsentReviewsControllerTest < ActionController::TestCase
-  should_route :get, '/consent_review', :controller => 'consent_reviews', :action => 'show'
+  should route( :get, '/consent_review' ).to( :action => 'show' )
 
-  context 'on GET to show' do
+  context 'on GET to show when not logged in' do
     setup { get :show }
-    should_redirect_to "login_url"
+
+    should 'redirect to the correct path' do
+      assert_redirected_to login_path
+    end
+
   end
 
   logged_in_user_context do
@@ -14,8 +18,8 @@ class ConsentReviewsControllerTest < ActionController::TestCase
         get :show
       end
 
-      should_respond_with :success
-      should_render_template :show
+      should respond_with :success
+      should render_template :show
 
       should "link to the consent document" do
         assert_select 'a', :text => /download/i
@@ -33,18 +37,28 @@ class ConsentReviewsControllerTest < ActionController::TestCase
         post :create, :consent_review => { :agreement => "0" }
       end
 
-      should_set_the_flash_to /review/i
-      should_respond_with :success
-      should_render_template :show
+      should 'show an appropriate error' do
+        assert_select 'div.alert-error', /review/i
+      end
+
+      should respond_with :success
+      should render_template :show
     end
 
     context "on POST to create with agreement" do
       setup do
+        @count = EnrollmentStepCompletion.count
         post :create, :consent_review => { :agreement => "1" }
       end
 
-      should_change 'EnrollmentStepCompletion.count'
-      should_redirect_to 'root_path'
+      should 'change the EnrollmentStepCompletion count' do
+        assert_equal @count+1, EnrollmentStepCompletion.count
+      end
+
+      should 'redirect to the correct path' do
+        assert_redirected_to root_path
+      end
+
     end
   end
 end

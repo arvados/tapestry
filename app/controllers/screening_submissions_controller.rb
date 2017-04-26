@@ -1,4 +1,6 @@
 class ScreeningSubmissionsController < ApplicationController
+  skip_before_filter :ensure_enrolled
+
   def show
   end
 

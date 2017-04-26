@@ -1,0 +1,5 @@
+test:
+  adapter: mysql
+  encoding: utf8
+  database: pgpenroll_test
+  host: localhost

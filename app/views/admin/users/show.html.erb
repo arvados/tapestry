@@ -1,112 +1,124 @@
-<h2><%= @user.full_name -%> -- <%= @user.email -%> [<%= link_to 'Edit', edit_admin_user_url(@user) %>]</h2>
-<% if @user.is_test? -%>
-<div class="alert alert-error">This is not a real account: it is a test account.</div>
-<% end -%>
-<% if @user.deceased? -%>
-<div class="alert">This participant is marked as deceased.</div>
-<% end -%>
+<h2>
+  <%= @user.full_name %> -- <%= @user.email %>
+  [<%= link_to 'Edit', edit_admin_user_url(@user) %>]
+</h2>
+
+<% if @user.is_test? %>
+  <div class="alert alert-error">
+    This is not a real account: it is a test account.
+  </div>
+<% end %>
+
+<% if @user.deceased? %>
+  <div class="alert">This participant is marked as deceased.</div>
+<% end %>
 
 <h3>User details</h3>
 Unique identifier: <%= @user.unique_hash %><br/>
+
 <% if @user.enrolled %>
-Hex id: <%= @user.hex %><br/>
-Public profile url: <%= link_to public_profile_url_string(@user), public_profile_path(:hex => @user.hex) %><br/>
+  Hex id: <%= @user.hex %><br/>
+  Public profile url: <%= link_to public_profile_url_string(@user), public_profile_path(:hex => @user.hex) %><br/>
 <% end %>
+
 <%= button_to "Log in as #{@user.full_name}", switch_to_user_path(@user.id), :method => :post %>
 
 <% @user.password = @user.password_confirmation = nil %>
 
-<%= form_for [:admin, @user], :html => { :method => :put } do |f| -%>
-<%= error_messages_for :user %>
+<%= form_for [:admin, @user], :html => { :method => :put } do |f| %>
+  <%= error_messages_for :user %>
 
-<h3>Completed Content Areas:</h3>
-<%= @user.completed_content_area_count %> / <%= ContentArea.count %> (<%= link_to 'Details', admin_user_exam_responses_path(@user) %>)</p>
+  <h3>Completed Content Areas:</h3>
+  <p>
+    <%= @user.completed_content_area_count %> / <%= ContentArea.count %>
+    (<%= link_to 'Details', admin_user_exam_responses_path(@user) %>)
+  </p>
 
-<p>
-<h3>Current Enrollment Step:</h3>
-  <% if @user.next_enrollment_step -%>
-    <%= @user.next_enrollment_step.ordinal %> <%= @user.next_enrollment_step.title %>
-  <% else -%>
-    Finished
-  <% end -%>
-</p>
-
-<h3>Designated Proxies:</h3>
-<table class="admin_table">
-  <tr>
-    <th>Name</th>
-    <th>E-mail address</th>
-  </tr>
-<% @user.named_proxies.each do |np| -%>
-    <tr class="<%= cycle 'even', 'odd' %>">
-      <td><%= np.name %></td>
-      <td><%= np.email %></td>
-    </tr>
-<% end -%>
-</table>
-
-<% if @ccr and @ccr_history.length > 0 %>
-<h3>All PHRs</h3>
-<table>
-<% @ccr_history.each { |version| %>
-<tr>
-  <td><%= link_to version, ccr_admin_user_url(@user) + '?version=' + version %>
-  </td>
-</tr>
-<% } %>
-</table>
-<% end %>
-
-<% if @user.waitlists.any? -%>
-  <h2>Waitlistings</h2>
-  <p>This user has been waitlisted:</p>
-  <ol>
-    <% @user.waitlists.each do |waitlist| -%>
-      <li>On <%= waitlist.created_at %>: <%= h waitlist.reason %></li>
-    <% end -%>
-  </ol>
-<% end -%>
-
-<h3>Activated</h3>
-<%= @user.active? ? @user.activated_at : "No -- activation URL is #{activate_url(@user.activation_code)}" %>
-
-<%= render :partial => 'profiles/enrollment_history' %>
-
-<% if @user.next_enrollment_step -%>
-  <p>Promote to the next enrollment step:<br/>
-  <%= link_to 'Promote', promote_admin_user_url(@user), :method => 'PUT' %></p>
-<% end -%>
-
-<% if @user.ineligible_for_enrollment.length != 0 and @user.ineligible_for_enrollment[0] != 'Already enrolled' -%>
-<h3>Enrollment eligibility</h3>
-Not eligible for enrollment for the following reason(s):
-<ul>
-<% @user.ineligible_for_enrollment.each do |reason| -%>
-  <li><%= h reason %></li>
-<% end -%>
-</ul>
-<% end -%>
-
-<h3>User Log</h3>
-
-<ul>
-<table class="admin_table">
-<tr>
-  <td>Timestamp</td>
-  <td>Entry</td>
-  <td>Performed by administrator</td>
-</tr>
-<% @user.user_logs.sort_by { |x| [x.created_at, -x.id] }.reverse.each do |entry| -%>
-  <tr class="<%= cycle 'even', 'odd' %>">
-  <td width="150"><%= entry.created_at %></td>
-  <td width="550"><%= h entry.comment %></td>
-  <td>
-    <% if entry.controlling_user and entry.controlling_user != entry.user %>
-    <%= link_to entry.controlling_user.full_name, admin_user_path(entry.controlling_user) -%>
+  <p>
+    <h3>Current Enrollment Step:</h3>
+    <% if @user.next_enrollment_step %>
+      <%= @user.next_enrollment_step.ordinal %> <%= @user.next_enrollment_step.title %>
+    <% else %>
+      Finished
     <% end %>
-  </td>
-  </tr>
-<% end -%>
-</table>
+  </p>
 
-<% end -%>
+  <h3>Designated Proxies:</h3>
+  <table class="admin_table">
+    <tr>
+      <th>Name</th>
+      <th>E-mail address</th>
+    </tr>
+    <% @user.named_proxies.each do |np| %>
+      <tr class="<%= cycle 'even', 'odd' %>">
+        <td><%= np.name %></td>
+        <td><%= np.email %></td>
+      </tr>
+    <% end %>
+  </table>
+
+  <% if @ccr and @ccr_history.length > 0 %>
+    <h3>All PHRs</h3>
+    <table>
+      <% @ccr_history.each do |version| %>
+        <tr>
+          <td>
+            <%= link_to version, ccr_admin_user_url(@user) + '?version=' + version %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+
+  <% if @user.waitlists.any? %>
+    <h2>Waitlistings</h2>
+    <p>This user has been waitlisted:</p>
+    <ol>
+      <% @user.waitlists.each do |waitlist| %>
+        <li>On <%= waitlist.created_at %>: <%= h waitlist.reason %></li>
+      <% end %>
+    </ol>
+  <% end %>
+
+  <h3>Activated</h3>
+  <%= @user.active? ? @user.activated_at : "No -- activation URL is #{activate_url(@user.activation_code)}" %>
+
+  <%= render :partial => 'profiles/enrollment_history' %>
+
+  <% if @user.next_enrollment_step %>
+    <p>Promote to the next enrollment step:<br/>
+    <%= link_to 'Promote', promote_admin_user_path(@user), :method => 'PUT' %></p>
+  <% end %>
+
+  <% if @user.ineligible_for_enrollment.length != 0 and @user.ineligible_for_enrollment[0] != 'Already enrolled' %>
+    <h3>Enrollment eligibility</h3>
+    Not eligible for enrollment for the following reason(s):
+    <ul>
+      <% @user.ineligible_for_enrollment.each do |reason| %>
+        <li><%= h reason %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <h3>User Log</h3>
+
+  <table class="admin_table">
+    <tr>
+      <td>Timestamp</td>
+      <td>Entry</td>
+      <td>Performed by administrator</td>
+    </tr>
+    <% @user.user_logs.sort_by { |x| [x.created_at, -x.id] }.reverse.each do |entry| %>
+      <tr class="<%= cycle 'even', 'odd' %>">
+        <td width="150"><%= entry.created_at %></td>
+        <td width="550"><%= h entry.comment %></td>
+        <td>
+          <% if entry.controlling_user and entry.controlling_user != entry.user %>
+            <%= link_to entry.controlling_user.full_name, admin_user_path(entry.controlling_user) %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+
+<% end %>

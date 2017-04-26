@@ -9,6 +9,7 @@ class DistinctiveTraitTest < ActiveSupport::TestCase
     assert_valid Factory(:distinctive_trait)
   end
 
-  should_validate_presence_of :name, :rating
-  should_belong_to :user
+  should validate_presence_of :name
+  should validate_presence_of :rating
+  should belong_to :user
 end

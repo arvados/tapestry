@@ -1,14 +1,9 @@
 require 'test_helper'
 
 class OauthTokensControllerTest < ActionController::TestCase
-  test "should get authorize" do
-    get :authorize
-    assert_response :success
-  end
 
-  test "should get revoke" do
-    get :revoke
-    assert_response :success
+  logged_in_user_context do
+    should_eventually "GET authorize, GET revoke, GET index, GET get_access_token"
   end
 
 end

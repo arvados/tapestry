@@ -12,20 +12,22 @@ class Admin::ReportsControllerTest < ActionController::TestCase
 
     context 'on GET to index' do
       setup { get :index }
-      should_redirect_to 'login_url'
+      should 'redirect to unauthorized page' do
+        assert_redirected_to unauthorized_user_path
+      end
     end
   end
 
   logged_in_as_admin do
 
-    context 'on GET to index' do
-      setup { get :index }
+    context 'on GET to exam' do
+      setup { get :exam }
 
-      should_respond_with :success
-      should_render_template :index
+      should respond_with :success
+      should render_template :exam
 
-      should_assign_to 'passed_entrance_exam_count'
-      should_assign_to 'content_areas'
+      should assign_to 'passed_entrance_exam_count'
+      should assign_to 'content_areas'
     end
   end
 end

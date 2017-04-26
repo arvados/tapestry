@@ -29,7 +29,7 @@ class OpenHumansControllerTest < ActionController::TestCase
           get :callback, :code => '12345'
           oauth_token = @user.oauth_tokens.first
           assert_equal oauth_token.oauth2_token_hash, token_hash
-          assert_redirected_to open_humans_participate_path
+          assert_redirected_to "https://localhost/study/pgp/return/"
         end
 
       end

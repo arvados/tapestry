@@ -1,14 +1,14 @@
 require 'test_helper'
 
 class Admin::InvitedEmailsControllerTest < ActionController::TestCase
-  should_route :get, '/admin/invited_emails', :controller => 'admin/invited_emails', :action => 'index'
+  should route( :get, '/admin/invited_emails' ).to( :controller => 'admin/invited_emails', :action => 'index' )
 
   logged_in_user_context do
 
     should 'not allow access' do
       get :index
       assert_response :redirect
-      assert_redirected_to login_url
+      assert_redirected_to unauthorized_user_path
     end
   end
 
@@ -24,8 +24,8 @@ class Admin::InvitedEmailsControllerTest < ActionController::TestCase
           get :index
         end
 
-        should_respond_with :success
-        should_render_template :index
+        should respond_with :success
+        should render_template :index
 
         should "assign to @invited_emails" do
           assert assigns(:invited_emails)
@@ -63,11 +63,16 @@ class Admin::InvitedEmailsControllerTest < ActionController::TestCase
 
     context 'on POST to create' do
       setup do
+        @count = InvitedEmail.count
         post :create, :emails => "a@b.com\nc@d.com"
       end
 
-      should_change "InvitedEmail.count", :by => 2
-      should_redirect_to "admin_invited_emails_path"
+      should 'increase the invited emails count by 2' do
+        assert_equal @count+2, InvitedEmail.count
+      end
+      should 'redirect to the correct path' do
+        assert_redirected_to admin_invited_emails_path
+      end
     end
   end
 

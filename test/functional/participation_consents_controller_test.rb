@@ -37,6 +37,7 @@ class ParticipationConsentsControllerTest < ActionController::TestCase
            InformedConsentResponse::TWIN_UNSURE].each do |v|
             assert_select 'input[type=radio][name=?][value=?]', "informed_consent_response[twin]", v, :count => 1
           end
+          assert_select 'input[type=radio][name=?]', "informed_consent_response[twin]", :count => 3
         end
       end
     end

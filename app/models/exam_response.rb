@@ -9,9 +9,8 @@ class ExamResponse < ActiveRecord::Base
   scope :all_for_user, lambda { |user| { :conditions => ['user_id = ? or original_user_id = ?', user.id, user.id ] } }
 
   def discard_for_retake!
-    # why does update_attributes!({:original_user_id => user_id, :user_id => nil}) not work in test?
-    connection.update("update exam_responses set original_user_id = #{user_id}, user_id = null where exam_responses.id = #{id}")
-    reload
+    update_attribute :original_user, user
+    update_attribute :user, nil
   end
 
   def response_count

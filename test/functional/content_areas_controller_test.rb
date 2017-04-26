@@ -18,9 +18,9 @@ class ContentAreasControllerTest < ActionController::TestCase
       context 'on GET to index' do
         setup { get :index }
 
-        should_render_with_layout 'exam'
-        should_respond_with :success
-        should_render_template :index
+        should render_with_layout 'tapestry_default_exam'
+        should respond_with :success
+        should render_template :index
 
         before_should 'get the content areas in order' do
           content_areas = ContentArea.all
@@ -42,7 +42,7 @@ class ContentAreasControllerTest < ActionController::TestCase
 
       context 'when some exams do not have versions for the current user' do
         setup do
-          Exam.any_instance.expects(:version_for).returns(nil)
+          Exam.any_instance.expects(:version_for).at_least_once.returns(nil)
         end
 
         context 'on GET to show' do
@@ -51,9 +51,9 @@ class ContentAreasControllerTest < ActionController::TestCase
             get :show, :id => @content_area
           end
 
-            should_render_with_layout 'exam'
+          should render_with_layout 'tapestry_default_exam'
 
-          should_assign_to :exams
+          should assign_to :exams
 
           should 'assign some exams' do
             assert assigns(:exams).any?
@@ -75,15 +75,16 @@ class ContentAreasControllerTest < ActionController::TestCase
           get :show, :id => @content_area
         end
 
-        should_respond_with :success
-        should_render_template :show
-        should_assign_to :exams
+        should respond_with :success
+        should render_template :show
+        should assign_to :exams
 
         should 'show, for each exam, the version for the current_user' do
           assigns(:exams).each do |exam|
+            next if exam.versions.where('published = ?', true).empty?
             assert_select 'a[href=?]',
                           content_area_exam_path(@content_area, exam),
-                          :text => /#{exam.version_for(@user).title}/
+                          :text => /#{exam.version_for(@user).title.gsub!(/&amp;/,'&')}/
           end
         end
       end

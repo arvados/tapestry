@@ -7,8 +7,9 @@ class ContentAreaTest < ActiveSupport::TestCase
       @content_area = Factory :content_area
     end
 
-    should_have_many :exams
-    should_validate_presence_of :title, :description
+    should have_many :exams
+    should validate_presence_of :title
+    should validate_presence_of :description
 
     context 'with many published exams and a user' do
       setup do
@@ -82,6 +83,7 @@ class ContentAreaTest < ActiveSupport::TestCase
 
   context 'with three content_areas with ordinals' do
     setup do
+      ContentArea.delete_all
       @c3 = Factory(:content_area, :ordinal => 3)
       @c2 = Factory(:content_area, :ordinal => 2)
       @c1 = Factory(:content_area, :ordinal => 1)

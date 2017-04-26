@@ -10,16 +10,16 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
       @context_hash = {
        :content_area_id => @content_area,
        :exam_id         => @exam,
-       :exam_version_id => @exam_version  
+       :exam_version_id => @exam_version
       }
     end
 
     context 'on GET to index' do
       setup { get :index, @context_hash }
 
-      should_respond_with :success
-      should_render_template :index
-      should_assign_to :exam_questions
+      should respond_with :success
+      should render_template :index
+      should assign_to :exam_questions
 
       should 'sort exam questions by ordinal' do
         sorted_exam_questions = assigns(:exam_questions).sort_by(&:ordinal)
@@ -30,8 +30,8 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
     context 'on GET to new' do
       setup { get :new, @context_hash }
 
-      should_respond_with :success
-      should_render_template :new
+      should respond_with :success
+      should render_template :new
     end
 
     context 'on POST to create' do
@@ -40,7 +40,9 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
         post :create, @context_hash.merge({ :exam_question => hash })
       end
 
-      should_redirect_to 'admin_content_area_exam_exam_version_exam_questions_url(@content_area, @exam, @exam_version)'
+      should 'do the redirection to the right page' do
+        assert_redirected_to admin_content_area_exam_exam_version_exam_questions_url(@content_area, @exam, @exam_version)
+      end
     end
 
     context 'with an exam question' do
@@ -54,16 +56,16 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
       context 'on GET to show' do
         setup { get :show, @context_hash }
 
-        should_respond_with :success
-        should_render_template :show
-        should_assign_to :answer_options
+        should respond_with :success
+        should render_template :show
+        should assign_to :answer_options
       end
 
       context 'on GET to edit' do
         setup { get :edit, @context_hash }
 
-        should_respond_with :success
-        should_render_template :edit
+        should respond_with :success
+        should render_template :edit
       end
 
       context 'on PUT to update' do
@@ -78,13 +80,17 @@ class Admin::ExamQuestionsControllerTest < ActionController::TestCase
           assert flash[:notice] =~ /success/i
         end
 
-        should_redirect_to 'admin_content_area_exam_exam_version_exam_questions_url(@content_area, @exam, @exam_version)'
+        should 'do the redirection to the right page' do
+          assert_redirected_to admin_content_area_exam_exam_version_exam_questions_url(@content_area, @exam, @exam_version)
+        end
       end
 
       context 'on DELETE to destroy' do
         setup { delete :destroy, @context_hash }
 
-        should_redirect_to 'admin_content_area_exam_exam_version_exam_questions_url(@content_area, @exam, @exam_version)'
+        should 'do the redirection to the right page' do
+          assert_redirected_to admin_content_area_exam_exam_version_exam_questions_url(@content_area, @exam, @exam_version)
+        end
       end
     end
   end

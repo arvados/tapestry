@@ -6,15 +6,15 @@ class InformedConsentResponseTest < ActiveSupport::TestCase
       @informed_consent_response = Factory(:informed_consent_response)
     end
 
-    should_belong_to :user
-    should_validate_presence_of :user_id
+    should belong_to :user
+    should validate_presence_of :user_id
 
     should_allow_values_for :twin, 0, 1, 2
     should_allow_values_for :recontact, 0, 1
 
-    should_not_allow_values_for :twin, 3, :message => 'must be Yes, No or Unsure'
-    should_not_allow_values_for :recontact, 2, :message => 'must be Yes or No'
+    should_not_allow_values_for :twin, 3, :message => 'Please indicate whether you have an identical twin.'
+    should_not_allow_values_for :recontact, 2, :message => 'Please indicate whether you are willing to be recontacted.'
 
-    should_not_allow_mass_assignment_of :user_id
+    should_not allow_mass_assignment_of :user_id
   end
 end

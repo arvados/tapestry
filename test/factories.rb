@@ -74,7 +74,7 @@ Factory.sequence(:pgp_id, 1000) { |n| "#{n}" }
 
 Factory.sequence(:enrollment_step_ordinal) { |n| n }
 
-Factory.sequence(:hex) { |n| sprintf "zz%06x", n }
+Factory.sequence(:hex) { |n| "hex#{n}"}
 
 %w(keyword title description).each do |attr|
   Factory.sequence("enrollment_step_#{attr}".to_sym) { |n| "#{attr.upcase} #{n}" }
@@ -392,8 +392,10 @@ end
 
 Factory.define(:plate_layout) {}
 
+Factory.sequence(:plate_crc_id) {|n| Kit.generate_verhoeff_number Plate.new }
+
 Factory.define(:plate) do |f|
-  f.crc_id { Factory.next :crc_id }
+  f.crc_id { Factory.next :plate_crc_id }
   f.url_code { Factory.next :url_code }
   f.plate_layout { Factory(:plate_layout) }
 end
@@ -430,6 +432,7 @@ end
 
 Factory.define(:open_humans_oauth_service, :class => OauthService) do |f|
   f.oauth2_service_type OauthService::OPEN_HUMANS
+  f.endpoint_url "http://localhost/oauth2/authorize/"
 end
 
 Factory.define(:open_humans_token, :class => OauthToken) do |f|

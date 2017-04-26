@@ -6,8 +6,8 @@ class QuestionResponseTest < ActiveSupport::TestCase
       @question_response = Factory :question_response
     end
 
-    should_belong_to :exam_response
-    should_belong_to :exam_question
+    should belong_to :exam_response
+    should belong_to :exam_question
   end
 
   context 'in response to a multiple choice question' do
@@ -86,6 +86,7 @@ class QuestionResponseTest < ActiveSupport::TestCase
   end
 
   should 'create the enrollment step completion when responding to the last exam' do
+    ContentArea.delete_all
     @exam_version = build_exam_version_with_questions_and_answers
     @user = Factory(:user)
     @exam_response = Factory(:exam_response, :exam_version => @exam_version, :user => @user)

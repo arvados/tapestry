@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Admin::BulkWaitlistsControllerTest < ActionController::TestCase
-  should_route :get, '/admin/bulk_waitlists/new', { :action => 'new' }
+  should route(:get, '/admin/bulk_waitlists/new').to(:action => 'new')
 
   logged_in_user_context do
 
@@ -9,7 +9,7 @@ class Admin::BulkWaitlistsControllerTest < ActionController::TestCase
       get :new
 
       assert_response :redirect
-      assert_redirected_to login_url
+      assert_redirected_to unauthorized_user_path
     end
   end
 

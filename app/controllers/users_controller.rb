@@ -116,8 +116,8 @@ class UsersController < ApplicationController
       flash[:notice] = 'Account information updated.'
       redirect_to(params[:return_to] || root_url)
     else
-      @mailing_lists = MailingList.all
-      render :action => 'edit'
+      flash[:error] = @user.errors.full_messages
+      redirect_to edit_user_path
     end
   end
 
@@ -195,7 +195,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    UserMailer.deliver_delete_request(@user)
+    UserMailer.delete_request(@user).deliver
     logout_killing_session!
     flash[:notice] = "A request to delete your account has been sent."
     redirect_back_or_default page_url(:logged_out)
