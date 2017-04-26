@@ -2,6 +2,10 @@ require 'test_helper'
 
 class ShippingAddressesControllerTest < ActionController::TestCase
 
+  setup do
+    ApplicationController.any_instance.stubs('include_section?').with(Section::SHIPPING_ADDRESS).returns(true)
+  end
+
   context "without a logged in user" do
     context "on GET to new" do
       setup do

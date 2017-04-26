@@ -2,6 +2,11 @@ require 'test_helper'
 
 class SamplesControllerTest < ActionController::TestCase
 
+  setup do
+    ApplicationController.any_instance.stubs('include_section?').with(Section::SAMPLES).returns(true)
+    ApplicationController.any_instance.stubs('include_section?').with(Section::PUBLIC_DATA).returns(true)
+  end
+
   should_eventually 'test the other samples_controller actions: participant_note, update_participant_note, mark_as_destroyed, and many others'
 
   context "without a logged in user" do
