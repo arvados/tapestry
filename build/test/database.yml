@@ -2,6 +2,4 @@ test:
   adapter: mysql
   encoding: utf8
   database: pgpenroll_test
-  xusername: pgpenroll
-  xpassword: zohCu4cu
   host: localhost
