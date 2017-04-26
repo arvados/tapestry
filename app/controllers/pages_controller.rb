@@ -70,6 +70,11 @@ class PagesController < ApplicationController
     params[:page] = params[:page].to_i
     params[:page] = 1 if params[:page] == 0
 
+    if params[:id] == 'enrolled'
+      @enrolled = User.publishable.find(:all).sort{ |a,b| a.enrolled <=> b.enrolled }.paginate(:page => params[:page] || 1, :per_page => 100)
+      @page_title = 'Enrolled Participants'
+    end
+
     fetch_ivars
     render :template => current_page
   end
