@@ -1,4 +1,6 @@
-Welcome to Tapestry!
+[![Build Status](https://ci.curoverse.com/buildStatus/icon?job=tapestry-test)](https://ci.curoverse.com/job/tapestry-test/)
+
+## Welcome to Tapestry!
 
 Tapestry handles participant interaction for Personal Genome Projects.
 
