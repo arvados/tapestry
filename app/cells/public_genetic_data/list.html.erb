@@ -27,7 +27,7 @@
     <tbody>
     </tbody>
     <% @datasets.each do |dataset| -%>
-    <tr data-file-row data-participant-id="<%= dataset.respond_to?(:participant_id) ? dataset.participant_id : dataset.user_id %>" data-locator="<%= dataset.locator %>" data-index-in-manifest="<%= dataset.index_in_manifest %>" data-file-size="<%= dataset.data_size %>">
+    <tr data-file-row data-participant-id="<%= dataset.participant_id %>" data-locator="<%= dataset.locator %>" data-index-in-manifest="<%= dataset.index_in_manifest %>" data-file-size="<%= dataset.data_size %>">
       <td style="width:20px" class="collection-column"></td>
       <% if @options[:show_participant_column] %>
       <td style="width:auto" data-summarize-as="participant"><%= link_to dataset.participant.hex, public_profile_path(:hex => dataset.participant.hex) %><%= ", PGP#{dataset.participant.pgp_id}" if dataset.participant.pgp_id %></td>
@@ -36,14 +36,14 @@
       <% if @options[:show_date_published_column] %>
       <td style="width:auto;white-space:nowrap" data-summarize-as="list-distinct">
 	<%= raw '<strong>' if dataset.class == Dataset %>
-	<%= (dataset.respond_to?(:published_at) ? dataset.published_at : dataset.created_at).strftime('%Y-%m-%d') %>
+	<%= dataset.published_at.strftime('%Y-%m-%d') %>
 	<%= raw '</strong>' if dataset.class == Dataset %>
       </td>
       <% end %>
 
       <% if @options[:show_date_column] %>
       <td style="width:auto;white-space:nowrap" data-summarize-as="list-distinct">
-	<%= Time.parse(dataset.date.to_s).strftime('%Y-%m-%d') if dataset.respond_to?(:date) && dataset.date %>
+	<%= dataset.date.strftime('%Y-%m-%d') if dataset.date %>
       </td>
       <% end %>
 
@@ -85,7 +85,9 @@
                 <br />&bull;&nbsp;<%= number_with_delimiter(m[:called_num]) %> positions&nbsp;covered
               <% end %>
             <% end %>
+            <% if not dataset.report_metadata.nil? -%>
             <%= raw "<br />&bull;&nbsp;ref.&nbsp;#{dataset.report_metadata[:genome_build]}" rescue nil %>
+            <% end %>
           <% end %>
 
         <% elsif @current_user and @current_user.is_admin? and dataset.processing_status %>
