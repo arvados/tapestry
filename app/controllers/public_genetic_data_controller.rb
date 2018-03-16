@@ -95,24 +95,26 @@ class PublicGeneticDataController < ApplicationController
     @coverage_series = {}
     @participants_series = {}
 
-    @datasets = UserFile.joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
-      Dataset.published.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant) |
-      Dataset.published_anonymously.joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
+    @datasets = UserFile.select('user_files.id, user_files.created_at, user_files.user_id, user_files.data_type, user_files.report_metadata').joins(:user).merge(User.enrolled.not_suspended).includes(:user) |
+      Dataset.published.select('datasets.id, datasets.published_at, datasets.published_anonymously_at, datasets.participant_id, datasets.name, datasets.report_metadata').joins(:participant).merge(User.enrolled.not_suspended).includes(:participant) |
+      Dataset.published_anonymously.select('datasets.id, datasets.published_at, datasets.published_anonymously_at, datasets.participant_id, datasets.name, datasets.report_metadata').joins(:participant).merge(User.enrolled.not_suspended).includes(:participant)
     @sorted_datasets = @datasets.sort_by { |d| d.published_at.nil? ? d.published_anonymously_at : d.published_at }
-    @sorted_users = User.enrolled.sort_by(&:enrolled)
-    @sorted_sample_logs = SampleLog.where('comment like ?', '%received by researcher%').includes(:sample).sort_by(&:created_at)
+    @sorted_users = User.enrolled.select(:enrolled).order('enrolled')
+    @sorted_sample_logs = SampleLog.where('comment like ?', '%received by researcher%').select('sample_logs.created_at, sample_logs.sample_id').joins(:sample).merge(Sample.with_participant).includes(:sample).order('sample_logs.created_at').group('samples.participant_id').map(&:created_at)
 
+    #@t0 = User.enrolled.minimum(:enrolled) ||
     @t0 = @sorted_users.first.enrolled ||
       @sorted_datasets.first.published_at ||
       @sorted_datasets.first.published_anonymously_at
 
+    @participants_series[:enrolled] ||= {
+      'data' => [[jstime(@t0), 0]],
+      'label' => 'Participants enrolled',
+      'data_type' => 'enrolled',
+      'lines' => { 'show' => true, 'fill' => 0.2 }
+    }
+
     @sorted_users.each do |user|
-      @participants_series[:enrolled] ||= {
-        'data' => [[jstime(@t0), 0]],
-        'label' => 'Participants enrolled',
-        'data_type' => 'enrolled',
-        'lines' => { 'show' => true, 'fill' => 0.2 }
-      }
       @participants_series[:enrolled]['data'] << [jstime(user.enrolled),
                                                   @participants_series[:enrolled]['data'].last[1]]
       @participants_series[:enrolled]['data'] << [jstime(user.enrolled),
@@ -120,19 +122,18 @@ class PublicGeneticDataController < ApplicationController
     end
 
     @counted_participant = {}
-    @sorted_sample_logs.each do |sample_log|
-      next if not sample_log.sample.participant_id
-      next if @counted_participant[sample_log.sample.participant_id]
-      @counted_participant[sample_log.sample.participant_id] = true
-      @participants_series[:with_samples] ||= {
-        'data' => [[jstime(@t0), 0]],
-        'label' => 'Participants with samples collected',
-        'data_type' => 'with_samples',
-        'lines' => { 'show' => true, 'fill' => 0.2 }
-      }
-      @participants_series[:with_samples]['data'] << [jstime(sample_log.created_at),
+
+    @participants_series[:with_samples] ||= {
+      'data' => [[jstime(@t0), 0]],
+      'label' => 'Participants with samples collected',
+      'data_type' => 'with_samples',
+      'lines' => { 'show' => true, 'fill' => 0.2 }
+    }
+
+    @sorted_sample_logs.each do |created_at|
+      @participants_series[:with_samples]['data'] << [jstime(created_at),
                                                       @participants_series[:with_samples]['data'].last[1]]
-      @participants_series[:with_samples]['data'] << [jstime(sample_log.created_at),
+      @participants_series[:with_samples]['data'] << [jstime(created_at),
                                                       @participants_series[:with_samples]['data'].last[1] + 1]
     end
 
@@ -153,15 +154,17 @@ class PublicGeneticDataController < ApplicationController
       }
       add_to_coverage_series = false
       add_to_wgs_series = false
-      begin
-        stats[:positions_covered] += d.report_metadata[:called_num]
-        add_to_coverage_series = true
-        if d.report_metadata[:called_num] > 1000000000
-          add_to_wgs_series = true
-          stats[:participants_with_wgs][d.participant.hex] = true
+      if not d.report_metadata.nil?
+        begin
+          stats[:positions_covered] += d.report_metadata[:called_num]
+          add_to_coverage_series = true
+          if d.report_metadata[:called_num] > 1000000000
+            add_to_wgs_series = true
+            stats[:participants_with_wgs][d.participant.hex] = true
+          end
+        rescue
+          # ignore base-counting fail
         end
-      rescue
-        # ignore base-counting fail
       end
       stats[:n_datasets] += 1
 

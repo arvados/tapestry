@@ -31,6 +31,7 @@ class Sample < ActiveRecord::Base
   validates_uniqueness_of :url_code
   validates_presence_of :study_id
 
+  scope :with_participant, where('participant_id is not ?',nil)
   scope :real, where('samples.is_destroyed is ?',nil)
   scope :destroyed, where('samples.is_destroyed is not ?',nil)
   scope :no_parent, includes(:parent_samples).where('sample_origins.id is ?', nil)
