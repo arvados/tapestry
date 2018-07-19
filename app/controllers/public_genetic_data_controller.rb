@@ -67,25 +67,30 @@ class PublicGeneticDataController < ApplicationController
         cmp
       end
     }
-    respond_to do |format|
-      format.html
-      format.json {
-        respond_with @datasets.collect { |user_file_or_dataset|
-          if user_file_or_dataset.class == UserFile
-            download_url = user_file_download_url(user_file_or_dataset)
-          elsif user_file_or_dataset.download_url
-            download_url = user_file_or_dataset.download_url
-          else
-            download_url = nil
-          end
-          user_file_or_dataset.attributes.delete_if { |k,v|
-             not ['data_type', 'name', 'date', 'description', 'report_url'].include?(k)
-          }.merge({
-            'file_source' => user_file_or_dataset.class.name == 'UserFile' ? 'Participant' : 'PGP',
-            'download_url' => download_url
-          })
+    # View rendering is absurdly slow on this page, because we don't paginate.
+    # Make it cache friendly.
+    expires_in(1.day, :public => true)
+    if stale?(etag: @datasets)
+      respond_to do |format|
+        format.html
+        format.json {
+          respond_with @datasets.collect { |user_file_or_dataset|
+            if user_file_or_dataset.class == UserFile
+              download_url = user_file_download_url(user_file_or_dataset)
+            elsif user_file_or_dataset.download_url
+              download_url = user_file_or_dataset.download_url
+            else
+              download_url = nil
+            end
+            user_file_or_dataset.attributes.delete_if { |k,v|
+               not ['data_type', 'name', 'date', 'description', 'report_url'].include?(k)
+            }.merge({
+              'file_source' => user_file_or_dataset.class.name == 'UserFile' ? 'Participant' : 'PGP',
+              'download_url' => download_url
+            })
+          }
         }
-      }
+      end
     end
   end
 
