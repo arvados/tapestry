@@ -70,7 +70,7 @@ class PublicGeneticDataController < ApplicationController
     # View rendering is absurdly slow on this page, because we don't paginate.
     # Make it cache friendly.
     expires_in(1.day, :public => true)
-    if stale?(etag: @datasets)
+    if stale?(:etag => @datasets)
       respond_to do |format|
         format.html
         format.json {
