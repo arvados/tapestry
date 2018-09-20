@@ -132,7 +132,13 @@ class StudiesController < ApplicationController
   end
 
   def show_third_party
-    @study = Study.find(params[:id])
+    @study = Study.approved.third_party.open_now.where(:id => params[:id]).first
+
+    if @study.nil? then
+      # Only approved and currently open third party studies should be available here
+      redirect_to(third_party_index_path)
+      return
+    end
   end
 
   def new
