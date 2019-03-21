@@ -10,7 +10,7 @@ class UserFilesController < ApplicationController
   # GET /user_file
   # GET /user_file.xml
   def index
-    @user_files = (current_user.user_files.find(:all) | current_user.incomplete_user_files.find(:all)).sort.paginate()
+    @user_files = (current_user.user_files.find(:all) | current_user.incomplete_user_files.find(:all)).sort.paginate(:page => params[:page] || 1, :per_page => 20)
 
     respond_to do |format|
       format.html # index.html.erb
