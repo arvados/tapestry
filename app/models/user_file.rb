@@ -55,6 +55,7 @@ class UserFile < ActiveRecord::Base
                  'genetic data - Counsyl' => 'Counsyl',
                  'genetic data - DeCode' => 'DeCode',
                  'genetic data - Family Tree DNA' => 'Family Tree DNA',
+                 'genetic data - Gencove low-pass (e.g. Nebula Genomics)' => 'Gencove',
                  'genetic data - Illumina (e.g., Understand Your Genome data)' => 'Illumina',
                  'genetic data - Knome' => 'Knome',
                  'genetic data - Navigenics' => 'Navigenics',
