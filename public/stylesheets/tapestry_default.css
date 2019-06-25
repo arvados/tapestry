@@ -177,7 +177,7 @@ form .submit input.long {
 	position: relative;
 	background: #fff url(../images/pgp.gif) top center no-repeat;
 	color: #000;
-	width: 960px;
+	width: 1214px;
 	margin-top: 24px;
 	margin-right: auto;
 	margin-bottom: 0;
@@ -198,7 +198,7 @@ form .submit input.long {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 960px;
+	width: 1214px;
 	height: 72px;
 	visibility: visible;
 	overflow: hidden;
@@ -384,7 +384,7 @@ ul.sublinks li a {
 
 #body .main {
 	float: left;
-	width: 878px;
+	width: 1132px;
 	padding: 0 12px 24px 24px;
 }
 
@@ -519,7 +519,7 @@ ul.sublinks li a {
 #foot {
 	background: #dfe5f1 url(../images/foot.gif) bottom center no-repeat;
 	color: #5d7cbb;
-	width: 960px;
+	width: 1214px;
 	margin-top: 0;
 	margin-right: auto;
 	margin-bottom: 24px;
@@ -531,7 +531,7 @@ ul.sublinks li a {
 #foot_big {
 	background: #dfe5f1 url(../images/foot.gif) bottom center no-repeat;
 	color: #5d7cbb;
-	width: 960px;
+	width: 1214px;
 	margin-top: 0;
 	margin-right: auto;
 	margin-bottom: 24px;
@@ -1074,7 +1074,7 @@ div.formError {
 #contentbody {
 	position: relative;
 	color: #000;
-	width: 960px;
+	width: 1214px;
 	margin-top: 24px;
 	margin-right: auto;
 	margin-bottom: 0;
