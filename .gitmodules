@@ -3,7 +3,7 @@
 	url = git://github.com/flot/flot.git
 [submodule "lib/longupload"]
 	path = lib/longupload
-	url = git://git.curoverse.com/longupload.git
+	url = git://git.arvados.org/longupload.git
 [submodule "lib/jsHashes"]
 	path = lib/jsHashes
 	url = git://github.com/h2non/jshashes.git
