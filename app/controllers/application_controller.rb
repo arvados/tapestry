@@ -205,7 +205,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_latest_consent
-    if logged_in? and current_user and current_user.enrolled and current_user.documents.kind('consent', LATEST_CONSENT_VERSION).empty? and (not session[:real_uid] or not session[:switch_back_to])
+    if logged_in? and current_user and current_user.enrolled and current_user.documents.kind('consent', APP_CONFIG['latest_consent_version']).empty? and current_user.documents.kind('consent', APP_CONFIG['ok_consent_versions']).empty? and (not session[:real_uid] or not session[:switch_back_to])
       session[:return_to] = request.protocol + request.host_with_port + request.fullpath
       redirect_to consent_user_url
     end

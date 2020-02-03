@@ -35,6 +35,8 @@ common:
   latest_tos_version: 'v1'
   latest_exam_version: 'vYYYYMMDD'
 
+  # all the consent versions that will be accepted as equivalent to the latest version
+  ok_consent_versions: []
   latest_consent_version: 'vYYYYMMDD'
 
   drb_server: '127.0.0.1'
