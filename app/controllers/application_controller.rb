@@ -48,10 +48,9 @@ class ApplicationController < ActionController::Base
   # we're not using the default locale
   def default_url_options(options={})
     if I18n.locale != I18n.default_locale
-      { :locale => I18n.locale }
-    else
-      { }
+      options.merge!({ :locale => I18n.locale })
     end
+    options.merge!({ :protocol => APP_CONFIG["root_url_scheme"].gsub(/[:\/]*/,'') })
   end
 
   def self.responder
