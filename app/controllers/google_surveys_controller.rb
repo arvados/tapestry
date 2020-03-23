@@ -7,6 +7,7 @@ class GoogleSurveysController < ApplicationController
   before_filter :get_object, :only => [ :synchronize, :download, :show, :edit, :update, :destroy ]
   before_filter :decide_view_mode, :only => [ :synchronize, :download, :index, :show ]
   before_filter :check_section_disabled_special, :only => [:show, :index, :download]
+  before_filter :store_location
 
   # Need a special method for the semi-complicated permissions of this controller.
   # Basically if the PUBLIC_DATA section is *not* enabled then only certain surveys can be seen.
