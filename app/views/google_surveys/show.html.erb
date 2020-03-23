@@ -8,7 +8,7 @@
   <%=h @google_survey.user.researcher_affiliation %>
 </p>
 
-<p><%=raw CGI.escapeHTML(@google_survey.description).gsub("\r","").gsub("\n\n","</p><p>") %></p>
+<p><%=raw auto_link(CGI.escapeHTML(@google_survey.description)).gsub("\r","").gsub("\n\n","</p><p>") %></p>
 
 <% if @can_edit or (current_user and current_user.enrolled and @google_survey.open) %>
 <p>
