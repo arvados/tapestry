@@ -14,6 +14,10 @@
 <p>
   <%= button_to 'Participate in this survey', participate_google_survey_path(@google_survey) %>
 </p>
+<% else -%>
+  <% if @google_survey.open %>
+    <div class="alert" style="width: 250px"><strong>Please log in to take this survey.</strong></div>
+  <% end %>
 <% end %>
 <% if !@google_survey.open %>
 <p>
