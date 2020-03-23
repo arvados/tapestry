@@ -23,7 +23,7 @@
       <td><%= bm.sent ? bm.sent_at : 'No' %></td>
       <td>
         <%= bm.sent ? '' : link_to('Edit', edit_admin_bulk_message_path(bm)) %>  
-        <%= (not bm.sent) ? link_to('Test', admin_send_bulk_message_path(bm)) : '' %>  
+        <%= (not bm.sent) ? link_to('Test', admin_test_bulk_message_path(bm)) : '' %>
         <%= (not bm.sent and bm.tested) ? link_to('Send', admin_send_bulk_message_path(bm)) : '' %>  
       </td>
     </tr>

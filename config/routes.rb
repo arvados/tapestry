@@ -242,7 +242,7 @@ Tapestry::Application.routes.draw do
       resources :bulk_promotions
       resources :bulk_waitlists
       match '/bulk_messages/send/:id' => 'bulk_messages#send_message', :as => :send_bulk_message
-      match '/bulk_messages/test/:id' => 'bulk_messages#test_message', :as => :send_bulk_message
+      match '/bulk_messages/test/:id' => 'bulk_messages#test_message', :as => :test_bulk_message
       match '/bulk_messages/recipients/:id' => 'bulk_messages#recipients', :as => :bulk_message_recipients
       resources :bulk_messages
       match '/reports/queue' => 'reports#queue', :as => :reports_queue
