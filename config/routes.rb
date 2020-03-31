@@ -230,6 +230,8 @@ Tapestry::Application.routes.draw do
   match '/admin/users/activate/:id' => 'admin/users#activate', :as => :activate_admin_user
   match '/admin/users/promote/:id' => 'admin/users#promote', :as => :promote_admin_user
 
+  match '/admin/users/:id/bounce_contact_proxy/:proxy_id' => 'admin/users#bounce_contact_proxy', :as => :admin_user_bounce_contact_proxy
+
   match '/admin/study/approve/:id' => 'admin/study#approve', :as => :approve_admin_study
   match '/admin/study/deny/:id' => 'admin/study#deny', :as => :deny_admin_study
 

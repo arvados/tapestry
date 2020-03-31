@@ -53,6 +53,7 @@ Unique identifier: <%= @user.unique_hash %><br/>
       <tr class="<%= cycle 'even', 'odd' %>">
         <td><%= np.name %></td>
         <td><%= np.email %></td>
+        <td><%= link_to "E-mail to participant bounced, contact proxy", admin_user_bounce_contact_proxy_path(@user.id,np.id), :confirm => "This will send a message to #{np.name} <#{np.email}> asking them to contact the participant to update their e-mail address. Are you sure?" %></td>
       </tr>
     <% end %>
   </table>

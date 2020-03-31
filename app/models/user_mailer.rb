@@ -1,5 +1,16 @@
 class UserMailer < ActionMailer::Base
 
+  def user_bounce_proxy_notification(user,proxy)
+    @recipients  = "#{proxy.email}"
+    @recipients  = SEND_ALL_USER_EMAIL_TO if defined? SEND_ALL_USER_EMAIL_TO
+    @from        = "#{ADMIN_EMAIL}"
+    @sent_on     = Time.now
+    @user        = user
+    @proxy       = proxy
+    @subject     = APP_CONFIG['user_bounce_proxy_subject'] + user.full_name
+    @content_type = "text/html; charset=UTF-8"
+  end
+
   def dataset_notification_message(url,user,dataset)
     setup_email(user)
     @subject += APP_CONFIG['dataset_notification_message_subject']

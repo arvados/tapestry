@@ -16,6 +16,8 @@ common:
   system_email: 'sysadmin@example.com'
   support_email: 'support@example.com'
 
+  user_bounce_proxy_subject: 'Harvard PGP proxy request for '
+
   # Your recaptcha keys
   recaptcha_public_key: 'your-recaptcha-public-key'
   recaptcha_private_key: 'your-recaptcha-private-key'

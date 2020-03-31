@@ -36,6 +36,30 @@ class Admin::UsersController < Admin::AdminControllerBase
     render :layout => "none"
   end
 
+  def bounce_contact_proxy
+    if params[:id] and params[:proxy_id] then
+      u = User.find(params[:id]*1)
+      if u.nil? then
+        flash[:error] = "User not found"
+      end
+      p = u.named_proxies.where(:id => params[:proxy_id]*1).first
+      if p.nil? then
+        flash[:error] = "Proxy not found"
+      end
+      UserMailer.deliver_user_bounce_proxy_notification(u,p)
+      flash[:notice] = "Proxy message sent to #{p.name} <#{p.email}>"
+      ul = UserLog.new()
+      ul.user = u
+      ul.comment = "Sent a proxy request to #{p.name} <#{p.email}>: e-mail bounce, please ask participant to log in and update e-mail address"
+      ul.controlling_user_id = current_user.id
+      ul.save!
+      redirect_to admin_user_url(u)
+      return
+    end
+    flash[:error] = "User or Proxy not found"
+    redirect_to root_url
+  end
+
   def enroll_single_user
     flash.delete(:error)
     flash.delete(:notice)

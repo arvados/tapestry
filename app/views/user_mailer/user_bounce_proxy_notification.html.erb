@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Dear <%=h @proxy.name %>,</p>
+
+    <p>We are emailing because you were designated an account proxy for <strong><%=h @user.full_name %></strong>, a participant in the Harvard University Personal Genome Project.</p>
+
+    <p>We recently tried to email them, but it looks like they have changed their email address, as the message bounced. Could you please let them know so that they can update their account at <a href="https://my.pgp-hms.org">https://my.pgp-hms.org</a>?</p>
+
+    <p>You can reply to this address with any questions.</p>
+
+    <p>With thanks,<br/>
+    <a href="https://pgp.med.harvard.edu/team">Harvard PGP Staff</a></p>
+
+  </body>
+</html>
