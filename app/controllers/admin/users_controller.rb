@@ -36,6 +36,56 @@ class Admin::UsersController < Admin::AdminControllerBase
     render :layout => "none"
   end
 
+  def mark_proxy_email_bad
+    if params[:id] and params[:proxy_id] then
+      u = User.find(params[:id]*1)
+      if u.nil? then
+        flash[:error] = "User not found"
+      end
+      p = u.named_proxies.where(:id => params[:proxy_id]*1).first
+      if p.nil? then
+        flash[:error] = "Proxy not found"
+      end
+      p.bad_email = true
+      p.save!
+      flash[:notice] = "Marked proxy #{p.name} <#{p.email}> as a bad e-mail address, the participant will be asked to update it on next login"
+      ul = UserLog.new()
+      ul.user = u
+      ul.comment = "Marked proxy #{p.name} <#{p.email}> as a bad e-mail address"
+      ul.controlling_user_id = current_user.id
+      ul.save!
+      redirect_to admin_user_url(u)
+      return
+    end
+    flash[:error] = "User or Proxy not found"
+    redirect_to root_url
+  end
+
+  def mark_proxy_email_good
+    if params[:id] and params[:proxy_id] then
+      u = User.find(params[:id]*1)
+      if u.nil? then
+        flash[:error] = "User not found"
+      end
+      p = u.named_proxies.where(:id => params[:proxy_id]*1).first
+      if p.nil? then
+        flash[:error] = "Proxy not found"
+      end
+      p.bad_email = false
+      p.save!
+      flash[:notice] = "Marked proxy #{p.name} <#{p.email}> as a good e-mail address"
+      ul = UserLog.new()
+      ul.user = u
+      ul.comment = "Marked proxy #{p.name} <#{p.email}> as a good e-mail address"
+      ul.controlling_user_id = current_user.id
+      ul.save!
+      redirect_to admin_user_url(u)
+      return
+    end
+    flash[:error] = "User or Proxy not found"
+    redirect_to root_url
+  end
+
   def bounce_contact_proxy
     if params[:id] and params[:proxy_id] then
       u = User.find(params[:id]*1)

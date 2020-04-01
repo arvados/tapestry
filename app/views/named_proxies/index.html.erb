@@ -27,12 +27,15 @@ during an autopsy, to the study on your behalf.
   <tr>
     <th>Name</th>
     <th>E-mail address</th>
+    <th>E-mail undeliverable</th>
+    <th>&nbsp;</th>
   </tr>
   <% @named_proxies.each do |np| -%>
     <tr class="<%= cycle 'even', 'odd' %>">
       <td><%=h np.name %></td>
-      <td>
-        <%= h np.email -%>
+      <td><%=h np.email -%></td>
+      <td <%= np.bad_email ? 'style=background:#FF0000;font-weight:bold' : "" -%>>
+        <%=h np.bad_email ? 'Yes' : 'No' -%>
       </td>
       <td><%= link_to 'Edit', edit_named_proxy_path(np) %></td>
       <td><%= link_to 'Remove', [ np ], :confirm => 'Are you sure?', :method => :delete %></td>

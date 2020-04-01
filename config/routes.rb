@@ -231,6 +231,8 @@ Tapestry::Application.routes.draw do
   match '/admin/users/promote/:id' => 'admin/users#promote', :as => :promote_admin_user
 
   match '/admin/users/:id/bounce_contact_proxy/:proxy_id' => 'admin/users#bounce_contact_proxy', :as => :admin_user_bounce_contact_proxy
+  match '/admin/users/:id/mark_proxy_email_bad/:proxy_id' => 'admin/users#mark_proxy_email_bad', :as => :admin_user_mark_proxy_email_bad
+  match '/admin/users/:id/mark_proxy_email_good/:proxy_id' => 'admin/users#mark_proxy_email_good', :as => :admin_user_mark_proxy_email_good
 
   match '/admin/study/approve/:id' => 'admin/study#approve', :as => :approve_admin_study
   match '/admin/study/deny/:id' => 'admin/study#deny', :as => :deny_admin_study

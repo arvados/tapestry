@@ -1,5 +1,6 @@
 class NamedProxiesController < ApplicationController
   skip_before_filter :ensure_enrolled
+  skip_before_filter :warn_bad_proxy_email # when they are here, they can see the red mark in the named proxies table
   before_filter :set_named_proxy, :only => [:show, :edit, :update, :destroy]
 
   def done
@@ -42,44 +43,18 @@ class NamedProxiesController < ApplicationController
   def update
     if @named_proxy.update_attributes(params[:named_proxy])
       flash[:notice] = 'Designated proxy was successfully updated.'
+      if @named_proxy.bad_email
+        UserLog.new(:user => current_user,
+                    :comment => "Participant updated the email address of named proxy to #{@named_proxy.name} <#{@named_proxy.email}>, bad e-mail address flag reset").save!
+        @named_proxy.bad_email = false
+        @named_proxy.save!
+      end
       redirect_to named_proxies_path
     else
       render :action => "edit"
     end
   end
 
-
-#    puts params.inspect()
-#    if params[:proxy1_name] != '' then
-#      np = NamedProxy.new(:name => params[:proxy1_name], :email => params[:proxy1_email], :user => current_user)
-#      #current_user.named_proxies << np
-#      #np.save
-#      #np.errors.each_full { |msg| flash[:error] += msg + "<br/>" }
-#    end
-#    if params[:proxy2_name] != '' then
-#      np = NamedProxy.new(:name => params[:proxy2_name], :email => params[:proxy2_email])
-#      current_user.named_proxies << np
-#    end
-#    if current_user.save then
-#      puts "OK"
-#      show
-#      render :action => 'show'
-#    else
-#      flash[:error] = ''
-#      puts "NOK"
-#      show
-#      render :action => 'show'
-#    end
-  #  if params[:pledge] =~ /[0-9\.]+/ && params[:pledge].to_f >= 0 && current_user.update_attribute(:pledge, params[:pledge])
-  #    step = EnrollmentStep.find_by_keyword('pledge')
-  #    current_user.complete_enrollment_step(step)
-  #    redirect_to root_path
-  #  else
-  #    flash[:error] = 'You should make a pledge in number of US dollars.'
-  #    show
-#      render :action => 'show'
-  #  end
-#  end
   private
   def set_named_proxy
     @named_proxy = NamedProxy.find(params[:id])

@@ -271,6 +271,15 @@ class User < ActiveRecord::Base
         where waitlists.resubmitted_at is null")
   end
 
+  def has_bad_proxy_email
+    named_proxies.each do |np|
+      if np.bad_email
+        return true
+      end
+    end
+    return false
+  end
+
   def email=(email)
     email = email.strip if email
     write_attribute(:email, email)

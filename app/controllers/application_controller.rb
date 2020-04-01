@@ -22,6 +22,7 @@ class ApplicationController < ActionController::Base
   before_filter :ensure_recent_safety_questionnaire
   before_filter :ensure_enrolled
   before_filter :ensure_active
+  before_filter :warn_bad_proxy_email
   before_filter :only_owner_can_change, :only => [:edit, :update, :destroy]
   before_filter :prevent_setting_ownership, :only => [:create, :update]
   before_filter :ensure_dataset_release
@@ -175,6 +176,12 @@ class ApplicationController < ActionController::Base
   def ensure_active
     if not current_user.nil? and current_user.enrolled and not current_user.deactivated_at.nil?
       redirect_to deactivated_user_url
+    end
+  end
+
+  def warn_bad_proxy_email
+    if current_user and current_user.has_bad_proxy_email
+      flash[:error] = 'One or more of your named proxies has an invalid e-mail address, please <a href="/named_proxies">correct it</a>'
     end
   end
 
