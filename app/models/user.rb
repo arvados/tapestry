@@ -56,7 +56,7 @@ class User < ActiveRecord::Base
   has_one  :baseline_traits_survey, :dependent => :destroy
   has_many :mailing_list_subscriptions, :dependent => :destroy
   has_many :mailing_lists, :through => :mailing_list_subscriptions
-  accepts_nested_attributes_for :mailing_list_subscriptions
+  accepts_nested_attributes_for :mailing_list_subscriptions, :allow_destroy => true
   has_many :user_logs, :dependent => :destroy
   has_many :safety_questionnaires, :dependent => :destroy
   has_many :ccrs, :dependent => :destroy

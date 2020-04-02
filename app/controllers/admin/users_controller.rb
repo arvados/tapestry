@@ -281,12 +281,31 @@ class Admin::UsersController < Admin::AdminControllerBase
       @log_messages << "Admin unsuspended account"
     end
     params[:user].delete :is_suspended
+
+    new_lists = []
     # we will take the mailing_list_ids and convert them to nested attributes for a User has_many :mailing_lists, :through => :mailing_list_subscriptions association
     if params[:user][:mailing_list_ids] && params[:user][:mailing_list_ids].any?
+      mls = params[:user][:mailing_list_ids]
+
+      # Handle deletion of subscription
+      @user.mailing_lists.each do |ml|
+        if mls.include?(ml.id)
+          new_lists << ml
+        end
+      end
+
+      # Handle unchanged subscriptions
       subscription_attributes = params[:user].delete( :mailing_list_ids ).collect{|m| { :mailing_list_id => m }}
+      subscription_attributes.each_with_index do |sa,i|
+        if @user.mailing_lists.include?(MailingList.find(sa[:mailing_list_id]))
+          subscription_attributes.delete_at(i)
+        end
+      end
+
       # also see User for the added accepts_nested_attributes_for directive and attr_accessible directive
       params[:user][:mailing_list_subscriptions_attributes] = subscription_attributes
     end
+    @user.mailing_lists = new_lists
 
     if @user.update_attributes(params[:user])
       flash[:notice] = 'User updated.'
@@ -295,7 +314,7 @@ class Admin::UsersController < Admin::AdminControllerBase
           @user.log(lm)
         end
       end
-      redirect_to admin_users_url
+      redirect_to admin_user_url(@user)
     else
       @mailing_lists = MailingList.all
       render :action => 'edit'
