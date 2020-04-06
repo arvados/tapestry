@@ -128,7 +128,7 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
     end
 
     @bulk_message.recipients.each do |user|
-      if user.suspended_at.nil? and (user.deactivated_at.nil? or user.can_reactivate_self) then
+      if user.suspended_at.nil? and (user.deactivated_at.nil? or user.can_reactivate_self) and (! user.deceased?) then
         begin
           UserMailer.bulk_message(@bulk_message,user).deliver
           user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) sent to #{user.email}")
@@ -140,6 +140,8 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
           user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user is suspended")
         elsif !user.deactivated_at.nil? and not user.can_reactivate_self then
           user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user is deactivated and may not reactivate themself")
+        elsif user.deceased? then
+          user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user is deceased")
         end
       end
     end
