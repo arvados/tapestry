@@ -5,6 +5,16 @@ module FileDataInWarehouse
   end
 
   def download_url
+    # If KEEP_WEB_ROOT is defined and this user_file record has a PDH, use it to download the file
+    if defined? KEEP_WEB_ROOT
+      if self.locator
+        if self.path_in_manifest
+          return "#{KEEP_WEB_ROOT}/c=#{self.locator.gsub("+","-")}/_/#{self.path_in_manifest}"
+        elsif self.dataset_file_name
+          return "#{KEEP_WEB_ROOT}/c=#{self.locator.gsub("+","-")}/_/#{self.dataset_file_name}"
+        end
+      end
+    end
     if defined? WAREHOUSE_WEB_ROOT and
         defined? WAREHOUSE_FS_ROOT
       if self.path_in_manifest

@@ -71,6 +71,7 @@ common:
 
   warehouse_web_root: '/warehouse' # Apache alias pointing to whmount target
   warehouse_fs_root: '/warehouse'  # whmount target
+  #keep_web_root: 'https://download.xxxxx.arvadosapi.com'
   #warehouse_proxy_script_path: '/whget.php' # alternative to using whmount
 
   trait_survey_ids: [1,2,3]
