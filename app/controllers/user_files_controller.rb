@@ -147,6 +147,15 @@ class UserFilesController < ApplicationController
     current_user.log("Removing user file ##{@user_file.id} '#{@user_file.name}'")
 
     begin
+      arv = Arvados.new(:apiVersion => 'v1')
+      app_name = Rails.application.class.to_s.split('::').first
+      collection = arv.collection.list(:portable_data_hash => @user_file.locator, :name => "#{app_name}--#{ROOT_URL}--#{self.class}--#{self.id}")[:items].first
+      if collection != nil
+        # Delete the collection from Arvados, if we can find it
+        # Note that if it has been copied, copies will *not* be deleted...
+        arv.collection.delete(:uuid => collection[:uuid])
+      end
+
       @user_file.destroy
       flash[:notice] = 'The file has been removed.'
     rescue Exception => e
