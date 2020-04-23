@@ -74,6 +74,9 @@ common:
   #keep_web_root: 'https://download.xxxxx.arvadosapi.com'
   #warehouse_proxy_script_path: '/whget.php' # alternative to using whmount
 
+  # Arvados project UUID where UserFile uploads will be stored  
+  #participant_uploaded_data_project: ''
+
   trait_survey_ids: [1,2,3]
 
   blog_email_subscription_url: ''
