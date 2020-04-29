@@ -3,7 +3,7 @@
 source 'http://rubygems.org'
 
 ruby '1.8.7'
-gem 'rails', '3.0.20'
+gem 'rails', '4.0.0'
 gem 'rake', '~> 10.4' # because rake 11 requires ruby 1.9.3
 
 gem 'mysql'
@@ -26,7 +26,7 @@ gem 'cure_acts_as_versioned', :require => 'acts_as_versioned'
 gem 'userstamp'
 
 group :test, :development do
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', '>= 1.7.0'
   # factory_girl >= 3 requires ruby >= 1.9.2, so for now we pin to <3
   gem 'factory_girl', '< 3.0.0'
   # Mocha: Mocking and stubbing library
@@ -51,7 +51,7 @@ end
 gem "gmaps4rails", "~> 1.3.0"
 gem 'RedCloth'
 # using a specific version of cells (3.11.0, released yesterday, throws up a Syntax error)
-gem 'cells', "~> 3.10.1"
+gem 'cells', '~> 3.10.1'
 # dependency of cells which throws up a syntax error on 0.0.11 and 0.0.12
 # 2015-06-10 nico .. bundler complains about any version > 0.0.6 
 gem 'uber', "0.0.6"
@@ -65,6 +65,6 @@ gem 'system_timer'
 gem 'faraday', '~> 0.9' # because google-api-client
 
 gem 'addressable', '2.3.8' # because newer versions require ruby 1.9
-gem 'arvados', '>= 0.1.20160413142414'
+gem 'arvados', '>= 0.1.20170330012324'
 gem 'google-api-client', '0.7.1' # because retriable because ruby 1.9
 gem 'retriable', '< 2' # because ruby 1.9
