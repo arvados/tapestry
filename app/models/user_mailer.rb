@@ -143,6 +143,17 @@ class UserMailer < ActionMailer::Base
     @subject += 'PGP withdrawal'
   end
 
+  def safety_questionnaire_staff_notification(user,safety_questionnaire)
+    setup_email(user)
+    if defined? SAFETY_QUESTIONNAIRE_NOTIFICATION_EMAIL
+      @recipients = "#{SAFETY_QUESTIONNAIRE_NOTIFICATION_EMAIL}"
+    else
+      @recipients = "#{ADMIN_EMAIL}"
+    end
+    @safety_questionnaire = safety_questionnaire
+    @subject += "PGP safety questionnaire with changes for #{user.hex}"
+  end
+
   def kit_sent_notification(study_participant, sp_info)
     setup_email(study_participant.user)
     @study_participant = study_participant

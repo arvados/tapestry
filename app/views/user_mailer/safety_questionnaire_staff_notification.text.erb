@@ -1,0 +1,9 @@
+<%= @user.full_name %> has reported changes in their latest safety questionnaire.
+
+View reported changes:
+
+<%= safety_questionnaire_url(:id => @safety_questionnaire.id) %>
+
+View all safety questionnaire responses:
+
+<%= admin_safety_questionnaires_url %>

@@ -35,6 +35,9 @@ class SafetyQuestionnairesController < ApplicationController
     if @safety_questionnaire.save
       flash[:notice] = 'Safety Questionnaire answers successfully saved.'
       @safety_questionnaire.user.auto_reactivate_if_possible
+      if @safety_questionnaire.has_changes
+        UserMailer.safety_questionnaire_staff_notification(current_user,@safety_questionnaire).deliver
+      end
       redirect_back_or_default(root_url)
     else
       render :action => 'new'
