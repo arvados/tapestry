@@ -33,9 +33,13 @@
   </td>
 </tr>
 <tr class="grey_background">
-  <td colspan="3">
+  <td>
     <%= f.label "deceased", "Deceased?", :class => 'strong' %><br/>
     <%= f.check_box :deceased %>
+  </td>
+  <td colspan="2">
+    <%= f.label 'cause_of_death', :class => 'strong' %><br/>
+    <%= f.text_field :cause_of_death, :size => 80 %>
   </td>
 </tr>
 <tr>

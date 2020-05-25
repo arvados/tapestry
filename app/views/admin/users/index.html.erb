@@ -26,6 +26,10 @@
     <li><%= link_to "Show all users", admin_users_path(:all => true) %></li>
     <li><%= link_to "Show enrolled users", admin_users_path(:enrolled => true) %></li>
     <li><%= link_to "Show enrolled users with PGP #", admin_users_path(:pgp_id => true) %></li>
+    <li><%= link_to "Show suspended users", admin_users_path(:suspended => true) %></li>
+    <li><%= link_to "Show deactivated users", admin_users_path(:deactivated => true) %></li>
+    <li><%= link_to "Show deceased users", admin_users_path(:deceased => true) %></li>
+    <p/>
     <li><%= link_to "Show users eligible to be enrolled (who have submitted their enrollment application)", admin_users_path(:eligible_for_enrollment => true) %></li>
     <li><%= link_to "Show users eligible to be enrolled (who have submitted their enrollment application) with willing twin", admin_users_path(:eligible_for_enrollment_with_willing_twin => true) %></li>
     <li><%= link_to "Show users ineligible to be enrolled (who have submitted their enrollment application)", admin_users_path(:ineligible_for_enrollment => true) %></li>
@@ -33,8 +37,6 @@
     <li><%= link_to "Show users at the exam step in the enrollment process", admin_users_path(:at_or_in_exam => true) %></li>
     <li><%= link_to "Show waitlisted users", admin_users_path(:waitlisted => true) %></li>
     <li><%= link_to "Show inactive users", admin_users_path(:inactive => true) %></li>
-    <li><%= link_to "Show suspended users", admin_users_path(:suspended => true) %></li>
-    <li><%= link_to "Show deactivated users", admin_users_path(:deactivated => true) %></li>
     <li>
       <label for="completed">Show users who have completed enrollment step:</label>
       <%= select_tag 'completed',
@@ -42,6 +44,7 @@
                              params[:completed])%>
       <%= submit_tag 'Show' %>
     </li>
+    <p/>
     <li><%= link_to "Show researchers", admin_users_path(:researcher => true) %></li>
     <li><%= link_to "Show test users (excluded from all lists above)", admin_users_path(:test => true) %></li>
 <% end %>

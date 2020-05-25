@@ -41,6 +41,8 @@ en:
       We have sent an e-mail to %{email} in order to verify your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from %{admin_email}
     resent_email_verification:
       We have re-sent an e-mail to %{email} in order to confirm your e-mail address. To complete your registration please<br/>&nbsp;<br/>1. Check your e-mail for a message from the PGP<br/>2. Follow the link in the e-mail to complete your registration.<br/>&nbsp;<br/>If you do not see the message in your inbox, please check your bulk mail or spam folder for an e-mail from %{admin_email}
+    cause_of_death_but_not_deceased:
+      "When 'Cause of death' is not blank, the participant must be marked as deceased."
     waitlist:
       family: >
         Thank you for your interest in participating in the PGP.

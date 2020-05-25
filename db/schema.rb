@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20200401163800) do
+ActiveRecord::Schema.define(:version => 20200525164600) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -2785,6 +2785,7 @@ ActiveRecord::Schema.define(:version => 20200401163800) do
     t.string   "phone_number"
     t.boolean  "deceased"
     t.boolean  "real_name_public"
+    t.string   "cause_of_death"
   end
 
   add_index "user_versions", ["user_id"], :name => "index_user_versions_on_user_id"
@@ -2844,6 +2845,7 @@ ActiveRecord::Schema.define(:version => 20200401163800) do
     t.string   "phone_number"
     t.boolean  "deceased"
     t.boolean  "real_name_public",                                :default => false
+    t.string   "cause_of_death"
   end
 
   create_table "waitlist_versions", :force => true do |t|

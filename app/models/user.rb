@@ -100,6 +100,14 @@ class User < ActiveRecord::Base
                       :with => APP_CONFIG['zip_validation'],
                       :allow_nil => true
 
+  validate :must_be_deceased_when_cause_of_death_is_given
+
+  def must_be_deceased_when_cause_of_death_is_given
+    if ! cause_of_death.blank? and ! deceased?
+      errors.add(:base, I18n.t('messages.cause_of_death_but_not_deceased'))
+    end
+  end
+
   # temporarily removed requirement
   # validate_on_create :email_confirmed
 
@@ -121,6 +129,7 @@ class User < ActiveRecord::Base
   # User.test is a built-in method, so we have to call our scope something else
   scope :is_test, where("is_test = 1")
   scope :researcher, where("researcher = 1")
+  scope :deceased, where("deceased = 1")
   scope :publishable, enrolled.where("suspended_at IS NULL").real
   scope :suspended, where("suspended_at IS NOT NULL").real
   scope :deactivated, where("deactivated_at IS NOT NULL").real

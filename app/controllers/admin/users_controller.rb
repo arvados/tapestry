@@ -225,10 +225,10 @@ class Admin::UsersController < Admin::AdminControllerBase
       end
     end
     @user.deceased = params[:user].delete(:deceased)
+    @user.cause_of_death = params[:user].delete(:cause_of_death)
     @user.can_reactivate_self = params[:user].delete(:can_reactivate_self)
     @user.researcher = params[:user].delete(:researcher)
     @user.researcher_onirb = params[:user].delete(:researcher_onirb)
-
 
     if (params[:user][:pgp_id] == '') then
       params[:user].delete(:pgp_id)
@@ -473,6 +473,9 @@ class Admin::UsersController < Admin::AdminControllerBase
     elsif params[:deactivated]
       @unpaginated_users = User.deactivated
       @result = "Searching for deactivated users"
+    elsif params[:deceased]
+      @unpaginated_users = User.deceased
+      @result = "Searching for deceased users"
     elsif params[:name] or params[:email]
       # Test users are *not* excluded from this
       if (params[:name] == '' and params[:email] == '') then
