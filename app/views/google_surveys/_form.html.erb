@@ -35,6 +35,18 @@
     <%= f.label(:userid_populate_entry, 'ID number of entry to pre-populate with user-identifying token') %><br />
     <%= f.text_field(:userid_populate_entry, :size => 6) %>
   </div>
+  <div class="field">
+    <%= f.label(:reminder_email_frequency, 'Reminder e-mail frequency options in days, comma separated') %> (e.g. 1,2,7; participants will opt-in and choose one of the options supplied here; leave blank to disable reminders)<br />
+    <%= f.text_field(:reminder_email_frequency, :size => 20) %>
+  </div>
+  <div class="field">
+    <%= f.label :reminder_email_subject, 'Reminder e-mail subject' %><br />
+    <%= f.text_field(:reminder_email_subject, :size => 40) %>
+  </div>
+  <div class="field">
+    <%= f.label :reminder_email_body, 'Reminder e-mail body' %><br />
+    <%= f.text_area :reminder_email_body, :cols => 80, :rows => 10 %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

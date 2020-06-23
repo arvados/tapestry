@@ -2,6 +2,7 @@
 
 <p id="notice"><%= notice %></p>
 
+<h3>Survey information</h3>
 <p>
   <b>Researcher:</b>
   <%=h @google_survey.user.full_name %>,
@@ -9,11 +10,19 @@
 </p>
 
 <p><%=raw auto_link(CGI.escapeHTML(@google_survey.description)).gsub("\r","").gsub("\n\n","</p><p>") %></p>
+<hr>
 
-<% if @can_edit or (current_user and current_user.enrolled and @google_survey.open) %>
+<h3>Participate</h3>
+<% if @can_edit or (current_user and current_user.enrolled and @google_survey.open) -%>
 <p>
   <%= button_to 'Participate in this survey', participate_google_survey_path(@google_survey) %>
 </p>
+<% if ! @google_survey.reminder_email_frequency.blank? -%>
+<h3>E-mail reminders</h3>
+<p>
+  <%= link_to 'Manage e-mail reminders', edit_google_survey_reminder_path(:google_survey_id => @google_survey) %>
+</p>
+<% end -%>
 <% else -%>
   <% if @google_survey.open %>
     <div class="alert" style="width: 250px"><strong>Please log in to take this survey.</strong></div>
@@ -24,20 +33,6 @@
   This survey is currently <%=raw '<b>not</b>' unless @google_survey.open %> open to participants.
 </p>
 <% end %>
-
-<% if @can_download %>
-<p>
-  <%= button_to "Download responses as CSV", download_google_survey_path(@google_survey) %>
-  (<%= @google_survey.responses.size %> responses from <%= @google_survey.responses.collect(&:owner_id).uniq.size %> participants)
-</p>
-<% end %>
-
-<% if !@google_survey.is_result_public %>
-<p>
-  Currently, responses to this survey are <b>not</b> publicly available.
-</p>
-<% end %>
-
 
 <% if @nonces %>
 <h3>Your participation in this survey</h3>
@@ -64,6 +59,20 @@
 <% end %>
 <% end %>
 
+<% if @can_download %>
+<h3>Survey responses</h3>
+<p>
+  <%= button_to "Download responses as CSV", download_google_survey_path(@google_survey) %>
+  (<%= @google_survey.responses.size %> responses from <%= @google_survey.responses.collect(&:owner_id).uniq.size %> participants)
+</p>
+<% end %>
+
+<% if !@google_survey.is_result_public %>
+<h3>Survey responses</h3>
+<p>
+  Currently, responses to this survey are <b>not</b> publicly available.
+</p>
+<% end %>
 
 <% if !@min_view %>
 <h3>Technical details (this section is only displayed to researchers and admins)</h3>
@@ -111,6 +120,24 @@
 <% if @can_edit %>
 <p>
   <%= button_to 'Synchronize responses from Google now', synchronize_google_survey_path(@google_survey) %>
+</p>
+<% end %>
+<p>
+  <b>Reminder e-mail frequency:</b>
+  <%=h @google_survey.reminder_email_frequency %>
+</p>
+<p>
+  <b>Reminder e-mail subject:</b>
+  <%=h @google_survey.reminder_email_subject %>
+</p>
+<p>
+  <b>Reminder e-mail body:</b>
+  <%=h @google_survey.reminder_email_body %>
+</p>
+
+<% if @can_edit %>
+<p>
+  <%= button_to 'Send myself a test reminder message now', send_test_reminder_google_survey_path(@google_survey) %>
 </p>
 
 <%= link_to 'Edit', edit_google_survey_path(@google_survey) %>

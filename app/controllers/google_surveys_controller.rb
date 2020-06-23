@@ -4,7 +4,7 @@ class GoogleSurveysController < ApplicationController
   skip_before_filter :ensure_enrolled, :except => [:participate]
   skip_before_filter :login_required, :only => [:show, :index, :download]
   skip_before_filter :ensure_active, :only => [:show, :index, :download]
-  before_filter :get_object, :only => [ :synchronize, :download, :show, :edit, :update, :destroy ]
+  before_filter :get_object, :only => [ :synchronize, :send_test_reminder, :download, :show, :edit, :update, :destroy ]
   before_filter :decide_view_mode, :only => [ :synchronize, :download, :index, :show ]
   before_filter :check_section_disabled_special, :only => [:show, :index, :download]
   before_filter :store_location
@@ -46,6 +46,18 @@ class GoogleSurveysController < ApplicationController
                       (current_user and
                        (@google_survey.user_id == current_user.id or
                         current_user.is_admin?))))
+  end
+
+  def send_test_reminder
+    begin
+      UserMailer.google_survey_reminder(current_user,@google_survey).deliver
+    rescue => e
+      flash[:error] = "Unable to send test reminder message: #{e}."
+      redirect_to google_survey_path(@google_survey)
+      return
+    end
+    flash[:notice] = 'Sent test reminder message.'
+    redirect_to google_survey_path(@google_survey)
   end
 
   def synchronize

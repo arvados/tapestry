@@ -65,9 +65,12 @@ Tapestry::Application.routes.draw do
   resources :google_surveys do
     post 'participate', :on => :member
     post 'synchronize', :on => :member
+    post 'send_test_reminder', :on => :member
     match 'download', :on => :member
   end
   match '/nonce/:id' => 'nonces#delete', :as => :delete_google_survey_answers, :via => :delete
+  match '/google_survey_reminder/edit' => 'google_survey_reminders#edit', :as => :edit_google_survey_reminder
+  match '/google_survey_reminder/update' => 'google_survey_reminders#update', :as => :update_google_survey_reminder, :via => :post
 
   resources :google_spreadsheets do
     post 'synchronize', :on => :member

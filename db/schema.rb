@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20200525164600) do
+ActiveRecord::Schema.define(:version => 20200622130000) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -887,6 +887,35 @@ ActiveRecord::Schema.define(:version => 20200525164600) do
     t.integer  "lock_version"
   end
 
+  create_table "google_survey_reminder_versions", :force => true do |t|
+    t.integer  "google_survey_reminder_id"
+    t.integer  "lock_version"
+    t.integer  "user_id"
+    t.integer  "google_survey_id"
+    t.integer  "frequency",                 :default => 0
+    t.datetime "last_sent"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "google_survey_reminder_versions", ["google_survey_reminder_id"], :name => "index_google_survey_reminder_versions_on_google_survey_reminder"
+
+  create_table "google_survey_reminders", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "google_survey_id"
+    t.integer  "frequency",        :default => 0
+    t.datetime "last_sent"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
   create_table "google_survey_versions", :force => true do |t|
     t.integer  "google_survey_id"
     t.integer  "lock_version"
@@ -903,11 +932,14 @@ ActiveRecord::Schema.define(:version => 20200525164600) do
     t.string   "form_url"
     t.boolean  "open"
     t.text     "description"
-    t.boolean  "is_result_public",       :default => true
-    t.boolean  "is_listed",              :default => true
+    t.boolean  "is_result_public",         :default => true
+    t.boolean  "is_listed",                :default => true
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
+    t.string   "reminder_email_subject"
+    t.text     "reminder_email_body"
+    t.string   "reminder_email_frequency"
   end
 
   add_index "google_survey_versions", ["google_survey_id"], :name => "index_google_survey_versions_on_google_survey_id"
@@ -926,12 +958,15 @@ ActiveRecord::Schema.define(:version => 20200525164600) do
     t.string   "form_url"
     t.boolean  "open"
     t.text     "description"
-    t.boolean  "is_result_public",       :default => true
-    t.boolean  "is_listed",              :default => true
+    t.boolean  "is_result_public",         :default => true
+    t.boolean  "is_listed",                :default => true
     t.integer  "creator_id"
     t.integer  "updater_id"
     t.datetime "deleted_at"
     t.integer  "lock_version"
+    t.string   "reminder_email_subject"
+    t.text     "reminder_email_body"
+    t.string   "reminder_email_frequency"
   end
 
   create_table "immunization_name_versions", :force => true do |t|

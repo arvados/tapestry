@@ -6,9 +6,14 @@ class GoogleSurvey < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :oauth_service
+  has_many :google_survey_reminders
 
   attr_protected :last_downloaded_at
   attr_protected :user_id
+
+  validates_format_of :reminder_email_frequency, :with => /\A((\d+,|)+\d+|)\Z/i, :message => "Invalid format"
+  validates_length_of :reminder_email_subject, :minimum => 10, :if => 'reminder_email_frequency != ""'
+  validates_length_of :reminder_email_body, :minimum => 50, :if => 'reminder_email_frequency != ""'
 
   CACHE_DIR = "/data/" + ROOT_URL + "/google_surveys"
 

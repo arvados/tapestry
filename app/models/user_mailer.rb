@@ -1,5 +1,12 @@
 class UserMailer < ActionMailer::Base
 
+  def google_survey_reminder(user, gs)
+    setup_email(user)
+    @subject += gs.reminder_email_subject
+		@gs = gs
+    @content_type = "text/html; charset=UTF-8"
+  end
+
   def user_bounce_proxy_notification(user,proxy)
     @recipients  = "#{proxy.email}"
     @recipients  = SEND_ALL_USER_EMAIL_TO if defined? SEND_ALL_USER_EMAIL_TO

@@ -1,0 +1,14 @@
+<%= form_for(@gsr, :url => update_google_survey_reminder_url, :html => { :method => "post" } ) do |f| %>
+  <div class="field">
+    <%= f.label :name, 'Survey Name' %><br />
+    <%= @gsr.google_survey.name %>
+    <%= hidden_field_tag(:google_survey_id, @gs.id) -%>
+  </div>
+  <div class="field">
+    <%= f.label :frequency, 'Reminder frequency' %> (in days)<br />
+    <%= select_tag(:frequency, options_for_select(@frequency_options, @gsr.frequency)) %>
+  </div>
+  <div class="actions">
+    <%= submit_tag("Configure reminder") %>
+  </div>
+<% end %>

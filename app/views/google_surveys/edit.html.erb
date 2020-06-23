@@ -1,5 +1,7 @@
 <h2><%= link_to 'Google surveys', google_surveys_path %> &gt; Edit</h2>
 
+<%= error_messages_for :google_survey, :header_message => 'Error: data could not be saved.', :message => nil %>
+
 <%= render 'form' %>
 
 <%= link_to 'Show', @google_survey %> |
