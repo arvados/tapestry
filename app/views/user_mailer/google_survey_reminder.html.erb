@@ -4,16 +4,8 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    Dear <%= @user.full_name -%>,
 
-    <%=h @gs.reminder_email_body -%>
-
-    <p>
-    <%= link_to("Take the survey", google_survey_url(@gs.id)) -%>
-    </p>
-
-    <p>With thanks,<br/>
-    <a href="https://pgp.med.harvard.edu/team">Harvard PGP Staff</a></p>
+<%=raw @email_body -%>
 
     <p>PS: automated reminders for this survey can be disabled <%= link_to("here", edit_google_survey_reminder_url(:google_survey_id => @gs)) -%>
 

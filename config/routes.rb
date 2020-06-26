@@ -64,13 +64,20 @@ Tapestry::Application.routes.draw do
 
   resources :google_surveys do
     post 'participate', :on => :member
+    # So that going via login_required when clicking on the link in a reminder e-mail doesn't break the flow,
+    # we also support the GET method.
+    get 'participate', :on => :member
     post 'synchronize', :on => :member
     post 'send_test_reminder', :on => :member
     match 'download', :on => :member
+    match 'download_bypasses', :on => :member
   end
   match '/nonce/:id' => 'nonces#delete', :as => :delete_google_survey_answers, :via => :delete
   match '/google_survey_reminder/edit' => 'google_survey_reminders#edit', :as => :edit_google_survey_reminder
   match '/google_survey_reminder/update' => 'google_survey_reminders#update', :as => :update_google_survey_reminder, :via => :post
+  # So that going via login_required when clicking on the link in a reminder e-mail doesn't break the flow,
+  # we also support the GET method.
+  match '/google_survey_bypass/:token' => 'google_survey_bypasses#record', :as => :google_survey_bypass, :via => [:get, :post]
 
   resources :google_spreadsheets do
     post 'synchronize', :on => :member

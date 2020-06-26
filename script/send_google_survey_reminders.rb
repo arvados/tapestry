@@ -14,7 +14,10 @@ GoogleSurvey.where('open = 1', 'reminder_email_frequency != ""').each do |gs|
       $stderr.puts "Sending google survey reminder (id #{gsr.id}) to #{gsr.user.email}"
       gsr.last_sent = Time.now().utc
       gsr.save!
-      UserMailer.google_survey_reminder(gsr.user,gs).deliver
+      bypass = GoogleSurveyBypass.new()
+      bypass.user = gsr.user
+      bypass.save!
+      UserMailer.google_survey_reminder(gsr.user,gs,bypass.token).deliver
     else
       $stderr.puts "Skipping google survey reminder (id #{gsr.id}) to #{gsr.user.email}, now is #{Time.now().utc.strftime("%F %T %Z")}, last sent at #{gsr.last_sent}, frequency is #{gsr.frequency} day(s)"
     end

@@ -1,8 +1,14 @@
 class UserMailer < ActionMailer::Base
 
-  def google_survey_reminder(user, gs)
+  def google_survey_reminder(user, gs, token)
     setup_email(user)
     @subject += gs.reminder_email_subject
+		@subject.gsub!(/%%SURVEY_NAME%%/,gs.name)
+		@email_body = gs.reminder_email_body
+		@email_body.gsub!(/%%SURVEY_NAME%%/,gs.name)
+		@email_body.gsub!(/%%USER_FULL_NAME%%/,user.full_name)
+		@email_body.gsub!(/%%BYPASS_LINK%%/,'<form action="' + google_survey_bypass_url(:token => token) + '" method="post"><button type="submit">' + gs.bypass_field_title + '</button></form>')
+		@email_body.gsub!(/%%SURVEY_LINK%%/,'<form action="' + participate_google_survey_url(gs) + '" method="post"><button type="submit">Take the survey</button></form>')
 		@gs = gs
     @content_type = "text/html; charset=UTF-8"
   end

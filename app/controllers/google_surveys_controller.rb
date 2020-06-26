@@ -1,12 +1,12 @@
 class GoogleSurveysController < ApplicationController
   before_filter {|c| c.check_section_disabled(Section::GOOGLE_SURVEYS) }
-  before_filter :ensure_researcher, :except => [:participate, :show, :index, :download]
+  before_filter :ensure_researcher, :except => [:participate, :show, :index, :download, :download_bypasses]
   skip_before_filter :ensure_enrolled, :except => [:participate]
-  skip_before_filter :login_required, :only => [:show, :index, :download]
-  skip_before_filter :ensure_active, :only => [:show, :index, :download]
-  before_filter :get_object, :only => [ :synchronize, :send_test_reminder, :download, :show, :edit, :update, :destroy ]
-  before_filter :decide_view_mode, :only => [ :synchronize, :download, :index, :show ]
-  before_filter :check_section_disabled_special, :only => [:show, :index, :download]
+  skip_before_filter :login_required, :only => [:show, :index, :download, :download_bypasses]
+  skip_before_filter :ensure_active, :only => [:show, :index, :download, :download_bypasses]
+  before_filter :get_object, :only => [ :synchronize, :send_test_reminder, :download, :download_bypasses, :show, :edit, :update, :destroy ]
+  before_filter :decide_view_mode, :only => [ :synchronize, :download, :download_bypasses, :index, :show ]
+  before_filter :check_section_disabled_special, :only => [:show, :index, :download, :download_bypasses]
   before_filter :store_location
 
   # Need a special method for the semi-complicated permissions of this controller.
@@ -50,7 +50,16 @@ class GoogleSurveysController < ApplicationController
 
   def send_test_reminder
     begin
-      UserMailer.google_survey_reminder(current_user,@google_survey).deliver
+      bypass = GoogleSurveyBypass.new()
+      bypass.user = current_user
+      bypass.google_survey = @google_survey
+      # Generate a random token manually, we are not going to save this GoogleSurveyBypass record because it's
+      # just intended for testing.
+      bypass.token = loop do
+        random_token = SecureRandom.hex(20)
+        break random_token unless GoogleSurveyBypass.exists?(:token => random_token)
+      end
+      UserMailer.google_survey_reminder(current_user,@google_survey,bypass.token).deliver
     rescue => e
       flash[:error] = "Unable to send test reminder message: #{e}."
       redirect_to google_survey_path(@google_survey)
@@ -74,6 +83,19 @@ class GoogleSurveysController < ApplicationController
     return access_denied unless @can_download
     filename = @google_survey.name.gsub(' ','_').camelcase + '-' + @google_survey.last_downloaded_at.strftime('%Y%m%d%H%M%S') + '.csv'
     send_data(File.open(@google_survey.processed_csv_file, "rb").read,
+              :filename => filename,
+              :disposition => 'attachment',
+              :type => 'text/csv')
+  end
+
+  def download_bypasses
+    return access_denied unless @can_download
+    csv = "Participant,Timestamp Created, Timestamp Reported\n"
+    @google_survey.google_survey_bypasses.each do |gsb|
+      csv += "#{gsb.user.hex},#{gsb.created_at},#{gsb.used}\n"
+    end
+    filename = @google_survey.name.gsub(' ','_').camelcase + '-' + @google_survey.bypass_field_title.gsub(' ','_').camelcase + '-' + @google_survey.last_downloaded_at.strftime('%Y%m%d%H%M%S') + '.csv'
+    send_data(csv,
               :filename => filename,
               :disposition => 'attachment',
               :type => 'text/csv')
@@ -116,6 +138,24 @@ class GoogleSurveysController < ApplicationController
   # GET /google_surveys/new.xml
   def new
     @google_survey = GoogleSurvey.new
+    @google_survey.bypass_field_title = "No symptoms"
+    @google_survey.reminder_email_subject = "%%SURVEY_NAME%% reminder"
+    @google_survey.reminder_email_body = <<EOS
+<p>Dear %%USER_FULL_NAME%%,</p>
+
+<p>The %%SURVEY_NAME%% is awaiting your response.</p>
+
+<p>Click here to report no symptoms:</p>
+
+%%BYPASS_LINK%%
+
+<p>If you are experiencing symptoms, please complete the survey:</p>
+
+%%SURVEY_LINK%%
+
+<p>With thanks,<br/>
+<a href="https://pgp.med.harvard.edu/team">Harvard PGP Staff</a></p>
+EOS
 
     respond_to do |format|
       format.html # new.html.erb

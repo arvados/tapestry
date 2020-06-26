@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20200622130000) do
+ActiveRecord::Schema.define(:version => 20200625151500) do
 
   create_table "absolute_pitch_survey_family_histories", :force => true do |t|
     t.integer  "user_id"
@@ -858,6 +858,47 @@ ActiveRecord::Schema.define(:version => 20200622130000) do
 
   add_index "google_survey_answers", ["nonce_id"], :name => "index_google_survey_answers_on_nonce_id"
 
+  create_table "google_survey_bypass", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "google_survey_id"
+    t.string   "token"
+    t.datetime "used"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "google_survey_bypass_versions", :force => true do |t|
+    t.integer  "google_survey_bypass_id"
+    t.integer  "lock_version"
+    t.integer  "user_id"
+    t.integer  "google_survey_id"
+    t.string   "token"
+    t.datetime "used"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "google_survey_bypass_versions", ["google_survey_bypass_id"], :name => "index_google_survey_bypass_versions_on_google_survey_bypass_id"
+
+  create_table "google_survey_bypasses", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "google_survey_id"
+    t.string   "token"
+    t.datetime "used"
+    t.integer  "creator_id"
+    t.integer  "updater_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "lock_version"
+  end
+
   create_table "google_survey_question_versions", :force => true do |t|
     t.integer  "google_survey_question_id"
     t.integer  "lock_version"
@@ -940,6 +981,7 @@ ActiveRecord::Schema.define(:version => 20200622130000) do
     t.string   "reminder_email_subject"
     t.text     "reminder_email_body"
     t.string   "reminder_email_frequency"
+    t.string   "bypass_field_title"
   end
 
   add_index "google_survey_versions", ["google_survey_id"], :name => "index_google_survey_versions_on_google_survey_id"
@@ -967,6 +1009,7 @@ ActiveRecord::Schema.define(:version => 20200622130000) do
     t.string   "reminder_email_subject"
     t.text     "reminder_email_body"
     t.string   "reminder_email_frequency"
+    t.string   "bypass_field_title"
   end
 
   create_table "immunization_name_versions", :force => true do |t|
