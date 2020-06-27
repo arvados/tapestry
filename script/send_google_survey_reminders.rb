@@ -16,6 +16,7 @@ GoogleSurvey.where('open = 1', 'reminder_email_frequency != ""').each do |gs|
       gsr.save!
       bypass = GoogleSurveyBypass.new()
       bypass.user = gsr.user
+      bypass.google_survey = gs
       bypass.save!
       UserMailer.google_survey_reminder(gsr.user,gs,bypass.token).deliver
     else
