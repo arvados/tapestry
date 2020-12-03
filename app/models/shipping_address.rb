@@ -4,8 +4,17 @@ class ShippingAddress < ActiveRecord::Base
 
   # PH: I realize this is heavy handed but I could not get stubbing to work, though I'm still sure there is a simple way to do it without resorting to this kind of model-side intervention!
   unless Rails.env == 'test'
+    # Our version of gmaps4rails (1.3.x) also does geocoding via google maps.
+    # Doing so didn't require an API key in the past, but it does now.
+    # gmaps4rails removed geocoding functionality completely as of v2,
+    # delegating it to geocoder. For now, let's just disable the address
+    # validation/geocoding - this fixes saving (unvalidated!) shipping
+    # addresses for participants.
+    # We will need to (bulk) validate addresses anyway before shipping anything
+    # to participants.
+
     # Setting :check_process to false forces an update to the geocoordinates on every save/update
-    acts_as_gmappable :check_process => false
+    #acts_as_gmappable :check_process => false
   end
 
   def gmaps4rails_address
