@@ -8,7 +8,7 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
-    RedCloth (4.2.9)
+    RedCloth (4.3.2)
     abstract (1.0.0)
     actionmailer (3.0.20)
       actionpack (= 3.0.20)
