@@ -9,9 +9,17 @@ module FileDataInWarehouse
     if defined? KEEP_WEB_ROOT
       if self.locator
         if self.path_in_manifest
-          return "#{KEEP_WEB_ROOT}/c=#{self.locator.gsub("+","-")}/_/#{self.path_in_manifest}"
+          return "#{KEEP_WEB_ROOT}/_/#{self.path_in_manifest}".gsub!(/https:\/\/%%LOCATOR%%/,"https:\/\/#{self.locator.gsub("+","-")}")
         elsif self.dataset_file_name
-          return "#{KEEP_WEB_ROOT}/c=#{self.locator.gsub("+","-")}/_/#{self.dataset_file_name}"
+          # For historical reasons (a Keep limitation from many years ago, no
+          # longer the case), longupload (the code at
+          # https://github.com/arvados/longupload/blob/master/stores_in_warehouse.rb#L62)
+          # replaces spaces with underscores in the manifest, but not in the
+          # dataset_file_name field in the datase. Cf.
+          # https://dev.arvados.org/issues/1278
+          #
+          # Make the same change here so we generate the right url.
+          return "#{KEEP_WEB_ROOT}/_/#{self.dataset_file_name.gsub!(/ /,'_')}".gsub!(/https:\/\/%%LOCATOR%%/,"https:\/\/#{self.locator.gsub("+","-")}")
         end
       end
     end
