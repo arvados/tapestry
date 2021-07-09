@@ -5,13 +5,19 @@ class PagesController < ApplicationController
   before_filter :ensure_valid
   helper_method :total_user_count, :recent_students, :recent_sponsors, :recent_causes
 
-  skip_before_filter :login_required, :only => [:show]
+  # certain pages are public
+  skip_before_filter :login_required, :if => :public_request?
+
+  # there is custom logic in the show function below to handle this, TODO: clean this up
   skip_before_filter :ensure_enrolled, :only => [:show]
   skip_before_filter :ensure_active, :only => [ :show ]
 
+  # withdrawal requests need to be processed without requiring a recent safety questionnaire or the latest consent
+  skip_before_filter :ensure_recent_safety_questionnaire, :if => :withdrawal_request?
+  skip_before_filter :ensure_latest_consent, :if => :withdrawal_request?
+
   def show
     @page_title = params[:id].titleize
-
     # Allow easy creation of initial admin user when the db is empty
     if !current_user and User.all.count == 0 then
       redirect_to initial_user_url
@@ -103,6 +109,25 @@ class PagesController < ApplicationController
       @step_completions = []
       @next_step        = nil
     end
+  end
+
+  private
+
+  def public_request?
+    if params[:id] == 'logged_out' or
+       params[:id] == 'introduction' or
+       params[:id] == 'home' or
+       params[:id] == 'sitemap'
+      return true
+    end
+    return false
+  end
+
+  def withdrawal_request?
+    if params[:id] == 'withdrawal_menu'
+      return true
+    end
+    return false
   end
 
 end

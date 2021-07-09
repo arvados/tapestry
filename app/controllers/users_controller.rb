@@ -7,11 +7,11 @@ class UsersController < ApplicationController
   skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized, :index ]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :switch_to, :index, :deactivated]
   # We enforce signing of the TOS before we enforce the latest consent; make sure that people *can* sign the TOS even when their consent is out of date
-  skip_before_filter :ensure_latest_consent, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
+  skip_before_filter :ensure_latest_consent, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated, :withdraw, :withdraw_confirm]
   # Make sure people sign the latest TOS and Consent before they do safety questionnaires
-  skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
+  skip_before_filter :ensure_recent_safety_questionnaire, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated, :withdraw, :withdraw_confirm]
   # Make sure people sign the latest TOS and Consent before they review new datasets
-  skip_before_filter :ensure_dataset_release, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated]
+  skip_before_filter :ensure_dataset_release, :only => [:tos, :accept_tos, :consent, :switch_to, :index, :deactivated, :withdraw, :withdraw_confirm]
   before_filter :load_selection, :only => :index
 
   def index
