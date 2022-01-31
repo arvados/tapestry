@@ -18,7 +18,6 @@ module Admin::UsersHelper
 
   # TODO: Move to a separate presenter class instead of a helper.
   def csv_for_users(users)
-
     # precache associations
     users = User.find(users.map(&:id),
         :include => [:distinctive_traits,
@@ -111,11 +110,23 @@ module Admin::UsersHelper
       end
 
       row.push user.distinctive_traits.map { |trait| "#{trait.name} (#{trait.rating}/5)" }.join(", ")
-      row.push user.enrollment_essay
+      if user.enrollment_essay
+        row.push user.enrollment_essay.gsub(/[\r\n]/,"")
+      else
+        row.push ""
+      end
 
       row.push user.has_sequence
-      row.push user.has_sequence_explanation
-      row.push user.family_members_passed_exam
+      if user.has_sequence_explanation
+        row.push user.has_sequence_explanation.gsub(/[\r\n]/,"")
+      else
+        row.push ""
+      end
+      if user.family_members_passed_exam
+        row.push user.family_members_passed_exam.gsub(/[\r\n]/,"")
+      else
+        row.push ""
+      end
 
       row.push user.pledge
 
