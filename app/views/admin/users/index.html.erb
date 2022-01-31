@@ -87,18 +87,25 @@
 
 Download this list of users as <%= link_to 'CSV',
   admin_users_url(:format => 'csv',
-                            :all                         => params[:all],
-                            :enrolled                    => params[:enrolled],
-                            :eligible_for_enrollment     => params[:eligible_for_enrollment],
-                            :ineligible_for_enrollment   => params[:ineligible_for_enrollment],
-                            :failed_eligibility_survey   => params[:failed_eligibility_survey],
-                            :waitlisted                  => params[:waitlisted],
-                            :inactive                    => params[:inactive],
-                            :completed                   => params[:completed],
-                            :unenrolled_identifier       => params[:unenrolled_identifier],
-                            :hex                         => params[:hex],
-                            :name                        => params[:name],
-                            :email                       => params[:email]
+                            :all                                       => params[:all],
+                            :enrolled                                  => params[:enrolled],
+                            :eligible_for_enrollment                   => params[:eligible_for_enrollment],
+                            :eligible_for_enrollment_with_willing_twin => params[:eligible_for_enrollment_with_willing_twin],
+                            :ineligible_for_enrollment                 => params[:ineligible_for_enrollment],
+                            :failed_eligibility_survey                 => params[:failed_eligibility_survey],
+                            :at_or_in_exam                             => params[:at_or_in_exam],
+                            :waitlisted                                => params[:waitlisted],
+                            :inactive                                  => params[:inactive],
+                            :suspended                                 => params[:suspended],
+                            :deactivated                               => params[:deactivated],
+                            :deceased                                  => params[:deceased],
+                            :completed                                 => params[:completed],
+                            :researcher                                => params[:researcher],
+                            :test                                      => params[:test],
+                            :unenrolled_identifier                     => params[:unenrolled_identifier],
+                            :hex                                       => params[:hex],
+                            :name                                      => params[:name],
+                            :email                                     => params[:email]
                            ) %>
   
 <%= render :partial => 'usertable' %>
