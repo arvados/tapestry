@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_filter( :only => :index ) {|c| c.check_section_disabled(Section::PUBLIC_DATA) }
   before_filter( :only => :shipping_address ) {|c| c.check_section_disabled(Section::SHIPPING_ADDRESS) }
   skip_before_filter :ensure_enrolled, :if => :okay_to_skip_ensure_enrolled
-  skip_before_filter :ensure_active, :only => [ :deactivated, :switch_to, :tos, :accept_tos, :consent ]
+  skip_before_filter :ensure_active, :only => [ :deactivated, :switch_to, :tos, :accept_tos, :consent, :withdraw, :withdraw_confirm ]
   before_filter :load_current_user
   skip_before_filter :login_required, :only => [:initial, :create_initial, :new, :new_researcher, :new2, :create, :activate, :created, :create_researcher, :resend_signup_notification, :resend_signup_notification_form, :unauthorized, :index ]
   skip_before_filter :ensure_tos_agreement, :only => [:tos, :accept_tos, :switch_to, :index, :deactivated]
@@ -377,14 +377,12 @@ class UsersController < ApplicationController
         end
       end
     end
-    if @user.deactivated_at.nil?
-      @user.log('Withdrew from the study.')
-      @user.deactivated_at = Time.now
-      @user.can_reactivate_self = false
-      @user.save!
-      UserMailer.withdrawal_notification(@user).deliver
-      UserMailer.withdrawal_staff_notification(@user).deliver
-    end
+    @user.log('Withdrew from the study.')
+    @user.deactivated_at = Time.now
+    @user.can_reactivate_self = false
+    @user.save!
+    UserMailer.withdrawal_notification(@user).deliver
+    UserMailer.withdrawal_staff_notification(@user).deliver
     redirect_to new_withdrawal_comment_path
   end
 

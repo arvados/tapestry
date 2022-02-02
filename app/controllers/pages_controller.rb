@@ -29,7 +29,7 @@ class PagesController < ApplicationController
       return
     end
 
-    if current_user and not current_user.deactivated_at.nil? then
+    if current_user and not current_user.deactivated_at.nil? and not withdrawal_request? then
       redirect_to deactivated_user_url
       return
     end
