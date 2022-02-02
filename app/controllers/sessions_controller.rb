@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
   def create
     logout_keeping_session!
     user = User.authenticate(params[:email], params[:password])
-    if user
+    if user and (not user.deactivated_at or user.can_reactivate_self)
       # Protects against session fixation attacks, causes request forgery
       # protection if user resubmits an earlier form using back
       # button. Uncomment if you understand the tradeoffs.
