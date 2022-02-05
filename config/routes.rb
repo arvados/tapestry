@@ -233,6 +233,7 @@ Tapestry::Application.routes.draw do
   match '/admin/users/activity' => 'admin/users#activity', :as => :admin_activity_users
   match '/admin/users/log' => 'admin/users#log', :as => :admin_log_users
   match '/admin/users/ineligible' => 'admin/users#ineligible', :as => :admin_ineligible_users
+  match '/admin/users/consent' => 'admin/users#consent', :as => :admin_consent_users
   match '/admin/users/trios' => 'admin/users#trios', :as => :admin_trios
   match '/admin/users/families' => 'admin/users#families', :as => :admin_families
   match '/admin/users/user_files_report' => 'admin/users#user_files_report', :as => :admin_user_files_report

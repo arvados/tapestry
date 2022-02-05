@@ -392,6 +392,11 @@ class Admin::UsersController < Admin::AdminControllerBase
     end
   end
 
+  def consent
+    sql = "select t.version,count(t.version) as count from (SELECT timestamp,MAX(version) as version,user_id FROM `documents` WHERE `documents`.`keyword` = 'consent' AND (documents.deleted_at IS NULL) GROUP BY user_id) as t group by version order by version"
+    @consents_by_version = ActiveRecord::Base.connection.execute(sql)
+  end
+
   def trios
     @trios = User.trios
   end

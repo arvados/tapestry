@@ -1,0 +1,18 @@
+<h2>Consent versions and the number of participants who signed them</h2>
+
+There are currently <%= User.enrolled.count %> participants enrolled.
+<p/>
+<strong>NOTE:</strong> the counts for each consent version includes participants who are not yet enrolled, have withdrawn, etc.
+<p/>
+<table class="admin_table">
+<tr>
+  <th>Version</th>
+  <th>Count</th>
+</tr>
+<% @consents_by_version.each do |k,v| %>
+<tr>
+  <td><%= k %></td>
+  <td><%= v %></td>
+</tr>
+<% end %>
+</table>
