@@ -130,9 +130,13 @@ class User < ActiveRecord::Base
   scope :is_test, where("is_test = 1")
   scope :researcher, where("researcher = 1")
   scope :deceased, where("deceased = 1")
+  scope :not_deceased, where("deceased IS NULL or deceased = 0")
+  scope :good_email, where("bad_email = 0")
+  scope :bad_email, where("bad_email = 1")
   scope :publishable, enrolled.where("suspended_at IS NULL").real
   scope :suspended, where("suspended_at IS NOT NULL").real
   scope :deactivated, where("deactivated_at IS NOT NULL").real
+  scope :not_withdrawn, where("deactivated_at is null or (deactivated_at is not null and can_reactivate_self = 1)").real
   scope :visible_to, lambda { |current_user|
     if current_user and current_user.is_admin?
       unscoped

@@ -23,9 +23,13 @@
   </td>
 </tr>
 <tr>
-  <td colspan="2">
+  <td>
     <%= f.label :email, :class => 'strong' %><br/>
-    <%= f.text_field :email, :size => 50 %>
+    <%= f.text_field :email, :size => 45 %>
+  </td>
+  <td>
+    <%= f.label "bad_email", "Bad email?", :class => 'strong' %><br/>
+    <%= f.check_box :bad_email %>
   </td>
   <td>
     <%= f.label 'PGP #', :class => 'strong' %><br/>

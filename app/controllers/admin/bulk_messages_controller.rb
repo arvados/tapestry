@@ -111,8 +111,8 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
 
   def send_message
     @bulk_message = BulkMessage.find(params[:id])
-    if @bulk_message.recipients.size == 0 then
-      flash[:error] = "Please add some recipients before sending this message."
+    if @bulk_message.valid_recipients.size == 0 then
+      flash[:error] = "Please add some valid recipients before sending this message."
       redirect_to admin_bulk_messages_url
       return
     end
@@ -127,8 +127,18 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
       return
     end
 
+    # Mark the message as sent *first*. Then send all the mail. This is so
+    # that large mailings (which can take considerable time to spool out) do
+    # not get accidentally started more than once. The downside is that an
+    # apache restart in the middle of a sendout will truncate the mailing. But
+    # that's the safer way to fail. We don't want to spam people.
+    @bulk_message.sent = true
+    @bulk_message.sent_at = Time.now()
+    @bulk_message.save!
+
+    # Loop over 'recipients' here, not 'valid_recipients', so that we can add appropriate user log messages for all invalid recipients
     @bulk_message.recipients.each do |user|
-      if user.suspended_at.nil? and (user.deactivated_at.nil? or user.can_reactivate_self) and (! user.deceased?) then
+      if !user.is_test and user.suspended_at.nil? and (user.deactivated_at.nil? or user.can_reactivate_self) and (! user.deceased?) and (! user.bad_email) then
         begin
           UserMailer.bulk_message(@bulk_message,user).deliver
           user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) sent to #{user.email}")
@@ -138,10 +148,14 @@ class Admin::BulkMessagesController < Admin::AdminControllerBase
       else
         if !user.suspended_at.nil? then
           user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user is suspended")
-        elsif !user.deactivated_at.nil? and not user.can_reactivate_self then
-          user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user is deactivated and may not reactivate themself")
         elsif user.deceased? then
           user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user is deceased")
+        elsif !user.deactivated_at.nil? and not user.can_reactivate_self then
+          user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user is deactivated and may not reactivate themself")
+        elsif user.bad_email then
+          user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user has a bad email address")
+        elsif user.is_test then
+          user.log("Bulk message with id #{@bulk_message.id} (#{@bulk_message.subject}) was not sent to #{user.email}: user is a test user")
         end
       end
     end

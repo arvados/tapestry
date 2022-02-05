@@ -217,6 +217,14 @@ class Admin::UsersController < Admin::AdminControllerBase
     @user.controlling_user = current_user
     @user.is_admin = params[:user].delete(:is_admin)
     @user.is_test = params[:user].delete(:is_test)
+    if (@user.bad_email != params[:user][:bad_email]) then
+      if not @user.bad_email and params[:user][:bad_email] == '1' then
+        @log_messages << "Admin marked email address '#{@user.email}' as bad"
+      elsif @user.bad_email and params[:user][:bad_email] == '0' then
+        @log_messages << "Admin marked email address '#{@user.email}' as good"
+      end
+    end
+    @user.bad_email = params[:user].delete(:bad_email)
     if (@user.deceased != params[:user][:deceased]) then
       if not @user.deceased and params[:user][:deceased] == '1' then
         @log_messages << "Marked as deceased by admin"

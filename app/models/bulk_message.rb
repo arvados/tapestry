@@ -20,4 +20,8 @@ class BulkMessage < ActiveRecord::Base
   has_many :recipients, :through => :bulk_message_recipients, :source => :user
   has_many :bulk_message_recipients
 
+  def valid_recipients
+    self.recipients.not_withdrawn.not_deceased.not_suspended.good_email
+  end
+
 end

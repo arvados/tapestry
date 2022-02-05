@@ -3,13 +3,45 @@
 <table>
 <tr><td>Message subject</td><td><%= @bulk_message.subject %></td></tr>
 <tr><td>Message sent</td><td><%= @bulk_message.sent ? @bulk_message.sent_at : 'No' %></td></tr>
+<tr><td>Valid recipients</td><td><%= @bulk_message.valid_recipients.size %></td></tr>
+<tr><td>All recipients</td><td><%= @bulk_message.recipients.size %></td></tr>
+<tr><td colspan="2"><hr></td></tr>
+<tr><td colspan="2">
+Valid recipients are participants who<br/>
+&nbsp;* are not test users<br/>
+&nbsp;* have not withdrawn<br/>
+&nbsp;* are not marked as deceased<br/>
+&nbsp;* are not marked as suspended<br/>
+&nbsp;* have an e-mail address that is not marked as bad<br/>
+</td></tr>
 </table>
-
 
 <table class="admin_table">
   <thead>
     <tr>
-      <th colspan="6">Hex</th>
+      <th colspan="6">Hex (valid recipients)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @count = 0 -%>
+    <% @bulk_message.valid_recipients.sort { |a,b| a.hex <=> b.hex }.each do |user| -%>
+      <% if @count % 6 == 0 then -%>
+    <tr>
+      <% end -%>
+      <% @count += 1 -%>
+      <td><%= link_to user.hex, admin_user_path(user) %></td>
+      <% if @count % 6 == 0 then -%>
+      <% @count = 0 if @count > 0 -%>
+    </tr>
+      <% end -%>
+    <% end -%>
+  </tbody>
+</table>
+
+<table class="admin_table">
+  <thead>
+    <tr>
+      <th colspan="6">Hex (all recipients)</th>
     </tr>
   </thead>
   <tbody>
