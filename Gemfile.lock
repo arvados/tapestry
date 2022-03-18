@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/alexdunae/validates_email_format_of.git
+  remote: https://github.com/alexdunae/validates_email_format_of.git
   revision: 14dd0630d21172e0a03128501a9380633226c6ff
   specs:
     validates_email_format_of (1.6.3)

@@ -17,7 +17,7 @@ gem 'gdata', :require => 'gdata'
 # Carmen: A repository of geographic regions
 gem 'carmen', '~> 0.2.13'
 gem 'will_paginate'
-gem 'validates_email_format_of', :git => 'git://github.com/alexdunae/validates_email_format_of.git'
+gem 'validates_email_format_of', :git => 'https://github.com/alexdunae/validates_email_format_of.git'
 
 gem 'i18n', '0.5.3'
 
