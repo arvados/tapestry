@@ -1,12 +1,12 @@
 [submodule "lib/flot"]
 	path = lib/flot
-	url = git://github.com/flot/flot.git
+	url = https://github.com/flot/flot.git
 [submodule "lib/longupload"]
 	path = lib/longupload
 	url = git://git.arvados.org/longupload.git
 [submodule "lib/jsHashes"]
 	path = lib/jsHashes
-	url = git://github.com/h2non/jshashes.git
+	url = https://github.com/h2non/jshashes.git
 [submodule "lib/jquery-ui"]
 	path = lib/jquery-ui
-	url = git://github.com/jquery/jquery-ui.git
+	url = https://github.com/jquery/jquery-ui.git
