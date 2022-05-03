@@ -141,6 +141,34 @@ class MyPG
     return csv_filename
   end
 
+  def create_samples_report_worker(work)
+    @samples = Sample.scoped.where("participant_id is not null").
+      includes([:kit, :participant, :study, :owner, :parent_samples]).order(:study_id,:id)
+
+    buf = FasterCSV.generate(String.new, :force_quotes => true) do |csv|
+      csv << %w(study_id sample_id kit_sample_name kit_id kit_name participant_hex material amount unit location)
+      @samples = @samples.includes(:kit_design_sample)
+      @samples.each { |s|
+        csv << [s.study_id,
+                s.crc_id_s,
+                s.kit_design_sample ? s.kit_design_sample.name : nil,
+                s.kit ? s.kit.crc_id_s : nil,
+                s.kit ? s.kit.name : nil,
+                s.participant ? s.participant.hex : nil,
+                s.material,
+                s.amount,
+                s.unit,
+                s.owner ? (s.owner.is_researcher? ? s.owner.researcher_affiliation : s.owner.hex) : nil
+               ]
+      }
+    end
+    csv_filename = generate_csv_filename('samples', true)
+    outFile = File.new(csv_filename, 'w')
+    outFile.write(buf)
+    outFile.close
+    return csv_filename
+  end
+
   def create_user_log_report_worker(work)
     filter = '%'
     filter = '%' + work.filter + '%' if work.filter
@@ -438,6 +466,8 @@ class MyPG
         filename = create_absolute_pitch_survey_question_key_report_worker(work)
       elsif work.report_name == 'user_log' and work.report_type == 'csv' then
         filename = create_user_log_report_worker(work)
+      elsif work.report_name == 'samples' and work.report_type == 'csv' then
+        filename = create_samples_report_worker(work)
       else
         error_message = "Unknown report name #{work.report_name} or type #{work.report_type}"
       end

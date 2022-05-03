@@ -28,6 +28,11 @@
     <td><%= link_to 'Scoreboard (csv)', admin_reports_queue_url(:report_name => 'international_users_scoreboard', :report_type => 'csv') %><br /></td>
     <td><%= link_to 'List (csv)', admin_reports_queue_url(:report_name => 'international_users_list', :report_type => 'csv') %><br /></td>
   </tr>
+  <tr class="even">
+    <td>Participant samples</td>
+    <td><%= link_to 'Report (csv)', admin_reports_queue_url(:report_name => 'samples', :report_type => 'csv') %><br /></td>
+    <td></td>
+  </tr>
 </table>
 
 <h3>Previously requested reports: </h3>
