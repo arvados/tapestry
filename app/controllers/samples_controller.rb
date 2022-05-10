@@ -45,7 +45,7 @@ class SamplesController < ApplicationController
                     s.material,
                     s.amount,
                     s.unit,
-                    s.owner ? (s.owner.is_researcher? ? s.owner.researcher_affiliation : s.owner.hex) : nil
+                    s.owner ? (s.owner.is_researcher? ? s.owner.researcher_affiliation : s.owner.hex) : (s.sample_logs.empty? ? nil : s.sample_logs.last.comment)
                    ]
           }
         end
